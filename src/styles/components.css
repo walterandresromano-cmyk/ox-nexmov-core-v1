@@ -1819,3 +1819,220 @@
   font-size: 0.82rem;
   font-weight: 800;
 }
+
+/* =========================================================
+   oX NEXMOV Core v1 — Operational Panel Polish
+   Mejora visual sin tocar lógica
+   ========================================================= */
+
+.admin-section-block,
+.dealer-leads-section,
+.buyer-panel-section,
+.support-panel-section,
+.zero-km-panel-section {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.92)),
+    radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.08), transparent 34%);
+  border-radius: 24px;
+  padding: clamp(16px, 2vw, 24px);
+  box-shadow:
+    0 18px 60px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.buyer-section-head,
+.admin-section-head,
+.dealer-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.buyer-section-head h2,
+.admin-section-head h2,
+.dealer-section-head h2 {
+  margin: 0;
+  font-size: clamp(1rem, 1.5vw, 1.28rem);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.buyer-section-head p,
+.admin-section-head p,
+.dealer-section-head p {
+  margin: 6px 0 0;
+  max-width: 720px;
+  color: var(--ox-muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.admin-table-wrap {
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  border-radius: 20px;
+  overflow: auto;
+  background: rgba(2, 6, 23, 0.44);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.admin-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(15, 23, 42, 0.96);
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 900;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  white-space: nowrap;
+}
+
+.admin-table tbody td {
+  padding: 13px 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.09);
+  vertical-align: top;
+  font-size: 0.84rem;
+}
+
+.admin-table tbody tr {
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(56, 189, 248, 0.045);
+}
+
+.admin-table td strong {
+  display: block;
+  color: var(--ox-text);
+  font-size: 0.86rem;
+  line-height: 1.25;
+}
+
+.admin-table td span {
+  display: block;
+  margin-top: 3px;
+  color: var(--ox-muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.table-action-btn,
+.admin-refresh-btn {
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.14), rgba(15, 23, 42, 0.78));
+  color: rgba(240, 249, 255, 0.94);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.76rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.08);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.table-action-btn:hover,
+.admin-refresh-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.42);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.22), rgba(15, 23, 42, 0.86));
+  box-shadow: 0 12px 30px rgba(14, 165, 233, 0.14);
+}
+
+.table-action-btn:disabled,
+.admin-refresh-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.lead-status-control select,
+.assign-dealer-box select,
+.zero-km-form input,
+.zero-km-form select,
+.zero-km-form textarea,
+.contact-form input,
+.contact-form select,
+.contact-form textarea,
+.lead-notes-textarea {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(2, 6, 23, 0.66);
+  color: var(--ox-text);
+  border-radius: 14px;
+  padding: 10px 12px;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.lead-status-control select:focus,
+.assign-dealer-box select:focus,
+.zero-km-form input:focus,
+.zero-km-form select:focus,
+.zero-km-form textarea:focus,
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus,
+.lead-notes-textarea:focus {
+  border-color: rgba(56, 189, 248, 0.46);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.10);
+  background: rgba(2, 6, 23, 0.86);
+}
+
+.ticket-detail-modal,
+.contact-modal {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98)),
+    radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.10), transparent 32%);
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.ticket-detail-card,
+.contact-summary,
+.lead-created-box {
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  background: rgba(15, 23, 42, 0.58);
+  border-radius: 18px;
+}
+
+.ticket-detail-card span,
+.contact-summary span {
+  color: rgba(148, 163, 184, 0.92);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.ticket-detail-card strong,
+.contact-summary strong {
+  letter-spacing: -0.015em;
+}
+
+.empty-state,
+.auth-message,
+.auth-warning {
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  background: rgba(15, 23, 42, 0.58);
+}
