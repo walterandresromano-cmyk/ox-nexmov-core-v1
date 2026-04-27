@@ -1,27 +1,29 @@
 import { useEffect, useMemo, useState } from "react";
+
 import DealerVehicleActions from "../../components/DealerVehicleActions.jsx";
 import DealerVehicleDetailModal from "../../components/DealerVehicleDetailModal.jsx";
 import VehicleLeadDetailModal from "../../components/VehicleLeadDetailModal.jsx";
 import EditVehicleModal from "../../components/EditVehicleModal.jsx";
 import EditVehicleImagesModal from "../../components/EditVehicleImagesModal.jsx";
-
 import DealerSellVehicleLeadDetailModal from "../../components/DealerSellVehicleLeadDetailModal.jsx";
 import DealerSellVehicleLeadStatusSelect from "../../components/DealerSellVehicleLeadStatusSelect.jsx";
-import { listSellVehicleLeadsForCurrentDealer } from "../../services/sellVehicle.service.js";
 import CreateSupportTicketModal from "../../components/CreateSupportTicketModal.jsx";
 import CreateVehicleModal from "../../components/CreateVehicleModal.jsx";
 import LeadStatusSelect from "../../components/LeadStatusSelect.jsx";
 import TicketDetailModal from "../../components/TicketDetailModal.jsx";
 import TicketStatusSelect from "../../components/TicketStatusSelect.jsx";
+
 import { mockDealers } from "../../data/mockData.js";
 import {
   canDealerPublish,
   getEffectiveDealerPermissions,
 } from "../../lib/permissions.js";
+
 import { listDealersForCurrentUser } from "../../services/dealers.service.js";
 import { listVehiclesForCurrentDealer } from "../../services/dealerVehicles.service.js";
 import { listVehicleLeadsForCurrentUser } from "../../services/leads.service.js";
 import { listSupportTicketsForCurrentUser } from "../../services/tickets.service.js";
+import { listSellVehicleLeadsForCurrentDealer } from "../../services/sellVehicle.service.js";
 
 function formatLimit(limit) {
   return limit === Infinity ? "Ilimitado" : limit;
@@ -41,6 +43,19 @@ function getPlanAlertLabel(days) {
   if (days <= 6) return `Vencimiento cercano · ${days} días`;
   if (days <= 14) return `Próximo a vencer · ${days} días`;
   return `Activo · ${days} días restantes`;
+}
+
+function getPlanStatusLabel(status) {
+  const labels = {
+    active: "Activo",
+    expiring: "Por vencer",
+    expired: "Vencido",
+    grace: "Período de gracia",
+    suspended: "Suspendido",
+    inactive: "Inactivo",
+  };
+
+  return labels[status] || status || "Sin estado";
 }
 
 function getRemainingQuota(limit, used) {
@@ -76,6 +91,8 @@ function formatKm(value) {
 }
 
 export default function DealerPanel({ authProfile }) {
+  const [activeDealerModule, setActiveDealerModule] = useState("summary");
+
   const [dealers, setDealers] = useState(mockDealers);
   const [selectedDealerId, setSelectedDealerId] = useState(mockDealers[0]?.id);
   const [loadingDealers, setLoadingDealers] = useState(true);
@@ -85,7 +102,6 @@ export default function DealerPanel({ authProfile }) {
   const [loadingSellVehicleLeads, setLoadingSellVehicleLeads] = useState(true);
   const [sellVehicleLeadsError, setSellVehicleLeadsError] = useState("");
   const [selectedSellVehicleLead, setSelectedSellVehicleLead] = useState(null);
-
 
   const [dealerVehicles, setDealerVehicles] = useState([]);
   const [loadingVehicles, setLoadingVehicles] = useState(true);
@@ -101,19 +117,20 @@ export default function DealerPanel({ authProfile }) {
 
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [showVehicleModal, setShowVehicleModal] = useState(false);
+
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [selectedLead, setSelectedLead] = useState(null);
+
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [editingVehicleImages, setEditingVehicleImages] = useState(null);
-
-
 
   async function loadDealers() {
     setLoadingDealers(true);
     setDealersError("");
 
-    const { dealers: supabaseDealers, error } = await listDealersForCurrentUser();
+    const { dealers: supabaseDealers, error } =
+      await listDealersForCurrentUser();
 
     if (error) {
       setDealers(mockDealers);
@@ -136,6 +153,7 @@ export default function DealerPanel({ authProfile }) {
     }
 
     setDealers(supabaseDealers);
+
     setSelectedDealerId((current) => {
       const stillExists = supabaseDealers.some(
         (dealer) => dealer.id === current
@@ -160,76 +178,74 @@ export default function DealerPanel({ authProfile }) {
       return;
     }
 
-    setDealerVehicles(vehicles);
+    setDealerVehicles(vehicles || []);
     setLoadingVehicles(false);
   }
 
-    async function loadSellVehicleLeads() {
-  setLoadingSellVehicleLeads(true);
-  setSellVehicleLeadsError("");
+  async function loadSellVehicleLeads() {
+    setLoadingSellVehicleLeads(true);
+    setSellVehicleLeadsError("");
 
-  const { leads: supabaseLeads, error } =
-    await listSellVehicleLeadsForCurrentDealer();
+    const { leads: supabaseLeads, error } =
+      await listSellVehicleLeadsForCurrentDealer();
 
-  if (error) {
-    setSellVehicleLeads([]);
-    setSellVehicleLeadsError(
-      error.message || "No se pudieron cargar oportunidades de venta."
-    );
+    if (error) {
+      setSellVehicleLeads([]);
+      setSellVehicleLeadsError(
+        error.message || "No se pudieron cargar oportunidades de venta."
+      );
+      setLoadingSellVehicleLeads(false);
+      return;
+    }
+
+    const nextLeads = supabaseLeads || [];
+
+    setSellVehicleLeads(nextLeads);
+
+    setSelectedSellVehicleLead((currentLead) => {
+      if (!currentLead?.lead_id) return currentLead;
+
+      const refreshedLead = nextLeads.find(
+        (lead) => lead.lead_id === currentLead.lead_id
+      );
+
+      return refreshedLead || currentLead;
+    });
+
     setLoadingSellVehicleLeads(false);
-    return;
   }
 
-  const nextLeads = supabaseLeads || [];
+  async function loadLeads() {
+    setLoadingLeads(true);
+    setLeadsError("");
 
-  setSellVehicleLeads(nextLeads);
+    const { leads: supabaseLeads, error } =
+      await listVehicleLeadsForCurrentUser();
 
-  setSelectedSellVehicleLead((currentLead) => {
-    if (!currentLead?.lead_id) return currentLead;
+    if (error) {
+      setLeads([]);
+      setLeadsError(error.message || "No se pudieron cargar los leads.");
+      setLoadingLeads(false);
+      return;
+    }
 
-    const refreshedLead = nextLeads.find(
-      (lead) => lead.lead_id === currentLead.lead_id
-    );
+    const nextLeads = supabaseLeads || [];
 
-    return refreshedLead || currentLead;
-  });
+    setLeads(nextLeads);
 
-  setLoadingSellVehicleLeads(false);
-}
+    setSelectedLead((currentLead) => {
+      if (!currentLead?.lead_id) return currentLead;
 
+      const refreshedLead = nextLeads.find(
+        (lead) => lead.lead_id === currentLead.lead_id
+      );
 
-   async function loadLeads() {
-  setLoadingLeads(true);
-  setLeadsError("");
+      return refreshedLead || currentLead;
+    });
 
-  const { leads: supabaseLeads, error } =
-    await listVehicleLeadsForCurrentUser();
-
-  if (error) {
-    setLeads([]);
-    setLeadsError(error.message || "No se pudieron cargar los leads.");
     setLoadingLeads(false);
-    return;
   }
 
-  const nextLeads = supabaseLeads || [];
-
-  setLeads(nextLeads);
-
-  setSelectedLead((currentLead) => {
-    if (!currentLead?.lead_id) return currentLead;
-
-    const refreshedLead = nextLeads.find(
-      (lead) => lead.lead_id === currentLead.lead_id
-    );
-
-    return refreshedLead || currentLead;
-  });
-
-  setLoadingLeads(false);
-}
-
- 
   async function loadTickets() {
     setLoadingTickets(true);
     setTicketsError("");
@@ -244,7 +260,7 @@ export default function DealerPanel({ authProfile }) {
       return;
     }
 
-    setTickets(supabaseTickets);
+    setTickets(supabaseTickets || []);
     setLoadingTickets(false);
   }
 
@@ -254,21 +270,41 @@ export default function DealerPanel({ authProfile }) {
       loadDealerVehicles(),
       loadLeads(),
       loadTickets(),
+      loadSellVehicleLeads(),
     ]);
   }
 
-    async function refreshDealerPanel() {
-  await Promise.all([
-    loadDealers(),
-    loadDealerVehicles(),
-    loadLeads(),
-    loadTickets(),
-    loadSellVehicleLeads(),
-  ]);
-}
-
   async function handleTicketUpdated() {
     await loadTickets();
+  }
+
+  function openModule(moduleName) {
+    setActiveDealerModule(moduleName);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function ModuleBackButton({ title, description, onRefresh }) {
+    return (
+      <div className="buyer-section-head dealer-module-open-head">
+        <div>
+          <button
+            className="table-action-btn"
+            type="button"
+            onClick={() => setActiveDealerModule("summary")}
+          >
+            ← Volver al resumen
+          </button>
+          <h2>{title}</h2>
+          {description && <p>{description}</p>}
+        </div>
+
+        {onRefresh && (
+          <button className="admin-refresh-btn" onClick={onRefresh}>
+            Actualizar
+          </button>
+        )}
+      </div>
+    );
   }
 
   useEffect(() => {
@@ -317,10 +353,6 @@ export default function DealerPanel({ authProfile }) {
   ).length;
 
   const newLeadsCount = leads.filter((lead) => lead.crm_status === "new").length;
-
-  const contactedLeadsCount = leads.filter(
-    (lead) => lead.crm_status === "contacted"
-  ).length;
 
   const negotiationLeadsCount = leads.filter(
     (lead) => lead.crm_status === "negotiation"
@@ -372,31 +404,22 @@ export default function DealerPanel({ authProfile }) {
         {vehiclesError && <div className="auth-warning">{vehiclesError}</div>}
         {leadsError && <div className="auth-warning">{leadsError}</div>}
         {ticketsError && <div className="auth-warning">{ticketsError}</div>}
-        {sellVehicleLeadsError && (<div className="auth-warning">{sellVehicleLeadsError}</div>
-      )}
-
-
-
-
-        {loadingDealers && (
-          <div className="auth-message">Cargando dealer...</div>
+        {sellVehicleLeadsError && (
+          <div className="auth-warning">{sellVehicleLeadsError}</div>
         )}
 
-        {loadingSellVehicleLeads && (
-          <div className="auth-message">Cargando oportunidades Vender mi vehículo... </div>
-)}
-
-
+        {loadingDealers && <div className="auth-message">Cargando dealer...</div>}
         {loadingVehicles && (
           <div className="auth-message">Cargando vehículos...</div>
         )}
-
-        {loadingLeads && (
-          <div className="auth-message">Cargando leads...</div>
-        )}
-
+        {loadingLeads && <div className="auth-message">Cargando leads...</div>}
         {loadingTickets && (
           <div className="auth-message">Cargando tickets...</div>
+        )}
+        {loadingSellVehicleLeads && (
+          <div className="auth-message">
+            Cargando oportunidades Vender mi vehículo...
+          </div>
         )}
 
         <div className="dealer-status-grid">
@@ -408,12 +431,11 @@ export default function DealerPanel({ authProfile }) {
             </p>
           </article>
 
-           <article className="dealer-status-card">
+          <article className="dealer-status-card">
             <span>Oportunidades venta</span>
             <strong>{sellVehicleLeads.length}</strong>
             <p>Solicitudes “Vender mi vehículo” asignadas por admin.</p>
           </article>
-
 
           <article className="dealer-status-card">
             <span>Cupo del período</span>
@@ -425,7 +447,7 @@ export default function DealerPanel({ authProfile }) {
 
           <article className="dealer-status-card">
             <span>Estado del plan</span>
-            <strong>{dealer.planStatus}</strong>
+            <strong>{getPlanStatusLabel(dealer.planStatus)}</strong>
             <p className={getPlanAlertClass(expiresInDays)}>
               {getPlanAlertLabel(expiresInDays)}
             </p>
@@ -464,474 +486,614 @@ export default function DealerPanel({ authProfile }) {
           </article>
         </div>
 
-        <div className="dealer-modules-grid">
-          <article className="dealer-module-card">
-            <h3>Mis vehículos</h3>
-            <p>
-              {dealerVehicles.length > 0
-                ? `${dealerVehicles.length} publicaciones reales cargadas.`
-                : "Todavía no hay publicaciones reales para este dealer."}
-            </p>
-            <button onClick={loadDealerVehicles}>Actualizar publicaciones</button>
-          </article>
-
-          <article className="dealer-module-card">
-            <h3>Alta de vehículo</h3>
-            <p>
-              Carga guiada por catálogo, validación automática y control de cupo.
-            </p>
-            <button
-              disabled={!publishCheck.allowed}
-              onClick={() => setShowVehicleModal(true)}
+        {activeDealerModule === "summary" && (
+          <div className="dealer-modules-grid">
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule("inventory")}
             >
-              Publicar vehículo
-            </button>
-          </article>
-
-          <article className="dealer-module-card">
-            <h3>Leads recibidos</h3>
-            <p>
-              {leads.length > 0
-                ? `${leads.length} consultas reales recibidas.`
-                : "Todavía no hay consultas reales para este dealer."}
-            </p>
-            <button onClick={loadLeads}>Actualizar leads</button>
-          </article>
-
-          <article className="dealer-module-card">
-            <h3>Financiación</h3>
-            <p>
-              {permissions.fullFinancingTools
-                ? "Financiación propia, bancaria y simulador visible al comprador."
-                : "Financiación básica informada. Herramientas completas disponibles en planes superiores."}
-            </p>
-            <button>Configurar financiación</button>
-          </article>
-
-          <article className="dealer-module-card">
-            <h3>Métricas</h3>
-            <p>Nivel habilitado: {permissions.metricsLevel}</p>
-            <button>Ver métricas</button>
-          </article>
-
-          <article className="dealer-module-card">
-            <h3>Vender mi vehículo</h3>
-            <p>
-              {permissions.sellVehicleLeads
-                ? "Habilitado para recibir oportunidades asignadas por admin."
-                : "No habilitado por defecto. Admin puede activarlo como beneficio."}
-            </p>
-            <button disabled={!permissions.sellVehicleLeads}>
-              Ver oportunidades
-            </button>
-          </article>
-
-          <article className="dealer-module-card">
-            <h3>Urgencias / Observaciones</h3>
-            <p>
-              Publicaciones observadas, revisión urgente y correcciones
-              necesarias.
-            </p>
-            <button>Ver urgencias</button>
-          </article>
-
-          <article className="dealer-module-card">
-            <h3>Soporte admin</h3>
-            <p>
-              Tickets internos estilo Remedy para resolver consultas sin salir de
-              la plataforma.
-            </p>
-            <button onClick={() => setShowTicketModal(true)}>Crear ticket</button>
-          </article>
-        </div>
-
-        <div className="dealer-leads-section">
-          <div className="buyer-section-head">
-            <div>
-              <h2>Mis vehículos publicados</h2>
+              <h3>Mis vehículos</h3>
               <p>
-                Inventario real asociado a este dealer. Incluye publicaciones
-                activas, pausadas, reservadas o enviadas a revisión.
+                {dealerVehicles.length > 0
+                  ? `${dealerVehicles.length} publicaciones reales cargadas.`
+                  : "Todavía no hay publicaciones reales para este dealer."}
               </p>
-            </div>
+              <button type="button">Abrir inventario</button>
+            </article>
 
-            <button className="admin-refresh-btn" onClick={loadDealerVehicles}>
-              Actualizar vehículos
-            </button>
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule("publish")}
+            >
+              <h3>Alta de vehículo</h3>
+              <p>
+                Carga guiada por catálogo, validación automática y control de
+                cupo.
+              </p>
+              <button type="button" disabled={!publishCheck.allowed}>
+                Publicar vehículo
+              </button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule("leads")}
+            >
+              <h3>Leads recibidos</h3>
+              <p>
+                {leads.length > 0
+                  ? `${leads.length} consultas reales recibidas.`
+                  : "Todavía no hay consultas reales para este dealer."}
+              </p>
+              <button type="button">Abrir leads</button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule("financing")}
+            >
+              <h3>Financiación</h3>
+              <p>
+                {permissions.fullFinancingTools
+                  ? "Financiación propia, bancaria y simulador visible al comprador."
+                  : "Financiación básica informada. Herramientas completas disponibles en planes superiores."}
+              </p>
+              <button type="button">Configurar financiación</button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule("metrics")}
+            >
+              <h3>Métricas</h3>
+              <p>Nivel habilitado: {permissions.metricsLevel}</p>
+              <button type="button">Ver métricas</button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => {
+                if (permissions.sellVehicleLeads) {
+                  openModule("sellVehicle");
+                }
+              }}
+            >
+              <h3>Vender mi vehículo</h3>
+              <p>
+                {permissions.sellVehicleLeads
+                  ? "Habilitado para recibir oportunidades asignadas por admin."
+                  : "No habilitado por defecto. Admin puede activarlo como beneficio."}
+              </p>
+              <button type="button" disabled={!permissions.sellVehicleLeads}>
+                Ver oportunidades
+              </button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule("urgent")}
+            >
+              <h3>Urgencias / Observaciones</h3>
+              <p>
+                Publicaciones observadas, revisión urgente y correcciones
+                necesarias.
+              </p>
+              <button type="button">Ver urgencias</button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule("support")}
+            >
+              <h3>Soporte admin</h3>
+              <p>
+                Tickets internos estilo Remedy para resolver consultas sin salir
+                de la plataforma.
+              </p>
+              <button type="button">Abrir soporte</button>
+            </article>
           </div>
+        )}
 
-          {dealerVehicles.length === 0 ? (
-            <div className="empty-state">
-              Todavía no hay vehículos reales para mostrar.
-            </div>
-          ) : (
-            <div className="admin-table-wrap">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Vehículo</th>
-                    <th>Precio</th>
-                    <th>Ubicación</th>
-                    <th>Financiación</th>
-                    <th>Publicación</th>
-                    <th>Revisión</th>
-                    <th>Acciones</th>
-                    <th>Detalle</th>
-                    <th>Editar</th>
-                    <th>Imágenes</th>
+        {activeDealerModule === "inventory" && (
+          <div className="dealer-leads-section">
+            <ModuleBackButton
+              title="Mis vehículos publicados"
+              description="Inventario real asociado a este dealer. Incluye publicaciones activas, pausadas, reservadas o enviadas a revisión."
+              onRefresh={loadDealerVehicles}
+            />
 
+            {dealerVehicles.length === 0 ? (
+              <div className="empty-state">
+                Todavía no hay vehículos reales para mostrar.
+              </div>
+            ) : (
+              <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Vehículo</th>
+                      <th>Precio</th>
+                      <th>Ubicación</th>
+                      <th>Financiación</th>
+                      <th>Publicación</th>
+                      <th>Revisión</th>
+                      <th>Acciones</th>
+                      <th>Detalle</th>
+                      <th>Editar</th>
+                      <th>Imágenes</th>
+                    </tr>
+                  </thead>
 
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {dealerVehicles.map((vehicle) => (
-                    <tr key={vehicle.vehicle_id}>
-                      <td>
-                        <strong>
-                          {vehicle.brand} {vehicle.model}
-                        </strong>
-                        <span>{vehicle.version || "Sin versión"}</span>
-                        <span>
-                          {vehicle.year} · {formatKm(vehicle.km)}
-                        </span>
-                      </td>
-
-                      <td>
-                        <strong>{formatARS(vehicle.price)}</strong>
-                        <span>Ref. {formatARS(vehicle.market_reference_price)}</span>
-                      </td>
-
-                      <td>
-                        <strong>{vehicle.city || "Sin ciudad"}</strong>
-                        <span>{vehicle.province || "Sin provincia"}</span>
-                      </td>
-
-                      <td>
-                        <span>
-                          {vehicle.financing ? "Disponible" : "No informada"}
-                        </span>
-                        {vehicle.financing && (
-                          <span>Entrega {formatARS(vehicle.delivery)}</span>
-                        )}
-                      </td>
-
-                      <td>
-                        <span
-                          className={
-                            vehicle.is_active
-                              ? "admin-chip success"
-                              : "admin-chip warning"
-                          }
-                        >
-                          {vehicle.is_active ? "Activa" : "No visible"}
-                        </span>
-                        <span>{vehicle.publication_status}</span>
-                      </td>
-
-                      <td>
-                        <span
-                          className={
-                            vehicle.review_status === "needs_review"
-                              ? "admin-chip danger"
-                              : "admin-chip success"
-                          }
-                        >
-                          {vehicle.review_status === "needs_review"
-                            ? "Revisión"
-                            : "Aprobada"}
-                        </span>
-                        {vehicle.reserved && <span>Reservada</span>}
-                      </td>
-                           <td>
-                           <DealerVehicleActions
-                           vehicle={vehicle}
-                           onUpdated={loadDealerVehicles}
-                         />
-                      </td>
-                      <td>
-                          <button
-                          className="table-action-btn"
-                          onClick={() => setSelectedVehicle(vehicle)}
-                        >
-                           Ver detalle
-                      </button>
-                      </td>
-   
-                         <td>
-                           <button
-                           className="table-action-btn"
-                           onClick={() => setEditingVehicle(vehicle)}
-                       >
-                            Editar
-                       </button>
-                       </td>
+                  <tbody>
+                    {dealerVehicles.map((vehicle) => (
+                      <tr key={vehicle.vehicle_id}>
                         <td>
-                        <button
-                           className="table-action-btn"
-                           onClick={() => setEditingVehicleImages(vehicle)}
-                       >
-                           Imágenes
-                         </button>
-                         </td>
+                          <strong>
+                            {vehicle.brand} {vehicle.model}
+                          </strong>
+                          <span>{vehicle.version || "Sin versión"}</span>
+                          <span>
+                            {vehicle.year} · {formatKm(vehicle.km)}
+                          </span>
+                        </td>
 
-   
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                        <td>
+                          <strong>{formatARS(vehicle.price)}</strong>
+                          <span>
+                            Ref. {formatARS(vehicle.market_reference_price)}
+                          </span>
+                        </td>
 
-        <div className="dealer-leads-section">
-          <div className="buyer-section-head">
-            <div>
-              <h2>Últimos leads reales</h2>
+                        <td>
+                          <strong>{vehicle.city || "Sin ciudad"}</strong>
+                          <span>{vehicle.province || "Sin provincia"}</span>
+                        </td>
+
+                        <td>
+                          <span>
+                            {vehicle.financing ? "Disponible" : "No informada"}
+                          </span>
+                          {vehicle.financing && (
+                            <span>Entrega {formatARS(vehicle.delivery)}</span>
+                          )}
+                        </td>
+
+                        <td>
+                          <span
+                            className={
+                              vehicle.is_active
+                                ? "admin-chip success"
+                                : "admin-chip warning"
+                            }
+                          >
+                            {vehicle.is_active ? "Activa" : "No visible"}
+                          </span>
+                          <span>{vehicle.publication_status}</span>
+                        </td>
+
+                        <td>
+                          <span
+                            className={
+                              vehicle.review_status === "needs_review"
+                                ? "admin-chip danger"
+                                : "admin-chip success"
+                            }
+                          >
+                            {vehicle.review_status === "needs_review"
+                              ? "Revisión"
+                              : "Aprobada"}
+                          </span>
+                          {vehicle.reserved && <span>Reservada</span>}
+                        </td>
+
+                        <td>
+                          <DealerVehicleActions
+                            vehicle={vehicle}
+                            onUpdated={loadDealerVehicles}
+                          />
+                        </td>
+
+                        <td>
+                          <button
+                            className="table-action-btn"
+                            onClick={() => setSelectedVehicle(vehicle)}
+                          >
+                            Ver detalle
+                          </button>
+                        </td>
+
+                        <td>
+                          <button
+                            className="table-action-btn"
+                            onClick={() => setEditingVehicle(vehicle)}
+                          >
+                            Editar
+                          </button>
+                        </td>
+
+                        <td>
+                          <button
+                            className="table-action-btn"
+                            onClick={() => setEditingVehicleImages(vehicle)}
+                          >
+                            Imágenes
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeDealerModule === "publish" && (
+          <div className="dealer-leads-section">
+            <ModuleBackButton
+              title="Alta de vehículo"
+              description="Carga guiada por catálogo, validación automática y control del cupo comercial del período."
+            />
+
+            <div className="dealer-module-card dealer-module-card-open">
+              <h3>Publicar nueva unidad</h3>
               <p>
-                Consultas generadas desde publicaciones asociadas a este dealer.
+                Cupo usado: {used} / {formatLimit(limit)}. Cupo restante:{" "}
+                {remaining}.
               </p>
-            </div>
 
-            <button className="admin-refresh-btn" onClick={loadLeads}>
-              Actualizar leads
-            </button>
-          </div>
-
-          {leads.length === 0 ? (
-            <div className="empty-state">
-              Todavía no hay leads reales para mostrar.
-            </div>
-          ) : (
-            <div className="admin-table-wrap">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Comprador</th>
-                    <th>Vehículo</th>
-                    <th>Mensaje</th>
-                    <th>Estado</th>
-                    <th>Detalle</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {leads.map((lead) => (
-                    <tr key={lead.lead_id}>
-                      <td>
-                        <strong>{formatDateTime(lead.created_at)}</strong>
-                        <span>Lead #{lead.lead_id}</span>
-                      </td>
-
-                      <td>
-                        <strong>
-                          {lead.buyer_first_name} {lead.buyer_last_name}
-                        </strong>
-                        <span>{lead.buyer_email}</span>
-                        <span>{lead.buyer_phone}</span>
-                      </td>
-
-                      <td>
-                        <strong>
-                          {lead.vehicle_brand} {lead.vehicle_model}
-                        </strong>
-                        <span>{lead.vehicle_version}</span>
-                        <span>{lead.vehicle_title_snapshot}</span>
-                      </td>
-
-                      <td>
-                        <span>{lead.message || "Sin mensaje."}</span>
-                      </td>
-
-                      <td>
-                        <LeadStatusSelect lead={lead} onUpdated={loadLeads} />
-                      </td>
-                      <td>
-                         <button
-                         className="table-action-btn"
-                         onClick={() => setSelectedLead(lead)}
-                      >
-                        Ver detalle
-                   </button>
-                   </td>
-
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-         <div className="dealer-leads-section">
-  <div className="buyer-section-head">
-    <div>
-      <h2>Oportunidades Vender mi vehículo</h2>
-      <p>
-        Solicitudes de compradores asignadas por administración para que el
-        dealer pueda evaluarlas y gestionarlas.
-      </p>
-    </div>
-
-    <button className="admin-refresh-btn" onClick={loadSellVehicleLeads}>
-      Actualizar oportunidades
-    </button>
-  </div>
-
-  {sellVehicleLeads.length === 0 ? (
-    <div className="empty-state">
-      Todavía no tenés oportunidades asignadas de “Vender mi vehículo”.
-    </div>
-  ) : (
-    <div className="admin-table-wrap">
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Vendedor</th>
-            <th>Vehículo</th>
-            <th>Precio esperado</th>
-            <th>Estado</th>
-            <th>Detalle</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {sellVehicleLeads.map((lead) => (
-            <tr key={lead.lead_id}>
-              <td>
-                <strong>{formatDateTime(lead.created_at)}</strong>
-                <span>{lead.priority || "normal"}</span>
-              </td>
-
-              <td>
-                <strong>{lead.full_name}</strong>
-                <span>{lead.email}</span>
-                <span>{lead.phone}</span>
-              </td>
-
-              <td>
-                <strong>
-                  {lead.brand} {lead.model}
-                </strong>
-                <span>{lead.version || "Sin versión"}</span>
-                <span>
-                  {lead.year || "Sin año"} ·{" "}
-                  {Number(lead.km || 0).toLocaleString("es-AR")} km
-                </span>
-                <span>
-                  {lead.city}, {lead.province}
-                </span>
-              </td>
-
-              <td>
-                <strong>{formatARS(lead.expected_price)}</strong>
-                <span>{lead.condition || "Sin condición"}</span>
-              </td>
-
-              <td>
-                <DealerSellVehicleLeadStatusSelect
-                  lead={lead}
-                  onUpdated={loadSellVehicleLeads}
-                />
-              </td>
-
-              <td>
-                <button
-                  className="table-action-btn"
-                  onClick={() => setSelectedSellVehicleLead(lead)}
-                >
-                  Ver detalle
-                </button>
-               </td>
-               </tr>
-              ))}
-             </tbody>
-             </table>
-             </div>
+              {!publishCheck.allowed && (
+                <div className="auth-warning">
+                  No podés publicar en este momento. Revisá cupo, estado del
+                  plan o permisos otorgados por admin.
+                </div>
               )}
-             </div>
 
-
-
-
-
-
-        <div className="dealer-leads-section">
-          <div className="buyer-section-head">
-            <div>
-              <h2>Tickets internos</h2>
-              <p>Consultas abiertas por este dealer para soporte o admin.</p>
+              <button
+                className="primary-action"
+                disabled={!publishCheck.allowed}
+                onClick={() => setShowVehicleModal(true)}
+              >
+                Publicar vehículo
+              </button>
             </div>
-
-            <button className="admin-refresh-btn" onClick={loadTickets}>
-              Actualizar tickets
-            </button>
           </div>
+        )}
 
-          {tickets.length === 0 ? (
-            <div className="empty-state">
-              Todavía no hay tickets internos para mostrar.
-            </div>
-          ) : (
-            <div className="admin-table-wrap">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Asunto</th>
-                    <th>Categoría</th>
-                    <th>Prioridad</th>
-                    <th>Estado</th>
-                    <th>Detalle</th>
-                  </tr>
-                </thead>
+        {activeDealerModule === "leads" && (
+          <div className="dealer-leads-section">
+            <ModuleBackButton
+              title="Leads recibidos"
+              description="Consultas generadas desde publicaciones asociadas a este dealer."
+              onRefresh={loadLeads}
+            />
 
-                <tbody>
-                  {tickets.map((ticket) => (
-                    <tr key={ticket.ticket_id}>
-                      <td>
-                        <strong>{formatDateTime(ticket.created_at)}</strong>
-                        <span>Ticket #{ticket.ticket_id}</span>
-                      </td>
-
-                      <td>
-                        <strong>{ticket.subject}</strong>
-                        <span>{ticket.message}</span>
-                      </td>
-
-                      <td>
-                        <span>{ticket.category}</span>
-                      </td>
-
-                      <td>
-                        <span className="admin-chip warning">
-                          {ticket.priority}
-                        </span>
-                      </td>
-
-                      <td>
-                        <TicketStatusSelect
-                          ticket={ticket}
-                          onUpdated={loadTickets}
-                        />
-                      </td>
-
-                      <td>
-                        <button
-                          className="table-action-btn"
-                          onClick={() => setSelectedTicket(ticket)}
-                        >
-                          Ver detalle
-                        </button>
-                      </td>
+            {leads.length === 0 ? (
+              <div className="empty-state">
+                Todavía no hay leads reales para mostrar.
+              </div>
+            ) : (
+              <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Comprador</th>
+                      <th>Vehículo</th>
+                      <th>Mensaje</th>
+                      <th>Estado</th>
+                      <th>Detalle</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+
+                  <tbody>
+                    {leads.map((lead) => (
+                      <tr key={lead.lead_id}>
+                        <td>
+                          <strong>{formatDateTime(lead.created_at)}</strong>
+                          <span>Lead #{lead.lead_id}</span>
+                        </td>
+
+                        <td>
+                          <strong>
+                            {lead.buyer_first_name} {lead.buyer_last_name}
+                          </strong>
+                          <span>{lead.buyer_email}</span>
+                          <span>{lead.buyer_phone}</span>
+                        </td>
+
+                        <td>
+                          <strong>
+                            {lead.vehicle_brand} {lead.vehicle_model}
+                          </strong>
+                          <span>{lead.vehicle_version}</span>
+                          <span>{lead.vehicle_title_snapshot}</span>
+                        </td>
+
+                        <td>
+                          <span>{lead.message || "Sin mensaje."}</span>
+                        </td>
+
+                        <td>
+                          <LeadStatusSelect lead={lead} onUpdated={loadLeads} />
+                        </td>
+
+                        <td>
+                          <button
+                            className="table-action-btn"
+                            onClick={() => setSelectedLead(lead)}
+                          >
+                            Ver detalle
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeDealerModule === "sellVehicle" && (
+          <div className="dealer-leads-section">
+            <ModuleBackButton
+              title="Oportunidades Vender mi vehículo"
+              description="Solicitudes de compradores asignadas por administración para que el dealer pueda evaluarlas y gestionarlas."
+              onRefresh={loadSellVehicleLeads}
+            />
+
+            {sellVehicleLeads.length === 0 ? (
+              <div className="empty-state">
+                Todavía no tenés oportunidades asignadas de “Vender mi vehículo”.
+              </div>
+            ) : (
+              <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Vendedor</th>
+                      <th>Vehículo</th>
+                      <th>Precio esperado</th>
+                      <th>Estado</th>
+                      <th>Detalle</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {sellVehicleLeads.map((lead) => (
+                      <tr key={lead.lead_id}>
+                        <td>
+                          <strong>{formatDateTime(lead.created_at)}</strong>
+                          <span>{lead.priority || "normal"}</span>
+                        </td>
+
+                        <td>
+                          <strong>{lead.full_name}</strong>
+                          <span>{lead.email}</span>
+                          <span>{lead.phone}</span>
+                        </td>
+
+                        <td>
+                          <strong>
+                            {lead.brand} {lead.model}
+                          </strong>
+                          <span>{lead.version || "Sin versión"}</span>
+                          <span>
+                            {lead.year || "Sin año"} ·{" "}
+                            {Number(lead.km || 0).toLocaleString("es-AR")} km
+                          </span>
+                          <span>
+                            {lead.city}, {lead.province}
+                          </span>
+                        </td>
+
+                        <td>
+                          <strong>{formatARS(lead.expected_price)}</strong>
+                          <span>{lead.condition || "Sin condición"}</span>
+                        </td>
+
+                        <td>
+                          <DealerSellVehicleLeadStatusSelect
+                            lead={lead}
+                            onUpdated={loadSellVehicleLeads}
+                          />
+                        </td>
+
+                        <td>
+                          <button
+                            className="table-action-btn"
+                            onClick={() => setSelectedSellVehicleLead(lead)}
+                          >
+                            Ver detalle
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeDealerModule === "support" && (
+          <div className="dealer-leads-section">
+            <ModuleBackButton
+              title="Soporte admin"
+              description="Tickets internos estilo Remedy para resolver consultas con soporte o administración sin salir de la plataforma."
+              onRefresh={loadTickets}
+            />
+
+            <div className="dealer-module-card dealer-module-card-open">
+              <h3>Crear nuevo ticket</h3>
+              <p>
+                Abrí una consulta interna para soporte técnico, facturación,
+                publicaciones, leads o cuenta.
+              </p>
+              <button
+                className="primary-action"
+                onClick={() => setShowTicketModal(true)}
+              >
+                Crear ticket
+              </button>
             </div>
-          )}
-        </div>
+
+            {tickets.length === 0 ? (
+              <div className="empty-state">
+                Todavía no hay tickets internos para mostrar.
+              </div>
+            ) : (
+              <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Asunto</th>
+                      <th>Categoría</th>
+                      <th>Prioridad</th>
+                      <th>Estado</th>
+                      <th>Detalle</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {tickets.map((ticket) => (
+                      <tr key={ticket.ticket_id}>
+                        <td>
+                          <strong>{formatDateTime(ticket.created_at)}</strong>
+                          <span>Ticket #{ticket.ticket_id}</span>
+                        </td>
+
+                        <td>
+                          <strong>{ticket.subject}</strong>
+                          <span>{ticket.message}</span>
+                        </td>
+
+                        <td>
+                          <span>{ticket.category}</span>
+                        </td>
+
+                        <td>
+                          <span className="admin-chip warning">
+                            {ticket.priority}
+                          </span>
+                        </td>
+
+                        <td>
+                          <TicketStatusSelect
+                            ticket={ticket}
+                            onUpdated={loadTickets}
+                          />
+                        </td>
+
+                        <td>
+                          <button
+                            className="table-action-btn"
+                            onClick={() => setSelectedTicket(ticket)}
+                          >
+                            Ver detalle
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeDealerModule === "financing" && (
+          <div className="dealer-leads-section">
+            <ModuleBackButton
+              title="Financiación"
+              description="Módulo de financiación propia, bancaria y simulador visible para el comprador."
+            />
+
+            <div className="empty-state">
+              El módulo de configuración avanzada de financiación queda
+              preparado para la siguiente fase. Las condiciones actuales se
+              cargan desde cada publicación.
+            </div>
+          </div>
+        )}
+
+        {activeDealerModule === "metrics" && (
+          <div className="dealer-leads-section">
+            <ModuleBackButton
+              title="Métricas"
+              description="Lectura operativa de leads, publicaciones, interacción y rendimiento comercial."
+            />
+
+            <div className="empty-state">
+              Nivel habilitado: {permissions.metricsLevel}. El módulo de
+              métricas avanzadas queda preparado para una fase posterior.
+            </div>
+          </div>
+        )}
+
+        {activeDealerModule === "urgent" && (
+          <div className="dealer-leads-section">
+            <ModuleBackButton
+              title="Urgencias / Observaciones"
+              description="Publicaciones observadas, revisión urgente y correcciones necesarias."
+              onRefresh={loadDealerVehicles}
+            />
+
+            {reviewVehiclesCount === 0 ? (
+              <div className="empty-state">
+                No hay publicaciones pendientes de revisión urgente.
+              </div>
+            ) : (
+              <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Vehículo</th>
+                      <th>Estado</th>
+                      <th>Detalle</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {dealerVehicles
+                      .filter((vehicle) => vehicle.review_status === "needs_review")
+                      .map((vehicle) => (
+                        <tr key={vehicle.vehicle_id}>
+                          <td>
+                            <strong>
+                              {vehicle.brand} {vehicle.model}
+                            </strong>
+                            <span>{vehicle.version || "Sin versión"}</span>
+                            <span>
+                              {vehicle.year} · {formatKm(vehicle.km)}
+                            </span>
+                          </td>
+
+                          <td>
+                            <span className="admin-chip danger">Revisión</span>
+                            <span>{vehicle.publication_status}</span>
+                          </td>
+
+                          <td>
+                            <button
+                              className="table-action-btn"
+                              onClick={() => setSelectedVehicle(vehicle)}
+                            >
+                              Ver detalle
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
 
         {showTicketModal && (
           <CreateSupportTicketModal
@@ -947,7 +1109,6 @@ export default function DealerPanel({ authProfile }) {
             onClose={() => setSelectedTicket(null)}
             onUpdated={handleTicketUpdated}
             authProfile={authProfile}
-
           />
         )}
 
@@ -959,59 +1120,47 @@ export default function DealerPanel({ authProfile }) {
           />
         )}
 
-          {selectedLead && (
-           <VehicleLeadDetailModal
+        {selectedLead && (
+          <VehicleLeadDetailModal
             lead={selectedLead}
-           onClose={() => setSelectedLead(null)}
-           onUpdated={loadLeads}
+            onClose={() => setSelectedLead(null)}
+            onUpdated={loadLeads}
           />
         )}
 
-         
-           {selectedVehicle && (
-               <DealerVehicleDetailModal
-                vehicle={selectedVehicle}
-                onClose={() => setSelectedVehicle(null)}
-                onUpdated={loadDealerVehicles}
-           />
-         )}
-            {selectedLead && (
-                 <VehicleLeadDetailModal
-                 lead={selectedLead}
-                 onClose={() => setSelectedLead(null)}
-                 onUpdated={loadLeads}
-             />
+        {selectedVehicle && (
+          <DealerVehicleDetailModal
+            vehicle={selectedVehicle}
+            onClose={() => setSelectedVehicle(null)}
+            onUpdated={loadDealerVehicles}
+          />
         )}
 
-             {editingVehicle && (
-                  <EditVehicleModal
-                  vehicle={editingVehicle}
-                  mode="dealer"
-                  onClose={() => setEditingVehicle(null)}
-                  onUpdated={loadDealerVehicles}
-             />
-         )}
+        {editingVehicle && (
+          <EditVehicleModal
+            vehicle={editingVehicle}
+            mode="dealer"
+            onClose={() => setEditingVehicle(null)}
+            onUpdated={loadDealerVehicles}
+          />
+        )}
 
-                 {editingVehicleImages && (
-                 <EditVehicleImagesModal
-                 vehicle={editingVehicleImages}
-                 mode="dealer"
-                 onClose={() => setEditingVehicleImages(null)}
-                 onUpdated={loadDealerVehicles}
-             />
-         )}
+        {editingVehicleImages && (
+          <EditVehicleImagesModal
+            vehicle={editingVehicleImages}
+            mode="dealer"
+            onClose={() => setEditingVehicleImages(null)}
+            onUpdated={loadDealerVehicles}
+          />
+        )}
 
-                 {selectedSellVehicleLead && (
-                 <DealerSellVehicleLeadDetailModal
-                 lead={selectedSellVehicleLead}
-                 onClose={() => setSelectedSellVehicleLead(null)}
-                onUpdated={loadSellVehicleLeads}
-             />
-         )}
-
-
-
-
+        {selectedSellVehicleLead && (
+          <DealerSellVehicleLeadDetailModal
+            lead={selectedSellVehicleLead}
+            onClose={() => setSelectedSellVehicleLead(null)}
+            onUpdated={loadSellVehicleLeads}
+          />
+        )}
       </div>
     </section>
   );

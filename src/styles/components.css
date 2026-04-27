@@ -2036,3 +2036,192 @@
   border: 1px solid rgba(148, 163, 184, 0.13);
   background: rgba(15, 23, 42, 0.58);
 }
+
+/* =========================================================
+   oX NEXMOV Core v1 — Panel Header Premium Polish
+   Mejora encabezados operativos sin tocar lógica.
+   ========================================================= */
+
+.panel-head-row,
+.admin-panel-head,
+.dealer-panel-head,
+.support-panel-head,
+.buyer-panel-head {
+  position: relative;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(56, 189, 248, 0.13), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(2, 6, 23, 0.94));
+  border-radius: 28px;
+  padding: clamp(18px, 2.4vw, 30px);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  overflow: hidden;
+}
+
+.panel-head-row::before,
+.admin-panel-head::before,
+.dealer-panel-head::before,
+.support-panel-head::before,
+.buyer-panel-head::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.10), transparent 38%),
+    radial-gradient(circle at 96% 10%, rgba(59, 130, 246, 0.10), transparent 28%);
+  opacity: 0.85;
+}
+
+.panel-head-row > *,
+.admin-panel-head > *,
+.dealer-panel-head > *,
+.support-panel-head > *,
+.buyer-panel-head > * {
+  position: relative;
+  z-index: 1;
+}
+
+.panel-head-row .eyebrow,
+.admin-panel-head .eyebrow,
+.dealer-panel-head .eyebrow,
+.support-panel-head .eyebrow,
+.buyer-panel-head .eyebrow {
+  color: rgba(125, 211, 252, 0.92);
+  letter-spacing: 0.13em;
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.panel-head-row h1,
+.admin-panel-head h1,
+.dealer-panel-head h1,
+.support-panel-head h1,
+.buyer-panel-head h1 {
+  margin: 8px 0 0;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: clamp(1.45rem, 3vw, 2.35rem);
+  line-height: 1.04;
+  letter-spacing: -0.055em;
+}
+
+.panel-head-row p,
+.admin-panel-head p,
+.dealer-panel-head p,
+.support-panel-head p,
+.buyer-panel-head p {
+  margin-top: 10px;
+  max-width: 760px;
+  color: rgba(203, 213, 225, 0.76);
+  font-size: clamp(0.88rem, 1.2vw, 0.98rem);
+  line-height: 1.55;
+}
+
+.admin-kpi-grid,
+.dealer-status-grid,
+.buyer-stats-grid,
+.support-stats-grid {
+  gap: 14px;
+}
+
+.admin-kpi-card,
+.dealer-status-card,
+.buyer-stat-card,
+.support-stat-card {
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.86));
+  border-radius: 22px;
+  box-shadow:
+    0 14px 42px rgba(0, 0, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.admin-kpi-card span,
+.dealer-status-card span,
+.buyer-stat-card span,
+.support-stat-card span {
+  color: rgba(148, 163, 184, 0.88);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  font-weight: 950;
+}
+
+.admin-kpi-card strong,
+.dealer-status-card strong,
+.buyer-stat-card strong,
+.support-stat-card strong {
+  color: rgba(248, 250, 252, 0.98);
+  letter-spacing: -0.04em;
+}
+
+.admin-kpi-card p,
+.dealer-status-card p,
+.buyer-stat-card p,
+.support-stat-card p {
+  color: rgba(203, 213, 225, 0.68);
+  line-height: 1.42;
+}
+
+.clickable-module-card {
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.clickable-module-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(56, 189, 248, 0.10);
+}
+
+.dealer-module-open-head {
+  margin-bottom: 18px;
+}
+
+.dealer-module-open-head .table-action-btn {
+  width: fit-content;
+  margin-bottom: 12px;
+}
+
+.dealer-module-card-open {
+  margin-bottom: 16px;
+}
+
+/* =========================================================
+   oX NEXMOV Core v1 — Dealer Module Cards Alignment
+   Alinea acciones inferiores en cards del panel dealer.
+   ========================================================= */
+
+.dealer-module-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 186px;
+}
+
+.dealer-module-card h3 {
+  margin-bottom: 10px;
+}
+
+.dealer-module-card p {
+  flex: 1;
+  margin-bottom: 18px;
+}
+
+.dealer-module-card button {
+  margin-top: auto;
+  width: 100%;
+}
+
+.clickable-module-card {
+  min-height: 186px;
+}
