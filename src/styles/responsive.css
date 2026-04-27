@@ -44,29 +44,12 @@
     flex-direction: column;
   }
 }
+
 @media (max-width: 1180px) {
   .vehicle-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
 
-@media (max-width: 640px) {
-  .vehicle-grid {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 1180px) {
-  .vehicle-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .vehicle-grid {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 1180px) {
   .dealer-status-grid,
   .dealer-modules-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -79,15 +62,7 @@
   .dealer-switcher {
     width: 100%;
   }
-}
 
-@media (max-width: 640px) {
-  .dealer-status-grid,
-  .dealer-modules-grid {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 1180px) {
   .admin-kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -97,27 +72,86 @@
   }
 }
 
-@media (max-width: 640px) {
-  .admin-kpi-grid {
-    grid-template-columns: 1fr;
-  }
-}
 @media (max-width: 1080px) {
   .header-role-actions {
     display: none;
   }
 }
+
 @media (max-width: 900px) {
   .vehicle-detail-layout {
     grid-template-columns: 1fr;
   }
 
   .detail-main-image {
+    height: clamp(260px, 38vh, 380px);
     min-height: 280px;
+  }
+
+  .detail-thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .dealer-vehicle-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dealer-vehicle-gallery .detail-main-image {
+    height: clamp(260px, 38vh, 380px);
+  }
+
+  .dealer-vehicle-gallery .detail-thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .compare-tray {
+    bottom: 86px;
+  }
+
+  .compare-tray-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vehicle-actions.vehicle-actions-four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .favorites-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zero-km-grid,
+  .form-grid-two {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .ticket-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-detail-modal {
+    padding: 18px;
   }
 }
 
 @media (max-width: 640px) {
+  .vehicle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dealer-status-grid,
+  .dealer-modules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
   .vehicle-detail-modal {
     padding: 18px;
   }
@@ -137,32 +171,7 @@
   .detail-actions .primary-action {
     grid-column: auto;
   }
-}
-@media (max-width: 860px) {
-  .compare-tray {
-    bottom: 86px;
-  }
 
-  .compare-tray-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 520px) {
-  .compare-tray-list {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 860px) {
-  .vehicle-actions.vehicle-actions-four {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .favorites-grid {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 640px) {
   .buyer-section-actions {
     width: 100%;
   }
@@ -170,55 +179,7 @@
   .buyer-section-actions button {
     width: 100%;
   }
-}
-@media (max-width: 720px) {
-  .ticket-detail-grid {
-    grid-template-columns: 1fr;
-  }
 
-  .ticket-detail-modal {
-    padding: 18px;
-  }
-}
-@media (max-width: 860px) {
-  .zero-km-grid,
-  .form-grid-two {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-@media (max-width: 900px) {
-  .vehicle-detail-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .detail-main-image {
-    height: clamp(260px, 38vh, 380px);
-  }
-
-  .detail-thumbs {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-
-@media (max-width: 900px) {
-  .dealer-vehicle-detail-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .dealer-vehicle-gallery .detail-main-image {
-    height: clamp(260px, 38vh, 380px);
-  }
-
-  .dealer-vehicle-gallery .detail-thumbs {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-
-@media (max-width: 640px) {
   .mobile-dock {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 6px;
@@ -234,9 +195,425 @@
   }
 }
 
+@media (max-width: 520px) {
+  .compare-tray-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 380px) {
   .mobile-dock .dock-btn {
     font-size: 0.62rem;
     padding-inline: 4px;
+  }
+}
+
+/* =========================================================
+   oX NEXMOV Core v1 — Mobile Tables Hard Override
+   Convierte tablas operativas en cards legibles en mobile.
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .admin-table-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  .admin-table {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    border-collapse: unset !important;
+    border-spacing: 0 !important;
+  }
+
+  .admin-table thead {
+    display: none !important;
+  }
+
+  .admin-table tbody {
+    display: grid !important;
+    width: 100% !important;
+    gap: 14px !important;
+  }
+
+  .admin-table tbody tr {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    gap: 10px !important;
+    padding: 14px !important;
+    border: 1px solid rgba(148, 163, 184, 0.16) !important;
+    border-radius: 20px !important;
+    background:
+      linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(2, 6, 23, 0.94)),
+      radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.08), transparent 36%) !important;
+    box-shadow:
+      0 16px 48px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  }
+
+  .admin-table tbody tr:hover {
+    transform: none !important;
+    background:
+      linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(2, 6, 23, 0.95)),
+      radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.10), transparent 36%) !important;
+  }
+
+  .admin-table tbody td {
+    display: grid !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    gap: 3px !important;
+    padding: 0 !important;
+    border: none !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    font-size: 0.82rem !important;
+  }
+
+  .admin-table tbody td strong,
+  .admin-table tbody td span,
+  .admin-table tbody td p {
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .admin-table tbody td strong {
+    font-size: 0.88rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .admin-table tbody td span {
+    font-size: 0.76rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .admin-table tbody td:empty {
+    display: none !important;
+  }
+
+  .admin-table tbody td:last-child,
+  .admin-table tbody td:has(.table-action-btn),
+  .admin-table tbody td:has(.lead-status-control) {
+    margin-top: 4px !important;
+  }
+
+  .admin-table .table-action-btn,
+  .admin-table .admin-refresh-btn,
+  .admin-table .lead-status-control,
+  .admin-table .lead-status-control select {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .admin-table .table-action-btn,
+  .admin-table .admin-refresh-btn {
+    justify-content: center !important;
+    text-align: center !important;
+    border-radius: 16px !important;
+    padding: 10px 12px !important;
+  }
+
+  .admin-table select {
+    width: 100% !important;
+  }
+
+  .buyer-section-head,
+  .admin-section-head,
+  .dealer-section-head {
+    display: grid !important;
+    gap: 12px !important;
+  }
+
+  .buyer-section-head .admin-refresh-btn,
+  .admin-section-head .admin-refresh-btn,
+  .dealer-section-head .admin-refresh-btn {
+    width: 100% !important;
+  }
+}
+
+/* =========================================================
+   oX NEXMOV Core v1 — Mobile Modals Polish
+   Mejora uso de modales grandes en mobile sin tocar JSX.
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .modal-backdrop {
+    align-items: flex-start !important;
+    padding: 10px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ticket-detail-modal,
+  .contact-modal,
+  .vehicle-detail-modal,
+  .dealer-vehicle-detail-modal,
+  .edit-images-modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: calc(100vh - 88px) !important;
+    margin: 0 auto 76px !important;
+    border-radius: 22px !important;
+    padding: 16px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .contact-modal-head {
+    position: sticky;
+    top: 0;
+    z-index: 8;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin: -16px -16px 14px;
+    padding: 16px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.13);
+    background:
+      linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.92));
+    backdrop-filter: blur(14px);
+  }
+
+  .contact-modal-head h2 {
+    font-size: 1.18rem !important;
+    line-height: 1.15 !important;
+    margin: 4px 0 0 !important;
+  }
+
+  .contact-modal-head p {
+    font-size: 0.8rem !important;
+    line-height: 1.38 !important;
+    margin-top: 6px !important;
+  }
+
+  .modal-close-btn {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    border-radius: 999px !important;
+    font-size: 1.25rem !important;
+    display: grid !important;
+    place-items: center !important;
+    background: rgba(15, 23, 42, 0.9) !important;
+    border: 1px solid rgba(148, 163, 184, 0.22) !important;
+    color: rgba(226, 232, 240, 0.94) !important;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+  }
+
+  .ticket-detail-grid,
+  .detail-spec-grid,
+  .form-grid-two {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .ticket-detail-card,
+  .contact-summary,
+  .lead-created-box {
+    border-radius: 18px !important;
+    padding: 14px !important;
+  }
+
+  .ticket-detail-card strong {
+    font-size: 0.95rem !important;
+  }
+
+  .ticket-detail-card p {
+    font-size: 0.84rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .detail-actions,
+  .vehicle-actions,
+  .lead-notes-actions,
+  .edit-image-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .detail-actions button,
+  .vehicle-actions button,
+  .lead-notes-actions button,
+  .primary-action,
+  .table-action-btn {
+    width: 100% !important;
+    min-height: 42px !important;
+  }
+
+  .zero-km-form,
+  .contact-form {
+    padding-bottom: 12px !important;
+  }
+
+  .zero-km-form label,
+  .contact-form label,
+  .edit-images-upload,
+  .assign-dealer-box label {
+    font-size: 0.78rem !important;
+  }
+
+  .zero-km-form input,
+  .zero-km-form select,
+  .zero-km-form textarea,
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea,
+  .lead-notes-textarea,
+  .assign-dealer-box select {
+    width: 100% !important;
+    min-height: 42px !important;
+    font-size: 0.86rem !important;
+  }
+
+  .lead-notes-textarea {
+    min-height: 130px !important;
+  }
+
+  .detail-main-image,
+  .dealer-vehicle-gallery .detail-main-image {
+    height: clamp(230px, 34vh, 340px) !important;
+    min-height: 230px !important;
+    border-radius: 18px !important;
+  }
+
+  .detail-thumbs,
+  .dealer-vehicle-gallery .detail-thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .edit-images-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .vehicle-image-preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .ticket-detail-modal,
+  .contact-modal,
+  .vehicle-detail-modal,
+  .dealer-vehicle-detail-modal,
+  .edit-images-modal {
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .contact-modal-head {
+    margin: -14px -14px 12px;
+    padding: 14px;
+  }
+
+  .contact-modal-head h2 {
+    font-size: 1.05rem !important;
+  }
+
+  .modal-close-btn {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+  }
+
+  .edit-images-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .detail-thumbs,
+  .dealer-vehicle-gallery .detail-thumbs {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* =========================================================
+   oX NEXMOV Core v1 — Final Mobile Modal Scroll Fix
+   Oculta scrollbars nativos sin quitar scroll.
+   Aplica a mobile/tablet hasta 1024px.
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .modal-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .ticket-detail-modal,
+  .contact-modal,
+  .vehicle-detail-modal,
+  .dealer-vehicle-detail-modal,
+  .edit-images-modal {
+    width: min(100%, calc(100vw - 20px)) !important;
+    max-width: calc(100vw - 20px) !important;
+    height: auto !important;
+    max-height: calc(100dvh - 96px) !important;
+    margin: 0 auto 76px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-bottom: 96px !important;
+    box-sizing: border-box !important;
+
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  .ticket-detail-modal::-webkit-scrollbar,
+  .contact-modal::-webkit-scrollbar,
+  .vehicle-detail-modal::-webkit-scrollbar,
+  .dealer-vehicle-detail-modal::-webkit-scrollbar,
+  .edit-images-modal::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+    background: transparent !important;
+  }
+
+  .ticket-detail-modal *,
+  .contact-modal *,
+  .vehicle-detail-modal *,
+  .dealer-vehicle-detail-modal *,
+  .edit-images-modal * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  .ticket-detail-modal *::-webkit-scrollbar,
+  .contact-modal *::-webkit-scrollbar,
+  .vehicle-detail-modal *::-webkit-scrollbar,
+  .dealer-vehicle-detail-modal *::-webkit-scrollbar,
+  .edit-images-modal *::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+    background: transparent !important;
+  }
+
+  html,
+  body,
+  #root,
+  .app-shell,
+  .app-main {
+    overflow-x: hidden !important;
   }
 }
