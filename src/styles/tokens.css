@@ -1,0 +1,16 @@
+:root {
+  --ox-bg: #070c18;
+  --ox-layer: #0d1627;
+  --ox-card: #13203a;
+  --ox-card-2: #1c2f4e;
+  --ox-text: #e5e7eb;
+  --ox-muted: #9ca3af;
+  --ox-border: rgba(255, 255, 255, 0.1);
+  --ox-blue: #3b82f6;
+  --ox-cyan: #22d3ee;
+  --ox-green: #22c55e;
+  --ox-amber: #f59e0b;
+  --ox-red: #ef4444;
+  --ox-radius: 18px;
+  --ox-max: 1320px;
+}

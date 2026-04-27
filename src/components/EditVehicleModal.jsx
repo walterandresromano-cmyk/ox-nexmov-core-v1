@@ -1,0 +1,359 @@
+import { useState } from "react";
+
+import { updateAdminVehicleData } from "../services/adminVehicles.service.js";
+import { updateCurrentDealerVehicleData } from "../services/dealerVehicles.service.js";
+
+function getInitialForm(vehicle) {
+  return {
+    vehicleId: vehicle?.vehicle_id,
+    brand: vehicle?.brand || "",
+    model: vehicle?.model || "",
+    version: vehicle?.version || "",
+    year: vehicle?.year || "",
+    price: vehicle?.price || "",
+    km: vehicle?.km || "",
+    bodyType: vehicle?.body_type || "",
+    transmission: vehicle?.transmission || "",
+    fuelType: vehicle?.fuel_type || "",
+    province: vehicle?.province || "",
+    city: vehicle?.city || "",
+    marketReferencePrice: vehicle?.market_reference_price || "",
+    financing: Boolean(vehicle?.financing),
+    delivery: vehicle?.delivery || "",
+    months: vehicle?.months || "",
+    rate: vehicle?.rate || "",
+    details: vehicle?.details || "",
+    forceApprove: false,
+  };
+}
+
+export default function EditVehicleModal({
+  vehicle,
+  mode = "dealer",
+  onClose,
+  onUpdated,
+}) {
+  const [form, setForm] = useState(() => getInitialForm(vehicle));
+  const [submitting, setSubmitting] = useState(false);
+  const [savedVehicle, setSavedVehicle] = useState(null);
+  const [error, setError] = useState("");
+
+  function updateField(field, value) {
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    setSubmitting(true);
+    setError("");
+    setSavedVehicle(null);
+
+    if (!form.brand.trim()) {
+      setError("Ingresá la marca.");
+      setSubmitting(false);
+      return;
+    }
+
+    if (!form.model.trim()) {
+      setError("Ingresá el modelo.");
+      setSubmitting(false);
+      return;
+    }
+
+    if (!form.year || Number(form.year) < 1980) {
+      setError("Ingresá un año válido.");
+      setSubmitting(false);
+      return;
+    }
+
+    if (!form.price || Number(form.price) <= 0) {
+      setError("Ingresá un precio válido.");
+      setSubmitting(false);
+      return;
+    }
+
+    if (Number(form.km || 0) < 0) {
+      setError("Ingresá kilometraje válido.");
+      setSubmitting(false);
+      return;
+    }
+
+    const result =
+      mode === "admin"
+        ? await updateAdminVehicleData(form)
+        : await updateCurrentDealerVehicleData(form);
+
+    if (result.error) {
+      setError(result.error.message || "No se pudo editar la publicación.");
+      setSubmitting(false);
+      return;
+    }
+
+    setSavedVehicle(result.vehicle);
+    setSubmitting(false);
+
+    if (onUpdated) {
+      await onUpdated();
+    }
+  }
+
+  if (!vehicle) return null;
+
+  return (
+    <div className="modal-backdrop">
+      <section className="ticket-detail-modal">
+        <div className="contact-modal-head">
+          <div>
+            <p className="eyebrow">Editar publicación</p>
+            <h2>
+              {vehicle.brand} {vehicle.model}
+            </h2>
+            <p>
+              Modificá datos principales, precio, referencia, ubicación,
+              financiación y detalles.
+            </p>
+          </div>
+
+          <button className="modal-close-btn" onClick={onClose}>
+            ×
+          </button>
+        </div>
+
+        {savedVehicle ? (
+          <div className="lead-created-box">
+            <h3>Publicación actualizada</h3>
+            <p>Los cambios fueron guardados correctamente.</p>
+
+            <div className="contact-summary">
+              <span>Estado</span>
+              <strong>{savedVehicle.publication_status}</strong>
+              <span>Revisión: {savedVehicle.review_status}</span>
+            </div>
+
+            <button className="primary-action" onClick={onClose}>
+              Cerrar
+            </button>
+          </div>
+        ) : (
+          <form className="zero-km-form" onSubmit={handleSubmit}>
+            <div className="form-grid-two">
+              <label>
+                Marca
+                <input
+                  value={form.brand}
+                  onChange={(event) => updateField("brand", event.target.value)}
+                />
+              </label>
+
+              <label>
+                Modelo
+                <input
+                  value={form.model}
+                  onChange={(event) => updateField("model", event.target.value)}
+                />
+              </label>
+
+              <label>
+                Versión
+                <input
+                  value={form.version}
+                  onChange={(event) =>
+                    updateField("version", event.target.value)
+                  }
+                />
+              </label>
+
+              <label>
+                Año
+                <input
+                  type="number"
+                  value={form.year}
+                  onChange={(event) => updateField("year", event.target.value)}
+                />
+              </label>
+
+              <label>
+                Precio publicado
+                <input
+                  type="number"
+                  value={form.price}
+                  onChange={(event) => updateField("price", event.target.value)}
+                />
+              </label>
+
+              <label>
+                Referencia mercado
+                <input
+                  type="number"
+                  value={form.marketReferencePrice}
+                  onChange={(event) =>
+                    updateField("marketReferencePrice", event.target.value)
+                  }
+                />
+              </label>
+
+              <label>
+                Kilómetros
+                <input
+                  type="number"
+                  value={form.km}
+                  onChange={(event) => updateField("km", event.target.value)}
+                />
+              </label>
+
+              <label>
+                Carrocería
+                <select
+                  value={form.bodyType}
+                  onChange={(event) =>
+                    updateField("bodyType", event.target.value)
+                  }
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="Sedán">Sedán</option>
+                  <option value="Hatchback">Hatchback</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Pickup">Pickup</option>
+                  <option value="Utilitario">Utilitario</option>
+                  <option value="Coupé">Coupé</option>
+                  <option value="Rural">Rural</option>
+                </select>
+              </label>
+
+              <label>
+                Transmisión
+                <select
+                  value={form.transmission}
+                  onChange={(event) =>
+                    updateField("transmission", event.target.value)
+                  }
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="Manual">Manual</option>
+                  <option value="Automática">Automática</option>
+                  <option value="CVT">CVT</option>
+                </select>
+              </label>
+
+              <label>
+                Combustible
+                <select
+                  value={form.fuelType}
+                  onChange={(event) =>
+                    updateField("fuelType", event.target.value)
+                  }
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="Nafta">Nafta</option>
+                  <option value="Diésel">Diésel</option>
+                  <option value="Híbrido">Híbrido</option>
+                  <option value="Eléctrico">Eléctrico</option>
+                  <option value="GNC">GNC</option>
+                </select>
+              </label>
+
+              <label>
+                Provincia
+                <input
+                  value={form.province}
+                  onChange={(event) =>
+                    updateField("province", event.target.value)
+                  }
+                />
+              </label>
+
+              <label>
+                Ciudad
+                <input
+                  value={form.city}
+                  onChange={(event) => updateField("city", event.target.value)}
+                />
+              </label>
+
+              <label>
+                Tiene financiación
+                <select
+                  value={form.financing ? "yes" : "no"}
+                  onChange={(event) =>
+                    updateField("financing", event.target.value === "yes")
+                  }
+                >
+                  <option value="no">No</option>
+                  <option value="yes">Sí</option>
+                </select>
+              </label>
+
+              <label>
+                Entrega
+                <input
+                  type="number"
+                  value={form.delivery}
+                  onChange={(event) =>
+                    updateField("delivery", event.target.value)
+                  }
+                />
+              </label>
+
+              <label>
+                Cuotas / meses
+                <input
+                  type="number"
+                  value={form.months}
+                  onChange={(event) => updateField("months", event.target.value)}
+                />
+              </label>
+
+              <label>
+                Tasa
+                <input
+                  type="number"
+                  value={form.rate}
+                  onChange={(event) => updateField("rate", event.target.value)}
+                />
+              </label>
+
+              {mode === "admin" && (
+                <label>
+                  Aprobación admin
+                  <select
+                    value={form.forceApprove ? "yes" : "no"}
+                    onChange={(event) =>
+                      updateField("forceApprove", event.target.value === "yes")
+                    }
+                  >
+                    <option value="no">Respetar validaciones</option>
+                    <option value="yes">Forzar aprobación y activar</option>
+                  </select>
+                </label>
+              )}
+            </div>
+
+            <label>
+              Detalles / aclaraciones
+              <textarea
+                value={form.details}
+                onChange={(event) => updateField("details", event.target.value)}
+                rows={5}
+                placeholder="Estado general, detalles comerciales, financiación, observaciones."
+              />
+            </label>
+
+            {error && <p className="form-error">{error}</p>}
+
+            <button
+              className="primary-action"
+              type="submit"
+              disabled={submitting}
+            >
+              {submitting ? "Guardando cambios..." : "Guardar cambios"}
+            </button>
+          </form>
+        )}
+      </section>
+    </div>
+  );
+}

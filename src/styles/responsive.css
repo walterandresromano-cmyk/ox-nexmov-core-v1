@@ -1,0 +1,242 @@
+.mobile-dock {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .header-inner {
+    justify-content: space-between;
+  }
+
+  .mobile-dock {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    z-index: 80;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    padding: 8px;
+    background: rgba(13, 22, 39, 0.96);
+    border: 1px solid var(--ox-border);
+    border-radius: 22px;
+    backdrop-filter: blur(16px);
+  }
+
+  .dock-btn {
+    border: 1px solid var(--ox-border);
+    background: var(--ox-card);
+    color: var(--ox-text);
+    border-radius: 16px;
+    padding: 10px 4px;
+    font-size: 0.75rem;
+  }
+
+  .hero-search {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    flex-direction: column;
+  }
+}
+@media (max-width: 1180px) {
+  .vehicle-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .vehicle-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 1180px) {
+  .vehicle-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .vehicle-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 1180px) {
+  .dealer-status-grid,
+  .dealer-modules-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .panel-head-row {
+    flex-direction: column;
+  }
+
+  .dealer-switcher {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .dealer-status-grid,
+  .dealer-modules-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 1180px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-toolbar {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 1080px) {
+  .header-role-actions {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .vehicle-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-main-image {
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .vehicle-detail-modal {
+    padding: 18px;
+  }
+
+  .vehicle-detail-head {
+    align-items: flex-start;
+  }
+
+  .detail-spec-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-actions .primary-action {
+    grid-column: auto;
+  }
+}
+@media (max-width: 860px) {
+  .compare-tray {
+    bottom: 86px;
+  }
+
+  .compare-tray-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .compare-tray-list {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 860px) {
+  .vehicle-actions.vehicle-actions-four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .favorites-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .buyer-section-actions {
+    width: 100%;
+  }
+
+  .buyer-section-actions button {
+    width: 100%;
+  }
+}
+@media (max-width: 720px) {
+  .ticket-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-detail-modal {
+    padding: 18px;
+  }
+}
+@media (max-width: 860px) {
+  .zero-km-grid,
+  .form-grid-two {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 900px) {
+  .vehicle-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-main-image {
+    height: clamp(260px, 38vh, 380px);
+  }
+
+  .detail-thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+
+@media (max-width: 900px) {
+  .dealer-vehicle-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dealer-vehicle-gallery .detail-main-image {
+    height: clamp(260px, 38vh, 380px);
+  }
+
+  .dealer-vehicle-gallery .detail-thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+
+@media (max-width: 640px) {
+  .mobile-dock {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .mobile-dock .dock-btn {
+    min-width: 0;
+    padding: 9px 6px;
+    font-size: 0.68rem;
+    border-radius: 14px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 380px) {
+  .mobile-dock .dock-btn {
+    font-size: 0.62rem;
+    padding-inline: 4px;
+  }
+}
