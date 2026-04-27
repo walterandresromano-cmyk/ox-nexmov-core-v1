@@ -617,3 +617,77 @@
     overflow-x: hidden !important;
   }
 }
+
+/* =========================================================
+   oX NEXMOV Core v1 — Mobile Card Hierarchy Polish
+   Mejora lectura de filas convertidas en cards.
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .admin-table tbody tr {
+    position: relative !important;
+    padding: 16px !important;
+    gap: 12px !important;
+  }
+
+  .admin-table tbody td {
+    position: relative !important;
+  }
+
+  .admin-table tbody td:not(:has(.table-action-btn)):not(:has(.lead-status-control)):not(:empty) {
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.08) !important;
+  }
+
+  .admin-table tbody td:last-child,
+  .admin-table tbody td:has(.table-action-btn),
+  .admin-table tbody td:has(.lead-status-control) {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  .admin-table tbody td:first-child strong {
+    font-size: 1rem !important;
+    letter-spacing: -0.025em !important;
+  }
+
+  .admin-table tbody td:first-child span {
+    color: rgba(186, 230, 253, 0.74) !important;
+  }
+
+  .admin-table tbody td strong {
+    color: rgba(248, 250, 252, 0.96) !important;
+  }
+
+  .admin-table tbody td span {
+    color: rgba(203, 213, 225, 0.72) !important;
+  }
+
+  .admin-table tbody td:has(.lead-status-control) {
+    margin-top: 6px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid rgba(56, 189, 248, 0.10) !important;
+  }
+
+  .admin-table tbody td:has(.table-action-btn) {
+    display: grid !important;
+    gap: 8px !important;
+  }
+
+  .admin-table .lead-status-control {
+    display: grid !important;
+    gap: 7px !important;
+  }
+
+  .admin-table .lead-status-control select {
+    min-height: 42px !important;
+    border-radius: 14px !important;
+    font-weight: 900 !important;
+  }
+
+  .admin-table .table-action-btn {
+    min-height: 42px !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.01em !important;
+  }
+}
