@@ -207,3 +207,23 @@ export async function updateAdminVehicleImages({
     error,
   };
 }
+
+export async function canDealerPublish({ dealerId }) {
+  if (!isSupabaseConfigured || !supabase) {
+    return {
+      allowed: false,
+      error: {
+        message: "Supabase no está configurado.",
+      },
+    };
+  }
+
+  const { data, error } = await supabase.rpc("can_dealer_publish", {
+    p_dealer_id: Number(dealerId),
+  });
+
+  return {
+    allowed: Boolean(data),
+    error,
+  };
+}

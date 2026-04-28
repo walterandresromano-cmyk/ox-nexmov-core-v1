@@ -1,18 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
 import VehicleLeadDetailModal from "../../components/VehicleLeadDetailModal.jsx";
-
+import CreateSupportTicketModal from "../../components/CreateSupportTicketModal.jsx";
 import AdminSellVehicleLeadsSection from "../../components/AdminSellVehicleLeadsSection.jsx";
 import GrantExtraSlotsModal from "../../components/GrantExtraSlotsModal.jsx";
 import AdminVehiclesSection from "../../components/AdminVehiclesSection.jsx";
 import LeadStatusSelect from "../../components/LeadStatusSelect.jsx";
 import TicketDetailModal from "../../components/TicketDetailModal.jsx";
 import TicketStatusSelect from "../../components/TicketStatusSelect.jsx";
+import AdminZeroKmLeadsSection from "../../components/AdminZeroKmLeadsSection.jsx";
 import { mockDealers } from "../../data/mockData.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import { listDealersForAdmin } from "../../services/dealers.service.js";
 import { listVehicleLeadsForCurrentUser } from "../../services/leads.service.js";
 import { listSupportTicketsForCurrentUser } from "../../services/tickets.service.js";
-import AdminZeroKmLeadsSection from "../../components/AdminZeroKmLeadsSection.jsx";
+import {
+  createDealerFromAdmin,
+  activateDealerFromAdmin,
+  updateDealerPlanFromAdmin,
+} from "../../services/adminDealers.service.js";
 
 const ADMIN_MODULES = {
   DEALERS: "dealers",
@@ -22,6 +27,13 @@ const ADMIN_MODULES = {
   ZERO_KM: "zeroKm",
   TICKETS: "tickets",
 };
+
+const PLAN_OPTIONS = [
+  { value: "inicio", label: "Inicio" },
+  { value: "pro", label: "Pro" },
+  { value: "elite", label: "Elite" },
+  { value: "platinum", label: "Platinum" },
+];
 
 function formatLimit(limit) {
   return limit === Infinity ? "Ilimitado" : limit;
@@ -41,6 +53,25 @@ function getAlertClass(days) {
   if (days <= 6) return "admin-chip orange";
   if (days <= 14) return "admin-chip warning";
   return "admin-chip success";
+}
+
+function getPlanStatusLabel(status) {
+  if (status === "pending_activation") return "Pendiente";
+  if (status === "active") return "Activo";
+  if (status === "expiring") return "Por vencer";
+  if (status === "expired_grace") return "En gracia";
+  if (status === "suspended") return "Suspendido";
+  return status || "Sin estado";
+}
+
+function getPlanStatusClass(status) {
+  if (status === "pending_activation") return "admin-chip warning";
+  if (status === "active") return "admin-chip success";
+  if (status === "expired_grace" || status === "suspended") {
+    return "admin-chip danger";
+  }
+  if (status === "expiring") return "admin-chip orange";
+  return "admin-chip warning";
 }
 
 function formatDateTime(dateValue) {
@@ -64,6 +95,10 @@ function formatARS(value) {
     currency: "ARS",
     maximumFractionDigits: 0,
   }).format(number);
+}
+
+function normalizeText(value) {
+  return String(value || "").trim();
 }
 
 export default function AdminPanel({ authProfile }) {
@@ -91,7 +126,31 @@ export default function AdminPanel({ authProfile }) {
 
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [selectedDealerForSlots, setSelectedDealerForSlots] = useState(null);
+  const [selectedDealer, setSelectedDealer] = useState(null);
+  const [selectedDealerForTicket, setSelectedDealerForTicket] = useState(null);
   const [selectedLead, setSelectedLead] = useState(null);
+  const [showCreateDealer, setShowCreateDealer] = useState(false);
+
+  const [newDealerForm, setNewDealerForm] = useState({
+    name: "",
+    email: "",
+    province: "",
+    city: "",
+    planCode: "inicio",
+    phone: "",
+  });
+
+  const [creatingDealer, setCreatingDealer] = useState(false);
+  const [createDealerError, setCreateDealerError] = useState("");
+
+  const [activatingDealer, setActivatingDealer] = useState(false);
+  const [activateDealerError, setActivateDealerError] = useState("");
+
+  const [updatingDealerPlan, setUpdatingDealerPlan] = useState(false);
+  const [dealerPlanError, setDealerPlanError] = useState("");
+  const [dealerPlanForm, setDealerPlanForm] = useState({
+    planCode: "inicio",
+  });
 
   async function loadDealers() {
     setLoadingDealers(true);
@@ -136,7 +195,6 @@ export default function AdminPanel({ authProfile }) {
     }
 
     const nextLeads = supabaseLeads || [];
-
     setLeads(nextLeads);
 
     setSelectedLead((currentLead) => {
@@ -166,7 +224,7 @@ export default function AdminPanel({ authProfile }) {
       return;
     }
 
-    setTickets(supabaseTickets);
+    setTickets(supabaseTickets || []);
     setLoadingTickets(false);
   }
 
@@ -178,10 +236,137 @@ export default function AdminPanel({ authProfile }) {
     await loadTickets();
   }
 
+  async function handleCreateDealer() {
+    setCreatingDealer(true);
+    setCreateDealerError("");
+
+    const cleanForm = {
+      name: normalizeText(newDealerForm.name),
+      email: normalizeText(newDealerForm.email).toLowerCase(),
+      province: normalizeText(newDealerForm.province),
+      city: normalizeText(newDealerForm.city),
+      phone: normalizeText(newDealerForm.phone),
+      planCode: newDealerForm.planCode || "inicio",
+    };
+
+    if (!cleanForm.name) {
+      setCreateDealerError("El nombre comercial del dealer es obligatorio.");
+      setCreatingDealer(false);
+      return;
+    }
+
+    if (!cleanForm.email) {
+      setCreateDealerError("El email de acceso del dealer es obligatorio.");
+      setCreatingDealer(false);
+      return;
+    }
+
+    if (!cleanForm.province || !cleanForm.city) {
+      setCreateDealerError("Provincia y ciudad son obligatorias.");
+      setCreatingDealer(false);
+      return;
+    }
+
+    const { error } = await createDealerFromAdmin({
+      name: cleanForm.name,
+      province: cleanForm.province,
+      city: cleanForm.city,
+      planCode: cleanForm.planCode,
+      contactPhone: cleanForm.phone,
+      phoneWhatsapp: cleanForm.phone,
+      accessEmail: cleanForm.email,
+    });
+
+    if (error) {
+      setCreateDealerError(error.message || "Error al crear dealer.");
+      setCreatingDealer(false);
+      return;
+    }
+
+    setShowCreateDealer(false);
+    setNewDealerForm({
+      name: "",
+      email: "",
+      province: "",
+      city: "",
+      planCode: "inicio",
+      phone: "",
+    });
+
+    await loadDealers();
+    setCreatingDealer(false);
+  }
+
+  async function handleActivateSelectedDealer() {
+    if (!selectedDealer?.id) return;
+
+    setActivatingDealer(true);
+    setActivateDealerError("");
+
+    const { error } = await activateDealerFromAdmin({
+      dealerId: selectedDealer.id,
+    });
+
+    if (error) {
+      setActivateDealerError(error.message || "No se pudo activar el dealer.");
+      setActivatingDealer(false);
+      return;
+    }
+
+    await refreshAdminPanel();
+    setSelectedDealer(null);
+    setActiveModule(ADMIN_MODULES.DEALERS);
+    setActivatingDealer(false);
+  }
+
+  async function handleUpdateDealerPlan() {
+    if (!selectedDealer?.id) return;
+
+    setUpdatingDealerPlan(true);
+    setDealerPlanError("");
+
+    const { error } = await updateDealerPlanFromAdmin({
+      dealerId: selectedDealer.id,
+      planCode: dealerPlanForm.planCode,
+    });
+
+    if (error) {
+      setDealerPlanError(error.message || "No se pudo actualizar el plan.");
+      setUpdatingDealerPlan(false);
+      return;
+    }
+
+    await refreshAdminPanel();
+    setSelectedDealer(null);
+    setActiveModule(ADMIN_MODULES.DEALERS);
+    setUpdatingDealerPlan(false);
+  }
+
   function openModule(moduleName) {
-  setActiveModule(moduleName);
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
+    setSelectedDealer(null);
+    setShowCreateDealer(false);
+    setCreateDealerError("");
+    setActivateDealerError("");
+    setDealerPlanError("");
+    setActiveModule(moduleName);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function openDealerDetail(dealer) {
+    setSelectedDealer(dealer);
+    setShowCreateDealer(false);
+    setCreateDealerError("");
+    setActivateDealerError("");
+    setDealerPlanError("");
+    setDealerPlanForm({
+      planCode: dealer.plan || "inicio",
+    });
+
+    window.setTimeout(() => {
+      const detail = document.getElementById("admin-dealer-detail");
+      detail?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  }
 
   useEffect(() => {
     refreshAdminPanel();
@@ -193,10 +378,11 @@ export default function AdminPanel({ authProfile }) {
 
       const matchesText =
         !text ||
-        dealer.commercialName.toLowerCase().includes(text) ||
-        dealer.city.toLowerCase().includes(text) ||
-        dealer.province.toLowerCase().includes(text) ||
-        dealer.plan.toLowerCase().includes(text);
+        dealer.commercialName?.toLowerCase().includes(text) ||
+        dealer.city?.toLowerCase().includes(text) ||
+        dealer.province?.toLowerCase().includes(text) ||
+        dealer.plan?.toLowerCase().includes(text) ||
+        dealer.planStatus?.toLowerCase().includes(text);
 
       const matchesPlan = planFilter === "all" || dealer.plan === planFilter;
       const matchesStatus =
@@ -316,7 +502,14 @@ export default function AdminPanel({ authProfile }) {
       <button
         type="button"
         className="admin-refresh-btn"
-        onClick={() => setActiveModule(null)}
+        onClick={() => {
+          setSelectedDealer(null);
+          setShowCreateDealer(false);
+          setCreateDealerError("");
+          setActivateDealerError("");
+          setDealerPlanError("");
+          setActiveModule(null);
+        }}
       >
         ← Volver al resumen
       </button>
@@ -342,7 +535,7 @@ export default function AdminPanel({ authProfile }) {
           <article className="admin-kpi-card">
             <span>Vencidos</span>
             <strong>{expiredDealers}</strong>
-            <p>Publicaciones deberían pausarse.</p>
+            <p>Publicaciones pausadas o en proceso de suspensión.</p>
           </article>
 
           <article className="admin-kpi-card">
@@ -416,64 +609,364 @@ export default function AdminPanel({ authProfile }) {
           </div>
 
           <div className="dealer-modules-grid">
-  <article
-    className="dealer-module-card clickable-module-card"
-    onClick={() => openModule(ADMIN_MODULES.DEALERS)}
-  >
-    <h3>Dealers</h3>
-    <p>Planes, cupos, vencimientos y beneficios comerciales.</p>
-    <button type="button">Abrir dealers</button>
-  </article>
-
-  <article
-    className="dealer-module-card clickable-module-card"
-    onClick={() => openModule(ADMIN_MODULES.VEHICLES)}
-  >
-    <h3>Publicaciones</h3>
-    <p>Control global del inventario publicado por la red.</p>
-    <button type="button">Abrir publicaciones</button>
-  </article>
-
-  <article
-    className="dealer-module-card clickable-module-card"
-    onClick={() => openModule(ADMIN_MODULES.COMMERCIAL_LEADS)}
-  >
-    <h3>Leads comerciales</h3>
-    <p>Seguimiento de consultas generadas por compradores.</p>
-    <button type="button">Abrir leads</button>
-  </article>
-
-  <article
-    className="dealer-module-card clickable-module-card"
-    onClick={() => openModule(ADMIN_MODULES.SELL_VEHICLE)}
-  >
-    <h3>Vender mi vehículo</h3>
-    <p>Solicitudes de compradores para asignar a dealers habilitados.</p>
-    <button type="button">Abrir oportunidades</button>
-  </article>
-
-  <article
-    className="dealer-module-card clickable-module-card"
-    onClick={() => openModule(ADMIN_MODULES.ZERO_KM)}
-  >
-    <h3>Financiación 0km</h3>
-    <p>Leads generados desde el módulo de financiación cero kilómetro.</p>
-    <button type="button">Abrir financiación</button>
-  </article>
-
-           <article
-            className="dealer-module-card clickable-module-card"
-            onClick={() => openModule(ADMIN_MODULES.TICKETS)}
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule(ADMIN_MODULES.DEALERS)}
             >
-           <h3>Tickets internos</h3>
-           <p>Gestión de soporte entre admin, soporte operativo y dealers.</p>
-           <button type="button">Abrir soporte</button>
+              <h3>Dealers</h3>
+              <p>Planes, cupos, vencimientos y beneficios comerciales.</p>
+              <button type="button">Abrir dealers</button>
             </article>
-             </div>
-        
 
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule(ADMIN_MODULES.VEHICLES)}
+            >
+              <h3>Publicaciones</h3>
+              <p>Control global del inventario publicado por la red.</p>
+              <button type="button">Abrir publicaciones</button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule(ADMIN_MODULES.COMMERCIAL_LEADS)}
+            >
+              <h3>Leads comerciales</h3>
+              <p>Seguimiento de consultas generadas por compradores.</p>
+              <button type="button">Abrir leads</button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule(ADMIN_MODULES.SELL_VEHICLE)}
+            >
+              <h3>Vender mi vehículo</h3>
+              <p>Solicitudes de compradores para asignar a dealers habilitados.</p>
+              <button type="button">Abrir oportunidades</button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule(ADMIN_MODULES.ZERO_KM)}
+            >
+              <h3>Financiación 0km</h3>
+              <p>Leads generados desde el módulo de financiación cero kilómetro.</p>
+              <button type="button">Abrir financiación</button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule(ADMIN_MODULES.TICKETS)}
+            >
+              <h3>Tickets internos</h3>
+              <p>Gestión de soporte entre admin, soporte operativo y dealers.</p>
+              <button type="button">Abrir soporte</button>
+            </article>
+          </div>
         </div>
       </>
+    );
+  }
+
+  function renderSelectedDealerDetail() {
+    if (!selectedDealer) return null;
+
+    const permissions = getEffectiveDealerPermissions(selectedDealer);
+    const used = selectedDealer.currentPeriod?.publicationsUsed || 0;
+    const limit = permissions.vehicleLimit;
+    const days = selectedDealer.currentPeriod?.expiresInDays ?? 0;
+
+    return (
+      <div className="admin-section-block" id="admin-dealer-detail">
+        <div className="buyer-section-head">
+          <div>
+            <h2>{selectedDealer.commercialName}</h2>
+            <p>
+              {selectedDealer.city}, {selectedDealer.province} · Plan{" "}
+              {permissions.rankLabel} · Estado{" "}
+              {getPlanStatusLabel(selectedDealer.planStatus)}
+            </p>
+          </div>
+
+          <div className="admin-action-row">
+            {selectedDealer.planStatus === "pending_activation" && (
+              <button
+                type="button"
+                className="admin-refresh-btn"
+                onClick={handleActivateSelectedDealer}
+                disabled={activatingDealer}
+              >
+                {activatingDealer ? "Activando..." : "Activar dealer"}
+              </button>
+            )}
+
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={() => setSelectedDealerForTicket(selectedDealer)}
+            >
+              Crear ticket
+            </button>
+
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={() => setSelectedDealer(null)}
+            >
+              Cerrar detalle
+            </button>
+          </div>
+        </div>
+
+        {activateDealerError && (
+          <div className="auth-warning">{activateDealerError}</div>
+        )}
+
+        <div
+          style={{
+            marginTop: "12px",
+            display: "flex",
+            gap: "8px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <div className="admin-filter">
+            <label>Cambiar / renovar plan</label>
+            <select
+              value={dealerPlanForm.planCode}
+              onChange={(event) =>
+                setDealerPlanForm({
+                  ...dealerPlanForm,
+                  planCode: event.target.value,
+                })
+              }
+            >
+              {PLAN_OPTIONS.map((plan) => (
+                <option key={plan.value} value={plan.value}>
+                  {plan.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            type="button"
+            className="admin-refresh-btn"
+            onClick={handleUpdateDealerPlan}
+            disabled={updatingDealerPlan}
+          >
+            {updatingDealerPlan ? "Actualizando..." : "Actualizar plan"}
+          </button>
+        </div>
+
+        {dealerPlanError && (
+          <div className="auth-warning">{dealerPlanError}</div>
+        )}
+
+        <div className="admin-kpi-grid">
+          <article className="admin-kpi-card">
+            <span>Estado comercial</span>
+            <strong>{getPlanStatusLabel(selectedDealer.planStatus)}</strong>
+            <p>Estado actual del período del dealer.</p>
+          </article>
+
+          <article className="admin-kpi-card">
+            <span>Cupo utilizado</span>
+            <strong>
+              {used} / {formatLimit(limit)}
+            </strong>
+            <p>
+              {limit === Infinity
+                ? "El plan no tiene límite de publicaciones."
+                : `${Math.max(limit - used, 0)} publicaciones disponibles.`}
+            </p>
+          </article>
+
+          <article className="admin-kpi-card">
+            <span>Vencimiento</span>
+            <strong>{days} días</strong>
+            <p>{getAlertLabel(days)} dentro del ciclo comercial.</p>
+          </article>
+
+          <article className="admin-kpi-card">
+            <span>Cupo extra</span>
+            <strong>{selectedDealer.benefits?.extraPublicationQuota || 0}</strong>
+            <p>Beneficio manual otorgado por administración.</p>
+          </article>
+        </div>
+
+        <div className="admin-kpi-grid">
+          <article className="admin-kpi-card">
+            <span>Vender mi vehículo</span>
+            <strong>{permissions.sellVehicleLeads ? "Habilitado" : "No"}</strong>
+            <p>Acceso a oportunidades del módulo de vendedores particulares.</p>
+          </article>
+
+          <article className="admin-kpi-card">
+            <span>Inteligencia de mercado</span>
+            <strong>
+              {permissions.marketIntelligence ? "Habilitada" : "No"}
+            </strong>
+            <p>Lectura avanzada de precio, señales y badges.</p>
+          </article>
+
+          <article className="admin-kpi-card">
+            <span>Rank visual</span>
+            <strong>{permissions.rankTheme}</strong>
+            <p>Estilo comercial aplicado a publicaciones y señales.</p>
+          </article>
+
+          <article className="admin-kpi-card">
+            <span>ID interno</span>
+            <strong>{selectedDealer.id}</strong>
+            <p>Referencia técnica del dealer.</p>
+          </article>
+        </div>
+      </div>
+    );
+  }
+
+  function renderCreateDealerForm() {
+    if (!showCreateDealer) return null;
+
+    return (
+      <div className="admin-section-block">
+        <div className="buyer-section-head">
+          <div>
+            <h2>Nuevo dealer</h2>
+            <p>Carga comercial inicial del dealer.</p>
+          </div>
+
+          <button
+            type="button"
+            className="admin-refresh-btn"
+            onClick={() => {
+              setShowCreateDealer(false);
+              setCreateDealerError("");
+            }}
+          >
+            Cerrar alta
+          </button>
+        </div>
+
+        <div className="admin-toolbar">
+          <div className="admin-search">
+            <label>Nombre comercial</label>
+            <input
+              value={newDealerForm.name}
+              onChange={(event) =>
+                setNewDealerForm({
+                  ...newDealerForm,
+                  name: event.target.value,
+                })
+              }
+              placeholder="Ej: Romano Motors"
+            />
+          </div>
+
+          <div className="admin-search">
+            <label>Email de acceso</label>
+            <input
+              type="email"
+              value={newDealerForm.email}
+              onChange={(event) =>
+                setNewDealerForm({
+                  ...newDealerForm,
+                  email: event.target.value,
+                })
+              }
+              placeholder="Ej: dealer@email.com"
+            />
+          </div>
+
+          <div className="admin-search">
+            <label>Provincia</label>
+            <input
+              value={newDealerForm.province}
+              onChange={(event) =>
+                setNewDealerForm({
+                  ...newDealerForm,
+                  province: event.target.value,
+                })
+              }
+              placeholder="Ej: Buenos Aires"
+            />
+          </div>
+
+          <div className="admin-search">
+            <label>Ciudad</label>
+            <input
+              value={newDealerForm.city}
+              onChange={(event) =>
+                setNewDealerForm({
+                  ...newDealerForm,
+                  city: event.target.value,
+                })
+              }
+              placeholder="Ej: Pilar"
+            />
+          </div>
+
+          <div className="admin-search">
+            <label>Teléfono / WhatsApp</label>
+            <input
+              value={newDealerForm.phone}
+              onChange={(event) =>
+                setNewDealerForm({
+                  ...newDealerForm,
+                  phone: event.target.value,
+                })
+              }
+              placeholder="Ej: 11 3806 2294"
+            />
+          </div>
+
+          <div className="admin-filter">
+            <label>Plan</label>
+            <select
+              value={newDealerForm.planCode}
+              onChange={(event) =>
+                setNewDealerForm({
+                  ...newDealerForm,
+                  planCode: event.target.value,
+                })
+              }
+            >
+              {PLAN_OPTIONS.map((plan) => (
+                <option key={plan.value} value={plan.value}>
+                  {plan.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {createDealerError && (
+          <div className="auth-warning">{createDealerError}</div>
+        )}
+
+        <div className="admin-action-row">
+          <button
+            type="button"
+            className="admin-refresh-btn"
+            onClick={handleCreateDealer}
+            disabled={creatingDealer}
+          >
+            {creatingDealer ? "Creando dealer..." : "Crear dealer"}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setShowCreateDealer(false);
+              setCreateDealerError("");
+            }}
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
     );
   }
 
@@ -486,7 +979,21 @@ export default function AdminPanel({ authProfile }) {
             <p>Control comercial de planes, vencimientos, cupos y beneficios.</p>
           </div>
 
-          {renderBackToSummaryButton()}
+          <div className="admin-action-row">
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={() => {
+                setSelectedDealer(null);
+                setCreateDealerError("");
+                setShowCreateDealer(true);
+              }}
+            >
+              + Alta dealer
+            </button>
+
+            {renderBackToSummaryButton()}
+          </div>
         </div>
 
         <div className="admin-toolbar">
@@ -495,7 +1002,7 @@ export default function AdminPanel({ authProfile }) {
             <input
               value={searchText}
               onChange={(event) => setSearchText(event.target.value)}
-              placeholder="Dealer, ciudad, provincia, plan..."
+              placeholder="Dealer, ciudad, provincia, plan, estado..."
             />
           </div>
 
@@ -506,10 +1013,11 @@ export default function AdminPanel({ authProfile }) {
               onChange={(event) => setPlanFilter(event.target.value)}
             >
               <option value="all">Todos</option>
-              <option value="inicio">Inicio</option>
-              <option value="pro">Pro</option>
-              <option value="elite">Elite</option>
-              <option value="platinum">Platinum</option>
+              {PLAN_OPTIONS.map((plan) => (
+                <option key={plan.value} value={plan.value}>
+                  {plan.label}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -520,11 +1028,11 @@ export default function AdminPanel({ authProfile }) {
               onChange={(event) => setStatusFilter(event.target.value)}
             >
               <option value="all">Todos</option>
+              <option value="pending_activation">Pendiente</option>
               <option value="active">Activo</option>
               <option value="expiring">Por vencer</option>
-              <option value="expired_grace">Vencido en gracia</option>
+              <option value="expired_grace">En gracia</option>
               <option value="suspended">Suspendido</option>
-              <option value="pending_activation">Pendiente</option>
             </select>
           </div>
         </div>
@@ -559,9 +1067,21 @@ export default function AdminPanel({ authProfile }) {
                     </td>
 
                     <td>
-                      <span className={`admin-chip rank-${permissions.rankTheme}`}>
-                        {permissions.rankLabel}
-                      </span>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "4px",
+                        }}
+                      >
+                        <span className={`admin-chip rank-${permissions.rankTheme}`}>
+                          {permissions.rankLabel}
+                        </span>
+
+                        <span className={getPlanStatusClass(dealer.planStatus)}>
+                          {getPlanStatusLabel(dealer.planStatus)}
+                        </span>
+                      </div>
                     </td>
 
                     <td>
@@ -592,9 +1112,7 @@ export default function AdminPanel({ authProfile }) {
                           <span>+{dealer.benefits.extraPublicationQuota} cupo</span>
                         )}
 
-                        {permissions.marketIntelligence && (
-                          <span>Inteligencia</span>
-                        )}
+                        {permissions.marketIntelligence && <span>Inteligencia</span>}
 
                         {!permissions.sellVehicleLeads &&
                           !dealer.benefits?.extraPublicationQuota &&
@@ -604,14 +1122,26 @@ export default function AdminPanel({ authProfile }) {
 
                     <td>
                       <div className="admin-action-row">
-                        <button type="button">Ver</button>
+                        <button
+                          type="button"
+                          onClick={() => openDealerDetail(dealer)}
+                        >
+                          Ver
+                        </button>
+
                         <button
                           type="button"
                           onClick={() => setSelectedDealerForSlots(dealer)}
                         >
                           Cupo extra
                         </button>
-                        <button type="button">Ticket</button>
+
+                        <button
+                          type="button"
+                          onClick={() => setSelectedDealerForTicket(dealer)}
+                        >
+                          Ticket
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -626,6 +1156,9 @@ export default function AdminPanel({ authProfile }) {
             </div>
           )}
         </div>
+
+        {renderSelectedDealerDetail()}
+        {renderCreateDealerForm()}
       </div>
     );
   }
@@ -1015,6 +1548,18 @@ export default function AdminPanel({ authProfile }) {
             dealer={selectedDealerForSlots}
             onClose={() => setSelectedDealerForSlots(null)}
             onGranted={refreshAdminPanel}
+          />
+        )}
+
+        {selectedDealerForTicket && (
+          <CreateSupportTicketModal
+            dealer={selectedDealerForTicket}
+            onClose={() => setSelectedDealerForTicket(null)}
+            onCreated={async () => {
+              setSelectedDealerForTicket(null);
+              await loadTickets();
+            }}
+            authProfile={authProfile}
           />
         )}
 
