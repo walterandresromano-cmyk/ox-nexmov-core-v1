@@ -1,7 +1,7 @@
 export default function JoinNetwork() {
   return (
     <section className="page-section">
-      <div className="container panel">
+          <div className="container panel public-page-panel">
         <div className="hero-panel">
           <p className="eyebrow">Red comercial oX NEXMOV</p>
 
