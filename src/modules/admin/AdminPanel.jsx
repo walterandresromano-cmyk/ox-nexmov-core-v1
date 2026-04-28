@@ -178,6 +178,11 @@ export default function AdminPanel({ authProfile }) {
     await loadTickets();
   }
 
+  function openModule(moduleName) {
+  setActiveModule(moduleName);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
   useEffect(() => {
     refreshAdminPanel();
   }, []);
@@ -410,67 +415,63 @@ export default function AdminPanel({ authProfile }) {
             </div>
           </div>
 
-          <div className="admin-kpi-grid">
-            <button
-              type="button"
-              className="admin-kpi-card"
-              onClick={() => setActiveModule(ADMIN_MODULES.DEALERS)}
-            >
-              <span>Gestión comercial</span>
-              <strong>Dealers</strong>
-              <p>Planes, cupos, vencimientos y beneficios.</p>
-            </button>
+          <div className="dealer-modules-grid">
+  <article
+    className="dealer-module-card clickable-module-card"
+    onClick={() => openModule(ADMIN_MODULES.DEALERS)}
+  >
+    <h3>Dealers</h3>
+    <p>Planes, cupos, vencimientos y beneficios comerciales.</p>
+    <button type="button">Abrir dealers</button>
+  </article>
 
-            <button
-              type="button"
-              className="admin-kpi-card"
-              onClick={() => setActiveModule(ADMIN_MODULES.VEHICLES)}
-            >
-              <span>Inventario</span>
-              <strong>Publicaciones</strong>
-              <p>Control global de vehículos publicados.</p>
-            </button>
+  <article
+    className="dealer-module-card clickable-module-card"
+    onClick={() => openModule(ADMIN_MODULES.VEHICLES)}
+  >
+    <h3>Publicaciones</h3>
+    <p>Control global del inventario publicado por la red.</p>
+    <button type="button">Abrir publicaciones</button>
+  </article>
 
-            <button
-              type="button"
-              className="admin-kpi-card"
-              onClick={() => setActiveModule(ADMIN_MODULES.COMMERCIAL_LEADS)}
-            >
-              <span>Consultas</span>
-              <strong>Leads comerciales</strong>
-              <p>Seguimiento de interesados por publicación.</p>
-            </button>
+  <article
+    className="dealer-module-card clickable-module-card"
+    onClick={() => openModule(ADMIN_MODULES.COMMERCIAL_LEADS)}
+  >
+    <h3>Leads comerciales</h3>
+    <p>Seguimiento de consultas generadas por compradores.</p>
+    <button type="button">Abrir leads</button>
+  </article>
 
-            <button
-              type="button"
-              className="admin-kpi-card"
-              onClick={() => setActiveModule(ADMIN_MODULES.SELL_VEHICLE)}
-            >
-              <span>Oportunidades</span>
-              <strong>Vender mi vehículo</strong>
-              <p>Solicitudes de compradores para asignar a dealers.</p>
-            </button>
+  <article
+    className="dealer-module-card clickable-module-card"
+    onClick={() => openModule(ADMIN_MODULES.SELL_VEHICLE)}
+  >
+    <h3>Vender mi vehículo</h3>
+    <p>Solicitudes de compradores para asignar a dealers habilitados.</p>
+    <button type="button">Abrir oportunidades</button>
+  </article>
 
-            <button
-              type="button"
-              className="admin-kpi-card"
-              onClick={() => setActiveModule(ADMIN_MODULES.ZERO_KM)}
-            >
-              <span>Financiación</span>
-              <strong>0km</strong>
-              <p>Leads de financiación cero kilómetro.</p>
-            </button>
+  <article
+    className="dealer-module-card clickable-module-card"
+    onClick={() => openModule(ADMIN_MODULES.ZERO_KM)}
+  >
+    <h3>Financiación 0km</h3>
+    <p>Leads generados desde el módulo de financiación cero kilómetro.</p>
+    <button type="button">Abrir financiación</button>
+  </article>
 
-            <button
-              type="button"
-              className="admin-kpi-card"
-              onClick={() => setActiveModule(ADMIN_MODULES.TICKETS)}
+           <article
+            className="dealer-module-card clickable-module-card"
+            onClick={() => openModule(ADMIN_MODULES.TICKETS)}
             >
-              <span>Soporte</span>
-              <strong>Tickets internos</strong>
-              <p>Gestión de casos entre admin, soporte y dealers.</p>
-            </button>
-          </div>
+           <h3>Tickets internos</h3>
+           <p>Gestión de soporte entre admin, soporte operativo y dealers.</p>
+           <button type="button">Abrir soporte</button>
+            </article>
+             </div>
+        
+
         </div>
       </>
     );
