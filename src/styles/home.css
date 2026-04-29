@@ -822,3 +822,132 @@
     height: 150px !important;
   }
 }
+
+/* =========================================================
+   oX NEXMOV Core v1 — Home Coverage Section
+   Sección aislada: cobertura comercial / plazas reales.
+   ========================================================= */
+
+.ox-home-coverage-section {
+  border-color: rgba(56, 189, 248, 0.14);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.11), transparent 32%),
+    radial-gradient(circle at 76% 18%, rgba(37, 99, 235, 0.10), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.94));
+}
+
+.ox-home-coverage-kpi-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.ox-home-coverage-kpi {
+  min-height: 128px;
+  padding: 16px;
+  border-radius: 22px;
+  border-color: rgba(56, 189, 248, 0.14);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.80), rgba(2, 6, 23, 0.92));
+}
+
+.ox-home-coverage-kpi span {
+  color: rgba(186, 230, 253, 0.82);
+  font-size: 0.64rem;
+  font-weight: 950;
+}
+
+.ox-home-coverage-kpi strong {
+  color: #38bdf8;
+  font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+  line-height: 0.95;
+  text-shadow: 0 0 24px rgba(56, 189, 248, 0.20);
+}
+
+.ox-home-coverage-kpi p {
+  margin-top: 8px;
+  color: rgba(203, 213, 225, 0.66);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.ox-home-coverage-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ox-home-coverage-card {
+  min-height: 0;
+  padding: 16px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(14, 165, 233, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.92));
+}
+
+.ox-home-coverage-card h3 {
+  margin: 0 0 10px;
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 0.98rem;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.ox-home-coverage-card p {
+  color: rgba(203, 213, 225, 0.66);
+  font-size: 0.76rem;
+  line-height: 1.38;
+}
+
+.ox-home-coverage-card .admin-benefits-list {
+  gap: 7px;
+}
+
+.ox-home-coverage-card .admin-benefits-list span {
+  padding: 6px 9px;
+  border-color: rgba(56, 189, 248, 0.16);
+  background: rgba(15, 23, 42, 0.72);
+  color: rgba(226, 232, 240, 0.90) !important;
+  font-size: 0.68rem;
+  font-weight: 850;
+}
+
+.ox-home-coverage-card strong {
+  color: #38bdf8 !important;
+  text-shadow: 0 0 22px rgba(56, 189, 248, 0.18);
+}
+
+/* Tratamiento especial del primer bloque: plazas con movimiento */
+.ox-home-coverage-card:first-child {
+  border-color: rgba(56, 189, 248, 0.20);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.94));
+}
+
+/* Tratamiento especial del precio promedio */
+.ox-home-coverage-card:last-child {
+  border-color: rgba(34, 197, 94, 0.16);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(34, 197, 94, 0.10), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.94));
+}
+
+@media (max-width: 1180px) {
+  .ox-home-coverage-kpi-grid,
+  .ox-home-coverage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .ox-home-coverage-kpi-grid,
+  .ox-home-coverage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ox-home-coverage-kpi {
+    min-height: unset;
+  }
+}

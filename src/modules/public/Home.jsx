@@ -705,8 +705,8 @@ const featuredSignal = featuredVehicle
           )}
         </div>
 
-        <div className="admin-section-block">
-          <div className="buyer-section-head">
+       <div className="admin-section-block ox-home-section ox-home-coverage-section">
+         <div className="buyer-section-head ox-home-section-head">
             <div>
               <p className="eyebrow">Cobertura comercial</p>
               <h2>Inventario distribuido en plazas reales.</h2>
@@ -717,34 +717,34 @@ const featuredSignal = featuredVehicle
             </div>
           </div>
 
-          <div className="admin-kpi-grid">
-            <article className="admin-kpi-card">
+          <div className="admin-kpi-grid ox-home-coverage-kpi-grid">
+            <article className="admin-kpi-card ox-home-coverage-kpi">
               <span>Concesionarias activas</span>
               <strong>{formatCount(homeStats.visibleDealers)}</strong>
               <p>Dealers visibles con operación vigente.</p>
             </article>
 
-            <article className="admin-kpi-card">
+            <article className="admin-kpi-card ox-home-coverage-kpi">
               <span>Unidades activas</span>
               <strong>{formatCount(homeStats.totalActiveVehicles)}</strong>
               <p>Publicaciones visibles dentro del mercado.</p>
             </article>
 
-            <article className="admin-kpi-card">
+            <article className="admin-kpi-card ox-home-coverage-kpi">
               <span>Plazas con movimiento</span>
               <strong>{formatCount(homeStats.activeLocations.length)}</strong>
               <p>Ciudades o zonas con inventario activo.</p>
             </article>
 
-            <article className="admin-kpi-card">
+            <article className="admin-kpi-card ox-home-coverage-kpi">
               <span>Imágenes cargadas</span>
               <strong>{formatCount(homeStats.vehiclesWithImages)}</strong>
               <p>Últimos ingresos con imagen principal.</p>
             </article>
           </div>
 
-          <div className="dealer-modules-grid">
-            <article className="dealer-module-card">
+          <div className="dealer-modules-grid ox-home-coverage-grid">
+            <article className="dealer-module-card ox-home-coverage-card">
               <h3>Plazas con más movimiento</h3>
 
               {homeStats.activeLocations.length === 0 ? (
@@ -760,7 +760,7 @@ const featuredSignal = featuredVehicle
               )}
             </article>
 
-            <article className="dealer-module-card">
+            <article className="dealer-module-card ox-home-coverage-card">
               <h3>Marcas con presencia reciente</h3>
 
               {homeStats.activeBrands.length === 0 ? (
@@ -776,7 +776,7 @@ const featuredSignal = featuredVehicle
               )}
             </article>
 
-            <article className="dealer-module-card">
+            <article className="dealer-module-card ox-home-coverage-card">
               <h3>Modelos recientes</h3>
 
               {homeStats.activeModels.length === 0 ? (
@@ -792,7 +792,7 @@ const featuredSignal = featuredVehicle
               )}
             </article>
 
-            <article className="dealer-module-card">
+            <article className="dealer-module-card ox-home-coverage-card">
               <h3>Precio promedio visible</h3>
               <p>
                 Referencia rápida calculada sobre los últimos ingresos visibles.
