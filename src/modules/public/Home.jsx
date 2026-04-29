@@ -221,6 +221,15 @@ export default function Home({ onNavigate, appActions = {} }) {
 
     return () => window.clearInterval(interval);
   }, [latestVehicles.length]);
+  
+   const featuredVehicle = latestVehicles[0] || null;
+const featuredDealer = featuredVehicle
+  ? buildDealerForVehicle(featuredVehicle)
+  : null;
+const featuredSignal = featuredVehicle
+  ? getVehicleSignal(featuredVehicle, 0)
+  : null;
+
 
   const homeStats = useMemo(() => {
     const totalActiveVehicles = publicDealers.reduce(
@@ -344,37 +353,69 @@ export default function Home({ onNavigate, appActions = {} }) {
     </div>
   </div>
 
-  <div className="ox-home-hero-visual">
-    <div className="ox-home-vehicle-frame">
+      <div className="ox-home-hero-visual">
+  <div className="ox-home-vehicle-frame">
+    {featuredVehicle?.mainImageUrl || featuredVehicle?.imageUrl ? (
+      <img
+        className="ox-home-vehicle-image"
+        src={featuredVehicle.mainImageUrl || featuredVehicle.imageUrl}
+        alt={`${featuredVehicle.brand} ${featuredVehicle.model}`}
+      />
+    ) : (
       <div className="ox-home-vehicle-placeholder">
         <span>oX NEXMOV</span>
         <strong>Vehículo destacado</strong>
       </div>
-    </div>
-
-    <article className="ox-home-highlight-card">
-      <span>Destacado</span>
-      <h3>Unidad seleccionada</h3>
-      <p>Datos reales · Dealer verificado · Consulta trazable</p>
-      <strong>Menos incertidumbre.</strong>
-
-      <button
-        type="button"
-        onClick={() =>
-          onNavigate("search", {
-            query: heroSearchText,
-          })
-        }
-      >
-        Ver publicaciones
-      </button>
-    </article>
+    )}
   </div>
+
+  <article className="ox-home-highlight-card">
+    <span>{featuredSignal?.label || "Destacado"}</span>
+
+    <h3>
+      {featuredVehicle
+        ? `${featuredVehicle.brand} ${featuredVehicle.model}`
+        : "Unidad seleccionada"}
+    </h3>
+
+    <p>
+      {featuredVehicle
+        ? `${featuredVehicle.version || "Sin versión"} · ${
+            featuredVehicle.year || "Sin año"
+          } · ${featuredVehicle.city || "Ubicación a confirmar"}`
+        : "Datos reales · Dealer verificado · Consulta trazable"}
+    </p>
+
+    <strong>
+      {featuredVehicle ? formatARS(featuredVehicle.price) : "Menos incertidumbre."}
+    </strong>
+
+    {featuredDealer && (
+      <small>
+        {featuredDealer.commercialName} · {getPlanLabel(featuredDealer.plan)}
+      </small>
+    )}
+
+    <button
+      type="button"
+      onClick={() =>
+        onNavigate("search", {
+          query: featuredVehicle
+            ? `${featuredVehicle.brand} ${featuredVehicle.model}`
+            : heroSearchText,
+        })
+      }
+    >
+      Ver publicaciones
+    </button>
+  </article>
 </div>
+ 
+ </div>
 
-<div className="admin-section-block">
+<div className="admin-section-block ox-home-section ox-home-latest-section">
+          <div className="buyer-section-head ox-home-section-head">
 
-          <div className="buyer-section-head">
             <div>
               <p className="eyebrow">Últimos ingresos</p>
               <h2>Vehículos recién publicados en la red.</h2>
@@ -430,7 +471,7 @@ export default function Home({ onNavigate, appActions = {} }) {
           {latestVehicles.length > 0 && (
             <div
               ref={latestVehiclesCarouselRef}
-              className="latest-vehicles-carousel"
+              className="latest-vehicles-carousel ox-home-latest-carousel"
               style={{
                 display: "grid",
                 gridAutoFlow: "column",
@@ -447,13 +488,7 @@ export default function Home({ onNavigate, appActions = {} }) {
                 const dealer = buildDealerForVehicle(vehicle);
 
                 return (
-                  <div
-                    key={vehicle.id}
-                    style={{
-                      scrollSnapAlign: "start",
-                      minWidth: 0,
-                    }}
-                  >
+                  <div key={vehicle.id} className="ox-home-latest-card-wrap">                                         
                     <VehicleCardPublic
                       vehicle={{
                         ...vehicle,
@@ -486,7 +521,7 @@ export default function Home({ onNavigate, appActions = {} }) {
             <button
               type="button"
               className="admin-refresh-btn"
-              onClick={() => onNavigate("join")}
+              onClick={() => onNavigate("joinNetwork")}
             >
               Sumate a la red
             </button>
