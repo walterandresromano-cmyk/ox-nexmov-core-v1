@@ -395,12 +395,12 @@ function getSuggestionTypeLabel(type) {
   return "Sugerencia";
 }
 
-export default function Search({ appActions, onNavigate }) {
+export default function Search({ appActions, onNavigate, initialSearchQuery = "", }) {
   const [vehicles, setVehicles] = useState(mockVehicles);
   const [loadingVehicles, setLoadingVehicles] = useState(true);
   const [vehiclesError, setVehiclesError] = useState("");
   const [searchText, setSearchText] = useState("");
-
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [catalogSuggestions, setCatalogSuggestions] = useState([]);
   const [loadingCatalog, setLoadingCatalog] = useState(true);
   const [catalogError, setCatalogError] = useState("");
@@ -456,6 +456,16 @@ export default function Search({ appActions, onNavigate }) {
     loadVehicles();
     loadCatalog();
   }, []);
+  
+  useEffect(() => {
+  const nextQuery = String(initialSearchQuery || "").trim();
+
+  if (!nextQuery) return;
+
+  setSearchText(nextQuery);
+  setShowSuggestions(false);
+}, [initialSearchQuery]);
+      
 
   function getDealer(vehicle) {
     if (vehicle.dealer) return vehicle.dealer;
@@ -580,13 +590,18 @@ export default function Search({ appActions, onNavigate }) {
         <div className="admin-toolbar">
           <div className="admin-search" style={{ position: "relative" }}>
             <label>Buscar</label>
-            <input
-              value={searchText}
-              onChange={(event) => setSearchText(event.target.value)}
-              placeholder="Ej: SUV financiada hasta 20 millones, Toyota automático, 100000 km..."
-            />
+            
+             <input
+             value={searchText}
+             onFocus={() => setShowSuggestions(true)}
+             onChange={(event) => {
+               setSearchText(event.target.value);
+               setShowSuggestions(true);
+             }}
+             placeholder="Ej: SUV financiada hasta 20 millones, Toyota automático, 100000 km..."
+           />
 
-            {visibleSuggestions.length > 0 && (
+            {showSuggestions && visibleSuggestions.length > 0 && (
               <div
                 style={{
                   position: "absolute",
@@ -609,7 +624,10 @@ export default function Search({ appActions, onNavigate }) {
                   <button
                     key={`${suggestion.type}-${suggestion.label}`}
                     type="button"
-                    onClick={() => setSearchText(suggestion.searchValue)}
+                    onClick={() => {
+                      setSearchText(suggestion.searchValue);
+                      setShowSuggestions(false);
+                    }}
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -649,7 +667,10 @@ export default function Search({ appActions, onNavigate }) {
 
           <button
             className="admin-refresh-btn"
-            onClick={() => setSearchText("")}
+            onClick={() => {
+                setSearchText("");
+                setShowSuggestions(false);
+              }}
             disabled={!searchText.trim()}
           >
             Limpiar

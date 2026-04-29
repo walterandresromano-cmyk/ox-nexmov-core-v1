@@ -104,7 +104,7 @@ export default function Home({ onNavigate, appActions = {} }) {
   const [latestVehicles, setLatestVehicles] = useState([]);
   const [loadingLatestVehicles, setLoadingLatestVehicles] = useState(true);
   const [latestVehiclesError, setLatestVehiclesError] = useState("");
-
+  const [heroSearchText, setHeroSearchText] = useState("");
   const latestVehiclesCarouselRef = useRef(null);
 
   const safeAppActions = {
@@ -240,6 +240,13 @@ export default function Home({ onNavigate, appActions = {} }) {
       behavior: "smooth",
     });
   }
+    function handleHeroSearch(event) {
+    event.preventDefault();
+  
+    onNavigate("search", {
+      query: heroSearchText,
+    });
+  }
 
   return (
     <section className="page-section">
@@ -256,13 +263,32 @@ export default function Home({ onNavigate, appActions = {} }) {
             con señales comerciales y contexto de mercado.
           </p>
 
-          <div className="hero-search">
-            <input placeholder="Ej: SUV financiada hasta 20 millones" />
-            <button onClick={() => onNavigate("search")}>Buscar</button>
-          </div>
-        </div>
+             <form className="hero-search" onSubmit={handleHeroSearch}>
+  <input
+    value={heroSearchText}
+    onChange={(event) => setHeroSearchText(event.target.value)}
+    placeholder="Ej: SUV financiada hasta 20 millones"
+  />
+  <button type="submit">Buscar vehículos</button>
+</form>
 
-        <div className="admin-section-block">
+<div className="hero-actions">
+  <button type="button" onClick={() => onNavigate("search")}>
+    Explorar publicaciones
+  </button>
+
+  <button
+    type="button"
+    className="secondary-btn"
+    onClick={() => onNavigate("joinNetwork")}
+  >
+    Sumar mi agencia
+  </button>
+</div>
+</div>
+
+<div className="admin-section-block">
+
           <div className="buyer-section-head">
             <div>
               <p className="eyebrow">Últimos ingresos</p>

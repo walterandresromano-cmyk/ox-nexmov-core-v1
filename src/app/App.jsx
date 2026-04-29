@@ -92,6 +92,7 @@ export default function App() {
   const [authProfile, setAuthProfile] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authError, setAuthError] = useState("");
+  const [searchQueryFromHome, setSearchQueryFromHome] = useState("");
 
   async function loadProfileForUser(user) {
     if (!user?.id) {
@@ -119,9 +120,13 @@ export default function App() {
     return normalizedProfile;
   }
 
-  function navigate(nextRoute) {
+  function navigate(nextRoute, payload = {}) {
     const safeNextRoute = String(nextRoute || "home").trim();
     const role = authProfile?.role;
+
+    if (safeNextRoute === "search") {
+      setSearchQueryFromHome(String(payload?.query || "").trim());
+    }
 
     if (!canAccessRoute(safeNextRoute, role, authUser)) {
       setCurrentRoute(getHomeRouteForRole(role));
@@ -288,6 +293,7 @@ export default function App() {
         authLoading={authLoading}
         authError={authError}
         onAuthChange={handleAuthChange}
+        initialSearchQuery={safeCurrentRoute === "search" ? searchQueryFromHome : ""}
       />
     </Layout>
   );
