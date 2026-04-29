@@ -338,11 +338,11 @@ export default function DealerPanel({ authProfile }) {
 
   const permissions = getEffectiveDealerPermissions(dealer);
   const publishCheck = canDealerPublish(dealer);
-
   const used = dealer.currentPeriod?.publicationsUsed || 0;
   const limit = permissions.vehicleLimit;
   const remaining = getRemainingQuota(limit, used);
   const expiresInDays = dealer.currentPeriod?.expiresInDays ?? 0;
+  const dealerLogo = dealer.logo || dealer.raw?.logo_url || "";
 
   const activeVehiclesCount = dealerVehicles.filter(
     (vehicle) => vehicle.is_active
@@ -365,23 +365,65 @@ export default function DealerPanel({ authProfile }) {
   return (
     <section className="page-section">
       <div className="container panel dealer-panel">
-        <div className="panel-head-row">
-          <div>
-            <p className="eyebrow">Panel dealer único</p>
-            <h1>Panel dealer</h1>
-            <p>
-              Un único panel completo. Las funciones se habilitan según plan,
-              estado de cuenta y beneficios otorgados por admin.
-            </p>
+         <div className="panel-head-row">
+  <div>
+    <p className="eyebrow">Panel dealer único</p>
+    <h1>Panel dealer</h1>
+    <p>
+      Un único panel completo. Las funciones se habilitan según plan,
+      estado de cuenta y beneficios otorgados por admin.
+    </p>
 
-            {authProfile && (
-              <p className="admin-session-note">
-                Sesión actual: {authProfile.email} · rol {authProfile.role}
-              </p>
-            )}
-          </div>
+    {authProfile && (
+      <p className="admin-session-note">
+        Sesión actual: {authProfile.email} · rol {authProfile.role}
+      </p>
+    )}
+  </div>
 
-          <div className="dealer-switcher">
+  <div
+    style={{
+      width: "min(260px, 100%)",
+      minHeight: "120px",
+      border: "1px solid var(--ox-border)",
+      borderRadius: "22px",
+      background: "var(--ox-card)",
+      overflow: "hidden",
+      display: "grid",
+      placeItems: "center",
+      flexShrink: 0,
+    }}
+  >
+    {dealerLogo ? (
+      <img
+        src={dealerLogo}
+        alt={`Imagen institucional de ${dealer.commercialName}`}
+        style={{
+          width: "100%",
+          height: "140px",
+          objectFit: "cover",
+          display: "block",
+        }}
+      />
+    ) : (
+      <div
+        style={{
+          padding: "16px",
+          textAlign: "center",
+          color: "var(--ox-muted)",
+        }}
+      >
+        <strong style={{ color: "var(--ox-text)", display: "block" }}>
+          Sin imagen institucional
+        </strong>
+        <span>Admin puede cargarla desde el panel.</span>
+      </div>
+    )}
+  </div>
+
+  <div className="dealer-switcher">
+
+        
             <label>Dealer operativo</label>
             <select
               value={dealer.id}

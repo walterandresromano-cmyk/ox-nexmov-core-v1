@@ -17,6 +17,7 @@ import {
   createDealerFromAdmin,
   activateDealerFromAdmin,
   updateDealerPlanFromAdmin,
+  uploadDealerLogoFromAdmin,
 } from "../../services/adminDealers.service.js";
 
 const ADMIN_MODULES = {
@@ -151,6 +152,10 @@ export default function AdminPanel({ authProfile }) {
   const [dealerPlanForm, setDealerPlanForm] = useState({
     planCode: "inicio",
   });
+
+  const [uploadingDealerLogo, setUploadingDealerLogo] = useState(false);
+  const [dealerLogoError, setDealerLogoError] = useState("");
+  const [dealerLogoSuccess, setDealerLogoSuccess] = useState("");
 
   async function loadDealers() {
     setLoadingDealers(true);
@@ -342,12 +347,86 @@ export default function AdminPanel({ authProfile }) {
     setUpdatingDealerPlan(false);
   }
 
+  async function handleDealerLogoFile(file) {
+    if (!selectedDealer?.id) return;
+
+    setUploadingDealerLogo(true);
+    setDealerLogoError("");
+    setDealerLogoSuccess("");
+
+    const { logoUrl, error } = await uploadDealerLogoFromAdmin({
+      dealerId: selectedDealer.id,
+      file,
+    });
+
+    if (error) {
+      setDealerLogoError(
+        error.message || "No se pudo subir la imagen institucional."
+      );
+      setUploadingDealerLogo(false);
+      return;
+    }
+
+    setSelectedDealer((currentDealer) =>
+      currentDealer
+        ? {
+            ...currentDealer,
+            logo: logoUrl,
+            raw: {
+              ...(currentDealer.raw || {}),
+              logo_url: logoUrl,
+            },
+          }
+        : currentDealer
+    );
+
+    setDealers((currentDealers) =>
+      currentDealers.map((dealer) =>
+        dealer.id === selectedDealer.id
+          ? {
+              ...dealer,
+              logo: logoUrl,
+              raw: {
+                ...(dealer.raw || {}),
+                logo_url: logoUrl,
+              },
+            }
+          : dealer
+      )
+    );
+
+    setDealerLogoSuccess("Imagen institucional actualizada.");
+    await loadDealers();
+    setUploadingDealerLogo(false);
+  }
+
+  function handleDealerLogoInputChange(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) return;
+
+    handleDealerLogoFile(file);
+  }
+
+  function handleDealerLogoDrop(event) {
+    event.preventDefault();
+
+    const file = event.dataTransfer.files?.[0];
+
+    if (!file) return;
+
+    handleDealerLogoFile(file);
+  }
+
   function openModule(moduleName) {
     setSelectedDealer(null);
     setShowCreateDealer(false);
     setCreateDealerError("");
     setActivateDealerError("");
     setDealerPlanError("");
+    setDealerLogoError("");
+    setDealerLogoSuccess("");
     setActiveModule(moduleName);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -358,6 +437,8 @@ export default function AdminPanel({ authProfile }) {
     setCreateDealerError("");
     setActivateDealerError("");
     setDealerPlanError("");
+    setDealerLogoError("");
+    setDealerLogoSuccess("");
     setDealerPlanForm({
       planCode: dealer.plan || "inicio",
     });
@@ -508,6 +589,8 @@ export default function AdminPanel({ authProfile }) {
           setCreateDealerError("");
           setActivateDealerError("");
           setDealerPlanError("");
+          setDealerLogoError("");
+          setDealerLogoSuccess("");
           setActiveModule(null);
         }}
       >
@@ -675,6 +758,7 @@ export default function AdminPanel({ authProfile }) {
     const used = selectedDealer.currentPeriod?.publicationsUsed || 0;
     const limit = permissions.vehicleLimit;
     const days = selectedDealer.currentPeriod?.expiresInDays ?? 0;
+    const dealerLogo = selectedDealer.logo || selectedDealer.raw?.logo_url || "";
 
     return (
       <div className="admin-section-block" id="admin-dealer-detail">
@@ -720,6 +804,107 @@ export default function AdminPanel({ authProfile }) {
 
         {activateDealerError && (
           <div className="auth-warning">{activateDealerError}</div>
+        )}
+
+        <div className="admin-kpi-grid">
+          <article className="admin-kpi-card">
+            <span>Imagen institucional</span>
+            <strong>{dealerLogo ? "Cargada" : "Pendiente"}</strong>
+            <p>
+              Esta imagen identifica al dealer en su panel y podrá usarse en
+              secciones públicas de la red.
+            </p>
+          </article>
+
+          <article
+            className="admin-kpi-card"
+            onDragOver={(event) => event.preventDefault()}
+            onDrop={handleDealerLogoDrop}
+            style={{
+              minHeight: "220px",
+              display: "grid",
+              gap: "10px",
+              alignContent: "center",
+            }}
+          >
+            {dealerLogo ? (
+              <img
+                src={dealerLogo}
+                alt={`Imagen institucional de ${selectedDealer.commercialName}`}
+                style={{
+                  width: "100%",
+                  height: "120px",
+                  objectFit: "cover",
+                  borderRadius: "16px",
+                  border: "1px solid var(--ox-border)",
+                  background: "var(--ox-card-2)",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  minHeight: "120px",
+                  display: "grid",
+                  placeItems: "center",
+                  border: "1px dashed var(--ox-border)",
+                  borderRadius: "16px",
+                  color: "var(--ox-muted)",
+                  background: "var(--ox-card-2)",
+                  textAlign: "center",
+                  padding: "12px",
+                }}
+              >
+                Arrastrá una imagen acá
+              </div>
+            )}
+
+            <label
+              className="admin-refresh-btn"
+              style={{
+                display: "inline-flex",
+                width: "fit-content",
+                cursor: uploadingDealerLogo ? "not-allowed" : "pointer",
+                opacity: uploadingDealerLogo ? 0.65 : 1,
+              }}
+            >
+              {uploadingDealerLogo ? "Subiendo..." : "Seleccionar imagen"}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleDealerLogoInputChange}
+                disabled={uploadingDealerLogo}
+                style={{ display: "none" }}
+              />
+            </label>
+
+            <p style={{ margin: 0 }}>
+              Podés seleccionar una imagen o arrastrarla desde la computadora.
+            </p>
+          </article>
+
+          <article className="admin-kpi-card">
+            <span>Uso previsto</span>
+            <strong>Dealer</strong>
+            <p>
+              Se verá en el encabezado del panel del dealer y luego podrá alimentar
+              el sector “Quiénes trabajan con nosotros”.
+            </p>
+          </article>
+
+          <article className="admin-kpi-card">
+            <span>Archivo</span>
+            <strong>Imagen</strong>
+            <p>
+              Usá una imagen horizontal o logo institucional de buena calidad. No
+              conviene subir capturas borrosas o fotos con texto ilegible.
+            </p>
+          </article>
+        </div>
+
+        {dealerLogoError && <div className="auth-warning">{dealerLogoError}</div>}
+
+        {dealerLogoSuccess && (
+          <div className="auth-message">{dealerLogoSuccess}</div>
         )}
 
         <div

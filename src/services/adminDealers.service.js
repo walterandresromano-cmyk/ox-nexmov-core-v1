@@ -1,5 +1,16 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 
+const DEALER_IMAGES_BUCKET = "vehicle-images";
+
+function sanitizeFileName(name) {
+  return String(name || "imagen")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9._-]/g, "-")
+    .replace(/-+/g, "-")
+    .toLowerCase();
+}
+
 /* =========================
    GRANT EXTRA SLOTS
 ========================= */
@@ -108,6 +119,10 @@ export async function createDealerFromAdmin({
     error,
   };
 }
+
+/* =========================
+   ACTIVATE DEALER FROM ADMIN
+========================= */
 export async function activateDealerFromAdmin({ dealerId }) {
   if (!isSupabaseConfigured || !supabase) {
     return {
@@ -128,6 +143,9 @@ export async function activateDealerFromAdmin({ dealerId }) {
   };
 }
 
+/* =========================
+   UPDATE DEALER PLAN FROM ADMIN
+========================= */
 export async function updateDealerPlanFromAdmin({ dealerId, planCode }) {
   if (!isSupabaseConfigured || !supabase) {
     return {
@@ -147,4 +165,95 @@ export async function updateDealerPlanFromAdmin({ dealerId, planCode }) {
     dealer: Array.isArray(data) ? data[0] : null,
     error,
   };
+}
+
+/* =========================
+   UPLOAD DEALER LOGO FROM ADMIN
+========================= */
+export async function uploadDealerLogoFromAdmin({ dealerId, file }) {
+  if (!isSupabaseConfigured || !supabase) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        message: "Supabase no está configurado.",
+      },
+    };
+  }
+
+  if (!dealerId) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        message: "Falta el ID del dealer.",
+      },
+    };
+  }
+
+  if (!file) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        message: "Seleccioná una imagen para subir.",
+      },
+    };
+  }
+
+  if (!String(file.type || "").startsWith("image/")) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        message: "El archivo debe ser una imagen.",
+      },
+    };
+  }
+
+  const safeName = sanitizeFileName(file.name);
+  const path = `dealers/${dealerId}/logo-${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from(DEALER_IMAGES_BUCKET)
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (uploadError) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: uploadError,
+    };
+  }
+
+  const { data: publicData } = supabase.storage
+    .from(DEALER_IMAGES_BUCKET)
+    .getPublicUrl(path);
+
+  const logoUrl = publicData?.publicUrl || null;
+
+  if (!logoUrl) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        message: "No se pudo obtener la URL pública de la imagen.",
+      },
+    };
+  }
+const { data, error } = await supabase.rpc("update_dealer_logo_from_admin", {
+  p_dealer_id: Number(dealerId),
+  p_logo_url: logoUrl,
+});
+
+return {
+  dealer: Array.isArray(data) ? data[0] : null,
+  logoUrl,
+  error,
+};
+
+
 }
