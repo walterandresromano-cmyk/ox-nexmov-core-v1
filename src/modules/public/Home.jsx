@@ -603,8 +603,8 @@ const featuredSignal = featuredVehicle
           )}
         </div>
 
-        <div className="admin-section-block">
-          <div className="buyer-section-head">
+        <div className="admin-section-block ox-home-section ox-home-signals-section">
+          <div className="buyer-section-head ox-home-section-head">
             <div>
               <p className="eyebrow">Señales destacadas</p>
               <h2>Señales destacadas del sistema.</h2>
@@ -629,12 +629,12 @@ const featuredSignal = featuredVehicle
               destacadas.
             </div>
           ) : (
-            <div className="dealer-modules-grid">
+            <div className="dealer-modules-grid ox-home-signals-grid">
               {latestVehicles.slice(0, 4).map((vehicle, index) => {
                 const signal = getVehicleSignal(vehicle, index);
 
                 return (
-                  <article className="dealer-module-card" key={vehicle.id}>
+                  <article className="dealer-module-card ox-home-signal-card" key={vehicle.id}>
                     {vehicle.mainImageUrl || vehicle.imageUrl ? (
                       <img
                         src={vehicle.mainImageUrl || vehicle.imageUrl}

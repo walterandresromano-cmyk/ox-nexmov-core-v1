@@ -705,3 +705,120 @@
     height: 120px !important;
   }
 }
+
+/* =========================================================
+   oX NEXMOV Core v1 — Home Signals Section
+   Sección aislada: señales destacadas / oportunidades.
+   ========================================================= */
+
+.ox-home-signals-section {
+  border-color: rgba(245, 197, 66, 0.16);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(245, 197, 66, 0.09), transparent 30%),
+    radial-gradient(circle at 88% 10%, rgba(56, 189, 248, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.94));
+}
+
+.ox-home-signals-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ox-home-signal-card {
+  min-height: 0;
+  padding: 14px;
+  border-radius: 24px;
+  border-color: rgba(245, 197, 66, 0.14);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(245, 197, 66, 0.10), transparent 32%),
+    radial-gradient(circle at 90% 0%, rgba(56, 189, 248, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.94));
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ox-home-signal-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 197, 66, 0.32);
+  box-shadow:
+    0 22px 68px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(245, 197, 66, 0.08);
+}
+
+.ox-home-signal-card img {
+  height: 118px !important;
+  border-radius: 18px !important;
+  margin-bottom: 12px !important;
+  filter: saturate(1.04) contrast(1.04);
+}
+
+.ox-home-signal-card .admin-benefits-list {
+  margin-bottom: 12px;
+}
+
+.ox-home-signal-card .admin-benefits-list span:first-child {
+  border-color: rgba(245, 197, 66, 0.30);
+  background: rgba(245, 197, 66, 0.12);
+  color: #fde68a !important;
+}
+
+.ox-home-signal-card .admin-benefits-list span:last-child {
+  border-color: rgba(56, 189, 248, 0.18);
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(186, 230, 253, 0.92) !important;
+}
+
+.ox-home-signal-card h3 {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 1rem;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.ox-home-signal-card p {
+  margin: 8px 0 0;
+  color: rgba(203, 213, 225, 0.66);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.ox-home-signal-card strong {
+  color: #38bdf8 !important;
+  text-shadow: 0 0 22px rgba(56, 189, 248, 0.20);
+}
+
+.ox-home-signal-card button {
+  min-height: 38px;
+  border-radius: 13px;
+  border-color: rgba(125, 211, 252, 0.24);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.16), rgba(15, 23, 42, 0.82));
+  color: rgba(240, 249, 255, 0.94);
+  font-size: 0.74rem;
+  font-weight: 950;
+}
+
+.ox-home-signal-card button:hover {
+  border-color: rgba(125, 211, 252, 0.42);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.24), rgba(15, 23, 42, 0.90));
+}
+
+@media (max-width: 1180px) {
+  .ox-home-signals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .ox-home-signals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ox-home-signal-card img {
+    height: 150px !important;
+  }
+}
