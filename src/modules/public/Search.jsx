@@ -3,6 +3,10 @@ import { useEffect, useMemo, useState } from "react";
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
 import { mockDealers, mockVehicles } from "../../data/mockData.js";
 import { listPublicVehicles } from "../../services/vehicles.service.js";
+import {
+  flattenCatalogSuggestions,
+  listVehicleCatalog,
+} from "../../services/catalog.service.js";
 
 function getMockDealer(vehicle) {
   return mockDealers.find((dealer) => dealer.id === vehicle.dealerId);
@@ -72,20 +76,15 @@ function parseMoneyExpression(text) {
 }
 
 function extractNumbers(text) {
-  const normalized = normalizeText(text);
   const compactNumbers = text.match(/\d[\d\.\,]*/g) || [];
 
   return compactNumbers
     .map((value) => Number(normalizeNumberText(value)))
     .filter((number) => Number.isFinite(number) && number > 0)
-    .map((number) => {
-      const before = normalized;
-      return {
-        value: number,
-        raw: String(number),
-        context: before,
-      };
-    });
+    .map((number) => ({
+      value: number,
+      raw: String(number),
+    }));
 }
 
 function hasAny(text, words) {
@@ -173,13 +172,17 @@ function parseSmartVehicleSearch(query) {
   };
 
   if (hasAny(text, ["suv", "camioneta familiar"])) parsed.bodyTypes.push("suv");
+
   if (hasAny(text, ["pickup", "pick up", "chata", "trabajo"])) {
     parsed.bodyTypes.push("pickup");
   }
+
   if (hasAny(text, ["sedan", "sedán"])) parsed.bodyTypes.push("sedan");
+
   if (hasAny(text, ["hatch", "hatchback", "compacto", "urbano"])) {
     parsed.bodyTypes.push("hatchback");
   }
+
   if (hasAny(text, ["utilitario", "furgon", "furgón"])) {
     parsed.bodyTypes.push("utilitario");
   }
@@ -361,7 +364,9 @@ function scoreVehicleForSearch(vehicle, dealer, parsedSearch) {
   }
 
   if (parsedSearch.bodyTypes.length > 0) {
-    const bodyType = normalizeText(getVehicleField(vehicle, "bodyType", "body_type"));
+    const bodyType = normalizeText(
+      getVehicleField(vehicle, "bodyType", "body_type")
+    );
 
     const matchesBody = parsedSearch.bodyTypes.some((type) =>
       bodyType.includes(type)
@@ -383,11 +388,22 @@ function scoreVehicleForSearch(vehicle, dealer, parsedSearch) {
   };
 }
 
+function getSuggestionTypeLabel(type) {
+  if (type === "brand") return "Marca";
+  if (type === "model") return "Modelo";
+  if (type === "version") return "Versión";
+  return "Sugerencia";
+}
+
 export default function Search({ appActions, onNavigate }) {
   const [vehicles, setVehicles] = useState(mockVehicles);
   const [loadingVehicles, setLoadingVehicles] = useState(true);
   const [vehiclesError, setVehiclesError] = useState("");
   const [searchText, setSearchText] = useState("");
+
+  const [catalogSuggestions, setCatalogSuggestions] = useState([]);
+  const [loadingCatalog, setLoadingCatalog] = useState(true);
+  const [catalogError, setCatalogError] = useState("");
 
   async function loadVehicles() {
     setLoadingVehicles(true);
@@ -417,8 +433,28 @@ export default function Search({ appActions, onNavigate }) {
     setLoadingVehicles(false);
   }
 
+  async function loadCatalog() {
+    setLoadingCatalog(true);
+    setCatalogError("");
+
+    const { catalog, error } = await listVehicleCatalog();
+
+    if (error) {
+      setCatalogSuggestions([]);
+      setCatalogError(
+        error.message || "No se pudo cargar el catálogo de vehículos."
+      );
+      setLoadingCatalog(false);
+      return;
+    }
+
+    setCatalogSuggestions(flattenCatalogSuggestions(catalog || []));
+    setLoadingCatalog(false);
+  }
+
   useEffect(() => {
     loadVehicles();
+    loadCatalog();
   }, []);
 
   function getDealer(vehicle) {
@@ -430,6 +466,37 @@ export default function Search({ appActions, onNavigate }) {
     () => parseSmartVehicleSearch(searchText),
     [searchText]
   );
+
+  const visibleSuggestions = useMemo(() => {
+    const text = normalizeText(searchText);
+
+    if (text.length < 2) return [];
+
+    return catalogSuggestions
+      .map((suggestion) => {
+        const label = normalizeText(suggestion.label);
+
+        let score = 0;
+
+        if (label === text) score += 100;
+        if (label.startsWith(text)) score += 60;
+        if (label.includes(text)) score += 30;
+
+        text.split(" ").forEach((token) => {
+          if (token.length > 1 && label.includes(token)) {
+            score += 8;
+          }
+        });
+
+        return {
+          ...suggestion,
+          score,
+        };
+      })
+      .filter((suggestion) => suggestion.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 8);
+  }, [catalogSuggestions, searchText]);
 
   const filteredVehicles = useMemo(() => {
     const text = searchText.trim();
@@ -454,7 +521,7 @@ export default function Search({ appActions, onNavigate }) {
 
   const searchSummary = useMemo(() => {
     if (!searchText.trim()) {
-      return "Escribí una marca, modelo, precio, kilometraje, año, financiación o tipo de vehículo.";
+      return "Escribí una marca, modelo, versión, precio, kilometraje, año, financiación o tipo de vehículo.";
     }
 
     const parts = [];
@@ -511,24 +578,91 @@ export default function Search({ appActions, onNavigate }) {
         </p>
 
         <div className="admin-toolbar">
-          <div className="admin-search">
+          <div className="admin-search" style={{ position: "relative" }}>
             <label>Buscar</label>
             <input
               value={searchText}
               onChange={(event) => setSearchText(event.target.value)}
               placeholder="Ej: SUV financiada hasta 20 millones, Toyota automático, 100000 km..."
             />
+
+            {visibleSuggestions.length > 0 && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  right: 0,
+                  zIndex: 20,
+                  display: "grid",
+                  gap: "6px",
+                  marginTop: "8px",
+                  padding: "10px",
+                  border: "1px solid rgba(148, 163, 184, 0.16)",
+                  borderRadius: "18px",
+                  background:
+                    "linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98))",
+                  boxShadow: "0 24px 70px rgba(0,0,0,.42)",
+                }}
+              >
+                {visibleSuggestions.map((suggestion) => (
+                  <button
+                    key={`${suggestion.type}-${suggestion.label}`}
+                    type="button"
+                    onClick={() => setSearchText(suggestion.searchValue)}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: "12px",
+                      alignItems: "center",
+                      width: "100%",
+                      border: "1px solid rgba(148, 163, 184, 0.12)",
+                      background: "rgba(15, 23, 42, 0.72)",
+                      color: "var(--ox-text)",
+                      borderRadius: "14px",
+                      padding: "10px 12px",
+                      textAlign: "left",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <strong>{suggestion.label}</strong>
+                    <span
+                      style={{
+                        color: "var(--ox-muted)",
+                        fontSize: "0.76rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em",
+                        fontWeight: 900,
+                      }}
+                    >
+                      {getSuggestionTypeLabel(suggestion.type)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <button className="admin-refresh-btn" onClick={loadVehicles}>
             Actualizar vehículos
+          </button>
+
+          <button
+            className="admin-refresh-btn"
+            onClick={() => setSearchText("")}
+            disabled={!searchText.trim()}
+          >
+            Limpiar
           </button>
         </div>
 
         <div className="auth-message">
           {searchSummary} Resultado: {filteredVehicles.length} de{" "}
           {vehicles.length} vehículos.
+          {loadingCatalog ? " Cargando catálogo..." : ""}
         </div>
+
+        {catalogError && <div className="auth-warning">{catalogError}</div>}
 
         {vehiclesError && <div className="auth-warning">{vehiclesError}</div>}
 
