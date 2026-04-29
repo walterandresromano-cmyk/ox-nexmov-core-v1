@@ -184,3 +184,35 @@ export async function listAllDealersForAdmin() {
 
 // Alias necesario porque AdminPanel.jsx importa este nombre.
 export const listDealersForAdmin = listAllDealersForAdmin;
+export async function listPublicActiveDealers() {
+  if (!isSupabaseConfigured || !supabase) {
+    return {
+      dealers: [],
+      error: {
+        message: "Supabase no está configurado.",
+      },
+    };
+  }
+
+  const { data, error } = await supabase.rpc("get_public_active_dealers");
+
+  if (error) {
+    return {
+      dealers: [],
+      error,
+    };
+  }
+
+  return {
+    dealers: (data || []).map((row) => ({
+      id: String(row.dealer_id),
+      commercialName: row.commercial_name || "Dealer sin nombre",
+      city: row.city || "",
+      province: row.province || "",
+      logo: row.logo_url || null,
+      plan: row.plan_code || "inicio",
+      activeVehiclesCount: Number(row.active_vehicles_count || 0),
+    })),
+    error: null,
+  };
+}
