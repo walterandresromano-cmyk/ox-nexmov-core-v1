@@ -144,30 +144,7 @@ export async function listAllDealersForAdmin() {
     };
   }
 
-  const { data, error } = await supabase
-    .from("dealers")
-    .select(
-      `
-      id,
-      profile_id,
-      name,
-      slug,
-      plan_code,
-      plan_status,
-      publications_used,
-      extra_publish_slots,
-      plan_expires_at,
-      province,
-      city,
-      logo_url,
-      image_url,
-      contact_phone,
-      phone_whatsapp,
-      can_receive_sell_vehicle_leads,
-      is_active
-    `
-    )
-    .order("id", { ascending: true });
+  const { data, error } = await supabase.rpc("list_dealers_for_admin");
 
   if (error) {
     return {
@@ -181,6 +158,7 @@ export async function listAllDealersForAdmin() {
     error: null,
   };
 }
+
 
 // Alias necesario porque AdminPanel.jsx importa este nombre.
 export const listDealersForAdmin = listAllDealersForAdmin;

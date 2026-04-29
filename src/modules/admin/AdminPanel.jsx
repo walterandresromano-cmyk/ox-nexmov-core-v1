@@ -18,6 +18,7 @@ import {
   activateDealerFromAdmin,
   updateDealerPlanFromAdmin,
   uploadDealerLogoFromAdmin,
+  suspendDealerFromAdmin,
 } from "../../services/adminDealers.service.js";
 
 const ADMIN_MODULES = {
@@ -156,6 +157,9 @@ export default function AdminPanel({ authProfile }) {
   const [uploadingDealerLogo, setUploadingDealerLogo] = useState(false);
   const [dealerLogoError, setDealerLogoError] = useState("");
   const [dealerLogoSuccess, setDealerLogoSuccess] = useState("");
+  const [suspendingDealer, setSuspendingDealer] = useState(false);
+  const [suspendDealerError, setSuspendDealerError] = useState("");
+
 
   async function loadDealers() {
     setLoadingDealers(true);
@@ -324,6 +328,35 @@ export default function AdminPanel({ authProfile }) {
     setActivatingDealer(false);
   }
 
+  async function handleSuspendSelectedDealer() {
+  if (!selectedDealer?.id) return;
+
+  const confirmed = window.confirm(
+    `Vas a suspender a ${selectedDealer.commercialName}. Sus publicaciones se pausarán por sistema y dejará de aparecer en la web pública. ¿Confirmás la suspensión?`
+  );
+
+  if (!confirmed) return;
+
+  setSuspendingDealer(true);
+  setSuspendDealerError("");
+
+  const { error } = await suspendDealerFromAdmin({
+    dealerId: selectedDealer.id,
+    reason: "Suspensión manual desde panel admin.",
+  });
+
+  if (error) {
+    setSuspendDealerError(error.message || "No se pudo suspender el dealer.");
+    setSuspendingDealer(false);
+    return;
+  }
+
+  await refreshAdminPanel();
+  setSelectedDealer(null);
+  setActiveModule(ADMIN_MODULES.DEALERS);
+  setSuspendingDealer(false);
+}
+
   async function handleUpdateDealerPlan() {
     if (!selectedDealer?.id) return;
 
@@ -427,6 +460,7 @@ export default function AdminPanel({ authProfile }) {
     setDealerPlanError("");
     setDealerLogoError("");
     setDealerLogoSuccess("");
+    setSuspendDealerError("");
     setActiveModule(moduleName);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -439,6 +473,7 @@ export default function AdminPanel({ authProfile }) {
     setDealerPlanError("");
     setDealerLogoError("");
     setDealerLogoSuccess("");
+    setSuspendDealerError("");
     setDealerPlanForm({
       planCode: dealer.plan || "inicio",
     });
@@ -591,6 +626,7 @@ export default function AdminPanel({ authProfile }) {
           setDealerPlanError("");
           setDealerLogoError("");
           setDealerLogoSuccess("");
+          setSuspendDealerError("");
           setActiveModule(null);
         }}
       >
@@ -791,6 +827,23 @@ export default function AdminPanel({ authProfile }) {
             >
               Crear ticket
             </button>
+              {selectedDealer.planStatus !== "suspended" && (
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={handleSuspendSelectedDealer}
+              disabled={suspendingDealer}
+              style={{
+                borderColor: "rgba(248, 113, 113, 0.36)",
+                color: "#fecaca",
+                background: "rgba(127, 29, 29, 0.28)",
+              }}
+            >
+              {suspendingDealer ? "Suspendiendo..." : "Suspender dealer"}
+            </button>
+          )}
+
+
 
             <button
               type="button"
@@ -804,6 +857,9 @@ export default function AdminPanel({ authProfile }) {
 
         {activateDealerError && (
           <div className="auth-warning">{activateDealerError}</div>
+        )}
+        {suspendDealerError && (
+        <div className="auth-warning">{suspendDealerError}</div>
         )}
 
         <div className="admin-kpi-grid">

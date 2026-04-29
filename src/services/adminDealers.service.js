@@ -168,6 +168,39 @@ export async function updateDealerPlanFromAdmin({ dealerId, planCode }) {
 }
 
 /* =========================
+   SUSPEND DEALER FROM ADMIN
+========================= */
+export async function suspendDealerFromAdmin({ dealerId, reason = "" }) {
+  if (!isSupabaseConfigured || !supabase) {
+    return {
+      dealer: null,
+      error: {
+        message: "Supabase no está configurado.",
+      },
+    };
+  }
+
+  if (!dealerId) {
+    return {
+      dealer: null,
+      error: {
+        message: "Falta el ID del dealer.",
+      },
+    };
+  }
+
+  const { data, error } = await supabase.rpc("suspend_dealer_from_admin", {
+    p_dealer_id: Number(dealerId),
+    p_reason: reason || null,
+  });
+
+  return {
+    dealer: Array.isArray(data) ? data[0] : null,
+    error,
+  };
+}
+
+/* =========================
    UPLOAD DEALER LOGO FROM ADMIN
 ========================= */
 export async function uploadDealerLogoFromAdmin({ dealerId, file }) {
@@ -244,16 +277,15 @@ export async function uploadDealerLogoFromAdmin({ dealerId, file }) {
       },
     };
   }
-const { data, error } = await supabase.rpc("update_dealer_logo_from_admin", {
-  p_dealer_id: Number(dealerId),
-  p_logo_url: logoUrl,
-});
 
-return {
-  dealer: Array.isArray(data) ? data[0] : null,
-  logoUrl,
-  error,
-};
+  const { data, error } = await supabase.rpc("update_dealer_logo_from_admin", {
+    p_dealer_id: Number(dealerId),
+    p_logo_url: logoUrl,
+  });
 
-
+  return {
+    dealer: Array.isArray(data) ? data[0] : null,
+    logoUrl,
+    error,
+  };
 }
