@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
 import { listPublicLatestVehicles } from "../../services/vehicles.service.js";
@@ -8,6 +8,24 @@ function getPlanLabel(plan) {
   if (plan === "elite") return "Elite";
   if (plan === "pro") return "Pro";
   return "Inicio";
+}
+
+function formatARS(value) {
+  const number = Number(value || 0);
+
+  if (!Number.isFinite(number) || number <= 0) {
+    return "Consultar";
+  }
+
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    maximumFractionDigits: 0,
+  }).format(number);
+}
+
+function formatCount(value) {
+  return Number(value || 0).toLocaleString("es-AR");
 }
 
 function buildDealerForVehicle(vehicle) {
@@ -26,6 +44,56 @@ function buildDealerForVehicle(vehicle) {
       expiresInDays: 30,
     },
   };
+}
+
+function getVehicleSignal(vehicle, index) {
+  if (vehicle.price && vehicle.price <= 15000000) {
+    return {
+      label: "Oportunidad",
+      text: "Precio competitivo",
+    };
+  }
+
+  if (vehicle.kilometers <= 30000) {
+    return {
+      label: "Menor uso",
+      text: "Kilometraje atractivo",
+    };
+  }
+
+  if (vehicle.year >= 2022) {
+    return {
+      label: "Reciente",
+      text: "Modelo nuevo",
+    };
+  }
+
+  if (index === 0) {
+    return {
+      label: "Nuevo ingreso",
+      text: "Recién publicado",
+    };
+  }
+
+  return {
+    label: "Disponible",
+    text: "Unidad activa",
+  };
+}
+
+function countBy(items, getKey) {
+  return items.reduce((acc, item) => {
+    const key = getKey(item);
+
+    if (!key) return acc;
+
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+}
+
+function sortEntriesByCount(entries) {
+  return Object.entries(entries).sort((a, b) => b[1] - a[1]);
 }
 
 export default function Home({ onNavigate, appActions = {} }) {
@@ -116,6 +184,50 @@ export default function Home({ onNavigate, appActions = {} }) {
 
     return () => window.clearInterval(interval);
   }, [latestVehicles.length]);
+
+  const homeStats = useMemo(() => {
+    const totalActiveVehicles = publicDealers.reduce(
+      (sum, dealer) => sum + Number(dealer.activeVehiclesCount || 0),
+      0
+    );
+
+    const cities = countBy(publicDealers, (dealer) => {
+      if (!dealer.city) return "";
+      return dealer.province ? `${dealer.city}, ${dealer.province}` : dealer.city;
+    });
+
+    const brands = countBy(latestVehicles, (vehicle) => vehicle.brand);
+    const models = countBy(latestVehicles, (vehicle) => {
+      if (!vehicle.brand || !vehicle.model) return "";
+      return `${vehicle.brand} ${vehicle.model}`;
+    });
+
+    const activeLocations = sortEntriesByCount(cities).slice(0, 5);
+    const activeBrands = sortEntriesByCount(brands).slice(0, 5);
+    const activeModels = sortEntriesByCount(models).slice(0, 3);
+
+    const averagePrice =
+      latestVehicles.length > 0
+        ? latestVehicles.reduce(
+            (sum, vehicle) => sum + Number(vehicle.price || 0),
+            0
+          ) / latestVehicles.length
+        : 0;
+
+    const vehiclesWithImages = latestVehicles.filter(
+      (vehicle) => vehicle.mainImageUrl || vehicle.imageUrl
+    ).length;
+
+    return {
+      totalActiveVehicles,
+      visibleDealers: publicDealers.length,
+      activeLocations,
+      activeBrands,
+      activeModels,
+      averagePrice,
+      vehiclesWithImages,
+    };
+  }, [publicDealers, latestVehicles]);
 
   function scrollLatestVehicles(direction) {
     const carousel = latestVehiclesCarouselRef.current;
@@ -343,6 +455,259 @@ export default function Home({ onNavigate, appActions = {} }) {
               ))}
             </div>
           )}
+        </div>
+
+        <div className="admin-section-block">
+          <div className="buyer-section-head">
+            <div>
+              <p className="eyebrow">Señales destacadas</p>
+              <h2>Señales destacadas del sistema.</h2>
+              <p>
+                Una selección corta de oportunidades con mejor lectura comercial
+                hoy, calculadas a partir de las unidades activas más recientes.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={() => onNavigate("search")}
+            >
+              Explorar señales
+            </button>
+          </div>
+
+          {latestVehicles.length === 0 ? (
+            <div className="empty-state">
+              Cuando haya unidades activas, mostraremos señales comerciales
+              destacadas.
+            </div>
+          ) : (
+            <div className="dealer-modules-grid">
+              {latestVehicles.slice(0, 4).map((vehicle, index) => {
+                const signal = getVehicleSignal(vehicle, index);
+
+                return (
+                  <article className="dealer-module-card" key={vehicle.id}>
+                    {vehicle.mainImageUrl || vehicle.imageUrl ? (
+                      <img
+                        src={vehicle.mainImageUrl || vehicle.imageUrl}
+                        alt={`${vehicle.brand} ${vehicle.model}`}
+                        style={{
+                          width: "100%",
+                          height: "130px",
+                          objectFit: "cover",
+                          borderRadius: "16px",
+                          border: "1px solid var(--ox-border)",
+                          background: "var(--ox-card-2)",
+                          marginBottom: "14px",
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "130px",
+                          display: "grid",
+                          placeItems: "center",
+                          borderRadius: "16px",
+                          border: "1px solid var(--ox-border)",
+                          background: "var(--ox-card-2)",
+                          color: "var(--ox-muted)",
+                          marginBottom: "14px",
+                          textAlign: "center",
+                          padding: "12px",
+                        }}
+                      >
+                        {vehicle.brand} {vehicle.model}
+                      </div>
+                    )}
+
+                    <div className="admin-benefits-list">
+                      <span>{signal.label}</span>
+                      <span>{signal.text}</span>
+                    </div>
+
+                    <h3>
+                      {vehicle.brand} {vehicle.model}
+                    </h3>
+
+                    <p>
+                      {vehicle.version || "Sin versión"} ·{" "}
+                      {vehicle.year || "Sin año"} ·{" "}
+                      {vehicle.city || "Sin ciudad"}
+                    </p>
+
+                    <strong
+                      style={{
+                        display: "block",
+                        color: "var(--ox-cyan)",
+                        fontSize: "1.25rem",
+                        marginTop: "10px",
+                      }}
+                    >
+                      {formatARS(vehicle.price)}
+                    </strong>
+
+                    <button type="button" onClick={() => onNavigate("search")}>
+                      Consultar disponibilidad
+                    </button>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="admin-section-block">
+          <div className="buyer-section-head">
+            <div>
+              <p className="eyebrow">Cobertura comercial</p>
+              <h2>Inventario distribuido en plazas reales.</h2>
+              <p>
+                La red muestra dónde hay oferta activa y qué plazas empiezan a
+                concentrar movimiento dentro de oX NEXMOV.
+              </p>
+            </div>
+          </div>
+
+          <div className="admin-kpi-grid">
+            <article className="admin-kpi-card">
+              <span>Concesionarias activas</span>
+              <strong>{formatCount(homeStats.visibleDealers)}</strong>
+              <p>Dealers visibles con operación vigente.</p>
+            </article>
+
+            <article className="admin-kpi-card">
+              <span>Unidades activas</span>
+              <strong>{formatCount(homeStats.totalActiveVehicles)}</strong>
+              <p>Publicaciones visibles dentro del mercado.</p>
+            </article>
+
+            <article className="admin-kpi-card">
+              <span>Plazas con movimiento</span>
+              <strong>{formatCount(homeStats.activeLocations.length)}</strong>
+              <p>Ciudades o zonas con inventario activo.</p>
+            </article>
+
+            <article className="admin-kpi-card">
+              <span>Imágenes cargadas</span>
+              <strong>{formatCount(homeStats.vehiclesWithImages)}</strong>
+              <p>Últimos ingresos con imagen principal.</p>
+            </article>
+          </div>
+
+          <div className="dealer-modules-grid">
+            <article className="dealer-module-card">
+              <h3>Plazas con más movimiento</h3>
+
+              {homeStats.activeLocations.length === 0 ? (
+                <p>Sin plazas activas para mostrar todavía.</p>
+              ) : (
+                <div className="admin-benefits-list">
+                  {homeStats.activeLocations.map(([location, count]) => (
+                    <span key={location}>
+                      {location} · {count}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </article>
+
+            <article className="dealer-module-card">
+              <h3>Marcas con presencia reciente</h3>
+
+              {homeStats.activeBrands.length === 0 ? (
+                <p>Sin marcas activas para mostrar todavía.</p>
+              ) : (
+                <div className="admin-benefits-list">
+                  {homeStats.activeBrands.map(([brand, count]) => (
+                    <span key={brand}>
+                      {brand} · {count}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </article>
+
+            <article className="dealer-module-card">
+              <h3>Modelos recientes</h3>
+
+              {homeStats.activeModels.length === 0 ? (
+                <p>Sin modelos activos para mostrar todavía.</p>
+              ) : (
+                <div className="admin-benefits-list">
+                  {homeStats.activeModels.map(([model, count]) => (
+                    <span key={model}>
+                      {model} · {count}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </article>
+
+            <article className="dealer-module-card">
+              <h3>Precio promedio visible</h3>
+              <p>
+                Referencia rápida calculada sobre los últimos ingresos visibles.
+              </p>
+              <strong
+                style={{
+                  color: "var(--ox-cyan)",
+                  fontSize: "1.35rem",
+                }}
+              >
+                {formatARS(homeStats.averagePrice)}
+              </strong>
+            </article>
+          </div>
+        </div>
+
+        <div className="admin-section-block">
+          <div className="buyer-section-head">
+            <div>
+              <p className="eyebrow">Pulso del mercado</p>
+              <h2>Lecturas rápidas para decidir mejor.</h2>
+              <p>
+                Una vista resumida de actividad comercial reciente, útil para
+                entender qué se está moviendo dentro de la red.
+              </p>
+            </div>
+          </div>
+
+          <div className="dealer-modules-grid">
+            <article className="dealer-module-card">
+              <h3>Nuevos ingresos</h3>
+              <p>
+                {formatCount(latestVehicles.length)} unidades recientes cargadas
+                por dealers activos.
+              </p>
+            </article>
+
+            <article className="dealer-module-card">
+              <h3>Red identificable</h3>
+              <p>
+                {formatCount(publicDealers.length)} concesionarias con identidad
+                institucional visible.
+              </p>
+            </article>
+
+            <article className="dealer-module-card">
+              <h3>Consulta con trazabilidad</h3>
+              <p>
+                Al contactar una unidad, la acción se registra para ordenar el
+                seguimiento comercial.
+              </p>
+            </article>
+
+            <article className="dealer-module-card rank-pro">
+              <h3>Buena oportunidad</h3>
+              <p>
+                Unidades recientes, dealers activos y señales de mercado para
+                comprar con más contexto.
+              </p>
+            </article>
+          </div>
         </div>
 
         <div className="admin-section-block">
