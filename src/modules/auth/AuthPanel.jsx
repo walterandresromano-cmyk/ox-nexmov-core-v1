@@ -3,6 +3,9 @@ import {
   signInWithEmail,
   signOut,
   signUpBuyer,
+  signUpDealer,
+  resetPasswordForEmail,
+  updateCurrentUserPassword,
 } from "../../services/auth.service.js";
 import { isSupabaseConfigured } from "../../lib/supabaseClient.js";
 
@@ -18,6 +21,15 @@ const initialRegister = {
   password: "",
 };
 
+const initialResetPassword = {
+  email: "",
+};
+
+const initialNewPassword = {
+  password: "",
+  confirmPassword: "",
+};
+
 function getPanelRoute(role) {
   const normalizedRole = String(role || "buyer").trim().toLowerCase();
 
@@ -27,6 +39,26 @@ function getPanelRoute(role) {
   if (normalizedRole === "support") return "support";
 
   return "buyer";
+}
+
+function validateRegisterForm(form) {
+  if (!form.fullName.trim()) {
+    return "Ingresá tu nombre.";
+  }
+
+  if (!form.email.includes("@")) {
+    return "Ingresá un email válido.";
+  }
+
+  if (!form.phone.trim()) {
+    return "Ingresá un teléfono o WhatsApp.";
+  }
+
+  if (form.password.length < 6) {
+    return "La contraseña debe tener al menos 6 caracteres.";
+  }
+
+  return "";
 }
 
 export default function AuthPanel({
@@ -40,6 +72,9 @@ export default function AuthPanel({
   const [mode, setMode] = useState("login");
   const [loginForm, setLoginForm] = useState(initialLogin);
   const [registerForm, setRegisterForm] = useState(initialRegister);
+  const [resetPasswordForm, setResetPasswordForm] =
+    useState(initialResetPassword);
+  const [newPasswordForm, setNewPasswordForm] = useState(initialNewPassword);
   const [message, setMessage] = useState("");
 
   function updateLogin(field, value) {
@@ -54,6 +89,25 @@ export default function AuthPanel({
       ...current,
       [field]: value,
     }));
+  }
+
+  function updateResetPassword(field, value) {
+    setResetPasswordForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  }
+
+  function updateNewPassword(field, value) {
+    setNewPasswordForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  }
+
+  function switchMode(nextMode) {
+    setMode(nextMode);
+    setMessage("");
   }
 
   async function handleLogin(event) {
@@ -71,42 +125,109 @@ export default function AuthPanel({
     setMessage("Sesión iniciada correctamente.");
   }
 
-  async function handleRegister(event) {
+  async function handleRegisterBuyer(event) {
     event.preventDefault();
     setMessage("");
 
-    if (!registerForm.fullName.trim()) {
-      setMessage("Ingresá tu nombre.");
-      return;
-    }
+    const validationError = validateRegisterForm(registerForm);
 
-    if (!registerForm.email.includes("@")) {
-      setMessage("Ingresá un email válido.");
-      return;
-    }
-
-    if (!registerForm.phone.trim()) {
-      setMessage("Ingresá un teléfono o WhatsApp.");
-      return;
-    }
-
-    if (registerForm.password.length < 6) {
-      setMessage("La contraseña debe tener al menos 6 caracteres.");
+    if (validationError) {
+      setMessage(validationError);
       return;
     }
 
     const { data, error } = await signUpBuyer(registerForm);
 
     if (error) {
-      setMessage(error.message || "No se pudo registrar el usuario.");
+      setMessage(error.message || "No se pudo registrar el comprador.");
       return;
     }
 
     await onAuthChange(data?.user || null, { redirectByRole: true });
 
     setMessage(
-      "Registro creado. Si Supabase requiere confirmación por email, revisá tu correo."
+      "Registro comprador creado. Si Supabase requiere confirmación por email, revisá tu correo."
     );
+  }
+
+  async function handleRegisterDealer(event) {
+    event.preventDefault();
+    setMessage("");
+
+    const validationError = validateRegisterForm(registerForm);
+
+    if (validationError) {
+      setMessage(validationError);
+      return;
+    }
+
+    const { data, error } = await signUpDealer(registerForm);
+
+    if (error) {
+      setMessage(
+        error.message ||
+          "No se pudo registrar el dealer. Verificá que el email coincida con el email autorizado por administración."
+      );
+      return;
+    }
+
+    await onAuthChange(data?.user || null, { redirectByRole: true });
+
+    setMessage(
+      "Registro dealer creado y vinculado. Ya podés ingresar con tu email y contraseña."
+    );
+  }
+
+  async function handleResetPassword(event) {
+    event.preventDefault();
+    setMessage("");
+
+    if (!resetPasswordForm.email.includes("@")) {
+      setMessage("Ingresá un email válido.");
+      return;
+    }
+
+    const { error } = await resetPasswordForEmail(resetPasswordForm);
+
+    if (error) {
+      setMessage(error.message || "No se pudo enviar el email de recuperación.");
+      return;
+    }
+
+    setMessage(
+      "Te enviamos un email para recuperar tu contraseña. Revisá tu casilla y seguí el enlace."
+    );
+  }
+
+  async function handleUpdatePassword(event) {
+    event.preventDefault();
+    setMessage("");
+
+    if (newPasswordForm.password.length < 6) {
+      setMessage("La nueva contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
+
+    if (newPasswordForm.password !== newPasswordForm.confirmPassword) {
+      setMessage("Las contraseñas no coinciden.");
+      return;
+    }
+
+    const { error } = await updateCurrentUserPassword({
+      password: newPasswordForm.password,
+    });
+
+    if (error) {
+      setMessage(
+        error.message ||
+          "No se pudo actualizar la contraseña. Abrí nuevamente el enlace de recuperación."
+      );
+      return;
+    }
+
+    setNewPasswordForm(initialNewPassword);
+    setMessage("Contraseña actualizada correctamente. Ya podés ingresar.");
+    setMode("login");
   }
 
   async function handleLogout() {
@@ -139,8 +260,8 @@ export default function AuthPanel({
         <p className="eyebrow">Acceso oX NEXMOV</p>
         <h1>Ingresar</h1>
         <p>
-          Base inicial de autenticación. El comprador podrá explorar libremente,
-          pero al contactar se exigirá registro para generar trazabilidad.
+          El comprador puede explorar libremente. Para contactar, publicar,
+          operar como dealer o gestionar la red, se requiere acceso identificado.
         </p>
 
         {!isSupabaseConfigured && (
@@ -178,28 +299,77 @@ export default function AuthPanel({
             <div className="auth-actions">
               <button onClick={handleRefreshProfile}>Actualizar perfil</button>
               <button onClick={handleGoToMyPanel}>Ir a mi panel</button>
+              <button onClick={() => switchMode("newPassword")}>
+                Cambiar contraseña
+              </button>
               <button onClick={handleLogout}>Cerrar sesión</button>
             </div>
+
+            {mode === "newPassword" && (
+              <form className="auth-form" onSubmit={handleUpdatePassword}>
+                <label>
+                  Nueva contraseña
+                  <input
+                    type="password"
+                    value={newPasswordForm.password}
+                    onChange={(event) =>
+                      updateNewPassword("password", event.target.value)
+                    }
+                    placeholder="Mínimo 6 caracteres"
+                  />
+                </label>
+
+                <label>
+                  Repetir contraseña
+                  <input
+                    type="password"
+                    value={newPasswordForm.confirmPassword}
+                    onChange={(event) =>
+                      updateNewPassword("confirmPassword", event.target.value)
+                    }
+                    placeholder="Repetí la nueva contraseña"
+                  />
+                </label>
+
+                <button className="primary-action" type="submit">
+                  Actualizar contraseña
+                </button>
+              </form>
+            )}
           </div>
         ) : (
           <>
             <div className="auth-mode-row">
               <button
                 className={mode === "login" ? "active" : ""}
-                onClick={() => setMode("login")}
+                onClick={() => switchMode("login")}
               >
                 Iniciar sesión
               </button>
 
               <button
-                className={mode === "register" ? "active" : ""}
-                onClick={() => setMode("register")}
+                className={mode === "registerBuyer" ? "active" : ""}
+                onClick={() => switchMode("registerBuyer")}
               >
                 Registro comprador
               </button>
+
+              <button
+                className={mode === "registerDealer" ? "active" : ""}
+                onClick={() => switchMode("registerDealer")}
+              >
+                Registro dealer
+              </button>
+
+              <button
+                className={mode === "resetPassword" ? "active" : ""}
+                onClick={() => switchMode("resetPassword")}
+              >
+                Olvidé mi contraseña
+              </button>
             </div>
 
-            {mode === "login" ? (
+            {mode === "login" && (
               <form className="auth-form" onSubmit={handleLogin}>
                 <label>
                   Email
@@ -228,8 +398,16 @@ export default function AuthPanel({
                   Ingresar
                 </button>
               </form>
-            ) : (
-              <form className="auth-form" onSubmit={handleRegister}>
+            )}
+
+            {mode === "registerBuyer" && (
+              <form className="auth-form" onSubmit={handleRegisterBuyer}>
+                <div className="auth-warning">
+                  Este registro es para compradores. Si sos dealer, usá{" "}
+                  <strong>Registro dealer</strong> con el email autorizado por
+                  administración.
+                </div>
+
                 <label>
                   Nombre
                   <input
@@ -277,6 +455,90 @@ export default function AuthPanel({
 
                 <button className="primary-action" type="submit">
                   Crear cuenta comprador
+                </button>
+              </form>
+            )}
+
+            {mode === "registerDealer" && (
+              <form className="auth-form" onSubmit={handleRegisterDealer}>
+                <div className="auth-warning">
+                  Este registro es solo para dealers previamente dados de alta
+                  por administración. El email debe coincidir con el email de
+                  acceso autorizado.
+                </div>
+
+                <label>
+                  Nombre del responsable
+                  <input
+                    value={registerForm.fullName}
+                    onChange={(event) =>
+                      updateRegister("fullName", event.target.value)
+                    }
+                    placeholder="Nombre del responsable"
+                  />
+                </label>
+
+                <label>
+                  Email autorizado
+                  <input
+                    value={registerForm.email}
+                    onChange={(event) =>
+                      updateRegister("email", event.target.value)
+                    }
+                    placeholder="dealer@agencia.com"
+                  />
+                </label>
+
+                <label>
+                  Teléfono / WhatsApp
+                  <input
+                    value={registerForm.phone}
+                    onChange={(event) =>
+                      updateRegister("phone", event.target.value)
+                    }
+                    placeholder="Ej: 11 3806 2294"
+                  />
+                </label>
+
+                <label>
+                  Crear contraseña
+                  <input
+                    type="password"
+                    value={registerForm.password}
+                    onChange={(event) =>
+                      updateRegister("password", event.target.value)
+                    }
+                    placeholder="Mínimo 6 caracteres"
+                  />
+                </label>
+
+                <button className="primary-action" type="submit">
+                  Crear acceso dealer
+                </button>
+              </form>
+            )}
+
+            {mode === "resetPassword" && (
+              <form className="auth-form" onSubmit={handleResetPassword}>
+                <div className="auth-warning">
+                  La recuperación sirve para compradores, dealers, admin, soporte
+                  y usuarios internos. Te enviaremos un enlace al email de tu
+                  cuenta.
+                </div>
+
+                <label>
+                  Email
+                  <input
+                    value={resetPasswordForm.email}
+                    onChange={(event) =>
+                      updateResetPassword("email", event.target.value)
+                    }
+                    placeholder="tu@email.com"
+                  />
+                </label>
+
+                <button className="primary-action" type="submit">
+                  Enviar recuperación
                 </button>
               </form>
             )}
