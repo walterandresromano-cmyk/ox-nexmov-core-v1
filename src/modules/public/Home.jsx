@@ -507,8 +507,8 @@ const featuredSignal = featuredVehicle
           )}
         </div>
 
-        <div className="admin-section-block">
-          <div className="buyer-section-head">
+        <div className="admin-section-block ox-home-section ox-home-dealers-section">
+          <div className="buyer-section-head ox-home-section-head">
             <div>
               <p className="eyebrow">Red activa</p>
               <h2>Dealers que trabajan con oX NEXMOV.</h2>
@@ -541,11 +541,11 @@ const featuredSignal = featuredVehicle
           )}
 
           {publicDealers.length > 0 && (
-            <div className="dealer-modules-grid">
+            <div className="dealer-modules-grid ox-home-dealers-grid">
               {publicDealers.slice(0, 8).map((dealer) => (
                 <article
                   key={dealer.id}
-                  className={`dealer-module-card rank-${dealer.plan || "inicio"}`}
+                  className={`dealer-module-card ox-home-dealer-card rank-${dealer.plan || "inicio"}`}
                 >
                   {dealer.logo ? (
                     <img
