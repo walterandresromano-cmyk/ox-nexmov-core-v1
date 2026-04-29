@@ -92,6 +92,43 @@ function countBy(items, getKey) {
   }, {});
 }
 
+const homeHeroQuickSearches = [
+  "SUV financiada",
+  "Primer auto",
+  "0km entrega inmediata",
+  "Bajo consumo",
+  "Pick up diesel",
+  "Familiar 7 asientos",
+];
+
+const homeHeroTrustItems = [
+  {
+    title: "Dealers verificados",
+    text: "Red validada",
+    icon: "◇",
+  },
+  {
+    title: "Comparador real",
+    text: "Hasta 4 vehículos",
+    icon: "⇄",
+  },
+  {
+    title: "Consultas trazables",
+    text: "Antes del WhatsApp",
+    icon: "◎",
+  },
+  {
+    title: "Financiación clara",
+    text: "Sin sorpresas",
+    icon: "$",
+  },
+  {
+    title: "Publicaciones revisadas",
+    text: "Datos coherentes",
+    icon: "✓",
+  },
+];
+
 function sortEntriesByCount(entries) {
   return Object.entries(entries).sort((a, b) => b[1] - a[1]);
 }
@@ -251,40 +288,88 @@ export default function Home({ onNavigate, appActions = {} }) {
   return (
     <section className="page-section">
       <div className="container panel public-page-panel">
-        <div className="hero-panel">
-          <p className="eyebrow">Red automotriz inteligente</p>
+         <div className="ox-home-hero-v2">
+  <div className="ox-home-hero-copy">
+    <p className="ox-home-hero-eyebrow">La plataforma líder en Argentina</p>
 
-          <h1>
-            Claridad en cada <span>decisión.</span>
-          </h1>
+    <h1>
+      Comprá mejor.
+      <br />
+      Vendé mejor.
+      <br />
+      Decidí con <span>más información.</span>
+    </h1>
 
-          <p className="lead">
-            Buscá, compará y consultá vehículos reales de dealers verificados,
-            con señales comerciales y contexto de mercado.
-          </p>
+    <p className="ox-home-hero-lead">
+      Datos reales, dealers verificados y herramientas para tomar siempre la
+      mejor decisión.
+    </p>
 
-             <form className="hero-search" onSubmit={handleHeroSearch}>
-  <input
-    value={heroSearchText}
-    onChange={(event) => setHeroSearchText(event.target.value)}
-    placeholder="Ej: SUV financiada hasta 20 millones"
-  />
-  <button type="submit">Buscar vehículos</button>
-</form>
+    <form className="ox-home-hero-search" onSubmit={handleHeroSearch}>
+      <input
+        value={heroSearchText}
+        onChange={(event) => setHeroSearchText(event.target.value)}
+        placeholder="¿Qué vehículo estás buscando?"
+      />
 
-<div className="hero-actions">
-  <button type="button" onClick={() => onNavigate("search")}>
-    Explorar publicaciones
-  </button>
+      <button type="submit">Buscar</button>
+    </form>
 
-  <button
-    type="button"
-    className="secondary-btn"
-    onClick={() => onNavigate("joinNetwork")}
-  >
-    Sumar mi agencia
-  </button>
-</div>
+    <div className="ox-home-hero-chips">
+      {homeHeroQuickSearches.map((query) => (
+        <button
+          key={query}
+          type="button"
+          onClick={() =>
+            onNavigate("search", {
+              query,
+            })
+          }
+        >
+          {query}
+        </button>
+      ))}
+    </div>
+
+    <div className="ox-home-trust-strip">
+      {homeHeroTrustItems.map((item) => (
+        <article key={item.title}>
+          <span>{item.icon}</span>
+          <div>
+            <strong>{item.title}</strong>
+            <small>{item.text}</small>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <div className="ox-home-hero-visual">
+    <div className="ox-home-vehicle-frame">
+      <div className="ox-home-vehicle-placeholder">
+        <span>oX NEXMOV</span>
+        <strong>Vehículo destacado</strong>
+      </div>
+    </div>
+
+    <article className="ox-home-highlight-card">
+      <span>Destacado</span>
+      <h3>Unidad seleccionada</h3>
+      <p>Datos reales · Dealer verificado · Consulta trazable</p>
+      <strong>Menos incertidumbre.</strong>
+
+      <button
+        type="button"
+        onClick={() =>
+          onNavigate("search", {
+            query: heroSearchText,
+          })
+        }
+      >
+        Ver publicaciones
+      </button>
+    </article>
+  </div>
 </div>
 
 <div className="admin-section-block">
