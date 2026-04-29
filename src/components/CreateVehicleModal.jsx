@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   attachImagesToCurrentDealerVehicle,
   createVehicleForCurrentDealer,
   uploadVehicleImages,
 } from "../services/publish.service.js";
+import {
+  buildCatalogTree,
+  listVehicleCatalog,
+} from "../services/catalog.service.js";
 
 const initialForm = {
   brand: "",
@@ -25,6 +29,24 @@ const initialForm = {
   details: "",
 };
 
+function normalizeText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function findByName(items = [], value) {
+  const normalizedValue = normalizeText(value);
+
+  if (!normalizedValue) return null;
+
+  return (
+    items.find((item) => normalizeText(item.name) === normalizedValue) || null
+  );
+}
+
 export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
   const [form, setForm] = useState(initialForm);
   const [imageFiles, setImageFiles] = useState([]);
@@ -33,10 +55,86 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  const [catalogTree, setCatalogTree] = useState([]);
+  const [loadingCatalog, setLoadingCatalog] = useState(true);
+  const [catalogError, setCatalogError] = useState("");
+
+  useEffect(() => {
+    async function loadCatalog() {
+      setLoadingCatalog(true);
+      setCatalogError("");
+
+      const { catalog, error: catalogLoadError } = await listVehicleCatalog();
+
+      if (catalogLoadError) {
+        setCatalogTree([]);
+        setCatalogError(
+          catalogLoadError.message ||
+            "No se pudo cargar el catálogo de marcas, modelos y versiones."
+        );
+        setLoadingCatalog(false);
+        return;
+      }
+
+      setCatalogTree(buildCatalogTree(catalog || []));
+      setLoadingCatalog(false);
+    }
+
+    loadCatalog();
+  }, []);
+
+  const selectedBrand = useMemo(
+    () => findByName(catalogTree, form.brand),
+    [catalogTree, form.brand]
+  );
+
+  const availableModels = useMemo(() => {
+    if (!selectedBrand) return [];
+
+    return selectedBrand.models || [];
+  }, [selectedBrand]);
+
+  const selectedModel = useMemo(
+    () => findByName(availableModels, form.model),
+    [availableModels, form.model]
+  );
+
+  const availableVersions = useMemo(() => {
+    if (!selectedModel) return [];
+
+    return selectedModel.versions || [];
+  }, [selectedModel]);
+
   function updateField(field, value) {
     setForm((current) => ({
       ...current,
       [field]: value,
+    }));
+  }
+
+  function updateBrand(value) {
+    setForm((current) => ({
+      ...current,
+      brand: value,
+      model:
+        selectedBrand && normalizeText(value) === normalizeText(current.brand)
+          ? current.model
+          : "",
+      version:
+        selectedBrand && normalizeText(value) === normalizeText(current.brand)
+          ? current.version
+          : "",
+    }));
+  }
+
+  function updateModel(value) {
+    setForm((current) => ({
+      ...current,
+      model: value,
+      version:
+        selectedModel && normalizeText(value) === normalizeText(current.model)
+          ? current.version
+          : "",
     }));
   }
 
@@ -208,7 +306,10 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
 
             {uploadSummary?.mainImageUrl && (
               <div className="vehicle-image-preview-grid">
-                <img src={uploadSummary.mainImageUrl} alt="Portada del vehículo" />
+                <img
+                  src={uploadSummary.mainImageUrl}
+                  alt="Portada del vehículo"
+                />
               </div>
             )}
 
@@ -218,34 +319,81 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
           </div>
         ) : (
           <form className="zero-km-form" onSubmit={handleSubmit}>
+            {catalogError && <div className="auth-warning">{catalogError}</div>}
+
+            {loadingCatalog && (
+              <div className="auth-message">
+                Cargando catálogo de marcas, modelos y versiones...
+              </div>
+            )}
+
             <div className="form-grid-two">
               <label>
                 Marca
                 <input
+                  list="vehicle-brand-options"
                   value={form.brand}
-                  onChange={(event) => updateField("brand", event.target.value)}
+                  onChange={(event) => updateBrand(event.target.value)}
                   placeholder="Ej: Toyota"
                 />
+                <datalist id="vehicle-brand-options">
+                  {catalogTree.map((brand) => (
+                    <option key={brand.id} value={brand.name} />
+                  ))}
+                </datalist>
+                <span className="form-hint">
+                  Empezá a escribir y elegí una marca del catálogo.
+                </span>
               </label>
 
               <label>
                 Modelo
                 <input
+                  list="vehicle-model-options"
                   value={form.model}
-                  onChange={(event) => updateField("model", event.target.value)}
-                  placeholder="Ej: Corolla"
+                  onChange={(event) => updateModel(event.target.value)}
+                  placeholder={
+                    form.brand
+                      ? "Ej: Corolla"
+                      : "Primero seleccioná una marca"
+                  }
                 />
+                <datalist id="vehicle-model-options">
+                  {availableModels.map((model) => (
+                    <option key={model.id} value={model.name} />
+                  ))}
+                </datalist>
+                <span className="form-hint">
+                  {selectedBrand
+                    ? "Modelos filtrados por la marca seleccionada."
+                    : "Si elegís una marca del catálogo, se filtran los modelos."}
+                </span>
               </label>
 
               <label>
                 Versión
                 <input
+                  list="vehicle-version-options"
                   value={form.version}
                   onChange={(event) =>
                     updateField("version", event.target.value)
                   }
-                  placeholder="Ej: 1.8 XEi CVT"
+                  placeholder={
+                    form.model
+                      ? "Ej: 1.8 XEi CVT"
+                      : "Primero seleccioná un modelo"
+                  }
                 />
+                <datalist id="vehicle-version-options">
+                  {availableVersions.map((version) => (
+                    <option key={version.id} value={version.name} />
+                  ))}
+                </datalist>
+                <span className="form-hint">
+                  {selectedModel
+                    ? "Versiones filtradas por el modelo seleccionado."
+                    : "La versión puede cargarse manualmente si aún no está en catálogo."}
+                </span>
               </label>
 
               <label>
@@ -444,7 +592,11 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
 
             {error && <p className="form-error">{error}</p>}
 
-            <button className="primary-action" type="submit" disabled={submitting}>
+            <button
+              className="primary-action"
+              type="submit"
+              disabled={submitting}
+            >
               {submitting ? "Publicando..." : "Publicar vehículo"}
             </button>
           </form>

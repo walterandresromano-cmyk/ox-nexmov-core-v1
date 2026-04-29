@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { updateAdminVehicleData } from "../services/adminVehicles.service.js";
 import { updateCurrentDealerVehicleData } from "../services/dealerVehicles.service.js";
+import {
+  buildCatalogTree,
+  listVehicleCatalog,
+} from "../services/catalog.service.js";
 
 function getInitialForm(vehicle) {
   return {
@@ -27,6 +31,24 @@ function getInitialForm(vehicle) {
   };
 }
 
+function normalizeText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function findByName(items = [], value) {
+  const normalizedValue = normalizeText(value);
+
+  if (!normalizedValue) return null;
+
+  return (
+    items.find((item) => normalizeText(item.name) === normalizedValue) || null
+  );
+}
+
 export default function EditVehicleModal({
   vehicle,
   mode = "dealer",
@@ -38,11 +60,88 @@ export default function EditVehicleModal({
   const [savedVehicle, setSavedVehicle] = useState(null);
   const [error, setError] = useState("");
 
+  const [catalogTree, setCatalogTree] = useState([]);
+  const [loadingCatalog, setLoadingCatalog] = useState(true);
+  const [catalogError, setCatalogError] = useState("");
+
+  useEffect(() => {
+    async function loadCatalog() {
+      setLoadingCatalog(true);
+      setCatalogError("");
+
+      const { catalog, error: catalogLoadError } = await listVehicleCatalog();
+
+      if (catalogLoadError) {
+        setCatalogTree([]);
+        setCatalogError(
+          catalogLoadError.message ||
+            "No se pudo cargar el catálogo de marcas, modelos y versiones."
+        );
+        setLoadingCatalog(false);
+        return;
+      }
+
+      setCatalogTree(buildCatalogTree(catalog || []));
+      setLoadingCatalog(false);
+    }
+
+    loadCatalog();
+  }, []);
+
+  const selectedBrand = useMemo(
+    () => findByName(catalogTree, form.brand),
+    [catalogTree, form.brand]
+  );
+
+  const availableModels = useMemo(() => {
+    if (!selectedBrand) return [];
+
+    return selectedBrand.models || [];
+  }, [selectedBrand]);
+
+  const selectedModel = useMemo(
+    () => findByName(availableModels, form.model),
+    [availableModels, form.model]
+  );
+
+  const availableVersions = useMemo(() => {
+    if (!selectedModel) return [];
+
+    return selectedModel.versions || [];
+  }, [selectedModel]);
+
   function updateField(field, value) {
     setForm((current) => ({
       ...current,
       [field]: value,
     }));
+  }
+
+  function updateBrand(value) {
+    setForm((current) => {
+      const previousBrand = current.brand;
+      const brandChanged = normalizeText(value) !== normalizeText(previousBrand);
+
+      return {
+        ...current,
+        brand: value,
+        model: brandChanged ? "" : current.model,
+        version: brandChanged ? "" : current.version,
+      };
+    });
+  }
+
+  function updateModel(value) {
+    setForm((current) => {
+      const previousModel = current.model;
+      const modelChanged = normalizeText(value) !== normalizeText(previousModel);
+
+      return {
+        ...current,
+        model: value,
+        version: modelChanged ? "" : current.version,
+      };
+    });
   }
 
   async function handleSubmit(event) {
@@ -140,31 +239,81 @@ export default function EditVehicleModal({
           </div>
         ) : (
           <form className="zero-km-form" onSubmit={handleSubmit}>
+            {catalogError && <div className="auth-warning">{catalogError}</div>}
+
+            {loadingCatalog && (
+              <div className="auth-message">
+                Cargando catálogo de marcas, modelos y versiones...
+              </div>
+            )}
+
             <div className="form-grid-two">
               <label>
                 Marca
                 <input
+                  list="edit-vehicle-brand-options"
                   value={form.brand}
-                  onChange={(event) => updateField("brand", event.target.value)}
+                  onChange={(event) => updateBrand(event.target.value)}
+                  placeholder="Ej: Toyota"
                 />
+                <datalist id="edit-vehicle-brand-options">
+                  {catalogTree.map((brand) => (
+                    <option key={brand.id} value={brand.name} />
+                  ))}
+                </datalist>
+                <span className="form-hint">
+                  Empezá a escribir y elegí una marca del catálogo.
+                </span>
               </label>
 
               <label>
                 Modelo
                 <input
+                  list="edit-vehicle-model-options"
                   value={form.model}
-                  onChange={(event) => updateField("model", event.target.value)}
+                  onChange={(event) => updateModel(event.target.value)}
+                  placeholder={
+                    form.brand
+                      ? "Ej: Corolla"
+                      : "Primero seleccioná una marca"
+                  }
                 />
+                <datalist id="edit-vehicle-model-options">
+                  {availableModels.map((model) => (
+                    <option key={model.id} value={model.name} />
+                  ))}
+                </datalist>
+                <span className="form-hint">
+                  {selectedBrand
+                    ? "Modelos filtrados por la marca seleccionada."
+                    : "Si elegís una marca del catálogo, se filtran los modelos."}
+                </span>
               </label>
 
               <label>
                 Versión
                 <input
+                  list="edit-vehicle-version-options"
                   value={form.version}
                   onChange={(event) =>
                     updateField("version", event.target.value)
                   }
+                  placeholder={
+                    form.model
+                      ? "Ej: 1.8 XEi CVT"
+                      : "Primero seleccioná un modelo"
+                  }
                 />
+                <datalist id="edit-vehicle-version-options">
+                  {availableVersions.map((version) => (
+                    <option key={version.id} value={version.name} />
+                  ))}
+                </datalist>
+                <span className="form-hint">
+                  {selectedModel
+                    ? "Versiones filtradas por el modelo seleccionado."
+                    : "La versión puede cargarse manualmente si aún no está en catálogo."}
+                </span>
               </label>
 
               <label>
