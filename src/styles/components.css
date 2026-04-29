@@ -2607,3 +2607,7 @@ button.admin-kpi-card:focus-visible {
     width: 100%;
   }
 }
+
+.latest-vehicles-carousel::-webkit-scrollbar {
+  display: none;
+}

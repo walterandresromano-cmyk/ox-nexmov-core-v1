@@ -208,3 +208,48 @@ export async function listPublicVehicles() {
     error: null,
   };
 }
+
+export async function listPublicLatestVehicles({ limit = 8 } = {}) {
+  if (!isSupabaseConfigured || !supabase) {
+    return {
+      vehicles: [],
+      error: {
+        message: "Supabase no está configurado.",
+      },
+    };
+  }
+
+  const { data, error } = await supabase.rpc("get_public_latest_vehicles", {
+    p_limit: Number(limit || 8),
+  });
+
+  if (error) {
+    return {
+      vehicles: [],
+      error,
+    };
+  }
+
+  return {
+    vehicles: (data || []).map((row) => ({
+      id: String(row.vehicle_id),
+      brand: row.brand || "Marca no informada",
+      model: row.model || "Modelo no informado",
+      version: row.version || "Versión no informada",
+      year: Number(row.year || 0),
+      kilometers: Number(row.km || 0),
+      price: Number(row.price || 0),
+      city: row.city || "",
+      province: row.province || "",
+      mainImageUrl: row.main_image_url || "",
+      imageUrl: row.main_image_url || "",
+      createdAt: row.created_at || null,
+      dealer: {
+        commercialName: row.dealer_name || "Dealer no informado",
+        logo: row.dealer_logo || null,
+        plan: row.dealer_plan_code || "inicio",
+      },
+    })),
+    error: null,
+  };
+}
