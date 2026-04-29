@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
 import { listPublicLatestVehicles } from "../../services/vehicles.service.js";
 
@@ -8,33 +9,51 @@ function getPlanLabel(plan) {
   if (plan === "pro") return "Pro";
   return "Inicio";
 }
-function formatARS(value) {
-  const number = Number(value || 0);
 
-  if (!Number.isFinite(number) || number <= 0) {
-    return "Consultar";
-  }
-
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS",
-    maximumFractionDigits: 0,
-  }).format(number);
+function buildDealerForVehicle(vehicle) {
+  return {
+    id: vehicle.dealer?.id || `dealer-${vehicle.id}`,
+    commercialName: vehicle.dealer?.commercialName || "Dealer no informado",
+    plan: vehicle.dealer?.plan || "inicio",
+    planStatus: "active",
+    province: vehicle.province || "",
+    city: vehicle.city || "",
+    logo: vehicle.dealer?.logo || null,
+    phone: "",
+    benefits: {},
+    currentPeriod: {
+      publicationsUsed: 0,
+      expiresInDays: 30,
+    },
+  };
 }
 
-function formatKm(value) {
-  return `${Number(value || 0).toLocaleString("es-AR")} km`;
-}
-
-export default function Home({ onNavigate }) {
+export default function Home({ onNavigate, appActions = {} }) {
   const [publicDealers, setPublicDealers] = useState([]);
   const [loadingDealers, setLoadingDealers] = useState(true);
   const [dealersError, setDealersError] = useState("");
+
   const [latestVehicles, setLatestVehicles] = useState([]);
   const [loadingLatestVehicles, setLoadingLatestVehicles] = useState(true);
   const [latestVehiclesError, setLatestVehiclesError] = useState("");
+
   const latestVehiclesCarouselRef = useRef(null);
 
+  const safeAppActions = {
+    authUser: appActions?.authUser || null,
+    authProfile: appActions?.authProfile || null,
+    addToCompare:
+      appActions?.addToCompare ||
+      (() => {
+        if (onNavigate) onNavigate("search");
+      }),
+    toggleFavorite:
+      appActions?.toggleFavorite ||
+      (() => {
+        if (onNavigate) onNavigate("login");
+      }),
+    isFavorite: appActions?.isFavorite || (() => false),
+  };
 
   useEffect(() => {
     async function loadPublicDealers() {
@@ -56,60 +75,59 @@ export default function Home({ onNavigate }) {
       setLoadingDealers(false);
     }
 
-    loadPublicDealers();
-
     async function loadLatestVehicles() {
-  setLoadingLatestVehicles(true);
-  setLatestVehiclesError("");
+      setLoadingLatestVehicles(true);
+      setLatestVehiclesError("");
 
-  const { vehicles, error } = await listPublicLatestVehicles({ limit: 8 });
+      const { vehicles, error } = await listPublicLatestVehicles({ limit: 8 });
 
-  if (error) {
-    setLatestVehicles([]);
-    setLatestVehiclesError(
-      error.message || "No se pudieron cargar los últimos ingresos."
-    );
-    setLoadingLatestVehicles(false);
-    return;
-  }
+      if (error) {
+        setLatestVehicles([]);
+        setLatestVehiclesError(
+          error.message || "No se pudieron cargar los últimos ingresos."
+        );
+        setLoadingLatestVehicles(false);
+        return;
+      }
 
-  setLatestVehicles(vehicles || []);
-  setLoadingLatestVehicles(false);
-}
+      setLatestVehicles(vehicles || []);
+      setLoadingLatestVehicles(false);
+    }
 
-loadLatestVehicles();
+    loadPublicDealers();
+    loadLatestVehicles();
   }, []);
- 
+
+  useEffect(() => {
+    if (latestVehicles.length <= 1) return;
+
+    const carousel = latestVehiclesCarouselRef.current;
+    if (!carousel) return;
+
+    const interval = window.setInterval(() => {
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+      const nextScroll = carousel.scrollLeft + 356;
+
+      carousel.scrollTo({
+        left: nextScroll >= maxScroll ? 0 : nextScroll,
+        behavior: "smooth",
+      });
+    }, 4200);
+
+    return () => window.clearInterval(interval);
+  }, [latestVehicles.length]);
+
   function scrollLatestVehicles(direction) {
-  const carousel = latestVehiclesCarouselRef.current;
-  if (!carousel) return;
+    const carousel = latestVehiclesCarouselRef.current;
+    if (!carousel) return;
 
-  const amount = 326;
+    const amount = 356;
 
-  carousel.scrollBy({
-    left: direction === "next" ? amount : -amount,
-    behavior: "smooth",
-  });
-}
-
-   useEffect(() => {
-  if (!latestVehicles.length) return;
-
-  const carousel = latestVehiclesCarouselRef.current;
-  if (!carousel) return;
-
-  const interval = window.setInterval(() => {
-    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-    const nextScroll = carousel.scrollLeft + 326;
-
-    carousel.scrollTo({
-      left: nextScroll >= maxScroll ? 0 : nextScroll,
+    carousel.scrollBy({
+      left: direction === "next" ? amount : -amount,
       behavior: "smooth",
     });
-  }, 4200);
-
-  return () => window.clearInterval(interval);
-}, [latestVehicles.length]);  
+  }
 
   return (
     <section className="page-section">
@@ -131,7 +149,8 @@ loadLatestVehicles();
             <button onClick={() => onNavigate("search")}>Buscar</button>
           </div>
         </div>
-                  <div className="admin-section-block">
+
+        <div className="admin-section-block">
           <div className="buyer-section-head">
             <div>
               <p className="eyebrow">Últimos ingresos</p>
@@ -141,31 +160,32 @@ loadLatestVehicles();
                 dealers activos dentro de oX NEXMOV.
               </p>
             </div>
-               <div className="admin-action-row">
-  <button
-    type="button"
-    className="admin-refresh-btn"
-    onClick={() => scrollLatestVehicles("prev")}
-  >
-    ←
-  </button>
 
-  <button
-    type="button"
-    className="admin-refresh-btn"
-    onClick={() => scrollLatestVehicles("next")}
-  >
-    →
-  </button>
+            <div className="admin-action-row">
+              <button
+                type="button"
+                className="admin-refresh-btn"
+                onClick={() => scrollLatestVehicles("prev")}
+              >
+                ←
+              </button>
 
-  <button
-    type="button"
-    className="admin-refresh-btn"
-    onClick={() => onNavigate("search")}
-  >
-    Ver todos
-  </button>
-</div>
+              <button
+                type="button"
+                className="admin-refresh-btn"
+                onClick={() => scrollLatestVehicles("next")}
+              >
+                →
+              </button>
+
+              <button
+                type="button"
+                className="admin-refresh-btn"
+                onClick={() => onNavigate("search")}
+              >
+                Ver todos
+              </button>
+            </div>
           </div>
 
           {loadingLatestVehicles && (
@@ -185,104 +205,50 @@ loadLatestVehicles();
             )}
 
           {latestVehicles.length > 0 && (
+            <div
+              ref={latestVehiclesCarouselRef}
+              className="latest-vehicles-carousel"
+              style={{
+                display: "grid",
+                gridAutoFlow: "column",
+                gridAutoColumns: "minmax(280px, 340px)",
+                gap: "16px",
+                overflowX: "auto",
+                paddingBottom: "4px",
+                scrollSnapType: "x mandatory",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+              }}
+            >
+              {latestVehicles.map((vehicle) => {
+                const dealer = buildDealerForVehicle(vehicle);
 
-             <div
-  ref={latestVehiclesCarouselRef}
-  className="latest-vehicles-carousel"
-  style={{
-    display: "grid",
-    gridAutoFlow: "column",
-    gridAutoColumns: "minmax(260px, 310px)",
-    gap: "16px",
-    overflowX: "auto",
-    paddingBottom: "4px",
-    scrollSnapType: "x mandatory",
-    scrollbarWidth: "none",
-    msOverflowStyle: "none",
-  }}
->
-               
-              {latestVehicles.map((vehicle) => (
-                <article
-                  key={vehicle.id}
-                  className="dealer-module-card"
-                  style={{
-                    scrollSnapAlign: "start",
-                    minHeight: "390px",
-                  }}
-                >
-                  {vehicle.mainImageUrl ? (
-                    <img
-                      src={vehicle.mainImageUrl}
-                      alt={`${vehicle.brand} ${vehicle.model}`}
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        objectFit: "cover",
-                        borderRadius: "16px",
-                        border: "1px solid var(--ox-border)",
-                        background: "var(--ox-card-2)",
-                        marginBottom: "14px",
-                      }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "grid",
-                        placeItems: "center",
-                        borderRadius: "16px",
-                        border: "1px solid var(--ox-border)",
-                        background: "var(--ox-card-2)",
-                        color: "var(--ox-muted)",
-                        marginBottom: "14px",
-                        textAlign: "center",
-                        padding: "12px",
-                      }}
-                    >
-                      Sin imagen
-                    </div>
-                  )}
-
-                  <h3>
-                    {vehicle.brand} {vehicle.model}
-                  </h3>
-
-                  <p>
-                    {vehicle.version} · {vehicle.year || "Sin año"} ·{" "}
-                    {formatKm(vehicle.kilometers)}
-                  </p>
-
-                  <strong
+                return (
+                  <div
+                    key={vehicle.id}
                     style={{
-                      display: "block",
-                      fontSize: "1.35rem",
-                      marginBottom: "10px",
+                      scrollSnapAlign: "start",
+                      minWidth: 0,
                     }}
                   >
-                    {formatARS(vehicle.price)}
-                  </strong>
-
-                  <div className="admin-benefits-list">
-                    <span>
-                      {vehicle.city || "Sin ciudad"}
-                      {vehicle.province ? `, ${vehicle.province}` : ""}
-                    </span>
-                    <span>{vehicle.dealer.commercialName}</span>
+                    <VehicleCardPublic
+                      vehicle={{
+                        ...vehicle,
+                        dealer,
+                        marketReferencePrice:
+                          vehicle.marketReferencePrice || vehicle.price || 0,
+                      }}
+                      dealer={dealer}
+                      appActions={safeAppActions}
+                      onNavigate={onNavigate}
+                    />
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => onNavigate("search")}
-                  >
-                    Ver publicación
-                  </button>
-                </article>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
+
         <div className="admin-section-block">
           <div className="buyer-section-head">
             <div>
