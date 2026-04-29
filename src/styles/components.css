@@ -3152,3 +3152,325 @@ button.admin-kpi-card:focus-visible {
     height: 220px;
   }
 }
+
+/* =========================================================
+   oX NEXMOV Core v1 — Search Premium Marketplace Upgrade
+   Encapsulado: solo afecta .search-page-panel
+   ========================================================= */
+
+.search-page-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    radial-gradient(circle at 92% 8%, rgba(37, 99, 235, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.74), rgba(2, 6, 23, 0.96));
+  box-shadow:
+    0 34px 120px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.search-page-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, rgba(56, 189, 248, 0.07), transparent 30%),
+    radial-gradient(circle at 52% 0%, rgba(255, 255, 255, 0.035), transparent 18%);
+}
+
+.search-page-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header de búsqueda */
+
+.search-page-panel > .eyebrow {
+  width: fit-content;
+  padding: 8px 12px;
+  border: 1px solid rgba(125, 211, 252, 0.24);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(186, 230, 253, 0.96);
+  box-shadow: 0 10px 34px rgba(14, 165, 233, 0.09);
+}
+
+.search-page-panel > h1 {
+  margin: 18px 0 0;
+  font-size: clamp(2.1rem, 5vw, 4.8rem);
+  line-height: 0.92;
+  letter-spacing: -0.075em;
+  color: rgba(248, 250, 252, 0.99);
+  text-wrap: balance;
+}
+
+.search-page-panel > h1::after {
+  content: ".";
+  color: var(--ox-cyan);
+  text-shadow: 0 0 30px rgba(56, 189, 248, 0.34);
+}
+
+.search-page-panel > p {
+  max-width: 860px;
+  margin-top: 18px;
+  color: rgba(203, 213, 225, 0.78);
+  font-size: clamp(0.96rem, 1.25vw, 1.08rem);
+  line-height: 1.68;
+}
+
+/* Barra de búsqueda */
+
+.search-page-panel .admin-toolbar {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: end;
+  gap: 12px;
+  margin: clamp(24px, 4vw, 38px) 0 18px;
+  padding: 14px;
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.88));
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.search-page-panel .admin-search label {
+  color: rgba(186, 230, 253, 0.88);
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+}
+
+.search-page-panel .admin-search input {
+  min-height: 56px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.58);
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1rem;
+  font-weight: 750;
+  padding: 15px 18px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 14px 36px rgba(0, 0, 0, 0.20);
+}
+
+.search-page-panel .admin-search input::placeholder {
+  color: rgba(148, 163, 184, 0.72);
+  font-weight: 650;
+}
+
+.search-page-panel .admin-search input:focus {
+  outline: none;
+  border-color: rgba(125, 211, 252, 0.48);
+  box-shadow:
+    0 0 0 4px rgba(56, 189, 248, 0.10),
+    0 18px 46px rgba(14, 165, 233, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.search-page-panel .admin-refresh-btn {
+  min-height: 48px;
+  min-width: 150px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.18), rgba(15, 23, 42, 0.84));
+  color: rgba(240, 249, 255, 0.96);
+  font-size: 0.82rem;
+  font-weight: 950;
+  box-shadow:
+    0 14px 38px rgba(14, 165, 233, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.search-page-panel .admin-refresh-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(125, 211, 252, 0.48);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.26), rgba(15, 23, 42, 0.90));
+  box-shadow:
+    0 20px 54px rgba(14, 165, 233, 0.18),
+    0 0 0 4px rgba(56, 189, 248, 0.07);
+}
+
+/* Lectura inteligente */
+
+.search-page-panel .auth-message {
+  margin: 18px 0 24px;
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.08), rgba(15, 23, 42, 0.68));
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+/* Grilla de resultados premium */
+
+.search-page-panel .vehicle-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 22px);
+  margin-top: 26px;
+}
+
+.search-page-panel .vehicle-card {
+  position: relative;
+  border-radius: 28px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.86), rgba(2, 6, 23, 0.96));
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+
+.search-page-panel .vehicle-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(125, 211, 252, 0.30);
+  box-shadow:
+    0 34px 94px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(56, 189, 248, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.search-page-panel .vehicle-card-media {
+  height: 250px;
+  border-bottom-color: rgba(148, 163, 184, 0.12);
+}
+
+.search-page-panel .vehicle-card-body {
+  padding: 18px;
+}
+
+.search-page-panel .vehicle-card-head {
+  align-items: center;
+}
+
+.search-page-panel .dealer-rank {
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 999px;
+  padding: 5px 8px;
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(186, 230, 253, 0.95);
+  font-size: 0.72rem;
+  font-weight: 950;
+}
+
+.search-page-panel .vehicle-card h3 {
+  margin-top: 14px;
+  font-size: 1.18rem;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  color: rgba(248, 250, 252, 0.98);
+}
+
+.search-page-panel .vehicle-version,
+.search-page-panel .vehicle-meta,
+.search-page-panel .vehicle-market {
+  color: rgba(203, 213, 225, 0.68);
+}
+
+.search-page-panel .vehicle-price {
+  margin-top: 14px;
+  color: rgba(240, 249, 255, 0.98);
+  font-size: 1.58rem;
+  letter-spacing: -0.045em;
+  text-shadow: 0 0 26px rgba(56, 189, 248, 0.18);
+}
+
+.search-page-panel .vehicle-actions button {
+  border-radius: 14px;
+  border-color: rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.78);
+  color: rgba(226, 232, 240, 0.88);
+  font-weight: 900;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.search-page-panel .vehicle-actions button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(125, 211, 252, 0.34);
+  background: rgba(14, 165, 233, 0.12);
+  color: white;
+}
+
+.search-page-panel .vehicle-actions button:last-child {
+  border-color: rgba(125, 211, 252, 0.28);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.20), rgba(37, 99, 235, 0.18));
+  color: white;
+}
+
+/* Estado vacío más premium */
+
+.search-page-panel .empty-state {
+  margin-top: 28px;
+  border-radius: 26px;
+  border: 1px solid rgba(248, 113, 113, 0.16);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(248, 113, 113, 0.10), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.92));
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+/* Responsive Buscar */
+
+@media (max-width: 1220px) {
+  .search-page-panel .vehicle-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .search-page-panel .admin-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .search-page-panel .admin-refresh-btn {
+    width: 100%;
+  }
+
+  .search-page-panel .vehicle-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .search-page-panel {
+    padding: 18px 14px;
+  }
+
+  .search-page-panel > h1 {
+    font-size: clamp(2.3rem, 13vw, 3.6rem);
+  }
+
+  .search-page-panel .vehicle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-page-panel .vehicle-card-media {
+    height: 230px;
+  }
+}

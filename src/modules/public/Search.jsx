@@ -579,7 +579,7 @@ export default function Search({ appActions, onNavigate, initialSearchQuery = ""
 
   return (
     <section className="page-section">
-      <div className="container panel">
+     <div className="container panel search-page-panel">
         <p className="eyebrow">Motor avanzado</p>
         <h1>Buscar vehículos</h1>
         <p>
