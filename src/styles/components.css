@@ -2611,3 +2611,544 @@ button.admin-kpi-card:focus-visible {
 .latest-vehicles-carousel::-webkit-scrollbar {
   display: none;
 }
+
+/* =========================================================
+   oX NEXMOV Core v1 — Home Premium Landing Upgrade
+   Objetivo: Home pública nivel premium / líder de sector.
+   Encapsulado: solo afecta .public-page-panel.
+   No toca AdminPanel ni DealerPanel.
+   ========================================================= */
+
+.public-page-panel {
+  position: relative;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
+    radial-gradient(circle at 92% 8%, rgba(37, 99, 235, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.72), rgba(2, 6, 23, 0.96));
+  box-shadow:
+    0 32px 120px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  overflow: hidden;
+}
+
+.public-page-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, rgba(56, 189, 248, 0.055), transparent 28%),
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.035), transparent 18%);
+  opacity: 0.9;
+}
+
+.public-page-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* HERO — más aspiracional, menos panel interno */
+
+.public-page-panel .hero-panel {
+  min-height: clamp(520px, 70vh, 720px);
+  display: grid;
+  align-content: center;
+  border-radius: 36px;
+  padding: clamp(34px, 7vw, 86px);
+  margin-bottom: clamp(34px, 5vw, 64px);
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  background:
+    radial-gradient(circle at 18% 8%, rgba(56, 189, 248, 0.26), transparent 30%),
+    radial-gradient(circle at 86% 18%, rgba(37, 99, 235, 0.22), transparent 34%),
+    radial-gradient(circle at 80% 78%, rgba(14, 165, 233, 0.08), transparent 28%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98));
+  box-shadow:
+    0 38px 110px rgba(0, 0, 0, 0.46),
+    0 0 0 1px rgba(56, 189, 248, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.public-page-panel .hero-panel::before {
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.14), transparent 44%),
+    linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.04) 48%, transparent 49%),
+    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.08), transparent 22%);
+}
+
+.public-page-panel .hero-panel::after {
+  content: "";
+  position: absolute;
+  right: -12%;
+  bottom: -20%;
+  width: min(620px, 70vw);
+  aspect-ratio: 1;
+  pointer-events: none;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 58%);
+  filter: blur(4px);
+  opacity: 0.78;
+}
+
+.public-page-panel .hero-panel .eyebrow {
+  width: fit-content;
+  padding: 8px 12px;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(186, 230, 253, 0.98);
+  box-shadow: 0 10px 34px rgba(14, 165, 233, 0.09);
+}
+
+.public-page-panel .hero-panel h1 {
+  max-width: 980px;
+  margin-top: 18px;
+  font-size: clamp(2.8rem, 7.4vw, 7rem);
+  line-height: 0.88;
+  letter-spacing: -0.085em;
+  color: rgba(248, 250, 252, 0.99);
+  text-wrap: balance;
+}
+
+.public-page-panel .hero-panel h1 span {
+  color: transparent;
+  background:
+    linear-gradient(90deg, #7dd3fc 0%, #38bdf8 42%, #2563eb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.16));
+}
+
+.public-page-panel .hero-panel .lead {
+  max-width: 760px;
+  margin-top: 24px;
+  color: rgba(203, 213, 225, 0.86);
+  font-size: clamp(1rem, 1.6vw, 1.28rem);
+  line-height: 1.72;
+  text-wrap: balance;
+}
+
+/* Buscador/CTA principal */
+
+.public-page-panel .hero-search {
+  max-width: 900px;
+  margin-top: 34px;
+  padding: 8px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.74), rgba(2, 6, 23, 0.86));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(18px);
+}
+
+.public-page-panel .hero-search input {
+  min-height: 56px;
+  border: 0;
+  background: transparent;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 0.98rem;
+  padding-inline: 20px;
+}
+
+.public-page-panel .hero-search input::placeholder {
+  color: rgba(148, 163, 184, 0.82);
+}
+
+.public-page-panel .hero-search input:focus {
+  outline: none;
+}
+
+.public-page-panel .hero-search button {
+  min-height: 56px;
+  min-width: 150px;
+  border: 1px solid rgba(125, 211, 252, 0.36);
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.22), transparent 28%),
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 950;
+  letter-spacing: -0.01em;
+  box-shadow:
+    0 18px 42px rgba(14, 165, 233, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+.public-page-panel .hero-search button:hover {
+  transform: translateY(-1px);
+  filter: saturate(1.08);
+  box-shadow:
+    0 24px 60px rgba(14, 165, 233, 0.32),
+    0 0 0 4px rgba(56, 189, 248, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+/* Secciones públicas: más landing, menos panel */
+
+.public-page-panel .admin-section-block {
+  position: relative;
+  border-radius: 34px;
+  padding: clamp(24px, 4vw, 44px);
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.70), rgba(2, 6, 23, 0.90));
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  overflow: hidden;
+}
+
+.public-page-panel .admin-section-block::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.055), transparent 46%),
+    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.035), transparent 20%);
+}
+
+.public-page-panel .admin-section-block > * {
+  position: relative;
+  z-index: 1;
+}
+
+.public-page-panel .buyer-section-head {
+  align-items: center;
+  gap: 28px;
+}
+
+.public-page-panel .buyer-section-head h2 {
+  max-width: 960px;
+  font-size: clamp(1.65rem, 3.3vw, 3.1rem);
+  line-height: 0.98;
+  letter-spacing: -0.065em;
+  color: rgba(248, 250, 252, 0.98);
+  text-wrap: balance;
+}
+
+.public-page-panel .buyer-section-head p {
+  max-width: 820px;
+  color: rgba(203, 213, 225, 0.75);
+  font-size: clamp(0.95rem, 1.22vw, 1.08rem);
+  line-height: 1.68;
+}
+
+/* Botones/CTA secundarios premium */
+
+.public-page-panel .admin-refresh-btn,
+.public-page-panel .buyer-section-head > button,
+.public-page-panel .admin-action-row button {
+  min-height: 42px;
+  border: 1px solid rgba(125, 211, 252, 0.25);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.16), rgba(15, 23, 42, 0.80));
+  color: rgba(240, 249, 255, 0.96);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 0.82rem;
+  font-weight: 950;
+  box-shadow:
+    0 12px 34px rgba(14, 165, 233, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.public-page-panel .admin-refresh-btn:hover,
+.public-page-panel .buyer-section-head > button:hover,
+.public-page-panel .admin-action-row button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(125, 211, 252, 0.46);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.24), rgba(15, 23, 42, 0.88));
+  box-shadow:
+    0 18px 48px rgba(14, 165, 233, 0.18),
+    0 0 0 4px rgba(56, 189, 248, 0.07);
+}
+
+/* Carrusel últimos ingresos */
+
+.public-page-panel .latest-vehicles-carousel {
+  padding: 4px 2px 12px;
+  mask-image: linear-gradient(90deg, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
+}
+
+.public-page-panel .latest-vehicles-carousel > div {
+  transition:
+    transform 0.22s ease,
+    filter 0.22s ease;
+}
+
+.public-page-panel .latest-vehicles-carousel > div:hover {
+  transform: translateY(-4px);
+  filter: saturate(1.04);
+}
+
+/* Cards públicas de vehículos cuando están dentro del Home */
+
+.public-page-panel .latest-vehicles-carousel .vehicle-card {
+  height: 100%;
+  border-radius: 28px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.86), rgba(2, 6, 23, 0.96));
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.public-page-panel .latest-vehicles-carousel .vehicle-card-media {
+  height: 245px;
+  border-bottom-color: rgba(148, 163, 184, 0.12);
+}
+
+.public-page-panel .latest-vehicles-carousel .vehicle-card-body {
+  padding: 18px;
+}
+
+.public-page-panel .latest-vehicles-carousel .dealer-rank {
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 999px;
+  padding: 5px 8px;
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(186, 230, 253, 0.95);
+}
+
+.public-page-panel .latest-vehicles-carousel .vehicle-card h3 {
+  margin-top: 14px;
+  font-size: 1.18rem;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+}
+
+.public-page-panel .latest-vehicles-carousel .vehicle-version,
+.public-page-panel .latest-vehicles-carousel .vehicle-meta,
+.public-page-panel .latest-vehicles-carousel .vehicle-market {
+  color: rgba(203, 213, 225, 0.68);
+}
+
+.public-page-panel .latest-vehicles-carousel .vehicle-price {
+  margin-top: 14px;
+  color: rgba(240, 249, 255, 0.98);
+  font-size: 1.55rem;
+  letter-spacing: -0.045em;
+  text-shadow: 0 0 26px rgba(56, 189, 248, 0.18);
+}
+
+.public-page-panel .latest-vehicles-carousel .vehicle-actions button {
+  border-radius: 14px;
+  border-color: rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.78);
+  color: rgba(226, 232, 240, 0.88);
+  font-weight: 900;
+}
+
+.public-page-panel .latest-vehicles-carousel .vehicle-actions button:hover {
+  border-color: rgba(125, 211, 252, 0.34);
+  background: rgba(14, 165, 233, 0.12);
+  color: white;
+}
+
+/* Cards institucionales y KPIs públicos */
+
+.public-page-panel .dealer-module-card,
+.public-page-panel .admin-kpi-card {
+  position: relative;
+  border-radius: 28px;
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.90));
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  overflow: hidden;
+}
+
+.public-page-panel .dealer-module-card::before,
+.public-page-panel .admin-kpi-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.035), transparent 32%);
+  opacity: 0.75;
+}
+
+.public-page-panel .dealer-module-card:hover,
+.public-page-panel .admin-kpi-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(125, 211, 252, 0.28);
+  box-shadow:
+    0 30px 86px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(56, 189, 248, 0.075),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.public-page-panel .dealer-module-card > *,
+.public-page-panel .admin-kpi-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.public-page-panel .dealer-module-card h3 {
+  color: rgba(248, 250, 252, 0.96);
+  font-size: clamp(1.08rem, 1.7vw, 1.35rem);
+  letter-spacing: -0.035em;
+}
+
+.public-page-panel .dealer-module-card p,
+.public-page-panel .admin-kpi-card p {
+  color: rgba(203, 213, 225, 0.70);
+}
+
+.public-page-panel .admin-kpi-card strong {
+  color: rgba(248, 250, 252, 0.98);
+  text-shadow: 0 0 28px rgba(56, 189, 248, 0.12);
+}
+
+.public-page-panel .admin-kpi-card span {
+  color: rgba(186, 230, 253, 0.78);
+}
+
+.public-page-panel .dealer-module-card img {
+  box-shadow:
+    0 16px 45px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: transform 0.32s ease, filter 0.32s ease;
+}
+
+.public-page-panel .dealer-module-card:hover img {
+  transform: scale(1.018);
+  filter: saturate(1.06) contrast(1.03);
+}
+
+.public-page-panel .admin-benefits-list span {
+  border-color: rgba(125, 211, 252, 0.18);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.10), rgba(15, 23, 42, 0.72));
+  color: rgba(226, 232, 240, 0.94) !important;
+  font-weight: 850;
+}
+
+/* CTA final: más fuerte y comercial */
+
+.public-page-panel .admin-section-block:last-child {
+  border-color: rgba(125, 211, 252, 0.20);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(56, 189, 248, 0.20), transparent 34%),
+    radial-gradient(circle at 92% 0%, rgba(37, 99, 235, 0.18), transparent 32%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98));
+  box-shadow:
+    0 36px 110px rgba(0, 0, 0, 0.40),
+    0 0 0 1px rgba(56, 189, 248, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.public-page-panel .admin-section-block:last-child h2 {
+  font-size: clamp(1.9rem, 4vw, 4rem);
+}
+
+.public-page-panel .admin-section-block:last-child .admin-action-row button:first-child {
+  border-color: rgba(125, 211, 252, 0.40);
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.20), transparent 28%),
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  box-shadow:
+    0 20px 58px rgba(14, 165, 233, 0.30),
+    0 0 0 4px rgba(56, 189, 248, 0.075),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+
+/* Responsive premium */
+
+@media (max-width: 900px) {
+  .public-page-panel .hero-panel {
+    min-height: auto;
+  }
+
+  .public-page-panel .hero-search {
+    grid-template-columns: 1fr;
+    border-radius: 26px;
+    padding: 10px;
+  }
+
+  .public-page-panel .hero-search input,
+  .public-page-panel .hero-search button {
+    border-radius: 18px;
+    width: 100%;
+  }
+
+  .public-page-panel .buyer-section-head {
+    align-items: stretch;
+  }
+
+  .public-page-panel .admin-action-row {
+    width: 100%;
+  }
+
+  .public-page-panel .admin-action-row button {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .public-page-panel {
+    padding: 12px;
+  }
+
+  .public-page-panel .hero-panel {
+    padding: 28px 18px;
+    border-radius: 28px;
+    margin-bottom: 28px;
+  }
+
+  .public-page-panel .hero-panel h1 {
+    font-size: clamp(2.35rem, 14vw, 4rem);
+    line-height: 0.92;
+  }
+
+  .public-page-panel .hero-panel .lead {
+    font-size: 0.98rem;
+    line-height: 1.62;
+  }
+
+  .public-page-panel .admin-section-block {
+    border-radius: 26px;
+    padding: 20px 16px;
+  }
+
+  .public-page-panel .buyer-section-head h2 {
+    font-size: clamp(1.55rem, 9vw, 2.45rem);
+  }
+
+  .public-page-panel .latest-vehicles-carousel {
+    mask-image: none;
+  }
+
+  .public-page-panel .latest-vehicles-carousel .vehicle-card-media {
+    height: 220px;
+  }
+}
