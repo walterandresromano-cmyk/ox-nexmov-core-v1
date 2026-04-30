@@ -909,7 +909,7 @@
   display: grid;
   align-content: center;
   min-height: 58px;
-  padding: px 14px;
+  padding:  10px 14px;
   border-right: 1px solid rgba(148, 163, 184, 0.12);
 }
 

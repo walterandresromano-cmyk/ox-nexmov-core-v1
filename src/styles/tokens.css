@@ -14,3 +14,106 @@
   --ox-radius: 18px;
   --ox-max: 1320px;
 }
+/* =========================================================
+   oX NEXMOV — Design System Core Tokens
+   Fuente, espaciado, radios y jerarquía visual global.
+   Basado en Home v3 aprobado.
+   ========================================================= */
+
+:root {
+  /* Layout */
+  --ox-page-max: 1530px;
+  --ox-page-gutter: 28px;
+  --ox-page-gutter-mobile: 20px;
+
+  --ox-section-gap: 10px;
+  --ox-section-gap-lg: 14px;
+  --ox-section-gap-mobile: 12px;
+
+  /* Spacing scale */
+  --ox-space-1: 4px;
+  --ox-space-2: 6px;
+  --ox-space-3: 8px;
+  --ox-space-4: 10px;
+  --ox-space-5: 12px;
+  --ox-space-6: 14px;
+  --ox-space-7: 16px;
+  --ox-space-8: 18px;
+  --ox-space-9: 20px;
+  --ox-space-10: 22px;
+  --ox-space-11: 24px;
+  --ox-space-12: 28px;
+  --ox-space-13: 32px;
+
+  /* Radius */
+  --ox-radius-xs: 9px;
+  --ox-radius-sm: 12px;
+  --ox-radius-md: 15px;
+  --ox-radius-lg: 18px;
+  --ox-radius-xl: 22px;
+  --ox-radius-2xl: 24px;
+  --ox-radius-hero: 30px;
+  --ox-radius-pill: 999px;
+
+  /* Typography — desktop */
+  --ox-fs-hero-title: clamp(2rem, 2.06vw, 2.82rem);
+  --ox-fs-page-title: clamp(1.72rem, 1.82vw, 2.32rem);
+  --ox-fs-section-title: 0.92rem;
+  --ox-fs-card-title: 0.76rem;
+  --ox-fs-panel-title: 0.86rem;
+
+  --ox-fs-body: 0.7rem;
+  --ox-fs-body-sm: 0.64rem;
+  --ox-fs-caption: 0.58rem;
+  --ox-fs-chip: 0.6rem;
+  --ox-fs-micro: 0.52rem;
+  --ox-fs-nano: 0.44rem;
+
+  --ox-fs-input: 0.76rem;
+  --ox-fs-button: 0.72rem;
+  --ox-fs-button-sm: 0.6rem;
+
+  --ox-fs-price-card: 0.9rem;
+  --ox-fs-price-featured: 1.12rem;
+  --ox-fs-stat: 1.42rem;
+
+  /* Typography — mobile */
+  --ox-fs-hero-title-mobile: clamp(2.35rem, 11.5vw, 3.1rem);
+  --ox-fs-page-title-mobile: clamp(2rem, 10vw, 2.65rem);
+  --ox-fs-section-title-mobile: 1rem;
+  --ox-fs-body-mobile: 0.78rem;
+  --ox-fs-caption-mobile: 0.66rem;
+
+  /* Line-height */
+  --ox-lh-tight: 0.94;
+  --ox-lh-title: 1;
+  --ox-lh-card-title: 1.08;
+  --ox-lh-body: 1.45;
+  --ox-lh-compact: 1.24;
+  --ox-lh-list: 1.32;
+
+  /* Letter spacing */
+  --ox-ls-hero: -0.05em;
+  --ox-ls-page: -0.045em;
+  --ox-ls-section: -0.04em;
+  --ox-ls-eyebrow: 0.13em;
+
+  /* Font weights */
+  --ox-fw-regular: 500;
+  --ox-fw-medium: 650;
+  --ox-fw-bold: 850;
+  --ox-fw-black: 950;
+
+  /* Component dimensions */
+  --ox-input-h: 34px;
+  --ox-input-h-page: 42px;
+  --ox-button-h: 34px;
+  --ox-button-h-page: 42px;
+  --ox-button-h-compact: 31px;
+  --ox-card-btn-h: 26px;
+
+  /* Panels */
+  --ox-panel-padding: 10px 12px 12px;
+  --ox-hero-padding: 22px 32px;
+  --ox-page-hero-padding: 20px 32px 18px;
+}
