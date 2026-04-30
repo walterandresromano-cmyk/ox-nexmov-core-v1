@@ -65,15 +65,20 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <button className="brand-button" onClick={() => onNavigate("home")}>
-          <span className="brand-ox">oX</span>
-          <span className="brand-word">NEXMOV</span>
+        <button
+          className="brand-button"
+          type="button"
+          onClick={() => onNavigate("home")}
+          aria-label="Ir al inicio de oX NEXMOV"
+        >
+          <img className="brand-logo-img" src="/logo.svg" alt="oX NEXMOV" />
         </button>
 
-        <nav className="desktop-nav">
+        <nav className="desktop-nav" aria-label="Navegación principal">
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
+              type="button"
               className={currentRoute === item.id ? "nav-btn active" : "nav-btn"}
               onClick={() => onNavigate(item.id)}
             >
@@ -85,6 +90,7 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
         <div className="header-role-actions">
           {isLoggedIn && privatePanel && (
             <button
+              type="button"
               className={
                 currentRoute === privatePanel.id ? "login-btn active" : "login-btn"
               }
@@ -95,13 +101,18 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
           )}
 
           {!isLoggedIn && (
-            <button className="login-btn" onClick={() => onNavigate("login")}>
+            <button
+              type="button"
+              className="login-btn"
+              onClick={() => onNavigate("login")}
+            >
               Ingresar
             </button>
           )}
 
           {isLoggedIn && (
             <button
+              type="button"
               className="login-btn logout-btn"
               onClick={handleLogout}
               disabled={loggingOut}
