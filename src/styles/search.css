@@ -1,0 +1,625 @@
+/* =========================================================
+   oX NEXMOV — Search page
+   Página Buscar aislada de components.css
+   ========================================================= */
+
+.ox-search-page {
+  padding-top: 8px;
+  padding-bottom: 30px;
+  background:
+    radial-gradient(circle at 70% 0%, rgba(37, 99, 235, 0.10), transparent 32%),
+    radial-gradient(circle at 8% 18%, rgba(14, 165, 233, 0.07), transparent 30%),
+    linear-gradient(180deg, rgba(2, 6, 23, 1), rgba(2, 6, 23, 0.98));
+}
+
+.ox-search-shell {
+  width: min(100% - 28px, 1530px);
+  max-width: 1530px;
+  margin: 0 auto;
+  display: grid;
+  gap: 10px;
+}
+
+.ox-search-hero {
+  position: relative;
+  overflow: visible;
+  display: grid;
+  gap: 8px;
+  padding: 20px 32px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 12% 9%, rgba(56, 189, 248, 0.14), transparent 30%),
+    radial-gradient(circle at 59% 28%, rgba(37, 99, 235, 0.18), transparent 42%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.88), rgba(2, 6, 23, 0.98));
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.ox-search-title-block {
+  max-width: 780px;
+}
+
+.ox-search-eyebrow {
+  width: fit-content;
+  margin: 0;
+  padding: 5px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.34);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.09);
+  color: rgba(125, 211, 252, 0.98);
+  font-size: 0.58rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  box-shadow: 0 0 24px rgba(14, 165, 233, 0.12);
+}
+
+.ox-search-title-block h1 {
+  margin: 12px 0 0;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: clamp(1.9rem, 1.95vw, 2.65rem);
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+  font-weight: 950;
+}
+
+.ox-search-title-block h1 span {
+  color: #38bdf8;
+}
+.ox-search-title-block > p {
+  max-width: 760px;
+  margin: 6px 0 0;
+  color: rgba(203, 213, 225, 0.78);
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+.ox-search-command {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 7px;
+  align-items: end;
+  margin-top: 7px;
+  padding: 5px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.76);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.ox-search-input-wrap {
+  position: relative;
+  display: grid;
+  gap: 6px;
+}
+
+.ox-search-input-wrap label {
+  color: #7dd3fc;
+  font-size: 0.58rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.ox-search-input-wrap input {
+  width: 100%;
+  min-height: 34px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: rgba(248, 250, 252, 0.98);
+  padding: 0 13px;
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.ox-search-input-wrap input:focus {
+  outline: none;
+}
+
+.ox-search-primary-btn {
+  min-width: 96px;
+  min-height: 34px;
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  border-radius: 13px;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  padding: 0 18px;
+  font-size: 0.72rem;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.26);
+}
+
+.ox-search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+}
+
+.ox-search-suggestions button {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.72);
+  color: var(--ox-text);
+  border-radius: 14px;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ox-search-suggestions span {
+  color: var(--ox-muted);
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 900;
+}
+
+.ox-search-suggested {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.ox-search-suggested span,
+.ox-search-suggested button,
+.ox-search-side-head button,
+.ox-search-filter-group button,
+.ox-search-result-actions button {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.70);
+  color: rgba(226, 232, 240, 0.88);
+  padding: 6px 10px;
+  font-size: 0.6rem;
+  font-weight: 850;
+  cursor: pointer;
+}
+.ox-search-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 13px;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-radius: 16px;
+  background: rgba(14, 165, 233, 0.07);
+  color: rgba(203, 213, 225, 0.78);
+  font-size: 0.62rem;
+}
+
+.ox-search-status strong {
+  color: rgba(248, 250, 252, 0.94);
+}
+
+.ox-search-workspace {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.2fr) minmax(0, 1fr) minmax(260px, 0.27fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.ox-search-filters,
+.ox-search-aside {
+  display: grid;
+  gap: 10px;
+}
+
+.ox-search-side-card,
+.ox-search-results {
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.88));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.ox-search-side-card {
+  padding: 14px;
+}
+
+.ox-search-side-card h2,
+.ox-search-results-toolbar h2 {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 0.92rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 950;
+}
+
+.ox-search-side-card p,
+.ox-search-results-toolbar p {
+  margin: 5px 0 0;
+  color: rgba(203, 213, 225, 0.66);
+  font-size: 0.58rem;
+  line-height: 1.3;
+}
+
+.ox-search-side-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.ox-search-filter-group {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.ox-search-filter-group strong {
+  color: rgba(248, 250, 252, 0.9);
+  font-size: 0.68rem;
+}
+
+.ox-search-update-btn,
+.ox-search-compare-btn {
+  width: 100%;
+  min-height: 34px;
+  margin-top: 14px;
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  border-radius: 13px;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  padding: 0 14px;
+  font-size: 0.72rem;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.ox-search-results {
+  min-width: 0;
+  padding: 14px;
+}
+
+.ox-search-results-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.ox-search-vehicle-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.ox-search-opportunity-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ox-search-opportunity-list article {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 15px;
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.ox-search-opportunity-list strong {
+  color: rgba(248, 250, 252, 0.92);
+  font-size: 0.75rem;
+}
+
+.ox-search-opportunity-list span {
+  color: #7dd3fc;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.ox-search-trust-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 22px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.07), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.66), rgba(2, 6, 23, 0.86));
+}
+
+.ox-search-trust-strip article {
+  display: flex;
+  gap: 10px;
+  min-height: 74px;
+  padding: 14px;
+  border-right: 1px solid rgba(148, 163, 184, 0.11);
+}
+
+.ox-search-trust-strip article:last-child {
+  border-right: 0;
+}
+
+.ox-search-trust-strip span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border-radius: 11px;
+  color: #7dd3fc;
+  background: rgba(14, 165, 233, 0.10);
+  border: 1px solid rgba(56, 189, 248, 0.24);
+}
+
+.ox-search-trust-strip strong {
+  color: rgba(248, 250, 252, 0.94);
+  font-size: 0.72rem;
+}
+
+.ox-search-trust-strip p {
+  margin: 4px 0 0;
+  color: rgba(203, 213, 225, 0.64);
+  font-size: 0.58rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 1180px) {
+  .ox-search-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .ox-search-filters,
+  .ox-search-aside {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ox-search-vehicle-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ox-search-trust-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .ox-search-page {
+    padding-top: 12px;
+    padding-bottom: 104px;
+  }
+
+  .ox-search-shell {
+    width: min(100% - 20px, 430px);
+    gap: 12px;
+  }
+
+  .ox-search-hero {
+    padding: 20px 14px;
+    border-radius: 24px;
+  }
+
+  .ox-search-title-block h1 {
+    font-size: clamp(2rem, 10vw, 2.65rem);
+  }
+
+  .ox-search-title-block > p {
+    font-size: 0.78rem;
+  }
+
+  .ox-search-command {
+    grid-template-columns: 1fr;
+  }
+
+  .ox-search-primary-btn {
+    width: 100%;
+  }
+
+  .ox-search-filters,
+  .ox-search-aside {
+    grid-template-columns: 1fr;
+  }
+
+  .ox-search-results-toolbar {
+    display: grid;
+  }
+
+  .ox-search-vehicle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ox-search-trust-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .ox-search-trust-strip article {
+    min-height: auto;
+    border-right: 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.11);
+  }
+}
+
+/* =========================================================
+   Search results — vehicle cards aligned with Home scale
+   Solo afecta las cards dentro de Buscar.
+   ========================================================= */
+
+.ox-search-vehicle-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.ox-search-vehicle-grid .vehicle-card {
+  min-height: auto;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.ox-search-vehicle-grid .vehicle-card-media {
+  height: 150px;
+  min-height: 150px;
+}
+
+.ox-search-vehicle-grid .vehicle-card-placeholder {
+  min-height: 150px;
+  font-size: 0.86rem;
+}
+
+.ox-search-vehicle-grid .vehicle-card-image {
+  min-height: 168px;
+}
+
+.ox-search-vehicle-grid .vehicle-card-body {
+  padding: 10px;
+}
+
+.ox-search-vehicle-grid .vehicle-card-head {
+  font-size: 0.58rem;
+  line-height: 1.2;
+}
+
+.ox-search-vehicle-grid .vehicle-card h3 {
+  margin: 7px 0 3px;
+  font-size: 0.76rem;
+  line-height: 1.08;
+}
+
+.ox-search-vehicle-grid .vehicle-version,
+.ox-search-vehicle-grid .vehicle-meta,
+.ox-search-vehicle-grid .vehicle-market {
+  font-size: 0.58rem;
+  line-height: 1.32;
+}
+
+.ox-search-vehicle-grid .vehicle-price {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.ox-search-vehicle-grid .vehicle-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 9px;
+}
+
+.ox-search-vehicle-grid .vehicle-actions button {
+  min-height: 34px;
+  padding: 6px 5px;
+  border-radius: 9px;
+  font-size: 0.58rem;
+  line-height: 1.05;
+}
+
+/* =========================================================
+   Search advanced filters panel
+   ========================================================= */
+
+.ox-search-advanced-filters {
+  position: sticky;
+  top: 76px;
+  max-height: calc(100vh - 96px);
+  overflow: auto;
+  scrollbar-width: none;
+}
+
+.ox-search-advanced-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.ox-filter-section {
+  display: grid;
+  gap: 8px;
+  padding-top: 13px;
+  margin-top: 13px;
+  border-top: 1px solid rgba(148, 163, 184, 0.11);
+}
+
+.ox-filter-section:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.ox-filter-section > strong {
+  color: rgba(248, 250, 252, 0.92);
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ox-filter-section label {
+  display: grid;
+  gap: 5px;
+  color: rgba(203, 213, 225, 0.68);
+  font-size: 0.58rem;
+  font-weight: 850;
+}
+
+.ox-filter-section input,
+.ox-filter-section select {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  background: rgba(2, 6, 23, 0.58);
+  color: rgba(248, 250, 252, 0.92);
+  padding: 0 10px;
+  font-size: 0.66rem;
+  font-weight: 750;
+  outline: none;
+}
+
+.ox-filter-section input:focus,
+.ox-filter-section select:focus {
+  border-color: rgba(56, 189, 248, 0.42);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
+}
+
+.ox-filter-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.ox-filter-shortcuts div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ox-filter-shortcuts button {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.70);
+  color: rgba(226, 232, 240, 0.88);
+  padding: 6px 9px;
+  font-size: 0.58rem;
+  font-weight: 850;
+  cursor: pointer;
+}

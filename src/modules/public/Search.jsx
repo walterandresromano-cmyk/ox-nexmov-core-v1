@@ -395,7 +395,158 @@ function getSuggestionTypeLabel(type) {
   return "Sugerencia";
 }
 
-export default function Search({ appActions, onNavigate, initialSearchQuery = "", }) {
+function getVehicleStatus(vehicle) {
+  return normalizeText(
+    getVehicleField(
+      vehicle,
+      "status",
+      "publicationStatus",
+      "publication_status"
+    )
+  );
+}
+
+function getDealerRank(vehicle, dealer) {
+  return normalizeText(
+    dealer?.rank ||
+      dealer?.plan ||
+      dealer?.dealerRank ||
+      vehicle.dealerRank ||
+      vehicle.raw?.dealer_rank ||
+      vehicle.raw?.dealer_plan
+  );
+}
+
+function getUniqueOptions(vehicles, getter) {
+  return Array.from(
+    new Set(
+      vehicles
+        .map((vehicle) => String(getter(vehicle) || "").trim())
+        .filter(Boolean)
+    )
+  ).sort((a, b) => a.localeCompare(b, "es"));
+}
+
+function matchesAdvancedFilters(vehicle, dealer, filters) {
+  const brand = normalizeText(vehicle.brand);
+  const model = normalizeText(vehicle.model);
+  const version = normalizeText(vehicle.version);
+  const province = normalizeText(vehicle.province || vehicle.raw?.province);
+  const city = normalizeText(vehicle.city || vehicle.raw?.city);
+  const bodyType = normalizeText(getVehicleField(vehicle, "bodyType", "body_type"));
+  const fuel = normalizeText(getVehicleField(vehicle, "fuelType", "fuel_type"));
+  const transmission = normalizeText(getVehicleField(vehicle, "transmission"));
+  const status = getVehicleStatus(vehicle);
+  const dealerRank = getDealerRank(vehicle, dealer);
+
+  const year = getVehicleYear(vehicle);
+  const price = getVehiclePrice(vehicle);
+  const km = getVehicleKm(vehicle);
+
+  if (filters.brand && brand !== normalizeText(filters.brand)) return false;
+  if (filters.model && model !== normalizeText(filters.model)) return false;
+  if (filters.version && version !== normalizeText(filters.version)) return false;
+
+  if (filters.yearFrom && year < Number(filters.yearFrom)) return false;
+  if (filters.yearTo && year > Number(filters.yearTo)) return false;
+
+  if (filters.priceMin && price < Number(filters.priceMin)) return false;
+  if (filters.priceMax && price > Number(filters.priceMax)) return false;
+
+  if (filters.kmMax && km > Number(filters.kmMax)) return false;
+
+  if (filters.province && province !== normalizeText(filters.province)) {
+    return false;
+  }
+
+  if (filters.city && city !== normalizeText(filters.city)) {
+    return false;
+  }
+
+  if (filters.vehicleType && !bodyType.includes(normalizeText(filters.vehicleType))) {
+    return false;
+  }
+
+  if (filters.fuel && !fuel.includes(normalizeText(filters.fuel))) {
+    return false;
+  }
+
+  if (
+    filters.transmission &&
+    !transmission.includes(normalizeText(filters.transmission))
+  ) {
+    return false;
+  }
+
+  if (filters.financing === "yes" && !vehicleHasFinancing(vehicle)) return false;
+  if (filters.financing === "no" && vehicleHasFinancing(vehicle)) return false;
+
+  if (filters.status === "reserved" && !status.includes("reserv")) return false;
+  if (filters.status === "available" && status.includes("reserv")) return false;
+
+  if (filters.dealerRank && !dealerRank.includes(normalizeText(filters.dealerRank))) {
+    return false;
+  }
+
+  return true;
+}
+
+const EMPTY_ADVANCED_FILTERS = {
+  brand: "",
+  model: "",
+  version: "",
+  yearFrom: "",
+  yearTo: "",
+  priceMin: "",
+  priceMax: "",
+  kmMax: "",
+  province: "",
+  city: "",
+  vehicleType: "",
+  fuel: "",
+  transmission: "",
+  financing: "",
+  status: "",
+  dealerRank: "",
+};
+
+const SEARCH_QUICK_ACTIONS = [
+  "SUV financiada",
+  "Primer auto",
+  "0km entrega inmediata",
+  "Bajo consumo",
+  "Pick up diesel",
+  "Familiar 7 asientos",
+];
+
+const SEARCH_TRUST_ITEMS = [
+  {
+    title: "Dealers verificados",
+    text: "Publican solo dealers validados por oX NEXMOV.",
+  },
+  {
+    title: "Datos reales",
+    text: "Información coherente y revisada para comparar mejor.",
+  },
+  {
+    title: "Comparador real",
+    text: "Hasta 4 vehículos lado a lado.",
+  },
+  {
+    title: "Consultas trazables",
+    text: "Cada contacto queda registrado antes del WhatsApp.",
+  },
+  {
+    title: "Financiación clara",
+    text: "Entrega, cuotas y condiciones visibles.",
+  },
+];
+
+export default function Search({
+  appActions,
+  onNavigate,
+  initialSearchQuery = "",
+}) {
   const [vehicles, setVehicles] = useState(mockVehicles);
   const [loadingVehicles, setLoadingVehicles] = useState(true);
   const [vehiclesError, setVehiclesError] = useState("");
@@ -404,6 +555,18 @@ export default function Search({ appActions, onNavigate, initialSearchQuery = ""
   const [catalogSuggestions, setCatalogSuggestions] = useState([]);
   const [loadingCatalog, setLoadingCatalog] = useState(true);
   const [catalogError, setCatalogError] = useState("");
+  const [filters, setFilters] = useState(EMPTY_ADVANCED_FILTERS);
+
+  function updateFilter(name, value) {
+    setFilters((currentFilters) => ({
+      ...currentFilters,
+      [name]: value,
+    }));
+  }
+
+  function clearAdvancedFilters() {
+    setFilters(EMPTY_ADVANCED_FILTERS);
+  }
 
   async function loadVehicles() {
     setLoadingVehicles(true);
@@ -456,16 +619,15 @@ export default function Search({ appActions, onNavigate, initialSearchQuery = ""
     loadVehicles();
     loadCatalog();
   }, []);
-  
+
   useEffect(() => {
-  const nextQuery = String(initialSearchQuery || "").trim();
+    const nextQuery = String(initialSearchQuery || "").trim();
 
-  if (!nextQuery) return;
+    if (!nextQuery) return;
 
-  setSearchText(nextQuery);
-  setShowSuggestions(false);
-}, [initialSearchQuery]);
-      
+    setSearchText(nextQuery);
+    setShowSuggestions(false);
+  }, [initialSearchQuery]);
 
   function getDealer(vehicle) {
     if (vehicle.dealer) return vehicle.dealer;
@@ -508,29 +670,104 @@ export default function Search({ appActions, onNavigate, initialSearchQuery = ""
       .slice(0, 8);
   }, [catalogSuggestions, searchText]);
 
+  const filterOptions = useMemo(() => {
+    const filteredForModel = vehicles.filter((vehicle) => {
+      if (!filters.brand) return true;
+      return normalizeText(vehicle.brand) === normalizeText(filters.brand);
+    });
+
+    const filteredForVersion = vehicles.filter((vehicle) => {
+      if (
+        filters.brand &&
+        normalizeText(vehicle.brand) !== normalizeText(filters.brand)
+      ) {
+        return false;
+      }
+
+      if (
+        filters.model &&
+        normalizeText(vehicle.model) !== normalizeText(filters.model)
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+
+    const filteredForCity = vehicles.filter((vehicle) => {
+      if (!filters.province) return true;
+      return (
+        normalizeText(vehicle.province || vehicle.raw?.province) ===
+        normalizeText(filters.province)
+      );
+    });
+
+    return {
+      brands: getUniqueOptions(vehicles, (vehicle) => vehicle.brand),
+      models: getUniqueOptions(filteredForModel, (vehicle) => vehicle.model),
+      versions: getUniqueOptions(filteredForVersion, (vehicle) => vehicle.version),
+      provinces: getUniqueOptions(
+        vehicles,
+        (vehicle) => vehicle.province || vehicle.raw?.province
+      ),
+      cities: getUniqueOptions(
+        filteredForCity,
+        (vehicle) => vehicle.city || vehicle.raw?.city
+      ),
+      bodyTypes: getUniqueOptions(vehicles, (vehicle) =>
+        getVehicleField(vehicle, "bodyType", "body_type")
+      ),
+      fuels: getUniqueOptions(vehicles, (vehicle) =>
+        getVehicleField(vehicle, "fuelType", "fuel_type")
+      ),
+      transmissions: getUniqueOptions(vehicles, (vehicle) =>
+        getVehicleField(vehicle, "transmission")
+      ),
+    };
+  }, [vehicles, filters.brand, filters.model, filters.province]);
+
   const filteredVehicles = useMemo(() => {
     const text = searchText.trim();
 
-    if (!text) return vehicles;
-
-    return vehicles
-      .map((vehicle) => {
-        const dealer = getDealer(vehicle);
-        const result = scoreVehicleForSearch(vehicle, dealer, parsedSearch);
-
-        return {
+    const smartSearchResults = !text
+      ? vehicles.map((vehicle) => ({
           vehicle,
-          score: result.score,
-          hardFail: result.hardFail,
-        };
+          score: 0,
+          hardFail: false,
+        }))
+      : vehicles
+          .map((vehicle) => {
+            const dealer = getDealer(vehicle);
+            const result = scoreVehicleForSearch(vehicle, dealer, parsedSearch);
+
+            return {
+              vehicle,
+              score: result.score,
+              hardFail: result.hardFail,
+            };
+          })
+          .filter((item) => !item.hardFail && item.score > 0)
+          .sort((a, b) => b.score - a.score);
+
+    return smartSearchResults
+      .filter((item) => {
+        const dealer = getDealer(item.vehicle);
+        return matchesAdvancedFilters(item.vehicle, dealer, filters);
       })
-      .filter((item) => !item.hardFail && item.score > 0)
-      .sort((a, b) => b.score - a.score)
       .map((item) => item.vehicle);
-  }, [vehicles, searchText, parsedSearch]);
+  }, [vehicles, searchText, parsedSearch, filters]);
+
+  const activeAdvancedFiltersCount = useMemo(
+    () => Object.values(filters).filter(Boolean).length,
+    [filters]
+  );
 
   const searchSummary = useMemo(() => {
     if (!searchText.trim()) {
+      if (activeAdvancedFiltersCount > 0) {
+        return `Filtros aplicados: ${activeAdvancedFiltersCount}.`;
+      }
+
       return "Escribí una marca, modelo, versión, precio, kilometraje, año, financiación o tipo de vehículo.";
     }
 
@@ -575,140 +812,530 @@ export default function Search({ appActions, onNavigate, initialSearchQuery = ""
     }
 
     return `Interpretación: ${parts.join(" · ")}.`;
-  }, [searchText, parsedSearch]);
+  }, [searchText, parsedSearch, activeAdvancedFiltersCount]);
 
   return (
-    <section className="page-section">
-     <div className="container panel search-page-panel">
-        <p className="eyebrow">Motor avanzado</p>
-        <h1>Buscar vehículos</h1>
-        <p>
-          Buscá por marca, modelo, versión, precio, kilometraje, año,
-          financiación, transmisión, combustible o tipo de vehículo.
-        </p>
+    <section className="ox-search-page">
+      <div className="ox-search-shell">
+        <section className="ox-search-hero">
+          <div className="ox-search-title-block">
+            <p className="ox-search-eyebrow">Motor avanzado</p>
+            <h1>
+              Buscar vehículos<span>.</span>
+            </h1>
+            <p>
+              Encontrá el vehículo ideal con datos reales, dealers verificados y
+              herramientas para decidir mejor.
+            </p>
+          </div>
 
-        <div className="admin-toolbar">
-          <div className="admin-search" style={{ position: "relative" }}>
-            <label>Buscar</label>
-            
-             <input
-             value={searchText}
-             onFocus={() => setShowSuggestions(true)}
-             onChange={(event) => {
-               setSearchText(event.target.value);
-               setShowSuggestions(true);
-             }}
-             placeholder="Ej: SUV financiada hasta 20 millones, Toyota automático, 100000 km..."
-           />
+          <div className="ox-search-command">
+            <div className="ox-search-input-wrap">
+              <label>¿Qué vehículo estás buscando?</label>
 
-            {showSuggestions && visibleSuggestions.length > 0 && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "100%",
-                  left: 0,
-                  right: 0,
-                  zIndex: 20,
-                  display: "grid",
-                  gap: "6px",
-                  marginTop: "8px",
-                  padding: "10px",
-                  border: "1px solid rgba(148, 163, 184, 0.16)",
-                  borderRadius: "18px",
-                  background:
-                    "linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98))",
-                  boxShadow: "0 24px 70px rgba(0,0,0,.42)",
+              <input
+                value={searchText}
+                onFocus={() => setShowSuggestions(true)}
+                onChange={(event) => {
+                  setSearchText(event.target.value);
+                  setShowSuggestions(true);
                 }}
-              >
-                {visibleSuggestions.map((suggestion) => (
-                  <button
-                    key={`${suggestion.type}-${suggestion.label}`}
-                    type="button"
-                    onClick={() => {
-                      setSearchText(suggestion.searchValue);
-                      setShowSuggestions(false);
-                    }}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: "12px",
-                      alignItems: "center",
-                      width: "100%",
-                      border: "1px solid rgba(148, 163, 184, 0.12)",
-                      background: "rgba(15, 23, 42, 0.72)",
-                      color: "var(--ox-text)",
-                      borderRadius: "14px",
-                      padding: "10px 12px",
-                      textAlign: "left",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <strong>{suggestion.label}</strong>
-                    <span
-                      style={{
-                        color: "var(--ox-muted)",
-                        fontSize: "0.76rem",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.08em",
-                        fontWeight: 900,
+                placeholder="Ej: SUV automática financiada en Buenos Aires"
+              />
+
+              {showSuggestions && visibleSuggestions.length > 0 && (
+                <div className="ox-search-suggestions">
+                  {visibleSuggestions.map((suggestion) => (
+                    <button
+                      key={`${suggestion.type}-${suggestion.label}`}
+                      type="button"
+                      onClick={() => {
+                        setSearchText(suggestion.searchValue);
+                        setShowSuggestions(false);
                       }}
                     >
-                      {getSuggestionTypeLabel(suggestion.type)}
-                    </span>
-                  </button>
-                ))}
+                      <strong>{suggestion.label}</strong>
+                      <span>{getSuggestionTypeLabel(suggestion.type)}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <button
+              type="button"
+              className="ox-search-primary-btn"
+              onClick={() => setShowSuggestions(false)}
+            >
+              Buscar
+            </button>
+          </div>
+
+          <div className="ox-search-suggested">
+            <span>Búsquedas sugeridas:</span>
+            {SEARCH_QUICK_ACTIONS.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => {
+                  setSearchText(item);
+                  setShowSuggestions(false);
+                }}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+
+          <div className="ox-search-status">
+            <span>{searchSummary}</span>
+            <strong>
+              {filteredVehicles.length} de {vehicles.length} vehículos
+            </strong>
+            {loadingCatalog && <em>Cargando catálogo...</em>}
+          </div>
+
+          {catalogError && <div className="auth-warning">{catalogError}</div>}
+          {vehiclesError && <div className="auth-warning">{vehiclesError}</div>}
+
+          {loadingVehicles && (
+            <div className="auth-message">
+              Cargando vehículos desde Supabase...
+            </div>
+          )}
+        </section>
+
+        <section className="ox-search-workspace">
+          <aside className="ox-search-filters">
+            <div className="ox-search-side-card ox-search-advanced-filters">
+              <div className="ox-search-side-head">
+                <div>
+                  <h2>Filtros</h2>
+                  <p>
+                    {activeAdvancedFiltersCount > 0
+                      ? `${activeAdvancedFiltersCount} filtros activos`
+                      : "Afiná la búsqueda con datos reales."}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearAdvancedFilters();
+                    setSearchText("");
+                    setShowSuggestions(false);
+                  }}
+                  disabled={
+                    !searchText.trim() && activeAdvancedFiltersCount === 0
+                  }
+                >
+                  Limpiar
+                </button>
+              </div>
+
+              <div className="ox-filter-section">
+                <strong>Vehículo</strong>
+
+                <label>
+                  Marca
+                  <select
+                    value={filters.brand}
+                    onChange={(event) => {
+                      updateFilter("brand", event.target.value);
+                      updateFilter("model", "");
+                      updateFilter("version", "");
+                    }}
+                  >
+                    <option value="">Todas</option>
+                    {filterOptions.brands.map((brand) => (
+                      <option key={brand} value={brand}>
+                        {brand}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label>
+                  Modelo
+                  <select
+                    value={filters.model}
+                    onChange={(event) => {
+                      updateFilter("model", event.target.value);
+                      updateFilter("version", "");
+                    }}
+                  >
+                    <option value="">Todos</option>
+                    {filterOptions.models.map((model) => (
+                      <option key={model} value={model}>
+                        {model}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label>
+                  Versión
+                  <select
+                    value={filters.version}
+                    onChange={(event) =>
+                      updateFilter("version", event.target.value)
+                    }
+                  >
+                    <option value="">Todas</option>
+                    {filterOptions.versions.map((version) => (
+                      <option key={version} value={version}>
+                        {version}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div className="ox-filter-section">
+                <strong>Precio y año</strong>
+
+                <div className="ox-filter-two">
+                  <label>
+                    Precio mín.
+                    <input
+                      type="number"
+                      min="0"
+                      value={filters.priceMin}
+                      onChange={(event) =>
+                        updateFilter("priceMin", event.target.value)
+                      }
+                      placeholder="0"
+                    />
+                  </label>
+
+                  <label>
+                    Precio máx.
+                    <input
+                      type="number"
+                      min="0"
+                      value={filters.priceMax}
+                      onChange={(event) =>
+                        updateFilter("priceMax", event.target.value)
+                      }
+                      placeholder="30000000"
+                    />
+                  </label>
+                </div>
+
+                <div className="ox-filter-two">
+                  <label>
+                    Año desde
+                    <input
+                      type="number"
+                      min="1980"
+                      max="2035"
+                      value={filters.yearFrom}
+                      onChange={(event) =>
+                        updateFilter("yearFrom", event.target.value)
+                      }
+                      placeholder="2015"
+                    />
+                  </label>
+
+                  <label>
+                    Año hasta
+                    <input
+                      type="number"
+                      min="1980"
+                      max="2035"
+                      value={filters.yearTo}
+                      onChange={(event) =>
+                        updateFilter("yearTo", event.target.value)
+                      }
+                      placeholder="2026"
+                    />
+                  </label>
+                </div>
+
+                <label>
+                  Kilometraje máximo
+                  <input
+                    type="number"
+                    min="0"
+                    value={filters.kmMax}
+                    onChange={(event) =>
+                      updateFilter("kmMax", event.target.value)
+                    }
+                    placeholder="100000"
+                  />
+                </label>
+              </div>
+
+              <div className="ox-filter-section">
+                <strong>Ubicación</strong>
+
+                <label>
+                  Provincia
+                  <select
+                    value={filters.province}
+                    onChange={(event) => {
+                      updateFilter("province", event.target.value);
+                      updateFilter("city", "");
+                    }}
+                  >
+                    <option value="">Todas</option>
+                    {filterOptions.provinces.map((province) => (
+                      <option key={province} value={province}>
+                        {province}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label>
+                  Ciudad
+                  <select
+                    value={filters.city}
+                    onChange={(event) =>
+                      updateFilter("city", event.target.value)
+                    }
+                  >
+                    <option value="">Todas</option>
+                    {filterOptions.cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div className="ox-filter-section">
+                <strong>Características</strong>
+
+                <label>
+                  Tipo
+                  <select
+                    value={filters.vehicleType}
+                    onChange={(event) =>
+                      updateFilter("vehicleType", event.target.value)
+                    }
+                  >
+                    <option value="">Todos</option>
+                    {filterOptions.bodyTypes.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label>
+                  Combustible
+                  <select
+                    value={filters.fuel}
+                    onChange={(event) =>
+                      updateFilter("fuel", event.target.value)
+                    }
+                  >
+                    <option value="">Todos</option>
+                    {filterOptions.fuels.map((fuel) => (
+                      <option key={fuel} value={fuel}>
+                        {fuel}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label>
+                  Transmisión
+                  <select
+                    value={filters.transmission}
+                    onChange={(event) =>
+                      updateFilter("transmission", event.target.value)
+                    }
+                  >
+                    <option value="">Todas</option>
+                    {filterOptions.transmissions.map((transmission) => (
+                      <option key={transmission} value={transmission}>
+                        {transmission}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div className="ox-filter-section">
+                <strong>Comercial</strong>
+
+                <label>
+                  Financiación
+                  <select
+                    value={filters.financing}
+                    onChange={(event) =>
+                      updateFilter("financing", event.target.value)
+                    }
+                  >
+                    <option value="">Todas</option>
+                    <option value="yes">Con financiación</option>
+                    <option value="no">Sin financiación</option>
+                  </select>
+                </label>
+
+                <label>
+                  Estado
+                  <select
+                    value={filters.status}
+                    onChange={(event) =>
+                      updateFilter("status", event.target.value)
+                    }
+                  >
+                    <option value="">Todos</option>
+                    <option value="available">Disponibles</option>
+                    <option value="reserved">Reservados</option>
+                  </select>
+                </label>
+
+                <label>
+                  Rango dealer
+                  <select
+                    value={filters.dealerRank}
+                    onChange={(event) =>
+                      updateFilter("dealerRank", event.target.value)
+                    }
+                  >
+                    <option value="">Todos</option>
+                    <option value="inicio">Inicio</option>
+                    <option value="pro">Pro</option>
+                    <option value="elite">Elite</option>
+                    <option value="platinum">Platinum</option>
+                  </select>
+                </label>
+              </div>
+
+              <div className="ox-filter-section ox-filter-shortcuts">
+                <strong>Atajos inteligentes</strong>
+
+                <div>
+                  {SEARCH_QUICK_ACTIONS.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => {
+                        setSearchText(item);
+                        setShowSuggestions(false);
+                      }}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="ox-search-update-btn"
+                onClick={loadVehicles}
+              >
+                Actualizar vehículos
+              </button>
+            </div>
+          </aside>
+
+          <main className="ox-search-results">
+            <div className="ox-search-results-toolbar">
+              <div>
+                <h2>Resultados</h2>
+                <p>
+                  Mostrando {filteredVehicles.length} unidades disponibles con
+                  lectura comercial.
+                </p>
+              </div>
+
+              <div className="ox-search-result-actions">
+                <button type="button">Más relevantes</button>
+              </div>
+            </div>
+
+            <div className="vehicle-grid ox-search-vehicle-grid">
+              {filteredVehicles.map((vehicle) => (
+                <VehicleCardPublic
+                  key={vehicle.id}
+                  vehicle={vehicle}
+                  dealer={getDealer(vehicle)}
+                  appActions={appActions}
+                  onNavigate={onNavigate}
+                />
+              ))}
+            </div>
+
+            {filteredVehicles.length === 0 && (
+              <div className="empty-state">
+                No hay vehículos que coincidan con la búsqueda. Probá con otra
+                marca, un precio más amplio, otro kilometraje o quitá alguna
+                condición.
               </div>
             )}
-          </div>
+          </main>
 
-          <button className="admin-refresh-btn" onClick={loadVehicles}>
-            Actualizar vehículos
-          </button>
+          <aside className="ox-search-aside">
+            <div className="ox-search-side-card">
+              <h2>Comparador</h2>
+              <p>Seleccioná hasta 4 vehículos para verlos lado a lado.</p>
 
-          <button
-            className="admin-refresh-btn"
-            onClick={() => {
-                setSearchText("");
-                setShowSuggestions(false);
-              }}
-            disabled={!searchText.trim()}
-          >
-            Limpiar
-          </button>
-        </div>
+              <button
+                type="button"
+                className="ox-search-compare-btn"
+                onClick={() => appActions?.openCompare?.()}
+              >
+                Ver comparador
+              </button>
+            </div>
 
-        <div className="auth-message">
-          {searchSummary} Resultado: {filteredVehicles.length} de{" "}
-          {vehicles.length} vehículos.
-          {loadingCatalog ? " Cargando catálogo..." : ""}
-        </div>
+            <div className="ox-search-side-card">
+              <h2>Oportunidades</h2>
 
-        {catalogError && <div className="auth-warning">{catalogError}</div>}
+              <div className="ox-search-opportunity-list">
+                {filteredVehicles.slice(0, 3).map((vehicle) => (
+                  <article key={`opportunity-${vehicle.id}`}>
+                    <strong>
+                      {vehicle.brand} {vehicle.model}
+                    </strong>
+                    <span>
+                      {getVehiclePrice(vehicle).toLocaleString("es-AR", {
+                        style: "currency",
+                        currency: "ARS",
+                        maximumFractionDigits: 0,
+                      })}
+                    </span>
+                  </article>
+                ))}
 
-        {vehiclesError && <div className="auth-warning">{vehiclesError}</div>}
+                {filteredVehicles.length === 0 && (
+                  <article>
+                    <strong>Sin oportunidades visibles</strong>
+                    <span>Probá ampliar la búsqueda.</span>
+                  </article>
+                )}
+              </div>
+            </div>
 
-        {loadingVehicles && (
-          <div className="auth-message">Cargando vehículos desde Supabase...</div>
-        )}
+            <div className="ox-search-side-card">
+              <h2>Búsqueda inteligente</h2>
+              <p>
+                Podés escribir frases naturales como “SUV financiada hasta 20
+                millones” o “Toyota automático bajo kilometraje”.
+              </p>
+            </div>
+          </aside>
+        </section>
 
-        <div className="vehicle-grid">
-          {filteredVehicles.map((vehicle) => (
-            <VehicleCardPublic
-              key={vehicle.id}
-              vehicle={vehicle}
-              dealer={getDealer(vehicle)}
-              appActions={appActions}
-              onNavigate={onNavigate}
-            />
+        <section className="ox-search-trust-strip">
+          {SEARCH_TRUST_ITEMS.map((item) => (
+            <article key={item.title}>
+              <span aria-hidden="true">◇</span>
+              <div>
+                <strong>{item.title}</strong>
+                <p>{item.text}</p>
+              </div>
+            </article>
           ))}
-        </div>
-
-        {filteredVehicles.length === 0 && (
-          <div className="empty-state">
-            No hay vehículos que coincidan con la búsqueda. Probá con otra marca,
-            un precio más amplio, otro kilometraje o quitá alguna condición.
-          </div>
-        )}
+        </section>
       </div>
     </section>
   );
