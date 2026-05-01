@@ -1,0 +1,306 @@
+/* =========================================================
+   oX NEXMOV — Quiénes somos
+   Estilos aislados de la pestaña pública.
+   No toca Home, Buscar, ZeroKm, SellVehicle ni JoinNetwork.
+   ========================================================= */
+
+.about-page {
+  padding-top: 8px;
+  padding-bottom: 30px;
+}
+
+.about-panel {
+  width: min(100% - 28px, 1530px);
+  max-width: 1530px;
+  margin: 0 auto;
+  padding: 24px 34px 28px;
+  border-radius: 30px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    radial-gradient(circle at 8% 8%, rgba(56, 189, 248, 0.16), transparent 30%),
+    radial-gradient(circle at 70% 6%, rgba(37, 99, 235, 0.15), transparent 36%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.99));
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.about-panel .eyebrow {
+  width: fit-content;
+  margin: 0;
+  padding: 5px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.34);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.09);
+  color: rgba(125, 211, 252, 0.98);
+  font-size: 0.58rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  box-shadow: 0 0 24px rgba(14, 165, 233, 0.12);
+}
+
+.about-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.about-hero-copy h1 {
+  max-width: 880px;
+  margin: 14px 0 0;
+  color: rgba(248, 250, 252, 0.99);
+  font-size: clamp(2rem, 2.06vw, 2.82rem);
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+  font-weight: 950;
+}
+
+.about-hero-copy h1 span {
+  color: #38bdf8;
+  text-shadow: 0 0 24px rgba(56, 189, 248, 0.26);
+}
+
+.about-hero-copy > p {
+  max-width: 860px;
+  margin: 8px 0 0;
+  color: rgba(203, 213, 225, 0.84);
+  font-size: 0.72rem;
+  line-height: 1.48;
+}
+
+.about-hero-card {
+  display: grid;
+  align-content: center;
+  gap: 9px;
+  padding: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.09), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.88));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.19),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.about-hero-card span {
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.1);
+  color: rgba(125, 211, 252, 0.94);
+  font-size: 0.54rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.about-hero-card strong {
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1rem;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.about-hero-card p {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.64rem;
+  line-height: 1.48;
+}
+
+.about-pillars {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.about-pillar-card,
+.about-vision-card,
+.about-section,
+.about-final {
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.075), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.88));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.19),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.about-pillar-card {
+  padding: 16px;
+}
+
+.about-pillar-card span {
+  color: rgba(125, 211, 252, 0.88);
+  font-size: 0.54rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.about-pillar-card strong {
+  display: block;
+  margin-top: 8px;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1.08rem;
+  line-height: 1;
+  font-weight: 950;
+}
+
+.about-pillar-card p {
+  margin: 8px 0 0;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.64rem;
+  line-height: 1.46;
+}
+
+.about-section {
+  margin-top: 14px;
+  padding: 18px;
+}
+
+.about-section-head h2,
+.about-final h2 {
+  max-width: 860px;
+  margin: 12px 0 0;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1.22rem;
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  font-weight: 950;
+}
+
+.about-section-head > p,
+.about-final p {
+  max-width: 940px;
+  margin: 8px 0 0;
+  color: rgba(203, 213, 225, 0.74);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.about-vision-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.about-vision-card {
+  padding: 14px;
+}
+
+.about-vision-card h3 {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.95);
+  font-size: 0.78rem;
+  line-height: 1.1;
+  font-weight: 950;
+}
+
+.about-vision-card p {
+  margin: 7px 0 0;
+  color: rgba(203, 213, 225, 0.7);
+  font-size: 0.62rem;
+  line-height: 1.42;
+}
+
+.about-benefits-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.about-benefits-list span {
+  padding: 8px 11px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.68);
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 0.62rem;
+  font-weight: 850;
+}
+
+.about-final {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin-top: 14px;
+  padding: 18px;
+}
+
+.about-final button {
+  min-height: 40px;
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 28% 0%, rgba(255, 255, 255, 0.22), transparent 28%),
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  padding: 0 18px;
+  font-size: 0.74rem;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow:
+    0 18px 38px rgba(37, 99, 235, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 1100px) {
+  .about-hero,
+  .about-final {
+    grid-template-columns: 1fr;
+  }
+
+  .about-pillars,
+  .about-vision-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .about-page {
+    padding-top: 12px;
+    padding-bottom: 104px;
+  }
+
+  .about-panel {
+    width: min(100% - 20px, 430px);
+    margin: 0 auto;
+    padding: 20px 14px 22px;
+    border-radius: 24px;
+  }
+
+  .about-hero-copy h1 {
+    font-size: clamp(2rem, 10vw, 2.65rem);
+  }
+
+  .about-hero-copy > p {
+    font-size: 0.78rem;
+  }
+
+  .about-pillars,
+  .about-vision-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-section,
+  .about-final,
+  .about-hero-card {
+    padding: 14px;
+  }
+
+  .about-final button {
+    width: 100%;
+  }
+}
