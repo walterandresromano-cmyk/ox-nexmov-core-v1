@@ -1,0 +1,354 @@
+/* =========================================================
+   oX NEXMOV — Sumate a la red
+   Estilos aislados de la pestaña pública.
+   No toca Home, Buscar, ZeroKm, SellVehicle ni components.css.
+   ========================================================= */
+
+.join-network-page {
+  padding-top: 8px;
+  padding-bottom: 30px;
+}
+
+.join-network-panel {
+  width: min(100% - 28px, 1530px);
+  max-width: 1530px;
+  margin: 0 auto;
+  padding: 30px 38px 34px;
+  border-radius: 30px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    radial-gradient(circle at 8% 8%, rgba(56, 189, 248, 0.16), transparent 30%),
+    radial-gradient(circle at 70% 6%, rgba(37, 99, 235, 0.15), transparent 36%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.99));
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.join-network-panel .eyebrow {
+  width: fit-content;
+  margin: 0;
+  padding: 5px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.34);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.09);
+  color: rgba(125, 211, 252, 0.98);
+  font-size: 0.58rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  box-shadow: 0 0 24px rgba(14, 165, 233, 0.12);
+}
+
+.join-network-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 370px);
+  gap: 28px;
+  align-items: stretch;
+}
+
+.join-network-hero-copy h1 {
+  max-width: 820px;
+  margin: 14px 0 0;
+  color: rgba(248, 250, 252, 0.99);
+  font-size: clamp(2rem, 2.06vw, 2.82rem);
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+  font-weight: 950;
+}
+
+.join-network-hero-copy h1 span {
+  color: #38bdf8;
+  text-shadow: 0 0 24px rgba(56, 189, 248, 0.26);
+}
+
+.join-network-hero-copy > p {
+  max-width: 920px;
+  margin: 10px 0 0;
+  color: rgba(203, 213, 225, 0.84);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.join-network-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.join-network-actions button,
+.join-network-final button {
+  min-height: 40px;
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 28% 0%, rgba(255, 255, 255, 0.22), transparent 28%),
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  padding: 0 18px;
+  font-size: 0.74rem;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow:
+    0 18px 38px rgba(37, 99, 235, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.join-network-actions .secondary-btn {
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(2, 6, 23, 0.76));
+  color: rgba(226, 232, 240, 0.92);
+  border-color: rgba(148, 163, 184, 0.2);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.join-network-hero-card {
+  display: grid;
+  align-content: center;
+  gap: 9px;
+  padding: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.09), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.88));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.19),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.join-network-hero-card span {
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.1);
+  color: rgba(125, 211, 252, 0.94);
+  font-size: 0.54rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.join-network-hero-card strong {
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1rem;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.join-network-hero-card p {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.64rem;
+  line-height: 1.48;
+}
+
+.join-network-values,
+.join-network-plans {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 22px;
+  
+}
+
+.join-network-value-card,
+.join-network-plan-card,
+.join-network-step-card,
+.join-network-section,
+.join-network-final {
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.075), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.88));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.19),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.join-network-value-card,
+.join-network-plan-card {
+  padding: 18px;
+}
+
+.join-network-value-card span,
+.join-network-plan-card span {
+  color: rgba(125, 211, 252, 0.88);
+  font-size: 0.54rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.join-network-value-card strong,
+.join-network-plan-card strong {
+  display: block;
+  margin-top: 8px;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1.2rem;
+  line-height: 1;
+  font-weight: 950;
+}
+
+.join-network-plan-platinum strong {
+  font-size: 1rem;
+}
+
+.join-network-value-card p,
+.join-network-plan-card p {
+  margin: 9px 0 0;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.join-network-section {
+  margin-top: 16px;
+  padding: 22px;
+}
+
+.join-network-section-head h2,
+.join-network-final h2 {
+  max-width: 820px;
+  margin: 12px 0 0;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1.35rem;
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  font-weight: 950;
+}
+
+.join-network-section-head > p,
+.join-network-final p {
+  max-width: 900px;
+  margin: 9px 0 0;
+  color: rgba(203, 213, 225, 0.74);
+  font-size: 0.74rem;
+  line-height: 1.52;
+}
+
+.join-network-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.join-network-step-card {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 10px;
+  padding: 12px;
+}
+
+.join-network-step-card > strong {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 950;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+}
+
+.join-network-step-card h3 {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.95);
+  font-size: 0.72rem;
+  line-height: 1.1;
+  font-weight: 950;
+}
+
+.join-network-step-card p {
+  margin: 6px 0 0;
+  color: rgba(203, 213, 225, 0.7);
+  font-size: 0.6rem;
+  line-height: 1.38;
+}
+
+.join-network-benefits-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.join-network-benefits-list span {
+  padding: 8px 11px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.68);
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 0.62rem;
+  font-weight: 850;
+}
+
+.join-network-final {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin-top: 14px;
+  padding: 18px;
+}
+
+@media (max-width: 1100px) {
+  .join-network-values,
+  .join-network-plans,
+  .join-network-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .join-network-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .join-network-page {
+    padding-top: 12px;
+    padding-bottom: 104px;
+  }
+
+  .join-network-panel {
+    width: min(100% - 20px, 430px);
+    margin: 0 auto;
+    padding: 20px 14px 22px;
+    border-radius: 24px;
+  }
+
+  .join-network-hero-copy h1 {
+    font-size: clamp(2rem, 10vw, 2.65rem);
+  }
+
+  .join-network-hero-copy > p {
+    font-size: 0.78rem;
+  }
+
+  .join-network-values,
+  .join-network-plans,
+  .join-network-steps,
+  .join-network-final {
+    grid-template-columns: 1fr;
+  }
+
+  .join-network-actions button,
+  .join-network-final button {
+    width: 100%;
+  }
+
+  .join-network-section,
+  .join-network-final,
+  .join-network-hero-card {
+    padding: 14px;
+  }
+}
