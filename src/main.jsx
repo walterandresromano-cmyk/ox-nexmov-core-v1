@@ -12,6 +12,7 @@ import "./styles/zeroKm.css";
 import "./styles/sellVehicle.css";
 import "./styles/joinNetwork.css";
 import "./styles/about.css";
+import "./styles/faq.css";
 import "./styles/responsive.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

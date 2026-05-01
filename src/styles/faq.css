@@ -1,0 +1,276 @@
+/* =========================================================
+   oX NEXMOV — Preguntas frecuentes
+   Estilos aislados de la pestaña pública.
+   No toca Home, Buscar, ZeroKm, SellVehicle, JoinNetwork ni About.
+   ========================================================= */
+
+.faq-page {
+  padding-top: 8px;
+  padding-bottom: 30px;
+}
+
+.faq-panel {
+  width: min(100% - 28px, 1530px);
+  max-width: 1530px;
+  margin: 0 auto;
+  padding: 24px 34px 28px;
+  border-radius: 30px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    radial-gradient(circle at 8% 8%, rgba(56, 189, 248, 0.16), transparent 30%),
+    radial-gradient(circle at 70% 6%, rgba(37, 99, 235, 0.15), transparent 36%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.99));
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.faq-panel .eyebrow {
+  width: fit-content;
+  margin: 0;
+  padding: 5px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.34);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.09);
+  color: rgba(125, 211, 252, 0.98);
+  font-size: 0.58rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  box-shadow: 0 0 24px rgba(14, 165, 233, 0.12);
+}
+
+.faq-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.faq-hero-copy h1 {
+  max-width: 880px;
+  margin: 14px 0 0;
+  color: rgba(248, 250, 252, 0.99);
+  font-size: clamp(2rem, 2.06vw, 2.82rem);
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+  font-weight: 950;
+}
+
+.faq-hero-copy h1 span {
+  color: #38bdf8;
+  text-shadow: 0 0 24px rgba(56, 189, 248, 0.26);
+}
+
+.faq-hero-copy > p {
+  max-width: 860px;
+  margin: 8px 0 0;
+  color: rgba(203, 213, 225, 0.84);
+  font-size: 0.72rem;
+  line-height: 1.48;
+}
+
+.faq-hero-card {
+  display: grid;
+  align-content: center;
+  gap: 9px;
+  padding: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.09), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.88));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.19),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.faq-hero-card span {
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.1);
+  color: rgba(125, 211, 252, 0.94);
+  font-size: 0.54rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.faq-hero-card strong {
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1rem;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.faq-hero-card p {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.64rem;
+  line-height: 1.48;
+}
+
+.faq-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.06), transparent 28%),
+    rgba(15, 23, 42, 0.52);
+}
+
+.faq-topics span {
+  padding: 8px 11px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.68);
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 0.62rem;
+  font-weight: 850;
+}
+
+.faq-section,
+.faq-final {
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.075), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.88));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.19),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.faq-section-head h2,
+.faq-final h2 {
+  max-width: 860px;
+  margin: 12px 0 0;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1.22rem;
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  font-weight: 950;
+}
+
+.faq-section-head > p,
+.faq-final p {
+  max-width: 940px;
+  margin: 8px 0 0;
+  color: rgba(203, 213, 225, 0.74);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.faq-card {
+  padding: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.06), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.82));
+  box-shadow:
+    0 16px 46px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.faq-card h3 {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.95);
+  font-size: 0.78rem;
+  line-height: 1.1;
+  font-weight: 950;
+}
+
+.faq-card p {
+  margin: 7px 0 0;
+  color: rgba(203, 213, 225, 0.7);
+  font-size: 0.62rem;
+  line-height: 1.42;
+}
+
+.faq-final {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.faq-final button {
+  min-height: 40px;
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 28% 0%, rgba(255, 255, 255, 0.22), transparent 28%),
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  padding: 0 18px;
+  font-size: 0.74rem;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow:
+    0 18px 38px rgba(37, 99, 235, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 1100px) {
+  .faq-hero,
+  .faq-final {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .faq-page {
+    padding-top: 12px;
+    padding-bottom: 104px;
+  }
+
+  .faq-panel {
+    width: min(100% - 20px, 430px);
+    margin: 0 auto;
+    padding: 20px 14px 22px;
+    border-radius: 24px;
+  }
+
+  .faq-hero-copy h1 {
+    font-size: clamp(2rem, 10vw, 2.65rem);
+  }
+
+  .faq-hero-copy > p {
+    font-size: 0.78rem;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-section,
+  .faq-final,
+  .faq-hero-card,
+  .faq-topics {
+    padding: 14px;
+  }
+
+  .faq-final button {
+    width: 100%;
+  }
+}
