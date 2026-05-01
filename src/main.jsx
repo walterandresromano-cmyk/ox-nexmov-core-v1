@@ -8,6 +8,7 @@ import "./styles/layout.css";
 import "./styles/components.css";
 import "./styles/home.css";
 import "./styles/search.css";
+import "./styles/zeroKm.css";
 import "./styles/responsive.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

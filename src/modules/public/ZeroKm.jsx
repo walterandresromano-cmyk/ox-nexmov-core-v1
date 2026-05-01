@@ -86,17 +86,19 @@ export default function ZeroKm({ authUser, authProfile }) {
   }
 
   return (
-    <section className="page-section">
-      <div className="container panel zero-km-panel">
-        <p className="eyebrow">Financiación 0km</p>
-        <h1>Consultá financiación para tu próximo 0km</h1>
-        <p>
+          <section className="zero-km-page ox-public-page">
+  <div className="zero-km-panel ox-public-hero">
+    <p className="ox-public-eyebrow">Financiación 0km</p>
+    <h1 className="ox-public-title">
+      Consultá financiación para tu próximo <span>0km</span>
+    </h1>
+    <p className="ox-public-lead">
           Completá tus datos mínimos y el equipo de oX NEXMOV revisará la
           consulta. La operación queda trazada dentro de la plataforma sin pedir
           datos sensibles desde el inicio.
         </p>
 
-        <div className="zero-km-grid">
+        <div className="zero-km-grid ox-public-content">
           <article className="zero-km-info-card">
             <span>Cómo funciona</span>
             <h2>Consulta guiada, sin cargar datos sensibles</h2>
@@ -324,3 +326,4 @@ export default function ZeroKm({ authUser, authProfile }) {
     </section>
   );
 }
+

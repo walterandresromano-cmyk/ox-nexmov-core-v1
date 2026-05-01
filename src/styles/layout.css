@@ -18,3 +18,110 @@
   border-radius: var(--ox-radius);
   padding: 32px;
 }
+/* =========================================================
+   oX NEXMOV — Public page standard
+   Base visual común para pestañas públicas.
+   No usar para cards específicas ni componentes internos.
+   ========================================================= */
+
+.ox-public-page {
+  width: min(100% - 28px, 1530px);
+  max-width: 1530px;
+  margin: 8px auto 30px;
+}
+
+.ox-public-hero {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 26px 34px 24px;
+  border-radius: 32px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    radial-gradient(circle at 8% 8%, rgba(56, 189, 248, 0.16), transparent 30%),
+    radial-gradient(circle at 72% 4%, rgba(37, 99, 235, 0.16), transparent 36%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.98));
+  box-shadow:
+    0 34px 95px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.ox-public-eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 28px;
+  align-items: center;
+  padding: 0 13px;
+  border: 1px solid rgba(56, 189, 248, 0.42);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.15), rgba(14, 165, 233, 0.055));
+  color: rgba(125, 211, 252, 0.98);
+  font-size: 0.58rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 26px rgba(14, 165, 233, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.ox-public-title {
+  max-width: 780px;
+  margin: 14px 0 0;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: clamp(1.9rem, 2vw, 2.65rem);
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+  font-weight: 950;
+  text-wrap: balance;
+  text-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
+}
+
+.ox-public-title span {
+  color: #38bdf8;
+  text-shadow: 0 0 24px rgba(56, 189, 248, 0.34);
+}
+
+.ox-public-lead {
+  max-width: 850px;
+  margin: 8px 0 0;
+  color: rgba(203, 213, 225, 0.8);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.ox-public-content {
+  margin-top: 18px;
+}
+
+.ox-public-card {
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.09), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.92));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+@media (max-width: 760px) {
+  .ox-public-page {
+    width: min(100% - 20px, 430px);
+    margin: 12px auto 104px;
+  }
+
+  .ox-public-hero {
+    padding: 20px 14px 22px;
+    border-radius: 24px;
+  }
+
+  .ox-public-title {
+    font-size: clamp(2rem, 10vw, 2.65rem);
+  }
+
+  .ox-public-lead {
+    font-size: 0.78rem;
+  }
+}
