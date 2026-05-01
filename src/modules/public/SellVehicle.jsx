@@ -123,9 +123,9 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
     }));
   }
 
-  return (
-    <section className="page-section">
-      <div className="container panel sell-vehicle-panel">
+         return (
+          <section className="page-section sell-vehicle-page">
+         <div className="container panel sell-vehicle-panel">
         <p className="eyebrow">Vender mi vehículo</p>
         <h1>Publicá tu intención de venta</h1>
         <p>
@@ -149,8 +149,8 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
           </div>
         )}
 
-        <div className="zero-km-grid">
-          <article className="zero-km-info-card">
+        <div className="sell-vehicle-grid">
+          <article className="sell-vehicle-info-card">
             <span>Cómo funciona</span>
             <h2>Tu vehículo puede llegar a dealers habilitados</h2>
             <p>
@@ -159,7 +159,7 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
               posible asignación a concesionarias habilitadas.
             </p>
 
-            <div className="zero-km-steps">
+            <div className="sell-vehicle-steps">
               <div>
                 <strong>1</strong>
                 <span>Cargás los datos básicos de tu vehículo.</span>
@@ -175,7 +175,7 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
             </div>
           </article>
 
-          <form className="zero-km-form" onSubmit={handleSubmit}>
+          <form className="sell-vehicle-form" onSubmit={handleSubmit}>
             <div className="form-grid-two">
               <label>
                 Nombre completo
