@@ -417,7 +417,7 @@
 }
 
 .vehicle-card-media {
-  height: 150px;
+  height: 224px;
   background: var(--ox-card-2);
   display: grid;
   place-items: center;
@@ -462,7 +462,7 @@
 .vehicle-price {
   display: block;
   margin-top: 12px;
-  font-size: 1.35rem;
+  font-size: 1rem;
   color: var(--ox-text);
 }
 
@@ -1795,7 +1795,7 @@
 .vehicle-card-media {
   position: relative;
   width: 100%;
-  height: 230px;
+  height: 224px;
   overflow: hidden;
   background:
     radial-gradient(circle at 30% 10%, rgba(56, 189, 248, 0.16), transparent 36%),
@@ -1819,7 +1819,7 @@
 }
 
 .vehicle-card-placeholder {
-  min-height: 230px;
+  min-height: 224px;
   display: grid;
   place-items: center;
 }
@@ -3777,7 +3777,7 @@ button.admin-kpi-card:focus-visible {
   }
 
   .search-page-panel .vehicle-card-media {
-    height: 230px;
+    height: 234px;
   }
 }
 
@@ -3880,37 +3880,40 @@ button.admin-kpi-card:focus-visible {
 .vehicle-card.rank-inicio::after,
 .vehicle-card:has(.dealer-rank-inicio)::after,
 .vehicle-card:has(.rank-inicio)::after {
-  width: 5px;
-  height: 5px;
+  width: 3px;
+  height: 3px;
   opacity: 0.62;
-  animation-duration: 13s;
+  animation-duration: 15s;
 }
 
 .vehicle-card.dealer-rank-pro::after,
 .vehicle-card.rank-pro::after,
 .vehicle-card:has(.dealer-rank-pro)::after,
 .vehicle-card:has(.rank-pro)::after {
-  animation-duration: 9.5s;
+   width: 3px;
+   height: 3px;
+   opacity: 0.62;
+   animation-duration: 15s;
 }
 
 .vehicle-card.dealer-rank-elite::after,
 .vehicle-card.rank-elite::after,
 .vehicle-card:has(.dealer-rank-elite)::after,
 .vehicle-card:has(.rank-elite)::after {
-  width: 8px;
-  height: 8px;
+  width: 3px;
+  height: 3px;
   opacity: 0.92;
-  animation-duration: 7.6s;
+  animation-duration: 19s;
 }
 
 .vehicle-card.dealer-rank-platinum::after,
 .vehicle-card.rank-platinum::after,
 .vehicle-card:has(.dealer-rank-platinum)::after,
 .vehicle-card:has(.rank-platinum)::after {
-  width: 8px;
-  height: 8px;
+  width: 3px;
+  height: 3px;
   opacity: 0.88;
-  animation-duration: 8.2s;
+  animation-duration: 20s;
 }
 
 /* Refuerzo al hover */
@@ -4005,6 +4008,7 @@ button.admin-kpi-card:focus-visible {
 .vehicle-card:has(.dealer-rank-inicio),
 .vehicle-card:has(.rank-inicio) {
   --ox-rank-under: rgba(184, 135, 70, 0.24);
+  
 }
 
 .vehicle-card.dealer-rank-pro,
@@ -4358,3 +4362,541 @@ body::-webkit-scrollbar {
     font-size: 0.64rem;
   }
 }
+
+/* =========================================================
+   oX NEXMOV Core v1 — Public Vehicle Card Premium Compact
+   Override final para VehicleCardPublic.jsx.
+   ========================================================= */
+
+.vehicle-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.07), transparent 26%),
+    radial-gradient(circle at 86% 14%, rgba(56, 189, 248, 0.08), transparent 34%),
+    linear-gradient(145deg, rgba(18, 28, 44, 0.96), rgba(5, 10, 22, 0.98) 50%, rgba(15, 23, 42, 0.94));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.vehicle-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.055) 16%,
+      transparent 34%,
+      rgba(255, 255, 255, 0.025) 62%,
+      transparent 100%
+    );
+  opacity: 0.7;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.26);
+  box-shadow:
+    0 28px 86px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(56, 189, 248, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+/* Rango como material, no como bloque de color */
+
+.vehicle-card.dealer-rank-inicio {
+  border-color: rgba(184, 135, 70, 0.24);
+}
+
+.vehicle-card.dealer-rank-pro {
+  border-color: rgba(34, 211, 238, 0.24);
+}
+
+.vehicle-card.dealer-rank-elite {
+  border-color: rgba(245, 197, 66, 0.32);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 241, 168, 0.08), transparent 26%),
+    radial-gradient(circle at 86% 14%, rgba(245, 158, 11, 0.10), transparent 34%),
+    linear-gradient(145deg, rgba(31, 25, 16, 0.96), rgba(7, 8, 14, 0.98) 50%, rgba(26, 18, 8, 0.94));
+}
+
+.vehicle-card.dealer-rank-platinum {
+  border-color: rgba(229, 231, 235, 0.34);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.12), transparent 26%),
+    radial-gradient(circle at 86% 14%, rgba(191, 219, 254, 0.10), transparent 34%),
+    linear-gradient(145deg, rgba(27, 36, 50, 0.96), rgba(5, 9, 18, 0.98) 50%, rgba(20, 28, 40, 0.94));
+}
+
+/* Imagen */
+
+.vehicle-card-media {
+  position: relative;
+  width: 100%;
+  height: 224px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  background:
+    radial-gradient(circle at 30% 10%, rgba(56, 189, 248, 0.14), transparent 36%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98));
+}
+
+.vehicle-card-image {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transform: scale(1.015);
+  filter: saturate(1.02) contrast(1.02);
+  transition:
+    transform 0.35s ease,
+    filter 0.35s ease;
+}
+
+.vehicle-card:hover .vehicle-card-image {
+  transform: scale(1.045);
+  filter: saturate(1.06) contrast(1.04);
+}
+
+.vehicle-card-media-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(2, 6, 23, 0.04), transparent 46%, rgba(2, 6, 23, 0.48));
+}
+
+.vehicle-card-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 224px;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  color: rgba(203, 213, 225, 0.7);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+/* Body compacto */
+
+.vehicle-card-body,
+.search-page-panel .vehicle-card-body {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 10px;
+  padding: 13px;
+}
+
+.vehicle-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.dealer-rank,
+.vehicle-year-pill {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 22px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 0.48rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dealer-rank {
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.10), rgba(15, 23, 42, 0.62));
+  color: rgba(186, 230, 253, 0.92);
+}
+
+.dealer-rank-inicio .dealer-rank {
+  border-color: rgba(184, 135, 70, 0.34);
+  color: rgba(255, 229, 190, 0.92);
+}
+
+.dealer-rank-pro .dealer-rank {
+  border-color: rgba(34, 211, 238, 0.34);
+  color: rgba(207, 250, 254, 0.94);
+}
+
+.dealer-rank-elite .dealer-rank {
+  border-color: rgba(245, 197, 66, 0.46);
+  color: rgba(255, 247, 214, 0.96);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.12);
+}
+
+.dealer-rank-platinum .dealer-rank {
+  border-color: rgba(229, 231, 235, 0.46);
+  color: rgba(248, 250, 252, 0.96);
+}
+
+.vehicle-year-pill {
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.52);
+  color: rgba(226, 232, 240, 0.84);
+}
+
+.vehicle-title-block {
+  min-height: 46px;
+  display: grid;
+  align-content: start;
+  gap: 3px;
+}
+
+.vehicle-card h3 {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 0.88rem;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 950;
+}
+
+.vehicle-version {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.66);
+  font-size: 0.6rem;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.vehicle-specs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vehicle-specs-row span {
+  display: inline-flex;
+  min-height: 25px;
+  align-items: center;
+  padding: 0 8px;
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.52);
+  color: rgba(203, 213, 225, 0.76);
+  font-size: 0.58rem;
+  line-height: 1;
+  font-weight: 850;
+}
+
+/* Precio + badge de mercado */
+
+.vehicle-price-row {
+  display: grid;
+  gap: 7px;
+  padding: 10px 11px;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.09), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.64), rgba(2, 6, 23, 0.46));
+}
+
+.vehicle-price {
+  display: block;
+  margin: 0;
+  color: rgba(248, 250, 252, 0.99);
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 950;
+}
+
+.vehicle-market-badge {
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 999px;
+  padding: 6px 9px;
+  font-size: 0.56rem;
+  line-height: 1;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.vehicle-market-badge.market-below {
+  border: 1px solid rgba(34, 197, 94, 0.24);
+  background: rgba(34, 197, 94, 0.10);
+  color: rgba(187, 247, 208, 0.96);
+}
+
+.vehicle-market-badge.market-above {
+  border: 1px solid rgba(245, 158, 11, 0.24);
+  background: rgba(245, 158, 11, 0.10);
+  color: rgba(253, 230, 138, 0.96);
+}
+
+/* Consulta enviada */
+
+.lead-created-note {
+  width: 100%;
+  margin: 0;
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.11), transparent 34%),
+    rgba(15, 23, 42, 0.55);
+  color: rgba(187, 247, 208, 0.96);
+  padding: 8px 9px;
+  font-size: 0.6rem;
+  line-height: 1.28;
+  font-weight: 900;
+}
+
+/* Acciones compactas */
+
+.vehicle-actions {
+  display: grid;
+  gap: 7px;
+  margin-top: 0;
+}
+
+.vehicle-actions.vehicle-actions-premium {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.vehicle-actions.vehicle-actions-premium button {
+  min-height: 34px;
+  border-radius: 12px;
+  padding: 0 8px;
+  font-size: 0.6rem;
+  line-height: 1;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.vehicle-action-primary {
+  border: 1px solid rgba(125, 211, 252, 0.36);
+  background:
+    radial-gradient(circle at 28% 0%, rgba(255, 255, 255, 0.18), transparent 28%),
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+}
+
+.vehicle-action-secondary,
+.vehicle-action-quiet {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background:
+    linear-gradient(180deg, rgba(30, 58, 98, 0.72), rgba(15, 23, 42, 0.72));
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.favorite-active {
+  border-color: rgba(245, 197, 66, 0.5) !important;
+  background:
+    linear-gradient(135deg, rgba(68, 43, 10, 0.86), rgba(245, 197, 66, 0.16)) !important;
+  color: rgba(254, 243, 199, 0.98) !important;
+}
+
+/* Reservado */
+
+.vehicle-card-reserved {
+  opacity: 0.94;
+}
+
+.vehicle-card-reserved .vehicle-card-image {
+  filter: saturate(0.78) contrast(0.96) brightness(0.86);
+}
+
+.vehicle-reserved-ribbon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.12), transparent 34%),
+    rgba(31, 24, 10, 0.88);
+  color: #ffe8a3;
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-size: 0.62rem;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.16);
+  backdrop-filter: blur(10px);
+}
+
+.vehicle-contact-disabled,
+.vehicle-contact-disabled:hover {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+  box-shadow: none;
+}
+
+/* Mobile */
+
+@media (max-width: 760px) {
+  .vehicle-card-media {
+    height: 224px;
+  }
+
+  .vehicle-card-body,
+  .search-page-panel .vehicle-card-body {
+    padding: 13px;
+  }
+
+  .vehicle-actions.vehicle-actions-premium {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vehicle-actions.vehicle-actions-premium button {
+    min-height: 34px;
+  }
+}
+
+.vehicle-price-row:has(.vehicle-market-badge) {
+  gap: 7px;
+}
+
+.vehicle-price-row:not(:has(.vehicle-market-badge)) {
+  min-height: 54px;
+  align-content: center;
+}
+
+/* =========================================================
+   oX NEXMOV Core v1 — Vehicle Card Compact Refinement
+   Ajuste de densidad visual posterior al premium metal.
+   ========================================================= */
+
+.vehicle-card-media {
+  height: 224px;
+}
+
+.vehicle-card-placeholder {
+  min-height: 224px;
+}
+
+.dealer-rank,
+.vehicle-year-pill {
+  min-height: 22px;
+  padding: 0 7px;
+  font-size: 0.48rem;
+  letter-spacing: 0.07em;
+}
+
+.vehicle-card-body,
+.search-page-panel .vehicle-card-body {
+  gap: 9px;
+  padding: 12px;
+}
+
+.vehicle-title-block {
+  min-height: 42px;
+}
+
+.vehicle-card h3 {
+  font-size: 0.84rem;
+}
+
+.vehicle-version {
+  font-size: 0.58rem;
+}
+
+.vehicle-specs-row span {
+  min-height: 24px;
+  padding: 0 7px;
+  font-size: 0.55rem;
+}
+
+.vehicle-price-row {
+  padding: 10px 11px;
+  border-radius: 16px;
+}
+
+.vehicle-price-row:has(.vehicle-market-badge) {
+  gap: 7px;
+}
+
+.vehicle-price-row:not(:has(.vehicle-market-badge)) {
+  min-height: 54px;
+  align-content: center;
+}
+
+.vehicle-price {
+  font-size: 1rem;
+}
+
+.vehicle-market-badge {
+  padding: 5px 8px;
+  font-size: 0.53rem;
+}
+
+.vehicle-actions.vehicle-actions-premium {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.vehicle-actions.vehicle-actions-premium button {
+  min-height: 34px;
+  border-radius: 12px;
+  padding: 0 8px;
+  font-size: 0.6rem;
+}
+
+@media (max-width: 760px) {
+  .vehicle-card-media {
+    height: 220px;
+  }
+
+  .vehicle-card-placeholder {
+    min-height: 220px;
+  }
+
+  .vehicle-actions.vehicle-actions-premium {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* =========================================================
+   oX NEXMOV Core v1 — Vehicle Card Spec Chips Truncation
+   Evita que ciudad/provincia largas rompan la estructura.
+   ========================================================= */
+
+.vehicle-specs-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px;
+  min-width: 0;
+}
+
+.vehicle-specs-row span {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.vehicle-specs-row span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

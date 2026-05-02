@@ -63,6 +63,42 @@ function getVehicleImageUrl(vehicle) {
   return "";
 }
 
+function getVehicleTitle(vehicle) {
+  return [vehicle?.brand, vehicle?.model].filter(Boolean).join(" ") || "Vehículo publicado";
+}
+
+function getLocationLabel(vehicle) {
+  const city = String(vehicle?.city || "").trim();
+  const province = String(vehicle?.province || "").trim();
+
+  if (city && province) return `${city}, ${province}`;
+  if (city) return city;
+  if (province) return province;
+
+  return "Ubicación a confirmar";
+}
+
+function getMarketBadge(delta) {
+  if (!delta) return null;
+
+  const percent = Number(delta.percent || 0);
+  const absolutePercent = Math.abs(percent);
+
+  if (absolutePercent < 0.1) return null;
+
+  if (delta.isBelowMarket) {
+    return {
+      tone: "below",
+      text: `${absolutePercent.toFixed(1)}% debajo del mercado`,
+    };
+  }
+
+  return {
+    tone: "above",
+    text: `${absolutePercent.toFixed(1)}% arriba del mercado`,
+  };
+}
+
 export default function VehicleCardPublic({
   vehicle,
   dealer,
@@ -76,9 +112,12 @@ export default function VehicleCardPublic({
   const safeDealer = dealer || fallbackDealer;
   const permissions = getEffectiveDealerPermissions(safeDealer);
   const delta = getMarketDelta(vehicle);
+  const marketBadge = getMarketBadge(delta);
   const favoriteActive = appActions?.isFavorite?.(vehicle.id);
   const reserved = isVehicleReserved(vehicle);
   const imageUrl = getVehicleImageUrl(vehicle);
+  const vehicleTitle = getVehicleTitle(vehicle);
+  const locationLabel = getLocationLabel(vehicle);
 
   function requireLoginForContact() {
     setShowContactGate(false);
@@ -100,14 +139,14 @@ export default function VehicleCardPublic({
             <img
               className="vehicle-card-image"
               src={imageUrl}
-              alt={`${vehicle.brand} ${vehicle.model}`}
+              alt={vehicleTitle}
               loading="lazy"
             />
           ) : (
-            <div className="vehicle-card-placeholder">
-              {vehicle.brand} {vehicle.model}
-            </div>
+            <div className="vehicle-card-placeholder">{vehicleTitle}</div>
           )}
+
+          <div className="vehicle-card-media-shade" aria-hidden="true" />
 
           {reserved && (
             <div className="vehicle-reserved-ribbon">Unidad reservada</div>
@@ -117,57 +156,50 @@ export default function VehicleCardPublic({
         <div className="vehicle-card-body">
           <div className="vehicle-card-head">
             <span className="dealer-rank">{permissions.rankLabel}</span>
-            <span>{vehicle.year}</span>
+            <span className="vehicle-year-pill">
+              {vehicle.year || "Año a confirmar"}
+            </span>
           </div>
 
-          {reserved && (
-            <div className="vehicle-status-alert">
-              <strong>Reservado</strong>
-              <span>Esta unidad fue marcada como reservada por el dealer.</span>
-            </div>
-          )}
+          <div className="vehicle-title-block">
+            <h3>{vehicleTitle}</h3>
 
-          <h3>
-            {vehicle.brand} {vehicle.model}
-          </h3>
+            {vehicle.version && (
+              <p className="vehicle-version">{vehicle.version}</p>
+            )}
+          </div>
 
-          <p className="vehicle-version">{vehicle.version}</p>
+          <div className="vehicle-specs-row">
+            <span>{formatKm(vehicle.kilometers)}</span>
+            <span>{locationLabel}</span>
+          </div>
 
-          <p className="vehicle-meta">
-            {formatKm(vehicle.kilometers)} · {vehicle.city}, {vehicle.province}
-          </p>
+          <div className="vehicle-price-row">
+            <strong className="vehicle-price">{formatARS(vehicle.price)}</strong>
 
-          <strong className="vehicle-price">{formatARS(vehicle.price)}</strong>
+            {marketBadge && (
+              <span className={`vehicle-market-badge market-${marketBadge.tone}`}>
+                {marketBadge.text}
+              </span>
+            )}
+          </div>
 
-          {delta && (
-            <p className="vehicle-market">
-              Ref. mercado {formatARS(vehicle.marketReferencePrice)} ·{" "}
-              {delta.isBelowMarket
-                ? `${delta.percent.toFixed(1)}% debajo`
-                : `${Math.abs(delta.percent).toFixed(1)}% arriba`}
+          {lastLead && (
+            <p className="lead-created-note">
+              ✓ Consulta enviada. Te contactarán a la brevedad.
             </p>
           )}
 
-          {lastLead && (
-            <p className="lead-created-note">Lead generado · contacto trazado</p>
-          )}
-
-          <div className="vehicle-actions vehicle-actions-four">
-            <button onClick={() => setShowDetailModal(true)}>Ver detalle</button>
-
-            <button onClick={() => appActions.addToCompare(vehicle)}>
-              Comparar
-            </button>
-
+          <div className="vehicle-actions vehicle-actions-premium">
             <button
-              className={favoriteActive ? "favorite-active" : ""}
-              onClick={() => appActions.toggleFavorite(vehicle)}
+              className="vehicle-action-secondary"
+              onClick={() => setShowDetailModal(true)}
             >
-              {favoriteActive ? "Guardado" : "Favorito"}
+              Ver detalle
             </button>
 
             <button
-              className={reserved ? "vehicle-contact-disabled" : ""}
+              className={reserved ? "vehicle-contact-disabled" : "vehicle-action-primary"}
               disabled={reserved}
               onClick={() => setShowContactGate(true)}
               title={
@@ -178,6 +210,24 @@ export default function VehicleCardPublic({
             >
               {reserved ? "Reservado" : "Contactar"}
             </button>
+
+            <button
+              className="vehicle-action-quiet"
+              onClick={() => appActions?.addToCompare?.(vehicle)}
+            >
+              Comparar
+            </button>
+
+            <button
+              className={
+                favoriteActive
+                  ? "vehicle-action-quiet favorite-active"
+                  : "vehicle-action-quiet"
+              }
+              onClick={() => appActions?.toggleFavorite?.(vehicle)}
+            >
+              {favoriteActive ? "Guardado" : "Favorito"}
+            </button>
           </div>
         </div>
       </article>
@@ -187,8 +237,8 @@ export default function VehicleCardPublic({
           vehicle={vehicle}
           dealer={safeDealer}
           onClose={() => setShowDetailModal(false)}
-          onCompare={() => appActions.addToCompare(vehicle)}
-          onFavorite={() => appActions.toggleFavorite(vehicle)}
+          onCompare={() => appActions?.addToCompare?.(vehicle)}
+          onFavorite={() => appActions?.toggleFavorite?.(vehicle)}
           favoriteActive={favoriteActive}
           onContact={() => {
             if (reserved) return;
