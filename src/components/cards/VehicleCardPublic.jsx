@@ -64,7 +64,10 @@ function getVehicleImageUrl(vehicle) {
 }
 
 function getVehicleTitle(vehicle) {
-  return [vehicle?.brand, vehicle?.model].filter(Boolean).join(" ") || "Vehículo publicado";
+  return (
+    [vehicle?.brand, vehicle?.model].filter(Boolean).join(" ") ||
+    "Vehículo publicado"
+  );
 }
 
 function getLocationLabel(vehicle) {
@@ -78,6 +81,26 @@ function getLocationLabel(vehicle) {
   return "Ubicación a confirmar";
 }
 
+function getRankClass(rankTheme) {
+  const normalizedRank = String(rankTheme || "inicio").trim().toLowerCase();
+
+  if (normalizedRank === "pro") return "pro";
+  if (normalizedRank === "elite") return "elite";
+  if (normalizedRank === "platinum") return "platinum";
+
+  return "inicio";
+}
+
+function getRankIcon(rankTheme) {
+  const normalizedRank = String(rankTheme || "inicio").trim().toLowerCase();
+
+  if (normalizedRank === "elite") return "✦";
+  if (normalizedRank === "platinum") return "◆";
+  if (normalizedRank === "pro") return "◇";
+
+  return "•";
+}
+
 function getMarketBadge(delta) {
   if (!delta) return null;
 
@@ -89,13 +112,13 @@ function getMarketBadge(delta) {
   if (delta.isBelowMarket) {
     return {
       tone: "below",
-      text: `${absolutePercent.toFixed(1)}% debajo del mercado`,
+      text: `${absolutePercent.toFixed(1)}% debajo`,
     };
   }
 
   return {
     tone: "above",
-    text: `${absolutePercent.toFixed(1)}% arriba del mercado`,
+    text: `${absolutePercent.toFixed(1)}% arriba`,
   };
 }
 
@@ -111,6 +134,8 @@ export default function VehicleCardPublic({
 
   const safeDealer = dealer || fallbackDealer;
   const permissions = getEffectiveDealerPermissions(safeDealer);
+  const rankClass = getRankClass(permissions.rankTheme);
+  const rankIcon = getRankIcon(rankClass);
   const delta = getMarketDelta(vehicle);
   const marketBadge = getMarketBadge(delta);
   const favoriteActive = appActions?.isFavorite?.(vehicle.id);
@@ -130,58 +155,84 @@ export default function VehicleCardPublic({
   return (
     <>
       <article
-        className={`vehicle-card dealer-rank-${permissions.rankTheme} ${
+        className={`vehicle-card vehicle-card--${rankClass} dealer-rank-${permissions.rankTheme} ${
           reserved ? "vehicle-card-reserved" : ""
         }`}
       >
-        <div className="vehicle-card-media">
-          {imageUrl ? (
+          <div className="vehicle-card__media">
+               <div className="vehicle-card__topbar">
+              <span className="vehicle-card__rank">
+                <span aria-hidden="true">{rankIcon}</span>
+                {permissions.rankLabel}
+              </span>
+            
+              <span className="vehicle-card__year">
+                {vehicle.year || "Año a confirmar"}
+              </span>
+            </div>
+            
+            <div className="vehicle-card__media-title">
+              <h3 className="vehicle-card__title">{vehicleTitle}</h3>
+            
+              {vehicle.version && (
+                <p className="vehicle-card__version">{vehicle.version}</p>
+              )}
+            </div>
+            
+            {reserved && (
+              <div className="vehicle-card__reserved">Unidad reservada</div>
+            )}
+            
+            {imageUrl ? (
+
             <img
-              className="vehicle-card-image"
+              className="vehicle-card__image"
               src={imageUrl}
               alt={vehicleTitle}
               loading="lazy"
             />
           ) : (
-            <div className="vehicle-card-placeholder">{vehicleTitle}</div>
-          )}
-
-          <div className="vehicle-card-media-shade" aria-hidden="true" />
-
-          {reserved && (
-            <div className="vehicle-reserved-ribbon">Unidad reservada</div>
+            <div className="vehicle-card__placeholder">
+              <span>{vehicleTitle}</span>
+            </div>
           )}
         </div>
 
-        <div className="vehicle-card-body">
-          <div className="vehicle-card-head">
-            <span className="dealer-rank">{permissions.rankLabel}</span>
-            <span className="vehicle-year-pill">
-              {vehicle.year || "Año a confirmar"}
-            </span>
+        <div className="vehicle-card__body">
+
+              <div className="vehicle-card__fact">
+             <span className="vehicle-card__fact-icon" aria-hidden="true">
+               <img src="/icons/speedometer.png" alt="" />
+             </span>
+             <strong>{formatKm(vehicle.kilometers)}</strong>
+
+            <div className="vehicle-card__fact vehicle-card__fact--location">
+              <span aria-hidden="true">⌖</span>
+              <strong>{locationLabel}</strong>
+            </div>
           </div>
 
-          <div className="vehicle-title-block">
-            <h3>{vehicleTitle}</h3>
+          <div className="vehicle-card__price-box">
+            <div className="vehicle-card__price-copy">
+              <span className="vehicle-card__price-label">Precio</span>
+              <strong className="vehicle-card__price">
+                {formatARS(vehicle.price)}
+              </strong>
+            </div>
 
-            {vehicle.version && (
-              <p className="vehicle-version">{vehicle.version}</p>
-            )}
-          </div>
+            <div className="vehicle-card__price-side">
+              {marketBadge && (
+                <span
+                  className={`vehicle-card__market vehicle-card__market--${marketBadge.tone}`}
+                >
+                  {marketBadge.text}
+                </span>
+              )}
 
-          <div className="vehicle-specs-row">
-            <span>{formatKm(vehicle.kilometers)}</span>
-            <span>{locationLabel}</span>
-          </div>
-
-          <div className="vehicle-price-row">
-            <strong className="vehicle-price">{formatARS(vehicle.price)}</strong>
-
-            {marketBadge && (
-              <span className={`vehicle-market-badge market-${marketBadge.tone}`}>
-                {marketBadge.text}
+              <span className="vehicle-card__price-icon" aria-hidden="true">
+                <img src="/icons/price.png" alt="" />
               </span>
-            )}
+            </div>
           </div>
 
           {lastLead && (
@@ -190,16 +241,22 @@ export default function VehicleCardPublic({
             </p>
           )}
 
-          <div className="vehicle-actions vehicle-actions-premium">
+          <div className="vehicle-card__actions">
             <button
-              className="vehicle-action-secondary"
+              type="button"
+              className="vehicle-card__btn vehicle-card__btn--primary"
               onClick={() => setShowDetailModal(true)}
             >
-              Ver detalle
+              Ver detalle <span aria-hidden="true">→</span>
             </button>
 
             <button
-              className={reserved ? "vehicle-contact-disabled" : "vehicle-action-primary"}
+              type="button"
+              className={
+                reserved
+                  ? "vehicle-card__btn vehicle-card__btn--disabled"
+                  : "vehicle-card__btn"
+              }
               disabled={reserved}
               onClick={() => setShowContactGate(true)}
               title={
@@ -208,21 +265,23 @@ export default function VehicleCardPublic({
                   : "Contactar dealer"
               }
             >
-              {reserved ? "Reservado" : "Contactar"}
+              Contactar
             </button>
 
             <button
-              className="vehicle-action-quiet"
+              type="button"
+              className="vehicle-card__btn"
               onClick={() => appActions?.addToCompare?.(vehicle)}
             >
               Comparar
             </button>
 
             <button
+              type="button"
               className={
                 favoriteActive
-                  ? "vehicle-action-quiet favorite-active"
-                  : "vehicle-action-quiet"
+                  ? "vehicle-card__btn vehicle-card__btn--favorite is-active"
+                  : "vehicle-card__btn vehicle-card__btn--favorite"
               }
               onClick={() => appActions?.toggleFavorite?.(vehicle)}
             >
