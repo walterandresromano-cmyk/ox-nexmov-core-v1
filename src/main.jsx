@@ -13,6 +13,8 @@ import "./styles/sellVehicle.css";
 import "./styles/joinNetwork.css";
 import "./styles/about.css";
 import "./styles/faq.css";
+import "./styles/auth.css";
+
 import "./styles/responsive.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
