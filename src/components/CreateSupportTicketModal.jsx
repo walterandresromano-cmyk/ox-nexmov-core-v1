@@ -31,10 +31,22 @@ export default function CreateSupportTicketModal({
     setSubmitting(true);
     setError("");
 
+    if (!form.subject.trim()) {
+      setError("Ingresa un asunto para el ticket.");
+      setSubmitting(false);
+      return;
+    }
+
+    if (!form.message.trim()) {
+      setError("Describi la consulta o el problema.");
+      setSubmitting(false);
+      return;
+    }
+
     const { ticket, error: ticketError } = await createDealerSupportTicket({
       dealerId: dealer?.id,
-      subject: form.subject,
-      message: form.message,
+      subject: form.subject.trim(),
+      message: form.message.trim(),
       priority: form.priority,
       category: form.category,
     });
@@ -148,7 +160,13 @@ export default function CreateSupportTicketModal({
 
             {error && <p className="form-error">{error}</p>}
 
-            <button className="primary-action" type="submit" disabled={submitting}>
+            <button
+              className="primary-action"
+              type="submit"
+              disabled={
+                submitting || !form.subject.trim() || !form.message.trim()
+              }
+            >
               {submitting ? "Creando ticket..." : "Crear ticket"}
             </button>
           </form>

@@ -13,7 +13,6 @@ import LeadStatusSelect from "../../components/LeadStatusSelect.jsx";
 import TicketDetailModal from "../../components/TicketDetailModal.jsx";
 import TicketStatusSelect from "../../components/TicketStatusSelect.jsx";
 
-import { mockDealers } from "../../data/mockData.js";
 import {
   canDealerPublish,
   getEffectiveDealerPermissions,
@@ -93,8 +92,8 @@ function formatKm(value) {
 export default function DealerPanel({ authProfile }) {
   const [activeDealerModule, setActiveDealerModule] = useState("summary");
 
-  const [dealers, setDealers] = useState(mockDealers);
-  const [selectedDealerId, setSelectedDealerId] = useState(mockDealers[0]?.id);
+  const [dealers, setDealers] = useState([]);
+  const [selectedDealerId, setSelectedDealerId] = useState(null);
   const [loadingDealers, setLoadingDealers] = useState(true);
   const [dealersError, setDealersError] = useState("");
 
@@ -133,10 +132,11 @@ export default function DealerPanel({ authProfile }) {
       await listDealersForCurrentUser();
 
     if (error) {
-      setDealers(mockDealers);
-      setSelectedDealerId(mockDealers[0]?.id);
+      setDealers([]);
+      setSelectedDealerId(null);
       setDealersError(
-        `${error.message}. Usando datos mock como respaldo temporal.`
+        error.message ||
+          "No pudimos cargar tu cuenta dealer. Reintenta o contacta a soporte."
       );
       setLoadingDealers(false);
       return;
@@ -531,7 +531,11 @@ export default function DealerPanel({ authProfile }) {
         {activeDealerModule === "summary" && (
           <div className="dealer-modules-grid">
             <article
-              className="dealer-module-card clickable-module-card"
+              className={
+                permissions.sellVehicleLeads
+                  ? "dealer-module-card clickable-module-card"
+                  : "dealer-module-card dealer-module-card--locked"
+              }
               onClick={() => openModule("inventory")}
             >
               <h3>Mis vehículos</h3>
@@ -544,14 +548,25 @@ export default function DealerPanel({ authProfile }) {
             </article>
 
             <article
-              className="dealer-module-card clickable-module-card"
-              onClick={() => openModule("publish")}
+              className={
+                publishCheck.allowed
+                  ? "dealer-module-card clickable-module-card"
+                  : "dealer-module-card dealer-module-card--locked"
+              }
+              onClick={() => {
+                if (publishCheck.allowed) openModule("publish");
+              }}
             >
               <h3>Alta de vehículo</h3>
               <p>
                 Carga guiada por catálogo, validación automática y control de
                 cupo.
               </p>
+              {!publishCheck.allowed && (
+                <small className="dealer-module-lock-reason">
+                  {publishCheck.reason || "No disponible por el estado del plan."}
+                </small>
+              )}
               <button type="button" disabled={!publishCheck.allowed}>
                 Publicar vehículo
               </button>
@@ -570,26 +585,24 @@ export default function DealerPanel({ authProfile }) {
               <button type="button">Abrir leads</button>
             </article>
 
-            <article
-              className="dealer-module-card clickable-module-card"
-              onClick={() => openModule("financing")}
-            >
+            <article className="dealer-module-card dealer-module-card--locked">
               <h3>Financiación</h3>
               <p>
                 {permissions.fullFinancingTools
                   ? "Financiación propia, bancaria y simulador visible al comprador."
                   : "Financiación básica informada. Herramientas completas disponibles en planes superiores."}
               </p>
-              <button type="button">Configurar financiación</button>
+              <button type="button" disabled>
+                Proximamente
+              </button>
             </article>
 
-            <article
-              className="dealer-module-card clickable-module-card"
-              onClick={() => openModule("metrics")}
-            >
+            <article className="dealer-module-card dealer-module-card--locked">
               <h3>Métricas</h3>
               <p>Nivel habilitado: {permissions.metricsLevel}</p>
-              <button type="button">Ver métricas</button>
+              <button type="button" disabled>
+                Proximamente
+              </button>
             </article>
 
             <article
@@ -612,15 +625,23 @@ export default function DealerPanel({ authProfile }) {
             </article>
 
             <article
-              className="dealer-module-card clickable-module-card"
-              onClick={() => openModule("urgent")}
+              className={
+                reviewVehiclesCount > 0
+                  ? "dealer-module-card clickable-module-card"
+                  : "dealer-module-card dealer-module-card--locked"
+              }
+              onClick={() => {
+                if (reviewVehiclesCount > 0) openModule("urgent");
+              }}
             >
               <h3>Urgencias / Observaciones</h3>
               <p>
                 Publicaciones observadas, revisión urgente y correcciones
                 necesarias.
               </p>
-              <button type="button">Ver urgencias</button>
+              <button type="button" disabled={reviewVehiclesCount === 0}>
+                Ver urgencias
+              </button>
             </article>
 
             <article
