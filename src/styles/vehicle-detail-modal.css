@@ -1,0 +1,537 @@
+/* =========================================================
+   oX NEXMOV — Vehicle Detail Modal isolated styles
+   ========================================================= */
+
+.modal-backdrop:has(.vehicle-detail-modal) {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+.vehicle-detail-modal {
+  width: min(1180px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 22px;
+  box-sizing: border-box;
+}
+
+.vehicle-detail-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.vehicle-detail-head h2 {
+  margin: 0;
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  line-height: 1;
+}
+
+.vehicle-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.95fr) minmax(380px, 1.05fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.vehicle-detail-gallery {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.detail-main-image {
+  position: relative;
+  width: 100%;
+  height: clamp(300px, 44vh, 500px);
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 30% 10%, rgba(56, 189, 248, 0.16), transparent 36%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98));
+}
+
+.detail-main-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  padding: 0;
+  box-sizing: border-box;
+  background: #050914;
+}
+
+.detail-thumbs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.detail-thumbs button {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.74);
+  cursor: pointer;
+  opacity: 0.74;
+}
+
+.detail-thumbs button.active {
+  opacity: 1;
+  border-color: rgba(56, 189, 248, 0.48);
+}
+
+.detail-thumbs img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vehicle-detail-info {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.detail-rank-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.detail-price {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+}
+
+.detail-market-box,
+.detail-dealer-box,
+.detail-notes-box,
+.detail-spec-grid div {
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.58);
+  padding: 14px;
+}
+
+.detail-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.detail-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.detail-actions .primary-action {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .modal-backdrop:has(.vehicle-detail-modal) {
+    place-items: start center;
+    padding: 12px;
+  }
+
+  .vehicle-detail-modal {
+    width: min(100%, calc(100vw - 24px));
+    max-height: none;
+    margin-bottom: 92px;
+    padding: 16px;
+  }
+
+  .vehicle-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-main-image {
+    height: clamp(230px, 38vh, 380px);
+    min-height: 230px;
+  }
+
+  .detail-thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .detail-spec-grid,
+  .detail-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-actions .primary-action {
+    grid-column: auto;
+  }
+}
+
+/* Web premium polish + zoom */
+
+.vehicle-detail-modal {
+  width: min(1280px, calc(100vw - 32px));
+}
+
+.vehicle-detail-layout {
+  grid-template-columns: minmax(520px, 1.08fr) minmax(420px, 0.92fr);
+}
+
+.detail-gallery-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.86), rgba(2, 6, 23, 0.96));
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  padding: 14px;
+}
+
+.detail-main-image {
+  height: clamp(360px, 50vh, 560px);
+  min-height: 360px;
+  border-radius: 22px;
+  cursor: zoom-in;
+}
+
+.detail-main-image img {
+  padding: 0;
+  object-fit: contain;
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+
+.detail-main-image:hover img {
+  filter: saturate(1.04) contrast(1.03);
+}
+
+.detail-main-image.is-zoomed {
+  overflow: auto;
+  cursor: zoom-out;
+}
+
+.detail-main-image.is-zoomed img {
+  width: auto;
+  height: auto;
+  min-width: 135%;
+  min-height: 135%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+}
+
+.detail-image-zoom-btn {
+  position: absolute;
+  left: 26px;
+  bottom: 26px;
+  z-index: 6;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 999px;
+  background: rgba(2, 6, 23, 0.76);
+  color: rgba(248, 250, 252, 0.92);
+  padding: 8px 13px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.detail-thumbs {
+  grid-template-columns: repeat(4, minmax(0, 118px));
+  justify-content: start;
+}
+
+.detail-thumbs button {
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.vehicle-detail-info > * {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.detail-market-box,
+.detail-dealer-box,
+.detail-notes-box,
+.detail-spec-grid div {
+  background:
+    radial-gradient(circle at 96% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
+    rgba(15, 23, 42, 0.62);
+}
+
+@media (max-width: 900px) {
+  .vehicle-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-gallery-frame {
+    padding: 10px;
+  }
+
+  .detail-main-image {
+    height: clamp(250px, 38vh, 390px);
+    min-height: 250px;
+  }
+
+  .detail-main-image.is-zoomed img {
+    min-width: 150%;
+    min-height: 150%;
+  }
+
+  .detail-thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   Vehicle Detail Modal — Premium pass
+   ========================================================= */
+
+.vehicle-detail-modal {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.11), transparent 30%),
+    radial-gradient(circle at 100% 8%, rgba(245, 197, 66, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(11, 18, 32, 0.98), rgba(2, 6, 23, 0.99));
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.vehicle-detail-head {
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.11);
+}
+
+.vehicle-detail-head .eyebrow {
+  width: fit-content;
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: rgba(14, 165, 233, 0.1);
+  color: rgba(186, 230, 253, 0.95);
+}
+
+.detail-gallery-frame {
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(56, 189, 248, 0.14), transparent 38%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.74), rgba(2, 6, 23, 0.95));
+  box-shadow:
+    0 18px 60px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.detail-main-image {
+  border-color: rgba(56, 189, 248, 0.18);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.045), transparent 34%),
+    #050914;
+}
+
+.detail-thumbs button {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.detail-rank-row {
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.detail-status {
+  color: #86efac;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255,255,255,.16), transparent 30%),
+    rgba(22, 101, 52, 0.34);
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.detail-price {
+  display: block;
+  padding: 18px 18px 16px;
+  border: 1px solid rgba(245, 197, 66, 0.2);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(245, 197, 66, 0.14), transparent 36%),
+    linear-gradient(135deg, rgba(24, 21, 14, 0.88), rgba(2, 6, 23, 0.92));
+  box-shadow:
+    0 16px 44px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.detail-market-box {
+  border-color: rgba(34, 197, 94, 0.18);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.1), transparent 34%),
+    rgba(15, 23, 42, 0.62);
+}
+
+.detail-spec-grid div,
+.detail-dealer-box,
+.detail-notes-box {
+  border-color: rgba(148, 163, 184, 0.15);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.07), transparent 30%),
+    rgba(15, 23, 42, 0.66);
+}
+
+.detail-actions button {
+  background:
+    linear-gradient(180deg, rgba(30, 64, 175, 0.6), rgba(15, 23, 42, 0.9));
+  border-color: rgba(96, 165, 250, 0.22);
+}
+
+.detail-actions button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(125, 211, 252, 0.42);
+}
+
+.detail-actions .primary-action {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255,255,255,.22), transparent 30%),
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+  border-color: rgba(125, 211, 252, 0.5);
+}
+
+/* Modal size compact web pass */
+
+.vehicle-detail-modal {
+  width: min(1040px, calc(100vw - 56px));
+  max-height: calc(100vh - 48px);
+  padding: 18px;
+}
+
+.vehicle-detail-head {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+}
+
+.vehicle-detail-head h2 {
+  font-size: clamp(1.55rem, 2.4vw, 2.25rem);
+}
+
+.vehicle-detail-layout {
+  grid-template-columns: minmax(420px, 0.95fr) minmax(360px, 1fr);
+  gap: 16px;
+}
+
+.detail-gallery-frame {
+  min-height: auto;
+  padding: 10px;
+}
+
+.detail-main-image {
+  height: clamp(280px, 38vh, 410px);
+  min-height: 280px;
+}
+
+.detail-price {
+  font-size: clamp(1.7rem, 3.2vw, 2.45rem);
+  padding: 14px;
+}
+
+.vehicle-detail-info {
+  gap: 9px;
+}
+
+.detail-market-box,
+.detail-dealer-box,
+.detail-notes-box,
+.detail-spec-grid div {
+  padding: 11px;
+  border-radius: 15px;
+}
+
+.detail-spec-grid {
+  gap: 8px;
+}
+
+.detail-thumbs {
+  gap: 7px;
+}
+
+.detail-actions button {
+  min-height: 38px;
+  padding: 9px 10px;
+}
+
+/* Compact header removal — title moves to right column */
+
+.vehicle-detail-modal {
+  position: relative;
+  padding-top: 18px;
+}
+
+.vehicle-detail-head {
+  display: none;
+}
+
+.vehicle-detail-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 20;
+}
+
+.vehicle-detail-layout {
+  align-items: start;
+}
+
+.vehicle-detail-title-card {
+  display: grid;
+  gap: 8px;
+  padding: 0 56px 14px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.vehicle-detail-title-card .eyebrow {
+  width: fit-content;
+  margin: 0;
+}
+
+.vehicle-detail-title-card h2 {
+  margin: 0;
+  font-size: clamp(1.65rem, 3vw, 2.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.vehicle-detail-title-card p {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 900px) {
+  .vehicle-detail-title-card {
+    padding-right: 46px;
+  }
+
+  .vehicle-detail-title-card h2 {
+    font-size: clamp(1.45rem, 9vw, 2.25rem);
+  }
+}

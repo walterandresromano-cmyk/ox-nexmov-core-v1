@@ -223,7 +223,7 @@
 }
 
 .ox-home-trust-strip-v3 article > span {
-  display: grid;
+  display: inline-grid;
   place-items: center;
   width: 20px;
   height: 20px;
@@ -232,6 +232,10 @@
   color: #38bdf8;
   background: rgba(14, 165, 233, 0.11);
   border: 1px solid rgba(56, 189, 248, 0.23);
+  font-size: 0.68rem;
+  font-weight: 950;
+  line-height: 1;
+  text-align: center;
 }
 
 .ox-home-trust-strip-v3 strong {
@@ -496,12 +500,16 @@
 }
 
 .ox-home-section-actions-v3 button {
+  display: inline-grid;
+  place-items: center;
+  min-height: 28px;
   border: 1px solid rgba(56, 189, 248, 0.23);
   border-radius: 999px;
   background: rgba(15, 23, 42, 0.80);
   color: rgba(240, 249, 255, 0.93);
   padding: 6px 9px;
   font-size: 0.6rem;
+  line-height: 1;
   font-weight: 900;
   cursor: pointer;
 }
@@ -513,11 +521,11 @@
 .ox-home-vehicles-carousel-v3 {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(205px, 232px);
+  grid-auto-columns: minmax(215px, 242px);
   gap: 10px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 4px 2px 9px;
+  padding: 4px 1px 9px;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -535,7 +543,7 @@
 .ox-home-vehicles-carousel-v3 .vehicle-card {
   height: 100%;
   min-height: 0;
-  border-radius: 20px;
+  border-radius: 18px;
 }
 .ox-home-vehicles-carousel-v3 .vehicle-card-media {
   height: 108px;
@@ -555,7 +563,7 @@
   height: 100%;
   display: grid;
   place-items: center;
-  padding: 10px;
+  padding: 8px;
 }
 
 .ox-home-vehicles-carousel-v3 .vehicle-card {
@@ -572,6 +580,13 @@
   gap: 6px;
 }
 
+.ox-home-vehicles-carousel-v3 .vehicle-card__rank,
+.ox-home-vehicles-carousel-v3 .vehicle-card__year {
+  min-height: 25px;
+  padding: 5px 8px;
+  font-size: 0.48rem;
+}
+
 .ox-home-vehicles-carousel-v3 .vehicle-card h3 {
   margin: 6px 0 3px;
 }
@@ -584,6 +599,24 @@
 
 .ox-home-vehicles-carousel-v3 .vehicle-price {
   margin-top: 7px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__facts {
+  gap: 5px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__fact {
+  min-width: 0;
+  padding: 5px 6px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__price-box {
+  padding: 8px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__price-icon {
+  width: 28px;
+  height: 28px;
 }
 
 .ox-home-vehicles-carousel-v3 .vehicle-actions {
@@ -610,9 +643,9 @@
 }
 
 .ox-home-vehicles-carousel-v3 .vehicle-actions button {
-  min-height: 26px;
+  min-height: 25px;
   padding: 5px 4px;
-  font-size: 0.54rem;
+  font-size: 0.51rem;
   border-radius: 9px;
 }
 
@@ -622,50 +655,54 @@
 .ox-home-confidence-v3 {
   display: grid;
   align-content: start;
-  gap: 8px;
+  gap: 9px;
 }
 
 .ox-home-confidence-list-v3 {
   display: grid;
-  gap: 6px;
+  gap: 8px;
 }
 
 .ox-home-confidence-list-v3 article {
   display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  min-height: 42px;
-  padding: 7px 8px;
+  gap: 10px;
+  align-items: center;
+  min-height: 52px;
+  padding: 9px 10px;
 
   border: 1px solid rgba(148, 163, 184, 0.14);
-  border-radius: 15px;
+  border-radius: 16px;
   background: rgba(15, 23, 42, 0.54);
 }
 
 .ox-home-confidence-list-v3 article > span {
-  display: grid;
+  display: inline-grid;
   place-items: center;
-  width: 23px;
-  height: 23px;
+  width: 28px;
+  height: 28px;
   flex: 0 0 auto;
-  border-radius: 9px;
+  border-radius: 10px;
   color: #38bdf8;
   background: rgba(14, 165, 233, 0.10);
   border: 1px solid rgba(56, 189, 248, 0.22);
+  font-size: 0.72rem;
+  font-weight: 950;
+  line-height: 1;
+  text-align: center;
 }
 
 .ox-home-confidence-list-v3 strong {
   display: block;
   color: rgba(248, 250, 252, 0.94);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   line-height: 1.15;
 }
 
 .ox-home-confidence-list-v3 p {
   margin: 2px 0 0;
   color: rgba(203, 213, 225, 0.66);
-  font-size: 0.56rem;
-  line-height: 1.24;
+  font-size: 0.57rem;
+  line-height: 1.28;
 }
 
 .ox-home-confidence-cta-v3 {
@@ -673,9 +710,9 @@
   overflow: hidden;
   display: grid;
   gap: 4px;
-  margin-top: 0;
-  padding: 11px;
-  min-height: 60px;
+  margin-top: 2px;
+  padding: 12px 14px;
+  min-height: 74px;
   border: 1px solid rgba(56, 189, 248, 0.18);
   border-radius: 16px;
   background:
@@ -686,10 +723,10 @@
 .ox-home-confidence-cta-v3::after {
   content: "";
   position: absolute;
-  right: 14px;
-  bottom: 10px;
-  width: 104px;
-  height: 32px;
+  right: 18px;
+  bottom: 12px;
+  width: 130px;
+  height: 40px;
   opacity: 0.78;
   background:
     linear-gradient(0deg, transparent 45%, rgba(56, 189, 248, 0.55) 46%, transparent 48%),
@@ -700,7 +737,7 @@
   position: relative;
   z-index: 1;
   color: rgba(248, 250, 252, 0.96);
-  font-size: 0.78rem;
+  font-size: 0.84rem;
   line-height: 1.15;
 }
 
@@ -708,7 +745,8 @@
   position: relative;
   z-index: 1;
   color: rgba(203, 213, 225, 0.72);
-  font-size: 0.64rem;
+  font-size: 0.66rem;
+  line-height: 1.25;
 }
 
 /* =========================================================
@@ -725,25 +763,47 @@
 .ox-home-inventory-v3 {
   position: relative;
   overflow: hidden;
-  min-height: 170px;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  column-gap: 16px;
+  row-gap: 10px;
+  min-height: 244px;
+  align-self: stretch;
 }
+
+.ox-home-inventory-v3 > h2,
+.ox-home-inventory-v3 > p {
+  grid-column: 1 / -1;
+}
+
+.ox-home-inventory-v3 > p {
+  margin-bottom: 2px;
+}
+
 .ox-home-buyer-v3,
 .ox-home-dealer-v3 {
-  min-height: 170px;
+  min-height: 244px;
+  align-self: stretch;
 }
 
 .ox-home-map-v3 {
-  position: absolute;
-  left: 12px;
-  bottom: 90px;
-  width: 176px;
-  height: 126px;
+  grid-column: 1;
+  grid-row: 3 / span 2;
+  position: relative;
+  left: auto;
+  bottom: auto;
+  align-self: start;
+  width: 100%;
+  height: 100%;
+  min-height: 176px;
   opacity: 0.96;
-  border-radius: 24px;
+  border-radius: 22px;
   background-image: url("/home-network.svg");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  background-color: rgba(2, 20, 38, 0.45);
   filter:
     drop-shadow(0 0 22px rgba(14, 165, 233, 0.10))
     drop-shadow(0 12px 28px rgba(0, 0, 0, 0.22));
@@ -755,18 +815,22 @@
 }
 
 .ox-home-stats-v3 {
+  grid-column: 2;
+  grid-row: 3;
   position: relative;
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 7px;
-  margin-top: 18px;
-  margin-left: 188px;
+  align-self: stretch;
+  margin: 0;
 }
 
 .ox-home-stats-v3 div {
-  min-height: 62px;
-  padding: 9px;
+  display: grid;
+  align-content: center;
+  min-height: 96px;
+  padding: 12px;
   border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 15px;
   background: rgba(15, 23, 42, 0.50);
@@ -789,13 +853,16 @@
 }
 
 .ox-home-locations-v3 {
+  grid-column: 2;
+  grid-row: 4;
   position: relative;
   z-index: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  margin-top: 10px;
-  margin-left: 188px;
+  align-self: end;
+  align-content: start;
+  margin: 0;
 }
 
 .ox-home-locations-v3 button,
@@ -824,42 +891,58 @@
 .ox-home-buyer-v3,
 .ox-home-dealer-v3 {
   display: grid;
-  align-content: start;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  align-content: stretch;
+  gap: 0;
 }
 
 .ox-home-buyer-v3 ol,
 .ox-home-dealer-v3 ul {
   display: grid;
-  gap: 5px;
-  margin: 8px 0 0;
+  align-content: space-between;
+  gap: 12px;
+  margin: 16px 0 0;
   padding: 0;
   list-style: none;
+}
+
+.ox-home-buyer-v3 ol {
+  counter-reset: buyer-step;
 }
 
 .ox-home-buyer-v3 li,
 .ox-home-dealer-v3 li {
   position: relative;
-  min-height: 20px;
-  padding-left: 26px;
+  display: grid;
+  align-items: center;
+  min-height: 22px;
+  padding-left: 32px;
   color: rgba(226, 232, 240, 0.86);
   font-size: 0.64rem;
-  line-height: 1.32;
+  line-height: 1.28;
+}
+
+.ox-home-buyer-v3 li {
+  counter-increment: buyer-step;
 }
 
 .ox-home-buyer-v3 li::before {
-  content: counter(list-item);
+  content: counter(buyer-step);
   position: absolute;
   left: 0;
-  top: -1px;
-  display: grid;
+  top: 50%;
+  display: inline-grid;
   place-items: center;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 999px;
   background: linear-gradient(135deg, #0ea5e9, #2563eb);
   color: white;
-  font-size: 0.54rem;
+  font-size: 0.58rem;
   font-weight: 950;
+  line-height: 1;
+  text-align: center;
+  transform: translateY(-50%);
 }
 
 .ox-home-dealer-v3 li::before {
@@ -879,9 +962,21 @@
   font-weight: 950;
 }
 
+.ox-home-dealer-v3 li::before {
+  display: inline-grid;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 0.58rem;
+  line-height: 1;
+  text-align: center;
+  transform: translateY(-50%);
+}
+
 .ox-home-dealer-v3 button {
   width: fit-content;
-  margin-top: 12px;
+  align-self: end;
+  margin-top: 18px;
   min-height: 31px;
   padding: 0 11px;
   border: 1px solid rgba(56, 189, 248, 0.26);
@@ -1023,6 +1118,17 @@
   .ox-home-main-grid-v3,
   .ox-home-intelligence-grid-v3 {
     grid-template-columns: 1fr;
+  }
+
+  .ox-home-inventory-v3 {
+    grid-template-columns: 1fr;
+  }
+
+  .ox-home-map-v3,
+  .ox-home-stats-v3,
+  .ox-home-locations-v3 {
+    grid-column: auto;
+    grid-row: auto;
   }
 
   .ox-home-stats-v3,
@@ -1374,6 +1480,11 @@
     min-height: auto;
     padding: 9px 10px;
     border-radius: 15px;
+  }
+
+  .ox-home-confidence-list-v3 article > span {
+    width: 26px;
+    height: 26px;
   }
 
   .ox-home-confidence-list-v3 strong {

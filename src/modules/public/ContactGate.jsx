@@ -5,6 +5,15 @@ const initialForm = {
   message: "",
 };
 
+function getWhatsAppUrl(phone, message) {
+  const digits = String(phone || "").replace(/\D/g, "");
+
+  if (!digits) return "";
+
+  const normalizedPhone = digits.startsWith("54") ? digits : `54${digits}`;
+  return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`;
+}
+
 export default function ContactGate({
   vehicle,
   dealer,
@@ -13,11 +22,20 @@ export default function ContactGate({
   onClose,
   onLeadCreated,
   onRequireLogin,
+  onNavigate,
 }) {
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [createdLead, setCreatedLead] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const whatsappUrl = createdLead
+    ? getWhatsAppUrl(
+        dealer?.phone || dealer?.phone_visible || dealer?.phone_whatsapp,
+        `Hola, quiero consultar por ${vehicle?.brand || ""} ${
+          vehicle?.model || ""
+        } publicado en oX NEXMOV.`
+      )
+    : "";
 
   function updateField(field, value) {
     setForm((current) => ({
@@ -141,14 +159,47 @@ export default function ContactGate({
               correspondiente luego de esta confirmación.
             </p>
 
+            <p>
+              Si el dealer tiene WhatsApp cargado, podes abrirlo ahora. Tambien
+              podes revisar esta consulta desde tu panel.
+            </p>
+
             <div className="lead-debug">
               <span>ID lead</span>
               <strong>{createdLead.id}</strong>
             </div>
 
-            <button className="primary-action" onClick={onClose}>
-              Cerrar
-            </button>
+            <div className="contact-next-actions">
+              {whatsappUrl && (
+                <a
+                  className="primary-action"
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Abrir WhatsApp
+                </a>
+              )}
+
+              <button
+                className="primary-action secondary-action"
+                type="button"
+                onClick={() => {
+                  onClose?.();
+                  onNavigate?.("buyer");
+                }}
+              >
+                Ver mis consultas
+              </button>
+
+              <button
+                className="primary-action secondary-action"
+                type="button"
+                onClick={onClose}
+              >
+                Cerrar
+              </button>
+            </div>
           </div>
         )}
       </section>

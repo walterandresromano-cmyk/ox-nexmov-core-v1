@@ -315,6 +315,7 @@ export default function VehicleCardPublic({
           authProfile={appActions?.authProfile}
           onClose={() => setShowContactGate(false)}
           onRequireLogin={requireLoginForContact}
+          onNavigate={onNavigate}
           onLeadCreated={(lead) => setLastLead(lead)}
         />
       )}

@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
+import "../../styles/vehicle-detail-modal.css";
 import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 
@@ -79,14 +80,89 @@ export default function VehicleDetailModal({
   const delta = getMarketDelta(vehicle);
   const images = useMemo(() => getVehicleImages(vehicle), [vehicle]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [imageZoomed, setImageZoomed] = useState(false);
+  const mainImageRef = useRef(null);
+
+  function toggleImageZoom() {
+  setImageZoomed((current) => !current);
+}
   const selectedImage = images[selectedImageIndex];
   const reserved = isVehicleReserved(vehicle);
 
   return (
-    <div className="modal-backdrop">
-      <section className="vehicle-detail-modal">
-        <div className="vehicle-detail-head">
-          <div>
+  <div className="modal-backdrop">
+    <section className="vehicle-detail-modal">
+      <button
+        className="modal-close-btn vehicle-detail-close"
+        onClick={onClose}
+      >
+        ×
+      </button>
+
+      <div className="vehicle-detail-layout">
+       <div className="vehicle-detail-gallery">
+  <div className="detail-gallery-frame">
+    <div
+      ref={mainImageRef}
+      className={`detail-main-image dealer-rank-${permissions.rankTheme} ${
+        imageZoomed ? "is-zoomed" : ""
+      }`}
+      onClick={selectedImage?.url ? toggleImageZoom : undefined}
+    >
+      {selectedImage?.url ? (
+        <img
+          src={selectedImage.url}
+          alt={`${vehicle.brand} ${vehicle.model}`}
+          loading="lazy"
+          draggable="false"
+        />
+      ) : (
+        <span>
+          {vehicle.brand} {vehicle.model}
+        </span>
+      )}
+
+      {reserved && (
+        <div className="vehicle-reserved-ribbon">Unidad reservada</div>
+      )}
+
+      {selectedImage?.url && (
+        <button
+          className="detail-image-zoom-btn"
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            toggleImageZoom();
+          }}
+        >
+          {imageZoomed ? "Restaurar" : "Zoom"}
+        </button>
+      )}
+    </div>
+  </div>
+
+  {images.length > 1 && (
+    <div className="detail-thumbs">
+      {images.slice(0, 12).map((image, index) => (
+        <button
+          key={`${image.url}-${index}`}
+          className={index === selectedImageIndex ? "active" : ""}
+          type="button"
+          onClick={() => {
+            setSelectedImageIndex(index);
+            setImageZoomed(false);
+          }}
+          aria-label={`Ver imagen ${index + 1}`}
+        >
+          <img src={image.url} alt={image.name || `Imagen ${index + 1}`} />
+        </button>
+      ))}
+    </div>
+  )}
+</div>
+
+          <div className="vehicle-detail-info">
+            <div className="vehicle-detail-title-card">
             <p className="eyebrow">Detalle del vehículo</p>
             <h2>
               {vehicle.brand} {vehicle.model}
@@ -95,50 +171,6 @@ export default function VehicleDetailModal({
               {vehicle.version} · {vehicle.year} · {formatKm(vehicle.kilometers)}
             </p>
           </div>
-
-          <button className="modal-close-btn" onClick={onClose}>
-            ×
-          </button>
-        </div>
-
-        <div className="vehicle-detail-layout">
-          <div className="vehicle-detail-gallery">
-            <div className={`detail-main-image dealer-rank-${permissions.rankTheme}`}>
-              {selectedImage?.url ? (
-                <img
-                  src={selectedImage.url}
-                  alt={`${vehicle.brand} ${vehicle.model}`}
-                  loading="lazy"
-                />
-              ) : (
-                <span>
-                  {vehicle.brand} {vehicle.model}
-                </span>
-              )}
-
-              {reserved && (
-                <div className="vehicle-reserved-ribbon">Unidad reservada</div>
-              )}
-            </div>
-
-            {images.length > 1 && (
-              <div className="detail-thumbs">
-                {images.slice(0, 12).map((image, index) => (
-                  <button
-                    key={`${image.url}-${index}`}
-                    className={index === selectedImageIndex ? "active" : ""}
-                    type="button"
-                    onClick={() => setSelectedImageIndex(index)}
-                    aria-label={`Ver imagen ${index + 1}`}
-                  >
-                    <img src={image.url} alt={image.name || `Imagen ${index + 1}`} />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="vehicle-detail-info">
             <div className="detail-rank-row">
               <span className={`admin-chip rank-${permissions.rankTheme}`}>
                 {permissions.rankLabel}

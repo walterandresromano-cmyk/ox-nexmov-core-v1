@@ -133,7 +133,7 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
           solicitud y derivarla a dealers habilitados según criterio operativo.
         </p>
 
-        {!authUser?.id && (
+        {/*
           <div className="auth-warning">
             Para enviar una solicitud de venta tenés que iniciar sesión. Esto nos
             permite generar trazabilidad y evitar consultas anónimas.
@@ -147,8 +147,28 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
               </button>
             </div>
           </div>
-        )}
+        */}
 
+        {!authUser?.id ? (
+          <div className="sell-vehicle-login-gate">
+            <article className="sell-vehicle-info-card">
+              <span>Acceso requerido</span>
+              <h2>Ingresá para cargar tu vehículo</h2>
+              <p>
+                El formulario se habilita después de iniciar sesión para que la
+                solicitud quede asociada a tu perfil y pueda tener seguimiento.
+              </p>
+
+              <button
+                className="primary-action"
+                type="button"
+                onClick={() => onNavigate?.("login")}
+              >
+                Iniciar sesión
+              </button>
+            </article>
+          </div>
+        ) : (
         <div className="sell-vehicle-grid">
           <article className="sell-vehicle-info-card">
             <span>Cómo funciona</span>
@@ -411,6 +431,7 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
             </button>
           </form>
         </div>
+        )}
       </div>
     </section>
   );

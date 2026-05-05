@@ -21,6 +21,15 @@ export default function Layout({
 
       <Footer onNavigate={onNavigate} />
 
+      {appActions?.appNotice && (
+        <div className={`app-notice app-notice--${appActions.appNotice.tone || "info"}`}>
+          <span>{appActions.appNotice.message}</span>
+          <button type="button" onClick={appActions.dismissAppNotice}>
+            Cerrar
+          </button>
+        </div>
+      )}
+
       <CompareTray appActions={appActions} onNavigate={onNavigate} />
 
       <MobileDock

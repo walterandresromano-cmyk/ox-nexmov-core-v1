@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VehicleDetailModal from "./cards/VehicleDetailModal.jsx";
 
 function formatARS(value) {
@@ -396,6 +396,14 @@ export default function CompareTray({ appActions, onNavigate }) {
   const addToCompare = appActions?.addToCompare || (() => {});
   const toggleFavorite = appActions?.toggleFavorite || (() => {});
   const isFavorite = appActions?.isFavorite || (() => false);
+  const compareOpenRequest = appActions?.compareOpenRequest || 0;
+
+  useEffect(() => {
+    if (!compareOpenRequest) return;
+    if (compareItems.length < 2) return;
+
+    setShowCompareModal(true);
+  }, [compareOpenRequest, compareItems.length]);
 
   if (!compareItems.length) return null;
 
