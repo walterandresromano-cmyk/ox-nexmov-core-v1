@@ -1,33 +1,49 @@
-:root {
-  --ox-bg: #070c18;
-  --ox-layer: #0d1627;
-  --ox-card: #13203a;
-  --ox-card-2: #1c2f4e;
-  --ox-text: #e5e7eb;
-  --ox-muted: #9ca3af;
-  --ox-border: rgba(255, 255, 255, 0.1);
-  --ox-blue: #3b82f6;
-  --ox-cyan: #22d3ee;
-  --ox-green: #22c55e;
-  --ox-amber: #f59e0b;
-  --ox-red: #ef4444;
-  --ox-radius: 18px;
-  --ox-max: 1320px;
-}
 /* =========================================================
-   oX NEXMOV — Design System Core Tokens
-   Fuente, espaciado, radios y jerarquía visual global.
-   Basado en Home v3 aprobado.
+   oX NEXMOV Core v1 - Master Visual System
+   Fuente unica para identidad, escala, layout y componentes.
    ========================================================= */
 
 :root {
+  color-scheme: dark;
+
+  /* Brand palette */
+  --ox-bg: #050913;
+  --ox-bg-soft: #08101f;
+  --ox-surface: #0b1424;
+  --ox-layer: #0f1a2d;
+  --ox-card: #111d31;
+  --ox-card-2: #17263e;
+  --ox-elevated: #142238;
+
+  --ox-text: #f2f6fb;
+  --ox-text-soft: #dbe5ef;
+  --ox-muted: #9fb0c3;
+  --ox-muted-2: #718196;
+
+  --ox-border: rgba(148, 163, 184, 0.16);
+  --ox-border-strong: rgba(176, 196, 220, 0.26);
+  --ox-border-accent: rgba(56, 189, 248, 0.34);
+
+  --ox-blue: #2563eb;
+  --ox-blue-soft: #3b82f6;
+  --ox-cyan: #38bdf8;
+  --ox-cyan-soft: #7dd3fc;
+  --ox-green: #22c55e;
+  --ox-amber: #f5b84b;
+  --ox-red: #ef4444;
+
+  --ox-rank-inicio: #b88746;
+  --ox-rank-pro: #38bdf8;
+  --ox-rank-elite: #e0b84f;
+  --ox-rank-platinum: #e7edf6;
+
   /* Layout */
+  --ox-max: 1320px;
   --ox-page-max: 1530px;
   --ox-page-gutter: 28px;
   --ox-page-gutter-mobile: 20px;
-
-  --ox-section-gap: 10px;
-  --ox-section-gap-lg: 14px;
+  --ox-section-gap: 12px;
+  --ox-section-gap-lg: 18px;
   --ox-section-gap-mobile: 12px;
 
   /* Spacing scale */
@@ -44,76 +60,176 @@
   --ox-space-11: 24px;
   --ox-space-12: 28px;
   --ox-space-13: 32px;
+  --ox-space-14: 36px;
+  --ox-space-15: 44px;
+  --ox-space-16: 56px;
 
   /* Radius */
-  --ox-radius-xs: 9px;
-  --ox-radius-sm: 12px;
-  --ox-radius-md: 15px;
+  --ox-radius-xs: 8px;
+  --ox-radius-sm: 10px;
+  --ox-radius-md: 14px;
   --ox-radius-lg: 18px;
   --ox-radius-xl: 22px;
   --ox-radius-2xl: 24px;
   --ox-radius-hero: 30px;
   --ox-radius-pill: 999px;
+  --ox-radius: var(--ox-radius-lg);
 
-  /* Typography — desktop */
-  --ox-fs-hero-title: clamp(2rem, 2.06vw, 2.82rem);
+  /* Typography */
+  --ox-font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ox-fs-hero-title: clamp(2rem, 2.1vw, 2.75rem);
   --ox-fs-page-title: clamp(1.72rem, 1.82vw, 2.32rem);
-  --ox-fs-section-title: 0.92rem;
-  --ox-fs-card-title: 0.76rem;
+  --ox-fs-section-title: 0.94rem;
+  --ox-fs-card-title: 0.92rem;
   --ox-fs-panel-title: 0.86rem;
-
-  --ox-fs-body: 0.7rem;
+  --ox-fs-subtitle: 0.78rem;
+  --ox-fs-body: 0.72rem;
   --ox-fs-body-sm: 0.64rem;
   --ox-fs-caption: 0.58rem;
   --ox-fs-chip: 0.6rem;
   --ox-fs-micro: 0.52rem;
-  --ox-fs-nano: 0.44rem;
-
+  --ox-fs-nano: 0.46rem;
   --ox-fs-input: 0.76rem;
   --ox-fs-button: 0.72rem;
-  --ox-fs-button-sm: 0.6rem;
-
-  --ox-fs-price-card: 0.9rem;
+  --ox-fs-button-sm: 0.62rem;
+  --ox-fs-price-card: 1.18rem;
   --ox-fs-price-featured: 1.12rem;
   --ox-fs-stat: 1.42rem;
 
-  /* Typography — mobile */
   --ox-fs-hero-title-mobile: clamp(2.35rem, 11.5vw, 3.1rem);
   --ox-fs-page-title-mobile: clamp(2rem, 10vw, 2.65rem);
   --ox-fs-section-title-mobile: 1rem;
   --ox-fs-body-mobile: 0.78rem;
   --ox-fs-caption-mobile: 0.66rem;
 
-  /* Line-height */
-  --ox-lh-tight: 0.94;
+  --ox-lh-tight: 0.96;
   --ox-lh-title: 1;
   --ox-lh-card-title: 1.08;
   --ox-lh-body: 1.45;
   --ox-lh-compact: 1.24;
   --ox-lh-list: 1.32;
 
-  /* Letter spacing */
-  --ox-ls-hero: -0.05em;
-  --ox-ls-page: -0.045em;
-  --ox-ls-section: -0.04em;
-  --ox-ls-eyebrow: 0.13em;
+  --ox-ls-hero: 0;
+  --ox-ls-page: 0;
+  --ox-ls-section: 0;
+  --ox-ls-eyebrow: 0.12em;
 
-  /* Font weights */
   --ox-fw-regular: 500;
   --ox-fw-medium: 650;
-  --ox-fw-bold: 850;
-  --ox-fw-black: 950;
+  --ox-fw-bold: 800;
+  --ox-fw-black: 920;
 
   /* Component dimensions */
-  --ox-input-h: 34px;
+  --ox-input-h: 36px;
   --ox-input-h-page: 42px;
-  --ox-button-h: 34px;
+  --ox-button-h: 36px;
   --ox-button-h-page: 42px;
   --ox-button-h-compact: 31px;
-  --ox-card-btn-h: 26px;
+  --ox-card-btn-h: 34px;
+
+  /* Shadows and surfaces */
+  --ox-shadow-card:
+    0 22px 58px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  --ox-shadow-card-hover:
+    0 26px 68px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(56, 189, 248, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  --ox-shadow-panel:
+    0 28px 82px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  --ox-shadow-modal:
+    0 32px 90px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  --ox-surface-card:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.07), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.92));
+  --ox-surface-card-quiet:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.88));
+  --ox-surface-hero:
+    radial-gradient(circle at 12% 9%, rgba(56, 189, 248, 0.12), transparent 30%),
+    radial-gradient(circle at 62% 28%, rgba(37, 99, 235, 0.20), transparent 42%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.99));
+  --ox-surface-input:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(8, 15, 28, 0.86));
+  --ox-surface-button:
+    linear-gradient(180deg, rgba(20, 33, 54, 0.96), rgba(10, 18, 32, 0.96));
+  --ox-surface-primary:
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+
+  /* Motion */
+  --ox-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ox-ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ox-duration-fast: 160ms;
+  --ox-duration: 220ms;
+  --ox-duration-slow: 360ms;
 
   /* Panels */
-  --ox-panel-padding: 10px 12px 12px;
+  --ox-panel-padding: 12px;
   --ox-hero-padding: 22px 32px;
-  --ox-page-hero-padding: 20px 32px 18px;
+  --ox-page-hero-padding: 22px 34px;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --ox-page-gutter: var(--ox-page-gutter-mobile);
+    --ox-panel-padding: 12px;
+    --ox-hero-padding: 20px 14px 18px;
+    --ox-page-hero-padding: 20px 14px 22px;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --ox-bg: #eaf7ff;
+  --ox-bg-soft: #dff1fb;
+  --ox-surface: #f6fcff;
+  --ox-layer: #ffffff;
+  --ox-card: #ffffff;
+  --ox-card-2: #e5f5fd;
+  --ox-elevated: #ffffff;
+
+  --ox-text: #0d1726;
+  --ox-text-soft: #243449;
+  --ox-muted: #5d6d81;
+  --ox-muted-2: #8795a7;
+
+  --ox-border: rgba(37, 54, 78, 0.14);
+  --ox-border-strong: rgba(37, 54, 78, 0.22);
+  --ox-border-accent: rgba(2, 132, 199, 0.34);
+
+  --ox-blue: #2563eb;
+  --ox-blue-soft: #1d4ed8;
+  --ox-cyan: #0284c7;
+  --ox-cyan-soft: #0369a1;
+
+  --ox-shadow-card:
+    0 18px 50px rgba(33, 48, 71, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --ox-shadow-card-hover:
+    0 22px 64px rgba(33, 48, 71, 0.16),
+    0 0 0 1px rgba(2, 132, 199, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  --ox-shadow-panel:
+    0 24px 70px rgba(33, 48, 71, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  --ox-shadow-modal:
+    0 32px 92px rgba(33, 48, 71, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+  --ox-surface-card:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(225, 244, 253, 0.92));
+  --ox-surface-card-quiet:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(222, 242, 252, 0.9));
+  --ox-surface-hero:
+    radial-gradient(circle at 12% 9%, rgba(14, 165, 233, 0.12), transparent 30%),
+    radial-gradient(circle at 62% 28%, rgba(37, 99, 235, 0.10), transparent 42%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(220, 241, 252, 0.98));
+  --ox-surface-input:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(224, 243, 252, 0.92));
+  --ox-surface-button:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(216, 238, 250, 0.96));
 }

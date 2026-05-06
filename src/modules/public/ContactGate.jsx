@@ -114,6 +114,11 @@ export default function ContactGate({
               <span>{dealer.commercialName}</span>
             </div>
 
+            <p className="contact-legal-note">
+              Al continuar, oX NEXMOV registrará esta consulta para generar
+              trazabilidad del contacto comercial.
+            </p>
+
             <button className="primary-action" onClick={onRequireLogin}>
               Ingresar para contactar
             </button>
@@ -145,6 +150,11 @@ export default function ContactGate({
             </label>
 
             {error && <p className="form-error">{error}</p>}
+
+            <p className="contact-legal-note">
+              Al continuar, oX NEXMOV registrará esta consulta para generar
+              trazabilidad del contacto comercial.
+            </p>
 
             <button className="primary-action" type="submit" disabled={submitting}>
               {submitting ? "Generando lead..." : "Generar lead y continuar"}

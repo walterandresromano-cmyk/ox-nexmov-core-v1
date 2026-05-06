@@ -3,16 +3,13 @@ import { useEffect, useMemo, useState } from "react";
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
 import { mockDealers, mockVehicles } from "../../data/mockData.js";
 import { listPublicVehicles } from "../../services/vehicles.service.js";
-import {
-  flattenCatalogSuggestions,
-  listVehicleCatalog,
-} from "../../services/catalog.service.js";
 
 function getMockDealer(vehicle) {
+  if (!ALLOW_MOCK_FALLBACK) return null;
   return mockDealers.find((dealer) => dealer.id === vehicle.dealerId);
 }
 
-function normalizeText(value) {
+function normalizeSearchText(value) {
   return String(value || "")
     .toLowerCase()
     .normalize("NFD")
@@ -20,6 +17,10 @@ function normalizeText(value) {
     .replace(/[^\w\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function normalizeText(value) {
+  return normalizeSearchText(value);
 }
 
 function normalizeNumberText(value) {
@@ -392,7 +393,152 @@ function getSuggestionTypeLabel(type) {
   if (type === "brand") return "Marca";
   if (type === "model") return "Modelo";
   if (type === "version") return "Versión";
+  if (type === "publication") return "Publicacion";
   return "Sugerencia";
+}
+
+function isVehicleVisibleForBuyer(vehicle) {
+  const status = normalizeSearchText(
+    getVehicleField(vehicle, "status", "publicationStatus", "publication_status")
+  );
+
+  const blockedStatus = [
+    "draft",
+    "borrador",
+    "paused",
+    "pausado",
+    "suspended",
+    "suspendido",
+    "expired",
+    "vencido",
+    "deleted",
+    "eliminado",
+    "inactive",
+    "inactivo",
+    "rejected",
+    "rechazado",
+  ];
+
+  if (blockedStatus.some((blocked) => status.includes(blocked))) return false;
+  if (vehicle.isPublished === false || vehicle.raw?.is_published === false) return false;
+  if (vehicle.active === false || vehicle.is_active === false) return false;
+  if (vehicle.raw?.active === false || vehicle.raw?.is_active === false) return false;
+
+  return true;
+}
+
+function getVehicleAutocompleteFields(vehicle) {
+  const brand = String(
+    vehicle.brand || vehicle.make || vehicle.raw?.brand || vehicle.raw?.make || ""
+  ).trim();
+  const model = String(vehicle.model || vehicle.raw?.model || "").trim();
+  const version = String(vehicle.version || vehicle.raw?.version || "").trim();
+  const year = String(vehicle.year || vehicle.raw?.year || "").trim();
+  const title = String(vehicle.title || vehicle.name || vehicle.raw?.title || "").trim();
+
+  return { brand, model, version, year, title };
+}
+
+function scoreAutocompleteSuggestion(label, haystack, query) {
+  const normalizedLabel = normalizeSearchText(label);
+  const normalizedHaystack = normalizeSearchText(haystack || label);
+  const tokens = query.split(" ").filter(Boolean);
+
+  let score = 0;
+
+  if (normalizedLabel === query) score += 120;
+  if (normalizedLabel.startsWith(query)) score += 80;
+  if (normalizedHaystack.includes(query)) score += 45;
+
+  tokens.forEach((token) => {
+    if (token.length > 1 && normalizedHaystack.includes(token)) score += 10;
+  });
+
+  return score;
+}
+
+function buildVehicleAutocompleteSuggestions(vehicles, query, limit = 8) {
+  const text = normalizeSearchText(query);
+  if (text.length < 2) return [];
+
+  const suggestions = new Map();
+
+  function addSuggestion(suggestion) {
+    if (!suggestion.label) return;
+
+    const key = `${suggestion.type}:${normalizeSearchText(suggestion.label)}`;
+    const haystack = [
+      suggestion.label,
+      suggestion.brand,
+      suggestion.model,
+      suggestion.version,
+      suggestion.title,
+      suggestion.year,
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const score = scoreAutocompleteSuggestion(suggestion.label, haystack, text);
+
+    if (score <= 0) return;
+
+    const current = suggestions.get(key);
+    if (!current || score > current.score) {
+      suggestions.set(key, {
+        ...suggestion,
+        searchValue: suggestion.searchValue || suggestion.label,
+        score,
+      });
+    }
+  }
+
+  vehicles.filter(isVehicleVisibleForBuyer).forEach((vehicle) => {
+    const { brand, model, version, year, title } =
+      getVehicleAutocompleteFields(vehicle);
+
+    if (!brand) return;
+
+    addSuggestion({
+      type: "brand",
+      label: brand,
+      searchValue: brand,
+      brand,
+      title,
+      year,
+    });
+
+    if (model) {
+      const modelLabel = `${brand} ${model}`;
+
+      addSuggestion({
+        type: "model",
+        label: modelLabel,
+        searchValue: modelLabel,
+        brand,
+        model,
+        title,
+        year,
+      });
+    }
+
+    if (model && version) {
+      const versionLabel = `${brand} ${model} ${version}`;
+
+      addSuggestion({
+        type: "version",
+        label: versionLabel,
+        searchValue: versionLabel,
+        brand,
+        model,
+        version,
+        title,
+        year,
+      });
+    }
+  });
+
+  return Array.from(suggestions.values())
+    .sort((a, b) => b.score - a.score || a.label.localeCompare(b.label, "es"))
+    .slice(0, limit);
 }
 
 function getVehicleStatus(vehicle) {
@@ -542,19 +688,20 @@ const SEARCH_TRUST_ITEMS = [
   },
 ];
 
+const ALLOW_MOCK_FALLBACK = import.meta.env.DEV;
+
 export default function Search({
   appActions,
   onNavigate,
   initialSearchQuery = "",
 }) {
-  const [vehicles, setVehicles] = useState(mockVehicles);
+  const [vehicles, setVehicles] = useState(
+    ALLOW_MOCK_FALLBACK ? mockVehicles : []
+  );
   const [loadingVehicles, setLoadingVehicles] = useState(true);
   const [vehiclesError, setVehiclesError] = useState("");
   const [searchText, setSearchText] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [catalogSuggestions, setCatalogSuggestions] = useState([]);
-  const [loadingCatalog, setLoadingCatalog] = useState(true);
-  const [catalogError, setCatalogError] = useState("");
   const [filters, setFilters] = useState(EMPTY_ADVANCED_FILTERS);
 
   function updateFilter(name, value) {
@@ -575,18 +722,22 @@ export default function Search({
     const { vehicles: supabaseVehicles, error } = await listPublicVehicles();
 
     if (error) {
-      setVehicles(mockVehicles);
+      setVehicles(ALLOW_MOCK_FALLBACK ? mockVehicles : []);
       setVehiclesError(
-        `${error.message}. Usando vehículos mock como respaldo temporal.`
+        ALLOW_MOCK_FALLBACK
+          ? `${error.message}. Modo desarrollo: usando vehículos mock como respaldo temporal.`
+          : "No pudimos cargar vehículos disponibles en este momento."
       );
       setLoadingVehicles(false);
       return;
     }
 
     if (!supabaseVehicles.length) {
-      setVehicles(mockVehicles);
+      setVehicles(ALLOW_MOCK_FALLBACK ? mockVehicles : []);
       setVehiclesError(
-        "Supabase devolvió 0 vehículos públicos. Usando vehículos mock como respaldo temporal."
+        ALLOW_MOCK_FALLBACK
+          ? "Supabase devolvió 0 vehículos públicos. Modo desarrollo: usando vehículos mock como respaldo temporal."
+          : "No hay vehículos publicados disponibles."
       );
       setLoadingVehicles(false);
       return;
@@ -596,28 +747,8 @@ export default function Search({
     setLoadingVehicles(false);
   }
 
-  async function loadCatalog() {
-    setLoadingCatalog(true);
-    setCatalogError("");
-
-    const { catalog, error } = await listVehicleCatalog();
-
-    if (error) {
-      setCatalogSuggestions([]);
-      setCatalogError(
-        error.message || "No se pudo cargar el catálogo de vehículos."
-      );
-      setLoadingCatalog(false);
-      return;
-    }
-
-    setCatalogSuggestions(flattenCatalogSuggestions(catalog || []));
-    setLoadingCatalog(false);
-  }
-
   useEffect(() => {
     loadVehicles();
-    loadCatalog();
   }, []);
 
   useEffect(() => {
@@ -639,44 +770,38 @@ export default function Search({
     [searchText]
   );
 
-  const visibleSuggestions = useMemo(() => {
-    const text = normalizeText(searchText);
+  const publicSearchVehicles = useMemo(
+    () => vehicles.filter(isVehicleVisibleForBuyer),
+    [vehicles]
+  );
 
-    if (text.length < 2) return [];
+  const visibleSuggestions = useMemo(
+    () => buildVehicleAutocompleteSuggestions(publicSearchVehicles, searchText, 8),
+    [publicSearchVehicles, searchText]
+  );
 
-    return catalogSuggestions
-      .map((suggestion) => {
-        const label = normalizeText(suggestion.label);
+  function handleSuggestionSelect(suggestion) {
+    setSearchText(suggestion.searchValue);
+    setShowSuggestions(false);
 
-        let score = 0;
-
-        if (label === text) score += 100;
-        if (label.startsWith(text)) score += 60;
-        if (label.includes(text)) score += 30;
-
-        text.split(" ").forEach((token) => {
-          if (token.length > 1 && label.includes(token)) {
-            score += 8;
-          }
-        });
-
-        return {
-          ...suggestion,
-          score,
-        };
-      })
-      .filter((suggestion) => suggestion.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 8);
-  }, [catalogSuggestions, searchText]);
+    setFilters((currentFilters) => ({
+      ...currentFilters,
+      brand: suggestion.brand || currentFilters.brand,
+      model:
+        suggestion.type === "model" || suggestion.type === "version"
+          ? suggestion.model || ""
+          : "",
+      version: suggestion.type === "version" ? suggestion.version || "" : "",
+    }));
+  }
 
   const filterOptions = useMemo(() => {
-    const filteredForModel = vehicles.filter((vehicle) => {
+    const filteredForModel = publicSearchVehicles.filter((vehicle) => {
       if (!filters.brand) return true;
       return normalizeText(vehicle.brand) === normalizeText(filters.brand);
     });
 
-    const filteredForVersion = vehicles.filter((vehicle) => {
+    const filteredForVersion = publicSearchVehicles.filter((vehicle) => {
       if (
         filters.brand &&
         normalizeText(vehicle.brand) !== normalizeText(filters.brand)
@@ -694,7 +819,7 @@ export default function Search({
       return true;
     });
 
-    const filteredForCity = vehicles.filter((vehicle) => {
+    const filteredForCity = publicSearchVehicles.filter((vehicle) => {
       if (!filters.province) return true;
       return (
         normalizeText(vehicle.province || vehicle.raw?.province) ===
@@ -703,39 +828,39 @@ export default function Search({
     });
 
     return {
-      brands: getUniqueOptions(vehicles, (vehicle) => vehicle.brand),
+      brands: getUniqueOptions(publicSearchVehicles, (vehicle) => vehicle.brand),
       models: getUniqueOptions(filteredForModel, (vehicle) => vehicle.model),
       versions: getUniqueOptions(filteredForVersion, (vehicle) => vehicle.version),
       provinces: getUniqueOptions(
-        vehicles,
+        publicSearchVehicles,
         (vehicle) => vehicle.province || vehicle.raw?.province
       ),
       cities: getUniqueOptions(
         filteredForCity,
         (vehicle) => vehicle.city || vehicle.raw?.city
       ),
-      bodyTypes: getUniqueOptions(vehicles, (vehicle) =>
+      bodyTypes: getUniqueOptions(publicSearchVehicles, (vehicle) =>
         getVehicleField(vehicle, "bodyType", "body_type")
       ),
-      fuels: getUniqueOptions(vehicles, (vehicle) =>
+      fuels: getUniqueOptions(publicSearchVehicles, (vehicle) =>
         getVehicleField(vehicle, "fuelType", "fuel_type")
       ),
-      transmissions: getUniqueOptions(vehicles, (vehicle) =>
+      transmissions: getUniqueOptions(publicSearchVehicles, (vehicle) =>
         getVehicleField(vehicle, "transmission")
       ),
     };
-  }, [vehicles, filters.brand, filters.model, filters.province]);
+  }, [publicSearchVehicles, filters.brand, filters.model, filters.province]);
 
   const filteredVehicles = useMemo(() => {
     const text = searchText.trim();
 
     const smartSearchResults = !text
-      ? vehicles.map((vehicle) => ({
+      ? publicSearchVehicles.map((vehicle) => ({
           vehicle,
           score: 0,
           hardFail: false,
         }))
-      : vehicles
+      : publicSearchVehicles
           .map((vehicle) => {
             const dealer = getDealer(vehicle);
             const result = scoreVehicleForSearch(vehicle, dealer, parsedSearch);
@@ -755,7 +880,7 @@ export default function Search({
         return matchesAdvancedFilters(item.vehicle, dealer, filters);
       })
       .map((item) => item.vehicle);
-  }, [vehicles, searchText, parsedSearch, filters]);
+  }, [publicSearchVehicles, searchText, parsedSearch, filters]);
 
   const activeAdvancedFiltersCount = useMemo(
     () => Object.values(filters).filter(Boolean).length,
@@ -830,7 +955,7 @@ export default function Search({
           </div>
 
           <div className="ox-search-command">
-            <div className="ox-search-input-wrap">
+            <div className="ox-search-input-wrap vehicle-autocomplete">
               <label>¿Qué vehículo estás buscando?</label>
 
               <input
@@ -843,21 +968,32 @@ export default function Search({
                 placeholder="Ej: SUV automática financiada en Buenos Aires"
               />
 
-              {showSuggestions && visibleSuggestions.length > 0 && (
-                <div className="ox-search-suggestions">
-                  {visibleSuggestions.map((suggestion) => (
-                    <button
-                      key={`${suggestion.type}-${suggestion.label}`}
-                      type="button"
-                      onClick={() => {
-                        setSearchText(suggestion.searchValue);
-                        setShowSuggestions(false);
-                      }}
-                    >
-                      <strong>{suggestion.label}</strong>
-                      <span>{getSuggestionTypeLabel(suggestion.type)}</span>
-                    </button>
-                  ))}
+              {showSuggestions && normalizeSearchText(searchText).length >= 2 && (
+                <div className="vehicle-autocomplete-dropdown">
+                  {visibleSuggestions.length > 0 ? (
+                    <div className="vehicle-autocomplete-list">
+                      {visibleSuggestions.map((suggestion) => (
+                        <button
+                          key={`${suggestion.type}-${suggestion.label}`}
+                          type="button"
+                          className="vehicle-autocomplete-item"
+                          onMouseDown={(event) => event.preventDefault()}
+                          onClick={() => handleSuggestionSelect(suggestion)}
+                        >
+                          <span className="vehicle-autocomplete-main">
+                            {suggestion.label}
+                          </span>
+                          <span className="vehicle-autocomplete-meta">
+                            {getSuggestionTypeLabel(suggestion.type)}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="vehicle-autocomplete-empty">
+                      Sin coincidencias disponibles.
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -890,12 +1026,10 @@ export default function Search({
           <div className="ox-search-status">
             <span>{searchSummary}</span>
             <strong>
-              {filteredVehicles.length} de {vehicles.length} vehículos
+              {filteredVehicles.length} de {publicSearchVehicles.length} vehículos
             </strong>
-            {loadingCatalog && <em>Cargando catálogo...</em>}
           </div>
 
-          {catalogError && <div className="auth-warning">{catalogError}</div>}
           {vehiclesError && <div className="auth-warning">{vehiclesError}</div>}
 
           {loadingVehicles && (

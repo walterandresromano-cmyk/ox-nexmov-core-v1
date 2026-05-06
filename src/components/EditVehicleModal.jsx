@@ -493,6 +493,12 @@ export default function EditVehicleModal({
 
             {error && <p className="form-error">{error}</p>}
 
+            <p className="dealer-legal-note">
+              Declaro que la información actualizada sobre el vehículo, precio,
+              disponibilidad, documentación y financiación es real y se
+              encuentra bajo mi responsabilidad comercial.
+            </p>
+
             <button
               className="primary-action"
               type="submit"

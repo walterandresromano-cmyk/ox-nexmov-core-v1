@@ -91,16 +91,6 @@ function getRankClass(rankTheme) {
   return "inicio";
 }
 
-function getRankIcon(rankTheme) {
-  const normalizedRank = String(rankTheme || "inicio").trim().toLowerCase();
-
-  if (normalizedRank === "elite") return "✦";
-  if (normalizedRank === "platinum") return "◆";
-  if (normalizedRank === "pro") return "◇";
-
-  return "•";
-}
-
 function getMarketBadge(delta) {
   if (!delta) return null;
 
@@ -135,7 +125,6 @@ export default function VehicleCardPublic({
   const safeDealer = dealer || fallbackDealer;
   const permissions = getEffectiveDealerPermissions(safeDealer);
   const rankClass = getRankClass(permissions.rankTheme);
-  const rankIcon = getRankIcon(rankClass);
   const delta = getMarketDelta(vehicle);
   const marketBadge = getMarketBadge(delta);
   const favoriteActive = appActions?.isFavorite?.(vehicle.id);
@@ -159,32 +148,30 @@ export default function VehicleCardPublic({
           reserved ? "vehicle-card-reserved" : ""
         }`}
       >
-          <div className="vehicle-card__media">
-               <div className="vehicle-card__topbar">
-              <span className="vehicle-card__rank">
-                <span aria-hidden="true">{rankIcon}</span>
-                {permissions.rankLabel}
-              </span>
-            
-              <span className="vehicle-card__year">
-                {vehicle.year || "Año a confirmar"}
-              </span>
-            </div>
-            
-            <div className="vehicle-card__media-title">
-              <h3 className="vehicle-card__title">{vehicleTitle}</h3>
-            
-              {vehicle.version && (
-                <p className="vehicle-card__version">{vehicle.version}</p>
-              )}
-            </div>
-            
-            {reserved && (
-              <div className="vehicle-card__reserved">Unidad reservada</div>
-            )}
-            
-            {imageUrl ? (
+        <div className="vehicle-card__media">
+          <div className="vehicle-card__topbar">
+            <span className="vehicle-card__rank">
+              {permissions.rankLabel}
+            </span>
 
+            <span className="vehicle-card__year">
+              {vehicle.year || "Año a confirmar"}
+            </span>
+          </div>
+
+          <div className="vehicle-card__media-title">
+            <h3 className="vehicle-card__title">{vehicleTitle}</h3>
+
+            {vehicle.version && (
+              <p className="vehicle-card__version">{vehicle.version}</p>
+            )}
+          </div>
+
+          {reserved && (
+            <div className="vehicle-card__reserved">Unidad reservada</div>
+          )}
+
+          {imageUrl ? (
             <img
               className="vehicle-card__image"
               src={imageUrl}
@@ -199,15 +186,16 @@ export default function VehicleCardPublic({
         </div>
 
         <div className="vehicle-card__body">
-
-              <div className="vehicle-card__fact">
-             <span className="vehicle-card__fact-icon" aria-hidden="true">
-               <img src="/icons/speedometer.png" alt="" />
-             </span>
-             <strong>{formatKm(vehicle.kilometers)}</strong>
+          <div className="vehicle-card__facts">
+            <div className="vehicle-card__fact">
+              <span className="vehicle-card__fact-icon" aria-hidden="true">
+                <img src="/icons/speedometer.png" alt="" />
+              </span>
+              <strong>{formatKm(vehicle.kilometers)}</strong>
+            </div>
 
             <div className="vehicle-card__fact vehicle-card__fact--location">
-              <span aria-hidden="true">⌖</span>
+              <span aria-hidden="true">ARG</span>
               <strong>{locationLabel}</strong>
             </div>
           </div>
@@ -237,7 +225,7 @@ export default function VehicleCardPublic({
 
           {lastLead && (
             <p className="lead-created-note">
-              ✓ Consulta enviada. Te contactarán a la brevedad.
+              Consulta enviada. Te contactarán a la brevedad.
             </p>
           )}
 
@@ -247,7 +235,7 @@ export default function VehicleCardPublic({
               className="vehicle-card__btn vehicle-card__btn--primary"
               onClick={() => setShowDetailModal(true)}
             >
-              Ver detalle <span aria-hidden="true">→</span>
+              Ver detalle
             </button>
 
             <button

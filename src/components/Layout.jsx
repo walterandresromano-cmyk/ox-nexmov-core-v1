@@ -9,6 +9,13 @@ export default function Layout({
   onNavigate,
   appActions,
 }) {
+  const showGlobalNotice =
+    appActions?.appNotice &&
+    !(
+      appActions.appNotice.scope === "compare" &&
+      appActions.compareItems?.length > 0
+    );
+
   return (
     <div className="app-shell">
       <Header
@@ -21,7 +28,7 @@ export default function Layout({
 
       <Footer onNavigate={onNavigate} />
 
-      {appActions?.appNotice && (
+      {showGlobalNotice && (
         <div className={`app-notice app-notice--${appActions.appNotice.tone || "info"}`}>
           <span>{appActions.appNotice.message}</span>
           <button type="button" onClick={appActions.dismissAppNotice}>

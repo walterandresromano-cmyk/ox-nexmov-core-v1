@@ -45,6 +45,23 @@ const PUBLIC_ROUTES = new Set([
   "login",
 ]);
 
+const THEME_STORAGE_KEY = "ox-nexmov-theme";
+const THEME_OPTIONS = new Set(["dark", "light"]);
+
+function getInitialTheme() {
+  if (typeof window === "undefined") return "dark";
+
+  const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+
+  if (THEME_OPTIONS.has(storedTheme)) return storedTheme;
+
+  if (window.matchMedia?.("(prefers-color-scheme: light)").matches) {
+    return "light";
+  }
+
+  return "dark";
+}
+
 function normalizeRole(role) {
   const value = String(role || "buyer").trim().toLowerCase();
 
@@ -95,6 +112,7 @@ export default function App() {
   const [searchQueryFromHome, setSearchQueryFromHome] = useState("");
   const [compareOpenRequest, setCompareOpenRequest] = useState(0);
   const [appNotice, setAppNotice] = useState(null);
+  const [theme, setTheme] = useState(getInitialTheme);
 
   async function loadProfileForUser(user) {
     if (!user?.id) {
@@ -209,12 +227,23 @@ export default function App() {
     return () => window.clearTimeout(timeoutId);
   }, [appNotice]);
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }, [theme]);
+
+  function toggleTheme() {
+    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
+  }
+
   function addToCompare(vehicle) {
     setCompareItems((current) => {
       const alreadyExists = current.some((item) => item.id === vehicle.id);
 
       if (alreadyExists) {
         setAppNotice({
+          scope: "compare",
           tone: "info",
           message: "Ese vehiculo ya esta en el comparador.",
         });
@@ -223,6 +252,7 @@ export default function App() {
 
       if (current.length >= 4) {
         setAppNotice({
+          scope: "compare",
           tone: "warning",
           message: "Podes comparar hasta 4 vehiculos. Quita uno para sumar otro.",
         });
@@ -230,6 +260,7 @@ export default function App() {
       }
 
       setAppNotice({
+        scope: "compare",
         tone: "success",
         message:
           current.length === 0
@@ -276,6 +307,7 @@ export default function App() {
   function openCompare() {
     if (compareItems.length < 2) {
       setAppNotice({
+        scope: "compare",
         tone: "info",
         message: "Selecciona al menos 2 vehiculos para comparar.",
       });
@@ -323,6 +355,9 @@ export default function App() {
 
     appNotice,
     dismissAppNotice: () => setAppNotice(null),
+
+    theme,
+    toggleTheme,
   };
 
   return (

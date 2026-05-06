@@ -292,6 +292,12 @@ export default function ZeroKm({ authUser, authProfile }) {
               />
             </label>
 
+            <p className="finance-legal-note">
+              Los valores de financiación son informativos y pueden variar según
+              aprobación crediticia, entidad financiera, condiciones del dealer
+              y fecha de operación.
+            </p>
+
             {error && <p className="form-error">{error}</p>}
 
             {createdLead && (
@@ -320,6 +326,11 @@ export default function ZeroKm({ authUser, authProfile }) {
             >
               {submitting ? "Enviando consulta..." : "Enviar consulta 0km"}
             </button>
+
+            <p className="form-legal-note">
+              Al enviar esta consulta, aceptás que oX NEXMOV registre tus datos
+              para gestionar el contacto comercial vinculado a financiación 0km.
+            </p>
           </form>
         </div>
       </div>

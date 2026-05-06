@@ -592,6 +592,12 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
 
             {error && <p className="form-error">{error}</p>}
 
+            <p className="dealer-legal-note">
+              Declaro que la información publicada sobre vehículos, precios,
+              disponibilidad, documentación y financiación es real, actualizada
+              y bajo mi responsabilidad comercial.
+            </p>
+
             <button
               className="primary-action"
               type="submit"

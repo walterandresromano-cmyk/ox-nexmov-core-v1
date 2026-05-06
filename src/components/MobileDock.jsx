@@ -56,6 +56,7 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
   const authProfile = appActions?.authProfile;
   const isLoggedIn = Boolean(authUser?.id);
   const privatePanel = getPrivatePanelForRole(authProfile?.role);
+  const theme = appActions?.theme || "dark";
 
   const [loggingOut, setLoggingOut] = useState(false);
   const [isMoreOpen, setIsMoreOpen] = useState(false);
@@ -117,6 +118,14 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
             </div>
 
             <div className="mobile-dock-more-list">
+              <button
+                type="button"
+                className="mobile-dock-more-btn"
+                onClick={appActions?.toggleTheme}
+              >
+                {theme === "dark" ? "Modo claro" : "Modo oscuro"}
+              </button>
+
               {MORE_DOCK_ITEMS.map((item) => (
                 <button
                   key={item.id}

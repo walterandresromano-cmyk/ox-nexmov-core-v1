@@ -1151,86 +1151,141 @@
 .compare-tray {
   position: fixed;
   left: 50%;
-  bottom: 24px;
+  bottom: 22px;
   z-index: 120;
-  width: min(680px, calc(100% - 32px));
+  width: min(620px, calc(100% - 32px));
   transform: translateX(-50%);
-  border: 1px solid var(--ox-border);
-  border-radius: 22px;
-  background: rgba(13, 22, 39, 0.96);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.38);
-  padding: 14px;
+  border: 1px solid var(--ox-border-strong);
+  border-radius: var(--ox-radius-xl);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+    rgba(13, 22, 39, 0.96);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--ox-shadow-modal);
+  padding: var(--ox-space-4);
+  overflow: hidden;
 }
 
-.compare-tray-head {
+.compare-tray-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 10px;
+  gap: var(--ox-space-4);
+  margin-bottom: var(--ox-space-3);
 }
 
-.compare-tray-head strong {
-  display: block;
-}
-
-.compare-tray-head span {
-  display: block;
-  color: var(--ox-muted);
-  font-size: 0.82rem;
-  margin-top: 3px;
-}
-
-.compare-tray-head button,
-.compare-tray-item button,
-.compare-open-btn {
-  border: 1px solid var(--ox-border);
-  background: var(--ox-card-2);
-  color: var(--ox-text);
-  border-radius: 12px;
-  padding: 8px 10px;
-  font-weight: 800;
-}
-
-.compare-tray-list {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.compare-tray-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+.compare-tray-titleblock {
   min-width: 0;
-  border: 1px solid var(--ox-border);
-  border-radius: 14px;
-  background: var(--ox-card);
-  padding: 9px 10px;
 }
 
-.compare-tray-item span {
+.compare-tray-title {
+  display: block;
+  color: var(--ox-text);
+  font-size: var(--ox-fs-card-title);
+  line-height: 1;
+}
+
+.compare-tray-count {
+  display: block;
+  margin-top: 3px;
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-caption);
+  line-height: var(--ox-lh-compact);
+}
+
+.compare-tray-clear,
+.compare-tray-chip-remove,
+.compare-tray-primary {
+  border: 1px solid var(--ox-border);
+  background: var(--ox-surface-button);
+  color: var(--ox-text-soft);
+  font-size: var(--ox-fs-button-sm);
+  font-weight: var(--ox-fw-bold);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.compare-tray-clear {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 0 var(--ox-space-5);
+  border-radius: var(--ox-radius-pill);
+}
+
+.compare-tray-message {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 var(--ox-space-3);
+  padding: 8px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-radius: var(--ox-radius-md);
+  background: rgba(56, 189, 248, 0.07);
+  color: var(--ox-text-soft);
+  font-size: var(--ox-fs-caption);
+  font-weight: var(--ox-fw-bold);
+  line-height: var(--ox-lh-body);
+}
+
+.compare-tray-scroll {
+  display: flex;
+  gap: var(--ox-space-3);
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.compare-tray-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.compare-tray-chip {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ox-space-3);
+  min-width: 150px;
+  max-width: 260px;
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-pill);
+  background: rgba(15, 27, 45, 0.72);
+  padding: 6px 7px 6px 12px;
+}
+
+.compare-tray-chip-name {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--ox-text-soft);
+  font-size: var(--ox-fs-caption);
+  font-weight: var(--ox-fw-bold);
 }
 
-.compare-tray-item button {
-  width: 28px;
-  height: 28px;
+.compare-tray-chip-remove {
+  flex: 0 0 auto;
+  width: 23px;
+  height: 23px;
   padding: 0;
-  flex-shrink: 0;
+  border-radius: var(--ox-radius-pill);
+  display: grid;
+  place-items: center;
 }
 
-.compare-open-btn {
+.compare-tray-primary {
   width: 100%;
-  margin-top: 10px;
-  background: var(--ox-blue);
-  border-color: var(--ox-blue);
-  color: white;
+  min-height: 34px;
+  margin-top: var(--ox-space-3);
+  border-color: rgba(125, 211, 252, 0.42);
+  border-radius: var(--ox-radius-pill);
+  background: var(--ox-surface-primary);
+  color: #ffffff;
+  box-shadow: 0 14px 32px rgba(37, 99, 235, 0.20);
 }
 .buyer-section {
   margin-top: 24px;
@@ -2338,6 +2393,55 @@
 .ticket-detail-card strong,
 .contact-summary strong {
   letter-spacing: -0.015em;
+}
+
+.contact-modal .lead-created-box {
+  border: 1px solid rgba(73, 181, 224, 0.36);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(229, 249, 255, 0.94),
+      rgba(196, 235, 248, 0.88),
+      rgba(152, 215, 239, 0.78)
+    );
+  box-shadow:
+    0 18px 45px rgba(21, 111, 160, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70);
+  color: var(--ox-ink, #102033);
+}
+
+.contact-modal .lead-created-box h3 {
+  margin: 0;
+  color: var(--ox-ink, #102033);
+  font-size: var(--ox-fs-section-title);
+  line-height: var(--ox-lh-title);
+  letter-spacing: var(--ox-ls-section);
+}
+
+.contact-modal .lead-created-box p,
+.contact-modal .lead-created-box .contact-legal-note {
+  color: #496277;
+}
+
+.contact-modal .lead-created-box .contact-legal-note {
+  border-color: rgba(73, 181, 224, 0.28);
+  background: rgba(255, 255, 255, 0.44);
+}
+
+.contact-modal .contact-summary {
+  border: 1px solid rgba(73, 181, 224, 0.28);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  color: var(--ox-ink, #102033);
+}
+
+.contact-modal .contact-summary strong {
+  color: var(--ox-ink, #102033);
+}
+
+.contact-modal .contact-summary span,
+.contact-modal .contact-summary small {
+  color: #51697f;
 }
 
 .empty-state,
@@ -5880,4 +5984,1423 @@ body::-webkit-scrollbar {
   width: 15px;
   height: 15px;
   object-fit: contain;
+}
+
+.theme-toggle-btn {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: var(--ox-radius-pill);
+  background: var(--ox-surface-button);
+  color: rgba(226, 232, 240, 0.86);
+  font-size: var(--ox-fs-button-sm);
+  font-weight: var(--ox-fw-black);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease),
+    color var(--ox-duration-fast) var(--ox-ease);
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--ox-border-accent);
+}
+
+/* =========================================================
+   oX NEXMOV Core v1 - Master Component Alignment
+   Overrides compartidos: cards, badges, inputs, modales y tablas.
+   ========================================================= */
+
+.nav-btn,
+.login-btn,
+.footer-links button,
+.primary-action,
+.secondary-action,
+.vehicle-actions button,
+.admin-action-row button,
+.dealer-module-card button,
+.modal-close-btn,
+.vehicle-card__btn {
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    color var(--ox-duration-fast) var(--ox-ease);
+}
+
+.nav-btn,
+.login-btn,
+.footer-links button,
+.hero-search button,
+.primary-action,
+.secondary-action,
+.vehicle-actions button,
+.admin-action-row button,
+.dealer-module-card button,
+.contact-next-actions .primary-action,
+.vehicle-card__btn {
+  min-height: var(--ox-button-h);
+  border-radius: var(--ox-radius-pill);
+  font-size: var(--ox-fs-button);
+  font-weight: var(--ox-fw-bold);
+  line-height: 1;
+}
+
+.primary-action,
+.vehicle-card__btn--primary,
+.login-btn.active,
+.nav-btn.active,
+.dock-btn.active {
+  border-color: rgba(125, 211, 252, 0.42);
+  background: var(--ox-surface-primary);
+  color: #ffffff;
+  box-shadow: 0 14px 32px rgba(37, 99, 235, 0.22);
+}
+
+.secondary-action,
+.vehicle-actions button,
+.admin-action-row button,
+.dealer-module-card button,
+.vehicle-card__btn {
+  border: 1px solid var(--ox-border);
+  background: var(--ox-surface-button);
+  color: rgba(242, 246, 251, 0.92);
+}
+
+.nav-btn:hover,
+.login-btn:hover,
+.footer-links button:hover,
+.primary-action:hover,
+.secondary-action:hover,
+.vehicle-actions button:hover,
+.admin-action-row button:hover,
+.dealer-module-card button:hover,
+.vehicle-card__btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--ox-border-accent);
+}
+
+.dealer-status-card,
+.dealer-module-card,
+.admin-kpi-card,
+.admin-table-wrap,
+.contact-summary,
+.lead-debug,
+.ox-public-card {
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-2xl);
+  background: var(--ox-surface-card-quiet);
+  box-shadow: var(--ox-shadow-card);
+}
+
+.admin-search input,
+.admin-filter select,
+.dealer-switcher select,
+.contact-form input,
+.hero-search input,
+.ox-home-search-v3,
+.ox-home-search-v3 input {
+  min-height: var(--ox-input-h);
+  border-color: var(--ox-border);
+  background: var(--ox-surface-input);
+  color: var(--ox-text);
+  font-size: var(--ox-fs-input);
+  font-weight: var(--ox-fw-medium);
+}
+
+.admin-search label,
+.admin-filter label,
+.dealer-switcher label,
+.contact-form label,
+.vehicle-card__price-label,
+.admin-table th,
+.dealer-status-card span,
+.admin-kpi-card span,
+.ox-public-eyebrow {
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-caption);
+  font-weight: var(--ox-fw-black);
+  letter-spacing: var(--ox-ls-eyebrow);
+  text-transform: uppercase;
+}
+
+.admin-chip,
+.plan-alert,
+.lead-created-note,
+.vehicle-card__rank,
+.vehicle-card__year,
+.vehicle-card__market,
+.vehicle-card__reserved,
+.ox-home-featured-badge-v3,
+.ox-home-eyebrow-v3,
+.ox-public-eyebrow {
+  border-radius: var(--ox-radius-pill);
+  font-weight: var(--ox-fw-black);
+  line-height: 1;
+}
+
+.modal-backdrop {
+  background: rgba(2, 6, 23, 0.74);
+  backdrop-filter: blur(14px);
+}
+
+.contact-modal,
+.vehicle-detail-modal {
+  border: 1px solid var(--ox-border-strong);
+  border-radius: var(--ox-radius-2xl);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(3, 7, 15, 0.99));
+  box-shadow: var(--ox-shadow-modal);
+}
+
+.contact-modal-head h2 {
+  font-size: var(--ox-fs-page-title);
+  line-height: var(--ox-lh-title);
+  letter-spacing: var(--ox-ls-page);
+}
+
+.contact-modal-head p,
+.dealer-status-card p,
+.dealer-module-card p,
+.admin-kpi-card p,
+.vehicle-version,
+.vehicle-meta,
+.vehicle-market {
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-body);
+  line-height: var(--ox-lh-body);
+}
+
+.vehicle-grid {
+  gap: var(--ox-space-7);
+}
+
+.vehicle-grid .vehicle-card {
+  width: 100%;
+  max-width: 326px;
+}
+
+.vehicle-card {
+  min-height: 500px;
+  max-height: none;
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-2xl);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(11, 20, 36, 0.98), rgba(3, 7, 15, 1));
+  box-shadow: var(--ox-shadow-card);
+  transition:
+    transform var(--ox-duration) var(--ox-ease),
+    border-color var(--ox-duration) var(--ox-ease),
+    box-shadow var(--ox-duration) var(--ox-ease);
+}
+
+.vehicle-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.28);
+  box-shadow: var(--ox-shadow-card-hover);
+}
+
+.vehicle-card--inicio {
+  border-color: rgba(184, 135, 70, 0.30);
+}
+
+.vehicle-card--pro {
+  border-color: rgba(56, 189, 248, 0.34);
+}
+
+.vehicle-card--elite {
+  border-color: rgba(224, 184, 79, 0.46);
+}
+
+.vehicle-card--platinum {
+  border-color: rgba(231, 237, 246, 0.46);
+}
+
+.vehicle-card__media {
+  height: 176px;
+  min-height: 176px;
+  padding: 10px;
+  background:
+    radial-gradient(circle at 50% 76%, rgba(37, 99, 235, 0.14), transparent 42%),
+    linear-gradient(180deg, rgba(7, 18, 36, 0.96), rgba(2, 6, 23, 0.98));
+}
+
+.vehicle-card__media::before {
+  left: 10px;
+  right: 10px;
+  top: 10px;
+  height: 92px;
+  border-radius: 18px 18px 0 0;
+}
+
+.vehicle-card__image,
+.vehicle-card__placeholder {
+  height: 156px;
+  min-height: 156px;
+  border-radius: var(--ox-radius-lg);
+}
+
+.vehicle-card__image {
+  filter:
+    saturate(1.02)
+    contrast(1.02)
+    drop-shadow(0 14px 18px rgba(0, 0, 0, 0.34));
+}
+
+.vehicle-card__media-title .vehicle-card__title {
+  font-size: var(--ox-fs-card-title);
+  line-height: var(--ox-lh-card-title);
+  letter-spacing: var(--ox-ls-section);
+  font-weight: var(--ox-fw-black);
+}
+
+.vehicle-card__media-title .vehicle-card__version {
+  color: rgba(219, 229, 239, 0.76);
+  font-size: var(--ox-fs-body-sm);
+  line-height: var(--ox-lh-compact);
+  font-weight: var(--ox-fw-medium);
+}
+
+.vehicle-card__rank,
+.vehicle-card__year {
+  min-height: 24px;
+  padding: 0 9px;
+  font-size: var(--ox-fs-micro);
+  letter-spacing: 0.06em;
+}
+
+.vehicle-card__rank > span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin-right: 4px;
+  border-radius: var(--ox-radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: var(--ox-fs-nano);
+}
+
+.vehicle-card__body {
+  gap: var(--ox-space-4);
+  padding: var(--ox-space-5);
+}
+
+.vehicle-card__facts {
+  grid-template-columns: minmax(84px, 0.78fr) minmax(0, 1.22fr);
+  gap: var(--ox-space-3);
+}
+
+.vehicle-card__fact {
+  min-height: 34px;
+  border-radius: var(--ox-radius-md);
+  background: rgba(15, 27, 45, 0.74);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  color: rgba(242, 246, 251, 0.9);
+  font-size: var(--ox-fs-caption);
+}
+
+.vehicle-card__fact > span {
+  color: var(--ox-cyan-soft);
+  font-size: var(--ox-fs-micro);
+  font-weight: var(--ox-fw-black);
+  letter-spacing: 0.04em;
+}
+
+.vehicle-card__price-box {
+  min-height: 68px;
+  border-radius: var(--ox-radius-lg);
+  border: 1px solid rgba(56, 189, 248, 0.20);
+  background:
+    linear-gradient(180deg, rgba(10, 20, 38, 0.92), rgba(5, 10, 20, 0.94));
+}
+
+.vehicle-card__price {
+  font-size: var(--ox-fs-price-card);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.vehicle-card__actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ox-space-3);
+}
+
+.vehicle-card__btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: var(--ox-card-btn-h);
+  padding: 0 10px;
+  font-size: var(--ox-fs-button-sm);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.vehicle-card__btn::before {
+  content: "";
+  position: absolute;
+  inset: 1px 1px auto;
+  z-index: -1;
+  height: 48%;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent);
+  opacity: 0.62;
+}
+
+.vehicle-card__btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -45%;
+  z-index: -1;
+  width: 38%;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transform: skewX(-18deg);
+  opacity: 0;
+  transition:
+    left var(--ox-duration-slow) var(--ox-ease-soft),
+    opacity var(--ox-duration) var(--ox-ease);
+}
+
+.vehicle-card__btn:hover::after {
+  left: 112%;
+  opacity: 1;
+}
+
+.vehicle-card--elite .vehicle-card__btn--primary {
+  color: #15120a;
+  background: linear-gradient(180deg, #f5d77c, #c99732);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.36),
+    0 12px 28px rgba(216, 160, 46, 0.22);
+}
+
+.vehicle-card--platinum .vehicle-card__btn--primary {
+  color: #020617;
+  background: linear-gradient(180deg, #f8fafc, #c7d8ee);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 12px 28px rgba(90, 125, 170, 0.18);
+}
+
+.admin-table {
+  background: rgba(11, 20, 36, 0.82);
+}
+
+.admin-table th,
+.admin-table td {
+  border-bottom-color: rgba(148, 163, 184, 0.12);
+}
+
+@media (max-width: 760px) {
+  .vehicle-grid .vehicle-card {
+    max-width: 430px;
+  }
+
+  .vehicle-card {
+    min-height: auto;
+  }
+
+  .vehicle-card__facts {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-modal,
+  .vehicle-detail-modal {
+    width: min(100%, 430px);
+    max-height: min(760px, 92vh);
+    border-radius: var(--ox-radius-2xl);
+  }
+}
+
+/* =========================================================
+   oX NEXMOV Core v1 - Light Theme Shared Overrides
+   Capa global para superficies hardcodeadas en oscuro.
+   ========================================================= */
+
+:root[data-theme="light"] .site-header {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(241, 247, 252, 0.86));
+  border-bottom-color: rgba(37, 54, 78, 0.12);
+  box-shadow: 0 14px 44px rgba(33, 48, 71, 0.10);
+}
+
+:root[data-theme="light"] .brand-logo-img,
+:root[data-theme="light"] .footer-logo-img {
+  filter:
+    drop-shadow(0 1px 0 rgba(5, 12, 24, 0.58))
+    drop-shadow(0 0 2px rgba(5, 12, 24, 0.38))
+    drop-shadow(0 8px 16px rgba(37, 54, 78, 0.18))
+    drop-shadow(0 0 14px rgba(14, 165, 233, 0.14));
+}
+
+:root[data-theme="light"] .nav-btn,
+:root[data-theme="light"] .login-btn,
+:root[data-theme="light"] .theme-toggle-btn,
+:root[data-theme="light"] .footer-links button,
+:root[data-theme="light"] .dock-btn,
+:root[data-theme="light"] .mobile-dock-more-btn,
+:root[data-theme="light"] .mobile-dock-more-head button,
+:root[data-theme="light"] .secondary-action,
+:root[data-theme="light"] .vehicle-card__btn,
+:root[data-theme="light"] .detail-actions button,
+:root[data-theme="light"] .admin-action-row button,
+:root[data-theme="light"] .dealer-module-card button {
+  border-color: var(--ox-border);
+  background: var(--ox-surface-button);
+  color: rgba(13, 23, 38, 0.82);
+}
+
+:root[data-theme="light"] .nav-btn:hover,
+:root[data-theme="light"] .login-btn:hover,
+:root[data-theme="light"] .theme-toggle-btn:hover,
+:root[data-theme="light"] .footer-links button:hover,
+:root[data-theme="light"] .dock-btn:hover,
+:root[data-theme="light"] .mobile-dock-more-btn:hover,
+:root[data-theme="light"] .vehicle-card__btn:hover {
+  color: rgba(13, 23, 38, 0.96);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(224, 239, 249, 0.94));
+}
+
+:root[data-theme="light"] .nav-btn.active,
+:root[data-theme="light"] .dock-btn.active,
+:root[data-theme="light"] .login-btn.active,
+:root[data-theme="light"] .primary-action,
+:root[data-theme="light"] .vehicle-card__btn--primary {
+  color: #ffffff;
+  background: var(--ox-surface-primary);
+}
+
+:root[data-theme="light"] .vehicle-card__btn {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.86),
+    0 10px 24px rgba(33, 48, 71, 0.10);
+}
+
+:root[data-theme="light"] .vehicle-card__btn::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), transparent);
+  opacity: 0.72;
+}
+
+:root[data-theme="light"] .vehicle-card__btn::after {
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.58), transparent);
+}
+
+:root[data-theme="light"] .vehicle-card__btn--primary {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.36),
+    0 14px 30px rgba(37, 99, 235, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+:root[data-theme="light"] .logout-btn {
+  border-color: rgba(220, 38, 38, 0.18);
+  background: rgba(254, 242, 242, 0.92);
+  color: #991b1b;
+}
+
+:root[data-theme="light"] .site-footer,
+:root[data-theme="light"] .mobile-dock,
+:root[data-theme="light"] .mobile-dock-more,
+:root[data-theme="light"] .app-notice,
+:root[data-theme="light"] .modal-backdrop:has(.contact-modal),
+:root[data-theme="light"] .modal-backdrop:has(.vehicle-detail-modal) {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.06), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(235, 244, 251, 0.98));
+  color: var(--ox-muted);
+}
+
+:root[data-theme="light"] .mobile-dock-backdrop {
+  background: rgba(15, 23, 42, 0.22);
+}
+
+:root[data-theme="light"] .ox-home-page-v3,
+:root[data-theme="light"] .ox-search-page,
+:root[data-theme="light"] .sell-vehicle-page,
+:root[data-theme="light"] .join-network-page,
+:root[data-theme="light"] .about-page,
+:root[data-theme="light"] .faq-page,
+:root[data-theme="light"] .auth-page,
+:root[data-theme="light"] .public-page-panel,
+:root[data-theme="light"] .ox-public-page {
+  background:
+    radial-gradient(circle at 68% 0%, rgba(37, 99, 235, 0.08), transparent 34%),
+    radial-gradient(circle at 4% 18%, rgba(14, 165, 233, 0.07), transparent 30%),
+    linear-gradient(180deg, var(--ox-bg), var(--ox-bg-soft));
+}
+
+:root[data-theme="light"] .ox-home-hero-v3,
+:root[data-theme="light"] .ox-search-hero,
+:root[data-theme="light"] .ox-public-hero,
+:root[data-theme="light"] .hero-panel,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .about-panel,
+:root[data-theme="light"] .faq-panel,
+:root[data-theme="light"] .join-network-panel,
+:root[data-theme="light"] .sell-vehicle-panel,
+:root[data-theme="light"] .auth-panel,
+:root[data-theme="light"] .ox-search-side-card,
+:root[data-theme="light"] .ox-search-results,
+:root[data-theme="light"] .ox-search-trust-strip,
+:root[data-theme="light"] .ox-home-featured-vehicles-v3,
+:root[data-theme="light"] .ox-home-confidence-v3,
+:root[data-theme="light"] .ox-home-inventory-v3,
+:root[data-theme="light"] .ox-home-buyer-v3,
+:root[data-theme="light"] .ox-home-dealer-v3,
+:root[data-theme="light"] .ox-home-bottom-trust-v3,
+:root[data-theme="light"] .contact-modal,
+:root[data-theme="light"] .vehicle-detail-modal,
+:root[data-theme="light"] .ticket-detail-modal,
+:root[data-theme="light"] .dealer-vehicle-detail-modal {
+  border-color: var(--ox-border);
+  background: var(--ox-surface-card);
+  box-shadow: var(--ox-shadow-card);
+}
+
+:root[data-theme="light"] .vehicle-card {
+  border-color: var(--ox-border);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.06), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(237, 245, 252, 0.98));
+  box-shadow: var(--ox-shadow-card);
+}
+
+:root[data-theme="light"] .vehicle-card__media,
+:root[data-theme="light"] .detail-gallery-frame,
+:root[data-theme="light"] .detail-main-image,
+:root[data-theme="light"] .vehicle-card__placeholder {
+  background:
+    radial-gradient(circle at 50% 76%, rgba(37, 99, 235, 0.08), transparent 42%),
+    linear-gradient(180deg, rgba(239, 246, 252, 0.98), rgba(218, 231, 242, 0.96));
+}
+
+:root[data-theme="light"] .vehicle-card__media::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10, 22, 38, 0.50) 0%,
+      rgba(10, 22, 38, 0.22) 52%,
+      rgba(10, 22, 38, 0.02) 100%
+    );
+}
+
+:root[data-theme="light"] .vehicle-card__media-title .vehicle-card__title,
+:root[data-theme="light"] .vehicle-card__media-title .vehicle-card__version {
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.36),
+    0 0 18px rgba(15, 23, 42, 0.26);
+}
+
+:root[data-theme="light"] .vehicle-card__fact,
+:root[data-theme="light"] .vehicle-card__price-box,
+:root[data-theme="light"] .detail-market-box,
+:root[data-theme="light"] .detail-dealer-box,
+:root[data-theme="light"] .detail-notes-box,
+:root[data-theme="light"] .detail-spec-grid div,
+:root[data-theme="light"] .contact-summary,
+:root[data-theme="light"] .lead-debug,
+:root[data-theme="light"] .admin-table,
+:root[data-theme="light"] .admin-table-wrap,
+:root[data-theme="light"] .dealer-status-card,
+:root[data-theme="light"] .dealer-module-card,
+:root[data-theme="light"] .admin-kpi-card,
+:root[data-theme="light"] .buyer-stat-card,
+:root[data-theme="light"] .support-stat-card {
+  border-color: var(--ox-border);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] input,
+:root[data-theme="light"] select,
+:root[data-theme="light"] textarea,
+:root[data-theme="light"] .ox-home-search-v3,
+:root[data-theme="light"] .ox-search-command,
+:root[data-theme="light"] .admin-search input,
+:root[data-theme="light"] .admin-filter select,
+:root[data-theme="light"] .dealer-switcher select,
+:root[data-theme="light"] .contact-form input {
+  border-color: var(--ox-border);
+  background: var(--ox-surface-input);
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] input::placeholder,
+:root[data-theme="light"] textarea::placeholder {
+  color: rgba(93, 109, 129, 0.72);
+}
+
+:root[data-theme="light"] .detail-price,
+:root[data-theme="light"] .vehicle-card__price {
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .detail-price {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(229, 241, 250, 0.92));
+}
+
+:root[data-theme="light"] h1,
+:root[data-theme="light"] h2,
+:root[data-theme="light"] h3,
+:root[data-theme="light"] h4,
+:root[data-theme="light"] strong,
+:root[data-theme="light"] .ox-public-title,
+:root[data-theme="light"] .ox-home-hero-copy-v3 h1,
+:root[data-theme="light"] .ox-home-section-head-v3 h2,
+:root[data-theme="light"] .ox-home-confidence-v3 h2,
+:root[data-theme="light"] .ox-home-inventory-v3 h2,
+:root[data-theme="light"] .ox-home-buyer-v3 h2,
+:root[data-theme="light"] .ox-home-dealer-v3 h2,
+:root[data-theme="light"] .ox-search-title-block h1,
+:root[data-theme="light"] .ox-search-side-card h2,
+:root[data-theme="light"] .ox-search-results-toolbar h2,
+:root[data-theme="light"] .vehicle-detail-title-card h2 {
+  color: var(--ox-text);
+  text-shadow: none;
+}
+
+:root[data-theme="light"] p,
+:root[data-theme="light"] small,
+:root[data-theme="light"] .lead,
+:root[data-theme="light"] .ox-public-lead,
+:root[data-theme="light"] .ox-home-hero-copy-v3 > p,
+:root[data-theme="light"] .ox-home-section-head-v3 p,
+:root[data-theme="light"] .ox-search-title-block > p,
+:root[data-theme="light"] .ox-search-side-card p,
+:root[data-theme="light"] .ox-search-results-toolbar p,
+:root[data-theme="light"] .vehicle-detail-title-card p,
+:root[data-theme="light"] .detail-market-box p,
+:root[data-theme="light"] .detail-dealer-box p,
+:root[data-theme="light"] .detail-notes-box p,
+:root[data-theme="light"] .footer-brand-block p {
+  color: var(--ox-muted);
+}
+
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .ox-public-eyebrow,
+:root[data-theme="light"] .ox-home-eyebrow-v3,
+:root[data-theme="light"] .ox-search-eyebrow,
+:root[data-theme="light"] .vehicle-detail-title-card .eyebrow,
+:root[data-theme="light"] .vehicle-card__price-label,
+:root[data-theme="light"] .detail-market-box span,
+:root[data-theme="light"] .detail-dealer-box span,
+:root[data-theme="light"] .detail-notes-box span,
+:root[data-theme="light"] .detail-spec-grid span,
+:root[data-theme="light"] .admin-table th,
+:root[data-theme="light"] .admin-search label,
+:root[data-theme="light"] .admin-filter label,
+:root[data-theme="light"] .dealer-switcher label {
+  color: var(--ox-cyan);
+}
+
+:root[data-theme="light"] .vehicle-card__rank,
+:root[data-theme="light"] .vehicle-card__year,
+:root[data-theme="light"] .admin-chip,
+:root[data-theme="light"] .plan-alert,
+:root[data-theme="light"] .detail-status {
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ox-text-soft);
+  border-color: var(--ox-border);
+}
+
+:root[data-theme="light"] .detail-status {
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.28);
+  background: rgba(236, 253, 245, 0.82);
+}
+
+/* Legal trust notes */
+.footer-legal {
+  display: grid;
+  gap: var(--ox-space-4);
+  margin-top: var(--ox-space-8);
+  padding-top: var(--ox-space-7);
+  border-top: 1px solid var(--ox-border);
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-caption);
+  line-height: var(--ox-lh-body);
+}
+
+.footer-support,
+.footer-legal-note {
+  margin: 0;
+  max-width: 1160px;
+}
+
+.footer-support {
+  color: var(--ox-text-soft);
+  font-weight: var(--ox-fw-medium);
+}
+
+.footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ox-space-3) var(--ox-space-7);
+  align-items: center;
+}
+
+.footer-support a,
+.footer-legal-links a,
+.auth-legal-note a {
+  color: var(--ox-cyan-soft);
+  font-weight: var(--ox-fw-bold);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--ox-duration-fast) var(--ox-ease);
+}
+
+.footer-support a:hover,
+.footer-legal-links a:hover,
+.auth-legal-note a:hover {
+  color: var(--ox-text);
+}
+
+.auth-legal-note,
+.contact-legal-note,
+.form-legal-note,
+.vehicle-card-finance-note {
+  margin: 0;
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-caption);
+  line-height: var(--ox-lh-body);
+}
+
+.finance-legal-note,
+.dealer-legal-note,
+.vehicle-detail-legal-note {
+  margin: 0;
+  padding: var(--ox-space-4) var(--ox-space-5);
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-md);
+  background: rgba(15, 27, 45, 0.46);
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-caption);
+  line-height: var(--ox-lh-body);
+}
+
+.auth-form .auth-legal-note,
+.contact-form .contact-legal-note,
+.lead-created-box .contact-legal-note,
+.zero-km-form .form-legal-note {
+  max-width: 680px;
+}
+
+:root[data-theme="light"] .footer-legal,
+:root[data-theme="light"] .auth-legal-note,
+:root[data-theme="light"] .contact-legal-note,
+:root[data-theme="light"] .form-legal-note,
+:root[data-theme="light"] .vehicle-card-finance-note {
+  color: #536a82;
+}
+
+:root[data-theme="light"] .finance-legal-note,
+:root[data-theme="light"] .dealer-legal-note,
+:root[data-theme="light"] .vehicle-detail-legal-note {
+  border-color: rgba(2, 132, 199, 0.18);
+  background: rgba(224, 243, 252, 0.76);
+  color: #4d6379;
+}
+
+@media (max-width: 760px) {
+  .footer-legal {
+    gap: var(--ox-space-3);
+    margin-top: var(--ox-space-6);
+    padding-top: var(--ox-space-5);
+    font-size: var(--ox-fs-caption-mobile);
+  }
+
+  .footer-legal-links {
+    gap: var(--ox-space-3) var(--ox-space-5);
+  }
+
+  .auth-legal-note,
+  .contact-legal-note,
+  .form-legal-note,
+  .finance-legal-note,
+  .dealer-legal-note,
+  .vehicle-detail-legal-note,
+  .vehicle-card-finance-note {
+    font-size: var(--ox-fs-caption-mobile);
+  }
+}
+
+/* Compare decision modal */
+.modal-backdrop:has(.compare-modal) {
+  position: fixed;
+  inset: 0;
+  z-index: 210;
+  display: grid;
+  place-items: center;
+  padding: var(--ox-space-6);
+  overflow: hidden;
+  background: rgba(2, 6, 23, 0.74);
+  backdrop-filter: blur(14px);
+}
+
+.compare-modal {
+  width: auto;
+  max-width: min(1180px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid var(--ox-border-strong);
+  border-radius: var(--ox-radius-2xl);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(12, 22, 38, 0.98), rgba(3, 7, 15, 0.99));
+  box-shadow: var(--ox-shadow-modal);
+  padding: var(--ox-space-6);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.compare-modal::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.compare-modal.compare-count-1 {
+  max-width: min(520px, calc(100vw - 32px));
+}
+
+.compare-modal.compare-count-2 {
+  max-width: min(760px, calc(100vw - 32px));
+}
+
+.compare-modal.compare-count-3 {
+  max-width: min(980px, calc(100vw - 32px));
+}
+
+.compare-modal.compare-count-4 {
+  max-width: min(1180px, calc(100vw - 32px));
+}
+
+.compare-modal-header {
+  position: sticky;
+  top: calc(var(--ox-space-6) * -1);
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--ox-space-6);
+  margin: calc(var(--ox-space-6) * -1) calc(var(--ox-space-6) * -1)
+    var(--ox-space-6);
+  padding: var(--ox-space-6);
+  border-bottom: 1px solid var(--ox-border);
+  background:
+    linear-gradient(180deg, rgba(12, 22, 38, 0.98), rgba(12, 22, 38, 0.90));
+  backdrop-filter: blur(14px);
+}
+
+.compare-modal-titleblock {
+  min-width: 0;
+  max-width: 720px;
+}
+
+.compare-modal-titleblock .eyebrow {
+  margin: 0 0 var(--ox-space-3);
+}
+
+.compare-modal-titleblock h2 {
+  margin: 0 0 var(--ox-space-2);
+  color: var(--ox-text);
+  font-size: clamp(1.35rem, 2.1vw, 1.9rem);
+  line-height: var(--ox-lh-title);
+  letter-spacing: var(--ox-ls-page);
+}
+
+.compare-modal-titleblock p {
+  margin: 0;
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-body);
+  line-height: var(--ox-lh-body);
+}
+
+.compare-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--ox-space-3);
+  flex: 0 0 auto;
+}
+
+.compare-modal-actions button,
+.compare-card-detail {
+  min-height: 32px;
+  padding: 0 var(--ox-space-6);
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-pill);
+  background: var(--ox-surface-button);
+  color: var(--ox-text-soft);
+  font-size: var(--ox-fs-button-sm);
+  font-weight: var(--ox-fw-bold);
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease),
+    color var(--ox-duration-fast) var(--ox-ease);
+}
+
+.compare-modal-actions button:hover,
+.compare-card-detail:hover {
+  transform: translateY(-1px);
+  border-color: var(--ox-border-accent);
+  color: var(--ox-text);
+}
+
+.compare-modal-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--ox-space-3);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.compare-modal-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.compare-grid {
+  display: grid;
+  gap: var(--ox-space-5);
+  width: 100%;
+  align-items: stretch;
+}
+
+.compare-grid.compare-count-1 {
+  grid-template-columns: minmax(260px, 360px);
+  justify-content: center;
+}
+
+.compare-grid.compare-count-2 {
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+}
+
+.compare-grid.compare-count-3 {
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
+}
+
+.compare-grid.compare-count-4 {
+  grid-template-columns: repeat(4, minmax(230px, 1fr));
+}
+
+.compare-card {
+  position: relative;
+  scroll-snap-align: start;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-xl);
+  background: var(--ox-surface-card-quiet);
+  box-shadow: var(--ox-shadow-card);
+}
+
+.compare-card-media {
+  position: relative;
+  height: clamp(142px, 16vw, 176px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--ox-border);
+  background:
+    radial-gradient(circle at 50% 72%, rgba(56, 189, 248, 0.12), transparent 42%),
+    linear-gradient(180deg, rgba(7, 18, 36, 0.96), rgba(2, 6, 23, 0.98));
+}
+
+.compare-card-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.compare-card-media strong {
+  padding: var(--ox-space-6);
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-body);
+  text-align: center;
+}
+
+.compare-card-gallery-btn {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  transform: translateY(-50%);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: var(--ox-radius-pill);
+  background: rgba(2, 6, 23, 0.62);
+  color: rgba(248, 250, 252, 0.94);
+  font-size: 1.05rem;
+  font-weight: var(--ox-fw-black);
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.compare-card-gallery-btn.prev {
+  left: var(--ox-space-3);
+}
+
+.compare-card-gallery-btn.next {
+  right: var(--ox-space-3);
+}
+
+.compare-card-gallery-count {
+  position: absolute;
+  right: var(--ox-space-3);
+  bottom: var(--ox-space-3);
+  z-index: 2;
+  padding: 4px 7px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: var(--ox-radius-pill);
+  background: rgba(2, 6, 23, 0.66);
+  color: rgba(248, 250, 252, 0.92);
+  font-size: var(--ox-fs-micro);
+  font-weight: var(--ox-fw-black);
+  line-height: 1;
+  backdrop-filter: blur(10px);
+}
+
+.compare-card-gallery-dots {
+  position: absolute;
+  left: var(--ox-space-3);
+  bottom: var(--ox-space-3);
+  z-index: 2;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.compare-card-gallery-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--ox-radius-pill);
+  background: rgba(226, 232, 240, 0.44);
+}
+
+.compare-card-gallery-dot.is-active {
+  width: 13px;
+  background: var(--ox-cyan-soft);
+}
+
+.compare-card-remove {
+  position: absolute;
+  top: var(--ox-space-4);
+  right: var(--ox-space-4);
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: var(--ox-radius-pill);
+  background: rgba(2, 6, 23, 0.72);
+  color: rgba(248, 250, 252, 0.94);
+  font-size: var(--ox-fs-body);
+  font-weight: var(--ox-fw-black);
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.compare-card-body {
+  display: grid;
+  gap: var(--ox-space-4);
+  padding: var(--ox-space-5);
+}
+
+.compare-card-dealer {
+  display: grid;
+  gap: var(--ox-space-2);
+}
+
+.compare-card-dealer .admin-chip {
+  width: fit-content;
+}
+
+.compare-card-dealer p,
+.compare-card-version {
+  margin: 0;
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-caption);
+  line-height: var(--ox-lh-compact);
+}
+
+.compare-card-title {
+  margin: 0 0 var(--ox-space-1);
+  color: var(--ox-text);
+  font-size: var(--ox-fs-card-title);
+  line-height: var(--ox-lh-card-title);
+}
+
+.compare-card-price {
+  display: block;
+  padding: var(--ox-space-4);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: var(--ox-radius-lg);
+  background: rgba(5, 10, 20, 0.58);
+  color: var(--ox-text);
+  font-size: clamp(1.1rem, 1.6vw, 1.34rem);
+  line-height: 1;
+}
+
+.compare-market {
+  display: grid;
+  gap: var(--ox-space-1);
+  padding: var(--ox-space-4);
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-lg);
+  background: rgba(15, 27, 45, 0.62);
+}
+
+.compare-market span,
+.compare-spec-label {
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-micro);
+  font-weight: var(--ox-fw-black);
+  letter-spacing: var(--ox-ls-eyebrow);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.compare-market strong {
+  color: var(--ox-text);
+  font-size: var(--ox-fs-body-sm);
+  line-height: var(--ox-lh-compact);
+}
+
+.compare-market p {
+  margin: 0;
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-caption);
+}
+
+.compare-market.is-below {
+  border-color: rgba(34, 197, 94, 0.24);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.compare-market.is-below strong {
+  color: rgba(187, 247, 208, 0.98);
+}
+
+.compare-market.is-above {
+  border-color: rgba(245, 184, 75, 0.24);
+  background: rgba(245, 184, 75, 0.08);
+}
+
+.compare-market.is-above strong {
+  color: rgba(254, 243, 199, 0.98);
+}
+
+.compare-spec-list {
+  display: grid;
+  gap: var(--ox-space-2);
+}
+
+.compare-spec-row {
+  display: grid;
+  grid-template-columns: minmax(82px, 0.75fr) minmax(0, 1fr);
+  gap: var(--ox-space-3);
+  align-items: center;
+  min-height: 34px;
+  padding: var(--ox-space-3);
+  border: 1px solid rgba(148, 163, 184, 0.10);
+  border-radius: var(--ox-radius-md);
+  background: rgba(15, 27, 45, 0.38);
+}
+
+.compare-spec-row.is-highlight {
+  border-color: rgba(56, 189, 248, 0.16);
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.compare-spec-value {
+  min-width: 0;
+  color: var(--ox-text-soft);
+  font-size: var(--ox-fs-body-sm);
+  line-height: var(--ox-lh-compact);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.compare-card-actions {
+  display: grid;
+}
+
+.compare-card-detail {
+  width: 100%;
+  min-height: 34px;
+}
+
+.compare-empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 260px;
+  padding: var(--ox-space-10);
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-xl);
+  background: rgba(15, 27, 45, 0.44);
+  text-align: center;
+}
+
+.compare-empty-state h3 {
+  margin: 0 0 var(--ox-space-3);
+}
+
+.compare-empty-state p {
+  margin: 0;
+  max-width: 520px;
+  color: var(--ox-muted);
+}
+
+:root[data-theme="light"] .modal-backdrop:has(.compare-modal) {
+  background: rgba(15, 23, 42, 0.22);
+}
+
+:root[data-theme="light"] .compare-modal,
+:root[data-theme="light"] .compare-card {
+  border-color: var(--ox-border);
+  background: var(--ox-surface-card);
+}
+
+:root[data-theme="light"] .compare-modal-header {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(232, 244, 252, 0.92));
+}
+
+:root[data-theme="light"] .compare-card-media {
+  background:
+    radial-gradient(circle at 50% 72%, rgba(37, 99, 235, 0.08), transparent 42%),
+    linear-gradient(180deg, rgba(239, 246, 252, 0.98), rgba(218, 231, 242, 0.96));
+}
+
+:root[data-theme="light"] .compare-card-price,
+:root[data-theme="light"] .compare-market,
+:root[data-theme="light"] .compare-spec-row,
+:root[data-theme="light"] .compare-empty-state {
+  background: rgba(255, 255, 255, 0.74);
+}
+
+:root[data-theme="light"] .compare-tray {
+  border-color: var(--ox-border);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+    rgba(255, 255, 255, 0.94);
+}
+
+:root[data-theme="light"] .compare-tray-chip {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+:root[data-theme="light"] .compare-tray-message {
+  border-color: rgba(2, 132, 199, 0.16);
+  background: rgba(224, 243, 252, 0.72);
+  color: #4d6379;
+}
+
+:root[data-theme="light"] .compare-card-remove {
+  border-color: var(--ox-border);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .compare-card-gallery-btn,
+:root[data-theme="light"] .compare-card-gallery-count {
+  border-color: var(--ox-border);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ox-text);
+}
+
+@media (max-width: 860px) {
+  .modal-backdrop:has(.compare-modal) {
+    place-items: start center;
+    padding: var(--ox-space-4);
+    overflow-y: auto;
+  }
+
+  .compare-modal {
+    width: min(100%, 720px);
+    max-height: none;
+    margin-bottom: 92px;
+    padding: var(--ox-space-4);
+  }
+
+  .compare-modal-header {
+    position: static;
+    flex-direction: column;
+    margin: 0 0 var(--ox-space-5);
+    padding: 0 0 var(--ox-space-5);
+    background: transparent;
+    backdrop-filter: none;
+  }
+
+  .compare-modal-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .compare-modal-actions button:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .compare-modal-scroll {
+    overflow-x: auto;
+  }
+
+  .compare-grid {
+    display: flex;
+    gap: var(--ox-space-4);
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .compare-card {
+    flex: 0 0 min(82vw, 320px);
+  }
+}
+
+@media (max-width: 520px) {
+  .compare-modal-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-card {
+    flex-basis: min(86vw, 310px);
+  }
+
+  .compare-card-media {
+    height: 146px;
+  }
 }

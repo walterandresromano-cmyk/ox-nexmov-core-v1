@@ -39,6 +39,8 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
   const authProfile = appActions?.authProfile;
   const isLoggedIn = Boolean(authUser?.id);
   const privatePanel = getPrivatePanelForRole(authProfile?.role);
+  const theme = appActions?.theme || "dark";
+  const nextThemeLabel = theme === "dark" ? "Modo claro" : "Modo oscuro";
 
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
@@ -88,6 +90,16 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
         </nav>
 
         <div className="header-role-actions">
+          <button
+            type="button"
+            className="theme-toggle-btn"
+            onClick={appActions?.toggleTheme}
+            aria-label={nextThemeLabel}
+            title={nextThemeLabel}
+          >
+            {theme === "dark" ? "Claro" : "Oscuro"}
+          </button>
+
           {isLoggedIn && privatePanel && (
             <button
               type="button"

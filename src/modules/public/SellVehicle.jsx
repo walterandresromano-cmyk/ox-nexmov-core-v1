@@ -429,6 +429,12 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
             >
               {submitting ? "Enviando solicitud..." : "Enviar solicitud de venta"}
             </button>
+
+            <p className="form-legal-note">
+              Al enviar los datos de tu vehículo, aceptás que oX NEXMOV registre
+              la información para gestionar posibles contactos comerciales con
+              dealers habilitados.
+            </p>
           </form>
         </div>
         )}

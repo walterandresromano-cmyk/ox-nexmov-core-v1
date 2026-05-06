@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import VehicleDetailModal from "./cards/VehicleDetailModal.jsx";
+import { getEffectiveDealerPermissions } from "../lib/permissions.js";
 
-function formatARS(value) {
-  const number = Number(value || 0);
+function getNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : null;
+}
 
-  if (!Number.isFinite(number) || number <= 0) {
-    return "Consultar";
-  }
+function formatPrice(value) {
+  const number = getNumber(value);
+
+  if (!number) return "Consultar";
 
   return new Intl.NumberFormat("es-AR", {
     style: "currency",
@@ -15,46 +19,132 @@ function formatARS(value) {
   }).format(number);
 }
 
-function formatKm(value) {
-  const number = Number(value || 0);
+function formatKilometers(value) {
+  const number = getNumber(value);
+
+  if (!number) return "No informado";
+
   return `${number.toLocaleString("es-AR")} km`;
 }
 
-function getVehicleImage(vehicle) {
-  if (!vehicle) return "";
+function getImageUrl(image) {
+  if (!image) return "";
+  if (typeof image === "string") return image;
 
-  if (vehicle.mainImageUrl) return vehicle.mainImageUrl;
-  if (vehicle.imageUrl) return vehicle.imageUrl;
-  if (vehicle.main_image_url) return vehicle.main_image_url;
-  if (vehicle.image_url) return vehicle.image_url;
+  return (
+    image.url ||
+    image.publicUrl ||
+    image.src ||
+    image.imageUrl ||
+    image.image_url ||
+    image.thumbnail ||
+    image.thumbnailUrl ||
+    ""
+  );
+}
 
-  if (Array.isArray(vehicle.images) && vehicle.images.length > 0) {
-    const firstImage = vehicle.images[0];
+function getVehicleImages(vehicle) {
+  if (!vehicle) return [];
 
-    if (typeof firstImage === "string") return firstImage;
-    if (firstImage?.url) return firstImage.url;
-    if (firstImage?.publicUrl) return firstImage.publicUrl;
+  const images = [];
+  const seen = new Set();
+
+  function addImage(image) {
+    const url = getImageUrl(image);
+    const cleanUrl = String(url || "").trim();
+
+    if (!cleanUrl || seen.has(cleanUrl)) return;
+
+    seen.add(cleanUrl);
+    images.push(cleanUrl);
   }
 
-  if (vehicle.raw?.main_image_url) return vehicle.raw.main_image_url;
-  if (vehicle.raw?.image_url) return vehicle.raw.image_url;
+  function addImages(value) {
+    if (!value) return;
 
-  const rawImages = vehicle.raw?.images_json;
+    if (typeof value === "string") {
+      const trimmed = value.trim();
 
-  if (Array.isArray(rawImages) && rawImages.length > 0) {
-    const firstRawImage = rawImages[0];
+      if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
+        try {
+          addImages(JSON.parse(trimmed));
+          return;
+        } catch {
+          addImage(trimmed);
+          return;
+        }
+      }
 
-    if (typeof firstRawImage === "string") return firstRawImage;
-    if (firstRawImage?.url) return firstRawImage.url;
-    if (firstRawImage?.publicUrl) return firstRawImage.publicUrl;
+      addImage(trimmed);
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach(addImage);
+      return;
+    }
+
+    addImage(value);
   }
 
-  return "";
+  const candidates = [
+    vehicle.mainImageUrl,
+    vehicle.main_image_url,
+    vehicle.coverImage,
+    vehicle.imageUrl,
+    vehicle.image_url,
+    vehicle.image,
+    vehicle.thumbnail,
+    vehicle.raw?.main_image_url,
+    vehicle.raw?.image_url,
+    vehicle.raw?.image,
+    vehicle.raw?.thumbnail,
+  ];
+
+  candidates.forEach(addImage);
+
+  const imageCollections = [
+    vehicle.images,
+    vehicle.images_json,
+    vehicle.imageUrls,
+    vehicle.image_urls,
+    vehicle.photos,
+    vehicle.raw?.images_json,
+    vehicle.raw?.images,
+    vehicle.raw?.image_urls,
+    vehicle.raw?.photos,
+  ];
+
+  imageCollections.forEach(addImages);
+
+  return images.slice(0, 12);
+}
+
+function getVehicleTitle(vehicle) {
+  return (
+    [vehicle?.brand || vehicle?.make, vehicle?.model].filter(Boolean).join(" ") ||
+    "Vehículo publicado"
+  );
+}
+
+function getLocation(vehicle) {
+  if (vehicle?.location) return vehicle.location;
+
+  const city = vehicle?.city || vehicle?.raw?.city;
+  const province = vehicle?.province || vehicle?.raw?.province;
+
+  if (city && province) return `${city}, ${province}`;
+  if (city) return city;
+  if (province) return province;
+
+  return "No informado";
 }
 
 function getDealerName(vehicle) {
   return (
     vehicle?.dealer?.commercialName ||
+    vehicle?.dealer?.commercial_name ||
+    vehicle?.dealerName ||
     vehicle?.dealer_name ||
     vehicle?.raw?.dealer_name ||
     "Dealer no informado"
@@ -62,11 +152,20 @@ function getDealerName(vehicle) {
 }
 
 function getDealerForVehicle(vehicle) {
+  const plan =
+    vehicle?.dealer?.plan ||
+    vehicle?.dealerPlan ||
+    vehicle?.dealer_plan ||
+    vehicle?.subscription_plan ||
+    vehicle?.raw?.dealer_plan ||
+    vehicle?.raw?.subscription_plan ||
+    "inicio";
+
   return (
     vehicle?.dealer || {
       id: vehicle?.dealerId || vehicle?.dealer_id || "dealer-fallback",
       commercialName: getDealerName(vehicle),
-      plan: "inicio",
+      plan,
       planStatus: "active",
       province: vehicle?.province || "",
       city: vehicle?.city || "",
@@ -81,24 +180,35 @@ function getDealerForVehicle(vehicle) {
   );
 }
 
+function getDealerRank(vehicle) {
+  const permissions = getEffectiveDealerPermissions(getDealerForVehicle(vehicle));
+
+  return {
+    label: permissions.rankLabel,
+    className: permissions.rankTheme,
+  };
+}
+
 function getMarketDelta(vehicle) {
-  const price = Number(vehicle?.price || 0);
-  const reference = Number(
+  const price = getNumber(vehicle?.price);
+  const reference = getNumber(
     vehicle?.marketReferencePrice ||
       vehicle?.market_reference_price ||
+      vehicle?.referencePrice ||
+      vehicle?.reference_price ||
       vehicle?.raw?.market_reference_price ||
-      vehicle?.raw?.avg ||
-      0
+      vehicle?.raw?.reference_price ||
+      vehicle?.raw?.avg
   );
 
   if (!price || !reference) return null;
 
-  const delta = ((price - reference) / reference) * 100;
+  const percent = ((price - reference) / reference) * 100;
 
   return {
     reference,
-    percent: delta,
-    isBelowMarket: delta < 0,
+    percent,
+    isBelowMarket: percent < 0,
   };
 }
 
@@ -120,265 +230,213 @@ function getVehicleStatus(vehicle) {
   return "Activo";
 }
 
-function SpecRow({ label, children }) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "120px 1fr",
-        gap: "10px",
-        padding: "10px 0",
-        borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
-      }}
-    >
-      <span
-        style={{
-          color: "var(--ox-muted)",
-          fontSize: "0.76rem",
-          fontWeight: 900,
-          textTransform: "uppercase",
-          letterSpacing: "0.06em",
-        }}
-      >
-        {label}
-      </span>
+function getFinancingLabel(vehicle) {
+  return vehicle?.hasFinancing || vehicle?.financing || vehicle?.raw?.financing
+    ? "Disponible"
+    : "No informada";
+}
 
-      <strong
-        style={{
-          color: "var(--ox-text)",
-          textAlign: "right",
-          fontSize: "0.9rem",
-          lineHeight: 1.35,
-        }}
-      >
-        {children || "—"}
-      </strong>
+function getVehicleKey(vehicle, index = 0) {
+  return (
+    vehicle?.id ||
+    vehicle?.vehicle_id ||
+    vehicle?.slug ||
+    `${vehicle?.brand || vehicle?.make || "vehicle"}-${vehicle?.model || index}`
+  );
+}
+
+function getCompareTrayMessage(compareItems, appNotice) {
+  if (appNotice?.scope === "compare") {
+    if (appNotice.message?.includes("Suma otro")) {
+      return "Vehículo agregado. Sumá otro para comparar.";
+    }
+
+    if (appNotice.message?.includes("agregado al comparador")) {
+      return "Ya podés comparar tus opciones.";
+    }
+
+    if (appNotice.message?.includes("hasta 4")) {
+      return "Podés comparar hasta 4 vehículos. Quitá uno para sumar otro.";
+    }
+
+    if (appNotice.message?.includes("ya esta")) {
+      return "Ese vehículo ya está en el comparador.";
+    }
+
+    if (appNotice.message?.includes("al menos 2")) {
+      return "Seleccioná al menos 2 vehículos para comparar.";
+    }
+
+    return appNotice.message;
+  }
+
+  if (compareItems.length === 1) {
+    return "Vehículo agregado. Sumá otro para comparar.";
+  }
+
+  return "";
+}
+
+function SpecRow({ label, children, highlight = false }) {
+  if (!children) return null;
+
+  return (
+    <div className={highlight ? "compare-spec-row is-highlight" : "compare-spec-row"}>
+      <span className="compare-spec-label">{label}</span>
+      <strong className="compare-spec-value">{children}</strong>
     </div>
   );
 }
 
-function CompareVehicleCard({ vehicle, onRemove, onOpenDetail }) {
-  const imageUrl = getVehicleImage(vehicle);
+function CompareVehicleCard({
+  vehicle,
+  index,
+  galleryIndex = 0,
+  onGalleryMove,
+  onRemove,
+  onOpenDetail,
+}) {
+  const images = getVehicleImages(vehicle);
+  const safeGalleryIndex =
+    images.length > 0 ? Math.min(galleryIndex, images.length - 1) : 0;
+  const imageUrl = images[safeGalleryIndex] || "";
+  const title = getVehicleTitle(vehicle);
   const market = getMarketDelta(vehicle);
+  const dealerRank = getDealerRank(vehicle);
+  const vehicleKey = getVehicleKey(vehicle, index);
+  const kilometers =
+    vehicle.kilometers || vehicle.km || vehicle.mileage || vehicle.raw?.km;
+  const delivery = vehicle.delivery || vehicle.raw?.delivery;
+  const months = vehicle.months || vehicle.raw?.months;
+  const rate = vehicle.rate || vehicle.raw?.rate;
 
   return (
-    <article
-      style={{
-        minWidth: 0,
-        border: "1px solid rgba(148, 163, 184, 0.16)",
-        borderRadius: "24px",
-        overflow: "hidden",
-        background:
-          "linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.94))",
-        boxShadow:
-          "0 18px 60px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255,255,255,.035)",
-      }}
-    >
-      <div
-        style={{
-          height: "190px",
-          background:
-            "radial-gradient(circle at 30% 10%, rgba(56, 189, 248, 0.16), transparent 36%), linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98))",
-          borderBottom: "1px solid rgba(148, 163, 184, 0.14)",
-          display: "grid",
-          placeItems: "center",
-          overflow: "hidden",
-        }}
+    <article className={`compare-card dealer-rank-${dealerRank.className}`}>
+      <button
+        type="button"
+        className="compare-card-remove"
+        onClick={() => onRemove(vehicle.id)}
+        title="Quitar de comparación"
+        aria-label={`Quitar ${title} de la comparación`}
       >
+        ×
+      </button>
+
+      <div className="compare-card-media">
         {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={`${vehicle.brand} ${vehicle.model}`}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-            }}
-          />
+          <img className="compare-card-image" src={imageUrl} alt={title} loading="lazy" />
         ) : (
-          <strong style={{ color: "var(--ox-muted)" }}>
-            {vehicle.brand} {vehicle.model}
-          </strong>
+          <strong>{title}</strong>
+        )}
+
+        {images.length > 1 && (
+          <>
+            <button
+              type="button"
+              className="compare-card-gallery-btn prev"
+              onClick={() => onGalleryMove(vehicleKey, -1, images.length)}
+              aria-label="Imagen anterior"
+            >
+              ‹
+            </button>
+
+            <button
+              type="button"
+              className="compare-card-gallery-btn next"
+              onClick={() => onGalleryMove(vehicleKey, 1, images.length)}
+              aria-label="Imagen siguiente"
+            >
+              ›
+            </button>
+
+            <span className="compare-card-gallery-count">
+              {safeGalleryIndex + 1} / {images.length}
+            </span>
+
+            <div className="compare-card-gallery-dots" aria-hidden="true">
+              {images.slice(0, 6).map((image, imageIndex) => (
+                <span
+                  key={`${image}-${imageIndex}`}
+                  className={
+                    imageIndex === safeGalleryIndex
+                      ? "compare-card-gallery-dot is-active"
+                      : "compare-card-gallery-dot"
+                  }
+                />
+              ))}
+            </div>
+          </>
         )}
       </div>
 
-      <div style={{ padding: "18px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            gap: "12px",
-            marginBottom: "12px",
-          }}
-        >
-          <div>
-            <p className="eyebrow" style={{ margin: 0 }}>
-              {getDealerName(vehicle)}
-            </p>
-
-            <h3
-              style={{
-                margin: "8px 0 4px",
-                fontSize: "1.25rem",
-                lineHeight: 1.05,
-              }}
-            >
-              {vehicle.brand} {vehicle.model}
-            </h3>
-
-            <p
-              style={{
-                margin: 0,
-                color: "var(--ox-muted)",
-                lineHeight: 1.4,
-              }}
-            >
-              {vehicle.version || "Sin versión"}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => onRemove(vehicle.id)}
-            title="Quitar de comparación"
-            style={{
-              width: "34px",
-              height: "34px",
-              flexShrink: 0,
-              border: "1px solid var(--ox-border)",
-              borderRadius: "999px",
-              background: "var(--ox-card-2)",
-              color: "var(--ox-text)",
-              fontWeight: 900,
-              cursor: "pointer",
-            }}
-          >
-            ×
-          </button>
+      <div className="compare-card-body">
+        <div className="compare-card-dealer">
+          <span className={`admin-chip rank-${dealerRank.className}`}>
+            {dealerRank.label}
+          </span>
+          <p>{getDealerName(vehicle)}</p>
         </div>
 
-        <strong
-          style={{
-            display: "block",
-            color: "var(--ox-cyan)",
-            fontSize: "1.65rem",
-            lineHeight: 1,
-            marginBottom: "14px",
-          }}
-        >
-          {formatARS(vehicle.price)}
-        </strong>
+        <div>
+          <h3 className="compare-card-title">{title}</h3>
+          <p className="compare-card-version">
+            {vehicle.version || vehicle.raw?.version || "Versión no informada"}
+          </p>
+        </div>
+
+        <strong className="compare-card-price">{formatPrice(vehicle.price)}</strong>
 
         {market && (
           <div
-            style={{
-              border: "1px solid rgba(56, 189, 248, 0.18)",
-              background: "rgba(56, 189, 248, 0.07)",
-              borderRadius: "16px",
-              padding: "12px",
-              marginBottom: "12px",
-            }}
+            className={
+              market.isBelowMarket
+                ? "compare-market is-below"
+                : "compare-market is-above"
+            }
           >
-            <span
-              style={{
-                display: "block",
-                color: "var(--ox-muted)",
-                fontSize: "0.72rem",
-                fontWeight: 900,
-                textTransform: "uppercase",
-                letterSpacing: "0.06em",
-                marginBottom: "5px",
-              }}
-            >
-              Lectura de mercado
-            </span>
-
-            <strong
-              style={{
-                color: market.isBelowMarket ? "#86efac" : "#fdba74",
-              }}
-            >
+            <span>Referencia de mercado</span>
+            <strong>
               {market.isBelowMarket
-                ? `${Math.abs(market.percent).toFixed(1)}% debajo de referencia`
-                : `${market.percent.toFixed(1)}% arriba de referencia`}
+                ? `${Math.abs(market.percent).toFixed(1)}% debajo`
+                : `${market.percent.toFixed(1)}% arriba`}
             </strong>
-
-            <p style={{ margin: "6px 0 0", color: "var(--ox-muted)" }}>
-              Ref. {formatARS(market.reference)}
-            </p>
+            <p>Ref. {formatPrice(market.reference)}</p>
           </div>
         )}
 
-        <SpecRow label="Año">{vehicle.year || "—"}</SpecRow>
-        <SpecRow label="Km">{formatKm(vehicle.kilometers || vehicle.km)}</SpecRow>
-        <SpecRow label="Ubicación">
-          {vehicle.city || "Sin ciudad"}
-          {vehicle.province ? `, ${vehicle.province}` : ""}
-        </SpecRow>
-        <SpecRow label="Estado">{getVehicleStatus(vehicle)}</SpecRow>
-        <SpecRow label="Combustible">
-          {vehicle.fuelType || vehicle.fuel_type || vehicle.raw?.fuel_type || "—"}
-        </SpecRow>
-        <SpecRow label="Transmisión">
-          {vehicle.transmission || vehicle.raw?.transmission || "—"}
-        </SpecRow>
-        <SpecRow label="Carrocería">
-          {vehicle.bodyType || vehicle.body_type || vehicle.raw?.body_type || "—"}
-        </SpecRow>
-        <SpecRow label="Financia">
-          {vehicle.hasFinancing || vehicle.financing || vehicle.raw?.financing
-            ? "Sí"
-            : "No informada"}
-        </SpecRow>
-        <SpecRow label="Entrega">
-          {vehicle.delivery || vehicle.raw?.delivery
-            ? formatARS(vehicle.delivery || vehicle.raw?.delivery)
-            : "—"}
-        </SpecRow>
-        <SpecRow label="Cuotas">
-          {vehicle.months || vehicle.raw?.months
-            ? `${vehicle.months || vehicle.raw?.months} meses`
-            : "—"}
-        </SpecRow>
-        <SpecRow label="Tasa">
-          {vehicle.rate || vehicle.raw?.rate
-            ? `${vehicle.rate || vehicle.raw?.rate}%`
-            : "—"}
-        </SpecRow>
+        <div className="compare-spec-list">
+          <SpecRow label="Año" highlight>
+            {vehicle.year || vehicle.raw?.year || "No informado"}
+          </SpecRow>
+          <SpecRow label="Km" highlight>
+            {formatKilometers(kilometers)}
+          </SpecRow>
+          <SpecRow label="Ubicación">{getLocation(vehicle)}</SpecRow>
+          <SpecRow label="Estado">{getVehicleStatus(vehicle)}</SpecRow>
+          <SpecRow label="Financiación" highlight>
+            {getFinancingLabel(vehicle)}
+          </SpecRow>
+          {delivery && <SpecRow label="Entrega">{formatPrice(delivery)}</SpecRow>}
+          {months && <SpecRow label="Cuotas">{months} meses</SpecRow>}
+          {rate && <SpecRow label="Tasa">{rate}%</SpecRow>}
+          <SpecRow label="Combustible">
+            {vehicle.fuelType || vehicle.fuel_type || vehicle.raw?.fuel_type}
+          </SpecRow>
+          <SpecRow label="Transmisión">
+            {vehicle.transmission || vehicle.raw?.transmission}
+          </SpecRow>
+          <SpecRow label="Carrocería">
+            {vehicle.bodyType || vehicle.body_type || vehicle.raw?.body_type}
+          </SpecRow>
+        </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "10px",
-            marginTop: "16px",
-          }}
-        >
+        <div className="compare-card-actions">
           <button
             type="button"
-            className="primary-action"
+            className="compare-card-detail"
             onClick={() => onOpenDetail(vehicle)}
-            style={{ width: "100%" }}
           >
             Ver detalle
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onRemove(vehicle.id)}
-            style={{
-              border: "1px solid var(--ox-border)",
-              background: "var(--ox-card-2)",
-              color: "var(--ox-text)",
-              borderRadius: "14px",
-              padding: "12px 14px",
-              fontWeight: 900,
-              cursor: "pointer",
-            }}
-          >
-            Quitar
           </button>
         </div>
       </div>
@@ -389,6 +447,7 @@ function CompareVehicleCard({ vehicle, onRemove, onOpenDetail }) {
 export default function CompareTray({ appActions, onNavigate }) {
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [selectedDetailVehicle, setSelectedDetailVehicle] = useState(null);
+  const [galleryIndexes, setGalleryIndexes] = useState({});
 
   const compareItems = appActions?.compareItems || [];
   const removeFromCompare = appActions?.removeFromCompare || (() => {});
@@ -408,34 +467,61 @@ export default function CompareTray({ appActions, onNavigate }) {
   if (!compareItems.length) return null;
 
   const canOpenComparison = compareItems.length >= 2;
+  const compareVehicles = compareItems.slice(0, 4);
+  const countClass = `compare-count-${Math.max(1, Math.min(compareVehicles.length, 4))}`;
+  const trayMessage = getCompareTrayMessage(compareItems, appActions?.appNotice);
   const selectedDealer = selectedDetailVehicle
     ? getDealerForVehicle(selectedDetailVehicle)
     : null;
 
+  function moveCompareImage(vehicleKey, direction, total) {
+    setGalleryIndexes((current) => {
+      const currentIndex = current[vehicleKey] || 0;
+      const nextIndex = (currentIndex + direction + total) % total;
+
+      return {
+        ...current,
+        [vehicleKey]: nextIndex,
+      };
+    });
+  }
+
   return (
     <>
       <aside className="compare-tray">
-        <div className="compare-tray-head">
-          <div>
-            <strong>Comparador</strong>
-            <span>{compareItems.length} / 4 vehículos</span>
+        <div className="compare-tray-header">
+          <div className="compare-tray-titleblock">
+            <strong className="compare-tray-title">Comparador</strong>
+            <span className="compare-tray-count">
+              {compareItems.length} / 4 vehículos
+            </span>
           </div>
 
-          <button type="button" onClick={clearCompare}>
+          <button
+            type="button"
+            className="compare-tray-clear"
+            onClick={clearCompare}
+          >
             Limpiar
           </button>
         </div>
 
-        <div className="compare-tray-list">
+        {trayMessage && (
+          <p className="compare-tray-message">{trayMessage}</p>
+        )}
+
+        <div className="compare-tray-scroll" aria-label="Vehículos comparados">
           {compareItems.map((vehicle) => (
-            <div className="compare-tray-item" key={vehicle.id}>
-              <span>
-                {vehicle.brand} {vehicle.model}
+            <div className="compare-tray-chip" key={vehicle.id}>
+              <span className="compare-tray-chip-name">
+                {getVehicleTitle(vehicle)}
               </span>
 
               <button
                 type="button"
+                className="compare-tray-chip-remove"
                 onClick={() => removeFromCompare(vehicle.id)}
+                aria-label={`Quitar ${getVehicleTitle(vehicle)}`}
               >
                 ×
               </button>
@@ -446,15 +532,15 @@ export default function CompareTray({ appActions, onNavigate }) {
         {canOpenComparison ? (
           <button
             type="button"
-            className="compare-open-btn"
+            className="compare-tray-primary"
             onClick={() => setShowCompareModal(true)}
           >
-            Abrir comparación completa
+            Comparar vehículos
           </button>
         ) : (
           <button
             type="button"
-            className="compare-open-btn"
+            className="compare-tray-primary"
             onClick={() => onNavigate?.("search")}
           >
             Agregá otro vehículo para comparar
@@ -465,57 +551,22 @@ export default function CompareTray({ appActions, onNavigate }) {
       {showCompareModal && (
         <div className="modal-backdrop">
           <section
-            style={{
-              width: "min(1240px, calc(100vw - 32px))",
-              maxHeight: "min(860px, calc(100vh - 32px))",
-              overflow: "auto",
-              border: "1px solid rgba(148, 163, 184, 0.18)",
-              borderRadius: "28px",
-              background:
-                "linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98))",
-              boxShadow:
-                "0 30px 90px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255,255,255,.04)",
-              padding: "24px",
-            }}
+            className={`compare-modal ${countClass}`}
+            aria-label="Comparación inteligente"
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                gap: "18px",
-                marginBottom: "22px",
-              }}
-            >
-              <div>
+            <header className="compare-modal-header">
+              <div className="compare-modal-titleblock">
                 <p className="eyebrow">Comparación inteligente</p>
-                <h2
-                  style={{
-                    margin: "8px 0 6px",
-                    fontSize: "clamp(1.7rem, 4vw, 2.7rem)",
-                    lineHeight: 1,
-                    letterSpacing: "-0.055em",
-                  }}
-                >
-                  Compará opciones con lectura real.
-                </h2>
-                <p
-                  style={{
-                    margin: 0,
-                    color: "var(--ox-muted)",
-                    maxWidth: "760px",
-                    lineHeight: 1.55,
-                  }}
-                >
+                <h2>Compará opciones con lectura real.</h2>
+                <p>
                   Revisá precio, referencia de mercado, kilometraje,
                   financiación, ubicación y datos técnicos antes de contactar.
                 </p>
               </div>
 
-              <div className="admin-action-row">
+              <div className="compare-modal-actions">
                 <button
                   type="button"
-                  className="admin-refresh-btn"
                   onClick={() => {
                     setShowCompareModal(false);
                     onNavigate?.("search");
@@ -524,45 +575,45 @@ export default function CompareTray({ appActions, onNavigate }) {
                   Seguir buscando
                 </button>
 
-                <button
-                  type="button"
-                  className="admin-refresh-btn"
-                  onClick={clearCompare}
-                >
+                <button type="button" onClick={clearCompare}>
                   Limpiar comparación
                 </button>
 
-                <button
-                  type="button"
-                  className="admin-refresh-btn"
-                  onClick={() => setShowCompareModal(false)}
-                >
+                <button type="button" onClick={() => setShowCompareModal(false)}>
                   Cerrar
                 </button>
               </div>
-            </div>
+            </header>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: `repeat(${Math.min(
-                  compareItems.length,
-                  4
-                )}, minmax(260px, 1fr))`,
-                gap: "16px",
-                overflowX: "auto",
-                paddingBottom: "4px",
-              }}
-            >
-              {compareItems.slice(0, 4).map((vehicle) => (
-                <CompareVehicleCard
-                  key={vehicle.id}
-                  vehicle={vehicle}
-                  onRemove={removeFromCompare}
-                  onOpenDetail={setSelectedDetailVehicle}
-                />
-              ))}
-            </div>
+            {compareItems.length ? (
+              <div className="compare-modal-scroll">
+                <div className={`compare-grid ${countClass}`}>
+                  {compareVehicles.map((vehicle, index) => {
+                    const vehicleKey = getVehicleKey(vehicle, index);
+
+                    return (
+                    <CompareVehicleCard
+                      key={vehicleKey}
+                      vehicle={vehicle}
+                      index={index}
+                      galleryIndex={galleryIndexes[vehicleKey] || 0}
+                      onGalleryMove={moveCompareImage}
+                      onRemove={removeFromCompare}
+                      onOpenDetail={setSelectedDetailVehicle}
+                    />
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className="compare-empty-state">
+                <h3>Todavía no agregaste vehículos para comparar.</h3>
+                <p>
+                  Agregá hasta 4 publicaciones desde las cards para construir
+                  una comparación real.
+                </p>
+              </div>
+            )}
           </section>
         </div>
       )}

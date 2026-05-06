@@ -453,6 +453,18 @@ export default function AuthPanel({
                   />
                 </label>
 
+                <p className="auth-legal-note">
+                  Al registrarme acepto los{" "}
+                  <a href="#" title="Próximamente">
+                    Términos y condiciones
+                  </a>{" "}
+                  y la{" "}
+                  <a href="#" title="Próximamente">
+                    Política de privacidad
+                  </a>{" "}
+                  de oX NEXMOV.
+                </p>
+
                 <button className="primary-action" type="submit">
                   Crear cuenta comprador
                 </button>
@@ -511,6 +523,18 @@ export default function AuthPanel({
                     placeholder="Mínimo 6 caracteres"
                   />
                 </label>
+
+                <p className="auth-legal-note">
+                  Al registrarme acepto los{" "}
+                  <a href="#" title="Próximamente">
+                    Términos y condiciones
+                  </a>{" "}
+                  y la{" "}
+                  <a href="#" title="Próximamente">
+                    Política de privacidad
+                  </a>{" "}
+                  de oX NEXMOV.
+                </p>
 
                 <button className="primary-action" type="submit">
                   Crear acceso dealer

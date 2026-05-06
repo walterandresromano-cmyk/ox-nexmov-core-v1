@@ -4,13 +4,22 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--ox-bg);
 }
 
 body {
   margin: 0;
-  font-family: Inter, system-ui, sans-serif;
-  background: var(--ox-bg);
+  min-width: 320px;
+  font-family: var(--ox-font-sans);
+  font-size: var(--ox-fs-body);
+  line-height: var(--ox-lh-body);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(37, 99, 235, 0.10), transparent 34%),
+    linear-gradient(180deg, var(--ox-bg), var(--ox-bg-soft) 68%);
   color: var(--ox-text);
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button,
@@ -24,6 +33,46 @@ button {
   cursor: pointer;
 }
 
-input {
+input,
+select,
+textarea {
   width: 100%;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.28);
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(125, 211, 252, 0.82);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

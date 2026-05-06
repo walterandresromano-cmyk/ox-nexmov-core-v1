@@ -37,6 +37,8 @@ const PLAN_OPTIONS = [
   { value: "platinum", label: "Platinum" },
 ];
 
+const ALLOW_MOCK_FALLBACK = import.meta.env.DEV;
+
 function formatLimit(limit) {
   return limit === Infinity ? "Ilimitado" : limit;
 }
@@ -110,7 +112,9 @@ export default function AdminPanel({ authProfile }) {
   const [planFilter, setPlanFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const [dealers, setDealers] = useState(mockDealers);
+  const [dealers, setDealers] = useState(
+    ALLOW_MOCK_FALLBACK ? mockDealers : []
+  );
   const [loadingDealers, setLoadingDealers] = useState(true);
   const [dealersError, setDealersError] = useState("");
 
@@ -168,18 +172,22 @@ export default function AdminPanel({ authProfile }) {
     const { dealers: supabaseDealers, error } = await listDealersForAdmin();
 
     if (error) {
-      setDealers(mockDealers);
+      setDealers(ALLOW_MOCK_FALLBACK ? mockDealers : []);
       setDealersError(
-        `${error.message}. Usando datos mock como respaldo temporal.`
+        ALLOW_MOCK_FALLBACK
+          ? `${error.message}. Modo desarrollo: usando datos mock como respaldo temporal.`
+          : "No pudimos cargar dealers reales en este momento."
       );
       setLoadingDealers(false);
       return;
     }
 
     if (!supabaseDealers.length) {
-      setDealers(mockDealers);
+      setDealers(ALLOW_MOCK_FALLBACK ? mockDealers : []);
       setDealersError(
-        "Supabase devolvió 0 dealers. Usando datos mock como respaldo temporal."
+        ALLOW_MOCK_FALLBACK
+          ? "Supabase devolvió 0 dealers. Modo desarrollo: usando datos mock como respaldo temporal."
+          : "No hay dealers reales cargados en la red."
       );
       setLoadingDealers(false);
       return;

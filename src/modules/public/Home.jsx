@@ -155,6 +155,166 @@ function sortEntriesByCount(entries) {
   return Object.entries(entries).sort((a, b) => b[1] - a[1]);
 }
 
+function normalizeSearchText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\w\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isVehicleVisibleForBuyer(vehicle) {
+  const status = normalizeSearchText(
+    [
+      vehicle.status,
+      vehicle.publicationStatus,
+      vehicle.publication_status,
+      vehicle.raw?.status,
+      vehicle.raw?.publication_status,
+    ]
+      .filter(Boolean)
+      .join(" ")
+  );
+
+  const blockedStatus = [
+    "draft",
+    "borrador",
+    "paused",
+    "pausado",
+    "suspended",
+    "suspendido",
+    "expired",
+    "vencido",
+    "deleted",
+    "eliminado",
+    "inactive",
+    "inactivo",
+    "rejected",
+    "rechazado",
+  ];
+
+  if (blockedStatus.some((blocked) => status.includes(blocked))) return false;
+  if (vehicle.isPublished === false || vehicle.raw?.is_published === false) return false;
+  if (vehicle.active === false || vehicle.is_active === false) return false;
+  if (vehicle.raw?.active === false || vehicle.raw?.is_active === false) return false;
+
+  return true;
+}
+
+function getVehicleAutocompleteFields(vehicle) {
+  const brand = String(
+    vehicle.brand || vehicle.make || vehicle.raw?.brand || vehicle.raw?.make || ""
+  ).trim();
+  const model = String(vehicle.model || vehicle.raw?.model || "").trim();
+  const version = String(vehicle.version || vehicle.raw?.version || "").trim();
+  const year = String(vehicle.year || vehicle.raw?.year || "").trim();
+
+  return { brand, model, version, year };
+}
+
+function scoreAutocompleteSuggestion(label, haystack, query) {
+  const normalizedLabel = normalizeSearchText(label);
+  const normalizedHaystack = normalizeSearchText(haystack || label);
+  const tokens = query.split(" ").filter(Boolean);
+
+  let score = 0;
+
+  if (normalizedLabel === query) score += 120;
+  if (normalizedLabel.startsWith(query)) score += 80;
+  if (normalizedHaystack.includes(query)) score += 45;
+
+  tokens.forEach((token) => {
+    if (token.length > 1 && normalizedHaystack.includes(token)) score += 10;
+  });
+
+  return score;
+}
+
+function buildVehicleAutocompleteSuggestions(vehicles, query, limit = 8) {
+  const text = normalizeSearchText(query);
+  if (text.length < 2) return [];
+
+  const suggestions = new Map();
+
+  function addSuggestion(suggestion) {
+    if (!suggestion.label) return;
+
+    const key = `${suggestion.type}:${normalizeSearchText(suggestion.label)}`;
+    const haystack = [
+      suggestion.label,
+      suggestion.brand,
+      suggestion.model,
+      suggestion.version,
+      suggestion.year,
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const score = scoreAutocompleteSuggestion(suggestion.label, haystack, text);
+
+    if (score <= 0) return;
+
+    const current = suggestions.get(key);
+    if (!current || score > current.score) {
+      suggestions.set(key, {
+        ...suggestion,
+        searchValue: suggestion.searchValue || suggestion.label,
+        score,
+      });
+    }
+  }
+
+  vehicles.filter(isVehicleVisibleForBuyer).forEach((vehicle) => {
+    const { brand, model, version, year } = getVehicleAutocompleteFields(vehicle);
+    if (!brand) return;
+
+    addSuggestion({
+      type: "brand",
+      label: brand,
+      searchValue: brand,
+      brand,
+      year,
+    });
+
+    if (model) {
+      const modelLabel = `${brand} ${model}`;
+      addSuggestion({
+        type: "model",
+        label: modelLabel,
+        searchValue: modelLabel,
+        brand,
+        model,
+        year,
+      });
+    }
+
+    if (model && version) {
+      const versionLabel = `${brand} ${model} ${version}`;
+      addSuggestion({
+        type: "version",
+        label: versionLabel,
+        searchValue: versionLabel,
+        brand,
+        model,
+        version,
+        year,
+      });
+    }
+  });
+
+  return Array.from(suggestions.values())
+    .sort((a, b) => b.score - a.score || a.label.localeCompare(b.label, "es"))
+    .slice(0, limit);
+}
+
+function getSuggestionTypeLabel(type) {
+  if (type === "brand") return "Marca";
+  if (type === "model") return "Modelo";
+  if (type === "version") return "Version";
+  return "Sugerencia";
+}
+
 export default function Home({ onNavigate, appActions = {} }) {
   const [publicDealers, setPublicDealers] = useState([]);
   const [loadingDealers, setLoadingDealers] = useState(true);
@@ -164,6 +324,7 @@ export default function Home({ onNavigate, appActions = {} }) {
   const [loadingLatestVehicles, setLoadingLatestVehicles] = useState(true);
   const [latestVehiclesError, setLatestVehiclesError] = useState("");
   const [heroSearchText, setHeroSearchText] = useState("");
+  const [showHeroSuggestions, setShowHeroSuggestions] = useState(false);
 
   const latestVehiclesCarouselRef = useRef(null);
 
@@ -212,7 +373,7 @@ export default function Home({ onNavigate, appActions = {} }) {
       if (error) {
         setLatestVehicles([]);
         setLatestVehiclesError(
-          error.message || "No se pudieron cargar los últimos ingresos."
+          "No pudimos cargar vehículos disponibles en este momento."
         );
         setLoadingLatestVehicles(false);
         return;
@@ -278,6 +439,11 @@ export default function Home({ onNavigate, appActions = {} }) {
     };
   }, [publicDealers, latestVehicles]);
 
+  const heroAutocompleteSuggestions = useMemo(
+    () => buildVehicleAutocompleteSuggestions(latestVehicles, heroSearchText, 8),
+    [latestVehicles, heroSearchText]
+  );
+
   function goToSearch(query = "") {
     onNavigate("search", {
       query,
@@ -286,6 +452,7 @@ export default function Home({ onNavigate, appActions = {} }) {
 
   function handleHeroSearch(event) {
     event.preventDefault();
+    setShowHeroSuggestions(false);
     goToSearch(heroSearchText);
   }
 
@@ -321,14 +488,55 @@ export default function Home({ onNavigate, appActions = {} }) {
               la mejor decisión.
             </p>
 
-            <form className="ox-home-search-v3" onSubmit={handleHeroSearch}>
+            <form
+              className="ox-home-search-v3 vehicle-autocomplete"
+              onSubmit={handleHeroSearch}
+            >
               <input
                 value={heroSearchText}
-                onChange={(event) => setHeroSearchText(event.target.value)}
+                onFocus={() => setShowHeroSuggestions(true)}
+                onChange={(event) => {
+                  setHeroSearchText(event.target.value);
+                  setShowHeroSuggestions(true);
+                }}
                 placeholder="¿Qué vehículo estás buscando?"
               />
 
               <button type="submit">Buscar</button>
+
+              {showHeroSuggestions &&
+                normalizeSearchText(heroSearchText).length >= 2 && (
+                  <div className="vehicle-autocomplete-dropdown">
+                    {heroAutocompleteSuggestions.length > 0 ? (
+                      <div className="vehicle-autocomplete-list">
+                        {heroAutocompleteSuggestions.map((suggestion) => (
+                          <button
+                            key={`${suggestion.type}-${suggestion.label}`}
+                            type="button"
+                            className="vehicle-autocomplete-item"
+                            onMouseDown={(event) => event.preventDefault()}
+                            onClick={() => {
+                              setHeroSearchText(suggestion.searchValue);
+                              setShowHeroSuggestions(false);
+                              goToSearch(suggestion.searchValue);
+                            }}
+                          >
+                            <span className="vehicle-autocomplete-main">
+                              {suggestion.label}
+                            </span>
+                            <span className="vehicle-autocomplete-meta">
+                              {getSuggestionTypeLabel(suggestion.type)}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="vehicle-autocomplete-empty">
+                        Sin coincidencias disponibles.
+                      </div>
+                    )}
+                  </div>
+                )}
             </form>
 
             <div className="ox-home-chips-v3">
@@ -455,7 +663,7 @@ export default function Home({ onNavigate, appActions = {} }) {
 
             {!loadingLatestVehicles && latestVehicles.length === 0 && (
               <div className="empty-state">
-                Próximamente mostraremos vehículos destacados.
+                No hay vehículos publicados disponibles.
               </div>
             )}
 
