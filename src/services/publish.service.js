@@ -68,6 +68,44 @@ function sanitizeFileName(name) {
     .toLowerCase();
 }
 
+function getPublishFriendlyError(error) {
+  const text = String(
+    (error && (error.message || error.details || error.hint)) || ""
+  ).toLowerCase();
+
+  if (/(quota|cupo|limit|publications|publish_limit|publications_used|max vehicles)/.test(text)) {
+    return {
+      message:
+        "No tenés cupo disponible para crear nuevas publicaciones en este período.",
+    };
+  }
+
+  if (/expired|vencid|plan vencido|plan expired|plan expir|vencimiento/.test(text)) {
+    return {
+      message:
+        "Tu plan comercial venció. Contactá a administración para reactivarlo.",
+    };
+  }
+
+  if (/suspend|suspendido|suspended/.test(text)) {
+    return {
+      message:
+        "Tu cuenta se encuentra suspendida operativamente. Contactá a administración.",
+    };
+  }
+
+  if (/no active plan|active plan|plan activo|no detectamos un plan|sin plan|no plan/.test(text)) {
+    return {
+      message:
+        "No detectamos un plan comercial activo. Contactá a administración.",
+    };
+  }
+
+  return {
+    message: "No pudimos crear la publicación. Revisá los datos e intentá nuevamente.",
+  };
+}
+
 export async function createVehicleForCurrentDealer(form) {
   if (!isSupabaseConfigured || !supabase) {
     return {
@@ -108,7 +146,7 @@ export async function createVehicleForCurrentDealer(form) {
 
   return {
     vehicle: Array.isArray(data) ? data[0] : null,
-    error,
+    error: error ? getPublishFriendlyError(error) : null,
   };
 }
 

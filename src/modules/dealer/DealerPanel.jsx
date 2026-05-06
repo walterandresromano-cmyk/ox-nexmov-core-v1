@@ -49,12 +49,89 @@ function getPlanStatusLabel(status) {
     active: "Activo",
     expiring: "Por vencer",
     expired: "Vencido",
-    grace: "Período de gracia",
+    expired_grace: "Período de gracia",
+    pending_activation: "Pendiente de activación",
     suspended: "Suspendido",
     inactive: "Inactivo",
   };
 
   return labels[status] || status || "Sin estado";
+}
+
+function getPlanStatusDescription(status, expiresInDays) {
+  if (status === "expiring") {
+    return `Tu plan está por vencer en ${expiresInDays} días. Podés seguir publicando hasta que termine el período activo.`;
+  }
+
+  if (status === "expired_grace") {
+    return "Tu plan venció y estás dentro del período de gracia. Podés consultar información existente, pero no crear nuevas publicaciones hasta reactivar tu plan.";
+  }
+
+  if (status === "expired") {
+    return "Tu plan comercial venció. Contactá a administración para reactivarlo.";
+  }
+
+  if (status === "suspended") {
+    return "Tu cuenta se encuentra suspendida operativamente. Contactá a administración para reactivar el servicio.";
+  }
+
+  if (status === "pending_activation") {
+    return "Tu plan está pendiente de activación por administración.";
+  }
+
+  if (status === "inactive") {
+    return "No hay un plan comercial activo para este dealer.";
+  }
+
+  return "Estado del plan normal. Si tenés dudas, consultá con administración.";
+}
+
+function getPlanStatusAlertClass(status, expiresInDays) {
+  if (status === "expired" || status === "expired_grace") {
+    return "plan-alert expired";
+  }
+
+  if (status === "suspended") {
+    return "plan-alert critical";
+  }
+
+  if (status === "pending_activation") {
+    return "plan-alert warning";
+  }
+
+  return getPlanAlertClass(expiresInDays);
+}
+
+function getPublishBlockReason(status, allowed, remaining) {
+  if (allowed) {
+    return "";
+  }
+
+  if (remaining <= 0) {
+    return "No tenés cupo disponible para este período comercial.";
+  }
+
+  if (status === "expired_grace") {
+    return "Plan vencido y en período de gracia. No podés crear nuevas publicaciones hasta reactivar el plan.";
+  }
+
+  if (status === "expired") {
+    return "Plan vencido. Contactá a administración para reactivarlo.";
+  }
+
+  if (status === "suspended") {
+    return "Cuenta suspendida. Contactá a administración.";
+  }
+
+  if (status === "pending_activation") {
+    return "Plan pendiente de activación por administración.";
+  }
+
+  if (status === "inactive") {
+    return "No hay plan comercial activo. Contactá a administración.";
+  }
+
+  return "No podés publicar con el estado actual del plan. Contactá a administración si necesitás ayuda.";
 }
 
 function getRemainingQuota(limit, used) {
@@ -342,6 +419,8 @@ export default function DealerPanel({ authProfile }) {
   const limit = permissions.vehicleLimit;
   const remaining = getRemainingQuota(limit, used);
   const expiresInDays = dealer.currentPeriod?.expiresInDays ?? 0;
+  const planStatusDescription = getPlanStatusDescription(dealer.planStatus);
+  const publishBlockReason = getPublishBlockReason(dealer.planStatus, publishCheck.allowed, remaining);
   const dealerLogo = dealer.logo || dealer.raw?.logo_url || "";
 
   const activeVehiclesCount = dealerVehicles.filter(
@@ -490,8 +569,8 @@ export default function DealerPanel({ authProfile }) {
           <article className="dealer-status-card">
             <span>Estado del plan</span>
             <strong>{getPlanStatusLabel(dealer.planStatus)}</strong>
-            <p className={getPlanAlertClass(expiresInDays)}>
-              {getPlanAlertLabel(expiresInDays)}
+            <p className={getPlanStatusAlertClass(dealer.planStatus, expiresInDays)}>
+              {planStatusDescription}
             </p>
           </article>
 
@@ -564,7 +643,7 @@ export default function DealerPanel({ authProfile }) {
               </p>
               {!publishCheck.allowed && (
                 <small className="dealer-module-lock-reason">
-                  {publishCheck.reason || "No disponible por el estado del plan."}
+                  {publishBlockReason || "No disponible por el estado del plan."}
                 </small>
               )}
               <button type="button" disabled={!publishCheck.allowed}>
@@ -808,14 +887,19 @@ export default function DealerPanel({ authProfile }) {
 
               {!publishCheck.allowed && (
                 <div className="auth-warning">
-                  No podés publicar en este momento. Revisá cupo, estado del
-                  plan o permisos otorgados por admin.
+                  {publishBlockReason || "No podés publicar en este momento. Revisá cupo, estado del plan o permisos otorgados por admin."}
                 </div>
               )}
 
               <button
                 className="primary-action"
                 disabled={!publishCheck.allowed}
+                title={
+                  !publishCheck.allowed
+                    ? publishBlockReason ||
+                      "No podés crear publicaciones hasta regularizar tu plan comercial."
+                    : undefined
+                }
                 onClick={() => setShowVehicleModal(true)}
               >
                 Publicar vehículo

@@ -5,6 +5,7 @@ import {
   uploadVehicleImages,
 } from "../services/publish.service.js";
 import { MAX_VEHICLE_IMAGES, MIN_VEHICLE_IMAGES } from "../config/constants.js";
+import { canDealerPublish } from "../lib/permissions.js";
 import {
   buildCatalogTree,
   listVehicleCatalog,
@@ -126,6 +127,37 @@ function validateVehiclePublishForm(form, imageCount) {
   return errors;
 }
 
+function getCreateVehicleBlockMessage(dealer, publishCheck) {
+  const status = String(dealer?.planStatus || "").toLowerCase();
+  const reason = publishCheck?.reason;
+
+  if (status === "expired_grace") {
+    return "Tu plan venció y estás dentro del período de gracia. Podés consultar información existente, pero no crear nuevas publicaciones hasta reactivar el plan.";
+  }
+
+  if (status === "suspended") {
+    return "Tu cuenta se encuentra suspendida operativamente. Contactá a administración para reactivar el servicio.";
+  }
+
+  if (status === "pending_activation") {
+    return "Tu cuenta está pendiente de activación. Administración debe activar tu plan antes de publicar.";
+  }
+
+  if (status === "expired") {
+    return "Tu plan comercial venció. Contactá a administración para reactivarlo.";
+  }
+
+  if (status === "inactive" || !status) {
+    return "No detectamos un plan comercial activo. Contactá a administración.";
+  }
+
+  if (reason) {
+    return reason;
+  }
+
+  return "No podés crear nuevas publicaciones hasta regularizar tu plan comercial o recuperar cupo disponible.";
+}
+
 function findByName(items = [], value) {
   const normalizedValue = normalizeText(value);
 
@@ -147,6 +179,14 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
   const [catalogTree, setCatalogTree] = useState([]);
   const [loadingCatalog, setLoadingCatalog] = useState(true);
   const [catalogError, setCatalogError] = useState("");
+
+  const publishCheck = canDealerPublish(dealer || {});
+  const planStatus = String(dealer?.planStatus || "").toLowerCase();
+  const canCreateVehicle =
+    publishCheck.allowed &&
+    ["active", "expiring"].includes(planStatus);
+  const createBlockMessage =
+    !canCreateVehicle && getCreateVehicleBlockMessage(dealer, publishCheck);
 
   useEffect(() => {
     async function loadCatalog() {
@@ -247,6 +287,15 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
     setError("");
     setCreatedVehicle(null);
     setUploadSummary(null);
+
+    if (!canCreateVehicle) {
+      setError(
+        createBlockMessage ||
+          "No podés crear nuevas publicaciones hasta regularizar tu plan comercial o recuperar cupo disponible."
+      );
+      setSubmitting(false);
+      return;
+    }
 
     if (!form.brand.trim()) {
       setError("Ingresá la marca.");
@@ -422,6 +471,10 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
         ) : (
           <form className="zero-km-form" onSubmit={handleSubmit}>
             {catalogError && <div className="auth-warning">{catalogError}</div>}
+
+            {createBlockMessage && (
+              <div className="auth-warning">{createBlockMessage}</div>
+            )}
 
             {loadingCatalog && (
               <div className="auth-message">
@@ -704,7 +757,7 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
             <button
               className="primary-action"
               type="submit"
-              disabled={submitting}
+              disabled={submitting || !canCreateVehicle}
             >
               {submitting ? "Publicando..." : "Publicar vehículo"}
             </button>

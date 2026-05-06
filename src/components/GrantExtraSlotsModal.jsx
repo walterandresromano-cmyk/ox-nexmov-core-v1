@@ -68,7 +68,7 @@ export default function GrantExtraSlotsModal({ dealer, onClose, onGranted }) {
             <h2>Otorgar cupo extra</h2>
             <p>
               Este cupo se suma al período comercial actual del dealer. No
-              modifica el plan base.
+              modifica el plan base. No es acumulativo ni permanente.
             </p>
           </div>
 
