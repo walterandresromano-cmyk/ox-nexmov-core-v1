@@ -1,6 +1,63 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 
 const VEHICLE_IMAGES_BUCKET = "vehicle-images";
+const CURRENT_YEAR = new Date().getFullYear();
+
+function buildValidationError(message) {
+  return {
+    vehicle: null,
+    error: {
+      message,
+    },
+  };
+}
+
+function cleanText(value) {
+  return String(value || "").trim();
+}
+
+function getNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function validateVehiclePayload(form) {
+  const year = getNumber(form.year);
+  const km = getNumber(form.km);
+  const price = getNumber(form.price);
+  const reference = getNumber(form.marketReferencePrice);
+  const delivery = getNumber(form.delivery);
+
+  if (!cleanText(form.brand) || !cleanText(form.model) || !cleanText(form.version)) {
+    return "Completá marca, modelo y versión antes de publicar.";
+  }
+
+  if (!year || year < 1950 || year > CURRENT_YEAR + 1) {
+    return "Ingresá un año válido.";
+  }
+
+  if (km === null || km < 0) {
+    return "Ingresá el kilometraje.";
+  }
+
+  if (!price || price <= 0) {
+    return "Ingresá el precio real total del vehículo.";
+  }
+
+  if (reference && reference > 0 && price < reference * 0.4) {
+    return "El precio publicado parece demasiado bajo respecto de la referencia de mercado.";
+  }
+
+  if (delivery && delivery > 0 && price <= delivery) {
+    return "El precio principal debe ser mayor que la entrega o anticipo.";
+  }
+
+  if (!cleanText(form.province) || !cleanText(form.city)) {
+    return "Completá provincia y ciudad.";
+  }
+
+  return "";
+}
 
 function sanitizeFileName(name) {
   return String(name || "imagen")
@@ -19,6 +76,12 @@ export async function createVehicleForCurrentDealer(form) {
         message: "Supabase no está configurado.",
       },
     };
+  }
+
+  const validationError = validateVehiclePayload(form);
+
+  if (validationError) {
+    return buildValidationError(validationError);
   }
 
   const { data, error } = await supabase.rpc("create_vehicle_for_current_dealer", {

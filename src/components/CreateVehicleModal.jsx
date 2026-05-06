@@ -4,6 +4,7 @@ import {
   createVehicleForCurrentDealer,
   uploadVehicleImages,
 } from "../services/publish.service.js";
+import { MAX_VEHICLE_IMAGES, MIN_VEHICLE_IMAGES } from "../config/constants.js";
 import {
   buildCatalogTree,
   listVehicleCatalog,
@@ -29,12 +30,100 @@ const initialForm = {
   details: "",
 };
 
+const CURRENT_YEAR = new Date().getFullYear();
+const INVALID_PLACEHOLDER_VALUES = new Set([
+  "no informado",
+  "no informada",
+  "sin informar",
+  "sin dato",
+  "sin datos",
+]);
+
 function normalizeText(value) {
   return String(value || "")
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .trim();
+}
+
+function getNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function isBlankOrPlaceholder(value) {
+  const normalized = normalizeText(value);
+  return !normalized || INVALID_PLACEHOLDER_VALUES.has(normalized);
+}
+
+function validateVehiclePublishForm(form, imageCount) {
+  const errors = [];
+  const year = getNumber(form.year);
+  const km = getNumber(form.km);
+  const price = getNumber(form.price);
+  const reference = getNumber(form.marketReferencePrice);
+  const delivery = getNumber(form.delivery);
+
+  if (isBlankOrPlaceholder(form.brand)) {
+    errors.push("Ingresá la marca del vehículo.");
+  }
+
+  if (isBlankOrPlaceholder(form.model)) {
+    errors.push("Ingresá el modelo del vehículo.");
+  }
+
+  if (isBlankOrPlaceholder(form.version)) {
+    errors.push("Ingresá la versión del vehículo.");
+  }
+
+  if (!year || year < 1950 || year > CURRENT_YEAR + 1) {
+    errors.push("Ingresá un año válido.");
+  }
+
+  if (km === null || km < 0) {
+    errors.push("Ingresá el kilometraje.");
+  }
+
+  if (!price || price <= 0) {
+    errors.push("Ingresá el precio real total del vehículo.");
+  }
+
+  if (price && reference && reference > 0 && price < reference * 0.4) {
+    errors.push(
+      "Revisá el precio: podría estar cargado como entrega o anticipo."
+    );
+  }
+
+  if (price && delivery && delivery > 0 && price <= delivery) {
+    errors.push("El precio principal debe ser mayor que la entrega o anticipo.");
+  }
+
+  if (isBlankOrPlaceholder(form.province) || isBlankOrPlaceholder(form.city)) {
+    errors.push("Completá provincia y ciudad.");
+  }
+
+  if (isBlankOrPlaceholder(form.bodyType)) {
+    errors.push("Seleccioná la carrocería.");
+  }
+
+  if (isBlankOrPlaceholder(form.transmission)) {
+    errors.push("Seleccioná la transmisión.");
+  }
+
+  if (isBlankOrPlaceholder(form.fuelType)) {
+    errors.push("Seleccioná el combustible.");
+  }
+
+  if (String(form.details || "").trim().length < 10) {
+    errors.push("Agregá detalles claros del estado y condiciones del vehículo.");
+  }
+
+  if (imageCount < MIN_VEHICLE_IMAGES) {
+    errors.push(`Agregá al menos ${MIN_VEHICLE_IMAGES} fotos para publicar.`);
+  }
+
+  return errors;
 }
 
 function findByName(items = [], value) {
@@ -141,9 +230,9 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
   function handleImagesChange(event) {
     const files = Array.from(event.target.files || []);
 
-    if (files.length > 12) {
-      setError("Podés cargar hasta 12 imágenes por vehículo.");
-      setImageFiles(files.slice(0, 12));
+    if (files.length > MAX_VEHICLE_IMAGES) {
+      setError(`Podés cargar hasta ${MAX_VEHICLE_IMAGES} imágenes por vehículo.`);
+      setImageFiles(files.slice(0, MAX_VEHICLE_IMAGES));
       return;
     }
 
@@ -171,7 +260,7 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
       return;
     }
 
-    if (!form.year || Number(form.year) < 1980) {
+    if (!form.year || Number(form.year) < 1950 || Number(form.year) > CURRENT_YEAR + 1) {
       setError("Ingresá un año válido.");
       setSubmitting(false);
       return;
@@ -179,6 +268,19 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
 
     if (!form.price || Number(form.price) <= 0) {
       setError("Ingresá un precio válido.");
+      setSubmitting(false);
+      return;
+    }
+
+    const validationErrors = validateVehiclePublishForm(
+      form,
+      imageFiles.length
+    );
+
+    if (validationErrors.length > 0) {
+      setError(
+        `Revisá los datos obligatorios antes de publicar el vehículo. ${validationErrors.join(" ")}`
+      );
       setSubmitting(false);
       return;
     }
@@ -564,7 +666,8 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
                 onChange={handleImagesChange}
               />
               <span className="form-hint">
-                Hasta 12 imágenes. La primera imagen será la portada.
+                Mínimo {MIN_VEHICLE_IMAGES} fotos para publicar. Máximo{" "}
+                {MAX_VEHICLE_IMAGES}. La primera imagen será la portada.
               </span>
             </label>
 

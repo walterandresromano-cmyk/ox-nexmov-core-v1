@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { updateAdminVehicleData } from "../services/adminVehicles.service.js";
 import { updateCurrentDealerVehicleData } from "../services/dealerVehicles.service.js";
+import { MIN_VEHICLE_IMAGES } from "../config/constants.js";
 import {
   buildCatalogTree,
   listVehicleCatalog,
@@ -31,12 +32,130 @@ function getInitialForm(vehicle) {
   };
 }
 
+const CURRENT_YEAR = new Date().getFullYear();
+const INVALID_PLACEHOLDER_VALUES = new Set([
+  "no informado",
+  "no informada",
+  "sin informar",
+  "sin dato",
+  "sin datos",
+]);
+
 function normalizeText(value) {
   return String(value || "")
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .trim();
+}
+
+function getNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function isBlankOrPlaceholder(value) {
+  const normalized = normalizeText(value);
+  return !normalized || INVALID_PLACEHOLDER_VALUES.has(normalized);
+}
+
+function getImageCount(vehicle) {
+  const urls = new Set();
+  let sawImageField = false;
+
+  function addUrl(value) {
+    const url = String(value || "").trim();
+    if (url) urls.add(url);
+  }
+
+  [vehicle?.main_image_url, vehicle?.mainImageUrl, vehicle?.imageUrl].forEach(
+    (value) => {
+      if (value !== undefined) sawImageField = true;
+      addUrl(value);
+    }
+  );
+
+  [vehicle?.images, vehicle?.images_json, vehicle?.raw?.images_json].forEach(
+    (source) => {
+      if (source !== undefined) sawImageField = true;
+      if (!Array.isArray(source)) return;
+
+      source.forEach((image) => {
+        if (typeof image === "string") {
+          addUrl(image);
+          return;
+        }
+
+        addUrl(image?.url || image?.publicUrl || image?.src);
+      });
+    }
+  );
+
+  return sawImageField ? urls.size : null;
+}
+
+function isVehicleActive(vehicle) {
+  return (
+    vehicle?.is_active === true ||
+    vehicle?.active === true ||
+    vehicle?.publication_status === "active" ||
+    vehicle?.publicationStatus === "active" ||
+    vehicle?.status === "active"
+  );
+}
+
+function validateVehicleEditForm(form, { imageCount, requireImages }) {
+  const errors = [];
+  const year = getNumber(form.year);
+  const km = getNumber(form.km);
+  const price = getNumber(form.price);
+  const reference = getNumber(form.marketReferencePrice);
+  const delivery = getNumber(form.delivery);
+
+  if (isBlankOrPlaceholder(form.brand)) errors.push("Ingresá la marca.");
+  if (isBlankOrPlaceholder(form.model)) errors.push("Ingresá el modelo.");
+  if (isBlankOrPlaceholder(form.version)) errors.push("Ingresá la versión.");
+
+  if (!year || year < 1950 || year > CURRENT_YEAR + 1) {
+    errors.push("Ingresá un año válido.");
+  }
+
+  if (km === null || km < 0) errors.push("Ingresá kilometraje válido.");
+  if (!price || price <= 0) {
+    errors.push("Ingresá el precio real total del vehículo.");
+  }
+
+  if (price && reference && reference > 0 && price < reference * 0.4) {
+    errors.push(
+      "El precio publicado parece demasiado bajo respecto de la referencia."
+    );
+  }
+
+  if (price && delivery && delivery > 0 && price <= delivery) {
+    errors.push("El precio principal debe ser mayor que la entrega o anticipo.");
+  }
+
+  if (isBlankOrPlaceholder(form.province) || isBlankOrPlaceholder(form.city)) {
+    errors.push("Completá provincia y ciudad.");
+  }
+
+  if (isBlankOrPlaceholder(form.bodyType)) errors.push("Seleccioná carrocería.");
+  if (isBlankOrPlaceholder(form.transmission)) {
+    errors.push("Seleccioná transmisión.");
+  }
+  if (isBlankOrPlaceholder(form.fuelType)) errors.push("Seleccioná combustible.");
+
+  if (String(form.details || "").trim().length < 10) {
+    errors.push("Agregá detalles claros del estado y condiciones.");
+  }
+
+  if (requireImages && imageCount !== null && imageCount < MIN_VEHICLE_IMAGES) {
+    errors.push(
+      `Para mantenerla activa necesitás al menos ${MIN_VEHICLE_IMAGES} fotos.`
+    );
+  }
+
+  return errors;
 }
 
 function findByName(items = [], value) {
@@ -163,7 +282,7 @@ export default function EditVehicleModal({
       return;
     }
 
-    if (!form.year || Number(form.year) < 1980) {
+    if (!form.year || Number(form.year) < 1950 || Number(form.year) > CURRENT_YEAR + 1) {
       setError("Ingresá un año válido.");
       setSubmitting(false);
       return;
@@ -179,6 +298,31 @@ export default function EditVehicleModal({
       setError("Ingresá kilometraje válido.");
       setSubmitting(false);
       return;
+    }
+
+    const imageCount = getImageCount(vehicle);
+    const validationErrors = validateVehicleEditForm(form, {
+      imageCount,
+      requireImages: isVehicleActive(vehicle),
+    });
+
+    if (validationErrors.length > 0) {
+      if (mode === "admin" && form.forceApprove) {
+        const confirmed = window.confirm(
+          `Esta publicación tiene datos incompletos o inconsistentes. Si la aprobás, quedará visible para compradores. Confirmá que revisaste la información.\n\n${validationErrors.join("\n")}`
+        );
+
+        if (!confirmed) {
+          setSubmitting(false);
+          return;
+        }
+      } else {
+        setError(
+          `Los cambios dejan la publicación incompleta. ${validationErrors.join(" ")}`
+        );
+        setSubmitting(false);
+        return;
+      }
     }
 
     const result =

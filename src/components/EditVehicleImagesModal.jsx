@@ -5,6 +5,7 @@ import {
   updateCurrentDealerVehicleImages,
   uploadVehicleImages,
 } from "../services/publish.service.js";
+import { MAX_VEHICLE_IMAGES, MIN_VEHICLE_IMAGES } from "../config/constants.js";
 
 function getInitialImages(vehicle) {
   const images = [];
@@ -87,7 +88,7 @@ export default function EditVehicleImagesModal({
 
   function handleFilesChange(event) {
     const files = Array.from(event.target.files || []);
-    const availableSlots = Math.max(12 - images.length, 0);
+    const availableSlots = Math.max(MAX_VEHICLE_IMAGES - images.length, 0);
 
     if (files.length > availableSlots) {
       setError(`Solo podés agregar ${availableSlots} imagen/es más.`);
@@ -142,7 +143,7 @@ export default function EditVehicleImagesModal({
       uploadedImages = uploaded;
     }
 
-    const mergedImages = [...images, ...uploadedImages].slice(0, 12);
+    const mergedImages = [...images, ...uploadedImages].slice(0, MAX_VEHICLE_IMAGES);
 
     const finalMainImageUrl =
       mainImageUrl || uploadedImages[0]?.url || mergedImages[0]?.url || "";
@@ -195,7 +196,8 @@ export default function EditVehicleImagesModal({
               {vehicle.brand} {vehicle.model}
             </h2>
             <p>
-              Agregá, eliminá o elegí portada. Máximo 12 imágenes por
+              Agregá, eliminá o elegí portada. Mínimo {MIN_VEHICLE_IMAGES} fotos
+              para publicar activa. Máximo {MAX_VEHICLE_IMAGES} imágenes por
               publicación.
             </p>
           </div>
@@ -249,9 +251,17 @@ export default function EditVehicleImagesModal({
             onChange={handleFilesChange}
           />
           <span className="form-hint">
-            Disponibles: {Math.max(12 - images.length, 0)} imágenes.
+            Disponibles: {Math.max(MAX_VEHICLE_IMAGES - images.length, 0)} imágenes.
+            Para publicar activa necesitás al menos {MIN_VEHICLE_IMAGES}.
           </span>
         </label>
+
+        {images.length + newFiles.length < MIN_VEHICLE_IMAGES && (
+          <p className="form-legal-note">
+            Para publicar un vehículo necesitás al menos {MIN_VEHICLE_IMAGES} fotos.
+            Podés guardar la carga y completarla antes de activarla.
+          </p>
+        )}
 
         {newFiles.length > 0 && (
           <div className="vehicle-image-preview-grid">
