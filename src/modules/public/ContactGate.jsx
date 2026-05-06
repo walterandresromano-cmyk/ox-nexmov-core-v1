@@ -8,7 +8,7 @@ const initialForm = {
 function getWhatsAppUrl(phone, message) {
   const digits = String(phone || "").replace(/\D/g, "");
 
-  if (!digits) return "";
+  if (!digits || digits.length < 8) return "";
 
   const normalizedPhone = digits.startsWith("54") ? digits : `54${digits}`;
   return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`;
@@ -27,6 +27,7 @@ export default function ContactGate({
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [createdLead, setCreatedLead] = useState(null);
+  const [leadWasReused, setLeadWasReused] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const whatsappUrl = createdLead
     ? getWhatsAppUrl(
@@ -47,6 +48,8 @@ export default function ContactGate({
   async function handleSubmit(event) {
     event.preventDefault();
 
+    if (submitting || createdLead) return;
+
     if (!authUser?.id) {
       setError("Para contactar al dealer primero tenés que iniciar sesión.");
       return;
@@ -55,7 +58,7 @@ export default function ContactGate({
     setSubmitting(true);
     setError("");
 
-    const { lead, error: leadError } = await createVehicleContactLead({
+    const { lead, error: leadError, reused } = await createVehicleContactLead({
       authUser,
       authProfile,
       vehicle,
@@ -64,20 +67,39 @@ export default function ContactGate({
         form.message.trim() ||
         "El comprador solicitó contacto desde la publicación.",
       channel: "contact_gate",
+      sourcePage: "contact_gate",
+      actionType: "vehicle_contact",
     });
 
     if (leadError) {
-      setError(leadError.message || "No se pudo generar el lead.");
+      setError("No pudimos registrar tu consulta. Intenta nuevamente.");
       setSubmitting(false);
       return;
     }
 
     setCreatedLead(lead);
+    setLeadWasReused(Boolean(reused));
     setSubmitting(false);
 
     if (onLeadCreated) {
       onLeadCreated(lead);
     }
+  }
+
+  function handleOpenWhatsApp() {
+    if (!createdLead) {
+      setError("Primero necesitamos registrar tu consulta.");
+      return;
+    }
+
+    if (!whatsappUrl) {
+      setError(
+        "El dealer no tiene un WhatsApp valido cargado. La consulta ya quedo registrada."
+      );
+      return;
+    }
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -157,12 +179,16 @@ export default function ContactGate({
             </p>
 
             <button className="primary-action" type="submit" disabled={submitting}>
-              {submitting ? "Generando lead..." : "Generar lead y continuar"}
+              {submitting ? "Preparando contacto..." : "Generar lead y continuar"}
             </button>
           </form>
         ) : (
           <div className="lead-created-box">
-            <h3>Lead generado correctamente</h3>
+            <h3>
+              {leadWasReused
+                ? "Consulta activa reutilizada"
+                : "Lead generado correctamente"}
+            </h3>
             <p>
               La consulta quedó registrada para {dealer.commercialName}. En la
               próxima fase se abrirá WhatsApp o el canal comercial
@@ -176,20 +202,19 @@ export default function ContactGate({
 
             <div className="lead-debug">
               <span>ID lead</span>
-              <strong>{createdLead.id}</strong>
+              <strong>{createdLead.id || createdLead.lead_id}</strong>
             </div>
 
+            {error && <p className="form-error">{error}</p>}
+
             <div className="contact-next-actions">
-              {whatsappUrl && (
-                <a
-                  className="primary-action"
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Abrir WhatsApp
-                </a>
-              )}
+              <button
+                className="primary-action"
+                type="button"
+                onClick={handleOpenWhatsApp}
+              >
+                Abrir WhatsApp
+              </button>
 
               <button
                 className="primary-action secondary-action"

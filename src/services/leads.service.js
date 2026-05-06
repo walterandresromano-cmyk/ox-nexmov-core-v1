@@ -10,6 +10,37 @@ function safeText(value, fallback) {
   return text || fallback;
 }
 
+const DEDUPE_WINDOW_HOURS = 24;
+
+const ACTIVE_LEAD_STATUSES = new Set([
+  "new",
+  "nuevo",
+  "pending",
+  "pendiente",
+  "open",
+  "abierto",
+  "seen",
+  "contacted",
+  "contactado",
+  "in_progress",
+  "en_gestion",
+  "assigned",
+  "asignado",
+  "negotiation",
+]);
+
+const CLOSED_LEAD_STATUSES = new Set([
+  "closed",
+  "cerrado",
+  "lost",
+  "perdido",
+  "cancelled",
+  "cancelado",
+  "archived",
+  "archivado",
+  "sold",
+]);
+
 function splitName(fullName, email) {
   const safeName = String(fullName || "").trim();
 
@@ -27,6 +58,113 @@ function splitName(fullName, email) {
   return {
     firstName,
     lastName,
+  };
+}
+
+function normalizeLeadStatus(status) {
+  return String(status || "").trim().toLowerCase();
+}
+
+function normalizeLeadChannel(channel) {
+  const value = String(channel || "contact_form").trim().toLowerCase();
+
+  if (
+    [
+      "whatsapp",
+      "contact_form",
+      "phone",
+      "detail_modal",
+      "card",
+      "compare",
+      "contact_gate",
+      "unknown",
+    ].includes(value)
+  ) {
+    return value;
+  }
+
+  return "unknown";
+}
+
+function normalizeActionType(actionType) {
+  const value = String(actionType || "contact_request").trim().toLowerCase();
+
+  if (
+    [
+      "whatsapp_click",
+      "contact_request",
+      "detail_contact",
+      "compare_contact",
+      "reservation_interest",
+      "vehicle_contact",
+      "unknown",
+    ].includes(value)
+  ) {
+    return value;
+  }
+
+  return "unknown";
+}
+
+function normalizeSourcePage(sourcePage) {
+  const value = String(sourcePage || "contact_gate").trim().toLowerCase();
+
+  if (
+    [
+      "home",
+      "search",
+      "vehicle_detail",
+      "compare",
+      "contact_gate",
+      "unknown",
+    ].includes(value)
+  ) {
+    return value;
+  }
+
+  return "unknown";
+}
+
+function isReusableLead(lead) {
+  if (!lead) return false;
+
+  const status = normalizeLeadStatus(lead.crm_status || lead.status);
+  const createdAt = lead.created_at ? new Date(lead.created_at).getTime() : 0;
+  const recentLimit = Date.now() - DEDUPE_WINDOW_HOURS * 60 * 60 * 1000;
+  const isRecent = Number.isFinite(createdAt) && createdAt >= recentLimit;
+
+  if (CLOSED_LEAD_STATUSES.has(status)) return false;
+  if (ACTIVE_LEAD_STATUSES.has(status)) return true;
+
+  return isRecent;
+}
+
+async function findReusableVehicleContactLead({
+  buyerId,
+  vehicleId,
+  channel,
+  actionType,
+}) {
+  const { data, error } = await supabase
+    .from("vehicle_action_leads")
+    .select("*")
+    .eq("buyer_id", buyerId)
+    .eq("vehicle_id", vehicleId)
+    .eq("channel", channel)
+    .eq("action_type", actionType)
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    return {
+      lead: null,
+      error,
+    };
+  }
+
+  return {
+    lead: (data || []).find(isReusableLead) || null,
+    error: null,
   };
 }
 
@@ -127,7 +265,9 @@ export async function createVehicleContactLead({
   vehicle,
   dealer,
   message,
-  channel = "contact_gate",
+  channel = "contact_form",
+  sourcePage = "contact_gate",
+  actionType = "contact_request",
 }) {
   if (!isSupabaseConfigured || !supabase) {
     return {
@@ -147,7 +287,7 @@ export async function createVehicleContactLead({
     };
   }
 
-  const numericVehicleId = toNumericVehicleId(vehicle?.id);
+  const numericVehicleId = toNumericVehicleId(vehicle?.id || vehicle?.vehicle_id);
 
   if (!numericVehicleId) {
     return {
@@ -185,12 +325,30 @@ export async function createVehicleContactLead({
     .join(" ");
 
   const dealerSnapshot = getDealerSnapshot({ dealer, vehicle });
+  const cleanChannel = normalizeLeadChannel(channel);
+  const cleanActionType = normalizeActionType(actionType);
+  const cleanSourcePage = normalizeSourcePage(sourcePage);
+
+  const { lead: reusableLead } = await findReusableVehicleContactLead({
+    buyerId: buyerProfile.id,
+    vehicleId: numericVehicleId,
+    channel: cleanChannel,
+    actionType: cleanActionType,
+  });
+
+  if (reusableLead) {
+    return {
+      lead: reusableLead,
+      error: null,
+      reused: true,
+    };
+  }
 
   const payload = {
     buyer_id: buyerProfile.id,
     vehicle_id: numericVehicleId,
-    action_type: "vehicle_contact",
-    channel,
+    action_type: cleanActionType,
+    channel: cleanChannel,
     message: message || "El comprador solicitó contacto desde la publicación.",
     dealer_name_snapshot: dealerSnapshot.dealerName,
     dealer_phone_snapshot: dealerSnapshot.dealerPhone,
@@ -198,7 +356,7 @@ export async function createVehicleContactLead({
     vehicle_status_snapshot: vehicle?.status || "active",
     price_snapshot: vehicle?.price || null,
     crm_status: "new",
-    notes: null,
+    notes: `sourcePage:${cleanSourcePage}`,
     vehicle_is_active_snapshot: true,
     vehicle_status_current: vehicle?.status || "active",
   };
@@ -212,6 +370,7 @@ export async function createVehicleContactLead({
   return {
     lead: data || null,
     error,
+    reused: false,
   };
 }
 
