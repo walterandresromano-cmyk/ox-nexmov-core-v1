@@ -168,6 +168,37 @@
   box-shadow: 0 12px 28px rgba(37, 99, 235, 0.26);
 }
 
+.ox-home-primary-actions-v3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.ox-home-primary-actions-v3 button {
+  min-height: 34px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  border-radius: var(--ox-radius-pill);
+  background: rgba(15, 23, 42, 0.68);
+  color: rgba(248, 250, 252, 0.94);
+  padding: 0 13px;
+  font-size: var(--ox-fs-button);
+  font-weight: var(--ox-fw-bold);
+  cursor: pointer;
+}
+
+.ox-home-primary-actions-v3 button:first-child {
+  background: var(--ox-surface-primary);
+  border-color: rgba(125, 211, 252, 0.46);
+  color: #ffffff;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+}
+
+.ox-home-primary-actions-v3 button:hover {
+  border-color: rgba(56, 189, 248, 0.48);
+  color: #ffffff;
+}
+
 .ox-home-chips-v3 {
   display: flex;
   flex-wrap: wrap;
@@ -1035,6 +1066,36 @@
   background: rgba(15, 23, 42, 0.70);
   color: rgba(226, 232, 240, 0.82);
   padding: 14px 16px;
+}
+
+.ox-home-page-v3 .empty-state {
+  display: grid;
+  gap: 8px;
+  align-items: start;
+}
+
+.ox-home-page-v3 .empty-state strong {
+  color: rgba(248, 250, 252, 0.96);
+  font-size: var(--ox-fs-card-title);
+}
+
+.ox-home-page-v3 .empty-state p {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.78);
+  font-size: var(--ox-fs-small);
+  line-height: var(--ox-lh-body);
+}
+
+.ox-home-page-v3 .empty-state button {
+  width: fit-content;
+  border: 1px solid rgba(125, 211, 252, 0.32);
+  border-radius: var(--ox-radius-pill);
+  background: rgba(14, 165, 233, 0.12);
+  color: rgba(248, 250, 252, 0.94);
+  padding: 8px 12px;
+  font-size: var(--ox-fs-button);
+  font-weight: var(--ox-fw-bold);
+  cursor: pointer;
 }
 
 /* =========================================================

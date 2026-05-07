@@ -1126,7 +1126,7 @@ export default function Search({
               </div>
 
               <div className="ox-filter-section">
-                <strong>Precio y año</strong>
+                <strong>Rango de precio y año</strong>
 
                 <div className="ox-filter-two">
                   <label>
@@ -1201,7 +1201,7 @@ export default function Search({
               </div>
 
               <div className="ox-filter-section">
-                <strong>Ubicación</strong>
+                <strong>Provincia / ciudad</strong>
 
                 <label>
                   Provincia
@@ -1400,9 +1400,37 @@ export default function Search({
 
             {filteredVehicles.length === 0 && (
               <div className="empty-state">
-                No hay vehículos que coincidan con la búsqueda. Probá con otra
-                marca, un precio más amplio, otro kilometraje o quitá alguna
-                condición.
+                <strong>No encontramos vehículos con esos filtros.</strong>
+                <p>
+                  Probá ampliar el rango de precio, quitar algún filtro o buscar
+                  por marca/modelo.
+                </p>
+                <div className="ox-search-empty-actions">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      clearAdvancedFilters();
+                      setSearchText("");
+                      setShowSuggestions(false);
+                    }}
+                  >
+                    Limpiar filtros
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      clearAdvancedFilters();
+                      setSearchText("");
+                      setShowSuggestions(false);
+                      loadVehicles();
+                    }}
+                  >
+                    Volver a ver todos
+                  </button>
+                  <button type="button" onClick={() => onNavigate?.("zeroKm")}>
+                    Consultar financiación 0km
+                  </button>
+                </div>
               </div>
             )}
           </main>

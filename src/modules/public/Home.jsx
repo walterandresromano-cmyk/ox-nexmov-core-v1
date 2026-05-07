@@ -484,8 +484,8 @@ export default function Home({ onNavigate, appActions = {} }) {
             </h1>
 
             <p>
-              Datos reales, dealers verificados y herramientas para tomar siempre
-              la mejor decisión.
+              Buscá, compará y contactá dealers verificados con más claridad
+              antes de decidir.
             </p>
 
             <form
@@ -538,6 +538,18 @@ export default function Home({ onNavigate, appActions = {} }) {
                   </div>
                 )}
             </form>
+
+            <div className="ox-home-primary-actions-v3">
+              <button type="button" onClick={() => goToSearch("")}>
+                Buscar vehículos
+              </button>
+              <button type="button" onClick={() => onNavigate("zeroKm")}>
+                Ver financiación 0km
+              </button>
+              <button type="button" onClick={() => onNavigate("sellVehicle")}>
+                Vender mi vehículo
+              </button>
+            </div>
 
             <div className="ox-home-chips-v3">
               {quickSearches.map((query) => (
@@ -663,7 +675,14 @@ export default function Home({ onNavigate, appActions = {} }) {
 
             {!loadingLatestVehicles && latestVehicles.length === 0 && (
               <div className="empty-state">
-                No hay vehículos publicados disponibles.
+                <strong>No hay vehículos publicados disponibles en este momento.</strong>
+                <p>
+                  Estamos actualizando el inventario. Podés volver a intentarlo
+                  más tarde o consultar financiación 0km.
+                </p>
+                <button type="button" onClick={() => onNavigate("zeroKm")}>
+                  Ver financiación 0km
+                </button>
               </div>
             )}
 
@@ -714,7 +733,10 @@ export default function Home({ onNavigate, appActions = {} }) {
 
             <div className="ox-home-confidence-cta-v3">
               <strong>Menos incertidumbre. Más decisión.</strong>
-              <span>Comprá con datos. Compará con criterio.</span>
+              <span>
+                Precio, kilometraje, ubicación, financiación, dealer y
+                comparación en un solo lugar.
+              </span>
             </div>
           </aside>
         </section>
