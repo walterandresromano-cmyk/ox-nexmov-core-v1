@@ -127,10 +127,10 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
           <section className="page-section sell-vehicle-page">
          <div className="container panel sell-vehicle-panel">
         <p className="eyebrow">Vender mi vehículo</p>
-        <h1>Publicá tu intención de venta</h1>
+        <h1>Vender mi vehículo</h1>
         <p>
-          Cargá los datos principales de tu unidad. oX NEXMOV podrá revisar la
-          solicitud y derivarla a dealers habilitados según criterio operativo.
+          Cargá los datos principales de tu vehículo para que oX NEXMOV pueda
+          gestionar posibles contactos comerciales con dealers habilitados.
         </p>
 
         {/*
@@ -153,10 +153,10 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
           <div className="sell-vehicle-login-gate">
             <article className="sell-vehicle-info-card">
               <span>Acceso requerido</span>
-              <h2>Ingresá para cargar tu vehículo</h2>
+              <h2>Ingresá para enviar los datos de tu vehículo</h2>
               <p>
-                El formulario se habilita después de iniciar sesión para que la
-                solicitud quede asociada a tu perfil y pueda tener seguimiento.
+                Para enviar los datos de tu vehículo necesitamos que inicies
+                sesión y podamos registrar la trazabilidad de la consulta.
               </p>
 
               <button
@@ -172,11 +172,11 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
         <div className="sell-vehicle-grid">
           <article className="sell-vehicle-info-card">
             <span>Cómo funciona</span>
-            <h2>Tu vehículo puede llegar a dealers habilitados</h2>
+            <h2>Tu vehículo puede ser evaluado por dealers habilitados</h2>
             <p>
               Esta solicitud no publica automáticamente tu auto como una unidad
               de dealer. Primero queda registrada para evaluación interna y
-              posible asignación a concesionarias habilitadas.
+              posibles contactos comerciales con dealers habilitados.
             </p>
 
             <div className="sell-vehicle-steps">
@@ -397,10 +397,10 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
 
             {createdLead && (
               <div className="lead-created-box">
-                <h3>Solicitud de venta enviada correctamente</h3>
+                <h3>Solicitud enviada correctamente</h3>
                 <p>
-                  Tu vehículo quedó registrado para evaluación. Podés seguir la
-                  solicitud desde tu Panel Comprador.
+                  Tu vehículo quedó registrado para evaluación. Si corresponde,
+                  la plataforma o un dealer habilitado podrá contactarte.
                 </p>
 
                 <div className="contact-summary">
@@ -427,13 +427,18 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
               type="submit"
               disabled={submitting || !authUser?.id}
             >
-              {submitting ? "Enviando solicitud..." : "Enviar solicitud de venta"}
+              {submitting
+                ? "Enviando solicitud..."
+                : "Enviar datos de mi vehículo"}
             </button>
 
             <p className="form-legal-note">
               Al enviar los datos de tu vehículo, aceptás que oX NEXMOV registre
               la información para gestionar posibles contactos comerciales con
-              dealers habilitados.
+              dealers habilitados. El envío de datos no garantiza una oferta ni
+              una compra; la operación queda sujeta a evaluación, disponibilidad
+              de dealers interesados y condiciones comerciales acordadas entre
+              las partes.
             </p>
           </form>
         </div>

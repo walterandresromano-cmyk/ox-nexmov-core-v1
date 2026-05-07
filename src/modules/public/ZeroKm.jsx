@@ -90,12 +90,11 @@ export default function ZeroKm({ authUser, authProfile }) {
   <div className="zero-km-panel ox-public-hero">
     <p className="ox-public-eyebrow">Financiación 0km</p>
     <h1 className="ox-public-title">
-      Consultá financiación para tu próximo <span>0km</span>
+      Financiación <span>0km</span>
     </h1>
     <p className="ox-public-lead">
-          Completá tus datos mínimos y el equipo de oX NEXMOV revisará la
-          consulta. La operación queda trazada dentro de la plataforma sin pedir
-          datos sensibles desde el inicio.
+          Consultá opciones de financiación para vehículos 0km y recibí
+          orientación comercial según disponibilidad y condiciones vigentes.
         </p>
 
         <div className="zero-km-grid ox-public-content">
@@ -119,7 +118,7 @@ export default function ZeroKm({ authUser, authProfile }) {
               </div>
               <div>
                 <strong>3</strong>
-                <span>Se avanza con alternativas reales.</span>
+                <span>Un asesor podrá orientarte según condiciones vigentes.</span>
               </div>
             </div>
           </article>
@@ -293,19 +292,19 @@ export default function ZeroKm({ authUser, authProfile }) {
             </label>
 
             <p className="finance-legal-note">
-              Los valores de financiación son informativos y pueden variar según
-              aprobación crediticia, entidad financiera, condiciones del dealer
-              y fecha de operación.
+              Los valores, tasas, cuotas y condiciones son informativos y pueden
+              variar según entidad financiera, aprobación crediticia,
+              disponibilidad del vehículo y fecha de operación.
             </p>
 
             {error && <p className="form-error">{error}</p>}
 
             {createdLead && (
               <div className="lead-created-box">
-                <h3>Consulta 0km enviada correctamente</h3>
+                <h3>Consulta enviada</h3>
                 <p>
-                  Tu consulta quedó registrada. El equipo de oX NEXMOV la
-                  revisará y podrá contactarte para continuar con la evaluación.
+                  Consulta enviada. Un asesor podrá contactarte para continuar
+                  el proceso.
                 </p>
 
                 <div className="contact-summary">
@@ -324,7 +323,7 @@ export default function ZeroKm({ authUser, authProfile }) {
               type="submit"
               disabled={submitting}
             >
-              {submitting ? "Enviando consulta..." : "Enviar consulta 0km"}
+              {submitting ? "Enviando consulta..." : "Consultar financiación"}
             </button>
 
             <p className="form-legal-note">

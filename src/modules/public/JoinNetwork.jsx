@@ -1,22 +1,22 @@
 const networkValues = [
   {
     eyebrow: "Más visibilidad útil",
-    title: "Red",
+    title: "Publicaciones ordenadas",
     text: "Tus vehículos se muestran dentro de una experiencia pensada para que el comprador compare, consulte y avance con más confianza.",
   },
   {
     eyebrow: "Leads trazables",
-    title: "Control",
+    title: "Consultas con seguimiento",
     text: "Cada consulta queda registrada dentro de la plataforma para mejorar el seguimiento comercial y evitar contactos perdidos.",
   },
   {
     eyebrow: "Planes por escala",
-    title: "Cupos",
+    title: "Señales comerciales por plan",
     text: "Cada dealer trabaja con un plan acorde a su volumen, con cupos, beneficios y herramientas habilitadas según su operación.",
   },
   {
     eyebrow: "Comprador primero",
-    title: "Confianza",
+    title: "Comparación para compradores",
     text: "La plataforma prioriza claridad, comparación y datos útiles. Eso mejora la experiencia del comprador y fortalece al dealer serio.",
   },
 ];
@@ -24,11 +24,11 @@ const networkValues = [
 const steps = [
   {
     title: "Alta del dealer",
-    text: "Administración registra los datos comerciales principales, asigna el plan y deja preparada la cuenta de acceso.",
+    text: "Administración revisa los datos comerciales principales y valida si la cuenta puede incorporarse a la red.",
   },
   {
     title: "Activación del plan",
-    text: "El dealer queda operativo durante su período vigente. Si el plan vence, las publicaciones se pausan hasta renovar.",
+    text: "El plan, los cupos y los beneficios se activan después de la validación administrativa correspondiente.",
   },
   {
     title: "Carga de vehículos",
@@ -81,19 +81,18 @@ export default function JoinNetwork({ onNavigate }) {
             <p className="eyebrow">Red comercial oX NEXMOV</p>
 
             <h1>
-              Sumate a una red pensada para dealers que quieren{" "}
-              <span>competir mejor.</span>
+              Sumate a la red <span>oX NEXMOV.</span>
             </h1>
 
             <p>
-              oX NEXMOV conecta agencias, concesionarias y vendedores
-              profesionales con compradores que buscan vehículos reales,
-              información clara y una experiencia de compra más ordenada.
+              Formá parte de una red automotriz pensada para publicar vehículos
+              con más claridad, recibir consultas trazables y diferenciar tu
+              operación comercial.
             </p>
 
             <div className="join-network-actions">
               <button type="button" onClick={() => onNavigate?.("login")}>
-                Iniciar contacto
+                Solicitar alta de dealer
               </button>
 
               <button
@@ -110,8 +109,8 @@ export default function JoinNetwork({ onNavigate }) {
             <span>Red activa</span>
             <strong>Dealers verificados</strong>
             <p>
-              Menos ruido, más trazabilidad y una operación comercial diseñada
-              para generar confianza real.
+              El alta está sujeta a revisión administrativa, validación de datos
+              comerciales y activación del plan correspondiente.
             </p>
           </aside>
         </section>
@@ -129,11 +128,11 @@ export default function JoinNetwork({ onNavigate }) {
         <section className="join-network-section">
           <div className="join-network-section-head">
             <p className="eyebrow">Cómo funciona</p>
-            <h2>Un alta simple, con control comercial desde administración.</h2>
+            <h2>Solicitud clara, activación administrada.</h2>
             <p>
-              El dealer se incorpora a la red, se le asigna un plan, se activa
-              su período comercial y desde su panel puede cargar vehículos,
-              recibir leads, responder consultas y gestionar oportunidades.
+              Iniciás la solicitud, administración valida los datos comerciales
+              y, si corresponde, habilita el plan para empezar a operar dentro
+              de la plataforma.
             </p>
           </div>
 
@@ -199,14 +198,14 @@ export default function JoinNetwork({ onNavigate }) {
             <p className="eyebrow">Próximo paso</p>
             <h2>Solicitá el alta y prepará tu operación dentro de la red.</h2>
             <p>
-              El alta se realiza con revisión administrativa para mantener una
-              red seria, con dealers identificados, publicaciones claras y
-              contactos comerciales trazables.
+              El alta de dealers está sujeta a revisión administrativa,
+              validación de datos comerciales y activación del plan
+              correspondiente.
             </p>
           </div>
 
           <button type="button" onClick={() => onNavigate?.("login")}>
-            Iniciar contacto
+            Solicitar alta de dealer
           </button>
         </section>
       </div>
