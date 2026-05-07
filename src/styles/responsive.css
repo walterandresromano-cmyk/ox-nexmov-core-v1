@@ -72,6 +72,38 @@
   }
 }
 
+@media (max-width: 1120px) and (min-width: 861px) {
+  .header-inner {
+    width: min(100% - 32px, 1760px);
+    grid-template-columns: 188px minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+
+  .brand-button {
+    width: 188px;
+  }
+
+  .brand-logo-img {
+    max-width: 168px;
+    height: 30px;
+  }
+
+  .desktop-nav {
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  .desktop-nav .nav-btn {
+    min-height: 30px;
+    padding: 6px 8px;
+    font-size: 0.66rem;
+  }
+
+  .desktop-nav .nav-btn:nth-last-child(-n + 2) {
+    display: none;
+  }
+}
+
 @media (max-width: 1080px) {
   .header-role-actions {
     display: none;

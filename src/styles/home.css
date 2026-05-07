@@ -1293,7 +1293,7 @@
 @media (max-width: 760px) {
   .ox-home-page-v3 {
     padding-top: 12px;
-    padding-bottom: 104px;
+    padding-bottom: calc(128px + env(safe-area-inset-bottom, 0px));
     overflow-x: hidden;
   }
 
@@ -1665,5 +1665,76 @@
     margin-top: 4px;
     font-size: 0.62rem;
     line-height: 1.35;
+  }
+}
+
+@media (max-width: 430px) {
+  .ox-home-shell-v3,
+  .ox-home-hero-v3,
+  .ox-home-hero-copy-v3 {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .ox-home-hero-v3 {
+    overflow: hidden;
+    padding-inline: 14px;
+  }
+
+  .ox-home-hero-copy-v3 h1 {
+    width: 100%;
+    max-width: 100%;
+    font-size: clamp(1.82rem, 8.8vw, 2.25rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .ox-home-hero-copy-v3 h1 span {
+    display: block;
+  }
+
+  .ox-home-hero-copy-v3 > p {
+    width: 100%;
+    max-width: 100%;
+    font-size: 0.78rem;
+    line-height: 1.44;
+  }
+
+  .ox-home-primary-actions-v3 button {
+    padding-inline: 11px;
+    font-size: 0.68rem;
+  }
+
+  .ox-home-hero-stage-v3 {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .ox-home-hero-car-v3 {
+    width: min(108%, 360px);
+    transform: translateY(16px) scale(1);
+  }
+}
+
+@media (max-width: 370px) {
+  .ox-home-shell-v3 {
+    width: min(100% - 18px, 430px);
+  }
+
+  .ox-home-hero-v3 {
+    padding-inline: 12px;
+  }
+
+  .ox-home-hero-copy-v3 h1 {
+    font-size: clamp(1.68rem, 8.3vw, 2.02rem);
+    letter-spacing: -0.012em;
+  }
+
+  .ox-home-eyebrow-v3 {
+    font-size: 0.6rem;
+    padding-inline: 10px;
   }
 }
