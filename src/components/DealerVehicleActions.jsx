@@ -2,11 +2,34 @@ import { useState } from "react";
 import { updateCurrentDealerVehicleStatus } from "../services/dealerVehicles.service.js";
 
 const ACTIONS = [
-  { value: "pause", label: "Pausar", needsConfirm: true },
-  { value: "reactivate", label: "Reactivar", needsConfirm: false },
-  { value: "reserve", label: "Reservar", needsConfirm: true },
-  { value: "mark_sold", label: "Vendido", needsConfirm: true },
-  { value: "send_to_review", label: "Enviar a revision", needsConfirm: true },
+  {
+    value: "pause",
+    label: "Pausar",
+    confirmText:
+      "Esta publicación dejará de estar visible para compradores. ¿Querés pausarla?",
+  },
+  {
+    value: "reactivate",
+    label: "Reactivar",
+    confirmText:
+      "La publicación volverá a estar disponible si cumple las reglas comerciales del dealer. ¿Querés continuar?",
+  },
+  {
+    value: "reserve",
+    label: "Reservar",
+    confirmText: "Confirmá que esta publicación debe marcarse como reservada.",
+  },
+  {
+    value: "mark_sold",
+    label: "Vendido",
+    confirmText: "Confirmá que esta publicación debe marcarse como vendida.",
+  },
+  {
+    value: "send_to_review",
+    label: "Enviar a revisión",
+    confirmText:
+      "La publicación volverá a revisión para corregir información. ¿Querés continuar?",
+  },
 ];
 
 export default function DealerVehicleActions({ vehicle, onUpdated }) {
@@ -15,16 +38,15 @@ export default function DealerVehicleActions({ vehicle, onUpdated }) {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
   const [awaitingConfirm, setAwaitingConfirm] = useState(false);
+  const selectedAction = ACTIONS.find((item) => item.value === action);
 
   async function handleApply() {
-    const selectedAction = ACTIONS.find((item) => item.value === action);
-
     if (!action) {
-      setError("Elegi una accion.");
+      setError("Elegí una acción.");
       return;
     }
 
-    if (selectedAction?.needsConfirm && !awaitingConfirm) {
+    if (selectedAction?.confirmText && !awaitingConfirm) {
       setAwaitingConfirm(true);
       setError("");
       return;
@@ -41,7 +63,7 @@ export default function DealerVehicleActions({ vehicle, onUpdated }) {
     });
 
     if (updateError) {
-      setError(updateError.message || "No se pudo modificar la publicacion.");
+      setError(updateError.message || "No se pudo modificar la publicación.");
       setLoading(false);
       return;
     }
@@ -70,7 +92,7 @@ export default function DealerVehicleActions({ vehicle, onUpdated }) {
         }}
         disabled={loading}
       >
-        <option value="">Accion</option>
+        <option value="">Acción</option>
         {ACTIONS.map((item) => (
           <option key={item.value} value={item.value}>
             {item.label}
@@ -93,7 +115,11 @@ export default function DealerVehicleActions({ vehicle, onUpdated }) {
         </button>
       )}
 
-      {awaitingConfirm && <small>Confirma para aplicar esta accion.</small>}
+      {awaitingConfirm && (
+        <small>
+          {selectedAction?.confirmText || "Confirmá para aplicar esta acción."}
+        </small>
+      )}
       {saved && <span>Actualizado</span>}
       {error && <small>{error}</small>}
     </div>

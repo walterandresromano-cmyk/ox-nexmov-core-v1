@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import VehicleDetailModal from "./cards/VehicleDetailModal.jsx";
+import ContactGate from "../modules/public/ContactGate.jsx";
 import { getEffectiveDealerPermissions } from "../lib/permissions.js";
 
 function getNumber(value) {
@@ -447,6 +448,7 @@ function CompareVehicleCard({
 export default function CompareTray({ appActions, onNavigate }) {
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [selectedDetailVehicle, setSelectedDetailVehicle] = useState(null);
+  const [contactVehicle, setContactVehicle] = useState(null);
   const [galleryIndexes, setGalleryIndexes] = useState({});
 
   const compareItems = appActions?.compareItems || [];
@@ -473,6 +475,7 @@ export default function CompareTray({ appActions, onNavigate }) {
   const selectedDealer = selectedDetailVehicle
     ? getDealerForVehicle(selectedDetailVehicle)
     : null;
+  const contactDealer = contactVehicle ? getDealerForVehicle(contactVehicle) : null;
 
   function moveCompareImage(vehicleKey, direction, total) {
     setGalleryIndexes((current) => {
@@ -627,10 +630,25 @@ export default function CompareTray({ appActions, onNavigate }) {
           onFavorite={() => toggleFavorite(selectedDetailVehicle)}
           favoriteActive={isFavorite(selectedDetailVehicle.id)}
           onContact={() => {
+            setContactVehicle(selectedDetailVehicle);
             setSelectedDetailVehicle(null);
             setShowCompareModal(false);
+          }}
+        />
+      )}
+
+      {contactVehicle && contactDealer && (
+        <ContactGate
+          vehicle={contactVehicle}
+          dealer={contactDealer}
+          authUser={appActions?.authUser}
+          authProfile={appActions?.authProfile}
+          onClose={() => setContactVehicle(null)}
+          onRequireLogin={() => {
+            setContactVehicle(null);
             onNavigate?.("login");
           }}
+          onNavigate={onNavigate}
         />
       )}
     </>

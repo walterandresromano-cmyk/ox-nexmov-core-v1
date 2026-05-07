@@ -186,24 +186,19 @@ export default function ContactGate({
           <div className="lead-created-box">
             <h3>
               {leadWasReused
-                ? "Consulta activa reutilizada"
-                : "Lead generado correctamente"}
+                ? "Ya tenés una consulta activa"
+                : "Consulta registrada"}
             </h3>
             <p>
-              La consulta quedó registrada para {dealer.commercialName}. En la
-              próxima fase se abrirá WhatsApp o el canal comercial
-              correspondiente luego de esta confirmación.
+              {leadWasReused
+                ? "Ya tenés una consulta activa para este vehículo. Podés continuar el contacto con el dealer."
+                : "Consulta registrada. Ya podés continuar el contacto con el dealer."}
             </p>
 
             <p>
-              Si el dealer tiene WhatsApp cargado, podés abrirlo ahora. También
-              podés revisar esta consulta desde tu panel.
+              Registramos esta consulta para que el contacto sea trazable y el
+              dealer pueda responderte mejor.
             </p>
-
-            <div className="lead-debug">
-              <span>ID lead</span>
-              <strong>{createdLead.id || createdLead.lead_id}</strong>
-            </div>
 
             {error && <p className="form-error">{error}</p>}
 
@@ -213,7 +208,7 @@ export default function ContactGate({
                 type="button"
                 onClick={handleOpenWhatsApp}
               >
-                Abrir WhatsApp
+                Continuar por WhatsApp
               </button>
 
               <button

@@ -32,13 +32,13 @@ export default function CreateSupportTicketModal({
     setError("");
 
     if (!form.subject.trim()) {
-      setError("Ingresa un asunto para el ticket.");
+      setError("Ingresá un asunto para el ticket.");
       setSubmitting(false);
       return;
     }
 
     if (!form.message.trim()) {
-      setError("Describi la consulta o el problema.");
+      setError("Describí la consulta o el problema.");
       setSubmitting(false);
       return;
     }
