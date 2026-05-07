@@ -134,6 +134,30 @@ function getPublishBlockReason(status, allowed, remaining) {
   return "No podés publicar con el estado actual del plan. Contactá a administración si necesitás ayuda.";
 }
 
+function getPublishBlockDetail(status, remaining) {
+  if (remaining <= 0) {
+    return "Ya utilizaste el cupo de publicaciones de este período. Podés solicitar cupo extra a administración.";
+  }
+
+  if (status === "expired_grace" || status === "expired") {
+    return "Tu plan venció. Podés consultar tus publicaciones y leads, pero necesitás reactivar el plan para volver a publicar.";
+  }
+
+  if (status === "suspended") {
+    return "Tu cuenta está suspendida operativamente. Contactá a administración para revisar la situación.";
+  }
+
+  if (status === "pending_activation") {
+    return "Tu cuenta está pendiente de activación. Administración debe habilitar tu plan para comenzar a publicar.";
+  }
+
+  if (status === "inactive") {
+    return "No detectamos un plan comercial activo. Contactá a administración para revisar la cuenta.";
+  }
+
+  return "Contactá a administración para revisar el estado comercial y recuperar la posibilidad de publicar.";
+}
+
 function getRemainingQuota(limit, used) {
   if (limit === Infinity) return "Ilimitado";
   return Math.max(limit - used, 0);
@@ -421,6 +445,12 @@ export default function DealerPanel({ authProfile }) {
   const expiresInDays = dealer.currentPeriod?.expiresInDays ?? 0;
   const planStatusDescription = getPlanStatusDescription(dealer.planStatus);
   const publishBlockReason = getPublishBlockReason(dealer.planStatus, publishCheck.allowed, remaining);
+  const publishBlockDetail = getPublishBlockDetail(dealer.planStatus, remaining);
+  const extraQuota = Number(dealer.benefits?.extraPublicationQuota || 0);
+  const quotaDescription =
+    limit === Infinity
+      ? "Publicaciones ilimitadas mientras el plan esté vigente."
+      : `${used} de ${formatLimit(limit)} publicaciones usadas en este período.`;
   const dealerLogo = dealer.logo || dealer.raw?.logo_url || "";
 
   const activeVehiclesCount = dealerVehicles.filter(
@@ -559,19 +589,35 @@ export default function DealerPanel({ authProfile }) {
           </article>
 
           <article className="dealer-status-card">
-            <span>Cupo del período</span>
+            <span>Cupo usado en este período</span>
             <strong>
               {used} / {formatLimit(limit)}
             </strong>
-            <p>Cupo restante: {remaining}</p>
+            <p>
+              {limit === Infinity
+                ? "Publicaciones ilimitadas mientras el plan esté vigente."
+                : `Publicaciones disponibles: ${remaining}.`}
+            </p>
+            {extraQuota > 0 && (
+              <p>Cupo extra temporal: {extraQuota} publicaciones.</p>
+            )}
           </article>
 
           <article className="dealer-status-card">
-            <span>Estado del plan</span>
+            <span>Estado comercial</span>
             <strong>{getPlanStatusLabel(dealer.planStatus)}</strong>
             <p className={getPlanStatusAlertClass(dealer.planStatus, expiresInDays)}>
               {planStatusDescription}
             </p>
+            {!publishCheck.allowed && (
+              <button
+                type="button"
+                className="table-action-btn"
+                onClick={() => openModule("support")}
+              >
+                Contactar administración
+              </button>
+            )}
           </article>
 
           <article className="dealer-status-card">
@@ -649,6 +695,18 @@ export default function DealerPanel({ authProfile }) {
               <button type="button" disabled={!publishCheck.allowed}>
                 Publicar vehículo
               </button>
+              {!publishCheck.allowed && (
+                <button
+                  type="button"
+                  className="table-action-btn"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    openModule("support");
+                  }}
+                >
+                  Contactar administración
+                </button>
+              )}
             </article>
 
             <article
@@ -881,13 +939,19 @@ export default function DealerPanel({ authProfile }) {
             <div className="dealer-module-card dealer-module-card-open">
               <h3>Publicar nueva unidad</h3>
               <p>
-                Cupo usado: {used} / {formatLimit(limit)}. Cupo restante:{" "}
-                {remaining}.
+                {quotaDescription}
               </p>
+              {extraQuota > 0 && (
+                <p>Cupo extra temporal: {extraQuota} publicaciones.</p>
+              )}
 
               {!publishCheck.allowed && (
                 <div className="auth-warning">
-                  {publishBlockReason || "No podés publicar en este momento. Revisá cupo, estado del plan o permisos otorgados por admin."}
+                  <strong>
+                    {publishBlockReason ||
+                      "No podés publicar en este momento."}
+                  </strong>
+                  <span>{publishBlockDetail}</span>
                 </div>
               )}
 
@@ -904,6 +968,15 @@ export default function DealerPanel({ authProfile }) {
               >
                 Publicar vehículo
               </button>
+              {!publishCheck.allowed && (
+                <button
+                  type="button"
+                  className="table-action-btn"
+                  onClick={() => openModule("support")}
+                >
+                  Contactar administración
+                </button>
+              )}
             </div>
           </div>
         )}

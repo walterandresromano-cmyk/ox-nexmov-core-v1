@@ -425,10 +425,10 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
 
         {createdVehicle ? (
           <div className="lead-created-box">
-            <h3>Publicación creada correctamente</h3>
+            <h3>Publicación creada y enviada a revisión</h3>
             <p>
-              El vehículo quedó registrado. Si pasó las validaciones, ya puede
-              aparecer en la búsqueda pública.
+              Publicación creada y enviada a revisión. No será visible para
+              compradores hasta que sea aprobada.
             </p>
 
             <div className="contact-summary">
@@ -436,10 +436,10 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
               <strong>
                 {createdVehicle.publication_status === "review"
                   ? "En revisión"
-                  : "Activa"}
+                  : "Creada"}
               </strong>
               <span>
-                Revisión: {createdVehicle.review_status || "auto_approved"}
+                Visibilidad: no visible hasta aprobación administrativa.
               </span>
             </div>
 
