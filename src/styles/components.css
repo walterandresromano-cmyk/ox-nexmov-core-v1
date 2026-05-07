@@ -955,24 +955,6 @@
   box-shadow: none;
 }
 
-.lead-debug {
-  display: grid;
-  gap: 6px;
-  border: 1px solid var(--ox-border);
-  border-radius: 16px;
-  background: var(--ox-card);
-  padding: 14px;
-  overflow-wrap: anywhere;
-}
-
-.lead-debug span {
-  color: var(--ox-muted);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .lead-created-note {
   color: #86efac;
   background: rgba(34, 197, 94, 0.1);
@@ -6090,7 +6072,6 @@ body::-webkit-scrollbar {
 .admin-kpi-card,
 .admin-table-wrap,
 .contact-summary,
-.lead-debug,
 .ox-public-card {
   border: 1px solid var(--ox-border);
   border-radius: var(--ox-radius-2xl);
@@ -6615,7 +6596,6 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .detail-notes-box,
 :root[data-theme="light"] .detail-spec-grid div,
 :root[data-theme="light"] .contact-summary,
-:root[data-theme="light"] .lead-debug,
 :root[data-theme="light"] .admin-table,
 :root[data-theme="light"] .admin-table-wrap,
 :root[data-theme="light"] .dealer-status-card,

@@ -91,11 +91,6 @@ export default function CreateSupportTicketModal({
               administración podrá tomarlo desde su bandeja.
             </p>
 
-            <div className="lead-debug">
-              <span>ID ticket</span>
-              <strong>{createdTicket.ticket_id}</strong>
-            </div>
-
             <button className="primary-action" onClick={onClose}>
               Cerrar
             </button>

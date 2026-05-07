@@ -66,7 +66,7 @@ function getVehicleImageUrl(vehicle) {
 function getVehicleTitle(vehicle) {
   return (
     [vehicle?.brand, vehicle?.model].filter(Boolean).join(" ") ||
-    "Vehículo publicado"
+    "Vehículo disponible"
   );
 }
 

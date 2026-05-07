@@ -237,7 +237,7 @@ export default function DealerPanel({ authProfile }) {
       setSelectedDealerId(null);
       setDealersError(
         error.message ||
-          "No pudimos cargar tu cuenta dealer. Reintenta o contacta a soporte."
+          "No pudimos cargar tu cuenta dealer. Reintentá o contactá a soporte."
       );
       setLoadingDealers(false);
       return;
@@ -247,7 +247,7 @@ export default function DealerPanel({ authProfile }) {
       setDealers([]);
       setSelectedDealerId(null);
       setDealersError(
-        "No tenés un dealer real asociado a este usuario. Revisar vínculo profile_id en Supabase."
+        "No tenés un dealer asociado a este usuario. Contactá a soporte para revisar la vinculación de la cuenta."
       );
       setLoadingDealers(false);
       return;

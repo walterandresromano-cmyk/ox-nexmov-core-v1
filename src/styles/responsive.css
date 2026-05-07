@@ -1129,8 +1129,7 @@
 :root[data-theme="light"] .admin-kpi-card,
 :root[data-theme="light"] .buyer-stat-card,
 :root[data-theme="light"] .support-stat-card,
-:root[data-theme="light"] .contact-summary,
-:root[data-theme="light"] .lead-debug {
+:root[data-theme="light"] .contact-summary {
   background:
     linear-gradient(180deg, rgba(247, 253, 255, 0.94), rgba(221, 241, 252, 0.86));
   border-color: rgba(14, 116, 144, 0.13);

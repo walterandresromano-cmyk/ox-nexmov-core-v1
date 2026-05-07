@@ -124,7 +124,7 @@ function getVehicleImages(vehicle) {
 function getVehicleTitle(vehicle) {
   return (
     [vehicle?.brand || vehicle?.make, vehicle?.model].filter(Boolean).join(" ") ||
-    "Vehículo publicado"
+    "Vehículo disponible"
   );
 }
 

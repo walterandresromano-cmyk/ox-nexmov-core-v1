@@ -393,7 +393,7 @@ function getSuggestionTypeLabel(type) {
   if (type === "brand") return "Marca";
   if (type === "model") return "Modelo";
   if (type === "version") return "Versión";
-  if (type === "publication") return "Publicacion";
+  if (type === "publication") return "Publicación";
   return "Sugerencia";
 }
 
@@ -725,7 +725,7 @@ export default function Search({
       setVehicles(ALLOW_MOCK_FALLBACK ? mockVehicles : []);
       setVehiclesError(
         ALLOW_MOCK_FALLBACK
-          ? `${error.message}. Modo desarrollo: usando vehículos mock como respaldo temporal.`
+          ? "No pudimos cargar vehículos públicos. Modo desarrollo: usando inventario local de demostración."
           : "No pudimos cargar vehículos disponibles en este momento."
       );
       setLoadingVehicles(false);
@@ -736,7 +736,7 @@ export default function Search({
       setVehicles(ALLOW_MOCK_FALLBACK ? mockVehicles : []);
       setVehiclesError(
         ALLOW_MOCK_FALLBACK
-          ? "Supabase devolvió 0 vehículos públicos. Modo desarrollo: usando vehículos mock como respaldo temporal."
+          ? "No hay vehículos públicos cargados. Modo desarrollo: usando inventario local de demostración."
           : "No hay vehículos publicados disponibles."
       );
       setLoadingVehicles(false);
