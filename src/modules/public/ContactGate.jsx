@@ -196,8 +196,8 @@ export default function ContactGate({
             </p>
 
             <p>
-              Si el dealer tiene WhatsApp cargado, podes abrirlo ahora. Tambien
-              podes revisar esta consulta desde tu panel.
+              Si el dealer tiene WhatsApp cargado, podés abrirlo ahora. También
+              podés revisar esta consulta desde tu panel.
             </p>
 
             <div className="lead-debug">

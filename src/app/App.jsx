@@ -245,7 +245,7 @@ export default function App() {
         setAppNotice({
           scope: "compare",
           tone: "info",
-          message: "Ese vehiculo ya esta en el comparador.",
+          message: "Ese vehículo ya está en el comparador.",
         });
         return current;
       }
@@ -254,7 +254,7 @@ export default function App() {
         setAppNotice({
           scope: "compare",
           tone: "warning",
-          message: "Podes comparar hasta 4 vehiculos. Quita uno para sumar otro.",
+          message: "Podés comparar hasta 4 vehículos. Quitá uno para sumar otro.",
         });
         return current;
       }
@@ -262,10 +262,10 @@ export default function App() {
       setAppNotice({
         scope: "compare",
         tone: "success",
-        message:
-          current.length === 0
-            ? "Vehiculo agregado. Suma otro para comparar."
-            : "Vehiculo agregado al comparador.",
+          message:
+            current.length === 0
+            ? "Vehículo agregado. Sumá otro para comparar."
+            : "Vehículo agregado al comparador.",
       });
 
       return [...current, vehicle];
@@ -309,7 +309,7 @@ export default function App() {
       setAppNotice({
         scope: "compare",
         tone: "info",
-        message: "Selecciona al menos 2 vehiculos para comparar.",
+        message: "Seleccioná al menos 2 vehículos para comparar.",
       });
       return;
     }

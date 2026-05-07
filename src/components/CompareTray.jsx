@@ -247,7 +247,7 @@ function getVehicleKey(vehicle, index = 0) {
 
 function getCompareTrayMessage(compareItems, appNotice) {
   if (appNotice?.scope === "compare") {
-    if (appNotice.message?.includes("Suma otro")) {
+    if (appNotice.message?.includes("Sumá otro")) {
       return "Vehículo agregado. Sumá otro para comparar.";
     }
 
@@ -259,7 +259,7 @@ function getCompareTrayMessage(compareItems, appNotice) {
       return "Podés comparar hasta 4 vehículos. Quitá uno para sumar otro.";
     }
 
-    if (appNotice.message?.includes("ya esta")) {
+    if (appNotice.message?.includes("ya está")) {
       return "Ese vehículo ya está en el comparador.";
     }
 
