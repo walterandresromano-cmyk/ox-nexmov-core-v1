@@ -10,6 +10,27 @@ const ACTIONS = [
   { value: "send_to_review", label: "Enviar a revisión" },
 ];
 
+function confirmAdminVehicleAction(action) {
+  const messages = {
+    approve_review:
+      "Confirmá que revisaste la información comercial antes de aprobar esta publicación.",
+    pause:
+      "Esta publicación dejará de estar visible para compradores. ¿Querés pausarla?",
+    reactivate:
+      "Esta publicación volverá a estar disponible según las reglas comerciales del dealer. ¿Querés reactivarla?",
+    reserve: "Confirmá que esta publicación debe marcarse como reservada.",
+    mark_sold: "Confirmá que esta publicación debe marcarse como vendida.",
+    send_to_review:
+      "Esta publicación volverá a revisión para que el dealer corrija la información. ¿Querés continuar?",
+  };
+
+  const message = messages[action];
+
+  if (!message) return true;
+
+  return window.confirm(message);
+}
+
 export default function AdminVehicleActions({ vehicle, onUpdated }) {
   const [action, setAction] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,6 +40,10 @@ export default function AdminVehicleActions({ vehicle, onUpdated }) {
   async function handleApply() {
     if (!action) {
       setError("Elegí una acción.");
+      return;
+    }
+
+    if (!confirmAdminVehicleAction(action)) {
       return;
     }
 
