@@ -6751,6 +6751,282 @@ body::-webkit-scrollbar {
   background: rgba(236, 253, 245, 0.82);
 }
 
+/* =========================================================
+   oX NEXMOV Core v1 - Admin/Dealer theme alignment
+   Scoped polish for operational panels. No business logic.
+   ========================================================= */
+
+.admin-panel,
+.dealer-panel {
+  overflow-x: hidden;
+}
+
+.admin-panel .admin-section-block,
+.dealer-panel .dealer-leads-section,
+.dealer-panel .dealer-module-card-open {
+  border-color: var(--ox-border);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(56, 189, 248, 0.06), transparent 34%),
+    var(--ox-surface-card-quiet);
+  box-shadow: var(--ox-shadow-card);
+}
+
+.admin-panel .panel-head-row,
+.dealer-panel .panel-head-row {
+  border-color: var(--ox-border);
+  background: var(--ox-surface-card);
+  box-shadow: var(--ox-shadow-panel);
+}
+
+.admin-panel .admin-table-wrap,
+.dealer-panel .admin-table-wrap {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(125, 211, 252, 0.42) transparent;
+}
+
+.admin-panel .admin-table-wrap::-webkit-scrollbar,
+.dealer-panel .admin-table-wrap::-webkit-scrollbar {
+  height: 8px;
+}
+
+.admin-panel .admin-table-wrap::-webkit-scrollbar-thumb,
+.dealer-panel .admin-table-wrap::-webkit-scrollbar-thumb {
+  border-radius: var(--ox-radius-pill);
+  background: rgba(125, 211, 252, 0.28);
+}
+
+.admin-panel .table-action-btn,
+.admin-panel .admin-refresh-btn,
+.dealer-panel .table-action-btn,
+.dealer-panel .admin-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  line-height: 1;
+}
+
+.admin-panel .admin-action-row,
+.dealer-panel .admin-action-row {
+  gap: var(--ox-space-3);
+}
+
+:root[data-theme="light"] .admin-panel,
+:root[data-theme="light"] .dealer-panel {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(224, 243, 252, 0.9));
+}
+
+:root[data-theme="light"] .admin-panel .panel-head-row,
+:root[data-theme="light"] .dealer-panel .panel-head-row,
+:root[data-theme="light"] .admin-panel .admin-section-block,
+:root[data-theme="light"] .dealer-panel .dealer-leads-section,
+:root[data-theme="light"] .dealer-panel .dealer-module-card-open {
+  border-color: var(--ox-border);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(226, 244, 253, 0.9));
+  color: var(--ox-text);
+  box-shadow: var(--ox-shadow-card);
+}
+
+:root[data-theme="light"] .admin-panel .panel-head-row h1,
+:root[data-theme="light"] .dealer-panel .panel-head-row h1,
+:root[data-theme="light"] .admin-panel .admin-section-block h2,
+:root[data-theme="light"] .dealer-panel .dealer-leads-section h2,
+:root[data-theme="light"] .admin-panel .dealer-module-card h3,
+:root[data-theme="light"] .dealer-panel .dealer-module-card h3,
+:root[data-theme="light"] .admin-panel .admin-kpi-card strong,
+:root[data-theme="light"] .dealer-panel .dealer-status-card strong {
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .admin-panel .panel-head-row p,
+:root[data-theme="light"] .dealer-panel .panel-head-row p,
+:root[data-theme="light"] .admin-panel .admin-section-block p,
+:root[data-theme="light"] .dealer-panel .dealer-leads-section p,
+:root[data-theme="light"] .admin-panel .admin-kpi-card p,
+:root[data-theme="light"] .dealer-panel .dealer-status-card p,
+:root[data-theme="light"] .dealer-panel .dealer-module-card p {
+  color: var(--ox-muted);
+}
+
+:root[data-theme="light"] .admin-panel .admin-table-wrap,
+:root[data-theme="light"] .dealer-panel .admin-table-wrap {
+  border-color: var(--ox-border);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--ox-shadow-card);
+}
+
+:root[data-theme="light"] .admin-panel .admin-table,
+:root[data-theme="light"] .dealer-panel .admin-table {
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .admin-panel .admin-table thead th,
+:root[data-theme="light"] .dealer-panel .admin-table thead th {
+  border-bottom-color: var(--ox-border);
+  background: rgba(232, 246, 253, 0.96);
+  color: var(--ox-cyan);
+}
+
+:root[data-theme="light"] .admin-panel .admin-table tbody td,
+:root[data-theme="light"] .dealer-panel .admin-table tbody td {
+  border-bottom-color: var(--ox-border);
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .admin-panel .admin-table td strong,
+:root[data-theme="light"] .dealer-panel .admin-table td strong {
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .admin-panel .admin-table td span,
+:root[data-theme="light"] .dealer-panel .admin-table td span {
+  color: var(--ox-muted);
+}
+
+:root[data-theme="light"] .admin-panel .table-action-btn,
+:root[data-theme="light"] .admin-panel .admin-refresh-btn,
+:root[data-theme="light"] .dealer-panel .table-action-btn,
+:root[data-theme="light"] .dealer-panel .admin-refresh-btn {
+  border-color: rgba(2, 132, 199, 0.22);
+  background: var(--ox-surface-button);
+  color: var(--ox-text-soft);
+  box-shadow: 0 10px 24px rgba(33, 48, 71, 0.08);
+}
+
+:root[data-theme="light"] .admin-panel .table-action-btn:hover,
+:root[data-theme="light"] .admin-panel .admin-refresh-btn:hover,
+:root[data-theme="light"] .dealer-panel .table-action-btn:hover,
+:root[data-theme="light"] .dealer-panel .admin-refresh-btn:hover {
+  border-color: var(--ox-border-accent);
+  color: var(--ox-text);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(220, 240, 250, 0.96));
+}
+
+:root[data-theme="light"] .admin-panel .lead-status-control select,
+:root[data-theme="light"] .dealer-panel .lead-status-control select,
+:root[data-theme="light"] .dealer-panel .dealer-switcher select {
+  border-color: var(--ox-border);
+  background: var(--ox-surface-input);
+  color: var(--ox-text);
+}
+
+/* =========================================================
+   oX NEXMOV Core v1 - Admin premium shell polish
+   Visual-only refinement for AdminPanel. No business logic.
+   ========================================================= */
+
+.admin-panel {
+  border-color: var(--ox-border);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(56, 189, 248, 0.07), transparent 30%),
+    linear-gradient(180deg, rgba(8, 16, 31, 0.86), rgba(2, 6, 23, 0.94));
+}
+
+.admin-panel .panel-head-row {
+  align-items: center;
+  gap: var(--ox-space-9);
+  margin-bottom: var(--ox-space-8);
+}
+
+.admin-panel .panel-head-row h1 {
+  letter-spacing: 0;
+}
+
+.admin-panel .panel-head-row p {
+  max-width: 820px;
+}
+
+.admin-panel .admin-section-block {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-panel .admin-section-block::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, rgba(56, 189, 248, 0.045), transparent 34%),
+    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.035), transparent 22%);
+}
+
+.admin-panel .admin-section-block > * {
+  position: relative;
+  z-index: 1;
+}
+
+.admin-panel .admin-kpi-card,
+.admin-panel .dealer-module-card {
+  min-height: 156px;
+  border-radius: var(--ox-radius-xl);
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease);
+}
+
+.admin-panel .admin-kpi-card:hover,
+.admin-panel .dealer-module-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--ox-border-accent);
+}
+
+.admin-panel .admin-kpi-card strong {
+  font-size: clamp(1.42rem, 2.4vw, 1.92rem);
+  line-height: 1;
+}
+
+.admin-panel .admin-kpi-card p,
+.admin-panel .dealer-module-card p {
+  font-size: var(--ox-fs-body);
+  line-height: var(--ox-lh-body);
+}
+
+.admin-panel .buyer-section-head h2 {
+  color: var(--ox-text);
+  font-size: clamp(1rem, 1.4vw, 1.22rem);
+}
+
+.admin-panel .buyer-section-head p {
+  color: var(--ox-muted);
+}
+
+.admin-panel .admin-toolbar {
+  padding: var(--ox-space-4);
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-xl);
+  background: rgba(2, 6, 23, 0.22);
+}
+
+.admin-panel .admin-search input,
+.admin-panel .admin-filter select {
+  min-height: 38px;
+}
+
+.admin-panel .admin-chip {
+  min-height: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+:root[data-theme="light"] .admin-panel {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(14, 165, 233, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(224, 243, 252, 0.9));
+}
+
+:root[data-theme="light"] .admin-panel .admin-toolbar {
+  border-color: var(--ox-border);
+  background: rgba(255, 255, 255, 0.58);
+}
+
 /* Legal trust notes */
 .footer-legal {
   display: grid;
@@ -6783,18 +7059,28 @@ body::-webkit-scrollbar {
 
 .footer-support a,
 .footer-legal-links a,
-.auth-legal-note a {
+.footer-legal-links button,
+.auth-legal-note a,
+.auth-legal-note button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
   color: var(--ox-cyan-soft);
+  font: inherit;
   font-weight: var(--ox-fw-bold);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
+  cursor: pointer;
   transition: color var(--ox-duration-fast) var(--ox-ease);
 }
 
 .footer-support a:hover,
 .footer-legal-links a:hover,
-.auth-legal-note a:hover {
+.footer-legal-links button:hover,
+.auth-legal-note a:hover,
+.auth-legal-note button:hover {
   color: var(--ox-text);
 }
 

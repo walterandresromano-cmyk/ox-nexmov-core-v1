@@ -30,6 +30,15 @@ const ADMIN_MODULES = {
   TICKETS: "tickets",
 };
 
+const ADMIN_MOBILE_SECTIONS = [
+  { id: "summary", label: "Resumen" },
+  { id: "dealers", label: "Dealers" },
+  { id: "vehicles", label: "Publicaciones" },
+  { id: "leads", label: "Leads" },
+  { id: "tickets", label: "Tickets" },
+  { id: "system", label: "Sistema" },
+];
+
 const PLAN_OPTIONS = [
   { value: "inicio", label: "Inicio" },
   { value: "pro", label: "Pro" },
@@ -107,6 +116,8 @@ function normalizeText(value) {
 
 export default function AdminPanel({ authProfile }) {
   const [activeModule, setActiveModule] = useState(null);
+  const [activeAdminMobileSection, setActiveAdminMobileSection] =
+    useState("summary");
 
   const [searchText, setSearchText] = useState("");
   const [planFilter, setPlanFilter] = useState("all");
@@ -461,6 +472,15 @@ export default function AdminPanel({ authProfile }) {
   }
 
   function openModule(moduleName) {
+    const nextMobileSection = {
+      [ADMIN_MODULES.DEALERS]: "dealers",
+      [ADMIN_MODULES.VEHICLES]: "vehicles",
+      [ADMIN_MODULES.COMMERCIAL_LEADS]: "leads",
+      [ADMIN_MODULES.SELL_VEHICLE]: "system",
+      [ADMIN_MODULES.ZERO_KM]: "system",
+      [ADMIN_MODULES.TICKETS]: "tickets",
+    }[moduleName];
+
     setSelectedDealer(null);
     setShowCreateDealer(false);
     setCreateDealerError("");
@@ -469,6 +489,7 @@ export default function AdminPanel({ authProfile }) {
     setDealerLogoError("");
     setDealerLogoSuccess("");
     setSuspendDealerError("");
+    setActiveAdminMobileSection(nextMobileSection || "summary");
     setActiveModule(moduleName);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -635,6 +656,7 @@ export default function AdminPanel({ authProfile }) {
           setDealerLogoError("");
           setDealerLogoSuccess("");
           setSuspendDealerError("");
+          setActiveAdminMobileSection("summary");
           setActiveModule(null);
         }}
       >
@@ -1668,6 +1690,174 @@ export default function AdminPanel({ authProfile }) {
     );
   }
 
+  function handleAdminMobileSectionChange(sectionId) {
+    setActiveAdminMobileSection(sectionId);
+
+    if (sectionId === "summary") {
+      setActiveModule(null);
+      return;
+    }
+
+    if (sectionId === "dealers") {
+      setActiveModule(ADMIN_MODULES.DEALERS);
+      return;
+    }
+
+    if (sectionId === "vehicles") {
+      setActiveModule(ADMIN_MODULES.VEHICLES);
+      return;
+    }
+
+    if (sectionId === "leads") {
+      setActiveModule(ADMIN_MODULES.COMMERCIAL_LEADS);
+      return;
+    }
+
+    if (sectionId === "tickets") {
+      setActiveModule(ADMIN_MODULES.TICKETS);
+      return;
+    }
+
+    if (sectionId === "system") {
+      setActiveModule(null);
+    }
+  }
+
+  function renderAdminMobileTabs() {
+    return (
+      <nav className="admin-mobile-tabs" aria-label="Secciones admin mobile">
+        {ADMIN_MOBILE_SECTIONS.map((section) => (
+          <button
+            key={section.id}
+            type="button"
+            className={`admin-mobile-tab${
+              activeAdminMobileSection === section.id ? " is-active" : ""
+            }`}
+            onClick={() => handleAdminMobileSectionChange(section.id)}
+          >
+            {section.label}
+          </button>
+        ))}
+      </nav>
+    );
+  }
+
+  function renderAdminMobileSummary() {
+    return (
+      <div className="admin-mobile-summary">
+        <div className="admin-mobile-summary-head">
+          <div>
+            <span>Resumen operativo</span>
+            <strong>Control rápido</strong>
+          </div>
+
+          <button
+            type="button"
+            className="admin-refresh-btn"
+            onClick={refreshAdminPanel}
+          >
+            Actualizar
+          </button>
+        </div>
+
+        <div className="admin-mobile-summary-grid">
+          <article className="admin-mobile-summary-card">
+            <span>Dealers</span>
+            <strong>{totalDealers}</strong>
+            <p>Total en la red.</p>
+          </article>
+
+          <article className="admin-mobile-summary-card">
+            <span>Por vencer</span>
+            <strong>{expiringDealers}</strong>
+            <p>Seguimiento comercial.</p>
+          </article>
+
+          <article className="admin-mobile-summary-card">
+            <span>Leads</span>
+            <strong>{newLeads}</strong>
+            <p>Nuevos pendientes.</p>
+          </article>
+
+          <article className="admin-mobile-summary-card">
+            <span>Tickets</span>
+            <strong>{newTickets}</strong>
+            <p>Casos nuevos.</p>
+          </article>
+
+          <article className="admin-mobile-summary-card">
+            <span>Urgentes</span>
+            <strong>{urgentTickets}</strong>
+            <p>Prioridad alta.</p>
+          </article>
+
+          <article className="admin-mobile-summary-card">
+            <span>Vencidos</span>
+            <strong>{expiredDealers}</strong>
+            <p>Revisar estado.</p>
+          </article>
+        </div>
+      </div>
+    );
+  }
+
+  function renderAdminMobileSystemPanel() {
+    return (
+      <div className="admin-mobile-system-panel">
+        <div className="buyer-section-head">
+          <div>
+            <h2>Sistema</h2>
+            <p>
+              Accesos secundarios del panel admin. Abrí solo el módulo que
+              necesitás operar.
+            </p>
+          </div>
+        </div>
+
+        <div className="admin-mobile-system-grid">
+          <article className="admin-mobile-system-card">
+            <span>Comercial</span>
+            <strong>Vender mi vehículo</strong>
+            <p>Solicitudes de compradores para asignar a dealers habilitados.</p>
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={() => openModule(ADMIN_MODULES.SELL_VEHICLE)}
+            >
+              Abrir oportunidades
+            </button>
+          </article>
+
+          <article className="admin-mobile-system-card">
+            <span>Financiación</span>
+            <strong>Financiación 0km</strong>
+            <p>Leads generados desde el módulo público de financiación.</p>
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={() => openModule(ADMIN_MODULES.ZERO_KM)}
+            >
+              Abrir financiación
+            </button>
+          </article>
+
+          <article className="admin-mobile-system-card">
+            <span>Red</span>
+            <strong>Dealers</strong>
+            <p>Planes, cupos, vencimientos y beneficios comerciales.</p>
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={() => openModule(ADMIN_MODULES.DEALERS)}
+            >
+              Ir a dealers
+            </button>
+          </article>
+        </div>
+      </div>
+    );
+  }
+
   function renderActiveModule() {
     if (!activeModule) return renderSummary();
 
@@ -1781,7 +1971,27 @@ export default function AdminPanel({ authProfile }) {
           <div className="auth-message">Cargando tickets desde Supabase...</div>
         )}
 
-        {renderActiveModule()}
+        {renderAdminMobileTabs()}
+
+        <div
+          className={`admin-desktop-content${
+            (activeAdminMobileSection === "summary" ||
+              activeAdminMobileSection === "system") &&
+            !activeModule
+              ? " admin-desktop-content--mobile-system"
+              : ""
+          }`}
+        >
+          {renderActiveModule()}
+        </div>
+
+        {activeAdminMobileSection === "summary" &&
+          !activeModule &&
+          renderAdminMobileSummary()}
+
+        {activeAdminMobileSection === "system" &&
+          !activeModule &&
+          renderAdminMobileSystemPanel()}
 
         {selectedTicket && (
           <TicketDetailModal

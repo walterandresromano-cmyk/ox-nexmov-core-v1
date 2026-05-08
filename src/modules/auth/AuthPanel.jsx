@@ -455,13 +455,13 @@ export default function AuthPanel({
 
                 <p className="auth-legal-note">
                   Al registrarme acepto los{" "}
-                  <a href="#" title="Próximamente">
+                  <button type="button" onClick={() => onNavigate?.("terms")}>
                     Términos y condiciones
-                  </a>{" "}
+                  </button>{" "}
                   y la{" "}
-                  <a href="#" title="Próximamente">
+                  <button type="button" onClick={() => onNavigate?.("privacy")}>
                     Política de privacidad
-                  </a>{" "}
+                  </button>{" "}
                   de oX NEXMOV.
                 </p>
 
@@ -526,13 +526,13 @@ export default function AuthPanel({
 
                 <p className="auth-legal-note">
                   Al registrarme acepto los{" "}
-                  <a href="#" title="Próximamente">
+                  <button type="button" onClick={() => onNavigate?.("terms")}>
                     Términos y condiciones
-                  </a>{" "}
+                  </button>{" "}
                   y la{" "}
-                  <a href="#" title="Próximamente">
+                  <button type="button" onClick={() => onNavigate?.("privacy")}>
                     Política de privacidad
-                  </a>{" "}
+                  </button>{" "}
                   de oX NEXMOV.
                 </p>
 

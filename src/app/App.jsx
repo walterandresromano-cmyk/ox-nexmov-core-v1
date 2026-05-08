@@ -8,6 +8,7 @@ import SellVehicle from "../modules/public/SellVehicle.jsx";
 import JoinNetwork from "../modules/public/JoinNetwork.jsx";
 import About from "../modules/public/About.jsx";
 import FAQ from "../modules/public/FAQ.jsx";
+import LegalPage from "../modules/public/LegalPage.jsx";
 import AuthPanel from "../modules/auth/AuthPanel.jsx";
 import BuyerPanel from "../modules/buyer/BuyerPanel.jsx";
 import DealerPanel from "../modules/dealer/DealerPanel.jsx";
@@ -26,6 +27,12 @@ const ROUTES = {
   joinNetwork: JoinNetwork,
   about: About,
   faq: FAQ,
+  terms: LegalPage,
+  privacy: LegalPage,
+  cookies: LegalPage,
+  consumerDefense: LegalPage,
+  regret: LegalPage,
+  serviceCancel: LegalPage,
   login: AuthPanel,
   buyer: BuyerPanel,
   dealer: DealerPanel,
@@ -42,6 +49,12 @@ const PUBLIC_ROUTES = new Set([
   "joinNetwork",
   "about",
   "faq",
+  "terms",
+  "privacy",
+  "cookies",
+  "consumerDefense",
+  "regret",
+  "serviceCancel",
   "login",
 ]);
 
@@ -375,6 +388,7 @@ export default function App() {
         authError={authError}
         onAuthChange={handleAuthChange}
         initialSearchQuery={safeCurrentRoute === "search" ? searchQueryFromHome : ""}
+        currentRoute={safeCurrentRoute}
       />
     </Layout>
   );

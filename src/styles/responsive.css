@@ -731,6 +731,513 @@
     letter-spacing: -0.01em !important;
   }
 }
+
+/* =========================================================
+   oX NEXMOV Core v1 - Admin/Dealer mobile operations
+   Keeps operational panels usable above MobileDock.
+   ========================================================= */
+
+.admin-mobile-tabs,
+.admin-mobile-summary,
+.admin-mobile-system-panel {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .admin-panel,
+  .dealer-panel {
+    width: min(100%, calc(100vw - 24px)) !important;
+    max-width: calc(100vw - 24px) !important;
+    padding: 14px !important;
+    padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow-x: hidden !important;
+  }
+
+  .admin-panel .panel-head-row,
+  .dealer-panel .panel-head-row,
+  .admin-panel .admin-section-block,
+  .dealer-panel .dealer-leads-section,
+  .dealer-panel .dealer-module-card-open {
+    border-radius: 22px !important;
+    padding: 16px !important;
+  }
+
+  .admin-panel .panel-head-row h1,
+  .dealer-panel .panel-head-row h1 {
+    font-size: clamp(1.45rem, 7vw, 2rem) !important;
+    line-height: 1.02 !important;
+  }
+
+  .admin-panel .panel-head-row p,
+  .dealer-panel .panel-head-row p,
+  .admin-session-note {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    font-size: 0.82rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .dealer-switcher {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .admin-panel .admin-kpi-grid,
+  .dealer-panel .dealer-status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .admin-panel .admin-kpi-card,
+  .dealer-panel .dealer-status-card {
+    min-height: unset !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .admin-panel .admin-kpi-card strong,
+  .dealer-panel .dealer-status-card strong {
+    font-size: clamp(1.22rem, 6vw, 1.62rem) !important;
+  }
+
+  .admin-panel .dealer-modules-grid,
+  .dealer-panel .dealer-modules-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .dealer-panel .dealer-modules-grid > .dealer-module-card:nth-child(2) {
+    order: -1;
+  }
+
+  .admin-panel .dealer-module-card,
+  .dealer-panel .dealer-module-card {
+    min-height: unset !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .admin-panel .dealer-module-card h3,
+  .dealer-panel .dealer-module-card h3 {
+    margin-bottom: 6px !important;
+    font-size: 0.98rem !important;
+  }
+
+  .admin-panel .dealer-module-card p,
+  .dealer-panel .dealer-module-card p {
+    margin-bottom: 12px !important;
+    font-size: 0.82rem !important;
+    line-height: 1.42 !important;
+  }
+
+  .admin-panel .admin-toolbar,
+  .dealer-panel .admin-toolbar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin: 14px 0 !important;
+  }
+
+  .admin-panel .admin-action-row,
+  .dealer-panel .admin-action-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .admin-panel .admin-action-row button,
+  .dealer-panel .admin-action-row button,
+  .admin-panel .table-action-btn,
+  .dealer-panel .table-action-btn,
+  .admin-panel .admin-refresh-btn,
+  .dealer-panel .admin-refresh-btn,
+  .dealer-panel .primary-action,
+  .dealer-panel .dealer-module-card button {
+    width: 100% !important;
+    min-height: 42px !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .admin-panel > .panel-head-row > .admin-refresh-btn {
+    width: fit-content !important;
+    min-height: 36px !important;
+    justify-self: start !important;
+    padding: 8px 12px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .admin-panel .admin-table-wrap,
+  .dealer-panel .admin-table-wrap {
+    overflow: visible !important;
+  }
+
+  .admin-panel .admin-table tbody tr,
+  .dealer-panel .admin-table tbody tr {
+    border-radius: 18px !important;
+  }
+
+  .admin-panel .admin-table tbody tr {
+    gap: 9px !important;
+    padding: 13px !important;
+    border-color: var(--ox-border) !important;
+    box-shadow:
+      0 12px 34px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  }
+
+  .admin-panel .admin-table tbody td {
+    gap: 2px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .admin-panel .admin-table tbody td:first-child {
+    padding-bottom: 9px !important;
+  }
+
+  .admin-panel .admin-table tbody td:first-child strong {
+    font-size: 0.95rem !important;
+    line-height: 1.18 !important;
+  }
+
+  .admin-panel .admin-table tbody td:first-child span {
+    font-size: 0.72rem !important;
+  }
+
+  .admin-panel .admin-chip {
+    min-height: 24px !important;
+    padding: 5px 9px !important;
+    font-size: 0.64rem !important;
+  }
+
+  .admin-panel .admin-benefits-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .admin-panel .admin-benefits-list span {
+    margin-top: 0 !important;
+    padding: 5px 8px !important;
+    border: 1px solid var(--ox-border) !important;
+    border-radius: var(--ox-radius-pill) !important;
+    background: rgba(56, 189, 248, 0.06) !important;
+    font-size: 0.62rem !important;
+    font-weight: 900 !important;
+  }
+
+  .admin-panel .lead-status-control select,
+  .admin-panel .admin-table .table-action-btn {
+    min-height: 38px !important;
+    border-radius: 14px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .admin-mobile-tabs {
+    position: sticky;
+    top: 8px;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 12px;
+    padding: 7px;
+    overflow: visible;
+    border: 1px solid var(--ox-border);
+    border-radius: 20px;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.06), transparent 34%),
+      var(--ox-surface-card-quiet);
+    box-shadow:
+      0 14px 38px rgba(0, 0, 0, 0.20),
+      inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    backdrop-filter: blur(14px);
+  }
+
+  .admin-mobile-tab {
+    appearance: none;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    border: 1px solid var(--ox-border);
+    border-radius: var(--ox-radius-pill);
+    padding: 7px 5px;
+    background: var(--ox-surface-button);
+    color: var(--ox-text-soft);
+    font: inherit;
+    font-size: 0.64rem;
+    font-weight: 900;
+    line-height: 1.08;
+    white-space: normal;
+    text-align: center;
+    cursor: pointer;
+    transition:
+      transform var(--ox-duration-fast) var(--ox-ease),
+      border-color var(--ox-duration-fast) var(--ox-ease),
+      background var(--ox-duration-fast) var(--ox-ease),
+      color var(--ox-duration-fast) var(--ox-ease);
+  }
+
+  .admin-mobile-tab:active {
+    transform: scale(0.98);
+  }
+
+  .admin-mobile-tab.is-active {
+    border-color: var(--ox-border-accent);
+    background: var(--ox-surface-primary);
+    color: #ffffff;
+    box-shadow:
+      0 10px 24px rgba(37, 99, 235, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .admin-desktop-content--mobile-system {
+    display: none !important;
+  }
+
+  .admin-mobile-summary {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    max-width: 100%;
+    padding: 12px;
+    border: 1px solid var(--ox-border);
+    border-radius: 20px;
+    background:
+      radial-gradient(circle at 14% 0%, rgba(56, 189, 248, 0.06), transparent 34%),
+      var(--ox-surface-card-quiet);
+    box-shadow:
+      0 16px 44px rgba(0, 0, 0, 0.20),
+      inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  }
+
+  .admin-mobile-summary-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .admin-mobile-summary-head span,
+  .admin-mobile-summary-card span {
+    display: block;
+    color: var(--ox-muted);
+    font-size: 0.58rem;
+    font-weight: 900;
+    letter-spacing: var(--ox-ls-eyebrow);
+    text-transform: uppercase;
+  }
+
+  .admin-mobile-summary-head strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--ox-text);
+    font-size: 0.96rem;
+    line-height: 1.1;
+  }
+
+  .admin-mobile-summary-head .admin-refresh-btn {
+    width: auto !important;
+    min-width: 92px !important;
+    min-height: 36px !important;
+    padding: 8px 11px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .admin-mobile-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .admin-mobile-summary-card {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+    min-height: 0;
+    padding: 11px;
+    border: 1px solid var(--ox-border);
+    border-radius: 16px;
+    background: var(--ox-surface-card-quiet);
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  }
+
+  .admin-mobile-summary-card strong {
+    color: var(--ox-text);
+    font-size: clamp(1.08rem, 6.4vw, 1.36rem);
+    line-height: 0.98;
+  }
+
+  .admin-mobile-summary-card p {
+    margin: 0;
+    color: var(--ox-muted);
+    font-size: 0.68rem;
+    line-height: 1.25;
+  }
+
+  .admin-mobile-summary-card:nth-child(2),
+  .admin-mobile-summary-card:nth-child(5),
+  .admin-mobile-summary-card:nth-child(6) {
+    border-color: var(--ox-border-accent);
+  }
+
+  .admin-mobile-system-panel {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    max-width: 100%;
+    padding: 12px;
+    border: 1px solid var(--ox-border);
+    border-radius: 20px;
+    background:
+      radial-gradient(circle at 14% 0%, rgba(56, 189, 248, 0.06), transparent 34%),
+      var(--ox-surface-card-quiet);
+    box-shadow: var(--ox-shadow-card);
+  }
+
+  .admin-mobile-system-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .admin-mobile-system-card {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--ox-border);
+    border-radius: 16px;
+    background: var(--ox-surface-card-quiet);
+    box-shadow: var(--ox-shadow-card);
+  }
+
+  .admin-mobile-system-card span {
+    color: var(--ox-muted);
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: var(--ox-ls-eyebrow);
+    text-transform: uppercase;
+  }
+
+  .admin-mobile-system-card strong {
+    color: var(--ox-text);
+    font-size: 0.96rem;
+    line-height: 1.15;
+  }
+
+  .admin-mobile-system-card p {
+    margin: 0;
+    color: var(--ox-muted);
+    font-size: 0.76rem;
+    line-height: 1.42;
+  }
+
+  .admin-mobile-system-card .admin-refresh-btn {
+    width: 100%;
+    min-height: 42px;
+    justify-content: center;
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 900px) {
+  :root[data-theme="light"] .admin-panel .admin-table tbody tr,
+  :root[data-theme="light"] .dealer-panel .admin-table tbody tr {
+    border-color: var(--ox-border) !important;
+    background:
+      radial-gradient(circle at 16% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(229, 245, 253, 0.92)) !important;
+    box-shadow:
+      0 14px 36px rgba(33, 48, 71, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+  }
+
+  :root[data-theme="light"] .admin-panel .admin-table tbody tr:hover,
+  :root[data-theme="light"] .dealer-panel .admin-table tbody tr:hover {
+    background:
+      radial-gradient(circle at 16% 0%, rgba(14, 165, 233, 0.10), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(221, 241, 252, 0.96)) !important;
+  }
+
+  :root[data-theme="light"] .admin-panel .admin-table tbody td:not(:has(.table-action-btn)):not(:has(.lead-status-control)):not(:empty),
+  :root[data-theme="light"] .dealer-panel .admin-table tbody td:not(:has(.table-action-btn)):not(:has(.lead-status-control)):not(:empty) {
+    border-bottom-color: rgba(37, 54, 78, 0.10) !important;
+  }
+
+  :root[data-theme="light"] .admin-panel .admin-table tbody td:first-child span,
+  :root[data-theme="light"] .dealer-panel .admin-table tbody td:first-child span,
+  :root[data-theme="light"] .admin-panel .admin-table tbody td span,
+  :root[data-theme="light"] .dealer-panel .admin-table tbody td span {
+    color: var(--ox-muted) !important;
+  }
+
+  :root[data-theme="light"] .admin-panel .admin-table tbody td strong,
+  :root[data-theme="light"] .dealer-panel .admin-table tbody td strong {
+    color: var(--ox-text) !important;
+  }
+
+  :root[data-theme="light"] .admin-panel .admin-table tbody td:has(.lead-status-control),
+  :root[data-theme="light"] .dealer-panel .admin-table tbody td:has(.lead-status-control) {
+    border-top-color: rgba(2, 132, 199, 0.12) !important;
+  }
+
+  :root[data-theme="light"] .admin-panel .admin-benefits-list span {
+    border-color: var(--ox-border) !important;
+    background: rgba(224, 243, 252, 0.76) !important;
+    color: var(--ox-text-soft) !important;
+  }
+
+  :root[data-theme="light"] .admin-mobile-tabs,
+  :root[data-theme="light"] .admin-mobile-summary,
+  :root[data-theme="light"] .admin-mobile-summary-card,
+  :root[data-theme="light"] .admin-mobile-system-panel,
+  :root[data-theme="light"] .admin-mobile-system-card {
+    border-color: var(--ox-border);
+    background:
+      radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(229, 245, 253, 0.92));
+    color: var(--ox-text);
+    box-shadow: var(--ox-shadow-card);
+  }
+
+  :root[data-theme="light"] .admin-mobile-tab {
+    border-color: var(--ox-border);
+    background: var(--ox-surface-button);
+    color: var(--ox-text-soft);
+  }
+
+  :root[data-theme="light"] .admin-mobile-tab.is-active {
+    border-color: var(--ox-border-accent);
+    background: var(--ox-surface-primary);
+    color: #ffffff;
+  }
+
+  :root[data-theme="light"] .admin-mobile-system-card strong {
+    color: var(--ox-text);
+  }
+
+  :root[data-theme="light"] .admin-mobile-summary-head strong,
+  :root[data-theme="light"] .admin-mobile-summary-card strong {
+    color: var(--ox-text);
+  }
+
+  :root[data-theme="light"] .admin-mobile-summary-head span,
+  :root[data-theme="light"] .admin-mobile-summary-card span,
+  :root[data-theme="light"] .admin-mobile-summary-card p,
+  :root[data-theme="light"] .admin-mobile-system-card span,
+  :root[data-theme="light"] .admin-mobile-system-card p {
+    color: var(--ox-muted);
+  }
+}
 @media (max-width: 1180px) {
   .ox-search-workspace {
     grid-template-columns: 1fr;

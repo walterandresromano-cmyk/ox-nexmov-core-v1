@@ -58,24 +58,24 @@ export default function Footer({ onNavigate }) {
         </p>
 
         <nav className="footer-legal-links" aria-label="Links legales">
-          <a href="#" title="Próximamente">
+          <button type="button" onClick={() => onNavigate("terms")}>
             Términos y condiciones
-          </a>
-          <a href="#" title="Próximamente">
+          </button>
+          <button type="button" onClick={() => onNavigate("privacy")}>
             Política de privacidad
-          </a>
-          <a href="#" title="Próximamente">
+          </button>
+          <button type="button" onClick={() => onNavigate("cookies")}>
             Política de cookies
-          </a>
-          <a href="#" title="Próximamente">
+          </button>
+          <button type="button" onClick={() => onNavigate("consumerDefense")}>
             Defensa del consumidor
-          </a>
-          <a href="#" title="Próximamente">
+          </button>
+          <button type="button" onClick={() => onNavigate("regret")}>
             Botón de arrepentimiento
-          </a>
-          <a href="#" title="Próximamente">
+          </button>
+          <button type="button" onClick={() => onNavigate("serviceCancel")}>
             Botón de baja de servicio
-          </a>
+          </button>
         </nav>
       </div>
     </footer>
