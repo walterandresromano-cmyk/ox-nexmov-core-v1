@@ -7987,3 +7987,799 @@ body::-webkit-scrollbar {
     height: 146px;
   }
 }
+
+/* oX NEXMOV - Global Phase 2 premium public cards */
+.vehicle-card,
+.compare-tray,
+.compare-modal,
+.compare-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.vehicle-card::before,
+.compare-tray::before,
+.compare-modal::before,
+.compare-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(125, 211, 252, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 30%);
+  opacity: 0.74;
+}
+
+.vehicle-card > *,
+.compare-tray > *,
+.compare-modal > *,
+.compare-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.vehicle-card {
+  border-color: var(--ox-border-strong);
+  box-shadow:
+    var(--ox-shadow-card),
+    0 0 0 1px rgba(56, 189, 248, 0.025);
+}
+
+.vehicle-card__media {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.vehicle-card__media::after {
+  opacity: 0.78;
+}
+
+.vehicle-card__rank,
+.vehicle-card__year,
+.vehicle-card__market,
+.vehicle-card__reserved,
+.compare-card-dealer .admin-chip {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.vehicle-card__fact,
+.vehicle-card__price-box,
+.compare-spec-row,
+.compare-card-dealer {
+  border-color: var(--ox-border);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.54), rgba(2, 6, 23, 0.46));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 24px rgba(0, 0, 0, 0.10);
+}
+
+.vehicle-card__btn,
+.compare-tray-primary,
+.compare-tray-clear,
+.compare-tray-chip-remove,
+.compare-card-detail,
+.compare-modal-actions button,
+.compare-card-remove,
+.compare-card-gallery-btn {
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .vehicle-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--ox-border-accent);
+    box-shadow: var(--ox-shadow-card-hover);
+  }
+
+  .vehicle-card:hover .vehicle-card__image {
+    transform: scale(1.018);
+  }
+
+  .vehicle-card__btn:hover,
+  .compare-tray-primary:hover,
+  .compare-tray-clear:hover,
+  .compare-tray-chip-remove:hover,
+  .compare-card-detail:hover,
+  .compare-modal-actions button:hover,
+  .compare-card-remove:hover,
+  .compare-card-gallery-btn:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 12px 26px rgba(37, 99, 235, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+}
+
+.compare-tray {
+  border-color: var(--ox-border-accent);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.96));
+  box-shadow:
+    0 20px 58px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.compare-tray-chip {
+  border-color: var(--ox-border);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.70), rgba(2, 6, 23, 0.72));
+}
+
+.compare-modal {
+  border-color: var(--ox-border-strong);
+  box-shadow: var(--ox-shadow-modal);
+}
+
+.compare-empty-state {
+  border-color: var(--ox-border-accent);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    var(--ox-surface-card-quiet);
+}
+
+:root[data-theme="light"] .vehicle-card::before,
+:root[data-theme="light"] .compare-tray::before,
+:root[data-theme="light"] .compare-modal::before,
+:root[data-theme="light"] .compare-card::before {
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.70), transparent 32%);
+}
+
+:root[data-theme="light"] .vehicle-card__fact,
+:root[data-theme="light"] .vehicle-card__price-box,
+:root[data-theme="light"] .compare-spec-row,
+:root[data-theme="light"] .compare-card-dealer,
+:root[data-theme="light"] .compare-tray-chip,
+:root[data-theme="light"] .compare-empty-state {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(225, 242, 252, 0.84));
+  box-shadow:
+    0 10px 24px rgba(33, 48, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+:root[data-theme="light"] .compare-tray {
+  border-color: rgba(2, 132, 199, 0.24);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.10), transparent 34%),
+    rgba(247, 253, 255, 0.94);
+  box-shadow:
+    0 18px 44px rgba(33, 48, 71, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+/* oX NEXMOV - Global Phase 3 internal app polish */
+.admin-panel .admin-section-block,
+.dealer-panel .dealer-leads-section,
+.dealer-panel .dealer-module-card-open,
+.admin-panel .admin-kpi-card,
+.dealer-panel .dealer-status-card,
+.admin-panel .dealer-module-card,
+.dealer-panel .dealer-module-card,
+.admin-panel .admin-table-wrap,
+.dealer-panel .admin-table-wrap {
+  border-color: var(--ox-border);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.055), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.66));
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.admin-panel .admin-section-block,
+.dealer-panel .dealer-leads-section,
+.dealer-panel .dealer-module-card-open {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-panel .admin-section-block::after,
+.dealer-panel .dealer-leads-section::after,
+.dealer-panel .dealer-module-card-open::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 30%),
+    linear-gradient(180deg, rgba(56, 189, 248, 0.035), transparent 36%);
+  opacity: 0.72;
+}
+
+.admin-panel .admin-section-block > *,
+.dealer-panel .dealer-leads-section > *,
+.dealer-panel .dealer-module-card-open > * {
+  position: relative;
+  z-index: 1;
+}
+
+.admin-panel .buyer-section-head,
+.dealer-panel .dealer-section-head,
+.dealer-panel .buyer-section-head {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  padding-bottom: var(--ox-space-3);
+}
+
+.admin-panel .buyer-section-head h2,
+.dealer-panel .dealer-section-head h2,
+.dealer-panel .buyer-section-head h2 {
+  letter-spacing: -0.035em;
+}
+
+.admin-panel .buyer-section-head p,
+.dealer-panel .dealer-section-head p,
+.dealer-panel .buyer-section-head p {
+  color: var(--ox-muted);
+}
+
+.admin-panel .admin-toolbar,
+.dealer-panel .admin-toolbar {
+  border: 1px solid var(--ox-border);
+  border-radius: 20px;
+  padding: 10px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.46), rgba(2, 6, 23, 0.36));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 12px 28px rgba(0, 0, 0, 0.10);
+}
+
+.admin-panel .admin-search input,
+.admin-panel .admin-filter select,
+.dealer-panel .admin-search input,
+.dealer-panel .admin-filter select,
+.lead-status-control select,
+.ticket-status-control select,
+.ticket-detail-modal .zero-km-form input,
+.ticket-detail-modal .zero-km-form select,
+.ticket-detail-modal .zero-km-form textarea,
+.contact-modal .contact-form input,
+.contact-modal .contact-form select,
+.contact-modal .contact-form textarea,
+.lead-notes-textarea {
+  border-color: var(--ox-border);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.50), rgba(2, 6, 23, 0.42));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.admin-panel .admin-search input:focus,
+.admin-panel .admin-filter select:focus,
+.dealer-panel .admin-search input:focus,
+.dealer-panel .admin-filter select:focus,
+.lead-status-control select:focus,
+.ticket-status-control select:focus,
+.ticket-detail-modal .zero-km-form input:focus,
+.ticket-detail-modal .zero-km-form select:focus,
+.ticket-detail-modal .zero-km-form textarea:focus,
+.contact-modal .contact-form input:focus,
+.contact-modal .contact-form select:focus,
+.contact-modal .contact-form textarea:focus,
+.lead-notes-textarea:focus {
+  border-color: var(--ox-border-accent);
+  box-shadow:
+    0 0 0 4px rgba(56, 189, 248, 0.12),
+    0 12px 26px rgba(37, 99, 235, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.admin-panel .table-action-btn,
+.admin-panel .admin-refresh-btn,
+.dealer-panel .table-action-btn,
+.dealer-panel .admin-refresh-btn,
+.dealer-panel .primary-action,
+.ticket-detail-modal .table-action-btn,
+.contact-modal .primary-action,
+.ticket-detail-modal .zero-km-form .primary-action {
+  border-color: var(--ox-border);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.admin-panel .admin-refresh-btn,
+.dealer-panel .admin-refresh-btn,
+.admin-panel .table-action-btn,
+.dealer-panel .table-action-btn {
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.70), rgba(2, 6, 23, 0.62));
+}
+
+.dealer-panel .primary-action,
+.contact-modal .primary-action,
+.ticket-detail-modal .zero-km-form .primary-action {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(125, 211, 252, 0.24), transparent 32%),
+    linear-gradient(135deg, #2563eb, #0891b2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .admin-panel .admin-kpi-card:hover,
+  .dealer-panel .dealer-status-card:hover,
+  .admin-panel .dealer-module-card:hover,
+  .dealer-panel .dealer-module-card:hover,
+  .admin-panel .admin-table tbody tr:hover,
+  .dealer-panel .admin-table tbody tr:hover,
+  .ticket-detail-card:hover {
+    transform: translateY(-1px);
+    border-color: var(--ox-border-accent);
+    box-shadow:
+      0 20px 54px rgba(0, 0, 0, 0.20),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .admin-panel .table-action-btn:hover,
+  .admin-panel .admin-refresh-btn:hover,
+  .dealer-panel .table-action-btn:hover,
+  .dealer-panel .admin-refresh-btn:hover,
+  .dealer-panel .primary-action:hover,
+  .ticket-detail-modal .table-action-btn:hover,
+  .contact-modal .primary-action:hover,
+  .ticket-detail-modal .zero-km-form .primary-action:hover {
+    transform: translateY(-1px);
+    border-color: var(--ox-border-accent);
+    box-shadow:
+      0 14px 30px rgba(37, 99, 235, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  }
+}
+
+.admin-panel .admin-chip,
+.dealer-panel .admin-chip,
+.ticket-detail-modal .admin-chip,
+.lead-status-control small,
+.ticket-status-control small {
+  border-color: var(--ox-border);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.54), rgba(2, 6, 23, 0.48));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 8px 18px rgba(0, 0, 0, 0.10);
+}
+
+.ticket-detail-modal,
+.dealer-vehicle-detail-modal,
+.contact-modal {
+  border-color: var(--ox-border-strong);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(56, 189, 248, 0.09), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.96));
+  box-shadow: var(--ox-shadow-modal);
+}
+
+.ticket-detail-modal .contact-modal-head,
+.dealer-vehicle-detail-modal .contact-modal-head,
+.contact-modal .contact-modal-head {
+  margin-bottom: var(--ox-space-4);
+  border-radius: 20px;
+  padding: var(--ox-space-4);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.52), rgba(2, 6, 23, 0.38));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 12px 28px rgba(0, 0, 0, 0.10);
+}
+
+.ticket-detail-card,
+.contact-summary,
+.edit-images-current,
+.edit-images-upload,
+.vehicle-image-preview-grid,
+.lead-created-box {
+  border-color: var(--ox-border);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(56, 189, 248, 0.055), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.62), rgba(2, 6, 23, 0.52));
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.ticket-detail-modal .zero-km-form label,
+.contact-modal .contact-form label {
+  color: var(--ox-text);
+  font-weight: 800;
+}
+
+.form-hint,
+.dealer-legal-note,
+.form-legal-note {
+  color: var(--ox-muted);
+}
+
+:root[data-theme="light"] .admin-panel .admin-section-block,
+:root[data-theme="light"] .dealer-panel .dealer-leads-section,
+:root[data-theme="light"] .dealer-panel .dealer-module-card-open,
+:root[data-theme="light"] .admin-panel .admin-kpi-card,
+:root[data-theme="light"] .dealer-panel .dealer-status-card,
+:root[data-theme="light"] .admin-panel .dealer-module-card,
+:root[data-theme="light"] .dealer-panel .dealer-module-card,
+:root[data-theme="light"] .admin-panel .admin-table-wrap,
+:root[data-theme="light"] .dealer-panel .admin-table-wrap,
+:root[data-theme="light"] .admin-panel .admin-toolbar,
+:root[data-theme="light"] .dealer-panel .admin-toolbar {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.075), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(229, 245, 253, 0.88));
+  box-shadow:
+    0 16px 38px rgba(33, 48, 71, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84);
+}
+
+:root[data-theme="light"] .admin-panel .admin-search input,
+:root[data-theme="light"] .admin-panel .admin-filter select,
+:root[data-theme="light"] .dealer-panel .admin-search input,
+:root[data-theme="light"] .dealer-panel .admin-filter select,
+:root[data-theme="light"] .lead-status-control select,
+:root[data-theme="light"] .ticket-status-control select,
+:root[data-theme="light"] .ticket-detail-modal .zero-km-form input,
+:root[data-theme="light"] .ticket-detail-modal .zero-km-form select,
+:root[data-theme="light"] .ticket-detail-modal .zero-km-form textarea,
+:root[data-theme="light"] .contact-modal .contact-form input,
+:root[data-theme="light"] .contact-modal .contact-form select,
+:root[data-theme="light"] .contact-modal .contact-form textarea,
+:root[data-theme="light"] .lead-notes-textarea {
+  border-color: rgba(14, 116, 144, 0.15);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ox-text);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    0 8px 18px rgba(33, 48, 71, 0.06);
+}
+
+:root[data-theme="light"] .admin-panel .admin-refresh-btn,
+:root[data-theme="light"] .dealer-panel .admin-refresh-btn,
+:root[data-theme="light"] .admin-panel .table-action-btn,
+:root[data-theme="light"] .dealer-panel .table-action-btn {
+  border-color: rgba(14, 116, 144, 0.15);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(225, 242, 252, 0.78));
+  color: var(--ox-text);
+  box-shadow:
+    0 10px 22px rgba(33, 48, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+:root[data-theme="light"] .ticket-detail-modal,
+:root[data-theme="light"] .dealer-vehicle-detail-modal,
+:root[data-theme="light"] .contact-modal {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(14, 165, 233, 0.085), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(229, 245, 253, 0.94));
+}
+
+:root[data-theme="light"] .ticket-detail-modal .contact-modal-head,
+:root[data-theme="light"] .dealer-vehicle-detail-modal .contact-modal-head,
+:root[data-theme="light"] .contact-modal .contact-modal-head,
+:root[data-theme="light"] .ticket-detail-card,
+:root[data-theme="light"] .contact-summary,
+:root[data-theme="light"] .edit-images-current,
+:root[data-theme="light"] .edit-images-upload,
+:root[data-theme="light"] .vehicle-image-preview-grid,
+:root[data-theme="light"] .lead-created-box {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(14, 165, 233, 0.06), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(225, 242, 252, 0.84));
+  box-shadow:
+    0 12px 28px rgba(33, 48, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84);
+}
+
+/* oX NEXMOV - Modal hierarchy fix for contact and vehicle detail */
+.modal-backdrop:has(.contact-modal),
+.modal-backdrop:has(.vehicle-detail-modal),
+.modal-backdrop:has(.dealer-vehicle-detail-modal),
+.modal-backdrop:has(.ticket-detail-modal),
+.modal-backdrop:has(.edit-images-modal) {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9000 !important;
+  isolation: isolate;
+  display: grid !important;
+  place-items: center !important;
+  overflow: auto !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.12), transparent 28%),
+    rgba(1, 6, 15, 0.86) !important;
+  backdrop-filter: blur(18px) saturate(0.82) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(0.82) !important;
+}
+
+.modal-backdrop:has(.contact-modal)::before,
+.modal-backdrop:has(.vehicle-detail-modal)::before,
+.modal-backdrop:has(.dealer-vehicle-detail-modal)::before,
+.modal-backdrop:has(.ticket-detail-modal)::before,
+.modal-backdrop:has(.edit-images-modal)::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(1, 6, 15, 0.18), rgba(1, 6, 15, 0.54)),
+    radial-gradient(circle at 50% 42%, transparent 0 18%, rgba(1, 6, 15, 0.38) 58%);
+}
+
+.modal-backdrop:has(.contact-modal) .contact-modal,
+.modal-backdrop:has(.vehicle-detail-modal) .vehicle-detail-modal,
+.modal-backdrop:has(.dealer-vehicle-detail-modal) .dealer-vehicle-detail-modal,
+.modal-backdrop:has(.ticket-detail-modal) .ticket-detail-modal,
+.modal-backdrop:has(.edit-images-modal) .edit-images-modal {
+  position: relative !important;
+  z-index: 9010 !important;
+}
+
+.modal-backdrop:has(.contact-modal) .modal-close-btn,
+.modal-backdrop:has(.vehicle-detail-modal) .modal-close-btn,
+.modal-backdrop:has(.dealer-vehicle-detail-modal) .modal-close-btn,
+.modal-backdrop:has(.ticket-detail-modal) .modal-close-btn,
+.modal-backdrop:has(.edit-images-modal) .modal-close-btn {
+  position: relative;
+  z-index: 9020 !important;
+}
+
+:root[data-theme="light"] .modal-backdrop:has(.contact-modal),
+:root[data-theme="light"] .modal-backdrop:has(.vehicle-detail-modal),
+:root[data-theme="light"] .modal-backdrop:has(.dealer-vehicle-detail-modal),
+:root[data-theme="light"] .modal-backdrop:has(.ticket-detail-modal),
+:root[data-theme="light"] .modal-backdrop:has(.edit-images-modal) {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.16), transparent 28%),
+    rgba(18, 35, 52, 0.72) !important;
+  backdrop-filter: blur(20px) saturate(0.78) brightness(0.88) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(0.78) brightness(0.88) !important;
+}
+
+/* oX NEXMOV - ContactGate contrast and state polish */
+.contact-modal .contact-summary,
+.contact-modal .lead-created-box {
+  border-color: rgba(125, 211, 252, 0.18) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.74)) !important;
+  color: var(--ox-text) !important;
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.065) !important;
+}
+
+.contact-modal .contact-summary strong,
+.contact-modal .lead-created-box h3 {
+  color: var(--ox-text) !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.16);
+}
+
+.contact-modal .contact-summary span,
+.contact-modal .contact-summary small,
+.contact-modal .lead-created-box p,
+.contact-modal .contact-legal-note {
+  color: rgba(203, 213, 225, 0.86) !important;
+}
+
+.contact-modal .contact-legal-note {
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  border-radius: 16px;
+  padding: 10px 12px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.52), rgba(2, 6, 23, 0.42));
+}
+
+.contact-modal .form-error {
+  border-color: rgba(248, 113, 113, 0.36) !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.13), transparent 40%),
+    linear-gradient(180deg, rgba(127, 29, 29, 0.34), rgba(69, 10, 10, 0.28)) !important;
+  color: #fecaca !important;
+  box-shadow:
+    0 12px 28px rgba(127, 29, 29, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.contact-modal .contact-next-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.contact-modal .contact-warning {
+  width: 100%;
+  border: 1px solid rgba(245, 158, 11, 0.34);
+  border-radius: 18px;
+  padding: 13px 14px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(245, 158, 11, 0.16), transparent 42%),
+    linear-gradient(135deg, rgba(245, 158, 11, 0.13), rgba(14, 116, 144, 0.08));
+  color: var(--ox-text);
+  font-size: 0.84rem;
+  font-weight: 750;
+  line-height: 1.42;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 14px 28px rgba(0, 0, 0, 0.12);
+}
+
+.contact-modal .contact-next-actions .secondary-action {
+  border-color: rgba(125, 211, 252, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.64), rgba(2, 6, 23, 0.58)) !important;
+  color: var(--ox-text) !important;
+}
+
+:root[data-theme="light"] .contact-modal .contact-summary,
+:root[data-theme="light"] .contact-modal .lead-created-box {
+  border-color: rgba(14, 116, 144, 0.16) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 252, 0.86)) !important;
+  color: var(--ox-text) !important;
+  box-shadow:
+    0 16px 36px rgba(33, 48, 71, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+:root[data-theme="light"] .contact-modal .contact-summary strong,
+:root[data-theme="light"] .contact-modal .lead-created-box h3 {
+  color: var(--ox-text) !important;
+  text-shadow: none;
+}
+
+:root[data-theme="light"] .contact-modal .contact-summary span,
+:root[data-theme="light"] .contact-modal .contact-summary small,
+:root[data-theme="light"] .contact-modal .lead-created-box p,
+:root[data-theme="light"] .contact-modal .contact-legal-note {
+  color: var(--ox-muted) !important;
+}
+
+:root[data-theme="light"] .contact-modal .contact-legal-note {
+  border-color: rgba(14, 116, 144, 0.14);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+:root[data-theme="light"] .contact-modal .form-error {
+  border-color: rgba(220, 38, 38, 0.24) !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.10), transparent 40%),
+    linear-gradient(180deg, rgba(255, 241, 242, 0.96), rgba(254, 226, 226, 0.78)) !important;
+  color: #991b1b !important;
+  box-shadow:
+    0 12px 28px rgba(127, 29, 29, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+:root[data-theme="light"] .contact-modal .contact-warning {
+  border-color: rgba(217, 119, 6, 0.22);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(245, 158, 11, 0.12), transparent 42%),
+    linear-gradient(135deg, rgba(255, 251, 235, 0.96), rgba(224, 242, 254, 0.70));
+  color: #713f12;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 14px 30px rgba(146, 64, 14, 0.10);
+}
+
+:root[data-theme="light"] .contact-modal .contact-next-actions .secondary-action {
+  border-color: rgba(14, 116, 144, 0.15) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(225, 242, 252, 0.80)) !important;
+  color: var(--ox-text) !important;
+}
+
+/* oX NEXMOV - Dealer contact profile editor */
+.dealer-contact-card {
+  border-color: var(--ox-border-accent) !important;
+}
+
+.dealer-profile-contact-block {
+  display: grid;
+  gap: 14px;
+}
+
+.dealer-profile-contact-head {
+  display: grid;
+  gap: 6px;
+}
+
+.dealer-profile-contact-head .eyebrow {
+  margin: 0;
+  color: var(--ox-primary);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+.dealer-profile-contact-head h3 {
+  margin: 0;
+  color: var(--ox-text);
+  font-size: clamp(1.02rem, 2vw, 1.18rem);
+  line-height: 1.12;
+}
+
+.dealer-profile-contact-head p {
+  margin: 0;
+  color: var(--ox-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.dealer-contact-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 0;
+}
+
+.dealer-contact-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--ox-text);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.dealer-contact-form input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--ox-border);
+  border-radius: 15px;
+  padding: 10px 12px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.56), rgba(2, 6, 23, 0.48));
+  color: var(--ox-text);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.dealer-contact-form input:focus {
+  border-color: var(--ox-border-accent);
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(56, 189, 248, 0.12),
+    0 12px 26px rgba(37, 99, 235, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.dealer-contact-form small {
+  color: var(--ox-muted);
+  font-size: 0.72rem;
+}
+
+.dealer-contact-form .auth-warning,
+.dealer-contact-form .auth-message {
+  margin: 0;
+  padding: 9px 10px;
+  border-radius: 14px;
+  font-size: 0.74rem;
+}
+
+.dealer-contact-form .table-action-btn {
+  width: 100%;
+  min-height: 42px;
+  justify-content: center;
+}
+
+:root[data-theme="light"] .dealer-contact-form input {
+  border-color: rgba(14, 116, 144, 0.15);
+  background: rgba(255, 255, 255, 0.90);
+  color: var(--ox-text);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    0 8px 18px rgba(33, 48, 71, 0.06);
+}

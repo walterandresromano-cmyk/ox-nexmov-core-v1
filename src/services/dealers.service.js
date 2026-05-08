@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
+import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
 
 function getDaysUntil(dateValue) {
   if (!dateValue) return 30;
@@ -45,7 +46,11 @@ function mapDealerFromSupabase(row) {
     city: row.city || "",
 
     logo: row.logo_url || row.image_url || null,
-    phone: row.phone_whatsapp || row.contact_phone || "",
+    phone: normalizeWhatsAppArgentina(row.phone_whatsapp || row.contact_phone),
+    phoneWhatsapp: normalizeWhatsAppArgentina(
+      row.phone_whatsapp || row.contact_phone
+    ),
+    contactPhone: row.contact_phone || "",
 
     isActive: row.is_active !== false,
 
@@ -134,6 +139,196 @@ export async function listDealersForCurrentUser() {
   };
 }
 
+export async function updateDealerWhatsappById(dealerId, normalizedWhatsapp) {
+  if (!isSupabaseConfigured || !supabase) {
+    return {
+      dealer: null,
+      error: {
+        message: "Supabase no está configurado.",
+      },
+    };
+  }
+
+  const resolvedDealerId = String(dealerId || "").trim();
+
+  if (!resolvedDealerId) {
+    return {
+      dealer: null,
+      error: {
+        code: "dealer_id_missing",
+        message: "No pudimos identificar tu perfil comercial.",
+      },
+    };
+  }
+
+  const normalizedValue = normalizeWhatsAppArgentina(normalizedWhatsapp);
+
+  if (!normalizedValue) {
+    return {
+      dealer: null,
+      error: {
+        message: "Ingresá un WhatsApp válido con característica.",
+      },
+    };
+  }
+
+  // Verificar que el usuario esté autenticado
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user?.id) {
+    return {
+      dealer: null,
+      error: {
+        code: "auth_required",
+        message: "Necesitás estar autenticado para actualizar el WhatsApp.",
+      },
+    };
+  }
+
+  // Verificar que el dealer existe y pertenece al usuario autenticado
+  const { data: existingDealer, error: checkError } = await supabase
+    .from("dealers")
+    .select("id, profile_id, contact_phone, phone_whatsapp")
+    .eq("id", resolvedDealerId)
+    .eq("profile_id", user.id)
+    .single();
+
+  if (checkError) {
+    console.log("[updateDealerWhatsapp] ownership check error:", checkError);
+    return {
+      dealer: null,
+      error: {
+        code: "dealer_not_found_or_not_owned",
+        message: "No pudimos actualizar el WhatsApp. Intentá nuevamente.",
+      },
+    };
+  }
+
+  if (!existingDealer) {
+    console.log("[updateDealerWhatsapp] dealer not found or not owned by user");
+    return {
+      dealer: null,
+      error: {
+        code: "dealer_not_found_or_not_owned",
+        message: "No pudimos actualizar el WhatsApp. Intentá nuevamente.",
+      },
+    };
+  }
+
+  console.log("[updateDealerWhatsapp] payload:", {
+    dealerId,
+    resolvedDealerId,
+    normalizedWhatsapp,
+    normalizedValue,
+    userId: user.id,
+    existingDealerProfileId: existingDealer.profile_id
+  });
+
+  const { count, error } = await supabase
+    .from("dealers")
+    .update(
+      {
+        contact_phone: normalizedValue,
+        phone_whatsapp: normalizedValue,
+        updated_at: new Date().toISOString(),
+      },
+      { count: "exact" }
+    )
+    .eq("id", resolvedDealerId)
+    .eq("profile_id", user.id); // Verificación adicional de ownership
+
+  console.log("[updateDealerWhatsapp] result:", {
+    data: null, // no mostrar data sensible
+    error,
+    count,
+    status: null,
+    statusText: null
+  });
+
+  if (error) {
+    console.log("[updateDealerWhatsapp] update error:", error);
+    return {
+      dealer: null,
+      error: {
+        code: "update_error",
+        message: "No pudimos actualizar el WhatsApp. Intentá nuevamente.",
+      },
+    };
+  }
+
+  if (count === 0) {
+    console.log("[updateDealerWhatsapp] count = 0, dealer not updated");
+    return {
+      dealer: null,
+      error: {
+        code: "dealer_not_updated",
+        message: "No pudimos actualizar el WhatsApp. Intentá nuevamente.",
+      },
+    };
+  }
+
+  const { data: refreshedDealers, error: refreshError } = await supabase
+    .from("dealers")
+    .select(
+      `
+      id,
+      profile_id,
+      name,
+      slug,
+      plan_code,
+      plan_status,
+      publications_used,
+      extra_publish_slots,
+      plan_expires_at,
+      province,
+      city,
+      logo_url,
+      image_url,
+      contact_phone,
+      phone_whatsapp,
+      can_receive_sell_vehicle_leads,
+      is_active
+    `
+    )
+    .eq("id", resolvedDealerId)
+    .limit(1);
+
+  if (refreshError) {
+    return {
+      dealer: null,
+      error: {
+        message: "No pudimos actualizar el WhatsApp. Intentá nuevamente.",
+      },
+    };
+  }
+
+  const updatedDealer = Array.isArray(refreshedDealers)
+    ? refreshedDealers[0]
+    : null;
+
+  return {
+    dealer: updatedDealer
+      ? mapDealerFromSupabase(updatedDealer)
+      : {
+          id: resolvedDealerId,
+          phone: normalizedValue,
+          phoneWhatsapp: normalizedValue,
+          contactPhone: normalizedValue,
+        },
+    error: null,
+  };
+}
+
+export async function updateDealerContactForCurrentUser({
+  dealerId,
+  whatsapp,
+}) {
+  const normalizedWhatsapp = normalizeWhatsAppArgentina(whatsapp);
+  return updateDealerWhatsappById(dealerId, normalizedWhatsapp);
+}
 export async function listAllDealersForAdmin() {
   if (!isSupabaseConfigured || !supabase) {
     return {
@@ -189,6 +384,13 @@ export async function listPublicActiveDealers() {
       province: row.province || "",
       logo: row.logo_url || null,
       plan: row.plan_code || "inicio",
+      phone: normalizeWhatsAppArgentina(
+        row.phone_whatsapp || row.contact_phone || row.dealer_phone
+      ),
+      phoneWhatsapp: normalizeWhatsAppArgentina(
+        row.phone_whatsapp || row.contact_phone || row.dealer_phone
+      ),
+      contactPhone: row.contact_phone || row.dealer_phone || "",
       activeVehiclesCount: Number(row.active_vehicles_count || 0),
     })),
     error: null,

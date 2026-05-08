@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
+import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 import { createVehicleContactLead } from "../../services/leads.service.js";
 
 const initialForm = {
@@ -6,12 +8,53 @@ const initialForm = {
 };
 
 function getWhatsAppUrl(phone, message) {
-  const digits = String(phone || "").replace(/\D/g, "");
+  const digits = normalizeWhatsAppArgentina(phone);
 
-  if (!digits || digits.length < 8) return "";
+  if (!digits) return "";
 
-  const normalizedPhone = digits.startsWith("54") ? digits : `54${digits}`;
-  return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`;
+  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+}
+
+function getDealerWhatsappFromVehicle(vehicle, dealer) {
+  return (
+    dealer?.dealerWhatsapp ||
+    dealer?.dealer_whatsapp ||
+    dealer?.phone ||
+    dealer?.phoneWhatsapp ||
+    dealer?.phone_whatsapp ||
+    dealer?.contactPhone ||
+    dealer?.contact_phone ||
+    dealer?.phone_visible ||
+    dealer?.dealerPhone ||
+    dealer?.dealer_phone ||
+    vehicle?.dealerWhatsapp ||
+    vehicle?.dealer_whatsapp ||
+    vehicle?.phoneWhatsapp ||
+    vehicle?.phone_whatsapp ||
+    vehicle?.contactPhone ||
+    vehicle?.contact_phone ||
+    vehicle?.dealerPhone ||
+    vehicle?.dealer_phone ||
+    vehicle?.dealer?.dealerWhatsapp ||
+    vehicle?.dealer?.dealer_whatsapp ||
+    vehicle?.dealer?.phone ||
+    vehicle?.dealer?.phoneWhatsapp ||
+    vehicle?.dealer?.phone_whatsapp ||
+    vehicle?.dealer?.contactPhone ||
+    vehicle?.dealer?.contact_phone ||
+    vehicle?.dealer?.dealerPhone ||
+    vehicle?.dealer?.dealer_phone ||
+    vehicle?.raw?.dealerWhatsapp ||
+    vehicle?.raw?.dealer_whatsapp ||
+    vehicle?.raw?.phoneWhatsapp ||
+    vehicle?.raw?.phone_whatsapp ||
+    vehicle?.raw?.contactPhone ||
+    vehicle?.raw?.contact_phone ||
+    vehicle?.raw?.dealerPhone ||
+    vehicle?.raw?.dealer_phone ||
+    vehicle?.raw?.dealer_phone_whatsapp ||
+    ""
+  );
 }
 
 export default function ContactGate({
@@ -29,9 +72,19 @@ export default function ContactGate({
   const [createdLead, setCreatedLead] = useState(null);
   const [leadWasReused, setLeadWasReused] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const rawDealerWhatsapp = getDealerWhatsappFromVehicle(vehicle, dealer);
+  const normalizedDealerWhatsapp = normalizeWhatsAppArgentina(rawDealerWhatsapp);
+  const hasDealerWhatsapp = Boolean(normalizedDealerWhatsapp);
+
+  if (import.meta.env.DEV) {
+    console.log("[ContactGate vehicle]", vehicle);
+    console.log("[ContactGate whatsapp raw]", rawDealerWhatsapp);
+    console.log("[ContactGate whatsapp normalized]", normalizedDealerWhatsapp);
+  }
+
   const whatsappUrl = createdLead
     ? getWhatsAppUrl(
-        dealer?.phone || dealer?.phone_visible || dealer?.phone_whatsapp,
+        normalizedDealerWhatsapp,
         `Hola, quiero consultar por ${vehicle?.brand || ""} ${
           vehicle?.model || ""
         } publicado en oX NEXMOV.`
@@ -94,7 +147,7 @@ export default function ContactGate({
 
     if (!whatsappUrl) {
       setError(
-        "El dealer no tiene un WhatsApp valido cargado. La consulta ya quedo registrada."
+        "El dealer no tiene un WhatsApp válido cargado. La consulta ya quedó registrada."
       );
       return;
     }
@@ -102,7 +155,7 @@ export default function ContactGate({
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   }
 
-  return (
+  const contactGateModal = (
     <div className="modal-backdrop">
       <section className="contact-modal">
         <div className="contact-modal-head">
@@ -203,13 +256,20 @@ export default function ContactGate({
             {error && <p className="form-error">{error}</p>}
 
             <div className="contact-next-actions">
-              <button
-                className="primary-action"
-                type="button"
-                onClick={handleOpenWhatsApp}
-              >
-                Continuar por WhatsApp
-              </button>
+              {hasDealerWhatsapp ? (
+                <button
+                  className="primary-action"
+                  type="button"
+                  onClick={handleOpenWhatsApp}
+                >
+                  Continuar por WhatsApp
+                </button>
+              ) : (
+                <div className="contact-warning" role="status">
+                  El dealer no tiene un WhatsApp válido cargado. La consulta ya
+                  quedó registrada.
+                </div>
+              )}
 
               <button
                 className="primary-action secondary-action"
@@ -235,4 +295,10 @@ export default function ContactGate({
       </section>
     </div>
   );
+
+  if (typeof document === "undefined") {
+    return contactGateModal;
+  }
+
+  return createPortal(contactGateModal, document.body);
 }

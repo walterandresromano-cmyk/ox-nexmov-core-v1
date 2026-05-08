@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
+import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
 
 function normalizeVehicleStatus(row) {
   if (row.reserved) return "reserved";
@@ -26,10 +27,29 @@ function normalizePlan(planCode) {
 }
 
 function buildDealerFromVehicleRow(row) {
-  const joinedDealer = row.dealers || null;
+  const joinedDealer = Array.isArray(row.dealers)
+    ? row.dealers[0]
+    : row.dealers || null;
+  const rowDealerWhatsapp =
+    row.dealerWhatsapp ||
+    row.dealer_whatsapp ||
+    row.phoneWhatsapp ||
+    row.phone_whatsapp ||
+    row.contactPhone ||
+    row.contact_phone ||
+    row.dealerPhone ||
+    row.dealer_phone ||
+    row.dealer_phone_whatsapp ||
+    "";
 
   if (joinedDealer) {
     const plan = normalizePlan(joinedDealer.plan_code);
+    const dealerWhatsapp =
+      joinedDealer.phone_whatsapp ||
+      joinedDealer.contact_phone ||
+      joinedDealer.dealer_phone ||
+      rowDealerWhatsapp;
+    const normalizedDealerWhatsapp = normalizeWhatsAppArgentina(dealerWhatsapp);
 
     return {
       id: String(joinedDealer.id),
@@ -40,11 +60,13 @@ function buildDealerFromVehicleRow(row) {
       province: joinedDealer.province || row.province || "",
       city: joinedDealer.city || row.city || "",
       logo: joinedDealer.logo_url || joinedDealer.image_url || null,
-      phone:
-        joinedDealer.phone_whatsapp ||
-        joinedDealer.contact_phone ||
-        row.dealer_phone ||
-        "",
+      phone: normalizedDealerWhatsapp,
+      phoneWhatsapp: normalizedDealerWhatsapp,
+      phone_whatsapp: normalizedDealerWhatsapp,
+      dealerWhatsapp: normalizedDealerWhatsapp,
+      dealer_whatsapp: normalizedDealerWhatsapp,
+      contactPhone: joinedDealer.contact_phone || normalizedDealerWhatsapp,
+      contact_phone: joinedDealer.contact_phone || normalizedDealerWhatsapp,
       benefits: {
         sellVehicleLeads: Boolean(joinedDealer.can_receive_sell_vehicle_leads),
         extraPublicationQuota: Number(joinedDealer.extra_publish_slots || 0),
@@ -56,6 +78,8 @@ function buildDealerFromVehicleRow(row) {
     };
   }
 
+  const normalizedDealerWhatsapp = normalizeWhatsAppArgentina(rowDealerWhatsapp);
+
   return {
     id: row.dealer_id ? String(row.dealer_id) : "dealer-snapshot",
     commercialName: row.dealer_name || "Dealer no informado",
@@ -64,7 +88,13 @@ function buildDealerFromVehicleRow(row) {
     province: row.province || "",
     city: row.city || "",
     logo: null,
-    phone: row.dealer_phone || "",
+    phone: normalizedDealerWhatsapp,
+    phoneWhatsapp: normalizedDealerWhatsapp,
+    phone_whatsapp: normalizedDealerWhatsapp,
+    dealerWhatsapp: normalizedDealerWhatsapp,
+    dealer_whatsapp: normalizedDealerWhatsapp,
+    contactPhone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
+    contact_phone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
     benefits: {},
     currentPeriod: {
       publicationsUsed: 0,
@@ -72,9 +102,18 @@ function buildDealerFromVehicleRow(row) {
     },
   };
 }
-
 export function mapVehicleFromSupabase(row) {
   const dealer = buildDealerFromVehicleRow(row);
+  const normalizedDealerWhatsapp = normalizeWhatsAppArgentina(
+    dealer?.dealerWhatsapp ||
+      dealer?.phoneWhatsapp ||
+      dealer?.contactPhone ||
+      row.dealer_whatsapp ||
+      row.phone_whatsapp ||
+      row.contact_phone ||
+      row.dealer_phone ||
+      row.dealer_phone_whatsapp
+  );
   const images = Array.isArray(row.images_json) ? row.images_json : [];
   const mainImageUrl =
     row.main_image_url || row.image_url || images[0]?.url || "";
@@ -116,6 +155,12 @@ export function mapVehicleFromSupabase(row) {
     details: row.details || row.description || "",
 
     dealer,
+    dealerWhatsapp: normalizedDealerWhatsapp,
+    dealer_whatsapp: normalizedDealerWhatsapp,
+    phoneWhatsapp: normalizedDealerWhatsapp,
+    phone_whatsapp: normalizedDealerWhatsapp,
+    contactPhone: dealer?.contactPhone || normalizedDealerWhatsapp,
+    contact_phone: dealer?.contactPhone || normalizedDealerWhatsapp,
 
     badges: row.featured ? ["featured"] : [],
     raw: row,
@@ -231,25 +276,49 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
   }
 
   return {
-    vehicles: (data || []).map((row) => ({
-      id: String(row.vehicle_id),
-      brand: row.brand || "Marca no informada",
-      model: row.model || "Modelo no informado",
-      version: row.version || "Versión no informada",
-      year: Number(row.year || 0),
-      kilometers: Number(row.km || 0),
-      price: Number(row.price || 0),
-      city: row.city || "",
-      province: row.province || "",
-      mainImageUrl: row.main_image_url || "",
-      imageUrl: row.main_image_url || "",
-      createdAt: row.created_at || null,
-      dealer: {
-        commercialName: row.dealer_name || "Dealer no informado",
-        logo: row.dealer_logo || null,
-        plan: row.dealer_plan_code || "inicio",
-      },
-    })),
+    vehicles: (data || []).map((row) => {
+      const normalizedDealerWhatsapp = normalizeWhatsAppArgentina(
+        row.dealer_whatsapp ||
+          row.dealer_phone ||
+          row.phone_whatsapp ||
+          row.contact_phone ||
+          row.dealer_phone_whatsapp
+      );
+
+      return {
+        id: String(row.vehicle_id),
+        brand: row.brand || "Marca no informada",
+        model: row.model || "Modelo no informado",
+        version: row.version || "Versión no informada",
+        year: Number(row.year || 0),
+        kilometers: Number(row.km || 0),
+        price: Number(row.price || 0),
+        city: row.city || "",
+        province: row.province || "",
+        mainImageUrl: row.main_image_url || "",
+        imageUrl: row.main_image_url || "",
+        createdAt: row.created_at || null,
+        dealerWhatsapp: normalizedDealerWhatsapp,
+        dealer_whatsapp: normalizedDealerWhatsapp,
+        phoneWhatsapp: normalizedDealerWhatsapp,
+        phone_whatsapp: normalizedDealerWhatsapp,
+        contactPhone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
+        contact_phone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
+        dealer: {
+          id: row.dealer_id ? String(row.dealer_id) : "",
+          commercialName: row.dealer_name || "Dealer no informado",
+          logo: row.dealer_logo || null,
+          plan: row.dealer_plan_code || "inicio",
+          phone: normalizedDealerWhatsapp,
+          phoneWhatsapp: normalizedDealerWhatsapp,
+          phone_whatsapp: normalizedDealerWhatsapp,
+          dealerWhatsapp: normalizedDealerWhatsapp,
+          dealer_whatsapp: normalizedDealerWhatsapp,
+          contactPhone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
+          contact_phone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
+        },
+      };
+    }),
     error: null,
   };
 }

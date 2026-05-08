@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
+import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
 
 const DEALER_IMAGES_BUCKET = "vehicle-images";
 
@@ -102,7 +103,7 @@ export async function createDealerFromAdmin({
       province: String(province || "").trim(),
       city: String(city || "").trim(),
       contact_phone: String(contactPhone || "").trim(),
-      phone_whatsapp: String(phoneWhatsapp || contactPhone || "").trim(),
+      phone_whatsapp: normalizeWhatsAppArgentina(phoneWhatsapp || contactPhone),
       logo_url: String(logoUrl || "").trim() || null,
       is_active: true,
       publications_used: 0,

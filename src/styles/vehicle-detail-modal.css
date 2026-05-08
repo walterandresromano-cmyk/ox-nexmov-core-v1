@@ -3,21 +3,24 @@
    Modal alineado al sistema maestro de cards y superficies.
    ========================================================= */
 
-.modal-backdrop:has(.vehicle-detail-modal) {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: grid;
-  place-items: center;
-  padding: var(--ox-space-6);
-  overflow-y: auto;
-  overflow-x: hidden;
-  background: rgba(2, 6, 23, 0.74);
-  backdrop-filter: blur(14px);
+.modal-backdrop:has(.vehicle-detail-modal),
+.modal-backdrop.vehicle-detail-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 12000 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: var(--ox-space-6) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  background: rgba(2, 6, 23, 0.74) !important;
+  backdrop-filter: blur(14px) !important;
+  isolation: isolate !important;
 }
 
 .vehicle-detail-modal {
-  position: relative;
+  position: relative !important;
+  z-index: 12010 !important;
   width: min(1040px, calc(100vw - 32px));
   max-height: calc(100vh - 32px);
   overflow-y: auto;
@@ -44,7 +47,7 @@
   position: absolute;
   top: var(--ox-space-6);
   right: var(--ox-space-6);
-  z-index: 20;
+  z-index: 12020 !important;
 }
 
 .vehicle-detail-close.modal-close-btn {
@@ -582,5 +585,116 @@
   .detail-price {
     font-size: clamp(1.55rem, 9vw, 2.05rem);
     padding: var(--ox-space-6);
+  }
+}
+
+/* oX NEXMOV - Global Phase 2 premium public vehicle detail */
+.vehicle-detail-modal {
+  border-color: var(--ox-border-strong);
+  box-shadow:
+    var(--ox-shadow-modal),
+    0 0 0 1px rgba(56, 189, 248, 0.035);
+}
+
+.vehicle-detail-modal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(125, 211, 252, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 28%);
+}
+
+.vehicle-detail-modal > * {
+  position: relative;
+  z-index: 1;
+}
+
+.detail-gallery-frame,
+.vehicle-detail-title-card,
+.detail-market-box,
+.detail-dealer-box,
+.detail-notes-box,
+.detail-spec-grid div {
+  border-color: var(--ox-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.vehicle-detail-main-image {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 18px 46px rgba(0, 0, 0, 0.22);
+}
+
+.vehicle-detail-thumb,
+.vehicle-detail-zoom-button,
+.detail-actions button,
+.vehicle-detail-close {
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .vehicle-detail-thumb:hover,
+  .vehicle-detail-zoom-button:hover,
+  .detail-actions button:hover,
+  .vehicle-detail-close:hover {
+    transform: translateY(-1px);
+    border-color: var(--ox-border-accent);
+    box-shadow:
+      0 12px 26px rgba(37, 99, 235, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  }
+}
+
+.vehicle-detail-thumb.is-active,
+.vehicle-detail-thumb.active {
+  border-color: rgba(125, 211, 252, 0.62);
+  box-shadow:
+    0 0 0 2px rgba(56, 189, 248, 0.12),
+    0 12px 26px rgba(37, 99, 235, 0.16);
+}
+
+.detail-price {
+  border-color: var(--ox-border-accent);
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+:root[data-theme="light"] .vehicle-detail-modal::after {
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.70), transparent 30%);
+}
+
+:root[data-theme="light"] .detail-gallery-frame,
+:root[data-theme="light"] .vehicle-detail-title-card,
+:root[data-theme="light"] .detail-market-box,
+:root[data-theme="light"] .detail-dealer-box,
+:root[data-theme="light"] .detail-notes-box,
+:root[data-theme="light"] .detail-spec-grid div {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(225, 242, 252, 0.84));
+  box-shadow:
+    0 10px 24px rgba(33, 48, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+@media (max-width: 900px) {
+  .vehicle-detail-modal {
+    border-top: 1px solid rgba(125, 211, 252, 0.22);
+  }
+
+  .detail-actions {
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
   }
 }

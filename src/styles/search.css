@@ -309,6 +309,61 @@
   gap: 10px;
 }
 
+.ox-search-filters {
+  align-self: start;
+  margin-top: 0;
+}
+
+.ox-search-advanced-filters {
+  max-height: calc(100vh - 96px);
+  overflow: auto;
+  scrollbar-width: none;
+}
+
+@media (max-width: 900px) {
+  .ox-search-filters {
+    margin-top: 0;
+  }
+}
+
+.ox-search-filters-panel {
+  display: grid;
+  gap: 10px;
+  max-height: none;
+  opacity: 1;
+  pointer-events: auto;
+  overflow: hidden;
+  transition: max-height 0.28s ease, opacity 0.2s ease;
+}
+
+.ox-search-mobile-filter-toggle {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid rgba(125, 211, 252, 0.35);
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.88);
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 0.82rem;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+}
+
+.ox-search-mobile-filter-toggle small {
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ox-search-mobile-filter-toggle:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(12, 20, 34, 0.98);
+}
+
 .ox-search-side-card,
 .ox-search-results {
   border: 1px solid rgba(148, 163, 184, 0.15);
@@ -516,6 +571,28 @@
   }
 }
 
+@media (max-width: 900px) {
+  .ox-search-mobile-filter-toggle {
+    display: flex;
+  }
+
+  .ox-search-filters-panel {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ox-search-filters-panel.is-open {
+    max-height: 2000px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .ox-search-filters {
+    width: 100%;
+  }
+}
+
 @media (max-width: 760px) {
   .ox-search-page {
     padding-top: 12px;
@@ -693,16 +770,138 @@
    Search advanced filters panel
    ========================================================= */
 
-.ox-search-advanced-filters {
-  position: sticky;
-  top: 76px;
-  max-height: calc(100vh - 96px);
-  overflow: auto;
-  scrollbar-width: none;
-}
-
 .ox-search-advanced-filters::-webkit-scrollbar {
   display: none;
+}
+
+/* oX NEXMOV - Global Phase 2 public search polish */
+.ox-search-hero,
+.ox-search-command,
+.ox-search-side-card,
+.ox-search-results,
+.ox-search-trust-strip {
+  position: relative;
+  isolation: isolate;
+}
+
+.ox-search-hero {
+  border-color: var(--ox-border-strong);
+  box-shadow:
+    var(--ox-shadow-panel),
+    0 0 0 1px rgba(56, 189, 248, 0.035);
+}
+
+.ox-search-command {
+  border-color: var(--ox-border-accent);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(8, 15, 28, 0.92));
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.26),
+    0 0 0 1px rgba(56, 189, 248, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.ox-search-command:focus-within {
+  border-color: rgba(125, 211, 252, 0.50);
+  box-shadow:
+    0 22px 52px rgba(0, 0, 0, 0.32),
+    0 0 0 3px rgba(56, 189, 248, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.ox-search-primary-btn,
+.ox-search-update-btn,
+.ox-search-compare-btn,
+.ox-search-empty-actions button,
+.ox-search-suggested button,
+.ox-search-side-head button,
+.ox-search-filter-group button,
+.ox-search-result-actions button {
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ox-search-primary-btn:hover,
+  .ox-search-update-btn:hover,
+  .ox-search-compare-btn:hover,
+  .ox-search-empty-actions button:hover,
+  .ox-search-suggested button:hover,
+  .ox-search-side-head button:hover,
+  .ox-search-filter-group button:hover,
+  .ox-search-result-actions button:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 14px 30px rgba(37, 99, 235, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+}
+
+.ox-search-side-card,
+.ox-search-results,
+.ox-search-trust-strip {
+  border-color: var(--ox-border);
+  box-shadow:
+    var(--ox-shadow-card),
+    0 0 0 1px rgba(56, 189, 248, 0.025);
+}
+
+.ox-filter-section,
+.ox-search-opportunity-list article,
+.ox-search-status,
+.ox-search-suggested button {
+  border-color: var(--ox-border);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.48), rgba(2, 6, 23, 0.40));
+}
+
+.ox-search-page .empty-state {
+  border-color: var(--ox-border-accent);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    var(--ox-surface-card-quiet);
+  box-shadow: var(--ox-shadow-card);
+}
+
+.ox-search-input-wrap input,
+.ox-filter-section input,
+.ox-filter-section select {
+  transition:
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease);
+}
+
+.ox-search-input-wrap input:focus,
+.ox-filter-section input:focus,
+.ox-filter-section select:focus {
+  border-color: rgba(125, 211, 252, 0.50);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.10);
+}
+
+:root[data-theme="light"] .ox-search-command {
+  border-color: rgba(2, 132, 199, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(229, 245, 253, 0.90));
+  box-shadow:
+    0 18px 42px rgba(33, 48, 71, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+:root[data-theme="light"] .ox-filter-section,
+:root[data-theme="light"] .ox-search-opportunity-list article,
+:root[data-theme="light"] .ox-search-status,
+:root[data-theme="light"] .ox-search-suggested button,
+:root[data-theme="light"] .ox-search-page .empty-state {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(225, 242, 252, 0.82));
+  box-shadow:
+    0 12px 30px rgba(33, 48, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
 .ox-filter-section {

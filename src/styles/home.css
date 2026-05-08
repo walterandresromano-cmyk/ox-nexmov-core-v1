@@ -1738,3 +1738,132 @@
     padding-inline: 10px;
   }
 }
+
+/* oX NEXMOV - Global Phase 2 public home polish */
+.ox-home-hero-v3,
+.ox-home-featured-vehicles-v3,
+.ox-home-confidence-v3,
+.ox-home-inventory-v3,
+.ox-home-buyer-v3,
+.ox-home-dealer-v3,
+.ox-home-bottom-trust-v3 {
+  position: relative;
+  isolation: isolate;
+}
+
+.ox-home-hero-v3 {
+  border-color: var(--ox-border-strong);
+  box-shadow:
+    var(--ox-shadow-panel),
+    0 0 0 1px rgba(56, 189, 248, 0.035);
+}
+
+.ox-home-hero-v3::before,
+.ox-home-featured-vehicles-v3::before,
+.ox-home-confidence-v3::before,
+.ox-home-inventory-v3::before,
+.ox-home-buyer-v3::before,
+.ox-home-dealer-v3::before {
+  opacity: 0.86;
+}
+
+.ox-home-hero-v3::after {
+  opacity: 0.58;
+}
+
+.ox-home-search-v3 {
+  border-color: var(--ox-border-accent);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(8, 15, 28, 0.92));
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(56, 189, 248, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.ox-home-search-v3:focus-within {
+  border-color: rgba(125, 211, 252, 0.50);
+  box-shadow:
+    0 22px 52px rgba(0, 0, 0, 0.34),
+    0 0 0 3px rgba(56, 189, 248, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.ox-home-search-v3 button,
+.ox-home-primary-actions-v3 button,
+.ox-home-section-actions-v3 button,
+.ox-home-featured-card-v3 button,
+.ox-home-dealer-v3 button,
+.ox-home-page-v3 .empty-state button {
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ox-home-search-v3 button:hover,
+  .ox-home-primary-actions-v3 button:hover,
+  .ox-home-section-actions-v3 button:hover,
+  .ox-home-featured-card-v3 button:hover,
+  .ox-home-dealer-v3 button:hover,
+  .ox-home-page-v3 .empty-state button:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 14px 30px rgba(37, 99, 235, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+}
+
+.ox-home-chips-v3 button,
+.ox-home-trust-strip-v3 article,
+.ox-home-confidence-list-v3 article,
+.ox-home-stats-v3 div,
+.ox-home-locations-v3 button,
+.ox-home-locations-v3 > span {
+  border-color: var(--ox-border);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.58), rgba(2, 6, 23, 0.50));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 26px rgba(0, 0, 0, 0.12);
+}
+
+.ox-home-featured-card-v3 {
+  border-color: rgba(125, 211, 252, 0.24);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.ox-home-page-v3 .empty-state {
+  border-color: var(--ox-border-accent);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    var(--ox-surface-card-quiet);
+}
+
+:root[data-theme="light"] .ox-home-search-v3 {
+  border-color: rgba(2, 132, 199, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(229, 245, 253, 0.90));
+  box-shadow:
+    0 18px 42px rgba(33, 48, 71, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+:root[data-theme="light"] .ox-home-chips-v3 button,
+:root[data-theme="light"] .ox-home-trust-strip-v3 article,
+:root[data-theme="light"] .ox-home-confidence-list-v3 article,
+:root[data-theme="light"] .ox-home-stats-v3 div,
+:root[data-theme="light"] .ox-home-locations-v3 button,
+:root[data-theme="light"] .ox-home-locations-v3 > span,
+:root[data-theme="light"] .ox-home-page-v3 .empty-state {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(225, 242, 252, 0.82));
+  box-shadow:
+    0 12px 30px rgba(33, 48, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}

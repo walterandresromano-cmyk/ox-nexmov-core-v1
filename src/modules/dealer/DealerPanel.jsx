@@ -17,8 +17,12 @@ import {
   canDealerPublish,
   getEffectiveDealerPermissions,
 } from "../../lib/permissions.js";
+import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 
-import { listDealersForCurrentUser } from "../../services/dealers.service.js";
+import {
+  listDealersForCurrentUser,
+  updateDealerWhatsappById,
+} from "../../services/dealers.service.js";
 import { listVehiclesForCurrentDealer } from "../../services/dealerVehicles.service.js";
 import { listVehicleLeadsForCurrentUser } from "../../services/leads.service.js";
 import { listSupportTicketsForCurrentUser } from "../../services/tickets.service.js";
@@ -234,6 +238,10 @@ export default function DealerPanel({ authProfile }) {
 
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [editingVehicleImages, setEditingVehicleImages] = useState(null);
+  const [whatsappForm, setWhatsappForm] = useState("");
+  const [savingWhatsapp, setSavingWhatsapp] = useState(false);
+  const [whatsappError, setWhatsappError] = useState("");
+  const [whatsappSuccess, setWhatsappSuccess] = useState("");
 
   async function loadDealers() {
     setLoadingDealers(true);
@@ -465,6 +473,14 @@ export default function DealerPanel({ authProfile }) {
     return dealers.find((item) => item.id === selectedDealerId) || dealers[0];
   }, [dealers, selectedDealerId]);
 
+  useEffect(() => {
+    if (!dealer?.id) return;
+
+    setWhatsappForm(dealer.contactPhone || dealer.phoneWhatsapp || dealer.phone || "");
+    setWhatsappError("");
+    setWhatsappSuccess("");
+  }, [dealer?.id, dealer?.contactPhone, dealer?.phoneWhatsapp, dealer?.phone]);
+
   if (!dealer) {
     return (
       <section className="page-section">
@@ -498,9 +514,120 @@ export default function DealerPanel({ authProfile }) {
   const extraQuota = Number(dealer.benefits?.extraPublicationQuota || 0);
   const quotaDescription =
     limit === Infinity
-      ? "Publicaciones ilimitadas mientras el plan esté vigente."
+      ? "Publicaciones ilimitadas mientras el plan está vigente."
       : `${used} de ${formatLimit(limit)} publicaciones usadas en este período.`;
   const dealerLogo = dealer.logo || dealer.raw?.logo_url || "";
+
+  async function handleSaveDealerWhatsapp(event) {
+    event?.preventDefault?.();
+
+    if (savingWhatsapp) return;
+
+    setWhatsappError("");
+    setWhatsappSuccess("");
+
+    const dealerId = dealer?.id;
+
+    if (!dealerId) {
+      setWhatsappError("No pudimos identificar tu perfil comercial.");
+      return;
+    }
+
+    const normalizedWhatsapp = normalizeWhatsAppArgentina(whatsappForm);
+
+    if (!normalizedWhatsapp) {
+      setWhatsappError("Ingresá un WhatsApp válido con característica.");
+      return;
+    }
+
+    console.log("[Dealer WhatsApp update] dealer state:", dealer);
+    console.log("[Dealer WhatsApp update] dealerId:", dealerId);
+    console.log("[Dealer WhatsApp update] normalizedWhatsapp:", normalizedWhatsapp);
+
+    setSavingWhatsapp(true);
+
+    const { dealer: updatedDealer, error } =
+      await updateDealerWhatsappById(dealerId, normalizedWhatsapp);
+
+    if (error) {
+      setWhatsappError(
+        error.message || "No pudimos actualizar el WhatsApp. Intentá nuevamente."
+      );
+      setSavingWhatsapp(false);
+      return;
+    }
+
+    setDealers((currentDealers) =>
+      currentDealers.map((item) =>
+        item.id === dealerId
+          ? {
+              ...item,
+              ...updatedDealer,
+              phone: normalizedWhatsapp,
+              phoneWhatsapp: normalizedWhatsapp,
+              contactPhone: normalizedWhatsapp,
+              raw: {
+                ...(item.raw || {}),
+                phone_whatsapp: normalizedWhatsapp,
+                contact_phone: normalizedWhatsapp,
+              },
+            }
+          : item
+      )
+    );
+    setWhatsappForm(normalizedWhatsapp);
+    setWhatsappSuccess("WhatsApp actualizado correctamente.");
+    setSavingWhatsapp(false);
+  }
+
+  function renderDealerWhatsappContactCard() {
+    const normalizedPreview = normalizeWhatsAppArgentina(whatsappForm);
+
+    return (
+      <div className="dealer-mobile-plan-card dealer-profile-contact-block dealer-contact-card">
+        <div className="dealer-profile-contact-head">
+          <p className="eyebrow">Perfil comercial</p>
+          <h3>WhatsApp de contacto</h3>
+          <p>
+            Este número se usará para que los compradores contacten tus
+            publicaciones por WhatsApp.
+          </p>
+        </div>
+
+        <form className="dealer-contact-form" onSubmit={handleSaveDealerWhatsapp}>
+          <label>
+            WhatsApp de contacto
+            <input
+              value={whatsappForm}
+              onChange={(event) => {
+                setWhatsappForm(event.target.value);
+                setWhatsappError("");
+                setWhatsappSuccess("");
+              }}
+              placeholder="Ej. 11 3806 2294"
+            />
+          </label>
+
+          {normalizedPreview && (
+            <small>Formato WhatsApp: +{normalizedPreview}</small>
+          )}
+
+          {whatsappError && <div className="auth-warning">{whatsappError}</div>}
+          {whatsappSuccess && (
+            <div className="auth-message">{whatsappSuccess}</div>
+          )}
+
+          <button
+            type="submit"
+            className="table-action-btn"
+            disabled={savingWhatsapp}
+          >
+            {savingWhatsapp ? "Guardando..." : "Guardar WhatsApp"}
+          </button>
+        </form>
+      </div>
+    );
+  }
 
   const activeVehiclesCount = dealerVehicles.filter(
     (vehicle) => vehicle.is_active
@@ -653,7 +780,7 @@ export default function DealerPanel({ authProfile }) {
             </strong>
             <p>
               {limit === Infinity
-                ? "Publicaciones ilimitadas mientras el plan esté vigente."
+                ? "Publicaciones ilimitadas mientras el plan está vigente."
                 : `Disponibles: ${remaining}.`}
             </p>
           </article>
@@ -671,6 +798,8 @@ export default function DealerPanel({ authProfile }) {
               <p>Temporal del período actual.</p>
             </article>
           )}
+
+          {renderDealerWhatsappContactCard()}
 
           <article className="dealer-mobile-plan-card">
             <span>Soporte</span>
@@ -816,6 +945,8 @@ export default function DealerPanel({ authProfile }) {
             <p>Solicitudes “Vender mi vehículo” asignadas por admin.</p>
           </article>
 
+          {renderDealerWhatsappContactCard()}
+
           <article className="dealer-status-card">
             <span>Cupo usado en este período</span>
             <strong>
@@ -823,7 +954,7 @@ export default function DealerPanel({ authProfile }) {
             </strong>
             <p>
               {limit === Infinity
-                ? "Publicaciones ilimitadas mientras el plan esté vigente."
+                ? "Publicaciones ilimitadas mientras el plan está vigente."
                 : `Publicaciones disponibles: ${remaining}.`}
             </p>
             {extraQuota > 0 && (
@@ -1464,7 +1595,7 @@ export default function DealerPanel({ authProfile }) {
             <div className="empty-state">
               El módulo de configuración avanzada de financiación queda
               preparado para la siguiente fase. Las condiciones actuales se
-              cargan desde cada publicación.
+              cargan desde cada publicaci?n.
             </div>
           </div>
         )}
@@ -1478,7 +1609,7 @@ export default function DealerPanel({ authProfile }) {
 
             <div className="empty-state">
               Nivel habilitado: {permissions.metricsLevel}. El módulo de
-              métricas avanzadas queda preparado para una fase posterior.
+              m?tricas avanzadas queda preparado para una fase posterior.
             </div>
           </div>
         )}

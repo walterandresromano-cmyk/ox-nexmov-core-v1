@@ -703,6 +703,7 @@ export default function Search({
   const [searchText, setSearchText] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filters, setFilters] = useState(EMPTY_ADVANCED_FILTERS);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   function updateFilter(name, value) {
     setFilters((currentFilters) => ({
@@ -1041,8 +1042,25 @@ export default function Search({
 
         <section className="ox-search-workspace">
           <aside className="ox-search-filters">
-            <div className="ox-search-side-card ox-search-advanced-filters">
-              <div className="ox-search-side-head">
+            <button
+              type="button"
+              className="ox-search-mobile-filter-toggle"
+              onClick={() => setIsMobileFiltersOpen((current) => !current)}
+              aria-expanded={isMobileFiltersOpen}
+            >
+              <span>Filtros avanzados</span>
+              <small>
+                {activeAdvancedFiltersCount > 0
+                  ? `${activeAdvancedFiltersCount} activos`
+                  : "Ver opciones"}
+              </small>
+            </button>
+
+            <div className={`ox-search-filters-panel${
+              isMobileFiltersOpen ? " is-open" : ""
+            }`}>
+              <div className="ox-search-side-card ox-search-advanced-filters">
+                <div className="ox-search-side-head">
                 <div>
                   <h2>Filtros</h2>
                   <p>
@@ -1369,6 +1387,7 @@ export default function Search({
                 Actualizar vehículos
               </button>
             </div>
+          </div>
           </aside>
 
           <main className="ox-search-results">

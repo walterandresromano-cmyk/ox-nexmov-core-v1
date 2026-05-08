@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import "../../styles/vehicle-detail-modal.css";
 import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
@@ -213,8 +214,8 @@ export default function VehicleDetailModal({
     onClose();
   }
 
-  return (
-    <div className="modal-backdrop">
+  const modal = (
+    <div className="modal-backdrop vehicle-detail-backdrop">
       <section className="vehicle-detail-modal">
         <button
           type="button"
@@ -483,4 +484,6 @@ export default function VehicleDetailModal({
       </section>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }

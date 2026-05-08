@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
+import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
 import { listPublicLatestVehicles } from "../../services/vehicles.service.js";
 
@@ -109,7 +110,65 @@ function buildDealerForVehicle(vehicle) {
     province: vehicle.province || "",
     city: vehicle.city || "",
     logo: vehicle.dealer?.logo || null,
-    phone: "",
+    phone: normalizeWhatsAppArgentina(
+      vehicle.dealer?.phone ||
+        vehicle.dealer?.phoneWhatsapp ||
+        vehicle.dealer?.dealerWhatsapp ||
+        vehicle.dealer?.dealer_whatsapp ||
+        vehicle.dealer?.phone_whatsapp ||
+        vehicle.dealer?.contactPhone ||
+        vehicle.dealer?.contact_phone ||
+        vehicle.dealerWhatsapp ||
+        vehicle.dealer_whatsapp ||
+        vehicle.phoneWhatsapp ||
+        vehicle.phone_whatsapp ||
+        vehicle.contactPhone ||
+        vehicle.contact_phone ||
+        vehicle.raw?.dealer_phone
+    ),
+    phoneWhatsapp: normalizeWhatsAppArgentina(
+      vehicle.dealer?.phone ||
+        vehicle.dealer?.phoneWhatsapp ||
+        vehicle.dealer?.dealerWhatsapp ||
+        vehicle.dealer?.dealer_whatsapp ||
+        vehicle.dealer?.phone_whatsapp ||
+        vehicle.dealer?.contactPhone ||
+        vehicle.dealer?.contact_phone ||
+        vehicle.dealerWhatsapp ||
+        vehicle.dealer_whatsapp ||
+        vehicle.phoneWhatsapp ||
+        vehicle.phone_whatsapp ||
+        vehicle.contactPhone ||
+        vehicle.contact_phone ||
+        vehicle.raw?.dealer_phone
+    ),
+    dealerWhatsapp: normalizeWhatsAppArgentina(
+      vehicle.dealer?.dealerWhatsapp ||
+        vehicle.dealer?.dealer_whatsapp ||
+        vehicle.dealer?.phone ||
+        vehicle.dealer?.phoneWhatsapp ||
+        vehicle.dealer?.phone_whatsapp ||
+        vehicle.dealer?.contactPhone ||
+        vehicle.dealer?.contact_phone ||
+        vehicle.dealerWhatsapp ||
+        vehicle.dealer_whatsapp ||
+        vehicle.phoneWhatsapp ||
+        vehicle.phone_whatsapp ||
+        vehicle.contactPhone ||
+        vehicle.contact_phone ||
+        vehicle.raw?.dealer_phone
+    ),
+    contactPhone:
+      vehicle.dealer?.contactPhone ||
+      vehicle.dealer?.contact_phone ||
+      vehicle.contactPhone ||
+      vehicle.contact_phone ||
+      vehicle.phoneWhatsapp ||
+      vehicle.phone_whatsapp ||
+      vehicle.dealerWhatsapp ||
+      vehicle.dealer_whatsapp ||
+      vehicle.raw?.dealer_phone ||
+      "",
     benefits: {},
     currentPeriod: {
       publicationsUsed: 0,

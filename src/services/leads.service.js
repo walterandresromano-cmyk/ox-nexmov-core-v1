@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
+import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
 
 function toNumericVehicleId(vehicleId) {
   const value = Number(vehicleId);
@@ -251,11 +252,17 @@ function getDealerSnapshot({ dealer, vehicle }) {
       vehicle?.raw?.dealer_name ||
       "Dealer no informado",
 
-    dealerPhone:
+    dealerPhone: normalizeWhatsAppArgentina(
       dealer?.phone ||
-      vehicle?.dealer?.phone ||
-      vehicle?.raw?.dealer_phone ||
-      "",
+        dealer?.phoneWhatsapp ||
+        dealer?.phone_whatsapp ||
+        dealer?.contactPhone ||
+        dealer?.contact_phone ||
+        vehicle?.dealer?.phone ||
+        vehicle?.dealer?.phoneWhatsapp ||
+        vehicle?.dealer?.phone_whatsapp ||
+        vehicle?.raw?.dealer_phone
+    ),
   };
 }
 
