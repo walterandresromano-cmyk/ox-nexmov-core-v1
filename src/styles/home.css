@@ -767,6 +767,61 @@
   line-height: 1.25;
 }
 
+/* oX NEXMOV - Home confidence panel height alignment */
+@media (min-width: 981px) {
+  .ox-home-confidence-v3 {
+    gap: 7px;
+    padding: 16px;
+  }
+
+  .ox-home-confidence-v3 h2 {
+    font-size: clamp(1.04rem, 1.34vw, 1.34rem);
+    line-height: 1.05;
+  }
+
+  .ox-home-confidence-list-v3 {
+    gap: 7px;
+  }
+
+  .ox-home-confidence-list-v3 article {
+    min-height: 48px;
+    padding: 8px 10px;
+    border-radius: 15px;
+  }
+
+  .ox-home-confidence-list-v3 article > span {
+    width: 26px;
+    height: 26px;
+    border-radius: 10px;
+    font-size: 0.66rem;
+  }
+
+  .ox-home-confidence-list-v3 strong {
+    font-size: 0.68rem;
+  }
+
+  .ox-home-confidence-list-v3 p {
+    margin-top: 2px;
+    font-size: 0.54rem;
+    line-height: 1.22;
+  }
+
+  .ox-home-confidence-cta-v3 {
+    min-height: 66px;
+    padding: 10px 12px;
+    border-radius: 15px;
+  }
+
+  .ox-home-confidence-cta-v3 strong {
+    font-size: 0.8rem;
+  }
+
+  .ox-home-confidence-cta-v3 span {
+    font-size: 0.6rem;
+    line-height: 1.2;
+  }
+}
+
 /* =========================================================
    LOWER INTELLIGENCE GRID
    ========================================================= */

@@ -373,3 +373,430 @@
     padding: 14px;
   }
 }
+
+/* oX NEXMOV - Join Network premium dealer landing */
+.join-network-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.join-network-hero {
+  min-height: 280px;
+  padding: clamp(18px, 2.4vw, 28px);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 12% 4%, rgba(56, 189, 248, 0.14), transparent 30%),
+    radial-gradient(circle at 78% 12%, rgba(37, 99, 235, 0.16), transparent 34%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.88));
+  box-shadow:
+    0 26px 78px rgba(0, 0, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.join-network-hero-copy h1 {
+  max-width: 780px;
+  font-size: clamp(1.85rem, 2.65vw, 2.85rem);
+  line-height: 1.04;
+}
+
+.join-network-hero-copy h1 span {
+  display: block;
+}
+
+.join-network-hero-copy > p {
+  max-width: 690px;
+  font-size: clamp(0.78rem, 0.88vw, 0.9rem);
+}
+
+.join-network-actions button,
+.join-network-final button,
+.join-network-plan-card button {
+  min-height: 42px;
+  padding: 0 18px;
+  font-size: 0.74rem;
+}
+
+.join-network-hero-card {
+  min-height: 190px;
+  align-content: space-between;
+  border-radius: 26px;
+}
+
+.join-network-hero-card strong {
+  max-width: 260px;
+  font-size: clamp(1rem, 1.22vw, 1.26rem);
+  line-height: 1.05;
+}
+
+.join-network-signal-list {
+  display: grid;
+  gap: 8px;
+}
+
+.join-network-signal-list small {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 34px;
+  padding: 8px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 999px;
+  background: rgba(2, 6, 23, 0.28);
+  color: rgba(226, 232, 240, 0.86);
+  font-size: 0.68rem;
+  font-weight: 850;
+}
+
+.join-network-signal-list small::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #38bdf8;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.54);
+}
+
+.join-network-problem {
+  display: grid;
+  gap: 18px;
+  padding: 22px 28px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.48), rgba(2, 6, 23, 0.36)),
+    radial-gradient(circle at 0% 0%, rgba(245, 158, 11, 0.08), transparent 30%);
+}
+
+.join-network-proposal-grid,
+.join-network-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.join-network-proposal-card,
+.join-network-faq-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 132px;
+  padding: 15px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+    rgba(2, 6, 23, 0.26);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.join-network-proposal-card strong,
+.join-network-faq-card strong {
+  display: block;
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 0.82rem;
+  line-height: 1.14;
+  font-weight: 950;
+}
+
+.join-network-proposal-card p,
+.join-network-faq-card p {
+  margin: 8px 0 0;
+  color: rgba(203, 213, 225, 0.70);
+  font-size: 0.64rem;
+  line-height: 1.48;
+}
+
+.join-network-plan-section .join-network-plans {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.join-network-plan-card {
+  display: grid;
+  grid-template-rows: auto auto auto auto 1fr auto;
+  gap: 9px;
+  min-height: 320px;
+  padding: 15px;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.90));
+}
+
+.join-network-plan-card > span {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 24px;
+  align-items: center;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-size: 0.52rem;
+}
+
+.join-network-plan-card > strong {
+  font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  line-height: 1.08;
+}
+
+.join-network-plan-card p {
+  font-size: 0.64rem;
+}
+
+.join-network-plan-meta {
+  padding: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  border-radius: 15px;
+  background: rgba(2, 6, 23, 0.28);
+}
+
+.join-network-plan-meta small {
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 0.6rem;
+  line-height: 1.42;
+  font-weight: 800;
+}
+
+.join-network-plan-card ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.join-network-plan-card li {
+  position: relative;
+  padding-left: 17px;
+  color: rgba(203, 213, 225, 0.76);
+  font-size: 0.6rem;
+  line-height: 1.32;
+  font-weight: 760;
+}
+
+.join-network-plan-card li::before {
+  content: "";
+  position: absolute;
+  top: 0.42em;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #38bdf8;
+}
+
+.join-network-plan-card button {
+  align-self: end;
+  border: 1px solid rgba(125, 211, 252, 0.34);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 28% 0%, rgba(255, 255, 255, 0.22), transparent 30%),
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.join-network-plan-inicio {
+  border-color: rgba(180, 122, 64, 0.28);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(245, 158, 11, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(39, 29, 20, 0.78), rgba(15, 23, 42, 0.88));
+}
+
+.join-network-plan-inicio > span,
+.join-network-plan-inicio li::before {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+}
+
+.join-network-plan-pro {
+  border-color: rgba(56, 189, 248, 0.30);
+}
+
+.join-network-plan-pro > span,
+.join-network-plan-pro li::before {
+  background: rgba(14, 165, 233, 0.18);
+  color: #7dd3fc;
+}
+
+.join-network-plan-elite {
+  border-color: rgba(250, 204, 21, 0.34);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(250, 204, 21, 0.13), transparent 34%),
+    linear-gradient(180deg, rgba(45, 36, 14, 0.76), rgba(15, 23, 42, 0.88));
+}
+
+.join-network-plan-elite > span,
+.join-network-plan-elite li::before {
+  background: rgba(250, 204, 21, 0.18);
+  color: #fde68a;
+}
+
+.join-network-plan-platinum {
+  border-color: rgba(226, 232, 240, 0.32);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(226, 232, 240, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(30, 41, 59, 0.88), rgba(2, 6, 23, 0.94));
+}
+
+.join-network-plan-platinum > span,
+.join-network-plan-platinum li::before {
+  background: rgba(226, 232, 240, 0.16);
+  color: #f8fafc;
+}
+
+.join-network-difference,
+.join-network-no-commission {
+  background:
+    radial-gradient(circle at 4% 0%, rgba(56, 189, 248, 0.10), transparent 30%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.64), rgba(2, 6, 23, 0.82));
+}
+
+.join-network-faq-card {
+  min-height: 126px;
+}
+
+.join-network-final {
+  grid-template-columns: minmax(0, 1fr) auto;
+  border-radius: 24px;
+}
+
+.join-network-final-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.join-network-final-actions .secondary-btn {
+  color: rgba(226, 232, 240, 0.9);
+  background: rgba(15, 23, 42, 0.42);
+  border-color: rgba(148, 163, 184, 0.2);
+  box-shadow: none;
+}
+
+:root[data-theme="light"] .join-network-hero,
+:root[data-theme="light"] .join-network-problem,
+:root[data-theme="light"] .join-network-difference,
+:root[data-theme="light"] .join-network-no-commission {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    radial-gradient(circle at 12% 4%, rgba(14, 165, 233, 0.10), transparent 30%),
+    radial-gradient(circle at 78% 12%, rgba(37, 99, 235, 0.08), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(236, 248, 253, 0.88));
+  box-shadow:
+    0 18px 50px rgba(15, 76, 117, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76);
+}
+
+:root[data-theme="light"] .join-network-signal-list small,
+:root[data-theme="light"] .join-network-proposal-card,
+:root[data-theme="light"] .join-network-faq-card,
+:root[data-theme="light"] .join-network-plan-meta {
+  border-color: rgba(14, 116, 144, 0.12);
+  background: rgba(255, 255, 255, 0.70);
+  color: rgba(13, 23, 38, 0.82);
+}
+
+:root[data-theme="light"] .join-network-proposal-card strong,
+:root[data-theme="light"] .join-network-faq-card strong,
+:root[data-theme="light"] .join-network-plan-card > strong {
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .join-network-proposal-card p,
+:root[data-theme="light"] .join-network-faq-card p,
+:root[data-theme="light"] .join-network-plan-meta small,
+:root[data-theme="light"] .join-network-plan-card li {
+  color: rgba(70, 87, 108, 0.84);
+}
+
+:root[data-theme="light"] .join-network-plan-inicio {
+  border-color: rgba(180, 122, 64, 0.28);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(245, 158, 11, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(255, 251, 235, 0.94), rgba(255, 255, 255, 0.88));
+}
+
+:root[data-theme="light"] .join-network-plan-pro {
+  border-color: rgba(14, 116, 144, 0.22);
+}
+
+:root[data-theme="light"] .join-network-plan-elite {
+  border-color: rgba(180, 122, 16, 0.28);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(250, 204, 21, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(255, 251, 235, 0.96), rgba(255, 255, 255, 0.88));
+}
+
+:root[data-theme="light"] .join-network-plan-platinum {
+  border-color: rgba(71, 85, 105, 0.18);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(71, 85, 105, 0.075), transparent 34%),
+    linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(229, 239, 246, 0.88));
+}
+
+:root[data-theme="light"] .join-network-final-actions .secondary-btn {
+  color: rgba(13, 23, 38, 0.78);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 1180px) {
+  .join-network-plan-section .join-network-plans,
+  .join-network-proposal-grid,
+  .join-network-faq-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .join-network-panel {
+    gap: 12px;
+  }
+
+  .join-network-hero {
+    min-height: auto;
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .join-network-hero-copy h1 {
+    font-size: clamp(1.55rem, 7.4vw, 2rem);
+  }
+
+  .join-network-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .join-network-problem,
+  .join-network-proposal-grid,
+  .join-network-faq-grid,
+  .join-network-plan-section .join-network-plans {
+    grid-template-columns: 1fr;
+  }
+
+  .join-network-problem {
+    padding: 14px;
+  }
+
+  .join-network-proposal-card,
+  .join-network-faq-card {
+    min-height: auto;
+  }
+
+  .join-network-plan-card {
+    min-height: auto;
+  }
+
+  .join-network-final {
+    grid-template-columns: 1fr;
+  }
+
+  .join-network-final-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: stretch;
+  }
+}

@@ -1,78 +1,155 @@
-const networkValues = [
+import { DEALER_PLANS } from "../../config/plans.js";
+
+const dealerSignals = [
+  "Dealers verificados",
+  "Leads trazables",
+  "Publicaciones con contexto",
+];
+
+const dealerChallenges = [
   {
-    eyebrow: "Más visibilidad útil",
-    title: "Publicaciones ordenadas",
-    text: "Tus vehículos se muestran dentro de una experiencia pensada para que el comprador compare, consulte y avance con más confianza.",
+    title: "Publicar no alcanza",
+    text: "El comprador compara, duda, vuelve y necesita señales claras antes de avanzar con una consulta real.",
   },
   {
-    eyebrow: "Leads trazables",
-    title: "Consultas con seguimiento",
-    text: "Cada consulta queda registrada dentro de la plataforma para mejorar el seguimiento comercial y evitar contactos perdidos.",
+    title: "La confianza define el contacto",
+    text: "Una publicación ordenada, con datos coherentes y trazabilidad comercial, mejora la percepción del dealer.",
   },
   {
-    eyebrow: "Planes por escala",
-    title: "Señales comerciales por plan",
-    text: "Cada dealer trabaja con un plan acorde a su volumen, con cupos, beneficios y herramientas habilitadas según su operación.",
-  },
-  {
-    eyebrow: "Comprador primero",
-    title: "Comparación para compradores",
-    text: "La plataforma prioriza claridad, comparación y datos útiles. Eso mejora la experiencia del comprador y fortalece al dealer serio.",
+    title: "Cada consulta tiene valor",
+    text: "Registrar el lead antes del WhatsApp ayuda a cuidar el seguimiento y evita perder oportunidades comerciales.",
   },
 ];
 
-const steps = [
+const proposalCards = [
   {
-    title: "Alta del dealer",
-    text: "Administración revisa los datos comerciales principales y valida si la cuenta puede incorporarse a la red.",
+    title: "Publicaciones premium",
+    text: "Vehículos presentados con datos clave, fotos, precio, ubicación y contexto para decidir mejor.",
   },
   {
-    title: "Activación del plan",
-    text: "El plan, los cupos y los beneficios se activan después de la validación administrativa correspondiente.",
+    title: "Leads trazables",
+    text: "Cada consulta queda registrada antes de abrir el canal de contacto.",
   },
   {
-    title: "Carga de vehículos",
-    text: "Cada publicación debe completar datos mínimos, precio coherente, fotos e información comercial clara.",
+    title: "Comparador para compradores",
+    text: "El usuario puede comparar opciones y llegar al contacto con mayor claridad.",
   },
   {
-    title: "Gestión de oportunidades",
-    text: "Los leads, consultas, tickets y oportunidades quedan centralizados para que el dealer pueda trabajar con orden.",
-  },
-];
-
-const plans = [
-  {
-    name: "Inicio",
-    amount: "10",
-    text: "Hasta 10 publicaciones por período. Ideal para comenzar a operar dentro de la red con presencia controlada.",
+    title: "Señales comerciales",
+    text: "Badges, ranking y presencia visual ayudan a diferenciar la operación del dealer.",
   },
   {
-    name: "Pro",
-    amount: "30",
-    text: "Mayor cupo, más herramientas comerciales y acceso ampliado a oportunidades según criterio operativo.",
+    title: "Panel dealer mobile",
+    text: "Una experiencia tipo app para revisar publicaciones, leads, tickets, plan y cupos.",
   },
   {
-    name: "Elite",
-    amount: "50",
-    text: "Pensado para dealers con mayor volumen, mejores señales comerciales y lectura más avanzada de operación.",
-  },
-  {
-    name: "Platinum",
-    amount: "Ilimitado",
-    text: "Publicaciones ilimitadas y máximo nivel de herramientas dentro de la red oX NEXMOV.",
+    title: "Soporte interno",
+    text: "Tickets y comunicación con administración para ordenar correcciones y consultas.",
   },
 ];
 
-const dealerTypes = [
-  "Agencias multimarca",
-  "Concesionarias",
-  "Vendedores profesionales",
-  "Operaciones con financiación",
-  "Dealers con stock real",
-  "Equipos comerciales en crecimiento",
+const planPositioning = {
+  inicio: {
+    cup: "Hasta 10 publicaciones por período",
+    audience: "Para agencias que quieren empezar con presencia profesional.",
+    visibility: "Presencia inicial con señales básicas y operación trazable.",
+    features: [
+      "Panel dealer operativo.",
+      "Publicaciones comparables.",
+      "Leads trazables.",
+      "Señales básicas.",
+      "Soporte interno.",
+    ],
+  },
+  pro: {
+    cup: "Hasta 30 publicaciones por período",
+    audience:
+      "Para dealers con actividad constante que necesitan más capacidad y mejor presencia comercial.",
+    visibility: "Más capacidad de publicación y mejor presencia visual.",
+    features: [
+      "Más capacidad de publicación.",
+      "Mejor presencia visual.",
+      "Métricas estándar.",
+      "Herramientas habilitadas según configuración.",
+      "Beneficios adicionales si admin lo habilita.",
+    ],
+  },
+  elite: {
+    cup: "Hasta 50 publicaciones por período",
+    audience: "Para operaciones con mayor volumen y seguimiento comercial.",
+    visibility: "Mayor diferenciación visual, sin publicación ilimitada.",
+    features: [
+      "Mayor diferenciación visual.",
+      "Señales premium.",
+      "Métricas avanzadas.",
+      "Oportunidades comerciales si corresponde.",
+      "Herramientas comerciales avanzadas.",
+    ],
+  },
+  platinum: {
+    cup: "Publicaciones ilimitadas",
+    audience:
+      "Para equipos de alto volumen que necesitan máxima capacidad dentro de la red.",
+    visibility: "Nivel superior de presencia, señales y herramientas.",
+    features: [
+      "Máxima diferenciación visual dentro de la red.",
+      "Señales completas.",
+      "Métricas completas.",
+      "Herramientas completas.",
+      "Presencia superior dentro del ecosistema.",
+    ],
+  },
+};
+
+const workflowSteps = [
+  "Solicitás el alta.",
+  "Revisamos la agencia.",
+  "Activamos tu plan.",
+  "Cargás publicaciones.",
+  "Recibís consultas trazables.",
+  "Gestionás desde tu panel.",
 ];
+
+const dealerFaq = [
+  {
+    question: "¿Necesito registrarme para publicar?",
+    answer:
+      "Sí. El alta de dealer permite validar datos comerciales, activar el plan y habilitar la gestión de publicaciones.",
+  },
+  {
+    question: "¿Qué pasa cuando vence el plan?",
+    answer:
+      "Los cupos corresponden al período comercial. Al vencer, las publicaciones pueden pausarse hasta renovar o reactivar el plan.",
+  },
+  {
+    question: "¿Puedo recibir leads de vendedores particulares?",
+    answer:
+      "Según el plan, el dealer puede acceder a oportunidades vinculadas a usuarios que quieren vender su vehículo.",
+  },
+  {
+    question: "¿El comprador puede comparar mis vehículos?",
+    answer:
+      "Sí. Todos los planes permiten que el comprador compare vehículos y decida con más contexto.",
+  },
+  {
+    question: "¿Puedo actualizar mi WhatsApp de contacto?",
+    answer:
+      "Sí. El WhatsApp pertenece al dealer y se usa como canal de contacto para sus publicaciones asociadas.",
+  },
+];
+
+const planOrder = ["inicio", "pro", "elite", "platinum"];
 
 export default function JoinNetwork({ onNavigate }) {
+  const plans = planOrder
+    .map((planId) => {
+      const plan = DEALER_PLANS[planId];
+      const positioning = planPositioning[planId];
+
+      return plan && positioning ? { ...plan, ...positioning } : null;
+    })
+    .filter(Boolean);
+
   return (
     <section className="page-section join-network-page">
       <div className="container panel join-network-panel">
@@ -81,18 +158,18 @@ export default function JoinNetwork({ onNavigate }) {
             <p className="eyebrow">Red comercial oX NEXMOV</p>
 
             <h1>
-              Sumate a la red <span>oX NEXMOV.</span>
+              Sumá tu agencia a una red automotriz{" "}
+              <span>más clara, confiable e inteligente.</span>
             </h1>
 
             <p>
-              Formá parte de una red automotriz pensada para publicar vehículos
-              con más claridad, recibir consultas trazables y diferenciar tu
-              operación comercial.
+              Publicá mejor, recibí leads trazables y diferenciá tus vehículos
+              con señales comerciales que ayudan al comprador a decidir.
             </p>
 
             <div className="join-network-actions">
               <button type="button" onClick={() => onNavigate?.("login")}>
-                Solicitar alta de dealer
+                Solicitar alta como dealer
               </button>
 
               <button
@@ -106,89 +183,161 @@ export default function JoinNetwork({ onNavigate }) {
           </div>
 
           <aside className="join-network-hero-card">
-            <span>Red activa</span>
-            <strong>Dealers verificados</strong>
-            <p>
-              El alta está sujeta a revisión administrativa, validación de datos
-              comerciales y activación del plan correspondiente.
-            </p>
+            <span>Red premium</span>
+            <strong>Más claridad para vender mejor</strong>
+            <div className="join-network-signal-list">
+              {dealerSignals.map((signal) => (
+                <small key={signal}>{signal}</small>
+              ))}
+            </div>
           </aside>
         </section>
 
-        <section className="join-network-values">
-          {networkValues.map((item) => (
-            <article key={item.title} className="join-network-value-card">
-              <span>{item.eyebrow}</span>
-              <strong>{item.title}</strong>
-              <p>{item.text}</p>
-            </article>
-          ))}
-        </section>
-
-        <section className="join-network-section">
+        <section className="join-network-problem">
           <div className="join-network-section-head">
-            <p className="eyebrow">Cómo funciona</p>
-            <h2>Solicitud clara, activación administrada.</h2>
+            <p className="eyebrow">El problema</p>
+            <h2>Hoy el dealer necesita más que una vidriera digital.</h2>
             <p>
-              Iniciás la solicitud, administración valida los datos comerciales
-              y, si corresponde, habilita el plan para empezar a operar dentro
-              de la plataforma.
+              La oportunidad no está solo en aparecer: está en construir
+              confianza, ordenar el contacto y diferenciar cada publicación con
+              información que el comprador pueda entender rápido.
             </p>
           </div>
 
-          <div className="join-network-steps">
-            {steps.map((step, index) => (
-              <article key={step.title} className="join-network-step-card">
-                <strong>{index + 1}</strong>
-                <div>
-                  <h3>{step.title}</h3>
-                  <p>{step.text}</p>
-                </div>
+          <div className="join-network-values">
+            {dealerChallenges.map((item) => (
+              <article key={item.title} className="join-network-value-card">
+                <span>Desafío</span>
+                <strong>{item.title}</strong>
+                <p>{item.text}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="join-network-section">
+        <section className="join-network-section join-network-proposal">
           <div className="join-network-section-head">
-            <p className="eyebrow">Planes comerciales</p>
-            <h2>Un esquema pensado para distintas escalas de operación.</h2>
+            <p className="eyebrow">Propuesta oX NEXMOV</p>
+            <h2>
+              Una red donde el comprador decide con claridad y el dealer trabaja
+              con mejores herramientas.
+            </h2>
             <p>
-              La diferencia entre planes no busca confundir al comprador:
-              permite que cada dealer acceda a más herramientas, señales,
-              métricas y capacidad operativa según su nivel de participación.
+              Publicaciones claras, leads trazables y herramientas comerciales
+              para convertir mejor cada oportunidad.
+            </p>
+          </div>
+
+          <div className="join-network-proposal-grid">
+            {proposalCards.map((item) => (
+              <article key={item.title} className="join-network-proposal-card">
+                <strong>{item.title}</strong>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="join-network-section join-network-plan-section">
+          <div className="join-network-section-head">
+            <p className="eyebrow">Planes dealer</p>
+            <h2>Elegí una escala comercial acorde a tu operación.</h2>
+            <p>
+              Sin precios publicados: cada plan define cupos, señales,
+              visibilidad y herramientas según el nivel de participación dentro
+              de la red.
             </p>
           </div>
 
           <div className="join-network-plans">
             {plans.map((plan) => (
               <article
-                key={plan.name}
-                className={`join-network-plan-card join-network-plan-${plan.name.toLowerCase()}`}
+                key={plan.id}
+                className={`join-network-plan-card join-network-plan-${plan.rankTheme}`}
               >
-                <span>Plan {plan.name}</span>
-                <strong>{plan.amount}</strong>
-                <p>{plan.text}</p>
+                <span>{plan.rankLabel}</span>
+                <strong>{plan.cup}</strong>
+                <p>{plan.audience}</p>
+
+                <div className="join-network-plan-meta">
+                  <small>{plan.visibility}</small>
+                </div>
+
+                <ul>
+                  {plan.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+
+                <button type="button" onClick={() => onNavigate?.("login")}>
+                  Solicitar este plan
+                </button>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="join-network-section join-network-audience">
+        <section className="join-network-section join-network-difference">
           <div className="join-network-section-head">
-            <p className="eyebrow">Para quién es</p>
-            <h2>Para dealers que quieren vender con más claridad y menos ruido.</h2>
+            <p className="eyebrow">Diferenciación por plan</p>
+            <h2>Más herramientas comerciales, sin confundir al comprador.</h2>
             <p>
-              oX NEXMOV está pensado para agencias, concesionarias y vendedores
-              profesionales que necesitan una presencia digital más ordenada,
-              trazabilidad de consultas y una plataforma que acompañe la
-              decisión del comprador sin saturarlo de publicidad.
+              Todos los planes permiten que el comprador compare vehículos. La
+              diferencia entre planes no bloquea funciones útiles al comprador:
+              se expresa en cupos, señales, prioridad visual, métricas y
+              herramientas comerciales.
             </p>
           </div>
+        </section>
 
-          <div className="join-network-benefits-list">
-            {dealerTypes.map((type) => (
-              <span key={type}>{type}</span>
+        <section className="join-network-section">
+          <div className="join-network-section-head">
+            <p className="eyebrow">Cómo funciona</p>
+            <h2>De la solicitud al panel dealer, sin fricción innecesaria.</h2>
+          </div>
+
+          <div className="join-network-steps">
+            {workflowSteps.map((step, index) => (
+              <article key={step} className="join-network-step-card">
+                <strong>{index + 1}</strong>
+                <div>
+                  <h3>{step}</h3>
+                  <p>
+                    {index === 0
+                      ? "Iniciás el proceso desde el acceso de dealer."
+                      : "La operación avanza dentro del circuito comercial de oX NEXMOV."}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="join-network-section join-network-no-commission">
+          <div className="join-network-section-head">
+            <p className="eyebrow">Modelo comercial</p>
+            <h2>No cobramos comisión por operación.</h2>
+            <p>
+              Tu inversión está en el plan, no en cada venta. Los cupos
+              corresponden al período comercial; al vencimiento, las
+              publicaciones pueden pausarse y el dealer puede renovar o
+              reactivar su operación.
+            </p>
+          </div>
+        </section>
+
+        <section className="join-network-section join-network-faq">
+          <div className="join-network-section-head">
+            <p className="eyebrow">Dudas frecuentes</p>
+            <h2>Lo esencial antes de solicitar el alta.</h2>
+          </div>
+
+          <div className="join-network-faq-grid">
+            {dealerFaq.map((item) => (
+              <article key={item.question} className="join-network-faq-card">
+                <strong>{item.question}</strong>
+                <p>{item.answer}</p>
+              </article>
             ))}
           </div>
         </section>
@@ -196,17 +345,27 @@ export default function JoinNetwork({ onNavigate }) {
         <section className="join-network-final">
           <div>
             <p className="eyebrow">Próximo paso</p>
-            <h2>Solicitá el alta y prepará tu operación dentro de la red.</h2>
+            <h2>Convertí tu stock en una experiencia de compra más clara.</h2>
             <p>
-              El alta de dealers está sujeta a revisión administrativa,
-              validación de datos comerciales y activación del plan
-              correspondiente.
+              Solicitá el alta como dealer y prepará tu operación para trabajar
+              con publicaciones premium, leads trazables y una red diseñada para
+              vender con más confianza.
             </p>
           </div>
 
-          <button type="button" onClick={() => onNavigate?.("login")}>
-            Solicitar alta de dealer
-          </button>
+          <div className="join-network-final-actions">
+            <button type="button" onClick={() => onNavigate?.("login")}>
+              Solicitar alta como dealer
+            </button>
+
+            <button
+              type="button"
+              className="secondary-btn"
+              onClick={() => onNavigate?.("search")}
+            >
+              Ver publicaciones
+            </button>
+          </div>
         </section>
       </div>
     </section>

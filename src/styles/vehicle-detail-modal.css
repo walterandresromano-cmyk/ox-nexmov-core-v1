@@ -791,3 +791,64 @@
     padding-inline: 10px;
   }
 }
+
+/* oX NEXMOV - P2 vehicle detail image and scale correction */
+.vehicle-detail-modal .detail-gallery-frame {
+  border-radius: 22px !important;
+  overflow: hidden !important;
+}
+
+.vehicle-detail-modal .vehicle-detail-main-image,
+.vehicle-detail-modal .detail-main-image {
+  width: 100% !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+  aspect-ratio: auto !important;
+}
+
+.vehicle-detail-modal .vehicle-detail-main-image img,
+.vehicle-detail-modal .detail-main-image img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: inherit !important;
+  clip-path: none !important;
+}
+
+.vehicle-detail-modal .vehicle-detail-thumb,
+.vehicle-detail-modal .detail-thumbs button {
+  border-radius: 14px !important;
+}
+
+.vehicle-detail-modal .vehicle-detail-thumb img,
+.vehicle-detail-modal .detail-thumbs img {
+  border-radius: inherit !important;
+}
+
+.vehicle-detail-modal .vehicle-detail-title-card h2 {
+  font-size: clamp(1.45rem, 2.2vw, 2.15rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0 !important;
+}
+
+.vehicle-detail-modal .detail-price {
+  font-size: clamp(1.8rem, 3vw, 2.65rem) !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 900px) {
+  .vehicle-detail-modal .vehicle-detail-main-image,
+  .vehicle-detail-modal .detail-main-image {
+    border-radius: 18px !important;
+  }
+
+  .vehicle-detail-modal .vehicle-detail-title-card h2 {
+    font-size: clamp(1.35rem, 6vw, 1.75rem) !important;
+  }
+
+  .vehicle-detail-modal .detail-price {
+    font-size: clamp(1.75rem, 8vw, 2.2rem) !important;
+  }
+}

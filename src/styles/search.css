@@ -976,6 +976,24 @@
   cursor: pointer;
 }
 
+/* oX NEXMOV - Search vehicle image framing fix */
+.ox-search-vehicle-grid .vehicle-card__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media img,
+.ox-search-vehicle-grid .vehicle-card__image {
+  position: absolute;
+  inset: 10px;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
+  min-height: 0;
+  display: block;
+  object-fit: cover;
+  object-position: center center !important;
+}
+
 /* oX NEXMOV - P2B Search mobile refinement */
 @media (max-width: 760px) {
   .ox-search-page {
