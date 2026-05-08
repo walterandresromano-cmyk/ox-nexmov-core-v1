@@ -491,65 +491,67 @@ export default function CompareTray({ appActions, onNavigate }) {
 
   return (
     <>
-      <aside className="compare-tray">
-        <div className="compare-tray-header">
-          <div className="compare-tray-titleblock">
-            <strong className="compare-tray-title">Comparador</strong>
-            <span className="compare-tray-count">
-              {compareItems.length} / 4 vehículos
-            </span>
+      {!showCompareModal && (
+        <aside className="compare-tray">
+          <div className="compare-tray-header">
+            <div className="compare-tray-titleblock">
+              <strong className="compare-tray-title">Comparador</strong>
+              <span className="compare-tray-count">
+                {compareItems.length} / 4 vehículos
+              </span>
+            </div>
+
+            <button
+              type="button"
+              className="compare-tray-clear"
+              onClick={clearCompare}
+            >
+              Limpiar
+            </button>
           </div>
 
-          <button
-            type="button"
-            className="compare-tray-clear"
-            onClick={clearCompare}
-          >
-            Limpiar
-          </button>
-        </div>
+          {trayMessage && (
+            <p className="compare-tray-message">{trayMessage}</p>
+          )}
 
-        {trayMessage && (
-          <p className="compare-tray-message">{trayMessage}</p>
-        )}
+          <div className="compare-tray-scroll" aria-label="Vehículos comparados">
+            {compareItems.map((vehicle) => (
+              <div className="compare-tray-chip" key={vehicle.id}>
+                <span className="compare-tray-chip-name">
+                  {getVehicleTitle(vehicle)}
+                </span>
 
-        <div className="compare-tray-scroll" aria-label="Vehículos comparados">
-          {compareItems.map((vehicle) => (
-            <div className="compare-tray-chip" key={vehicle.id}>
-              <span className="compare-tray-chip-name">
-                {getVehicleTitle(vehicle)}
-              </span>
+                <button
+                  type="button"
+                  className="compare-tray-chip-remove"
+                  onClick={() => removeFromCompare(vehicle.id)}
+                  aria-label={`Quitar ${getVehicleTitle(vehicle)}`}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
 
-              <button
-                type="button"
-                className="compare-tray-chip-remove"
-                onClick={() => removeFromCompare(vehicle.id)}
-                aria-label={`Quitar ${getVehicleTitle(vehicle)}`}
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {canOpenComparison ? (
-          <button
-            type="button"
-            className="compare-tray-primary"
-            onClick={() => setShowCompareModal(true)}
-          >
-            Comparar vehículos
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="compare-tray-primary"
-            onClick={() => onNavigate?.("search")}
-          >
-            Agregá otro vehículo para comparar
-          </button>
-        )}
-      </aside>
+          {canOpenComparison ? (
+            <button
+              type="button"
+              className="compare-tray-primary"
+              onClick={() => setShowCompareModal(true)}
+            >
+              Comparar vehículos
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="compare-tray-primary"
+              onClick={() => onNavigate?.("search")}
+            >
+              Agregá otro vehículo para comparar
+            </button>
+          )}
+        </aside>
+      )}
 
       {showCompareModal && (
         <div className="modal-backdrop">

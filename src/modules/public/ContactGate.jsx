@@ -211,7 +211,7 @@ export default function ContactGate({
             <div className="contact-summary">
               <span>Comprador registrado</span>
               <strong>{authProfile?.full_name || authUser.email}</strong>
-              <span>{authProfile?.phone_visible || "Teléfono no informado"}</span>
+              <span>Datos protegidos por oX NEXMOV</span>
             </div>
 
             <label>
