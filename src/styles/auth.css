@@ -422,3 +422,108 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* oX NEXMOV - P2B AuthPanel refinement */
+.auth-panel {
+  border-color: var(--ox-border-strong);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.10), transparent 34%),
+    var(--ox-surface-card);
+  box-shadow: var(--ox-shadow-panel);
+}
+
+.auth-mode-row {
+  padding: 5px;
+  border: 1px solid var(--ox-border);
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.30);
+}
+
+.auth-mode-row button,
+.auth-actions button {
+  min-height: 38px;
+  border-radius: var(--ox-radius-pill);
+}
+
+.auth-form {
+  gap: 12px;
+}
+
+.auth-form label {
+  gap: 7px;
+  color: var(--ox-text-soft);
+}
+
+.auth-form input {
+  min-height: 42px;
+  border-radius: 15px;
+  background: var(--ox-surface-input);
+}
+
+.auth-form .primary-action {
+  min-height: 44px;
+  border-radius: var(--ox-radius-pill);
+}
+
+.auth-legal-note {
+  color: var(--ox-muted);
+  line-height: 1.45;
+}
+
+.auth-legal-note button {
+  color: var(--ox-primary);
+  font-weight: 850;
+}
+
+:root[data-theme="light"] .auth-panel {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 252, 0.88));
+}
+
+:root[data-theme="light"] .auth-mode-row {
+  border-color: rgba(14, 116, 144, 0.14);
+  background: rgba(255, 255, 255, 0.56);
+}
+
+:root[data-theme="light"] .auth-profile-box {
+  border-color: rgba(14, 116, 144, 0.14);
+  background: rgba(255, 255, 255, 0.62);
+}
+
+:root[data-theme="light"] .auth-profile-box strong {
+  color: var(--ox-text);
+}
+
+@media (max-width: 760px) {
+  .auth-panel {
+    padding: 18px 13px 20px;
+    border-radius: 22px;
+  }
+
+  .auth-mode-row {
+    gap: 6px;
+  }
+
+  .auth-mode-row button,
+  .auth-actions button,
+  .auth-form .primary-action {
+    min-height: 42px;
+  }
+
+  .auth-form {
+    gap: 10px;
+  }
+
+  .auth-form input {
+    min-height: 42px;
+    font-size: 16px;
+  }
+
+  .auth-warning,
+  .auth-message {
+    margin-top: 10px;
+    padding: 11px 12px;
+  }
+}

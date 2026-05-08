@@ -9391,3 +9391,236 @@ body::-webkit-scrollbar {
     linear-gradient(180deg, rgba(254, 242, 242, 0.98), rgba(254, 226, 226, 0.82));
   color: #991b1b;
 }
+
+/* oX NEXMOV - P2C internal panels refinement */
+.admin-panel,
+.dealer-panel {
+  isolation: isolate;
+}
+
+.admin-panel .panel-head-row,
+.dealer-panel .panel-head-row,
+.admin-panel .admin-section-block,
+.dealer-panel .dealer-leads-section,
+.dealer-panel .dealer-module-card-open,
+.admin-panel .admin-kpi-card,
+.dealer-panel .dealer-status-card,
+.dealer-panel .dealer-module-card {
+  border-color: rgba(125, 211, 252, 0.15);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.07), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.84));
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.admin-panel .admin-toolbar,
+.dealer-panel .admin-toolbar,
+.admin-panel .admin-table-wrap,
+.dealer-panel .admin-table-wrap {
+  border-color: rgba(125, 211, 252, 0.13);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.58), rgba(2, 6, 23, 0.66));
+}
+
+.admin-panel .admin-kpi-card,
+.dealer-panel .dealer-status-card,
+.dealer-panel .dealer-module-card,
+.dealer-mobile-kpi-card,
+.dealer-mobile-plan-card,
+.admin-mobile-summary-card,
+.admin-mobile-system-card {
+  min-width: 0;
+}
+
+.admin-panel .admin-kpi-card strong,
+.dealer-panel .dealer-status-card strong,
+.dealer-mobile-kpi-card strong,
+.dealer-mobile-plan-card strong,
+.admin-mobile-summary-card strong {
+  letter-spacing: 0;
+}
+
+.admin-panel .admin-table,
+.dealer-panel .admin-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.admin-panel .admin-table tbody tr,
+.dealer-panel .admin-table tbody tr {
+  transition:
+    background var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease);
+}
+
+.admin-panel .table-action-btn,
+.admin-panel .admin-refresh-btn,
+.dealer-panel .table-action-btn,
+.dealer-panel .admin-refresh-btn,
+.dealer-panel .primary-action {
+  min-height: 38px;
+}
+
+.dealer-contact-card {
+  border-color: rgba(125, 211, 252, 0.18);
+}
+
+.dealer-contact-form input {
+  min-height: 42px;
+}
+
+/* oX NEXMOV - P2C internal modals and forms refinement */
+.modal-backdrop:has(.ticket-detail-modal),
+.modal-backdrop:has(.dealer-vehicle-detail-modal),
+.modal-backdrop:has(.edit-images-modal) {
+  z-index: 12100 !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.13), transparent 36%),
+    rgba(1, 6, 15, 0.84) !important;
+  backdrop-filter: blur(18px) saturate(0.80) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(0.80) !important;
+}
+
+.modal-backdrop:has(.ticket-detail-modal) .ticket-detail-modal,
+.modal-backdrop:has(.dealer-vehicle-detail-modal) .dealer-vehicle-detail-modal,
+.modal-backdrop:has(.edit-images-modal) .edit-images-modal {
+  z-index: 12110 !important;
+}
+
+.modal-backdrop:has(.ticket-detail-modal) .modal-close-btn,
+.modal-backdrop:has(.dealer-vehicle-detail-modal) .modal-close-btn,
+.modal-backdrop:has(.edit-images-modal) .modal-close-btn {
+  z-index: 12120 !important;
+}
+
+.ticket-detail-modal,
+.dealer-vehicle-detail-modal,
+.edit-images-modal {
+  border-color: rgba(125, 211, 252, 0.18);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.96));
+}
+
+.ticket-detail-card,
+.edit-images-current,
+.edit-images-upload {
+  min-width: 0;
+  border-color: rgba(125, 211, 252, 0.15);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.64), rgba(2, 6, 23, 0.72));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.ticket-detail-card strong,
+.ticket-detail-card p,
+.ticket-detail-card span {
+  overflow-wrap: anywhere;
+}
+
+.ticket-detail-modal .zero-km-form,
+.ticket-detail-modal .lead-notes-actions {
+  gap: 10px;
+}
+
+.ticket-detail-modal .zero-km-form input,
+.ticket-detail-modal .zero-km-form select,
+.ticket-detail-modal .zero-km-form textarea,
+.ticket-detail-modal .lead-notes-textarea,
+.ticket-detail-modal .lead-status-control select,
+.ticket-detail-modal .ticket-status-control select {
+  min-height: 42px;
+  border-radius: 15px;
+}
+
+.ticket-detail-modal .zero-km-form textarea,
+.ticket-detail-modal .lead-notes-textarea {
+  min-height: 112px;
+}
+
+.ticket-detail-modal .table-action-btn,
+.ticket-detail-modal .zero-km-form .primary-action,
+.lead-notes-actions .table-action-btn {
+  min-height: 40px;
+}
+
+:root[data-theme="light"] .admin-panel .panel-head-row,
+:root[data-theme="light"] .dealer-panel .panel-head-row,
+:root[data-theme="light"] .admin-panel .admin-section-block,
+:root[data-theme="light"] .dealer-panel .dealer-leads-section,
+:root[data-theme="light"] .dealer-panel .dealer-module-card-open,
+:root[data-theme="light"] .admin-panel .admin-kpi-card,
+:root[data-theme="light"] .dealer-panel .dealer-status-card,
+:root[data-theme="light"] .dealer-panel .dealer-module-card,
+:root[data-theme="light"] .admin-panel .admin-toolbar,
+:root[data-theme="light"] .dealer-panel .admin-toolbar,
+:root[data-theme="light"] .admin-panel .admin-table-wrap,
+:root[data-theme="light"] .dealer-panel .admin-table-wrap {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(225, 242, 252, 0.84));
+  box-shadow:
+    0 12px 30px rgba(33, 48, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+:root[data-theme="light"] .modal-backdrop:has(.ticket-detail-modal),
+:root[data-theme="light"] .modal-backdrop:has(.dealer-vehicle-detail-modal),
+:root[data-theme="light"] .modal-backdrop:has(.edit-images-modal) {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.15), transparent 38%),
+    rgba(15, 23, 42, 0.50) !important;
+}
+
+:root[data-theme="light"] .ticket-detail-modal,
+:root[data-theme="light"] .dealer-vehicle-detail-modal,
+:root[data-theme="light"] .edit-images-modal,
+:root[data-theme="light"] .ticket-detail-card,
+:root[data-theme="light"] .edit-images-current,
+:root[data-theme="light"] .edit-images-upload {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 252, 0.86));
+  color: var(--ox-text);
+}
+
+/* oX NEXMOV - P2A ContactGate final modal layer */
+.modal-backdrop:has(.contact-modal) {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 13000 !important;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  overflow: hidden auto;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.16), transparent 36%),
+    rgba(1, 6, 15, 0.88) !important;
+  backdrop-filter: blur(20px) saturate(0.78) brightness(0.88) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(0.78) brightness(0.88) !important;
+}
+
+.modal-backdrop:has(.contact-modal) .contact-modal {
+  position: relative;
+  z-index: 13010 !important;
+  width: min(680px, calc(100vw - 32px));
+  max-height: min(780px, calc(100dvh - 40px));
+  overflow: auto;
+}
+
+.modal-backdrop:has(.contact-modal) .modal-close-btn {
+  z-index: 13020 !important;
+}
+
+:root[data-theme="light"] .modal-backdrop:has(.contact-modal) {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.18), transparent 38%),
+    rgba(15, 23, 42, 0.58) !important;
+  backdrop-filter: blur(22px) saturate(0.78) brightness(0.92) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(0.78) brightness(0.92) !important;
+}

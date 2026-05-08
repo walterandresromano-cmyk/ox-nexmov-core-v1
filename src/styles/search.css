@@ -975,3 +975,103 @@
   font-weight: 850;
   cursor: pointer;
 }
+
+/* oX NEXMOV - P2B Search mobile refinement */
+@media (max-width: 760px) {
+  .ox-search-page {
+    padding-top: 10px;
+  }
+
+  .ox-search-shell {
+    gap: 10px;
+  }
+
+  .ox-search-hero {
+    gap: 11px;
+    padding: 16px 12px;
+    border-radius: 22px;
+  }
+
+  .ox-search-command {
+    gap: 8px;
+    padding: 7px;
+  }
+
+  .ox-search-input-wrap input {
+    min-height: 42px;
+    padding-inline: 11px;
+    font-size: 16px;
+  }
+
+  .ox-search-primary-btn,
+  .ox-search-mobile-filter-toggle {
+    min-height: 42px;
+  }
+
+  .ox-search-suggested {
+    gap: 6px;
+  }
+
+  .ox-search-suggested button {
+    min-height: 32px;
+    padding: 7px 8px;
+    font-size: 0.58rem;
+  }
+
+  .ox-search-status {
+    gap: 6px;
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .ox-search-filters-panel.is-open {
+    max-height: 1240px;
+  }
+
+  .ox-search-side-card,
+  .ox-search-results {
+    border-radius: 20px;
+    padding: 12px;
+  }
+
+  .ox-search-side-head {
+    gap: 8px;
+  }
+
+  .ox-filter-section {
+    gap: 7px;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+
+  .ox-filter-section label {
+    gap: 4px;
+    font-size: 0.56rem;
+  }
+
+  .ox-filter-section input,
+  .ox-filter-section select {
+    min-height: 40px;
+    border-radius: 13px;
+    padding-inline: 10px;
+    font-size: 16px;
+  }
+
+  .ox-filter-two {
+    gap: 6px;
+  }
+
+  .ox-filter-shortcuts div {
+    gap: 6px;
+  }
+
+  .ox-filter-shortcuts button {
+    min-height: 34px;
+    padding: 7px 9px;
+    font-size: 0.58rem;
+  }
+
+  .ox-search-results-toolbar {
+    gap: 8px;
+  }
+}
