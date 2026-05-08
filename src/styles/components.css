@@ -7135,6 +7135,171 @@ body::-webkit-scrollbar {
   background: rgba(255, 255, 255, 0.58);
 }
 
+/* oX NEXMOV - Premium interaction polish */
+.admin-panel .panel-head-row,
+.dealer-panel .panel-head-row,
+.admin-panel .admin-section-block,
+.dealer-panel .dealer-leads-section,
+.dealer-panel .dealer-module-card-open,
+.admin-panel .admin-kpi-card,
+.admin-panel .dealer-module-card,
+.dealer-panel .dealer-status-card,
+.dealer-panel .dealer-module-card,
+.ticket-detail-modal,
+.dealer-vehicle-detail-modal,
+.contact-modal {
+  position: relative;
+  isolation: isolate;
+}
+
+.admin-panel .panel-head-row::after,
+.dealer-panel .panel-head-row::after,
+.admin-panel .admin-section-block::after,
+.dealer-panel .dealer-leads-section::after,
+.dealer-panel .dealer-module-card-open::after,
+.ticket-detail-modal::after,
+.dealer-vehicle-detail-modal::after,
+.contact-modal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(125, 211, 252, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 26%);
+  opacity: 0.72;
+}
+
+.admin-panel .admin-kpi-card::before,
+.admin-panel .dealer-module-card::before,
+.dealer-panel .dealer-status-card::before,
+.dealer-panel .dealer-module-card::before,
+.ticket-detail-card::before,
+.contact-summary::before,
+.lead-created-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(125, 211, 252, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 30%);
+  opacity: 0;
+  transition: opacity var(--ox-duration-fast) var(--ox-ease);
+}
+
+.admin-panel .admin-kpi-card,
+.admin-panel .dealer-module-card,
+.dealer-panel .dealer-status-card,
+.dealer-panel .dealer-module-card,
+.ticket-detail-card,
+.contact-summary,
+.lead-created-box {
+  overflow: hidden;
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .admin-panel .admin-kpi-card:hover,
+  .admin-panel .dealer-module-card:hover,
+  .dealer-panel .dealer-status-card:hover,
+  .dealer-panel .dealer-module-card:hover,
+  .ticket-detail-card:hover,
+  .contact-summary:hover {
+    transform: translateY(-1px);
+    border-color: var(--ox-border-accent);
+    box-shadow: var(--ox-shadow-card-hover);
+  }
+
+  .admin-panel .admin-kpi-card:hover::before,
+  .admin-panel .dealer-module-card:hover::before,
+  .dealer-panel .dealer-status-card:hover::before,
+  .dealer-panel .dealer-module-card:hover::before,
+  .ticket-detail-card:hover::before,
+  .contact-summary:hover::before {
+    opacity: 1;
+  }
+}
+
+.admin-panel .admin-chip,
+.dealer-panel .admin-chip,
+.ticket-detail-card .admin-chip {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.10);
+}
+
+.admin-panel .admin-chip.success,
+.dealer-panel .admin-chip.success {
+  border-color: rgba(34, 197, 94, 0.28);
+  background:
+    linear-gradient(180deg, rgba(34, 197, 94, 0.18), rgba(22, 163, 74, 0.10));
+}
+
+.admin-panel .admin-chip.warning,
+.dealer-panel .admin-chip.warning,
+.admin-panel .admin-chip.orange,
+.dealer-panel .admin-chip.orange {
+  border-color: rgba(245, 184, 75, 0.30);
+  background:
+    linear-gradient(180deg, rgba(245, 184, 75, 0.18), rgba(217, 119, 6, 0.10));
+}
+
+.admin-panel .admin-chip.danger,
+.dealer-panel .admin-chip.danger {
+  border-color: rgba(239, 68, 68, 0.30);
+  background:
+    linear-gradient(180deg, rgba(239, 68, 68, 0.18), rgba(185, 28, 28, 0.10));
+}
+
+.admin-panel .table-action-btn:focus-visible,
+.admin-panel .admin-refresh-btn:focus-visible,
+.dealer-panel .table-action-btn:focus-visible,
+.dealer-panel .admin-refresh-btn:focus-visible,
+.dealer-panel .primary-action:focus-visible,
+.modal-close-btn:focus-visible,
+.lead-status-control select:focus-visible {
+  outline: 0;
+  border-color: var(--ox-border-accent);
+  box-shadow:
+    0 0 0 3px rgba(56, 189, 248, 0.14),
+    0 12px 28px rgba(37, 99, 235, 0.14);
+}
+
+:root[data-theme="light"] .admin-panel .panel-head-row::after,
+:root[data-theme="light"] .dealer-panel .panel-head-row::after,
+:root[data-theme="light"] .admin-panel .admin-section-block::after,
+:root[data-theme="light"] .dealer-panel .dealer-leads-section::after,
+:root[data-theme="light"] .dealer-panel .dealer-module-card-open::after,
+:root[data-theme="light"] .ticket-detail-modal::after,
+:root[data-theme="light"] .dealer-vehicle-detail-modal::after,
+:root[data-theme="light"] .contact-modal::after {
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.74), transparent 30%);
+  opacity: 0.86;
+}
+
+:root[data-theme="light"] .admin-panel .admin-kpi-card::before,
+:root[data-theme="light"] .admin-panel .dealer-module-card::before,
+:root[data-theme="light"] .dealer-panel .dealer-status-card::before,
+:root[data-theme="light"] .dealer-panel .dealer-module-card::before,
+:root[data-theme="light"] .ticket-detail-card::before,
+:root[data-theme="light"] .contact-summary::before,
+:root[data-theme="light"] .lead-created-box::before {
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.70), transparent 32%);
+}
+
 /* Legal trust notes */
 .footer-legal {
   display: grid;
