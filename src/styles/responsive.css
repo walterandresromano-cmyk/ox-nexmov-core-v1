@@ -2824,9 +2824,15 @@
   }
 
   .compare-tray {
-    bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: calc(var(--mobile-dock-height, 76px) + env(safe-area-inset-bottom, 0px) + 12px) !important;
+    width: auto !important;
+    max-width: calc(100vw - 24px) !important;
     border-radius: 20px !important;
     padding: 10px !important;
+    transform: none !important;
   }
 
   .compare-tray-scroll {
@@ -3308,5 +3314,153 @@
   .dealer-contact-form input,
   .dealer-contact-form .table-action-btn {
     min-height: 44px !important;
+  }
+}
+
+/* oX NEXMOV - P0 public mobile stabilization */
+@media (max-width: 760px) {
+  .ox-home-page-v3,
+  .ox-search-page {
+    overflow-x: clip;
+  }
+
+  .ox-home-vehicles-carousel-v3 .vehicle-card,
+  .ox-search-vehicle-grid .vehicle-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ox-home-vehicles-carousel-v3 .vehicle-card__media,
+  .ox-search-vehicle-grid .vehicle-card__media {
+    min-height: 196px;
+  }
+
+  .ox-home-vehicles-carousel-v3 .vehicle-card__actions,
+  .ox-search-vehicle-grid .vehicle-card__actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .ox-home-vehicles-carousel-v3 .vehicle-card__btn,
+  .ox-search-vehicle-grid .vehicle-card__btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding-inline: 8px;
+  }
+
+  .compare-tray {
+    right: 12px !important;
+    bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important;
+    width: min(420px, calc(100vw - 24px)) !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+
+  .modal-backdrop:has(.compare-modal),
+  .modal-backdrop:has(.contact-modal),
+  .modal-backdrop:has(.vehicle-detail-modal) {
+    overflow-x: hidden !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .ox-home-vehicles-carousel-v3 .vehicle-card__media,
+  .ox-search-vehicle-grid .vehicle-card__media {
+    min-height: 184px;
+  }
+
+  .compare-tray {
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* oX NEXMOV - P1 unified controls mobile guard */
+@media (max-width: 760px) {
+  .primary-action,
+  .secondary-action,
+  .table-action-btn,
+  .admin-refresh-btn,
+  .vehicle-card__btn,
+  .compare-tray-primary,
+  .compare-modal-actions button,
+  .compare-card-detail,
+  .auth-actions button,
+  .auth-mode-row button,
+  .dock-btn,
+  .logout-dock-btn,
+  .login-btn,
+  .nav-btn,
+  .detail-actions button,
+  .ox-home-search-v3 button,
+  .ox-home-primary-actions-v3 button,
+  .ox-home-section-actions-v3 button,
+  .ox-search-primary-btn,
+  .ox-search-update-btn,
+  .ox-search-compare-btn,
+  .ox-search-empty-actions button {
+    min-height: 44px;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .auth-form input,
+  .auth-form select,
+  .auth-form textarea,
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea,
+  .zero-km-form input,
+  .zero-km-form select,
+  .zero-km-form textarea,
+  .sell-vehicle-form input,
+  .sell-vehicle-form select,
+  .sell-vehicle-form textarea,
+  .join-network-form input,
+  .join-network-form select,
+  .join-network-form textarea,
+  .dealer-contact-form input,
+  .admin-search input,
+  .admin-filter select,
+  .dealer-switcher select,
+  .lead-status-control select,
+  .ticket-status-control select,
+  .ox-search-input-wrap input,
+  .ox-filter-section input,
+  .ox-filter-section select,
+  .lead-notes-textarea,
+  .assign-dealer-box select {
+    min-height: 44px;
+    max-width: 100%;
+    font-size: 16px;
+  }
+
+  .admin-chip,
+  .detail-status,
+  .vehicle-card__rank,
+  .vehicle-card__year,
+  .vehicle-card__market,
+  .compare-card-dealer .admin-chip,
+  .ox-search-status > span,
+  .ox-home-featured-badge-v3 {
+    min-height: 24px;
+    max-width: 100%;
+  }
+
+  .ox-home-vehicles-carousel-v3 .vehicle-card__body {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .ox-home-vehicles-carousel-v3 .vehicle-card__actions {
+    gap: 7px;
+  }
+
+  .ox-home-vehicles-carousel-v3 .vehicle-card__btn {
+    min-height: 40px;
+    padding-inline: 8px;
+    font-size: 0.58rem;
+    overflow-wrap: normal;
   }
 }

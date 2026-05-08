@@ -1158,11 +1158,12 @@
   grid-column: 1 / -1;
 }
 .compare-tray {
-  position: fixed;
+  position: fixed !important;
   left: 50%;
-  bottom: 22px;
-  z-index: 120;
-  width: min(620px, calc(100% - 32px));
+  bottom: 24px;
+  z-index: 7000;
+  width: min(720px, calc(100vw - 48px));
+  max-width: 100%;
   transform: translateX(-50%);
   border: 1px solid var(--ox-border-strong);
   border-radius: var(--ox-radius-xl);
@@ -8782,4 +8783,611 @@ body::-webkit-scrollbar {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.88),
     0 8px 18px rgba(33, 48, 71, 0.06);
+}
+
+/* oX NEXMOV - P0 visual stabilization */
+.modal-backdrop:has(.compare-modal) {
+  z-index: 11800 !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.14), transparent 36%),
+    rgba(2, 6, 23, 0.82) !important;
+  backdrop-filter: blur(18px) saturate(0.82) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(0.82) !important;
+}
+
+.modal-backdrop:has(.compare-modal) .compare-modal {
+  z-index: 11810 !important;
+}
+
+.modal-backdrop:has(.compare-modal) .compare-modal-header {
+  z-index: 11820 !important;
+}
+
+.modal-backdrop:has(.contact-modal) {
+  z-index: 11900 !important;
+}
+
+.modal-backdrop:has(.contact-modal) .contact-modal {
+  z-index: 11910 !important;
+}
+
+.modal-backdrop:has(.contact-modal) .modal-close-btn {
+  z-index: 11920 !important;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card,
+.ox-search-vehicle-grid .vehicle-card {
+  isolation: isolate;
+  min-width: 0;
+  border-color: rgba(125, 211, 252, 0.16);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.96));
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__media,
+.ox-search-vehicle-grid .vehicle-card__media {
+  min-height: 214px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__body,
+.ox-search-vehicle-grid .vehicle-card__body {
+  min-width: 0;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__title,
+.ox-search-vehicle-grid .vehicle-card__title,
+.ox-home-vehicles-carousel-v3 .vehicle-card__version,
+.ox-search-vehicle-grid .vehicle-card__version,
+.ox-home-vehicles-carousel-v3 .vehicle-card__fact strong,
+.ox-search-vehicle-grid .vehicle-card__fact strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__actions,
+.ox-search-vehicle-grid .vehicle-card__actions {
+  align-items: stretch;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__btn,
+.ox-search-vehicle-grid .vehicle-card__btn {
+  min-height: 42px;
+}
+
+:root[data-theme="light"] .modal-backdrop:has(.compare-modal) {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.16), transparent 38%),
+    rgba(15, 23, 42, 0.48) !important;
+  backdrop-filter: blur(20px) saturate(0.78) brightness(0.92) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(0.78) brightness(0.92) !important;
+}
+
+:root[data-theme="light"] .ox-home-vehicles-carousel-v3 .vehicle-card,
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 255, 0.92));
+}
+
+/* oX NEXMOV - P1 unified button system */
+.primary-action,
+.secondary-action,
+.table-action-btn,
+.admin-refresh-btn,
+.vehicle-card__btn,
+.compare-tray-primary,
+.compare-tray-clear,
+.compare-tray-chip-remove,
+.compare-card-detail,
+.compare-card-remove,
+.compare-modal-actions button,
+.contact-next-actions button,
+.auth-actions button,
+.auth-mode-row button,
+.dock-btn,
+.logout-dock-btn,
+.login-btn,
+.nav-btn,
+.legal-back-button,
+.footer-legal-links button,
+.ox-home-search-v3 button,
+.ox-home-primary-actions-v3 button,
+.ox-home-section-actions-v3 button,
+.ox-home-featured-card-v3 button,
+.ox-home-dealer-v3 button,
+.ox-home-page-v3 .empty-state button,
+.ox-search-primary-btn,
+.ox-search-update-btn,
+.ox-search-compare-btn,
+.ox-search-empty-actions button,
+.ox-search-suggested button,
+.ox-search-side-head button,
+.ox-search-filter-group button,
+.ox-search-result-actions button,
+.detail-actions button,
+.vehicle-detail-zoom-button,
+.detail-thumbs button,
+.lead-status-control select,
+.ticket-status-control select {
+  border-radius: var(--ox-radius-pill);
+  font-family: var(--ox-font-sans);
+  font-weight: 850;
+  letter-spacing: 0;
+  text-decoration: none;
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease),
+    color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    opacity var(--ox-duration-fast) var(--ox-ease);
+}
+
+.primary-action,
+.vehicle-card__btn--primary,
+.compare-tray-primary,
+.ox-home-search-v3 button,
+.ox-home-primary-actions-v3 button:first-child,
+.ox-search-primary-btn,
+.ox-search-empty-actions button:first-child,
+.dealer-mobile-home-head .primary-action {
+  border: 1px solid rgba(125, 211, 252, 0.34);
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.98), rgba(37, 99, 235, 0.98));
+  color: #f8fbff;
+  box-shadow:
+    0 16px 34px rgba(37, 99, 235, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.secondary-action,
+.table-action-btn,
+.admin-refresh-btn,
+.vehicle-card__btn,
+.compare-modal-actions button,
+.compare-card-detail,
+.auth-mode-row button,
+.dock-btn,
+.login-btn,
+.nav-btn,
+.legal-back-button,
+.ox-search-update-btn,
+.ox-search-compare-btn,
+.ox-search-suggested button,
+.ox-search-side-head button,
+.ox-search-filter-group button,
+.ox-search-result-actions button,
+.detail-actions button:not(.primary-action) {
+  border: 1px solid var(--ox-border);
+  background:
+    linear-gradient(180deg, rgba(20, 33, 54, 0.92), rgba(8, 15, 28, 0.88));
+  color: var(--ox-text-soft);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.compare-tray-clear,
+.compare-tray-chip-remove,
+.compare-card-remove,
+.logout-dock-btn {
+  border: 1px solid rgba(248, 113, 113, 0.24);
+  background:
+    linear-gradient(180deg, rgba(127, 29, 29, 0.34), rgba(69, 10, 10, 0.22));
+  color: #fecaca;
+  box-shadow:
+    0 10px 22px rgba(127, 29, 29, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.primary-action:disabled,
+.secondary-action:disabled,
+.table-action-btn:disabled,
+.admin-refresh-btn:disabled,
+.vehicle-card__btn:disabled,
+.compare-tray-primary:disabled,
+.ox-search-primary-btn:disabled,
+.ox-search-update-btn:disabled,
+.detail-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+  filter: saturate(0.72);
+  transform: none !important;
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  .primary-action:not(:disabled):hover,
+  .vehicle-card__btn--primary:not(:disabled):hover,
+  .compare-tray-primary:not(:disabled):hover,
+  .ox-home-search-v3 button:not(:disabled):hover,
+  .ox-search-primary-btn:not(:disabled):hover,
+  .secondary-action:not(:disabled):hover,
+  .table-action-btn:not(:disabled):hover,
+  .admin-refresh-btn:not(:disabled):hover,
+  .vehicle-card__btn:not(:disabled):hover,
+  .compare-modal-actions button:not(:disabled):hover,
+  .compare-card-detail:not(:disabled):hover,
+  .dock-btn:not(:disabled):hover,
+  .login-btn:not(:disabled):hover,
+  .nav-btn:not(:disabled):hover,
+  .detail-actions button:not(:disabled):hover {
+    transform: translateY(-1px);
+    border-color: var(--ox-border-accent);
+    box-shadow:
+      0 16px 36px rgba(37, 99, 235, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+}
+
+.primary-action:not(:disabled):active,
+.secondary-action:not(:disabled):active,
+.table-action-btn:not(:disabled):active,
+.admin-refresh-btn:not(:disabled):active,
+.vehicle-card__btn:not(:disabled):active,
+.compare-tray-primary:not(:disabled):active,
+.compare-modal-actions button:not(:disabled):active,
+.dock-btn:not(:disabled):active,
+.login-btn:not(:disabled):active,
+.nav-btn:not(:disabled):active,
+.detail-actions button:not(:disabled):active {
+  transform: scale(0.985);
+}
+
+.primary-action:focus-visible,
+.secondary-action:focus-visible,
+.table-action-btn:focus-visible,
+.admin-refresh-btn:focus-visible,
+.vehicle-card__btn:focus-visible,
+.compare-tray-primary:focus-visible,
+.compare-tray-clear:focus-visible,
+.compare-tray-chip-remove:focus-visible,
+.compare-card-detail:focus-visible,
+.compare-card-remove:focus-visible,
+.compare-modal-actions button:focus-visible,
+.auth-mode-row button:focus-visible,
+.dock-btn:focus-visible,
+.logout-dock-btn:focus-visible,
+.login-btn:focus-visible,
+.nav-btn:focus-visible,
+.detail-actions button:focus-visible,
+.vehicle-detail-zoom-button:focus-visible,
+.detail-thumbs button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(56, 189, 248, 0.18),
+    0 14px 32px rgba(37, 99, 235, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* oX NEXMOV - P1 unified form system */
+.auth-form input,
+.auth-form select,
+.auth-form textarea,
+.contact-form input,
+.contact-form select,
+.contact-form textarea,
+.zero-km-form input,
+.zero-km-form select,
+.zero-km-form textarea,
+.sell-vehicle-form input,
+.sell-vehicle-form select,
+.sell-vehicle-form textarea,
+.join-network-form input,
+.join-network-form select,
+.join-network-form textarea,
+.dealer-contact-form input,
+.admin-search input,
+.admin-filter select,
+.dealer-switcher select,
+.lead-status-control select,
+.ticket-status-control select,
+.ox-search-input-wrap input,
+.ox-filter-section input,
+.ox-filter-section select,
+.lead-notes-textarea,
+.assign-dealer-box select {
+  min-height: var(--ox-input-h-page);
+  border: 1px solid var(--ox-border);
+  border-radius: 15px;
+  background: var(--ox-surface-input);
+  color: var(--ox-text);
+  font-family: var(--ox-font-sans);
+  font-size: var(--ox-fs-input);
+  font-weight: 650;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 8px 18px rgba(0, 0, 0, 0.07);
+  transition:
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease);
+}
+
+.auth-form input::placeholder,
+.contact-form input::placeholder,
+.contact-form textarea::placeholder,
+.zero-km-form input::placeholder,
+.zero-km-form textarea::placeholder,
+.sell-vehicle-form input::placeholder,
+.sell-vehicle-form textarea::placeholder,
+.join-network-form input::placeholder,
+.join-network-form textarea::placeholder,
+.dealer-contact-form input::placeholder,
+.ox-search-input-wrap input::placeholder,
+.ox-filter-section input::placeholder,
+.lead-notes-textarea::placeholder {
+  color: var(--ox-muted-2);
+}
+
+.auth-form input:focus,
+.auth-form select:focus,
+.auth-form textarea:focus,
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus,
+.zero-km-form input:focus,
+.zero-km-form select:focus,
+.zero-km-form textarea:focus,
+.sell-vehicle-form input:focus,
+.sell-vehicle-form select:focus,
+.sell-vehicle-form textarea:focus,
+.join-network-form input:focus,
+.join-network-form select:focus,
+.join-network-form textarea:focus,
+.dealer-contact-form input:focus,
+.admin-search input:focus,
+.admin-filter select:focus,
+.dealer-switcher select:focus,
+.lead-status-control select:focus,
+.ticket-status-control select:focus,
+.ox-search-input-wrap input:focus,
+.ox-filter-section input:focus,
+.ox-filter-section select:focus,
+.lead-notes-textarea:focus,
+.assign-dealer-box select:focus {
+  border-color: var(--ox-border-accent);
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(56, 189, 248, 0.14),
+    0 14px 32px rgba(37, 99, 235, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.auth-form label,
+.contact-form label,
+.zero-km-form label,
+.sell-vehicle-form label,
+.join-network-form label,
+.dealer-contact-form label {
+  color: var(--ox-text-soft);
+  font-weight: 800;
+}
+
+.form-error,
+.auth-warning,
+.contact-warning {
+  border-color: rgba(245, 158, 11, 0.30);
+  background:
+    linear-gradient(180deg, rgba(245, 158, 11, 0.14), rgba(127, 29, 29, 0.10));
+  color: #fde68a;
+}
+
+.auth-message {
+  border-color: rgba(34, 197, 94, 0.30);
+  background:
+    linear-gradient(180deg, rgba(34, 197, 94, 0.14), rgba(6, 78, 59, 0.10));
+  color: #bbf7d0;
+}
+
+/* oX NEXMOV - P1 unified status badges */
+.admin-chip,
+.detail-status,
+.vehicle-card__rank,
+.vehicle-card__year,
+.vehicle-card__market,
+.compare-card-dealer .admin-chip,
+.ox-search-status > span,
+.ox-home-featured-badge-v3,
+.rank-inicio,
+.rank-pro,
+.rank-elite,
+.rank-platinum,
+.dealer-rank-inicio,
+.dealer-rank-pro,
+.dealer-rank-elite,
+.dealer-rank-platinum {
+  min-height: 24px;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: var(--ox-radius-pill);
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.14), rgba(37, 99, 235, 0.08));
+  color: var(--ox-text-soft);
+  font-weight: 850;
+  letter-spacing: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.admin-chip.success,
+.detail-status.success,
+.vehicle-card__market--below {
+  border-color: rgba(34, 197, 94, 0.30);
+  background:
+    linear-gradient(180deg, rgba(34, 197, 94, 0.18), rgba(6, 78, 59, 0.10));
+  color: #bbf7d0;
+}
+
+.admin-chip.warning,
+.admin-chip.orange,
+.detail-status.warning,
+.vehicle-card__market--above {
+  border-color: rgba(245, 184, 75, 0.34);
+  background:
+    linear-gradient(180deg, rgba(245, 184, 75, 0.18), rgba(120, 53, 15, 0.10));
+  color: #fde68a;
+}
+
+.admin-chip.danger,
+.detail-status.danger {
+  border-color: rgba(248, 113, 113, 0.34);
+  background:
+    linear-gradient(180deg, rgba(239, 68, 68, 0.18), rgba(127, 29, 29, 0.12));
+  color: #fecaca;
+}
+
+.rank-inicio,
+.dealer-rank-inicio {
+  border-color: rgba(184, 135, 70, 0.34);
+}
+
+.rank-pro,
+.dealer-rank-pro {
+  border-color: rgba(56, 189, 248, 0.34);
+}
+
+.rank-elite,
+.dealer-rank-elite {
+  border-color: rgba(245, 184, 75, 0.38);
+}
+
+.rank-platinum,
+.dealer-rank-platinum {
+  border-color: rgba(226, 232, 240, 0.38);
+}
+
+:root[data-theme="light"] .secondary-action,
+:root[data-theme="light"] .table-action-btn,
+:root[data-theme="light"] .admin-refresh-btn,
+:root[data-theme="light"] .vehicle-card__btn,
+:root[data-theme="light"] .compare-modal-actions button,
+:root[data-theme="light"] .compare-card-detail,
+:root[data-theme="light"] .auth-mode-row button,
+:root[data-theme="light"] .dock-btn,
+:root[data-theme="light"] .login-btn,
+:root[data-theme="light"] .nav-btn,
+:root[data-theme="light"] .legal-back-button,
+:root[data-theme="light"] .ox-search-update-btn,
+:root[data-theme="light"] .ox-search-compare-btn,
+:root[data-theme="light"] .ox-search-suggested button,
+:root[data-theme="light"] .ox-search-side-head button,
+:root[data-theme="light"] .ox-search-filter-group button,
+:root[data-theme="light"] .ox-search-result-actions button,
+:root[data-theme="light"] .detail-actions button:not(.primary-action) {
+  border-color: rgba(14, 116, 144, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(224, 243, 252, 0.94));
+  color: var(--ox-text);
+  box-shadow:
+    0 10px 22px rgba(33, 48, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+:root[data-theme="light"] .compare-tray-clear,
+:root[data-theme="light"] .compare-tray-chip-remove,
+:root[data-theme="light"] .compare-card-remove,
+:root[data-theme="light"] .logout-dock-btn {
+  border-color: rgba(220, 38, 38, 0.20);
+  background:
+    linear-gradient(180deg, rgba(254, 242, 242, 0.98), rgba(254, 226, 226, 0.92));
+  color: #991b1b;
+}
+
+:root[data-theme="light"] .auth-form input,
+:root[data-theme="light"] .auth-form select,
+:root[data-theme="light"] .auth-form textarea,
+:root[data-theme="light"] .contact-form input,
+:root[data-theme="light"] .contact-form select,
+:root[data-theme="light"] .contact-form textarea,
+:root[data-theme="light"] .zero-km-form input,
+:root[data-theme="light"] .zero-km-form select,
+:root[data-theme="light"] .zero-km-form textarea,
+:root[data-theme="light"] .sell-vehicle-form input,
+:root[data-theme="light"] .sell-vehicle-form select,
+:root[data-theme="light"] .sell-vehicle-form textarea,
+:root[data-theme="light"] .join-network-form input,
+:root[data-theme="light"] .join-network-form select,
+:root[data-theme="light"] .join-network-form textarea,
+:root[data-theme="light"] .dealer-contact-form input,
+:root[data-theme="light"] .admin-search input,
+:root[data-theme="light"] .admin-filter select,
+:root[data-theme="light"] .dealer-switcher select,
+:root[data-theme="light"] .lead-status-control select,
+:root[data-theme="light"] .ticket-status-control select,
+:root[data-theme="light"] .ox-search-input-wrap input,
+:root[data-theme="light"] .ox-filter-section input,
+:root[data-theme="light"] .ox-filter-section select,
+:root[data-theme="light"] .lead-notes-textarea,
+:root[data-theme="light"] .assign-dealer-box select {
+  border-color: rgba(14, 116, 144, 0.16);
+  background: var(--ox-surface-input);
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .form-error,
+:root[data-theme="light"] .auth-warning,
+:root[data-theme="light"] .contact-warning {
+  border-color: rgba(217, 119, 6, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 251, 235, 0.98), rgba(254, 243, 199, 0.86));
+  color: #7c2d12;
+}
+
+:root[data-theme="light"] .auth-message {
+  border-color: rgba(22, 163, 74, 0.22);
+  background:
+    linear-gradient(180deg, rgba(240, 253, 244, 0.98), rgba(220, 252, 231, 0.86));
+  color: #14532d;
+}
+
+:root[data-theme="light"] .admin-chip,
+:root[data-theme="light"] .detail-status,
+:root[data-theme="light"] .vehicle-card__rank,
+:root[data-theme="light"] .vehicle-card__year,
+:root[data-theme="light"] .vehicle-card__market,
+:root[data-theme="light"] .compare-card-dealer .admin-chip,
+:root[data-theme="light"] .ox-search-status > span,
+:root[data-theme="light"] .ox-home-featured-badge-v3,
+:root[data-theme="light"] .rank-inicio,
+:root[data-theme="light"] .rank-pro,
+:root[data-theme="light"] .rank-elite,
+:root[data-theme="light"] .rank-platinum,
+:root[data-theme="light"] .dealer-rank-inicio,
+:root[data-theme="light"] .dealer-rank-pro,
+:root[data-theme="light"] .dealer-rank-elite,
+:root[data-theme="light"] .dealer-rank-platinum {
+  border-color: rgba(14, 116, 144, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(224, 243, 252, 0.78));
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .admin-chip.success,
+:root[data-theme="light"] .detail-status.success,
+:root[data-theme="light"] .vehicle-card__market--below {
+  border-color: rgba(22, 163, 74, 0.22);
+  background:
+    linear-gradient(180deg, rgba(240, 253, 244, 0.98), rgba(220, 252, 231, 0.82));
+  color: #14532d;
+}
+
+:root[data-theme="light"] .admin-chip.warning,
+:root[data-theme="light"] .admin-chip.orange,
+:root[data-theme="light"] .detail-status.warning,
+:root[data-theme="light"] .vehicle-card__market--above {
+  border-color: rgba(217, 119, 6, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255, 251, 235, 0.98), rgba(254, 243, 199, 0.84));
+  color: #7c2d12;
+}
+
+:root[data-theme="light"] .admin-chip.danger,
+:root[data-theme="light"] .detail-status.danger {
+  border-color: rgba(220, 38, 38, 0.22);
+  background:
+    linear-gradient(180deg, rgba(254, 242, 242, 0.98), rgba(254, 226, 226, 0.82));
+  color: #991b1b;
 }

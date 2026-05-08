@@ -31,6 +31,12 @@
   --ox-green: #22c55e;
   --ox-amber: #f5b84b;
   --ox-red: #ef4444;
+  --ox-primary: var(--ox-cyan);
+  --ox-primary-strong: var(--ox-blue);
+  --ox-primary-soft: rgba(56, 189, 248, 0.14);
+  --ox-success: var(--ox-green);
+  --ox-warning: var(--ox-amber);
+  --ox-danger: var(--ox-red);
 
   --ox-rank-inicio: #b88746;
   --ox-rank-pro: #38bdf8;

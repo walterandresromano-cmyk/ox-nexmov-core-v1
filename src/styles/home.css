@@ -1867,3 +1867,54 @@
     0 12px 30px rgba(33, 48, 71, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
+
+/* oX NEXMOV - Home carousel compact card recovery */
+.ox-home-vehicles-carousel-v3 .vehicle-card {
+  align-self: stretch;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__media {
+  min-height: 178px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__body {
+  gap: 8px;
+  padding: 10px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__facts {
+  gap: 6px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__fact {
+  min-height: 28px;
+  padding-inline: 7px;
+  font-size: 0.56rem;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__price-box {
+  min-height: 56px;
+  padding: 9px 10px;
+  border-radius: 16px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__price {
+  font-size: 1.04rem;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__price-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__actions {
+  gap: 7px;
+  margin-top: 2px;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__btn {
+  min-height: 34px;
+  padding: 0 9px;
+  font-size: 0.56rem;
+  line-height: 1.08;
+}
