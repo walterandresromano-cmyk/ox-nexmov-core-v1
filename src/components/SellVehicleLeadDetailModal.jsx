@@ -53,6 +53,20 @@ function getPriorityLabel(priority) {
   return labels[priority] || "Normal";
 }
 
+function getAssignedDealerPlanValue(lead) {
+  return String(
+    lead?.assigned_dealer_plan ||
+      lead?.assigned_dealer_plan_code ||
+      lead?.dealer_plan ||
+      lead?.dealer_plan_code ||
+      lead?.dealerPlan ||
+      lead?.plan_code ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+}
+
 export default function SellVehicleLeadDetailModal({
   lead,
   onClose,
@@ -74,6 +88,8 @@ export default function SellVehicleLeadDetailModal({
 }, [lead?.admin_dealer_note]);
 
   if (!lead) return null;
+
+  const isPlatinumOpportunity = getAssignedDealerPlanValue(lead) === "platinum";
 
   async function handleSaveNotes() {
     setSavingNotes(true);
@@ -202,6 +218,13 @@ export default function SellVehicleLeadDetailModal({
              <p>
               Seleccioná el dealer que va a recibir esta oportunidad comercial.
              </p>
+
+             {isPlatinumOpportunity && (
+               <div className="sell-lead-platinum-badge">
+                 <span>Oportunidad Platinum</span>
+                 <p>Oportunidad comercial visible para dealer con plan Platinum.</p>
+               </div>
+             )}
 
              <AssignSellVehicleLeadDealer lead={lead} onAssigned={onUpdated} />
             </article>

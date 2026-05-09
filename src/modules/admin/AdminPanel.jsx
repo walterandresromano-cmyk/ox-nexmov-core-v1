@@ -114,6 +114,27 @@ function normalizeText(value) {
   return String(value || "").trim();
 }
 
+function getDealerPlanValue(dealer) {
+  return String(
+    dealer?.planCode ||
+      dealer?.plan_code ||
+      dealer?.plan ||
+      dealer?.subscriptionPlan ||
+      dealer?.subscription_plan ||
+      dealer?.planType ||
+      dealer?.plan_type ||
+      dealer?.rango ||
+      dealer?.rank ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+}
+
+function isDealerPlatinum(dealer) {
+  return getDealerPlanValue(dealer) === "platinum";
+}
+
 export default function AdminPanel({ authProfile }) {
   const [activeModule, setActiveModule] = useState(null);
   const [activeAdminMobileSection, setActiveAdminMobileSection] =
@@ -504,7 +525,7 @@ export default function AdminPanel({ authProfile }) {
     setDealerLogoSuccess("");
     setSuspendDealerError("");
     setDealerPlanForm({
-      planCode: dealer.plan || "inicio",
+      planCode: getDealerPlanValue(dealer) || "inicio",
     });
 
     window.setTimeout(() => {
@@ -526,10 +547,11 @@ export default function AdminPanel({ authProfile }) {
         dealer.commercialName?.toLowerCase().includes(text) ||
         dealer.city?.toLowerCase().includes(text) ||
         dealer.province?.toLowerCase().includes(text) ||
-        dealer.plan?.toLowerCase().includes(text) ||
+        getDealerPlanValue(dealer).includes(text) ||
         dealer.planStatus?.toLowerCase().includes(text);
 
-      const matchesPlan = planFilter === "all" || dealer.plan === planFilter;
+      const matchesPlan =
+        planFilter === "all" || getDealerPlanValue(dealer) === planFilter;
       const matchesStatus =
         statusFilter === "all" || dealer.planStatus === statusFilter;
 
@@ -630,6 +652,39 @@ export default function AdminPanel({ authProfile }) {
   const urgentTickets = tickets.filter(
     (ticket) => ticket.priority === "urgent"
   ).length;
+
+  function getDealerForTicket(ticket) {
+    const ticketDealerId = String(
+      ticket?.dealer_id || ticket?.dealerId || ticket?.dealer || ""
+    ).trim();
+
+    if (ticketDealerId) {
+      const matchById = dealers.find(
+        (dealer) => String(dealer.id) === ticketDealerId
+      );
+
+      if (matchById) return matchById;
+    }
+
+    const ticketDealerName = normalizeText(
+      ticket?.dealer_name || ticket?.dealerName
+    ).toLowerCase();
+
+    if (!ticketDealerName) return null;
+
+    return (
+      dealers.find((dealer) => {
+        const commercialName = normalizeText(dealer.commercialName).toLowerCase();
+        const name = normalizeText(dealer.name).toLowerCase();
+        return commercialName === ticketDealerName || name === ticketDealerName;
+      }) || null
+    );
+  }
+
+  function isTicketFromPlatinumDealer(ticket) {
+    const dealer = getDealerForTicket(ticket);
+    return dealer ? isDealerPlatinum(dealer) : false;
+  }
 
   const activeModuleLabel = {
     [ADMIN_MODULES.DEALERS]: "Dealers",
@@ -825,9 +880,15 @@ export default function AdminPanel({ authProfile }) {
     const limit = permissions.vehicleLimit;
     const days = selectedDealer.currentPeriod?.expiresInDays ?? 0;
     const dealerLogo = selectedDealer.logo || selectedDealer.raw?.logo_url || "";
+    const selectedDealerIsPlatinum = isDealerPlatinum(selectedDealer);
 
     return (
-      <div className="admin-section-block" id="admin-dealer-detail">
+      <div
+        className={`admin-section-block${
+          selectedDealerIsPlatinum ? " admin-dealer-card--platinum" : ""
+        }`}
+        id="admin-dealer-detail"
+      >
         <div className="buyer-section-head">
           <div>
             <h2>{selectedDealer.commercialName}</h2>
@@ -836,6 +897,14 @@ export default function AdminPanel({ authProfile }) {
               {permissions.rankLabel} · Estado{" "}
               {getPlanStatusLabel(selectedDealer.planStatus)}
             </p>
+            {selectedDealerIsPlatinum && (
+              <div className="admin-platinum-chip-row">
+                <span className="admin-dealer-platinum-badge">PLATINUM</span>
+                <span className="admin-platinum-chip">
+                  Publicaciones ilimitadas
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="admin-action-row">
@@ -993,6 +1062,29 @@ export default function AdminPanel({ authProfile }) {
           <div className="auth-message">{dealerLogoSuccess}</div>
         )}
 
+        {selectedDealerIsPlatinum && (
+          <article className="admin-platinum-detail-card">
+            <span className="admin-dealer-platinum-badge">Dealer Platinum</span>
+            <strong>Nivel máximo de presencia dentro de oX NEXMOV.</strong>
+            <p>
+              Lectura operativa para seguimiento comercial de dealers de alto
+              volumen, sin modificar permisos ni prioridades reales.
+            </p>
+            <div className="admin-platinum-chip-row">
+              <span className="admin-platinum-chip">Publicaciones ilimitadas</span>
+              <span className="admin-platinum-chip">Señales completas</span>
+              <span className="admin-platinum-chip">
+                Oportunidades comerciales habilitadas
+              </span>
+              <span className="admin-platinum-chip">
+                Métricas incluidas/preparadas
+              </span>
+              <span className="admin-platinum-chip">Soporte prioritario</span>
+              <span className="admin-platinum-chip">Herramientas avanzadas</span>
+            </div>
+          </article>
+        )}
+
         <div
           style={{
             marginTop: "12px",
@@ -1045,10 +1137,14 @@ export default function AdminPanel({ authProfile }) {
           <article className="admin-kpi-card">
             <span>Cupo utilizado</span>
             <strong>
-              {used} / {formatLimit(limit)}
+              {selectedDealerIsPlatinum
+                ? "Publicaciones ilimitadas"
+                : `${used} / ${formatLimit(limit)}`}
             </strong>
             <p>
-              {limit === Infinity
+              {selectedDealerIsPlatinum
+                ? `${used} publicaciones creadas en el periodo.`
+                : limit === Infinity
                 ? "El plan no tiene límite de publicaciones."
                 : `${Math.max(limit - used, 0)} publicaciones disponibles.`}
             </p>
@@ -1327,14 +1423,23 @@ export default function AdminPanel({ authProfile }) {
                 const used = dealer.currentPeriod?.publicationsUsed || 0;
                 const limit = permissions.vehicleLimit;
                 const days = dealer.currentPeriod?.expiresInDays ?? 0;
+                const dealerIsPlatinum = isDealerPlatinum(dealer);
 
                 return (
-                  <tr key={dealer.id}>
+                  <tr
+                    key={dealer.id}
+                    className={dealerIsPlatinum ? "admin-dealer-card--platinum" : ""}
+                  >
                     <td>
                       <strong>{dealer.commercialName}</strong>
                       <span>
                         {dealer.city}, {dealer.province}
                       </span>
+                      {dealerIsPlatinum && (
+                        <span className="admin-dealer-platinum-badge">
+                          PLATINUM
+                        </span>
+                      )}
                     </td>
 
                     <td>
@@ -1352,15 +1457,22 @@ export default function AdminPanel({ authProfile }) {
                         <span className={getPlanStatusClass(dealer.planStatus)}>
                           {getPlanStatusLabel(dealer.planStatus)}
                         </span>
+                        {dealerIsPlatinum && (
+                          <span className="admin-platinum-chip">
+                            Publicaciones ilimitadas
+                          </span>
+                        )}
                       </div>
                     </td>
 
                     <td>
                       <strong>
-                        {used} / {formatLimit(limit)}
+                        {dealerIsPlatinum
+                          ? "Publicaciones ilimitadas"
+                          : `${used} / ${formatLimit(limit)}`}
                       </strong>
                       <span>
-                        {limit === Infinity
+                        {dealerIsPlatinum ? `${used} creadas en el periodo` : limit === Infinity
                           ? "Sin límite"
                           : `${Math.max(limit - used, 0)} restantes`}
                       </span>
@@ -1385,9 +1497,17 @@ export default function AdminPanel({ authProfile }) {
 
                         {permissions.marketIntelligence && <span>Inteligencia</span>}
 
+                        {dealerIsPlatinum && (
+                          <>
+                            <span>Señales completas</span>
+                            <span>Soporte prioritario</span>
+                          </>
+                        )}
+
                         {!permissions.sellVehicleLeads &&
                           !dealer.benefits?.extraPublicationQuota &&
-                          !permissions.marketIntelligence && <span>Base</span>}
+                          !permissions.marketIntelligence &&
+                          !dealerIsPlatinum && <span>Base</span>}
                       </div>
                     </td>
 
@@ -1629,8 +1749,14 @@ export default function AdminPanel({ authProfile }) {
               </thead>
 
               <tbody>
-                {filteredTickets.map((ticket) => (
-                  <tr key={ticket.ticket_id}>
+                {filteredTickets.map((ticket) => {
+                  const ticketIsPlatinum = isTicketFromPlatinumDealer(ticket);
+
+                  return (
+                  <tr
+                    key={ticket.ticket_id}
+                    className={ticketIsPlatinum ? "admin-dealer-card--platinum" : ""}
+                  >
                     <td>
                       <strong>{formatDateTime(ticket.created_at)}</strong>
                       <span>Ticket #{ticket.ticket_id}</span>
@@ -1639,6 +1765,11 @@ export default function AdminPanel({ authProfile }) {
                     <td>
                       <strong>{ticket.dealer_name || "Sin dealer"}</strong>
                       <span>{ticket.category}</span>
+                      {ticketIsPlatinum && (
+                        <span className="admin-ticket-platinum-priority">
+                          Prioridad Platinum
+                        </span>
+                      )}
                     </td>
 
                     <td>
@@ -1681,7 +1812,8 @@ export default function AdminPanel({ authProfile }) {
                       </button>
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>

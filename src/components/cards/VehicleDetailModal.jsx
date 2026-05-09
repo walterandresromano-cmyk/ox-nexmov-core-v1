@@ -95,6 +95,7 @@ export default function VehicleDetailModal({
   favoriteActive,
 }) {
   const permissions = getEffectiveDealerPermissions(dealer);
+  const isPlatinumDealer = permissions.rankTheme === "platinum";
   const delta = getMarketDelta(vehicle);
   const images = useMemo(() => getVehicleImages(vehicle), [vehicle]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -429,6 +430,31 @@ export default function VehicleDetailModal({
                 {dealer.city}, {dealer.province}
               </p>
             </div>
+
+            {isPlatinumDealer && (
+              <div className="vehicle-detail-platinum-block">
+                <span className="vehicle-detail-platinum-kicker">
+                  Dealer Platinum
+                </span>
+                <strong className="vehicle-detail-platinum-title">
+                  Máxima presencia dentro de oX NEXMOV.
+                </strong>
+                <p>
+                  Dealer con máxima presencia dentro de la red oX NEXMOV.
+                </p>
+                <div className="vehicle-detail-platinum-chips">
+                  <span className="vehicle-detail-platinum-chip">
+                    Publicaciones de alto volumen
+                  </span>
+                  <span className="vehicle-detail-platinum-chip">
+                    Señales comerciales completas
+                  </span>
+                  <span className="vehicle-detail-platinum-chip">
+                    Herramientas avanzadas
+                  </span>
+                </div>
+              </div>
+            )}
 
             <div className="detail-notes-box">
               <span>Detalles del dealer</span>

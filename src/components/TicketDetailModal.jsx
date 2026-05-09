@@ -47,6 +47,20 @@ function normalizeRole(role) {
   return value;
 }
 
+function getTicketPlanValue(ticket) {
+  return String(
+    ticket?.dealer_plan ||
+      ticket?.dealer_plan_code ||
+      ticket?.dealerPlan ||
+      ticket?.plan_code ||
+      ticket?.plan ||
+      ticket?.rank ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+}
+
 export default function TicketDetailModal({
   ticket,
   onClose,
@@ -67,6 +81,8 @@ export default function TicketDetailModal({
   }, [ticket?.admin_notes]);
 
   if (!ticket) return null;
+
+  const isPlatinumTicket = getTicketPlanValue(ticket) === "platinum";
 
   async function handleSaveSupportNotes() {
     setSavingNotes(true);
@@ -125,6 +141,12 @@ export default function TicketDetailModal({
             <span>Dealer</span>
             <strong>{ticket.dealer_name || "Sin dealer asociado"}</strong>
             <p>ID dealer: {ticket.dealer_id || "No informado"}</p>
+            {isPlatinumTicket && (
+              <div className="ticket-platinum-priority-note">
+                <span>Prioridad Platinum</span>
+                <p>Dealer Platinum identificado para seguimiento interno.</p>
+              </div>
+            )}
           </article>
 
           <article className="ticket-detail-card">

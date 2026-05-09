@@ -30,9 +30,10 @@ import { listSellVehicleLeadsForCurrentDealer } from "../../services/sellVehicle
 
 const DEALER_MOBILE_SECTIONS = [
   { id: "home", label: "Inicio" },
-  { id: "vehicles", label: "Publicaciones" },
+  { id: "publish", label: "Publicar" },
+  { id: "vehicles", label: "Inventario" },
   { id: "leads", label: "Leads" },
-  { id: "tickets", label: "Tickets" },
+  { id: "tickets", label: "Soporte" },
   { id: "plan", label: "Mi plan" },
 ];
 
@@ -173,6 +174,48 @@ function getPublishBlockDetail(status, remaining) {
 function getRemainingQuota(limit, used) {
   if (limit === Infinity) return "Ilimitado";
   return Math.max(limit - used, 0);
+}
+
+function getPlanCapacityLabel({ isPlatinum, used, limit }) {
+  if (isPlatinum) return "Publicaciones ilimitadas";
+  return `${used} / ${formatLimit(limit)}`;
+}
+
+function getPlanSecondaryCapacityLabel({ isPlatinum, used, remaining }) {
+  if (isPlatinum) {
+    return `${used} publicaciones creadas en este período`;
+  }
+
+  return `Disponibles: ${remaining}.`;
+}
+
+function getPlanBenefitBadges(permissions, isPlatinum) {
+  if (isPlatinum) {
+    return [
+      "Publicaciones ilimitadas",
+      "Señales completas",
+      "Métricas completas incluidas",
+      "Financiación completa",
+      "Oportunidades comerciales",
+      "Soporte prioritario",
+    ];
+  }
+
+  const badges = [
+    `${formatLimit(permissions.vehicleLimit)} publicaciones`,
+    `Señales ${permissions.badgeVisibility}`,
+    `Métricas ${permissions.metricsLevel}`,
+  ];
+
+  if (permissions.fullFinancingTools) {
+    badges.push("Financiación completa");
+  }
+
+  if (permissions.sellVehicleLeads) {
+    badges.push("Oportunidades comerciales");
+  }
+
+  return badges;
 }
 
 function formatDateTime(dateValue) {
@@ -403,7 +446,7 @@ export default function DealerPanel({ authProfile }) {
       inventory: "vehicles",
       leads: "leads",
       support: "tickets",
-      publish: "home",
+      publish: "publish",
       sellVehicle: "leads",
       urgent: "vehicles",
       financing: "plan",
@@ -420,6 +463,11 @@ export default function DealerPanel({ authProfile }) {
 
     if (sectionId === "home" || sectionId === "plan") {
       setActiveDealerModule("summary");
+      return;
+    }
+
+    if (sectionId === "publish") {
+      setActiveDealerModule("publish");
       return;
     }
 
@@ -506,17 +554,24 @@ export default function DealerPanel({ authProfile }) {
   const publishCheck = canDealerPublish(dealer);
   const used = dealer.currentPeriod?.publicationsUsed || 0;
   const limit = permissions.vehicleLimit;
+  const isPlatinum = permissions?.planId === "platinum";
   const remaining = getRemainingQuota(limit, used);
   const expiresInDays = dealer.currentPeriod?.expiresInDays ?? 0;
   const planStatusDescription = getPlanStatusDescription(dealer.planStatus);
   const publishBlockReason = getPublishBlockReason(dealer.planStatus, publishCheck.allowed, remaining);
   const publishBlockDetail = getPublishBlockDetail(dealer.planStatus, remaining);
   const extraQuota = Number(dealer.benefits?.extraPublicationQuota || 0);
-  const quotaDescription =
-    limit === Infinity
-      ? "Publicaciones ilimitadas mientras el plan está vigente."
-      : `${used} de ${formatLimit(limit)} publicaciones usadas en este período.`;
+  const capacityLabel = getPlanCapacityLabel({ isPlatinum, used, limit });
+  const secondaryCapacityLabel = getPlanSecondaryCapacityLabel({
+    isPlatinum,
+    used,
+    remaining,
+  });
+  const quotaDescription = isPlatinum
+    ? `${capacityLabel}. ${secondaryCapacityLabel}.`
+    : `${used} de ${formatLimit(limit)} publicaciones usadas en este período.`;
   const dealerLogo = dealer.logo || dealer.raw?.logo_url || "";
+  const planBenefitBadges = getPlanBenefitBadges(permissions, isPlatinum);
 
   async function handleSaveDealerWhatsapp(event) {
     event?.preventDefault?.();
@@ -637,6 +692,31 @@ export default function DealerPanel({ authProfile }) {
     (vehicle) => vehicle.review_status === "needs_review"
   ).length;
 
+  const financingVehiclesCount = dealerVehicles.filter(
+    (vehicle) => vehicle.financing || vehicle.hasFinancing
+  ).length;
+
+  const marketReferenceVehiclesCount = dealerVehicles.filter(
+    (vehicle) =>
+      Number(
+        vehicle.marketReferencePrice ||
+          vehicle.market_reference_price ||
+          vehicle.avg ||
+          0
+      ) > 0
+  ).length;
+
+  const photoReadyVehiclesCount = dealerVehicles.filter((vehicle) => {
+    const images = vehicle.images || vehicle.images_json || [];
+    return Boolean(
+      vehicle.mainImageUrl ||
+        vehicle.main_image_url ||
+        vehicle.imageUrl ||
+        vehicle.image_url ||
+        (Array.isArray(images) && images.length > 0)
+    );
+  }).length;
+
   const newLeadsCount = leads.filter((lead) => lead.crm_status === "new").length;
 
   const negotiationLeadsCount = leads.filter(
@@ -674,6 +754,11 @@ export default function DealerPanel({ authProfile }) {
             <span>{dealer.commercialName}</span>
             <strong>{permissions.rankLabel}</strong>
             <p>{getPlanStatusLabel(dealer.planStatus)}</p>
+            {isPlatinum && (
+              <span className="dealer-mobile-platinum-pill">
+                Platinum · publicaciones ilimitadas
+              </span>
+            )}
           </div>
 
           <button
@@ -686,7 +771,7 @@ export default function DealerPanel({ authProfile }) {
               }
             }}
           >
-            + Alta
+            Alta de vehículo
           </button>
         </div>
 
@@ -705,19 +790,15 @@ export default function DealerPanel({ authProfile }) {
 
         <div className="dealer-mobile-kpi-grid">
           <article className="dealer-mobile-kpi-card">
-            <span>Publicaciones</span>
-            <strong>{dealerVehicles.length}</strong>
+            <span>Activas</span>
+            <strong>{activeVehiclesCount}</strong>
             <p>{activeVehiclesCount} activas</p>
           </article>
 
           <article className="dealer-mobile-kpi-card">
-            <span>Cupo</span>
-            <strong>
-              {limit === Infinity ? "Ilimitado" : `${used}/${formatLimit(limit)}`}
-            </strong>
-            <p>
-              {limit === Infinity ? "Plan vigente" : `${remaining} disponibles`}
-            </p>
+            <span>Plan</span>
+            <strong>{isPlatinum ? "Ilimitado" : `${used}/${formatLimit(limit)}`}</strong>
+            <p>{isPlatinum ? `${used} creadas` : `${remaining} disponibles`}</p>
           </article>
 
           <article className="dealer-mobile-kpi-card">
@@ -759,7 +840,11 @@ export default function DealerPanel({ authProfile }) {
         </div>
 
         <div className="dealer-mobile-plan-grid">
-          <article className={`dealer-mobile-plan-card rank-${permissions.rankTheme}`}>
+          <article
+            className={`dealer-mobile-plan-card rank-${permissions.rankTheme}${
+              isPlatinum ? " dealer-plan-platinum-card" : ""
+            }`}
+          >
             <span>Plan actual</span>
             <strong>{permissions.rankLabel}</strong>
             <p>
@@ -775,14 +860,8 @@ export default function DealerPanel({ authProfile }) {
 
           <article className="dealer-mobile-plan-card">
             <span>Cupo usado</span>
-            <strong>
-              {used} / {formatLimit(limit)}
-            </strong>
-            <p>
-              {limit === Infinity
-                ? "Publicaciones ilimitadas mientras el plan está vigente."
-                : `Disponibles: ${remaining}.`}
-            </p>
+            <strong>{capacityLabel}</strong>
+            <p>{secondaryCapacityLabel}</p>
           </article>
 
           <article className="dealer-mobile-plan-card">
@@ -801,10 +880,36 @@ export default function DealerPanel({ authProfile }) {
 
           {renderDealerWhatsappContactCard()}
 
+          <article
+            className={`dealer-mobile-plan-card dealer-plan-benefits-card${
+              isPlatinum ? " dealer-plan-platinum-card" : ""
+            }`}
+          >
+            <span>Beneficios de tu plan</span>
+            <strong>{isPlatinum ? "Nivel máximo" : permissions.planLabel}</strong>
+            <p>
+              {isPlatinum
+                ? "Máxima presencia para operaciones de alto volumen."
+                : "Herramientas comerciales disponibles según tu plan."}
+            </p>
+            <div className="dealer-plan-benefits-grid">
+              {planBenefitBadges.map((badge) => (
+                <span key={badge} className="dealer-plan-benefit-chip">
+                  {badge}
+                </span>
+              ))}
+            </div>
+          </article>
+
           <article className="dealer-mobile-plan-card">
             <span>Soporte</span>
             <strong>Admin</strong>
             <p>Tickets para plan, cupo, leads o publicaciones.</p>
+            {isPlatinum && (
+              <span className="dealer-platinum-priority-badge">
+                Prioridad Platinum
+              </span>
+            )}
             <button
               type="button"
               className="table-action-btn"
@@ -824,11 +929,20 @@ export default function DealerPanel({ authProfile }) {
          <div className="panel-head-row">
   <div>
     <p className="eyebrow">Panel dealer único</p>
-    <h1>Panel dealer</h1>
+    <h1>{isPlatinum ? "Panel Dealer Platinum" : "Panel dealer"}</h1>
     <p>
-      Un único panel completo. Las funciones se habilitan según plan,
-      estado de cuenta y beneficios otorgados por admin.
+      {isPlatinum ? "Máxima presencia para operaciones de alto volumen." : "Un único panel completo. Las funciones se habilitan según plan,"}
+      {!isPlatinum && " estado de cuenta y beneficios otorgados por admin."}
     </p>
+
+    {isPlatinum && (
+      <div className="dealer-platinum-header-badges">
+        <span className="dealer-platinum-badge">PLATINUM</span>
+        <span className="dealer-platinum-badge dealer-platinum-badge--soft">
+          Publicaciones ilimitadas
+        </span>
+      </div>
+    )}
 
     {authProfile && (
       <p className="admin-session-note">
@@ -930,8 +1044,107 @@ export default function DealerPanel({ authProfile }) {
           activeDealerModule === "summary" &&
           renderDealerMobilePlan()}
 
+        {activeDealerModule === "summary" && (
+          <section className="dealer-dashboard-shell" aria-label="Resumen operativo dealer">
+            <article className="dealer-dashboard-primary-card">
+              <span>Acción principal</span>
+              <h2>Alta de vehículo</h2>
+              <p>Cargá una unidad con fotos, precio, financiación y datos comerciales.</p>
+              <div className="dealer-dashboard-primary-meta">
+                <strong>{activeVehiclesCount} activas</strong>
+                <span>{dealerVehicles.length} publicaciones cargadas</span>
+              </div>
+              <button
+                type="button"
+                className="primary-action"
+                disabled={!publishCheck.allowed}
+                onClick={() => {
+                  if (publishCheck.allowed) openModule("publish");
+                }}
+              >
+                Publicar vehículo
+              </button>
+              {!publishCheck.allowed && (
+                <small className="dealer-module-lock-reason">
+                  {publishBlockReason || "No disponible por el estado del plan."}
+                </small>
+              )}
+            </article>
+
+            <div className="dealer-dashboard-ops">
+              <article className="dealer-dashboard-mini-card">
+                <span>Inventario</span>
+                <strong>{activeVehiclesCount} activas</strong>
+                <p>{reviewVehiclesCount} en revisión</p>
+                <button type="button" onClick={() => openModule("inventory")}>
+                  Abrir inventario
+                </button>
+              </article>
+
+              <article className="dealer-dashboard-mini-card">
+                <span>Leads</span>
+                <strong>{newLeadsCount} nuevos</strong>
+                <p>{leads.length} consultas totales</p>
+                <button type="button" onClick={() => openModule("leads")}>
+                  Abrir leads
+                </button>
+              </article>
+
+              <article className="dealer-dashboard-mini-card">
+                <span>Soporte</span>
+                <strong>{openTicketsCount} abiertos</strong>
+                <p>{isPlatinum ? "Prioridad Platinum visible" : "Seguimiento interno"}</p>
+                <button type="button" onClick={() => openModule("support")}>
+                  Abrir soporte
+                </button>
+              </article>
+
+              <article className="dealer-dashboard-mini-card">
+                <span>Oportunidades</span>
+                <strong>{sellVehicleLeads.length}</strong>
+                <p>Vender mi vehículo asignadas</p>
+                <button
+                  type="button"
+                  disabled={!permissions.sellVehicleLeads}
+                  onClick={() => {
+                    if (permissions.sellVehicleLeads) openModule("sellVehicle");
+                  }}
+                >
+                  Ver oportunidades
+                </button>
+              </article>
+            </div>
+
+            <aside className="dealer-dashboard-account">
+              <article
+                className={`dealer-dashboard-plan-card${
+                  isPlatinum ? " dealer-dashboard-plan-card--platinum" : ""
+                }`}
+              >
+                <span>{isPlatinum ? "Platinum · ilimitado" : "Mi plan"}</span>
+                <strong>{isPlatinum ? "Publicaciones ilimitadas" : capacityLabel}</strong>
+                <p>{secondaryCapacityLabel}</p>
+                <div className="dealer-dashboard-chip-row">
+                  {(isPlatinum
+                    ? ["Señales completas", "Soporte prioritario", "Herramientas avanzadas"]
+                    : planBenefitBadges.slice(0, 3)
+                  ).map((badge) => (
+                    <span key={badge}>{badge}</span>
+                  ))}
+                </div>
+              </article>
+
+              {renderDealerWhatsappContactCard()}
+            </aside>
+          </section>
+        )}
+
         <div className="dealer-status-grid">
-          <article className={`dealer-status-card rank-${permissions.rankTheme}`}>
+          <article
+            className={`dealer-status-card rank-${permissions.rankTheme}${
+              isPlatinum ? " dealer-plan-platinum-card" : ""
+            }`}
+          >
             <span>Plan actual</span>
             <strong>{permissions.rankLabel}</strong>
             <p>
@@ -949,18 +1162,57 @@ export default function DealerPanel({ authProfile }) {
 
           <article className="dealer-status-card">
             <span>Cupo usado en este período</span>
-            <strong>
-              {used} / {formatLimit(limit)}
-            </strong>
-            <p>
-              {limit === Infinity
-                ? "Publicaciones ilimitadas mientras el plan está vigente."
-                : `Publicaciones disponibles: ${remaining}.`}
-            </p>
+            <strong>{capacityLabel}</strong>
+            <p>{secondaryCapacityLabel}</p>
             {extraQuota > 0 && (
               <p>Cupo extra temporal: {extraQuota} publicaciones.</p>
             )}
           </article>
+
+          <article
+            className={`dealer-status-card dealer-plan-benefits-card${
+              isPlatinum ? " dealer-plan-platinum-card" : ""
+            }`}
+          >
+            <span>Beneficios de tu plan</span>
+            <strong>{isPlatinum ? "Nivel máximo" : permissions.planLabel}</strong>
+            <p>
+              {isPlatinum
+                ? "Métricas completas incluidas en tu plan. Módulo avanzado preparado para próximas fases."
+                : "Capacidades comerciales habilitadas para este período."}
+            </p>
+            <div className="dealer-plan-benefits-grid">
+              {planBenefitBadges.map((badge) => (
+                <span key={badge} className="dealer-plan-benefit-chip">
+                  {badge}
+                </span>
+              ))}
+            </div>
+          </article>
+
+          {isPlatinum && (
+            <article className="dealer-status-card platinum-operational-card">
+              <span>Señales operativas de tu stock</span>
+              <strong>Lectura Platinum</strong>
+              <p>
+                Señales calculadas solo con datos cargados en tus publicaciones.
+              </p>
+              <div className="platinum-operational-chip-row">
+                <span className="platinum-operational-chip">
+                  {financingVehiclesCount} con financiación
+                </span>
+                <span className="platinum-operational-chip">
+                  {marketReferenceVehiclesCount} con referencia de mercado
+                </span>
+                <span className="platinum-operational-chip">
+                  {photoReadyVehiclesCount} con fotos
+                </span>
+                <span className="platinum-operational-chip">
+                  {reviewVehiclesCount} en revisión
+                </span>
+              </div>
+            </article>
+          )}
 
           <article className="dealer-status-card">
             <span>Estado comercial</span>
@@ -1003,6 +1255,11 @@ export default function DealerPanel({ authProfile }) {
             <span>Tickets abiertos</span>
             <strong>{openTicketsCount}</strong>
             <p>Consultas internas pendientes o en proceso.</p>
+            {isPlatinum && (
+              <span className="dealer-platinum-priority-badge">
+                Prioridad Platinum
+              </span>
+            )}
           </article>
 
           <article className="dealer-status-card">
@@ -1081,28 +1338,55 @@ export default function DealerPanel({ authProfile }) {
               <button type="button">Abrir leads</button>
             </article>
 
-            <article className="dealer-module-card dealer-module-card--locked">
+            <article
+              className={`dealer-module-card dealer-module-card--locked${
+                isPlatinum ? " dealer-platinum-tool-card" : ""
+              }`}
+            >
               <h3>Financiación</h3>
               <p>
-                {permissions.fullFinancingTools
+                {isPlatinum
+                  ? "Incluido en Platinum. Herramientas completas preparadas para configuración comercial avanzada."
+                  : permissions.fullFinancingTools
                   ? "Financiación propia, bancaria y simulador visible al comprador."
                   : "Financiación básica informada. Herramientas completas disponibles en planes superiores."}
               </p>
+              {isPlatinum && (
+                <div className="platinum-operational-chip-row">
+                  <span className="platinum-operational-chip">Visualizaciones</span>
+                  <span className="platinum-operational-chip">Leads</span>
+                  <span className="platinum-operational-chip">WhatsApp</span>
+                  <span className="platinum-operational-chip">Comparaciones</span>
+                  <span className="platinum-operational-chip">
+                    Publicaciones activas
+                  </span>
+                </div>
+              )}
               <button type="button" disabled>
-                Proximamente
-              </button>
-            </article>
-
-            <article className="dealer-module-card dealer-module-card--locked">
-              <h3>Métricas</h3>
-              <p>Nivel habilitado: {permissions.metricsLevel}</p>
-              <button type="button" disabled>
-                Proximamente
+                {isPlatinum ? "Incluido en Platinum" : "Proximamente"}
               </button>
             </article>
 
             <article
-              className="dealer-module-card clickable-module-card"
+              className={`dealer-module-card dealer-module-card--locked${
+                isPlatinum ? " dealer-platinum-tool-card" : ""
+              }`}
+            >
+              <h3>Métricas</h3>
+              <p>
+                {isPlatinum
+                  ? "Métricas completas incluidas en tu plan. Módulo avanzado preparado para próximas fases."
+                  : `Nivel habilitado: ${permissions.metricsLevel}`}
+              </p>
+              <button type="button" disabled>
+                {isPlatinum ? "Preparado para próximas fases" : "Proximamente"}
+              </button>
+            </article>
+
+            <article
+              className={`dealer-module-card clickable-module-card${
+                isPlatinum ? " dealer-platinum-tool-card" : ""
+              }`}
               onClick={() => {
                 if (permissions.sellVehicleLeads) {
                   openModule("sellVehicle");
@@ -1112,9 +1396,16 @@ export default function DealerPanel({ authProfile }) {
               <h3>Vender mi vehículo</h3>
               <p>
                 {permissions.sellVehicleLeads
-                  ? "Habilitado para recibir oportunidades asignadas por admin."
+                  ? isPlatinum
+                    ? "Habilitado para oportunidades comerciales asignadas por admin. Sin asignación automática simulada."
+                    : "Habilitado para recibir oportunidades asignadas por admin."
                   : "No habilitado por defecto. Admin puede activarlo como beneficio."}
               </p>
+              {isPlatinum && (
+                <span className="platinum-opportunity-state">
+                  {sellVehicleLeads.length} oportunidades reales asignadas
+                </span>
+              )}
               <button type="button" disabled={!permissions.sellVehicleLeads}>
                 Ver oportunidades
               </button>
@@ -1141,14 +1432,22 @@ export default function DealerPanel({ authProfile }) {
             </article>
 
             <article
-              className="dealer-module-card clickable-module-card"
+              className={`dealer-module-card clickable-module-card${
+                isPlatinum ? " dealer-platinum-tool-card" : ""
+              }`}
               onClick={() => openModule("support")}
             >
               <h3>Soporte admin</h3>
               <p>
-                Tickets internos estilo Remedy para resolver consultas sin salir
-                de la plataforma.
+                {isPlatinum
+                  ? "Tus tickets se identifican con prioridad Platinum para seguimiento interno."
+                  : "Tickets internos estilo Remedy para resolver consultas sin salir de la plataforma."}
               </p>
+              {isPlatinum && (
+                <span className="dealer-platinum-priority-badge">
+                  Prioridad Platinum
+                </span>
+              )}
               <button type="button">Abrir soporte</button>
             </article>
           </div>
@@ -1423,6 +1722,17 @@ export default function DealerPanel({ authProfile }) {
               onRefresh={loadSellVehicleLeads}
             />
 
+            {isPlatinum && (
+              <article className="platinum-operational-card platinum-opportunity-state">
+                <span className="dealer-platinum-badge">Oportunidades Platinum</span>
+                <strong>{sellVehicleLeads.length} oportunidades reales asignadas</strong>
+                <p>
+                  Tu plan Platinum está habilitado para oportunidades comerciales.
+                  Las asignaciones dependen del admin y de la operación real.
+                </p>
+              </article>
+            )}
+
             {sellVehicleLeads.length === 0 ? (
               <div className="empty-state">
                 Todavía no tenés oportunidades asignadas de “Vender mi vehículo”.
@@ -1595,7 +1905,7 @@ export default function DealerPanel({ authProfile }) {
             <div className="empty-state">
               El módulo de configuración avanzada de financiación queda
               preparado para la siguiente fase. Las condiciones actuales se
-              cargan desde cada publicaci?n.
+              cargan desde cada publicación.
             </div>
           </div>
         )}
@@ -1609,7 +1919,7 @@ export default function DealerPanel({ authProfile }) {
 
             <div className="empty-state">
               Nivel habilitado: {permissions.metricsLevel}. El módulo de
-              m?tricas avanzadas queda preparado para una fase posterior.
+              métricas avanzadas queda preparado para una fase posterior.
             </div>
           </div>
         )}
