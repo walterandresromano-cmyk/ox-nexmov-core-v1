@@ -4876,6 +4876,168 @@
   line-height: 1.48 !important;
 }
 
+/* oX NEXMOV - Public information pages mobile app refinement */
+@media (max-width: 900px) {
+  .join-network-page,
+  .about-page,
+  .faq-page,
+  .zero-km-page,
+  .sell-vehicle-page,
+  .legal-page {
+    padding-bottom: calc(116px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .join-network-panel,
+  .about-panel,
+  .faq-panel,
+  .zero-km-panel,
+  .sell-vehicle-panel,
+  .legal-card {
+    width: min(100% - 20px, 1180px);
+    padding: 14px;
+    border-radius: 24px;
+  }
+
+  .join-network-hero,
+  .about-hero,
+  .faq-hero {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .join-network-hero-card,
+  .about-hero-card,
+  .faq-hero-card {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .join-network-hero-copy h1,
+  .about-hero-copy h1,
+  .faq-hero-copy h1,
+  .zero-km-panel .ox-public-title,
+  .sell-vehicle-panel > h1,
+  .legal-title {
+    font-size: clamp(1.42rem, 7.2vw, 2rem);
+    line-height: 1.08;
+  }
+
+  .join-network-section,
+  .join-network-problem,
+  .join-network-final,
+  .about-section,
+  .about-final,
+  .faq-section,
+  .faq-final {
+    margin-top: 12px;
+    padding: 15px;
+    border-radius: 20px;
+  }
+
+  .join-network-section-head h2,
+  .join-network-final h2,
+  .about-section-head h2,
+  .about-final h2,
+  .faq-section-head h2,
+  .faq-final h2,
+  .zero-km-info-card h2,
+  .sell-vehicle-info-card h2 {
+    font-size: clamp(1.05rem, 5vw, 1.42rem);
+  }
+
+  .join-network-values,
+  .join-network-proposal-grid,
+  .join-network-plan-section .join-network-plans,
+  .join-network-steps,
+  .about-pillars,
+  .about-vision-grid,
+  .faq-grid,
+  .zero-km-grid,
+  .sell-vehicle-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+
+  .join-network-value-card,
+  .join-network-proposal-card,
+  .join-network-plan-card,
+  .join-network-step-card,
+  .about-pillar-card,
+  .about-vision-card,
+  .faq-card,
+  .zero-km-info-card,
+  .sell-vehicle-info-card,
+  .zero-km-form,
+  .sell-vehicle-form {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .zero-km-info-card,
+  .sell-vehicle-info-card {
+    position: static;
+  }
+
+  .faq-topics {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    margin: 10px 0 12px;
+    scrollbar-width: none;
+  }
+
+  .faq-topics::-webkit-scrollbar {
+    display: none;
+  }
+
+  .faq-topics span {
+    flex: 0 0 auto;
+  }
+
+  .join-network-actions,
+  .join-network-final-actions,
+  .about-final,
+  .faq-final {
+    align-items: stretch;
+  }
+
+  .join-network-actions button,
+  .join-network-final-actions button,
+  .about-final button,
+  .faq-final button,
+  .zero-km-form .primary-action,
+  .sell-vehicle-form .primary-action,
+  .sell-vehicle-panel .primary-action,
+  .legal-actions a,
+  .legal-back-button {
+    width: 100%;
+  }
+
+  .legal-index {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+    padding: 8px;
+  }
+
+  .legal-index a {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .legal-section {
+    padding: 15px;
+    border-radius: 18px;
+  }
+
+  .footer-legal-links {
+    justify-content: flex-start;
+  }
+}
+
 /* oX NEXMOV - Final visual stabilization */
 .ox-search-title-block h1,
 .zero-km-panel h1,

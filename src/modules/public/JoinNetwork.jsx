@@ -1,4 +1,4 @@
-import { DEALER_PLANS } from "../../config/plans.js";
+﻿import { DEALER_PLANS } from "../../config/plans.js";
 
 const dealerSignals = [
   "Dealers verificados",
@@ -108,34 +108,6 @@ const workflowSteps = [
   "Cargás publicaciones.",
   "Recibís consultas trazables.",
   "Gestionás desde tu panel.",
-];
-
-const dealerFaq = [
-  {
-    question: "¿Necesito registrarme para publicar?",
-    answer:
-      "Sí. El alta de dealer permite validar datos comerciales, activar el plan y habilitar la gestión de publicaciones.",
-  },
-  {
-    question: "¿Qué pasa cuando vence el plan?",
-    answer:
-      "Los cupos corresponden al período comercial. Al vencer, las publicaciones pueden pausarse hasta renovar o reactivar el plan.",
-  },
-  {
-    question: "¿Puedo recibir leads de vendedores particulares?",
-    answer:
-      "Según el plan, el dealer puede acceder a oportunidades vinculadas a usuarios que quieren vender su vehículo.",
-  },
-  {
-    question: "¿El comprador puede comparar mis vehículos?",
-    answer:
-      "Sí. Todos los planes permiten que el comprador compare vehículos y decida con más contexto.",
-  },
-  {
-    question: "¿Puedo actualizar mi WhatsApp de contacto?",
-    answer:
-      "Sí. El WhatsApp pertenece al dealer y se usa como canal de contacto para sus publicaciones asociadas.",
-  },
 ];
 
 const planOrder = ["inicio", "pro", "elite", "platinum"];
@@ -313,35 +285,6 @@ export default function JoinNetwork({ onNavigate }) {
           </div>
         </section>
 
-        <section className="join-network-section join-network-no-commission">
-          <div className="join-network-section-head">
-            <p className="eyebrow">Modelo comercial</p>
-            <h2>No cobramos comisión por operación.</h2>
-            <p>
-              Tu inversión está en el plan, no en cada venta. Los cupos
-              corresponden al período comercial; al vencimiento, las
-              publicaciones pueden pausarse y el dealer puede renovar o
-              reactivar su operación.
-            </p>
-          </div>
-        </section>
-
-        <section className="join-network-section join-network-faq">
-          <div className="join-network-section-head">
-            <p className="eyebrow">Dudas frecuentes</p>
-            <h2>Lo esencial antes de solicitar el alta.</h2>
-          </div>
-
-          <div className="join-network-faq-grid">
-            {dealerFaq.map((item) => (
-              <article key={item.question} className="join-network-faq-card">
-                <strong>{item.question}</strong>
-                <p>{item.answer}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
         <section className="join-network-final">
           <div>
             <p className="eyebrow">Próximo paso</p>
@@ -371,3 +314,4 @@ export default function JoinNetwork({ onNavigate }) {
     </section>
   );
 }
+

@@ -1,4 +1,4 @@
-const faqSections = [
+﻿const faqSections = [
   {
     eyebrow: "Compradores",
     title: "Buscar, comparar y consultar vehículos.",
@@ -107,7 +107,50 @@ const faqSections = [
       },
     ],
   },
-];
+  {
+    eyebrow: "Publicaciones y planes",
+    title: "Cupos, visibilidad y reglas claras.",
+    text: "Las publicaciones dependen del plan del dealer y de la información disponible en cada unidad.",
+    items: [
+      {
+        question: "¿Todos los planes permiten comparar vehículos?",
+        answer:
+          "Sí. La comparación es una función útil para el comprador y no se bloquea por plan.",
+      },
+      {
+        question: "¿Qué diferencia a los planes dealer?",
+        answer:
+          "La diferencia está en cupos, señales comerciales, presencia visual, métricas y herramientas operativas.",
+      },
+      {
+        question: "¿Elite es ilimitado?",
+        answer:
+          "No. Elite tiene hasta 50 publicaciones por período. Platinum es el único plan con publicaciones ilimitadas.",
+      },
+    ],
+  },
+  {
+    eyebrow: "Seguridad y datos",
+    title: "Información mínima para operar con trazabilidad.",
+    text: "La plataforma registra datos necesarios para ordenar consultas, soporte y oportunidades comerciales.",
+    items: [
+      {
+        question: "¿Se muestran teléfonos públicamente?",
+        answer:
+          "No. El contacto se habilita mediante flujos trazables y no se exponen teléfonos como dato público innecesario.",
+      },
+      {
+        question: "¿Qué datos se usan para una consulta?",
+        answer:
+          "Nombre, email, teléfono y contexto de la operación, solo para gestionar la oportunidad comercial.",
+      },
+      {
+        question: "¿Puedo revisar políticas legales?",
+        answer:
+          "Sí. Las páginas legales explican términos, privacidad, cookies y canales de contacto institucional.",
+      },
+    ],
+  },];
 
 const quickTopics = [
   "Buscar vehículos",

@@ -1,4 +1,4 @@
-const aboutPillars = [
+﻿const aboutPillars = [
   {
     eyebrow: "Comprador primero",
     title: "Claridad",
@@ -49,29 +49,6 @@ const differences = [
   "Solicitudes de venta",
   "Paneles operativos",
   "Soporte interno",
-];
-
-const networkPreview = [
-  {
-    eyebrow: "Próxima integración",
-    title: "Imagen",
-    text: "El admin podrá cargar la imagen institucional del dealer y esa identidad se verá en su panel y en futuras secciones públicas.",
-  },
-  {
-    eyebrow: "Perfil dealer",
-    title: "Datos",
-    text: "La red podrá mostrar nombre comercial, zona de atención, plan, estado operativo e información institucional relevante.",
-  },
-  {
-    eyebrow: "Red activa",
-    title: "Confianza",
-    text: "Mostrar quiénes forman parte de la red ayuda a construir respaldo, transparencia y presencia comercial.",
-  },
-  {
-    eyebrow: "Crecimiento",
-    title: "Escala",
-    text: "A medida que se incorporen dealers reales, esta sección podrá transformarse en una vidriera institucional de la red.",
-  },
 ];
 
 export default function About({ onNavigate }) {
@@ -151,29 +128,6 @@ export default function About({ onNavigate }) {
           <div className="about-benefits-list">
             {differences.map((item) => (
               <span key={item}>{item}</span>
-            ))}
-          </div>
-        </section>
-
-        <section className="about-section">
-          <div className="about-section-head">
-            <p className="eyebrow">Quiénes trabajan con nosotros</p>
-            <h2>Una red de dealers que iremos mostrando con identidad propia.</h2>
-            <p>
-              Este espacio estará destinado a presentar agencias, concesionarias
-              y vendedores profesionales activos dentro de oX NEXMOV. Cada dealer
-              podrá contar con su imagen institucional, ubicación y presencia
-              dentro de la red.
-            </p>
-          </div>
-
-          <div className="about-pillars">
-            {networkPreview.map((item) => (
-              <article key={item.title} className="about-pillar-card">
-                <span>{item.eyebrow}</span>
-                <strong>{item.title}</strong>
-                <p>{item.text}</p>
-              </article>
             ))}
           </div>
         </section>

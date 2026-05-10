@@ -60,27 +60,80 @@ const LEGAL_CONTENT = {
   },
 };
 
+const LEGAL_ORDER = [
+  "terms",
+  "privacy",
+  "cookies",
+  "consumerDefense",
+  "regret",
+  "serviceCancel",
+];
+
+const LEGAL_IDS = {
+  terms: "terms",
+  privacy: "privacy",
+  cookies: "cookies",
+  consumerDefense: "consumer",
+  regret: "arrepentimiento",
+  serviceCancel: "baja-servicio",
+};
+
 export default function LegalPage({ currentRoute = "terms", onNavigate }) {
-  const content = LEGAL_CONTENT[currentRoute] || LEGAL_CONTENT.terms;
+  const activeRoute = LEGAL_CONTENT[currentRoute] ? currentRoute : "terms";
 
   return (
     <section className="legal-page">
       <div className="legal-shell">
-        <article className="legal-card">
-          <p className="legal-eyebrow">{content.eyebrow}</p>
-          <h1 className="legal-title">{content.title}</h1>
+        <article className="legal-card legal-card--unified">
+          <p className="legal-eyebrow">Legales oX NEXMOV</p>
+          <h1 className="legal-title">Términos y condiciones</h1>
+          <p className="legal-intro">
+            Esta página reúne el marco de uso, privacidad, cookies, defensa del
+            consumidor y solicitudes comerciales vinculadas al servicio.
+          </p>
 
-          <div className="legal-copy">
-            {content.sections.map((section) => (
-              <p key={section}>{section}</p>
+          <nav className="legal-index" aria-label="Índice legal">
+            {LEGAL_ORDER.map((key) => (
+              <a
+                key={key}
+                className={activeRoute === key ? "is-active" : ""}
+                href={`#${LEGAL_IDS[key]}`}
+              >
+                {LEGAL_CONTENT[key].title}
+              </a>
             ))}
-          </div>
+          </nav>
 
-          {content.action && (
-            <div className="legal-actions">
-              <a href={content.action.href}>{content.action.label}</a>
-            </div>
-          )}
+          <div className="legal-sections">
+            {LEGAL_ORDER.map((key) => {
+              const item = LEGAL_CONTENT[key];
+
+              return (
+                <section
+                  key={key}
+                  id={LEGAL_IDS[key]}
+                  className={`legal-section${
+                    activeRoute === key ? " is-active" : ""
+                  }`}
+                >
+                  <p className="legal-eyebrow">{item.eyebrow}</p>
+                  <h2>{item.title}</h2>
+
+                  <div className="legal-copy">
+                    {item.sections.map((section) => (
+                      <p key={section}>{section}</p>
+                    ))}
+                  </div>
+
+                  {item.action && (
+                    <div className="legal-actions">
+                      <a href={item.action.href}>{item.action.label}</a>
+                    </div>
+                  )}
+                </section>
+              );
+            })}
+          </div>
 
           <p className="legal-review-note">
             Texto provisorio y revisable. Para consultas, escribinos a{" "}
