@@ -1093,3 +1093,315 @@
     gap: 8px;
   }
 }
+
+/* oX NEXMOV - Premium search filters refinement */
+.ox-search-page .ox-search-advanced-filters {
+  padding: 14px;
+  border-color: rgba(125, 211, 252, 0.18);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.90));
+  box-shadow:
+    0 24px 68px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.ox-search-page .ox-search-side-head {
+  padding: 4px 2px 8px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.ox-search-page .ox-search-side-head h2 {
+  font-size: 0.86rem;
+  letter-spacing: -0.02em;
+}
+
+.ox-search-page .ox-search-side-head p {
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.62rem;
+}
+
+.ox-search-page .ox-search-side-head button {
+  min-height: 32px;
+  padding: 7px 11px;
+  border-color: rgba(148, 163, 184, 0.20);
+  background: rgba(15, 23, 42, 0.66);
+  color: rgba(226, 232, 240, 0.88);
+}
+
+.ox-search-page .ox-search-side-head button:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+  transform: none;
+}
+
+.ox-search-page .ox-filter-section {
+  gap: 9px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.52), rgba(2, 6, 23, 0.34));
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.ox-search-page .ox-filter-section:first-of-type {
+  padding-top: 12px;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.ox-search-page .ox-filter-section > strong {
+  color: rgba(226, 232, 240, 0.94);
+  font-size: 0.61rem;
+  letter-spacing: 0.105em;
+}
+
+.ox-search-page .ox-filter-section label {
+  gap: 6px;
+  color: rgba(203, 213, 225, 0.80);
+  font-size: 0.58rem;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.ox-search-page .ox-filter-section input,
+.ox-search-page .ox-filter-section select {
+  min-height: 38px;
+  border-color: rgba(148, 163, 184, 0.20);
+  border-radius: 13px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(8, 15, 28, 0.92));
+  color: rgba(248, 250, 252, 0.94);
+  padding: 0 12px;
+  font-size: 0.68rem;
+  font-weight: 820;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 8px 18px rgba(0, 0, 0, 0.10);
+}
+
+.ox-search-page .ox-filter-section select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 34px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(125, 211, 252, 0.92) 50%),
+    linear-gradient(135deg, rgba(125, 211, 252, 0.92) 50%, transparent 50%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(8, 15, 28, 0.92));
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 13px) 52%,
+    0 0;
+  background-size:
+    5px 5px,
+    5px 5px,
+    100% 100%;
+  background-repeat: no-repeat;
+}
+
+.ox-search-page .ox-filter-section select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.ox-search-page .ox-filter-section input::placeholder {
+  color: rgba(148, 163, 184, 0.72);
+}
+
+.ox-search-page .ox-filter-section input:hover,
+.ox-search-page .ox-filter-section select:hover {
+  border-color: rgba(125, 211, 252, 0.34);
+}
+
+.ox-search-page .ox-filter-section input:focus,
+.ox-search-page .ox-filter-section select:focus,
+.ox-search-page .ox-filter-section input:focus-visible,
+.ox-search-page .ox-filter-section select:focus-visible {
+  border-color: rgba(56, 189, 248, 0.58);
+  box-shadow:
+    0 0 0 3px rgba(56, 189, 248, 0.12),
+    0 12px 24px rgba(14, 165, 233, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  outline: none;
+}
+
+.ox-search-page .ox-filter-section input[type="number"]::-webkit-outer-spin-button,
+.ox-search-page .ox-filter-section input[type="number"]::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.ox-search-page .ox-filter-section input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.ox-search-page .ox-filter-two {
+  gap: 8px;
+}
+
+.ox-search-page .ox-filter-shortcuts div {
+  gap: 7px;
+}
+
+.ox-search-page .ox-filter-shortcuts button {
+  min-height: 30px;
+  border-color: rgba(125, 211, 252, 0.18);
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.13), rgba(37, 99, 235, 0.08));
+  color: rgba(226, 232, 240, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.ox-search-page .ox-search-update-btn {
+  min-height: 38px;
+  border-color: rgba(125, 211, 252, 0.36);
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  box-shadow: 0 14px 32px rgba(37, 99, 235, 0.22);
+}
+
+:root[data-theme="light"] .ox-search-page .ox-search-advanced-filters {
+  border-color: rgba(14, 116, 144, 0.16);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.96), transparent 34%),
+    radial-gradient(circle at 88% 12%, rgba(125, 211, 252, 0.20), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(225, 243, 252, 0.86));
+  box-shadow:
+    0 22px 58px rgba(15, 23, 42, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+:root[data-theme="light"] .ox-search-page .ox-search-side-head {
+  border-bottom-color: rgba(14, 116, 144, 0.12);
+}
+
+:root[data-theme="light"] .ox-search-page .ox-search-side-head h2,
+:root[data-theme="light"] .ox-search-page .ox-filter-section > strong {
+  color: #082f49;
+}
+
+:root[data-theme="light"] .ox-search-page .ox-search-side-head p {
+  color: rgba(15, 23, 42, 0.62);
+}
+
+:root[data-theme="light"] .ox-search-page .ox-search-side-head button {
+  border-color: rgba(14, 116, 144, 0.16);
+  background: rgba(255, 255, 255, 0.78);
+  color: #0f2537;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+}
+
+:root[data-theme="light"] .ox-search-page .ox-filter-section {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(232, 246, 253, 0.70));
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.065),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
+}
+
+:root[data-theme="light"] .ox-search-page .ox-filter-section label {
+  color: rgba(8, 47, 73, 0.74);
+}
+
+:root[data-theme="light"] .ox-search-page .ox-filter-section input,
+:root[data-theme="light"] .ox-search-page .ox-filter-section select {
+  border-color: rgba(14, 116, 144, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 255, 0.92));
+  color: #0f2537;
+  box-shadow:
+    0 8px 18px rgba(15, 23, 42, 0.055),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+:root[data-theme="light"] .ox-search-page .ox-filter-section select {
+  background-image:
+    linear-gradient(45deg, transparent 50%, #0e7490 50%),
+    linear-gradient(135deg, #0e7490 50%, transparent 50%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 255, 0.92));
+}
+
+:root[data-theme="light"] .ox-search-page .ox-filter-section select option {
+  background: #f8fcff;
+  color: #0f2537;
+}
+
+:root[data-theme="light"] .ox-search-page .ox-filter-shortcuts button {
+  border-color: rgba(14, 116, 144, 0.16);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(224, 242, 254, 0.78));
+  color: #0f2537;
+}
+
+/* oX NEXMOV - Premium search filters mobile refinement */
+@media (max-width: 760px) {
+  .ox-search-page .ox-search-mobile-filter-toggle {
+    min-height: 48px;
+    padding: 11px 13px;
+    border-color: rgba(125, 211, 252, 0.30);
+    border-radius: 18px;
+    background:
+      linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(15, 23, 42, 0.88));
+    box-shadow:
+      0 16px 38px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .ox-search-page .ox-search-mobile-filter-toggle small {
+    font-size: 0.68rem;
+  }
+
+  .ox-search-page .ox-search-filters-panel {
+    gap: 8px;
+  }
+
+  .ox-search-page .ox-search-advanced-filters {
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  .ox-search-page .ox-search-side-head {
+    padding-bottom: 9px;
+  }
+
+  .ox-search-page .ox-filter-section {
+    gap: 8px;
+    margin-top: 8px;
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .ox-search-page .ox-filter-section input,
+  .ox-search-page .ox-filter-section select {
+    min-height: 42px;
+    font-size: 16px;
+  }
+
+  .ox-search-page .ox-filter-section > strong {
+    font-size: 0.58rem;
+  }
+
+  .ox-search-page .ox-filter-section label {
+    font-size: 0.55rem;
+  }
+
+  .ox-search-page .ox-filter-shortcuts button {
+    min-height: 32px;
+  }
+
+  :root[data-theme="light"] .ox-search-page .ox-search-mobile-filter-toggle {
+    border-color: rgba(14, 116, 144, 0.16);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(224, 242, 254, 0.86));
+    color: #082f49;
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+  }
+
+  :root[data-theme="light"] .ox-search-page .ox-search-mobile-filter-toggle small {
+    color: rgba(15, 23, 42, 0.58);
+  }
+}
