@@ -85,6 +85,103 @@ function isVehicleReserved(vehicle) {
   );
 }
 
+const MAINTENANCE_SOURCE_KEYS = [
+  "maintenance",
+  "maintenance_info",
+  "maintenanceInfo",
+];
+
+function getMaintenanceValue(vehicle, ...keys) {
+  const sources = [
+    vehicle,
+    vehicle?.raw,
+    ...MAINTENANCE_SOURCE_KEYS.map((key) => vehicle?.[key]),
+    ...MAINTENANCE_SOURCE_KEYS.map((key) => vehicle?.raw?.[key]),
+  ].filter(Boolean);
+
+  for (const source of sources) {
+    for (const key of keys) {
+      const value = source?.[key];
+
+      if (value !== undefined && value !== null && String(value).trim() !== "") {
+        return value;
+      }
+    }
+  }
+
+  return null;
+}
+
+function getPositiveNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : null;
+}
+
+function formatMaintenanceDate(value) {
+  if (!value) return "";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return String(value);
+
+  return date.toLocaleDateString("es-AR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
+
+function getVehicleMaintenanceInfo(vehicle) {
+  const showMaintenanceInfo = getMaintenanceValue(
+    vehicle,
+    "show_maintenance_info",
+    "showMaintenanceInfo"
+  );
+  const rows = [];
+
+  function addText(label, ...keys) {
+    const value = getMaintenanceValue(vehicle, ...keys);
+    if (!value) return;
+    rows.push({ label, value: String(value) });
+  }
+
+  function addMoney(label, ...keys) {
+    const value = getPositiveNumber(getMaintenanceValue(vehicle, ...keys));
+    if (!value) return;
+    rows.push({ label, value: formatARS(value) });
+  }
+
+  function addNumber(label, suffix, ...keys) {
+    const value = getPositiveNumber(getMaintenanceValue(vehicle, ...keys));
+    if (!value) return;
+    rows.push({ label, value: `${value.toLocaleString("es-AR")} ${suffix}` });
+  }
+
+  addMoney("Seguro informado", "insurance_monthly_amount", "insuranceMonthlyAmount");
+  addText("Proveedor", "insurance_provider", "insuranceProvider");
+  addText("Cobertura", "insurance_coverage_type", "insuranceCoverageType");
+  addNumber("Tanque", "litros", "fuel_tank_liters", "fuelTankLiters");
+  addMoney("Costo tanque lleno informado", "fuel_full_tank_cost", "fuelFullTankCost");
+  addMoney("Service aproximado", "estimated_service_cost", "estimatedServiceCost");
+  addMoney(
+    "Mantenimiento mensual orientativo",
+    "estimated_monthly_maintenance",
+    "estimatedMonthlyMaintenance"
+  );
+  addText("Detalle", "maintenance_notes", "maintenanceNotes");
+
+  const updatedAt = formatMaintenanceDate(
+    getMaintenanceValue(vehicle, "maintenance_updated_at", "maintenanceUpdatedAt")
+  );
+
+  if (updatedAt) rows.push({ label: "Dato actualizado", value: updatedAt });
+
+  return {
+    rows,
+    shouldShow: (showMaintenanceInfo === true && rows.length > 0) || rows.length > 0,
+  };
+}
+
 export default function VehicleDetailModal({
   vehicle,
   dealer,
@@ -108,6 +205,10 @@ export default function VehicleDetailModal({
   const imageWasDraggedRef = useRef(false);
   const selectedImage = images[selectedImageIndex];
   const reserved = isVehicleReserved(vehicle);
+  const maintenanceInfo = useMemo(
+    () => getVehicleMaintenanceInfo(vehicle),
+    [vehicle]
+  );
 
   function clampZoomPosition(position, scale = zoomScale) {
     const frame = mainImageRef.current;
@@ -462,6 +563,46 @@ export default function VehicleDetailModal({
                 {vehicle.details ||
                   "La unidad se encuentra disponible para consultar. Las condiciones comerciales y de financiación deben confirmarse con el dealer."}
               </p>
+            </div>
+
+            {maintenanceInfo.shouldShow && (
+              <div className="vehicle-detail-maintenance-block">
+                <div className="vehicle-detail-maintenance-head">
+                  <span>Mantenimiento orientativo</span>
+                  <strong>Datos declarados por el vendedor</strong>
+                </div>
+
+                <div className="vehicle-detail-maintenance-grid">
+                  {maintenanceInfo.rows.map((row) => (
+                    <div key={`${row.label}-${row.value}`}>
+                      <span>{row.label}</span>
+                      <strong>{row.value}</strong>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="vehicle-detail-maintenance-note">
+                  Información orientativa declarada por el vendedor. Los valores
+                  pueden variar según uso, ubicación, proveedor, cobertura,
+                  precios vigentes y condiciones particulares. oX NEXMOV no
+                  calcula, verifica ni garantiza estos importes.
+                </p>
+              </div>
+            )}
+
+            <div className="vehicle-detail-insurance-next-box">
+              <div>
+                <span>Seguro</span>
+                <strong>Cotizá tu seguro</strong>
+                <p>
+                  Próximamente vas a poder cotizar el seguro de este vehículo
+                  con un proveedor autorizado.
+                </p>
+              </div>
+
+              <button type="button" disabled>
+                Próximamente
+              </button>
             </div>
 
             {vehicle.hasFinancing && (
