@@ -62,23 +62,36 @@ function getZeroKmStatusLabel(status) {
   return labels[status] || "Recibida";
 }
 
+function getSellLeadStatusLabel(status) {
+  const labels = {
+    new: "Recibida",
+    seen: "Vista",
+    assigned: "En evaluación",
+    contacted: "Contactado",
+    negotiation: "En negociación",
+    closed: "Cerrada",
+    lost: "Finalizada",
+  };
+
+  return labels[status] || "Recibida";
+}
+
 function getVehicleTitle(vehicle) {
   return [vehicle.brand, vehicle.model, vehicle.version]
     .filter(Boolean)
     .join(" ");
 }
 
-export default function BuyerPanel({ authUser, authProfile, appActions }) {
+export default function BuyerPanel({ authUser, authProfile, appActions, onNavigate }) {
   const [vehicleLeads, setVehicleLeads] = useState([]);
   const [zeroKmLeads, setZeroKmLeads] = useState([]);
   const [loadingVehicleLeads, setLoadingVehicleLeads] = useState(true);
   const [loadingZeroKmLeads, setLoadingZeroKmLeads] = useState(true);
   const [vehicleLeadsError, setVehicleLeadsError] = useState("");
   const [zeroKmLeadsError, setZeroKmLeadsError] = useState("");
-const [sellVehicleLeads, setSellVehicleLeads] = useState([]);
-const [loadingSellVehicleLeads, setLoadingSellVehicleLeads] = useState(true);
-const [sellVehicleLeadsError, setSellVehicleLeadsError] = useState("");
-
+  const [sellVehicleLeads, setSellVehicleLeads] = useState([]);
+  const [loadingSellVehicleLeads, setLoadingSellVehicleLeads] = useState(true);
+  const [sellVehicleLeadsError, setSellVehicleLeadsError] = useState("");
 
   const favorites = appActions?.favoriteItems || [];
   const compareItems = appActions?.compareItems || [];
@@ -102,24 +115,24 @@ const [sellVehicleLeadsError, setSellVehicleLeadsError] = useState("");
     setLoadingVehicleLeads(false);
   }
 
-async function loadSellVehicleLeads() {
-  setLoadingSellVehicleLeads(true);
-  setSellVehicleLeadsError("");
+  async function loadSellVehicleLeads() {
+    setLoadingSellVehicleLeads(true);
+    setSellVehicleLeadsError("");
 
-  const { leads, error } = await listSellVehicleLeadsForCurrentBuyer();
+    const { leads, error } = await listSellVehicleLeadsForCurrentBuyer();
 
-  if (error) {
-    setSellVehicleLeads([]);
-    setSellVehicleLeadsError(
-      error.message || "No se pudieron cargar tus solicitudes de venta."
-    );
+    if (error) {
+      setSellVehicleLeads([]);
+      setSellVehicleLeadsError(
+        error.message || "No se pudieron cargar tus solicitudes de venta."
+      );
+      setLoadingSellVehicleLeads(false);
+      return;
+    }
+
+    setSellVehicleLeads(leads || []);
     setLoadingSellVehicleLeads(false);
-    return;
   }
-
-  setSellVehicleLeads(leads || []);
-  setLoadingSellVehicleLeads(false);
-}
 
   async function loadZeroKmLeads() {
     setLoadingZeroKmLeads(true);
@@ -139,14 +152,14 @@ async function loadSellVehicleLeads() {
     setZeroKmLeads(leads || []);
     setLoadingZeroKmLeads(false);
   }
-    
-     async function refreshBuyerPanel() {
-  await Promise.all([
-    loadVehicleLeads(),
-    loadZeroKmLeads(),
-    loadSellVehicleLeads(),
-  ]);
-}
+
+  async function refreshBuyerPanel() {
+    await Promise.all([
+      loadVehicleLeads(),
+      loadZeroKmLeads(),
+      loadSellVehicleLeads(),
+    ]);
+  }
 
   useEffect(() => {
     refreshBuyerPanel();
@@ -156,109 +169,138 @@ async function loadSellVehicleLeads() {
     return vehicleLeads.length + zeroKmLeads.length;
   }, [vehicleLeads.length, zeroKmLeads.length]);
 
+  const isLoading = loadingVehicleLeads || loadingZeroKmLeads || loadingSellVehicleLeads;
+
   return (
     <section className="page-section">
       <div className="container panel buyer-panel">
+
         <div className="panel-head-row">
           <div>
             <p className="eyebrow">Panel comprador</p>
             <h1>Mi actividad</h1>
             <p>
-              Favoritos, comparaciones y consultas realizadas dentro de oX
-              NEXMOV. Esta vista no muestra datos internos de gestión.
+              Seguí tus consultas, comparaciones y vehículos guardados desde un
+              solo lugar.
             </p>
 
             {(authProfile || authUser) && (
               <p className="admin-session-note">
-                Sesión actual: {authProfile?.email || authUser?.email}
+                {authProfile?.email || authUser?.email}
               </p>
             )}
           </div>
 
-          <button className="admin-refresh-btn" onClick={refreshBuyerPanel}>
-            Actualizar actividad
-          </button>
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start", flexWrap: "wrap" }}>
+            <button className="admin-refresh-btn" onClick={refreshBuyerPanel}>
+              Actualizar
+            </button>
+            <button className="primary-action" onClick={() => onNavigate?.("search")}>
+              Buscar vehículos
+            </button>
+          </div>
         </div>
 
         {vehicleLeadsError && (
           <div className="auth-warning">{vehicleLeadsError}</div>
         )}
-
         {sellVehicleLeadsError && (
-  <div className="auth-warning">{sellVehicleLeadsError}</div>
-)}
-
+          <div className="auth-warning">{sellVehicleLeadsError}</div>
+        )}
         {zeroKmLeadsError && (
           <div className="auth-warning">{zeroKmLeadsError}</div>
         )}
 
-        {(loadingVehicleLeads || loadingZeroKmLeads) && (
-          <div className="auth-message">
-            Cargando actividad del comprador...
-          </div>
+        {isLoading && (
+          <div className="auth-message">Cargando actividad...</div>
         )}
-
-         {(loadingVehicleLeads || loadingZeroKmLeads || loadingSellVehicleLeads) && (
-  <div className="auth-message">
-    Cargando actividad del comprador...
-  </div>
-)}
 
         <div className="dealer-status-grid">
           <article className="dealer-status-card">
+            <span>Consultas activas</span>
+            <strong>{vehicleLeads.length}</strong>
+            <p>
+              {vehicleLeads.length === 0
+                ? "Todavía no realizaste consultas."
+                : "Contactos con dealers registrados."}
+            </p>
+          </article>
+
+          <article className="dealer-status-card">
+            <span>Comparaciones</span>
+            <strong>{compareItems.length} / 4</strong>
+            <p>
+              {compareItems.length === 0
+                ? "Seleccioná vehículos para comparar."
+                : "Vehículos seleccionados para comparar."}
+            </p>
+          </article>
+
+          <article className="dealer-status-card">
             <span>Favoritos</span>
             <strong>{favorites.length}</strong>
-            <p>Vehículos guardados para revisar más tarde.</p>
-          </article>
-
-          <article className="dealer-status-card">
-            <span>Comparación actual</span>
-            <strong>{compareItems.length} / 4</strong>
-            <p>Vehículos seleccionados para comparar.</p>
-          </article>
-
-            <article className="dealer-status-card">
-            <span>Vender mi vehículo</span>
-            <strong>{sellVehicleLeads.length}</strong>
-            <p>Solicitudes enviadas para que dealers evalúen tu unidad.</p>
-          </article>
-
-          <article className="dealer-status-card">
-            <span>Consultas a dealers</span>
-            <strong>{vehicleLeads.length}</strong>
-            <p>Contactos comerciales generados.</p>
+            <p>
+              {favorites.length === 0
+                ? "Todavía no guardaste vehículos."
+                : "Vehículos guardados para revisar."}
+            </p>
           </article>
 
           <article className="dealer-status-card">
             <span>Financiación 0km</span>
             <strong>{zeroKmLeads.length}</strong>
-            <p>Consultas enviadas al equipo interno.</p>
+            <p>
+              {zeroKmLeads.length === 0
+                ? "Todavía no enviaste consultas."
+                : "Consultas de financiación enviadas."}
+            </p>
           </article>
         </div>
 
         <div className="dealer-leads-section">
           <div className="buyer-section-head">
             <div>
-              <h2>Comparación actual</h2>
-              <p>
-                Podés comparar hasta 4 vehículos. La comparación se arma desde
-                las cards públicas.
-              </p>
+              {totalActivity === 0 ? (
+                <>
+                  <h2>Empezá buscando vehículos</h2>
+                  <p>
+                    Guardá favoritos, compará hasta 4 unidades y consultá
+                    dealers verificados.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2>Retomá tu actividad</h2>
+                  <p>
+                    Tenés {vehicleLeads.length}{" "}
+                    consulta{vehicleLeads.length !== 1 ? "s" : ""} activa
+                    {vehicleLeads.length !== 1 ? "s" : ""} con dealers.
+                  </p>
+                </>
+              )}
             </div>
 
-            {compareItems.length > 0 && (
-              <button
-                className="admin-refresh-btn"
-                onClick={appActions?.clearCompare}
-              >
-                Limpiar comparación
-              </button>
-            )}
+            <button
+              className="primary-action"
+              onClick={() => onNavigate?.("search")}
+            >
+              {totalActivity === 0 ? "Buscar vehículos" : "Ver más vehículos"}
+            </button>
+          </div>
+        </div>
+
+        <div className="dealer-leads-section">
+          <div className="buyer-section-head">
+            <div>
+              <h2>Vehículos favoritos</h2>
+              <p>Guardados para revisar más tarde.</p>
+            </div>
           </div>
 
-          {compareItems.length < 2 ? (
+          {favorites.length === 0 ? (
             <div className="empty-state">
-              Seleccioná al menos 2 vehículos desde Buscar para comparar.
+              <strong>Todavía no guardaste vehículos.</strong>
+              <p>Usá el botón Favorito desde las cards para guardarlos acá.</p>
             </div>
           ) : (
             <div className="admin-table-wrap">
@@ -268,42 +310,34 @@ async function loadSellVehicleLeads() {
                     <th>Vehículo</th>
                     <th>Precio</th>
                     <th>Ubicación</th>
-                    <th>Acción</th>
+                    <th></th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {compareItems.map((vehicle) => (
+                  {favorites.map((vehicle) => (
                     <tr key={vehicle.id}>
                       <td>
                         <strong>{getVehicleTitle(vehicle)}</strong>
-                        <span>{vehicle.year}</span>
                         <span>
-                          {Number(vehicle.kilometers || 0).toLocaleString(
-                            "es-AR"
-                          )}{" "}
-                          km
+                          {vehicle.year} ·{" "}
+                          {Number(vehicle.kilometers || 0).toLocaleString("es-AR")} km
                         </span>
                       </td>
 
                       <td>
                         <strong>{formatARS(vehicle.price)}</strong>
-                        <span>
-                          Ref. {formatARS(vehicle.marketReferencePrice)}
-                        </span>
                       </td>
 
                       <td>
-                        <strong>{vehicle.city || "Sin ciudad"}</strong>
-                        <span>{vehicle.province || "Sin provincia"}</span>
+                        <strong>{vehicle.city || "—"}</strong>
+                        <span>{vehicle.province || ""}</span>
                       </td>
 
                       <td>
                         <button
                           className="table-action-btn"
-                          onClick={() =>
-                            appActions?.removeFromCompare?.(vehicle.id)
-                          }
+                          onClick={() => appActions?.removeFavorite?.(vehicle.id)}
                         >
                           Quitar
                         </button>
@@ -316,92 +350,22 @@ async function loadSellVehicleLeads() {
           )}
         </div>
 
-        <div className="dealer-leads-section">
-          <div className="buyer-section-head">
-            <div>
-              <h2>Mis favoritos</h2>
-              <p>Vehículos guardados para revisar más tarde.</p>
-            </div>
-          </div>
-
-          {favorites.length === 0 ? (
-            <div className="empty-state">
-              Todavía no guardaste vehículos favoritos.
-            </div>
-          ) : (
-            <div className="admin-table-wrap">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Vehículo</th>
-                    <th>Precio</th>
-                    <th>Ubicación</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {favorites.map((vehicle) => (
-                    <tr key={vehicle.id}>
-                      <td>
-                        <strong>{getVehicleTitle(vehicle)}</strong>
-                        <span>{vehicle.year}</span>
-                        <span>
-                          {Number(vehicle.kilometers || 0).toLocaleString(
-                            "es-AR"
-                          )}{" "}
-                          km
-                        </span>
-                      </td>
-
-                      <td>
-                        <strong>{formatARS(vehicle.price)}</strong>
-                        <span>
-                          Ref. {formatARS(vehicle.marketReferencePrice)}
-                        </span>
-                      </td>
-
-                      <td>
-                        <strong>{vehicle.city || "Sin ciudad"}</strong>
-                        <span>{vehicle.province || "Sin provincia"}</span>
-                      </td>
-
-                      <td>
-                        <button
-                          className="table-action-btn"
-                          onClick={() =>
-                            appActions?.removeFavorite?.(vehicle.id)
-                          }
-                        >
-                          Quitar favorito
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-
-        <div className="dealer-leads-section">
+        <div className="dealer-leads-section" id="buyer-consultas">
           <div className="buyer-section-head">
             <div>
               <h2>Consultas a dealers</h2>
-              <p>
-                Contactos comerciales que generaste desde publicaciones. Solo se
-                muestran datos necesarios para tu seguimiento.
-              </p>
+              <p>Contactos comerciales generados desde publicaciones.</p>
             </div>
 
             <button className="admin-refresh-btn" onClick={loadVehicleLeads}>
-              Actualizar consultas
+              Actualizar
             </button>
           </div>
 
           {vehicleLeads.length === 0 ? (
             <div className="empty-state">
-              Todavía no realizaste consultas a dealers.
+              <strong>Todavía no realizaste consultas.</strong>
+              <p>Abrí un vehículo desde Buscar y usá el botón Contactar.</p>
             </div>
           ) : (
             <div className="admin-table-wrap">
@@ -411,7 +375,6 @@ async function loadSellVehicleLeads() {
                     <th>Fecha</th>
                     <th>Vehículo</th>
                     <th>Dealer</th>
-                    <th>Mensaje</th>
                     <th>Estado</th>
                   </tr>
                 </thead>
@@ -425,25 +388,18 @@ async function loadSellVehicleLeads() {
 
                       <td>
                         <strong>
-                          {lead.vehicle_brand || ""} {lead.vehicle_model || ""}
+                          {lead.vehicle_brand || ""}{" "}
+                          {lead.vehicle_model || ""}
                         </strong>
                         <span>
-                          {lead.vehicle_version ||
-                            lead.vehicle_title ||
-                            "Sin versión"}
+                          {lead.vehicle_version || lead.vehicle_title || ""}
                         </span>
                         <span>{formatARS(lead.price_snapshot)}</span>
                       </td>
 
                       <td>
-                        <strong>{lead.dealer_name || "Dealer no informado"}</strong>
-                        <span>
-                          {lead.dealer_phone || "Contacto registrado"}
-                        </span>
-                      </td>
-
-                      <td>
-                        <span>{lead.message || "Sin mensaje."}</span>
+                        <strong>{lead.dealer_name || "Dealer"}</strong>
+                        <span>{lead.dealer_phone || "Contacto registrado"}</span>
                       </td>
 
                       <td>
@@ -462,21 +418,93 @@ async function loadSellVehicleLeads() {
         <div className="dealer-leads-section">
           <div className="buyer-section-head">
             <div>
-              <h2>Consultas Financiación 0km</h2>
+              <h2>Comparación actual</h2>
+              <p>Hasta 4 vehículos lado a lado. Se arma desde las cards en Buscar.</p>
+            </div>
+
+            {compareItems.length > 0 && (
+              <button
+                className="admin-refresh-btn"
+                onClick={appActions?.clearCompare}
+              >
+                Limpiar
+              </button>
+            )}
+          </div>
+
+          {compareItems.length < 2 ? (
+            <div className="empty-state">
+              <strong>Todavía no armaste comparaciones.</strong>
               <p>
-                Solicitudes enviadas desde la sección Financiación 0km. No se
-                muestran datos internos ni notas operativas.
+                Seleccioná al menos 2 vehículos desde Buscar usando el botón
+                Comparar.
               </p>
+            </div>
+          ) : (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Vehículo</th>
+                    <th>Precio</th>
+                    <th>Ubicación</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {compareItems.map((vehicle) => (
+                    <tr key={vehicle.id}>
+                      <td>
+                        <strong>{getVehicleTitle(vehicle)}</strong>
+                        <span>
+                          {vehicle.year} ·{" "}
+                          {Number(vehicle.kilometers || 0).toLocaleString("es-AR")} km
+                        </span>
+                      </td>
+
+                      <td>
+                        <strong>{formatARS(vehicle.price)}</strong>
+                        <span>Ref. {formatARS(vehicle.marketReferencePrice)}</span>
+                      </td>
+
+                      <td>
+                        <strong>{vehicle.city || "—"}</strong>
+                        <span>{vehicle.province || ""}</span>
+                      </td>
+
+                      <td>
+                        <button
+                          className="table-action-btn"
+                          onClick={() => appActions?.removeFromCompare?.(vehicle.id)}
+                        >
+                          Quitar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        <div className="dealer-leads-section">
+          <div className="buyer-section-head">
+            <div>
+              <h2>Financiación 0km</h2>
+              <p>Consultas enviadas desde la sección de financiación.</p>
             </div>
 
             <button className="admin-refresh-btn" onClick={loadZeroKmLeads}>
-              Actualizar 0km
+              Actualizar
             </button>
           </div>
 
           {zeroKmLeads.length === 0 ? (
             <div className="empty-state">
-              Todavía no enviaste consultas de financiación 0km.
+              <strong>Todavía no enviaste consultas de financiación 0km.</strong>
+              <p>Explorá las opciones disponibles en la sección de financiación.</p>
             </div>
           ) : (
             <div className="admin-table-wrap">
@@ -503,15 +531,13 @@ async function loadSellVehicleLeads() {
                           {lead.brand_interest || "Marca abierta"}{" "}
                           {lead.model_interest || ""}
                         </strong>
-                        <span>
-                          {lead.budget_range || "Sin rango declarado"}
-                        </span>
-                        <span>{lead.message || "Sin mensaje adicional"}</span>
+                        <span>{lead.budget_range || "Sin rango declarado"}</span>
+                        <span>{lead.message || ""}</span>
                       </td>
 
                       <td>
                         <strong>{lead.city || "Sin ciudad"}</strong>
-                        <span>{lead.province || "Sin provincia"}</span>
+                        <span>{lead.province || ""}</span>
                       </td>
 
                       <td>
@@ -519,7 +545,7 @@ async function loadSellVehicleLeads() {
                         <span>
                           {lead.preferred_term_months
                             ? `${lead.preferred_term_months} meses`
-                            : "Sin plazo preferido"}
+                            : "Sin plazo"}
                         </span>
                       </td>
 
@@ -537,104 +563,86 @@ async function loadSellVehicleLeads() {
         </div>
 
         <div className="dealer-leads-section">
-  <div className="buyer-section-head">
-    <div>
-      <h2>Mis solicitudes de venta</h2>
-      <p>
-        Vehículos que cargaste desde “Vender mi vehículo”. Esta vista muestra
-        solo el seguimiento visible para comprador.
-      </p>
-    </div>
+          <div className="buyer-section-head">
+            <div>
+              <h2>Solicitudes de venta</h2>
+              <p>Vehículos que publicaste para que dealers evalúen tu unidad.</p>
+            </div>
 
-    <button className="admin-refresh-btn" onClick={loadSellVehicleLeads}>
-      Actualizar solicitudes
-    </button>
-  </div>
+            <button className="admin-refresh-btn" onClick={loadSellVehicleLeads}>
+              Actualizar
+            </button>
+          </div>
 
-  {sellVehicleLeads.length === 0 ? (
-    <div className="empty-state">
-      Todavía no solicitaste vender un vehículo.
-    </div>
-  ) : (
-    <div className="admin-table-wrap">
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Vehículo</th>
-            <th>Ubicación</th>
-            <th>Precio esperado</th>
-            <th>Condición</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
+          {sellVehicleLeads.length === 0 ? (
+            <div className="empty-state">
+              <strong>Todavía no publicaste una solicitud de venta.</strong>
+              <p>
+                Si querés vender tu vehículo, usá la opción "Vender mi
+                vehículo" desde el menú.
+              </p>
+            </div>
+          ) : (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Vehículo</th>
+                    <th>Ubicación</th>
+                    <th>Precio esperado</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
 
-        <tbody>
-          {sellVehicleLeads.map((lead, index) => (
-            <tr key={`${lead.created_at}-${index}`}>
-              <td>
-                <strong>{formatDateTime(lead.created_at)}</strong>
-              </td>
+                <tbody>
+                  {sellVehicleLeads.map((lead, index) => (
+                    <tr key={`${lead.created_at}-${index}`}>
+                      <td>
+                        <strong>{formatDateTime(lead.created_at)}</strong>
+                      </td>
 
-              <td>
-                <strong>
-                  {lead.brand} {lead.model}
-                </strong>
-                <span>{lead.version || "Sin versión"}</span>
-                <span>
-                  {lead.year || "Sin año"} ·{" "}
-                  {Number(lead.km || 0).toLocaleString("es-AR")} km
-                </span>
-              </td>
+                      <td>
+                        <strong>
+                          {lead.brand} {lead.model}
+                        </strong>
+                        <span>{lead.version || ""}</span>
+                        <span>
+                          {lead.year || ""} ·{" "}
+                          {Number(lead.km || 0).toLocaleString("es-AR")} km
+                        </span>
+                      </td>
 
-              <td>
-                <strong>{lead.city || "Sin ciudad"}</strong>
-                <span>{lead.province || "Sin provincia"}</span>
-              </td>
+                      <td>
+                        <strong>{lead.city || "—"}</strong>
+                        <span>{lead.province || ""}</span>
+                      </td>
 
-              <td>
-                <strong>{formatARS(lead.expected_price)}</strong>
-              </td>
+                      <td>
+                        <strong>{formatARS(lead.expected_price)}</strong>
+                        {lead.has_debt && (
+                          <span>Con deuda/prenda declarada</span>
+                        )}
+                      </td>
 
-              <td>
-                <span>{lead.condition || "Sin condición declarada"}</span>
-                {lead.has_debt && <span>Con deuda/prenda declarada</span>}
-                {lead.has_financing && <span>Con financiación vigente</span>}
-              </td>
-
-              <td>
-                <span className="admin-chip success">
-                  {lead.status === "new"
-                    ? "Recibida"
-                    : lead.status === "seen"
-                      ? "Vista"
-                      : lead.status === "assigned"
-                        ? "En evaluación"
-                        : lead.status === "contacted"
-                          ? "Contactado"
-                          : lead.status === "negotiation"
-                            ? "En negociación"
-                            : lead.status === "closed"
-                              ? "Cerrada"
-                              : lead.status === "lost"
-                                ? "Finalizada"
-                                : "Recibida"}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )}
-</div>
+                      <td>
+                        <span className="admin-chip success">
+                          {getSellLeadStatusLabel(lead.status)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
 
         <div className="buyer-privacy-note">
-          <strong>Privacidad operativa</strong>
+          <strong>Privacidad</strong>
           <span>
-            Este panel muestra solo información útil para el comprador. Los IDs
-            internos, notas de gestión, asignaciones y decisiones operativas son
-            visibles únicamente para los roles autorizados.
+            Este panel muestra solo tu actividad como comprador. Los datos de
+            gestión interna son visibles únicamente para roles autorizados.
           </span>
         </div>
       </div>
