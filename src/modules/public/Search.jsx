@@ -1418,12 +1418,14 @@ export default function Search({
             </div>
 
             {filteredVehicles.length === 0 && (
-              <div className="empty-state">
-                <strong>No encontramos vehículos con esos filtros.</strong>
-                <p>
-                  Probá ampliar el rango de precio, quitar algún filtro o buscar
-                  por marca/modelo.
-                </p>
+              <div className="ox-search-empty-state" role="status" aria-live="polite">
+                <div className="ox-search-empty-state-copy">
+                  <h3>No hay resultados con esta búsqueda.</h3>
+                  <p>
+                    Ajustá los filtros para abrir más opciones o probá uno de estos
+                    criterios sugeridos para encontrar vehículos disponibles ahora.
+                  </p>
+                </div>
                 <div className="ox-search-empty-actions">
                   <button
                     type="button"
@@ -1447,8 +1449,24 @@ export default function Search({
                     Volver a ver todos
                   </button>
                   <button type="button" onClick={() => onNavigate?.("zeroKm")}>
-                    Consultar financiación 0km
+                    Ver 0km con financiación
                   </button>
+                </div>
+
+                <div className="ox-search-suggested">
+                  <span>Probá con:</span>
+                  {SEARCH_QUICK_ACTIONS.slice(0, 4).map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => {
+                        setSearchText(item);
+                        setShowSuggestions(false);
+                      }}
+                    >
+                      {item}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}

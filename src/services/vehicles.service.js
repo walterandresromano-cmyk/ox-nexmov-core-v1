@@ -264,9 +264,70 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
     };
   }
 
-  const { data, error } = await supabase.rpc("get_public_latest_vehicles", {
-    p_limit: Number(limit || 8),
-  });
+  const { data, error } = await supabase
+    .from("vehicles")
+    .select(
+      `
+      id,
+      created_at,
+      brand,
+      model,
+      version,
+      year,
+      price,
+      currency,
+      km,
+      body_type,
+      transmission,
+      fuel_type,
+      dealer_id,
+      dealer_name,
+      dealer_phone,
+      location,
+      province,
+      city,
+      main_image_url,
+      image_url,
+      images_json,
+      status,
+      publication_status,
+      financing,
+      featured,
+      description,
+      details,
+      avg,
+      market_reference_price,
+      usage,
+      views,
+      doors,
+      reserved,
+      reserved_by,
+      delivery,
+      months,
+      rate,
+      is_active,
+      review_status,
+      dealers (
+        id,
+        name,
+        plan_code,
+        plan_status,
+        logo_url,
+        image_url,
+        contact_phone,
+        phone_whatsapp,
+        province,
+        city,
+        extra_publish_slots,
+        publications_used,
+        plan_expires_at,
+        can_receive_sell_vehicle_leads
+      )
+    `
+    )
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
+    .limit(Number(limit || 8));
 
   if (error) {
     return {
@@ -276,49 +337,7 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
   }
 
   return {
-    vehicles: (data || []).map((row) => {
-      const normalizedDealerWhatsapp = normalizeWhatsAppArgentina(
-        row.dealer_whatsapp ||
-          row.dealer_phone ||
-          row.phone_whatsapp ||
-          row.contact_phone ||
-          row.dealer_phone_whatsapp
-      );
-
-      return {
-        id: String(row.vehicle_id),
-        brand: row.brand || "Marca no informada",
-        model: row.model || "Modelo no informado",
-        version: row.version || "Versión no informada",
-        year: Number(row.year || 0),
-        kilometers: Number(row.km || 0),
-        price: Number(row.price || 0),
-        city: row.city || "",
-        province: row.province || "",
-        mainImageUrl: row.main_image_url || "",
-        imageUrl: row.main_image_url || "",
-        createdAt: row.created_at || null,
-        dealerWhatsapp: normalizedDealerWhatsapp,
-        dealer_whatsapp: normalizedDealerWhatsapp,
-        phoneWhatsapp: normalizedDealerWhatsapp,
-        phone_whatsapp: normalizedDealerWhatsapp,
-        contactPhone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
-        contact_phone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
-        dealer: {
-          id: row.dealer_id ? String(row.dealer_id) : "",
-          commercialName: row.dealer_name || "Dealer no informado",
-          logo: row.dealer_logo || null,
-          plan: row.dealer_plan_code || "inicio",
-          phone: normalizedDealerWhatsapp,
-          phoneWhatsapp: normalizedDealerWhatsapp,
-          phone_whatsapp: normalizedDealerWhatsapp,
-          dealerWhatsapp: normalizedDealerWhatsapp,
-          dealer_whatsapp: normalizedDealerWhatsapp,
-          contactPhone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
-          contact_phone: row.contact_phone || row.dealer_phone || normalizedDealerWhatsapp,
-        },
-      };
-    }),
+    vehicles: (data || []).map(mapVehicleFromSupabase),
     error: null,
   };
 }

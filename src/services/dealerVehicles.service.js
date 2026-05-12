@@ -71,7 +71,10 @@ export async function listVehiclesForCurrentDealer() {
   const { data, error } = await supabase.rpc("get_vehicles_for_current_dealer");
 
   return {
-    vehicles: data || [],
+    vehicles: (data || []).map(vehicle => ({
+      ...vehicle,
+      images: vehicle.images_json || [],
+    })),
     error,
   };
 }

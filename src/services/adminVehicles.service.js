@@ -73,7 +73,10 @@ export async function listVehiclesForAdmin() {
   const { data, error } = await supabase.rpc("get_vehicles_for_admin");
 
   return {
-    vehicles: data || [],
+    vehicles: (data || []).map(vehicle => ({
+      ...vehicle,
+      images: vehicle.images_json || [],
+    })),
     error,
   };
 }
