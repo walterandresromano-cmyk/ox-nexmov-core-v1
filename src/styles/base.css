@@ -61,9 +61,17 @@ svg {
   color: #ffffff;
 }
 
-:focus-visible {
-  outline: 2px solid rgba(125, 211, 252, 0.92);
-  outline-offset: 4px;
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.75);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.32),
+    0 0 0 5px rgba(15, 23, 42, 0.18);
 }
 
 input:focus,

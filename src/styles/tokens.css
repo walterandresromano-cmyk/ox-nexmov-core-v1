@@ -89,9 +89,9 @@
   --ox-fs-card-title: 0.92rem;
   --ox-fs-panel-title: 0.86rem;
   --ox-fs-subtitle: 0.78rem;
-  --ox-fs-body: 0.72rem;
-  --ox-fs-body-sm: 0.64rem;
-  --ox-fs-caption: 0.58rem;
+  --ox-fs-body: 0.875rem;
+  --ox-fs-body-sm: 0.8125rem;
+  --ox-fs-caption: 0.75rem;
   --ox-fs-chip: 0.6rem;
   --ox-fs-micro: 0.52rem;
   --ox-fs-nano: 0.46rem;
@@ -105,13 +105,13 @@
   --ox-fs-hero-title-mobile: clamp(2.35rem, 11.5vw, 3.1rem);
   --ox-fs-page-title-mobile: clamp(2rem, 10vw, 2.65rem);
   --ox-fs-section-title-mobile: 1rem;
-  --ox-fs-body-mobile: 0.78rem;
+  --ox-fs-body-mobile: 0.82rem;
   --ox-fs-caption-mobile: 0.66rem;
 
   --ox-lh-tight: 0.96;
   --ox-lh-title: 1;
   --ox-lh-card-title: 1.08;
-  --ox-lh-body: 1.45;
+  --ox-lh-body: 1.52;
   --ox-lh-compact: 1.24;
   --ox-lh-list: 1.32;
 

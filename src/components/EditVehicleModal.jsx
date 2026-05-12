@@ -581,7 +581,7 @@ export default function EditVehicleModal({
               </label>
 
               <label>
-                Entrega
+                Entrada / anticipo
                 <input
                   type="number"
                   value={form.delivery}
@@ -592,7 +592,7 @@ export default function EditVehicleModal({
               </label>
 
               <label>
-                Cuotas / meses
+                Cantidad de cuotas
                 <input
                   type="number"
                   value={form.months}
@@ -601,12 +601,17 @@ export default function EditVehicleModal({
               </label>
 
               <label>
-                Tasa
+                Tasa anual
                 <input
                   type="number"
                   value={form.rate}
                   onChange={(event) => updateField("rate", event.target.value)}
                 />
+                <span className="form-hint">
+                  No uses el precio principal para cargar solo una entrada o anticipo.
+                  Ejemplo: precio total del vehículo + entrada $500.000 + 48 cuotas.
+                  La financiación debe cargarse como dato complementario, no reemplaza el precio real del vehículo.
+                </span>
               </label>
 
               {mode === "admin" && (
