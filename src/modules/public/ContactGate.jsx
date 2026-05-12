@@ -160,8 +160,8 @@ export default function ContactGate({
       <section className="contact-modal">
         <div className="contact-modal-head">
           <div>
-            <p className="eyebrow">Contacto con trazabilidad</p>
-            <h2>Contactar dealer</h2>
+            <p className="eyebrow">Registro de seguridad comercial</p>
+            <h2>Contacto seguro</h2>
             <p>
               Para proteger la trazabilidad comercial, primero registramos el
               lead en oX NEXMOV y luego habilitamos el canal de contacto.
@@ -175,11 +175,10 @@ export default function ContactGate({
 
         {!authUser ? (
           <div className="lead-created-box">
-            <h3>Necesitás iniciar sesión</h3>
+            <h3>Contacto seguro con trazabilidad</h3>
             <p>
-              Podés explorar, ver detalles y comparar sin registrarte. Para
-              contactar al dealer, oX NEXMOV necesita crear trazabilidad del
-              lead.
+              Para proteger a compradores y dealers, oX NEXMOV registra cada
+              consulta comercial. Ingresá para continuar.
             </p>
 
             <div className="contact-summary">
@@ -190,12 +189,12 @@ export default function ContactGate({
             </div>
 
             <p className="contact-legal-note">
-              Al continuar, oX NEXMOV registrará esta consulta para generar
-              trazabilidad del contacto comercial.
+              Este paso ayuda a evitar consultas falsas, spam y operaciones
+              sospechosas.
             </p>
 
             <button className="primary-action" onClick={onRequireLogin}>
-              Ingresar para contactar
+              Continuar con email
             </button>
           </div>
         ) : !createdLead ? (
