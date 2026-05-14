@@ -162,6 +162,9 @@ export function mapVehicleFromSupabase(row) {
     contactPhone: dealer?.contactPhone || normalizedDealerWhatsapp,
     contact_phone: dealer?.contactPhone || normalizedDealerWhatsapp,
 
+    maintenance_info: row.maintenance_info ?? null,
+    show_maintenance_info: Boolean(row.show_maintenance_info ?? false),
+
     badges: row.featured ? ["featured"] : [],
     raw: row,
   };
@@ -220,6 +223,8 @@ export async function listPublicVehicles() {
       rate,
       is_active,
       review_status,
+      maintenance_info,
+      show_maintenance_info,
       dealers (
         id,
         name,
@@ -307,6 +312,8 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
       rate,
       is_active,
       review_status,
+      maintenance_info,
+      show_maintenance_info,
       dealers (
         id,
         name,

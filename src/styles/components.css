@@ -10986,3 +10986,26 @@ body::-webkit-scrollbar {
   display: grid;
   gap: 12px;
 }
+
+/* oX NEXMOV - DealerPanel modal stacking context recovery
+   isolation:isolate on .dealer-panel traps z-index within its stacking context,
+   causing the mobile-dock (z-999 in root) to paint above the modal (z-12100
+   within the isolated context). Elevating the panel to z-10000 in root when
+   a modal is open ensures the modal beats the dock. */
+.dealer-panel:has(.modal-backdrop) {
+  position: relative;
+  z-index: 10000;
+}
+
+.modal-backdrop:has(.ticket-detail-modal) .ticket-detail-modal {
+  max-height: min(820px, calc(100dvh - 32px)) !important;
+}
+
+@media (max-width: 640px) {
+  .modal-backdrop:has(.ticket-detail-modal) {
+    align-items: start !important;
+  }
+  .modal-backdrop:has(.ticket-detail-modal) .ticket-detail-modal {
+    max-height: calc(100dvh - 24px) !important;
+  }
+}

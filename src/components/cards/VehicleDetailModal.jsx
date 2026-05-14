@@ -178,7 +178,7 @@ function getVehicleMaintenanceInfo(vehicle) {
 
   return {
     rows,
-    shouldShow: (showMaintenanceInfo === true && rows.length > 0) || rows.length > 0,
+    shouldShow: Boolean(showMaintenanceInfo) && rows.length > 0,
   };
 }
 
@@ -425,6 +425,64 @@ export default function VehicleDetailModal({
                 ))}
               </div>
             )}
+
+            <div className="vehicle-detail-quick-specs">
+              <div>
+                <span>Año</span>
+                <strong>{vehicle.year}</strong>
+              </div>
+              <div>
+                <span>Kilómetros</span>
+                <strong>{formatKm(vehicle.kilometers)}</strong>
+              </div>
+              {vehicle.fuelType && (
+                <div>
+                  <span>Combustible</span>
+                  <strong>{vehicle.fuelType}</strong>
+                </div>
+              )}
+              {vehicle.transmission && (
+                <div>
+                  <span>Transmisión</span>
+                  <strong>{vehicle.transmission}</strong>
+                </div>
+              )}
+              {vehicle.bodyType && (
+                <div>
+                  <span>Carrocería</span>
+                  <strong>{vehicle.bodyType}</strong>
+                </div>
+              )}
+              <div>
+                <span>Ubicación</span>
+                <strong>{vehicle.city}, {vehicle.province}</strong>
+              </div>
+            </div>
+
+            {maintenanceInfo.shouldShow && (
+              <div className="vehicle-detail-maintenance-block">
+                <div className="vehicle-detail-maintenance-head">
+                  <span>Mantenimiento orientativo</span>
+                  <strong>Datos declarados por el vendedor</strong>
+                </div>
+
+                <div className="vehicle-detail-maintenance-grid">
+                  {maintenanceInfo.rows.map((row) => (
+                    <div key={`${row.label}-${row.value}`}>
+                      <span>{row.label}</span>
+                      <strong>{row.value}</strong>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="vehicle-detail-maintenance-note">
+                  Información orientativa declarada por el vendedor. Los valores
+                  pueden variar según uso, ubicación, proveedor, cobertura,
+                  precios vigentes y condiciones particulares. oX NEXMOV no
+                  calcula, verifica ni garantiza estos importes.
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="vehicle-detail-info">
@@ -470,58 +528,32 @@ export default function VehicleDetailModal({
               </div>
             )}
 
-            <div className="detail-spec-grid">
-              <div>
-                <span>Año</span>
-                <strong>{vehicle.year}</strong>
-              </div>
+            <div className="detail-actions">
+              <button
+                type="button"
+                className="primary-action"
+                onClick={onContact}
+                disabled={reserved}
+                title={
+                  reserved
+                    ? "Esta unidad está reservada por el dealer."
+                    : "Contactar dealer"
+                }
+              >
+                {reserved ? "Unidad reservada" : "Contactar dealer"}
+              </button>
 
-              <div>
-                <span>Kilómetros</span>
-                <strong>{formatKm(vehicle.kilometers)}</strong>
-              </div>
+              <button type="button" onClick={onCompare}>
+                Agregar a comparar
+              </button>
 
-              <div>
-                <span>Ubicación</span>
-                <strong>
-                  {vehicle.city}, {vehicle.province}
-                </strong>
-              </div>
-
-              <div>
-                <span>Financiación</span>
-                <strong>
-                  {vehicle.hasFinancing ? "Disponible" : "No informada"}
-                </strong>
-              </div>
-
-              {vehicle.bodyType && (
-                <div>
-                  <span>Carrocería</span>
-                  <strong>{vehicle.bodyType}</strong>
-                </div>
-              )}
-
-              {vehicle.transmission && (
-                <div>
-                  <span>Transmisión</span>
-                  <strong>{vehicle.transmission}</strong>
-                </div>
-              )}
-
-              {vehicle.fuelType && (
-                <div>
-                  <span>Combustible</span>
-                  <strong>{vehicle.fuelType}</strong>
-                </div>
-              )}
-
-              {vehicle.hasFinancing && (
-                <div>
-                  <span>Entrega</span>
-                  <strong>{formatARS(vehicle.delivery)}</strong>
-                </div>
-              )}
+              <button
+                type="button"
+                className={favoriteActive ? "favorite-active" : ""}
+                onClick={onFavorite}
+              >
+                {favoriteActive ? "Guardado" : "Guardar favorito"}
+              </button>
             </div>
 
             <div className="detail-dealer-box">
@@ -531,6 +563,38 @@ export default function VehicleDetailModal({
                 {dealer.city}, {dealer.province}
               </p>
             </div>
+
+            {vehicle.hasFinancing && (vehicle.delivery > 0 || vehicle.months > 0 || vehicle.rate > 0) && (
+              <div className="vehicle-detail-financing-details">
+                <p className="vehicle-detail-financing-label">Condiciones de financiación</p>
+                {vehicle.delivery > 0 && (
+                  <div>
+                    <span>Entrega</span>
+                    <strong>{formatARS(vehicle.delivery)}</strong>
+                  </div>
+                )}
+                {vehicle.months > 0 && (
+                  <div>
+                    <span>Cuotas</span>
+                    <strong>{vehicle.months} meses</strong>
+                  </div>
+                )}
+                {vehicle.rate > 0 && (
+                  <div>
+                    <span>Tasa</span>
+                    <strong>{vehicle.rate}%</strong>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {vehicle.hasFinancing && (
+              <p className="finance-legal-note">
+                Los valores de financiación son informativos y pueden variar
+                según aprobación crediticia, entidad financiera, condiciones del
+                dealer y fecha de operación.
+              </p>
+            )}
 
             {isPlatinumDealer && (
               <div className="vehicle-detail-platinum-block">
@@ -565,31 +629,6 @@ export default function VehicleDetailModal({
               </p>
             </div>
 
-            {maintenanceInfo.shouldShow && (
-              <div className="vehicle-detail-maintenance-block">
-                <div className="vehicle-detail-maintenance-head">
-                  <span>Mantenimiento orientativo</span>
-                  <strong>Datos declarados por el vendedor</strong>
-                </div>
-
-                <div className="vehicle-detail-maintenance-grid">
-                  {maintenanceInfo.rows.map((row) => (
-                    <div key={`${row.label}-${row.value}`}>
-                      <span>{row.label}</span>
-                      <strong>{row.value}</strong>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="vehicle-detail-maintenance-note">
-                  Información orientativa declarada por el vendedor. Los valores
-                  pueden variar según uso, ubicación, proveedor, cobertura,
-                  precios vigentes y condiciones particulares. oX NEXMOV no
-                  calcula, verifica ni garantiza estos importes.
-                </p>
-              </div>
-            )}
-
             <div className="vehicle-detail-insurance-next-box">
               <div>
                 <span>Seguro</span>
@@ -605,47 +644,11 @@ export default function VehicleDetailModal({
               </button>
             </div>
 
-            {vehicle.hasFinancing && (
-              <p className="finance-legal-note">
-                Los valores de financiación son informativos y pueden variar
-                según aprobación crediticia, entidad financiera, condiciones del
-                dealer y fecha de operación.
-              </p>
-            )}
-
             <p className="vehicle-detail-legal-note">
               La información de esta publicación fue declarada por el dealer
               anunciante. Verificá disponibilidad, precio final, documentación y
               condiciones antes de avanzar.
             </p>
-
-            <div className="detail-actions">
-              <button type="button" onClick={onCompare}>
-                Agregar a comparar
-              </button>
-
-              <button
-                type="button"
-                className={favoriteActive ? "favorite-active" : ""}
-                onClick={onFavorite}
-              >
-                {favoriteActive ? "Guardado" : "Guardar favorito"}
-              </button>
-
-              <button
-                type="button"
-                className="primary-action"
-                onClick={onContact}
-                disabled={reserved}
-                title={
-                  reserved
-                    ? "Esta unidad está reservada por el dealer."
-                    : "Contactar dealer"
-                }
-              >
-                {reserved ? "Unidad reservada" : "Contactar dealer"}
-              </button>
-            </div>
           </div>
         </div>
       </section>

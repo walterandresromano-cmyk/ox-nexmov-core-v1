@@ -142,6 +142,8 @@ export async function createVehicleForCurrentDealer(form) {
       ? Number(form.marketReferencePrice)
       : null,
     p_details: form.details || null,
+    p_maintenance_info: form.maintenance_info ?? form.maintenanceInfo ?? null,
+    p_show_maintenance_info: Boolean(form.show_maintenance_info ?? form.showMaintenanceInfo ?? false),
   });
 
   return {

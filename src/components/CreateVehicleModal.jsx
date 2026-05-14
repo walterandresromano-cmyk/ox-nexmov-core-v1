@@ -29,6 +29,18 @@ const initialForm = {
   months: "",
   rate: "",
   details: "",
+  show_maintenance_info: false,
+  insurance_monthly_amount: "",
+  insurance_provider: "",
+  insurance_coverage_type: "",
+  fuel_consumption: "",
+  fuel_tank_liters: "",
+  fuel_full_tank_cost: "",
+  patent_cost: "",
+  estimated_service_cost: "",
+  estimated_monthly_maintenance: "",
+  maintenance_notes: "",
+  maintenance_updated_at: "",
 };
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -166,6 +178,30 @@ function findByName(items = [], value) {
   return (
     items.find((item) => normalizeText(item.name) === normalizedValue) || null
   );
+}
+
+function buildMaintenanceInfo(form) {
+  function num(v) {
+    const n = Number(v);
+    return v !== "" && Number.isFinite(n) && n > 0 ? n : null;
+  }
+  function txt(v) {
+    return String(v || "").trim() || null;
+  }
+  const info = {
+    insurance_monthly_amount:      num(form.insurance_monthly_amount),
+    insurance_provider:            txt(form.insurance_provider),
+    insurance_coverage_type:       txt(form.insurance_coverage_type),
+    fuel_consumption:              num(form.fuel_consumption),
+    fuel_tank_liters:              num(form.fuel_tank_liters),
+    fuel_full_tank_cost:           num(form.fuel_full_tank_cost),
+    patent_cost:                   num(form.patent_cost),
+    estimated_service_cost:        num(form.estimated_service_cost),
+    estimated_monthly_maintenance: num(form.estimated_monthly_maintenance),
+    maintenance_notes:             txt(form.maintenance_notes),
+    maintenance_updated_at:        txt(form.maintenance_updated_at),
+  };
+  return Object.values(info).some((v) => v !== null) ? info : null;
 }
 
 export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
@@ -334,9 +370,10 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
       return;
     }
 
-    const { vehicle, error: publishError } = await createVehicleForCurrentDealer(
-      form
-    );
+    const { vehicle, error: publishError } = await createVehicleForCurrentDealer({
+      ...form,
+      maintenance_info: buildMaintenanceInfo(form),
+    });
 
     if (publishError) {
       setError(publishError.message || "No se pudo publicar el vehículo.");
@@ -748,6 +785,132 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
                 placeholder="Estado general, detalles de financiación, condiciones, observaciones."
               />
             </label>
+
+            <div style={{ borderTop: "1px solid var(--ox-border)", paddingTop: "18px", marginTop: "8px" }}>
+              <p className="eyebrow" style={{ marginBottom: "6px" }}>Mantenimiento orientativo</p>
+              <p className="form-hint" style={{ marginBottom: "10px" }}>
+                Estos datos son opcionales y serán mostrados como información orientativa declarada por el vendedor.
+                oX NEXMOV no calcula ni garantiza estos importes.
+              </p>
+
+              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "14px" }}>
+                <input
+                  type="checkbox"
+                  checked={form.show_maintenance_info}
+                  onChange={(event) => updateField("show_maintenance_info", event.target.checked)}
+                />
+                Mostrar mantenimiento orientativo en el detalle del vehículo
+              </label>
+
+              <div className="form-grid-two">
+                <label>
+                  Seguro mensual informado
+                  <input
+                    type="number"
+                    value={form.insurance_monthly_amount}
+                    onChange={(event) => updateField("insurance_monthly_amount", event.target.value)}
+                    placeholder="Ej: 45000"
+                  />
+                </label>
+
+                <label>
+                  Proveedor del seguro
+                  <input
+                    value={form.insurance_provider}
+                    onChange={(event) => updateField("insurance_provider", event.target.value)}
+                    placeholder="Ej: MAPFRE"
+                  />
+                </label>
+
+                <label>
+                  Tipo de cobertura
+                  <input
+                    value={form.insurance_coverage_type}
+                    onChange={(event) => updateField("insurance_coverage_type", event.target.value)}
+                    placeholder="Ej: Todo riesgo"
+                  />
+                </label>
+
+                <label>
+                  Consumo estimado (L/100km)
+                  <input
+                    type="number"
+                    value={form.fuel_consumption}
+                    onChange={(event) => updateField("fuel_consumption", event.target.value)}
+                    placeholder="Ej: 8.5"
+                  />
+                </label>
+
+                <label>
+                  Litros del tanque
+                  <input
+                    type="number"
+                    value={form.fuel_tank_liters}
+                    onChange={(event) => updateField("fuel_tank_liters", event.target.value)}
+                    placeholder="Ej: 50"
+                  />
+                </label>
+
+                <label>
+                  Costo tanque lleno informado
+                  <input
+                    type="number"
+                    value={form.fuel_full_tank_cost}
+                    onChange={(event) => updateField("fuel_full_tank_cost", event.target.value)}
+                    placeholder="Ej: 110000"
+                  />
+                </label>
+
+                <label>
+                  Patente informada
+                  <input
+                    type="number"
+                    value={form.patent_cost}
+                    onChange={(event) => updateField("patent_cost", event.target.value)}
+                    placeholder="Ej: 28000"
+                  />
+                </label>
+
+                <label>
+                  Service aproximado
+                  <input
+                    type="number"
+                    value={form.estimated_service_cost}
+                    onChange={(event) => updateField("estimated_service_cost", event.target.value)}
+                    placeholder="Ej: 85000"
+                  />
+                </label>
+
+                <label>
+                  Mantenimiento mensual orientativo
+                  <input
+                    type="number"
+                    value={form.estimated_monthly_maintenance}
+                    onChange={(event) => updateField("estimated_monthly_maintenance", event.target.value)}
+                    placeholder="Ej: 55000"
+                  />
+                </label>
+
+                <label>
+                  Fecha de actualización del dato
+                  <input
+                    type="date"
+                    value={form.maintenance_updated_at}
+                    onChange={(event) => updateField("maintenance_updated_at", event.target.value)}
+                  />
+                </label>
+              </div>
+
+              <label>
+                Detalle / aclaración de mantenimiento
+                <textarea
+                  value={form.maintenance_notes}
+                  onChange={(event) => updateField("maintenance_notes", event.target.value)}
+                  rows={3}
+                  placeholder="Aclaraciones sobre los datos informados, condiciones de cobertura, etc."
+                />
+              </label>
+            </div>
 
             {error && <p className="form-error">{error}</p>}
 
