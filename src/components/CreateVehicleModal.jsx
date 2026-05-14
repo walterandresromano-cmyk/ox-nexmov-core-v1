@@ -385,7 +385,7 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
 
     if (imageFiles.length > 0) {
       const { images, error: uploadError } = await uploadVehicleImages({
-        vehicleId: vehicle.vehicle_id,
+        vehicleId: vehicle.id ?? vehicle.vehicle_id,
         files: imageFiles,
       });
 
@@ -408,7 +408,7 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
       uploadedImages = images;
 
       const { error: attachError } = await attachImagesToCurrentDealerVehicle({
-        vehicleId: vehicle.vehicle_id,
+        vehicleId: vehicle.id ?? vehicle.vehicle_id,
         images: uploadedImages,
       });
 
