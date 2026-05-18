@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import DealerVehicleActions from "../../components/DealerVehicleActions.jsx";
 import DealerVehicleDetailModal from "../../components/DealerVehicleDetailModal.jsx";
@@ -21,6 +21,7 @@ import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 
 import {
   listDealersForCurrentUser,
+  uploadCurrentDealerLogo,
   updateDealerWhatsappById,
 } from "../../services/dealers.service.js";
 import { listVehiclesForCurrentDealer } from "../../services/dealerVehicles.service.js";
@@ -43,28 +44,56 @@ const DEALER_FEATURE_PREVIEWS = [
     title: "Financiacion avanzada",
     requiredPlan: "Pro",
     description:
-      "Configura financiacion propia, bancaria y senales visibles en tus publicaciones.",
-  },
-  {
-    id: "sellVehicle",
-    title: "Vender mi vehiculo",
-    requiredPlan: "Elite",
-    description:
-      "Recibi oportunidades comerciales asignadas por administracion para evaluar unidades.",
+      "Mejora la lectura comercial de publicaciones con condiciones de financiacion mas claras.",
   },
   {
     id: "metrics",
     title: "Metricas comerciales",
     requiredPlan: "Elite",
     description:
-      "Lectura de leads, publicaciones, interaccion y rendimiento operativo.",
+      "Entende rendimiento, consultas y oportunidades para priorizar mejor tu stock.",
+  },
+  {
+    id: "premiumSignals",
+    title: "Senales premium",
+    requiredPlan: "Elite",
+    description:
+      "Destaca publicaciones con senales de confianza, precio y calidad del dato.",
+  },
+  {
+    id: "sellVehicle",
+    title: "Oportunidades Vender mi vehiculo",
+    requiredPlan: "Elite",
+    description:
+      "Recibi oportunidades comerciales asignadas por administracion para evaluar unidades.",
   },
   {
     id: "visibility",
-    title: "Herramientas de visibilidad",
+    title: "Visibilidad destacada",
     requiredPlan: "Elite",
     description:
-      "Badges, senales premium, comparacion y datos destacados para mejorar conversion.",
+      "Aumenta presencia dentro de la red con beneficios de posicionamiento y lectura premium.",
+  },
+  {
+    id: "maintenance",
+    title: "Mantenimiento orientativo",
+    requiredPlan: "Pro",
+    description:
+      "Suma contexto util sobre mantenimiento para mejorar confianza en cada publicacion.",
+  },
+  {
+    id: "extraQuota",
+    title: "Cupos extra / beneficios",
+    requiredPlan: "Admin",
+    description:
+      "Solicita cupos temporales o beneficios comerciales especiales para campanas puntuales.",
+  },
+  {
+    id: "prioritySupport",
+    title: "Soporte prioritario",
+    requiredPlan: "Platinum",
+    description:
+      "Gestiona consultas operativas con prioridad superior en cuentas de mayor volumen.",
   },
 ];
 
@@ -316,6 +345,10 @@ export default function DealerPanel({ authProfile }) {
   const [savingWhatsapp, setSavingWhatsapp] = useState(false);
   const [whatsappError, setWhatsappError] = useState("");
   const [whatsappSuccess, setWhatsappSuccess] = useState("");
+  const [uploadingDealerLogo, setUploadingDealerLogo] = useState(false);
+  const [dealerLogoError, setDealerLogoError] = useState("");
+  const [dealerLogoSuccess, setDealerLogoSuccess] = useState("");
+  const dealerLogoInputRef = useRef(null);
 
   async function loadDealers() {
     setLoadingDealers(true);
@@ -560,6 +593,13 @@ export default function DealerPanel({ authProfile }) {
     setWhatsappSuccess("");
   }, [dealer?.id, dealer?.contactPhone, dealer?.phoneWhatsapp, dealer?.phone]);
 
+  useEffect(() => {
+    if (!dealer?.id) return;
+
+    setDealerLogoError("");
+    setDealerLogoSuccess("");
+  }, [dealer?.id, dealer?.logo, dealer?.raw?.logo_url]);
+
   if (!dealer) {
     return (
       <section className="page-section">
@@ -666,14 +706,79 @@ export default function DealerPanel({ authProfile }) {
     setSavingWhatsapp(false);
   }
 
-  function renderDealerWhatsappContactCard() {
+  async function handleDealerLogoFile(file) {
+    if (uploadingDealerLogo) return;
+
+    const dealerId = dealer?.id;
+
+    setDealerLogoError("");
+    setDealerLogoSuccess("");
+
+    if (!dealerId) {
+      setDealerLogoError("No pudimos identificar tu perfil comercial.");
+      return;
+    }
+
+    setUploadingDealerLogo(true);
+
+    const { logoUrl, error } = await uploadCurrentDealerLogo({
+      dealerId,
+      file,
+    });
+
+    if (error) {
+      setDealerLogoError(
+        error.message || "No pudimos actualizar la imagen institucional."
+      );
+      setUploadingDealerLogo(false);
+      return;
+    }
+
+    setDealers((currentDealers) =>
+      currentDealers.map((item) =>
+        item.id === dealerId
+          ? {
+              ...item,
+              logo: logoUrl,
+              raw: {
+                ...(item.raw || {}),
+                logo_url: logoUrl,
+              },
+            }
+          : item
+      )
+    );
+
+    setDealerLogoSuccess("Imagen institucional actualizada.");
+    setUploadingDealerLogo(false);
+  }
+
+  function handleDealerLogoInputChange(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) return;
+
+    handleDealerLogoFile(file);
+  }
+
+  function renderDealerWhatsappContactCard({ compact = false } = {}) {
     const normalizedPreview = normalizeWhatsAppArgentina(whatsappForm);
 
     return (
-      <div className="dealer-mobile-plan-card dealer-profile-contact-block dealer-contact-card">
+      <div
+        className={`dealer-mobile-plan-card dealer-profile-contact-block dealer-contact-card${
+          compact ? " dealer-contact-card--compact" : ""
+        }`}
+      >
         <div className="dealer-profile-contact-head">
           <p className="eyebrow">Perfil comercial</p>
-          <h3>WhatsApp de contacto</h3>
+          <h3>{compact ? "WhatsApp comercial" : "WhatsApp de contacto"}</h3>
+          {compact && (
+            <p className="dealer-contact-compact-copy">
+              NÃºmero principal para consultas de compradores.
+            </p>
+          )}
           <p>
             Este número se usará para que los compradores contacten tus
             publicaciones por WhatsApp.
@@ -717,28 +822,61 @@ export default function DealerPanel({ authProfile }) {
 
   function getDealerFeatureState(featureId) {
     if (featureId === "financing") {
+      const available = permissions.fullFinancingTools;
+
       return {
-        available: permissions.fullFinancingTools,
-        module: "financing",
-        status: permissions.fullFinancingTools ? "Disponible" : "Disponible en Pro",
+        available,
+        tone: available ? "available" : "locked",
+        module: available ? "inventory" : "support",
+        status: available ? "Disponible" : "Disponible en Pro",
+        ctaLabel: available ? "Gestionar publicaciones" : "Solicitar upgrade",
       };
     }
 
     if (featureId === "sellVehicle") {
+      const available = permissions.sellVehicleLeads;
+
       return {
-        available: permissions.sellVehicleLeads,
-        module: "sellVehicle",
-        status: permissions.sellVehicleLeads ? "Habilitado" : "Disponible en Elite",
+        available,
+        tone: available ? "available" : "admin",
+        module: available ? "sellVehicle" : "support",
+        status: available
+          ? "Disponible"
+          : "Disponible con habilitacion de administracion",
+        ctaLabel: available ? "Abrir oportunidades" : "Contactar administracion",
       };
     }
 
     if (featureId === "metrics") {
-      const available = permissions.metricsLevel !== "basic";
+      const hasStandardMetrics = permissions.metricsLevel !== "basic";
+      const hasAdvancedMetrics =
+        permissions.metricsLevel === "advanced" || permissions.metricsLevel === "full";
+
+      return {
+        available: false,
+        tone: hasAdvancedMetrics ? "soon" : hasStandardMetrics ? "limited" : "locked",
+        module: "support",
+        status: hasAdvancedMetrics
+          ? "Proximamente"
+          : hasStandardMetrics
+          ? `Nivel ${permissions.metricsLevel}`
+          : "Disponible en Pro",
+        ctaLabel: hasAdvancedMetrics ? "Proximamente" : "Solicitar upgrade",
+        disabled: hasAdvancedMetrics,
+      };
+    }
+
+    if (featureId === "premiumSignals") {
+      const available =
+        permissions.badgeVisibility === "premium" ||
+        permissions.badgeVisibility === "full";
 
       return {
         available,
-        module: "metrics",
-        status: available ? `Nivel ${permissions.metricsLevel}` : "Disponible en Elite",
+        tone: available ? "available" : "locked",
+        module: available ? "inventory" : "support",
+        status: available ? "Disponible" : "Disponible en Elite",
+        ctaLabel: available ? "Ver publicaciones" : "Solicitar upgrade",
       };
     }
 
@@ -750,15 +888,55 @@ export default function DealerPanel({ authProfile }) {
 
       return {
         available,
-        module: "metrics",
-        status: available ? "Activo segun plan" : "Disponible en Elite",
+        tone: available ? "available" : "locked",
+        module: available ? "inventory" : "support",
+        status: available ? "Disponible" : "Disponible en Elite",
+        ctaLabel: available ? "Ver publicaciones" : "Solicitar upgrade",
+      };
+    }
+
+    if (featureId === "maintenance") {
+      const available = permissions.planId !== "inicio";
+
+      return {
+        available,
+        tone: available ? "available" : "locked",
+        module: available ? "inventory" : "support",
+        status: available ? "Disponible" : "Disponible en Pro",
+        ctaLabel: available ? "Gestionar publicaciones" : "Solicitar upgrade",
+      };
+    }
+
+    if (featureId === "extraQuota") {
+      const available = extraQuota > 0;
+
+      return {
+        available,
+        tone: available ? "admin" : "limited",
+        module: "support",
+        status: available
+          ? "Habilitado por admin"
+          : "Disponible con habilitacion de administracion",
+        ctaLabel: available ? "Ver soporte" : "Contactar administracion",
+      };
+    }
+
+    if (featureId === "prioritySupport") {
+      return {
+        available: isPlatinum,
+        tone: isPlatinum ? "available" : "locked",
+        module: "support",
+        status: isPlatinum ? "Disponible" : "Disponible en Platinum",
+        ctaLabel: isPlatinum ? "Abrir soporte" : "Solicitar upgrade",
       };
     }
 
     return {
       available: false,
+      tone: "locked",
       module: "support",
       status: "Disponible en planes superiores",
+      ctaLabel: "Solicitar upgrade",
     };
   }
 
@@ -773,7 +951,7 @@ export default function DealerPanel({ authProfile }) {
             <span>Herramientas de crecimiento</span>
             <h2>Funciones visibles para todos los planes</h2>
             <p>
-              Cada herramienta queda a la vista con su alcance actual. Para
+              Cada herramienta queda visible con su alcance actual. Para
               habilitar funciones superiores, solicitÃ¡ upgrade desde soporte.
             </p>
           </div>
@@ -794,22 +972,19 @@ export default function DealerPanel({ authProfile }) {
             return (
               <article
                 key={feature.id}
-                className={`dealer-feature-preview-card${
-                  state.available ? " is-available" : " is-locked"
-                }`}
+                className={`dealer-feature-preview-card is-${state.tone}`}
               >
                 <span>{state.status}</span>
                 <strong>{feature.title}</strong>
                 <p>{feature.description}</p>
                 <button
                   type="button"
+                  disabled={state.disabled}
                   onClick={() =>
-                    state.available
-                      ? openModule(state.module)
-                      : openModule("support")
+                    !state.disabled && openModule(state.module || "support")
                   }
                 >
-                  {state.available ? "Abrir herramienta" : "Solicitar upgrade"}
+                  {state.ctaLabel}
                 </button>
               </article>
             );
@@ -1013,8 +1188,6 @@ export default function DealerPanel({ authProfile }) {
             </article>
           )}
 
-          {renderDealerWhatsappContactCard()}
-
           <article
             className={`dealer-mobile-plan-card dealer-plan-benefits-card${
               isPlatinum ? " dealer-plan-platinum-card" : ""
@@ -1087,17 +1260,55 @@ export default function DealerPanel({ authProfile }) {
   </div>
 
   <div className="dealer-institutional-card">
-    {dealerLogo ? (
-      <img
-        src={dealerLogo}
-        alt={`Imagen institucional de ${dealer.commercialName}`}
+    <div className="dealer-institutional-media">
+      {dealerLogo ? (
+        <img
+          src={dealerLogo}
+          alt={`Imagen institucional de ${dealer.commercialName}`}
+        />
+      ) : (
+        <div className="dealer-institutional-empty">
+          <strong>Sin imagen institucional</strong>
+          <span>CargÃ¡ una imagen clara de tu agencia.</span>
+        </div>
+      )}
+    </div>
+
+    <div className="dealer-institutional-actions">
+      <p>
+        UsÃ¡ una imagen institucional clara de tu agencia. Se mostrarÃ¡ en tu
+        perfil y ayudarÃ¡ a generar confianza.
+      </p>
+
+      <button
+        type="button"
+        className="table-action-btn dealer-institutional-upload-btn"
+        onClick={() => dealerLogoInputRef.current?.click()}
+        disabled={uploadingDealerLogo}
+      >
+        {uploadingDealerLogo ? "Subiendo imagen..." : "Actualizar imagen"}
+      </button>
+
+      <input
+        ref={dealerLogoInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+        onChange={handleDealerLogoInputChange}
+        disabled={uploadingDealerLogo}
+        className="dealer-institutional-file-input"
       />
-    ) : (
-      <div className="dealer-institutional-empty">
-        <strong>Sin imagen institucional</strong>
-        <span>Disponible para carga desde administracion.</span>
-      </div>
-    )}
+
+      {dealerLogoError && (
+        <div className="auth-warning dealer-institutional-feedback">
+          {dealerLogoError}
+        </div>
+      )}
+      {dealerLogoSuccess && (
+        <div className="auth-message dealer-institutional-feedback">
+          {dealerLogoSuccess}
+        </div>
+      )}
+    </div>
   </div>
 
   <div className="dealer-switcher">
@@ -1117,6 +1328,27 @@ export default function DealerPanel({ authProfile }) {
 
             <button className="admin-refresh-btn" onClick={refreshDealerPanel}>
               Actualizar panel
+            </button>
+
+            {renderDealerWhatsappContactCard({ compact: true })}
+
+            <button
+              type="button"
+              className="primary-action dealer-header-mobile-primary"
+              disabled={!publishCheck.allowed}
+              title={
+                !publishCheck.allowed
+                  ? publishBlockReason ||
+                    "No podÃ©s crear publicaciones hasta regularizar tu plan comercial."
+                  : undefined
+              }
+              onClick={() => {
+                if (publishCheck.allowed) {
+                  setShowVehicleModal(true);
+                }
+              }}
+            >
+              Publicar vehÃ­culo
             </button>
           </div>
         </div>
@@ -1243,8 +1475,6 @@ export default function DealerPanel({ authProfile }) {
                   ))}
                 </div>
               </article>
-
-              {renderDealerWhatsappContactCard()}
             </aside>
           </section>
 
@@ -1270,9 +1500,6 @@ export default function DealerPanel({ authProfile }) {
             <strong>{sellVehicleLeads.length}</strong>
             <p>Solicitudes “Vender mi vehículo” asignadas por admin.</p>
           </article>
-
-          {renderDealerWhatsappContactCard()}
-
           <article className="dealer-status-card">
             <span>Cupo usado en este período</span>
             <strong>{capacityLabel}</strong>

@@ -1,6 +1,29 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
 
+const DEALER_IMAGES_BUCKET = "vehicle-images";
+const MAX_DEALER_LOGO_BYTES = 3 * 1024 * 1024;
+const ALLOWED_DEALER_LOGO_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+]);
+const ALLOWED_DEALER_LOGO_EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp"]);
+
+function sanitizeFileName(name) {
+  return String(name || "imagen")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9._-]/g, "-")
+    .replace(/-+/g, "-")
+    .toLowerCase();
+}
+
+function getFileExtension(name) {
+  const parts = String(name || "").toLowerCase().split(".");
+  return parts.length > 1 ? parts.pop() : "";
+}
+
 function getDaysUntil(dateValue) {
   if (!dateValue) return 30;
 
@@ -135,6 +158,123 @@ export async function listDealersForCurrentUser() {
 
   return {
     dealers: (data || []).map(mapDealerFromSupabase),
+    error: null,
+  };
+}
+
+export async function uploadCurrentDealerLogo({ dealerId, file }) {
+  if (!isSupabaseConfigured || !supabase) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        message: "Supabase no estÃ¡ configurado.",
+      },
+    };
+  }
+
+  const resolvedDealerId = String(dealerId || "").trim();
+  const numericDealerId = Number(resolvedDealerId);
+
+  if (!resolvedDealerId || !Number.isFinite(numericDealerId)) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        code: "dealer_id_missing",
+        message: "No pudimos identificar tu perfil comercial.",
+      },
+    };
+  }
+
+  if (!file) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        code: "file_missing",
+        message: "SeleccionÃ¡ una imagen institucional para subir.",
+      },
+    };
+  }
+
+  const extension = getFileExtension(file.name);
+  const isAllowedType = ALLOWED_DEALER_LOGO_TYPES.has(file.type);
+  const isAllowedExtension = ALLOWED_DEALER_LOGO_EXTENSIONS.has(extension);
+
+  if (!isAllowedType || !isAllowedExtension) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        code: "invalid_file_type",
+        message: "UsÃ¡ una imagen JPG, PNG o WebP.",
+      },
+    };
+  }
+
+  if (file.size > MAX_DEALER_LOGO_BYTES) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        code: "file_too_large",
+        message: "La imagen no puede superar los 3 MB.",
+      },
+    };
+  }
+
+  const safeName = sanitizeFileName(file.name);
+  const path = `dealers/${resolvedDealerId}/institutional/${Date.now()}-${safeName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from(DEALER_IMAGES_BUCKET)
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (uploadError) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: uploadError,
+    };
+  }
+
+  const { data: publicData } = supabase.storage
+    .from(DEALER_IMAGES_BUCKET)
+    .getPublicUrl(path);
+
+  const logoUrl = publicData?.publicUrl || null;
+
+  if (!logoUrl) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error: {
+        code: "public_url_missing",
+        message: "No se pudo obtener la URL pÃºblica de la imagen.",
+      },
+    };
+  }
+
+  const { data, error } = await supabase.rpc("update_current_dealer_logo", {
+    p_dealer_id: numericDealerId,
+    p_logo_url: logoUrl,
+  });
+
+  if (error) {
+    return {
+      dealer: null,
+      logoUrl: null,
+      error,
+    };
+  }
+
+  return {
+    dealer: Array.isArray(data) ? data[0] : data || null,
+    logoUrl,
     error: null,
   };
 }
