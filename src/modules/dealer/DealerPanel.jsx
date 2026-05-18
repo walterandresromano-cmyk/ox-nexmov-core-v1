@@ -37,6 +37,37 @@ const DEALER_MOBILE_SECTIONS = [
   { id: "plan", label: "Mi plan" },
 ];
 
+const DEALER_FEATURE_PREVIEWS = [
+  {
+    id: "financing",
+    title: "Financiacion avanzada",
+    requiredPlan: "Pro",
+    description:
+      "Configura financiacion propia, bancaria y senales visibles en tus publicaciones.",
+  },
+  {
+    id: "sellVehicle",
+    title: "Vender mi vehiculo",
+    requiredPlan: "Elite",
+    description:
+      "Recibi oportunidades comerciales asignadas por administracion para evaluar unidades.",
+  },
+  {
+    id: "metrics",
+    title: "Metricas comerciales",
+    requiredPlan: "Elite",
+    description:
+      "Lectura de leads, publicaciones, interaccion y rendimiento operativo.",
+  },
+  {
+    id: "visibility",
+    title: "Herramientas de visibilidad",
+    requiredPlan: "Elite",
+    description:
+      "Badges, senales premium, comparacion y datos destacados para mejorar conversion.",
+  },
+];
+
 function formatLimit(limit) {
   return limit === Infinity ? "Ilimitado" : limit;
 }
@@ -684,6 +715,110 @@ export default function DealerPanel({ authProfile }) {
     );
   }
 
+  function getDealerFeatureState(featureId) {
+    if (featureId === "financing") {
+      return {
+        available: permissions.fullFinancingTools,
+        module: "financing",
+        status: permissions.fullFinancingTools ? "Disponible" : "Disponible en Pro",
+      };
+    }
+
+    if (featureId === "sellVehicle") {
+      return {
+        available: permissions.sellVehicleLeads,
+        module: "sellVehicle",
+        status: permissions.sellVehicleLeads ? "Habilitado" : "Disponible en Elite",
+      };
+    }
+
+    if (featureId === "metrics") {
+      const available = permissions.metricsLevel !== "basic";
+
+      return {
+        available,
+        module: "metrics",
+        status: available ? `Nivel ${permissions.metricsLevel}` : "Disponible en Elite",
+      };
+    }
+
+    if (featureId === "visibility") {
+      const available =
+        permissions.marketIntelligence ||
+        permissions.badgeVisibility === "premium" ||
+        permissions.badgeVisibility === "full";
+
+      return {
+        available,
+        module: "metrics",
+        status: available ? "Activo segun plan" : "Disponible en Elite",
+      };
+    }
+
+    return {
+      available: false,
+      module: "support",
+      status: "Disponible en planes superiores",
+    };
+  }
+
+  function renderDealerFeaturePreview() {
+    return (
+      <section
+        className="dealer-feature-preview"
+        aria-label="Herramientas y beneficios disponibles"
+      >
+        <div className="dealer-feature-preview-head">
+          <div>
+            <span>Herramientas de crecimiento</span>
+            <h2>Funciones visibles para todos los planes</h2>
+            <p>
+              Cada herramienta queda a la vista con su alcance actual. Para
+              habilitar funciones superiores, solicitÃ¡ upgrade desde soporte.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="table-action-btn"
+            onClick={() => openModule("support")}
+          >
+            Solicitar upgrade
+          </button>
+        </div>
+
+        <div className="dealer-feature-preview-grid">
+          {DEALER_FEATURE_PREVIEWS.map((feature) => {
+            const state = getDealerFeatureState(feature.id);
+
+            return (
+              <article
+                key={feature.id}
+                className={`dealer-feature-preview-card${
+                  state.available ? " is-available" : " is-locked"
+                }`}
+              >
+                <span>{state.status}</span>
+                <strong>{feature.title}</strong>
+                <p>{feature.description}</p>
+                <button
+                  type="button"
+                  onClick={() =>
+                    state.available
+                      ? openModule(state.module)
+                      : openModule("support")
+                  }
+                >
+                  {state.available ? "Abrir herramienta" : "Solicitar upgrade"}
+                </button>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    );
+  }
+
   const activeVehiclesCount = dealerVehicles.filter(
     (vehicle) => vehicle.is_active
   ).length;
@@ -951,42 +1086,16 @@ export default function DealerPanel({ authProfile }) {
     )}
   </div>
 
-  <div
-    style={{
-      width: "min(260px, 100%)",
-      minHeight: "120px",
-      border: "1px solid var(--ox-border)",
-      borderRadius: "22px",
-      background: "var(--ox-card)",
-      overflow: "hidden",
-      display: "grid",
-      placeItems: "center",
-      flexShrink: 0,
-    }}
-  >
+  <div className="dealer-institutional-card">
     {dealerLogo ? (
       <img
         src={dealerLogo}
         alt={`Imagen institucional de ${dealer.commercialName}`}
-        style={{
-          width: "100%",
-          height: "140px",
-          objectFit: "cover",
-          display: "block",
-        }}
       />
     ) : (
-      <div
-        style={{
-          padding: "16px",
-          textAlign: "center",
-          color: "var(--ox-muted)",
-        }}
-      >
-        <strong style={{ color: "var(--ox-text)", display: "block" }}>
-          Sin imagen institucional
-        </strong>
-        <span>Admin puede cargarla desde el panel.</span>
+      <div className="dealer-institutional-empty">
+        <strong>Sin imagen institucional</strong>
+        <span>Disponible para carga desde administracion.</span>
       </div>
     )}
   </div>
@@ -1045,6 +1154,7 @@ export default function DealerPanel({ authProfile }) {
           renderDealerMobilePlan()}
 
         {activeDealerModule === "summary" && (
+          <>
           <section className="dealer-dashboard-shell" aria-label="Resumen operativo dealer">
             <article className="dealer-dashboard-primary-card">
               <span>Acción principal</span>
@@ -1137,6 +1247,9 @@ export default function DealerPanel({ authProfile }) {
               {renderDealerWhatsappContactCard()}
             </aside>
           </section>
+
+          {renderDealerFeaturePreview()}
+          </>
         )}
 
         <div className="dealer-status-grid">

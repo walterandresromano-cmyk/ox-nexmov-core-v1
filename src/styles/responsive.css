@@ -1598,6 +1598,20 @@
     padding-bottom: calc(128px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
+  .dealer-panel > .panel-head-row {
+    gap: 10px !important;
+  }
+
+  .dealer-institutional-card {
+    width: 100%;
+    min-height: 92px;
+    border-radius: 18px;
+  }
+
+  .dealer-institutional-card img {
+    height: 104px;
+  }
+
   .dealer-mobile-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
@@ -1802,6 +1816,56 @@
   .dealer-panel .primary-action {
     min-height: 42px;
     border-radius: 16px;
+  }
+
+  .dealer-dashboard-shell {
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+    margin: 10px 0 12px;
+  }
+
+  .dealer-dashboard-ops,
+  .dealer-feature-preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .dealer-feature-preview {
+    gap: 10px;
+    padding: 12px;
+    border-radius: 20px;
+  }
+
+  .dealer-feature-preview-head {
+    display: grid;
+    gap: 9px;
+    align-items: start;
+  }
+
+  .dealer-feature-preview-head h2 {
+    font-size: 1.05rem;
+  }
+
+  .dealer-feature-preview-head p,
+  .dealer-feature-preview-card p {
+    font-size: 0.74rem;
+    line-height: 1.34;
+  }
+
+  .dealer-feature-preview-head .table-action-btn,
+  .dealer-feature-preview-card button {
+    width: 100%;
+    min-height: 40px !important;
+    justify-content: center;
+  }
+
+  .dealer-feature-preview-card {
+    padding: 11px;
+    border-radius: 16px;
+  }
+
+  .dealer-feature-preview-card strong {
+    font-size: 0.9rem;
   }
 }
 
