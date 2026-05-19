@@ -169,22 +169,18 @@ export default function FAQ({ onNavigate }) {
       <div className="container panel faq-panel">
         <section className="faq-hero">
           <div className="faq-hero-copy">
-            <p className="eyebrow">Preguntas frecuentes</p>
+            <p className="eyebrow">Centro de ayuda</p>
 
-            <h1>
-              Respuestas claras para compradores, dealers y usuarios de{" "}
-              <span>la red.</span>
-            </h1>
+            <h1>Preguntas frecuentes</h1>
 
             <p>
-              oX NEXMOV está pensado para ordenar la búsqueda, comparación,
-              financiación, publicación y contacto comercial dentro de una misma
-              plataforma.
+              Resolvemos las dudas más importantes para que compradores y
+              dealers usen oX NEXMOV con claridad y confianza.
             </p>
           </div>
 
           <aside className="faq-hero-card">
-            <span>Centro de ayuda</span>
+            <span>Guía rápida</span>
             <strong>Menos dudas. Más decisión.</strong>
             <p>
               Una guía rápida para entender cómo funciona la red, cuándo iniciar
@@ -221,17 +217,21 @@ export default function FAQ({ onNavigate }) {
         <section className="faq-final">
           <div>
             <p className="eyebrow">Soporte</p>
-            <h2>Comunicación interna ordenada.</h2>
+            <h2>¿Todavía tenés dudas?</h2>
             <p>
-              oX NEXMOV cuenta con tickets internos para que dealers,
-              administración y soporte puedan resolver consultas sin salir de la
-              plataforma.
+              Podés explorar vehículos publicados, comparar opciones reales o
+              sumarte a la red como dealer.
             </p>
           </div>
 
-          <button type="button" onClick={() => onNavigate?.("joinNetwork")}>
-            Sumarme a la red
-          </button>
+          <div className="faq-final-actions">
+            <button type="button" onClick={() => onNavigate?.("search")}>
+              Buscar vehículos
+            </button>
+            <button type="button" onClick={() => onNavigate?.("joinNetwork")}>
+              Sumate a la red
+            </button>
+          </div>
         </section>
       </div>
     </section>

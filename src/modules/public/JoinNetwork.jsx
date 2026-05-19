@@ -212,21 +212,22 @@ export default function JoinNetwork({ onNavigate }) {
       <div className="container panel join-network-panel">
         <section className="join-network-hero">
           <div className="join-network-hero-copy">
-            <p className="eyebrow">Red comercial oX NEXMOV</p>
+            <p className="eyebrow">Red de dealers</p>
 
             <h1>
-              Sumá tu agencia a una red automotriz{" "}
-              <span>más clara, confiable e inteligente.</span>
+              Sumá tu agencia a una nueva forma de{" "}
+              <span>comercializar vehículos.</span>
             </h1>
 
             <p>
-              Publicá mejor, recibí leads trazables y diferenciá tus vehículos
-              con señales comerciales que ayudan al comprador a decidir.
+              oX NEXMOV reúne publicaciones, consultas, herramientas
+              comerciales y señales de confianza para que cada dealer trabaje
+              con más claridad.
             </p>
 
             <div className="join-network-actions">
               <button type="button" onClick={() => onNavigate?.("login")}>
-                Solicitar alta como dealer
+                Quiero sumar mi agencia
               </button>
 
               <button

@@ -86,45 +86,145 @@ export default function ZeroKm({ authUser, authProfile }) {
   }
 
   return (
-          <section className="zero-km-page ox-public-page">
-  <div className="zero-km-panel ox-public-hero">
-    <p className="ox-public-eyebrow">Financiación 0km</p>
-    <h1 className="ox-public-title">
-      Financiación <span>0km</span>
-    </h1>
-    <p className="ox-public-lead">
-          Consultá opciones de financiación para vehículos 0km y recibí
-          orientación comercial según disponibilidad y condiciones vigentes.
+    <section className="zero-km-page ox-public-page">
+      <div className="zero-km-panel ox-public-hero">
+        <p className="ox-public-eyebrow">Financiación 0km</p>
+        <h1 className="ox-public-title">
+          Explorá opciones de financiación con más claridad
+        </h1>
+        <p className="ox-public-lead">
+          Consultá alternativas disponibles y dejá tus datos para recibir
+          asesoramiento sobre planes, cuotas y condiciones de financiación.
         </p>
 
-        <div className="zero-km-grid ox-public-content">
-          <article className="zero-km-info-card">
-            <span>Cómo funciona</span>
-            <h2>Consulta guiada, sin cargar datos sensibles</h2>
-            <p>
-              No pedimos DNI desde el inicio. La primera etapa solo registra
-              datos de contacto, ubicación, interés de vehículo y condiciones
-              aproximadas.
-            </p>
+        <div className="zero-km-hero-actions">
+          <a className="primary-action" href="#zero-km-form">
+            Consultar financiación
+          </a>
+          <a className="secondary-action" href="#zero-km-how">
+            Cómo funciona
+          </a>
+        </div>
 
-            <div className="zero-km-steps">
-              <div>
-                <strong>1</strong>
-                <span>Completás la consulta.</span>
-              </div>
-              <div>
-                <strong>2</strong>
-                <span>El equipo interno revisa el caso.</span>
-              </div>
-              <div>
-                <strong>3</strong>
-                <span>Un asesor podrá orientarte según condiciones vigentes.</span>
-              </div>
-            </div>
+        <section
+          className="zero-km-capabilities"
+          aria-label="Qué vas a poder consultar"
+        >
+          <article>
+            <span>Próximamente</span>
+            <strong>Vehículos financiables</strong>
+            <p>Explorar unidades con planes o financiación disponible.</p>
           </article>
+          <article>
+            <span>Comparación</span>
+            <strong>Cuotas y condiciones</strong>
+            <p>Leer entrega, cuotas, plazos y condiciones declaradas.</p>
+          </article>
+          <article>
+            <span>Análisis</span>
+            <strong>Ingreso mensual</strong>
+            <p>Estimar si una cuota se ajusta a tus ingresos.</p>
+          </article>
+          <article>
+            <span>Contexto</span>
+            <strong>Variación de cuota</strong>
+            <p>Considerar que los planes pueden cambiar con el tiempo.</p>
+          </article>
+          <article>
+            <span>Detalle</span>
+            <strong>Cuota pura y gastos</strong>
+            <p>Diferenciar conceptos antes de avanzar con una consulta.</p>
+          </article>
+        </section>
 
-          <form className="zero-km-form" onSubmit={handleSubmit}>
-            <div className="form-grid-two">
+        <article className="zero-km-simulator-preview">
+          <div>
+            <span>Próximamente</span>
+            <h2>Simulador de alcance de cuota</h2>
+            <p>
+              Estamos preparando una herramienta para relacionar ingreso
+              mensual, cuota pura, variación estimada y capacidad de pago.
+            </p>
+            <a href="#zero-km-form">Dejar consulta ahora</a>
+          </div>
+          <div className="zero-km-preview-grid" aria-hidden="true">
+            <div>
+              <span>Ingreso mensual</span>
+              <strong>$ --</strong>
+            </div>
+            <div>
+              <span>Cuota estimada</span>
+              <strong>$ --</strong>
+            </div>
+            <div>
+              <span>% de ingreso</span>
+              <strong>--%</strong>
+            </div>
+            <div>
+              <span>Variación posible</span>
+              <strong>Variable</strong>
+            </div>
+          </div>
+        </article>
+
+        <div className="zero-km-grid ox-public-content">
+          <div className="zero-km-side-stack">
+            <article className="zero-km-info-card" id="zero-km-how">
+              <span>Cómo funciona hoy</span>
+              <h2>Consulta guiada, sin cargar datos sensibles</h2>
+              <p>
+                No pedimos DNI desde el inicio. La primera etapa registra datos
+                de contacto, ubicación, interés de vehículo y condiciones
+                aproximadas.
+              </p>
+
+              <div className="zero-km-steps">
+                <div>
+                  <strong>1</strong>
+                  <span>Completás una consulta.</span>
+                </div>
+                <div>
+                  <strong>2</strong>
+                  <span>oX NEXMOV registra la solicitud.</span>
+                </div>
+                <div>
+                  <strong>3</strong>
+                  <span>Un asesor o usuario habilitado analiza la consulta.</span>
+                </div>
+                <div>
+                  <strong>4</strong>
+                  <span>Recibís contacto comercial según disponibilidad.</span>
+                </div>
+              </div>
+            </article>
+
+            <article className="zero-km-responsible-note">
+              <span>Lectura responsable</span>
+              <p>
+                Las cuotas, condiciones y disponibilidad pueden variar según
+                proveedor, modelo, plan y situación crediticia. oX NEXMOV
+                organiza la consulta, pero no garantiza aprobación ni
+                condiciones finales.
+              </p>
+            </article>
+          </div>
+
+          <form className="zero-km-form" id="zero-km-form" onSubmit={handleSubmit}>
+            <div className="zero-km-form-head">
+              <span>Consulta guiada</span>
+              <h2>Datos para orientar la financiación</h2>
+              <p>
+                Completá la información principal. La consulta no implica
+                aprobación crediticia ni contratación de un plan.
+              </p>
+            </div>
+
+            <div className="zero-km-form-group">
+              <div className="zero-km-form-group-head">
+                <span>Datos personales</span>
+              </div>
+
+              <div className="form-grid-two">
               <label>
                 Nombre completo
                 <input
@@ -173,7 +273,15 @@ export default function ZeroKm({ authUser, authProfile }) {
                   placeholder="Ej: Pilar"
                 />
               </label>
+              </div>
+            </div>
 
+            <div className="zero-km-form-group">
+              <div className="zero-km-form-group-head">
+                <span>Vehículo e inversión</span>
+              </div>
+
+              <div className="form-grid-two">
               <label>
                 Marca de interés
                 <input
@@ -242,7 +350,15 @@ export default function ZeroKm({ authUser, authProfile }) {
                   <option value="72">72 meses</option>
                 </select>
               </label>
+              </div>
+            </div>
 
+            <div className="zero-km-form-group">
+              <div className="zero-km-form-group-head">
+                <span>Ingreso / situación</span>
+              </div>
+
+              <div className="form-grid-two">
               <label>
                 Situación laboral
                 <select
@@ -280,21 +396,28 @@ export default function ZeroKm({ authUser, authProfile }) {
                 </select>
               </label>
             </div>
+            </div>
 
-            <label>
-              Mensaje
+            <div className="zero-km-form-group zero-km-form-group-message">
+              <div className="zero-km-form-group-head">
+                <span>Mensaje</span>
+              </div>
+
+              <label>
+              Detalle de la consulta
               <textarea
                 value={form.message}
                 onChange={(event) => updateField("message", event.target.value)}
-                rows={5}
+                rows={4}
                 placeholder="Contanos qué estás buscando o qué condición querés consultar."
               />
-            </label>
+              </label>
+            </div>
 
             <p className="finance-legal-note">
-              Los valores, tasas, cuotas y condiciones son informativos y pueden
-              variar según entidad financiera, aprobación crediticia,
-              disponibilidad del vehículo y fecha de operación.
+              Dejanos tus datos para consultar opciones disponibles. La
+              información final dependerá del proveedor, plan y condiciones
+              vigentes.
             </p>
 
             {error && <p className="form-error">{error}</p>}
@@ -329,6 +452,8 @@ export default function ZeroKm({ authUser, authProfile }) {
             <p className="form-legal-note">
               Al enviar esta consulta, aceptás que oX NEXMOV registre tus datos
               para gestionar el contacto comercial vinculado a financiación 0km.
+              El envío de una consulta no implica aprobación crediticia ni
+              contratación de un plan.
             </p>
           </form>
         </div>
@@ -336,4 +461,3 @@ export default function ZeroKm({ authUser, authProfile }) {
     </section>
   );
 }
-

@@ -127,10 +127,10 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
           <section className="page-section sell-vehicle-page">
          <div className="container panel sell-vehicle-panel">
         <p className="eyebrow">Vender mi vehículo</p>
-        <h1>Vender mi vehículo</h1>
+        <h1>Ofrecé tu vehículo a dealers de la red</h1>
         <p>
-          Cargá los datos principales de tu vehículo para que oX NEXMOV pueda
-          gestionar posibles contactos comerciales con dealers habilitados.
+          Cargá los datos principales de tu vehículo y generá una solicitud
+          para que pueda ser evaluada dentro de oX NEXMOV.
         </p>
 
         {/*
@@ -182,16 +182,27 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
             <div className="sell-vehicle-steps">
               <div>
                 <strong>1</strong>
-                <span>Cargás los datos básicos de tu vehículo.</span>
+                <span>Cargás los datos del vehículo.</span>
               </div>
               <div>
                 <strong>2</strong>
-                <span>La plataforma revisa la solicitud.</span>
+                <span>oX NEXMOV registra la solicitud.</span>
               </div>
               <div>
                 <strong>3</strong>
-                <span>Un dealer habilitado puede contactarte si corresponde.</span>
+                <span>Dealers habilitados pueden evaluarla.</span>
               </div>
+              <div>
+                <strong>4</strong>
+                <span>Recibís contacto comercial si hay interés.</span>
+              </div>
+            </div>
+
+            <div className="sell-vehicle-trust-list">
+              <span>Consulta trazable</span>
+              <span>Red de dealers</span>
+              <span>Sin exposición pública innecesaria</span>
+              <span>Datos ordenados para evaluar mejor</span>
             </div>
           </article>
 
@@ -429,7 +440,7 @@ export default function SellVehicle({ authUser, authProfile, onNavigate }) {
             >
               {submitting
                 ? "Enviando solicitud..."
-                : "Enviar datos de mi vehículo"}
+                : "Cargar mi vehículo"}
             </button>
 
             <p className="form-legal-note">

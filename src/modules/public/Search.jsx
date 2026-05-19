@@ -688,6 +688,63 @@ const SEARCH_TRUST_ITEMS = [
   },
 ];
 
+function FilterDropdown({
+  label,
+  value,
+  placeholder,
+  options,
+  onChange,
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const items = [{ value: "", label: placeholder }, ...options];
+  const selected = items.find((item) => item.value === value);
+  const displayLabel = selected?.label || placeholder;
+
+  return (
+    <label className="ox-filter-select-field">
+      {label}
+      <div
+        className={`ox-filter-dropdown${isOpen ? " is-open" : ""}`}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setIsOpen(false);
+          }
+        }}
+      >
+        <button
+          type="button"
+          className="ox-filter-dropdown-trigger"
+          onClick={() => setIsOpen((current) => !current)}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+        >
+          <span>{displayLabel}</span>
+        </button>
+
+        {isOpen && (
+          <div className="ox-filter-dropdown-menu" role="listbox">
+            {items.map((item) => (
+              <button
+                key={`${label}-${item.value || "all"}`}
+                type="button"
+                role="option"
+                aria-selected={item.value === value}
+                className={item.value === value ? "is-selected" : ""}
+                onClick={() => {
+                  onChange(item.value);
+                  setIsOpen(false);
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </label>
+  );
+}
+
 const ALLOW_MOCK_FALLBACK = import.meta.env.DEV;
 
 export default function Search({
@@ -945,13 +1002,13 @@ export default function Search({
       <div className="ox-search-shell">
         <section className="ox-search-hero">
           <div className="ox-search-title-block">
-            <p className="ox-search-eyebrow">Motor avanzado</p>
+            <p className="ox-search-eyebrow">Búsqueda inteligente</p>
             <h1>
-              Buscar vehículos<span>.</span>
+              Buscá con más claridad<span>.</span>
             </h1>
             <p>
-              Encontrá el vehículo ideal con datos reales, dealers verificados y
-              herramientas para decidir mejor.
+              Filtrá vehículos por precio, ubicación, financiación, kilometraje
+              y señales comerciales antes de contactar.
             </p>
           </div>
 
@@ -1088,59 +1145,45 @@ export default function Search({
               <div className="ox-filter-section">
                 <strong>Vehículo</strong>
 
-                <label>
-                  Marca
-                  <select
-                    value={filters.brand}
-                    onChange={(event) => {
-                      updateFilter("brand", event.target.value);
-                      updateFilter("model", "");
-                      updateFilter("version", "");
-                    }}
-                  >
-                    <option value="">Todas</option>
-                    {filterOptions.brands.map((brand) => (
-                      <option key={brand} value={brand}>
-                        {brand}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Marca"
+                  value={filters.brand}
+                  placeholder="Todas"
+                  options={filterOptions.brands.map((brand) => ({
+                    value: brand,
+                    label: brand,
+                  }))}
+                  onChange={(value) => {
+                    updateFilter("brand", value);
+                    updateFilter("model", "");
+                    updateFilter("version", "");
+                  }}
+                />
 
-                <label>
-                  Modelo
-                  <select
-                    value={filters.model}
-                    onChange={(event) => {
-                      updateFilter("model", event.target.value);
-                      updateFilter("version", "");
-                    }}
-                  >
-                    <option value="">Todos</option>
-                    {filterOptions.models.map((model) => (
-                      <option key={model} value={model}>
-                        {model}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Modelo"
+                  value={filters.model}
+                  placeholder="Todos"
+                  options={filterOptions.models.map((model) => ({
+                    value: model,
+                    label: model,
+                  }))}
+                  onChange={(value) => {
+                    updateFilter("model", value);
+                    updateFilter("version", "");
+                  }}
+                />
 
-                <label>
-                  Versión
-                  <select
-                    value={filters.version}
-                    onChange={(event) =>
-                      updateFilter("version", event.target.value)
-                    }
-                  >
-                    <option value="">Todas</option>
-                    {filterOptions.versions.map((version) => (
-                      <option key={version} value={version}>
-                        {version}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Versión"
+                  value={filters.version}
+                  placeholder="Todas"
+                  options={filterOptions.versions.map((version) => ({
+                    value: version,
+                    label: version,
+                  }))}
+                  onChange={(value) => updateFilter("version", value)}
+                />
               </div>
 
               <div className="ox-filter-section">
@@ -1221,143 +1264,106 @@ export default function Search({
               <div className="ox-filter-section">
                 <strong>Provincia / ciudad</strong>
 
-                <label>
-                  Provincia
-                  <select
-                    value={filters.province}
-                    onChange={(event) => {
-                      updateFilter("province", event.target.value);
-                      updateFilter("city", "");
-                    }}
-                  >
-                    <option value="">Todas</option>
-                    {filterOptions.provinces.map((province) => (
-                      <option key={province} value={province}>
-                        {province}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Provincia"
+                  value={filters.province}
+                  placeholder="Todas"
+                  options={filterOptions.provinces.map((province) => ({
+                    value: province,
+                    label: province,
+                  }))}
+                  onChange={(value) => {
+                    updateFilter("province", value);
+                    updateFilter("city", "");
+                  }}
+                />
 
-                <label>
-                  Ciudad
-                  <select
-                    value={filters.city}
-                    onChange={(event) =>
-                      updateFilter("city", event.target.value)
-                    }
-                  >
-                    <option value="">Todas</option>
-                    {filterOptions.cities.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Ciudad"
+                  value={filters.city}
+                  placeholder="Todas"
+                  options={filterOptions.cities.map((city) => ({
+                    value: city,
+                    label: city,
+                  }))}
+                  onChange={(value) => updateFilter("city", value)}
+                />
               </div>
 
               <div className="ox-filter-section">
                 <strong>Características</strong>
 
-                <label>
-                  Tipo
-                  <select
-                    value={filters.vehicleType}
-                    onChange={(event) =>
-                      updateFilter("vehicleType", event.target.value)
-                    }
-                  >
-                    <option value="">Todos</option>
-                    {filterOptions.bodyTypes.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Tipo"
+                  value={filters.vehicleType}
+                  placeholder="Todos"
+                  options={filterOptions.bodyTypes.map((type) => ({
+                    value: type,
+                    label: type,
+                  }))}
+                  onChange={(value) => updateFilter("vehicleType", value)}
+                />
 
-                <label>
-                  Combustible
-                  <select
-                    value={filters.fuel}
-                    onChange={(event) =>
-                      updateFilter("fuel", event.target.value)
-                    }
-                  >
-                    <option value="">Todos</option>
-                    {filterOptions.fuels.map((fuel) => (
-                      <option key={fuel} value={fuel}>
-                        {fuel}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Combustible"
+                  value={filters.fuel}
+                  placeholder="Todos"
+                  options={filterOptions.fuels.map((fuel) => ({
+                    value: fuel,
+                    label: fuel,
+                  }))}
+                  onChange={(value) => updateFilter("fuel", value)}
+                />
 
-                <label>
-                  Transmisión
-                  <select
-                    value={filters.transmission}
-                    onChange={(event) =>
-                      updateFilter("transmission", event.target.value)
-                    }
-                  >
-                    <option value="">Todas</option>
-                    {filterOptions.transmissions.map((transmission) => (
-                      <option key={transmission} value={transmission}>
-                        {transmission}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Transmisión"
+                  value={filters.transmission}
+                  placeholder="Todas"
+                  options={filterOptions.transmissions.map((transmission) => ({
+                    value: transmission,
+                    label: transmission,
+                  }))}
+                  onChange={(value) => updateFilter("transmission", value)}
+                />
               </div>
 
               <div className="ox-filter-section">
                 <strong>Comercial</strong>
 
-                <label>
-                  Financiación
-                  <select
-                    value={filters.financing}
-                    onChange={(event) =>
-                      updateFilter("financing", event.target.value)
-                    }
-                  >
-                    <option value="">Todas</option>
-                    <option value="yes">Con financiación</option>
-                    <option value="no">Sin financiación</option>
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Financiación"
+                  value={filters.financing}
+                  placeholder="Todas"
+                  options={[
+                    { value: "yes", label: "Con financiación" },
+                    { value: "no", label: "Sin financiación" },
+                  ]}
+                  onChange={(value) => updateFilter("financing", value)}
+                />
 
-                <label>
-                  Estado
-                  <select
-                    value={filters.status}
-                    onChange={(event) =>
-                      updateFilter("status", event.target.value)
-                    }
-                  >
-                    <option value="">Todos</option>
-                    <option value="available">Disponibles</option>
-                    <option value="reserved">Reservados</option>
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Estado"
+                  value={filters.status}
+                  placeholder="Todos"
+                  options={[
+                    { value: "available", label: "Disponibles" },
+                    { value: "reserved", label: "Reservados" },
+                  ]}
+                  onChange={(value) => updateFilter("status", value)}
+                />
 
-                <label>
-                  Rango dealer
-                  <select
-                    value={filters.dealerRank}
-                    onChange={(event) =>
-                      updateFilter("dealerRank", event.target.value)
-                    }
-                  >
-                    <option value="">Todos</option>
-                    <option value="inicio">Inicio</option>
-                    <option value="pro">Pro</option>
-                    <option value="elite">Elite</option>
-                    <option value="platinum">Platinum</option>
-                  </select>
-                </label>
+                <FilterDropdown
+                  label="Rango dealer"
+                  value={filters.dealerRank}
+                  placeholder="Todos"
+                  options={[
+                    { value: "inicio", label: "Inicio" },
+                    { value: "pro", label: "Pro" },
+                    { value: "elite", label: "Elite" },
+                    { value: "platinum", label: "Platinum" },
+                  ]}
+                  onChange={(value) => updateFilter("dealerRank", value)}
+                />
               </div>
 
               <div className="ox-filter-section ox-filter-shortcuts">
@@ -1473,9 +1479,13 @@ export default function Search({
           </main>
 
           <aside className="ox-search-aside">
-            <div className="ox-search-side-card">
-              <h2>Comparador</h2>
-              <p>Seleccioná hasta 4 vehículos para verlos lado a lado.</p>
+            <div className="ox-search-side-card ox-search-decision-card">
+              <span>Decisión</span>
+              <h2>Compará mejor</h2>
+              <p>
+                Seleccioná hasta 4 vehículos para revisar precio, km,
+                financiación y ubicación lado a lado.
+              </p>
 
               <button
                 type="button"
@@ -1486,39 +1496,32 @@ export default function Search({
               </button>
             </div>
 
-            <div className="ox-search-side-card">
-              <h2>Oportunidades</h2>
-
-              <div className="ox-search-opportunity-list">
-                {filteredVehicles.slice(0, 3).map((vehicle) => (
-                  <article key={`opportunity-${vehicle.id}`}>
-                    <strong>
-                      {vehicle.brand} {vehicle.model}
-                    </strong>
-                    <span>
-                      {getVehiclePrice(vehicle).toLocaleString("es-AR", {
-                        style: "currency",
-                        currency: "ARS",
-                        maximumFractionDigits: 0,
-                      })}
-                    </span>
-                  </article>
-                ))}
-
-                {filteredVehicles.length === 0 && (
-                  <article>
-                    <strong>Sin oportunidades visibles</strong>
-                    <span>Probá ampliar la búsqueda.</span>
-                  </article>
-                )}
-              </div>
+            <div className="ox-search-side-card ox-search-signal-card">
+              <span>Lectura</span>
+              <h2>Cómo leer las señales</h2>
+              <ul>
+                <li>Precio bajo referencia.</li>
+                <li>Financiación disponible.</li>
+                <li>Dealer verificado.</li>
+                <li>Vehículo comparable.</li>
+              </ul>
             </div>
 
-            <div className="ox-search-side-card">
-              <h2>Búsqueda inteligente</h2>
+            <div className="ox-search-side-card ox-search-contact-card">
+              <span>Contacto</span>
+              <h2>Consulta trazable</h2>
               <p>
-                Podés escribir frases naturales como “SUV financiada hasta 20
-                millones” o “Toyota automático bajo kilometraje”.
+                Para contactar a un dealer, oX NEXMOV registra la consulta
+                comercial para mayor claridad del proceso.
+              </p>
+            </div>
+
+            <div className="ox-search-side-card ox-search-tip-card">
+              <span>Consejo</span>
+              <h2>Abrí más opciones</h2>
+              <p>
+                Si hay pocos resultados, probá ampliar marca, precio o ubicación
+                antes de descartar alternativas.
               </p>
             </div>
           </aside>

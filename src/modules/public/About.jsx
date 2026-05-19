@@ -57,18 +57,16 @@ export default function About({ onNavigate }) {
       <div className="container panel about-panel">
         <section className="about-hero">
           <div className="about-hero-copy">
-            <p className="eyebrow">Quiénes somos</p>
+            <p className="eyebrow">Sobre oX NEXMOV</p>
 
             <h1>
-              Una red automotriz inteligente para comprar y vender con{" "}
-              <span>más claridad.</span>
+              Una plataforma creada para decidir con <span>más claridad.</span>
             </h1>
 
             <p>
-              oX NEXMOV nace para ordenar la experiencia de búsqueda,
-              comparación y contacto dentro del mercado automotor. Nuestro
-              objetivo es que el comprador pueda decidir mejor y que los dealers
-              serios tengan una herramienta más justa para mostrar su propuesta.
+              Ordenamos información, dealers, publicaciones y herramientas de
+              comparación para que comprar o vender un vehículo sea una
+              experiencia más clara, trazable y confiable.
             </p>
           </div>
 
@@ -135,7 +133,7 @@ export default function About({ onNavigate }) {
         <section className="about-final">
           <div>
             <p className="eyebrow">Nuestra promesa</p>
-            <h2>Comprar mejor. Vender mejor. Decidir con más información.</h2>
+            <h2>No buscamos que decidas más rápido. Buscamos que decidas mejor.</h2>
             <p>
               oX NEXMOV busca convertirse en una nueva forma de trabajar en el
               rubro automotriz: más clara para el comprador, más ordenada para el
@@ -143,9 +141,14 @@ export default function About({ onNavigate }) {
             </p>
           </div>
 
-          <button type="button" onClick={() => onNavigate?.("search")}>
-            Explorar vehículos
-          </button>
+          <div className="about-final-actions">
+            <button type="button" onClick={() => onNavigate?.("search")}>
+              Buscar vehículos
+            </button>
+            <button type="button" onClick={() => onNavigate?.("joinNetwork")}>
+              Sumate a la red
+            </button>
+          </div>
         </section>
       </div>
     </section>

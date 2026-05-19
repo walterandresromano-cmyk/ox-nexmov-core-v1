@@ -1973,3 +1973,155 @@
   font-size: 0.56rem;
   line-height: 1.08;
 }
+
+/* =========================================================
+   Home premium refinement pass
+   ========================================================= */
+
+.ox-home-page-v3 {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.12), transparent 28%),
+    radial-gradient(circle at 86% 8%, rgba(245, 184, 75, 0.08), transparent 24%),
+    linear-gradient(180deg, rgba(2, 6, 23, 1), rgba(4, 10, 22, 0.99) 68%, rgba(2, 6, 23, 1));
+}
+
+.ox-home-shell-v3 {
+  gap: 14px;
+}
+
+.ox-home-hero-v3 {
+  min-height: 318px;
+  padding: 30px 34px 28px;
+  border-color: rgba(125, 211, 252, 0.17);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.16), transparent 30%),
+    radial-gradient(circle at 70% 16%, rgba(37, 99, 235, 0.16), transparent 35%),
+    radial-gradient(circle at 92% 10%, rgba(245, 184, 75, 0.07), transparent 26%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98));
+}
+
+.ox-home-hero-v3::before {
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.12), transparent 34%),
+    radial-gradient(circle at 73% 20%, rgba(96, 165, 250, 0.16), transparent 26%),
+    linear-gradient(180deg, transparent 68%, rgba(2, 6, 23, 0.72));
+}
+
+.ox-home-hero-copy-v3 h1 {
+  max-width: 640px;
+}
+
+.ox-home-search-v3 {
+  border-radius: 18px;
+  border-color: rgba(125, 211, 252, 0.22);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.10), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(8, 15, 28, 0.92));
+}
+
+.ox-home-search-v3 button,
+.ox-home-primary-actions-v3 button:first-child,
+.ox-home-featured-card-v3 button {
+  background:
+    radial-gradient(circle at 26% 0%, rgba(255, 255, 255, 0.20), transparent 28%),
+    linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: #ffffff;
+}
+
+.ox-home-primary-actions-v3 button:not(:first-child),
+.ox-home-chips-v3 button,
+.ox-home-section-actions-v3 button,
+.ox-home-dealer-v3 button {
+  border-color: rgba(125, 211, 252, 0.20);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.56));
+  color: rgba(241, 245, 249, 0.92);
+}
+
+.ox-home-featured-card-v3,
+.ox-home-featured-vehicles-v3,
+.ox-home-confidence-v3,
+.ox-home-inventory-v3,
+.ox-home-buyer-v3,
+.ox-home-dealer-v3,
+.ox-home-bottom-trust-v3 {
+  border-color: rgba(125, 211, 252, 0.15);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.09), transparent 30%),
+    radial-gradient(circle at 92% 0%, rgba(245, 184, 75, 0.04), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.90));
+}
+
+.ox-home-featured-vehicles-v3,
+.ox-home-confidence-v3,
+.ox-home-inventory-v3,
+.ox-home-buyer-v3,
+.ox-home-dealer-v3 {
+  padding: 16px;
+}
+
+.ox-home-section-head-v3 {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.ox-home-trust-strip-v3,
+.ox-home-confidence-list-v3 article,
+.ox-home-stats-v3 div,
+.ox-home-locations-v3 button,
+.ox-home-locations-v3 > span,
+.ox-home-buyer-v3 li,
+.ox-home-dealer-v3 li {
+  border-color: rgba(125, 211, 252, 0.13);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.56), rgba(2, 6, 23, 0.38));
+}
+
+.ox-home-bottom-trust-v3 article {
+  min-height: 66px;
+}
+
+.ox-home-bottom-trust-v3 span {
+  line-height: 1.32;
+}
+
+:root[data-theme="light"] .ox-home-page-v3 {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.10), transparent 28%),
+    radial-gradient(circle at 88% 10%, rgba(245, 184, 75, 0.10), transparent 24%),
+    linear-gradient(180deg, #eef9ff, #dceff8 72%, #eaf6fb);
+}
+
+:root[data-theme="light"] .ox-home-hero-v3,
+:root[data-theme="light"] .ox-home-featured-card-v3,
+:root[data-theme="light"] .ox-home-featured-vehicles-v3,
+:root[data-theme="light"] .ox-home-confidence-v3,
+:root[data-theme="light"] .ox-home-inventory-v3,
+:root[data-theme="light"] .ox-home-buyer-v3,
+:root[data-theme="light"] .ox-home-dealer-v3,
+:root[data-theme="light"] .ox-home-bottom-trust-v3 {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(14, 165, 233, 0.10), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(230, 245, 252, 0.88));
+  box-shadow:
+    0 16px 44px rgba(33, 48, 71, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+:root[data-theme="light"] .ox-home-primary-actions-v3 button:not(:first-child),
+:root[data-theme="light"] .ox-home-chips-v3 button,
+:root[data-theme="light"] .ox-home-section-actions-v3 button,
+:root[data-theme="light"] .ox-home-trust-strip-v3,
+:root[data-theme="light"] .ox-home-confidence-list-v3 article,
+:root[data-theme="light"] .ox-home-stats-v3 div,
+:root[data-theme="light"] .ox-home-locations-v3 button,
+:root[data-theme="light"] .ox-home-locations-v3 > span,
+:root[data-theme="light"] .ox-home-buyer-v3 li,
+:root[data-theme="light"] .ox-home-dealer-v3 li {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(224, 243, 252, 0.80));
+  color: #1f3448;
+}
