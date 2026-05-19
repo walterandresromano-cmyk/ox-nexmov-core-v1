@@ -97,7 +97,7 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
             aria-label={nextThemeLabel}
             title={nextThemeLabel}
           >
-            {theme === "dark" ? "Claro" : "Oscuro"}
+            <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>
           </button>
 
           {isLoggedIn && privatePanel && (

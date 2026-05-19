@@ -1,5 +1,8 @@
 ﻿import { DEALER_PLANS } from "../../config/plans.js";
 
+import { useEffect, useMemo, useState } from "react";
+import { listPublicActiveDealers } from "../../services/dealers.service.js";
+
 const dealerSignals = [
   "Dealers verificados",
   "Leads trazables",
@@ -112,7 +115,54 @@ const workflowSteps = [
 
 const planOrder = ["inicio", "pro", "elite", "platinum"];
 
+const publicDealerPlanLabels = {
+  inicio: "Dealer verificado",
+  pro: "Dealer Pro",
+  elite: "Dealer Elite",
+  platinum: "Dealer Platinum",
+};
+
+const publicDealerPlanClass = {
+  inicio: "verified",
+  pro: "pro",
+  elite: "elite",
+  platinum: "platinum",
+};
+
+function getDealerInitials(name) {
+  return String(name || "oX")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+
+function formatDealerLocation(dealer) {
+  return [dealer.city, dealer.province].filter(Boolean).join(", ");
+}
+
+function mapPublicDealerCard(dealer) {
+  const plan = publicDealerPlanLabels[dealer.plan] ? dealer.plan : "inicio";
+  const name = dealer.commercialName || dealer.name || "Dealer verificado";
+
+  return {
+    id: dealer.id,
+    name,
+    initials: getDealerInitials(name),
+    location: formatDealerLocation(dealer),
+    logo: dealer.logo || dealer.logoUrl || dealer.imageUrl || null,
+    planClass: publicDealerPlanClass[plan],
+    badge: publicDealerPlanLabels[plan],
+    activeVehiclesCount: Number(dealer.activeVehiclesCount || 0),
+  };
+}
+
 export default function JoinNetwork({ onNavigate }) {
+  const [networkDealers, setNetworkDealers] = useState([]);
+  const [isLoadingNetworkDealers, setIsLoadingNetworkDealers] = useState(true);
+
   const plans = planOrder
     .map((planId) => {
       const plan = DEALER_PLANS[planId];
@@ -121,6 +171,41 @@ export default function JoinNetwork({ onNavigate }) {
       return plan && positioning ? { ...plan, ...positioning } : null;
     })
     .filter(Boolean);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadPublicDealers() {
+      setIsLoadingNetworkDealers(true);
+
+      let dealers = [];
+
+      try {
+        const response = await listPublicActiveDealers();
+        dealers = response.dealers || [];
+      } catch {
+        dealers = [];
+      }
+
+      if (!isMounted) return;
+
+      setNetworkDealers(
+        (dealers || [])
+          .map(mapPublicDealerCard)
+          .filter((dealer) => dealer.id && dealer.name)
+          .slice(0, 8)
+      );
+      setIsLoadingNetworkDealers(false);
+    }
+
+    loadPublicDealers();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const publicDealers = useMemo(() => networkDealers, [networkDealers]);
 
   return (
     <section className="page-section join-network-page">
@@ -208,6 +293,85 @@ export default function JoinNetwork({ onNavigate }) {
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="join-network-section join-network-dealers">
+          <div className="join-network-section-head">
+            <p className="eyebrow">Red activa</p>
+            <h2>Dealers que ya forman parte de la red</h2>
+            <p>
+              Agencias verificadas que publican, gestionan consultas y trabajan
+              con herramientas comerciales dentro de oX NEXMOV.
+            </p>
+          </div>
+
+          {isLoadingNetworkDealers ? (
+            <div
+              className="join-network-dealer-grid join-network-dealer-grid-loading"
+              aria-label="Cargando dealers de la red"
+            >
+              {[0, 1, 2, 3].map((item) => (
+                <article
+                  key={item}
+                  className="join-network-dealer-card join-network-dealer-card-loading"
+                >
+                  <div className="join-network-dealer-logo" />
+                  <span className="join-network-dealer-badge">Verificando</span>
+                  <strong>Agencia oX</strong>
+                  <p>Red oX NEXMOV</p>
+                  <small>Dealer verificado dentro de la red oX.</small>
+                </article>
+              ))}
+            </div>
+          ) : publicDealers.length > 0 ? (
+            <div className="join-network-dealer-grid">
+              {publicDealers.map((dealer) => (
+                <article
+                  key={dealer.id}
+                  className={`join-network-dealer-card join-network-dealer-${dealer.planClass}`}
+                >
+                  <div className="join-network-dealer-logo">
+                    {dealer.logo ? (
+                      <img
+                        src={dealer.logo}
+                        alt={`Imagen institucional de ${dealer.name}`}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span>{dealer.initials}</span>
+                    )}
+                  </div>
+
+                  <div className="join-network-dealer-content">
+                    <span className="join-network-dealer-badge">
+                      {dealer.badge}
+                    </span>
+                    <strong>{dealer.name}</strong>
+                    <p>{dealer.location || "Red oX NEXMOV"}</p>
+                  </div>
+
+                  <small>Dealer verificado dentro de la red oX.</small>
+
+                  {dealer.activeVehiclesCount > 0 && (
+                    <span className="join-network-dealer-count">
+                      {dealer.activeVehiclesCount} publicaciones activas
+                    </span>
+                  )}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="join-network-dealers-empty">
+              <strong>
+                Estamos incorporando agencias verificadas a la red.
+              </strong>
+              <p>
+                Pronto vas a ver aquí dealers activos con presencia
+                institucional dentro de oX NEXMOV.
+              </p>
+            </div>
+          )}
+
         </section>
 
         <section className="join-network-section join-network-plan-section">

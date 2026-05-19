@@ -159,14 +159,6 @@ export default function VehicleCardPublic({
             </span>
           </div>
 
-          <div className="vehicle-card__media-title">
-            <h3 className="vehicle-card__title">{vehicleTitle}</h3>
-
-            {vehicle.version && (
-              <p className="vehicle-card__version">{vehicle.version}</p>
-            )}
-          </div>
-
           {reserved && (
             <div className="vehicle-card__reserved">Unidad reservada</div>
           )}
@@ -180,12 +172,20 @@ export default function VehicleCardPublic({
             />
           ) : (
             <div className="vehicle-card__placeholder">
-              <span>{vehicleTitle}</span>
+              <span>Imagen no disponible</span>
             </div>
           )}
         </div>
 
         <div className="vehicle-card__body">
+          <div className="vehicle-card__identity">
+            <h3 className="vehicle-card__title">{vehicleTitle}</h3>
+
+            {vehicle.version && (
+              <p className="vehicle-card__version">{vehicle.version}</p>
+            )}
+          </div>
+
           <div className="vehicle-card__facts">
             <div className="vehicle-card__fact">
               <span className="vehicle-card__fact-icon" aria-hidden="true">

@@ -2,6 +2,520 @@
   display: none;
 }
 
+/* oX NEXMOV - Home featured/confidence row alignment */
+@media (min-width: 981px) {
+  .ox-home-main-grid-v3 {
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 0.39fr) !important;
+    gap: 14px !important;
+    align-items: stretch !important;
+  }
+
+  .ox-home-featured-vehicles-v3,
+  .ox-home-confidence-v3 {
+    align-self: stretch !important;
+    min-height: 430px !important;
+    border-radius: 24px !important;
+    border-color: rgba(125, 211, 252, 0.2) !important;
+    box-shadow:
+      0 20px 46px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .ox-home-featured-vehicles-v3 {
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+  }
+
+  .ox-home-confidence-v3 {
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) auto !important;
+    align-content: stretch !important;
+    gap: 10px !important;
+    padding: 18px !important;
+  }
+
+  .ox-home-confidence-v3 h2 {
+    min-height: 48px !important;
+    display: block !important;
+    margin: 0 !important;
+    max-width: 260px !important;
+    font-size: clamp(1.08rem, 1.12vw, 1.28rem) !important;
+    line-height: 1.08 !important;
+  }
+
+  .ox-home-confidence-v3 h2 span {
+    display: inline !important;
+  }
+
+  .ox-home-confidence-list-v3 {
+    display: grid !important;
+    grid-template-rows: repeat(6, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    min-height: 0 !important;
+  }
+
+  .ox-home-confidence-list-v3 article {
+    min-height: 0 !important;
+    height: 100% !important;
+    padding: 8px 10px !important;
+    border-radius: 15px !important;
+  }
+
+  .ox-home-confidence-list-v3 article > span {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 9px !important;
+    font-size: 0.62rem !important;
+  }
+
+  .ox-home-confidence-list-v3 strong {
+    font-size: 0.7rem !important;
+    line-height: 1.12 !important;
+  }
+
+  .ox-home-confidence-list-v3 p {
+    margin-top: 1px !important;
+    font-size: 0.55rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .ox-home-confidence-cta-v3 {
+    min-height: 58px !important;
+    margin-top: 0 !important;
+    padding: 10px 12px !important;
+    border-radius: 15px !important;
+  }
+
+  .ox-home-confidence-cta-v3 strong {
+    font-size: 0.78rem !important;
+    line-height: 1.12 !important;
+  }
+
+  .ox-home-confidence-cta-v3 span {
+    font-size: 0.58rem !important;
+    line-height: 1.18 !important;
+  }
+}
+
+/* oX NEXMOV - Home confidence card premium focus */
+.ox-home-confidence-v3 {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(125, 211, 252, 0.18) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(56, 189, 248, 0.2), transparent 36%),
+    radial-gradient(circle at 92% 12%, rgba(234, 179, 8, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.78)) !important;
+  box-shadow:
+    0 20px 46px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  isolation: isolate !important;
+}
+
+.ox-home-confidence-v3::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  border-radius: inherit !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.09), transparent 44%),
+    radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.08), transparent 34%) !important;
+  pointer-events: none !important;
+}
+
+.ox-home-confidence-v3::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 18px !important;
+  right: 18px !important;
+  height: 3px !important;
+  border-radius: 0 0 999px 999px !important;
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.88), rgba(34, 197, 94, 0.7), rgba(234, 179, 8, 0.58)) !important;
+}
+
+.ox-home-confidence-v3 h2 {
+  color: rgba(248, 250, 252, 0.98) !important;
+  font-size: clamp(1.24rem, 1.42vw, 1.64rem) !important;
+  line-height: 1.06 !important;
+  letter-spacing: 0 !important;
+}
+
+.ox-home-confidence-v3 h2 span {
+  color: rgba(56, 189, 248, 0.98) !important;
+}
+
+.ox-home-confidence-list-v3 {
+  gap: 10px !important;
+}
+
+.ox-home-confidence-list-v3 article,
+.ox-home-confidence-cta-v3 {
+  border: 1px solid rgba(125, 211, 252, 0.15) !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(15, 23, 42, 0.28) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 22px rgba(0, 0, 0, 0.08) !important;
+}
+
+.ox-home-confidence-list-v3 article {
+  align-items: center !important;
+  min-height: 50px !important;
+  padding: 9px 10px !important;
+}
+
+.ox-home-confidence-list-v3 article > span {
+  width: 26px !important;
+  height: 26px !important;
+  border: 1px solid rgba(125, 211, 252, 0.24) !important;
+  color: rgba(186, 230, 253, 0.96) !important;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.3), rgba(34, 197, 94, 0.14)) !important;
+  box-shadow: 0 10px 20px rgba(14, 165, 233, 0.16) !important;
+}
+
+.ox-home-confidence-list-v3 strong,
+.ox-home-confidence-cta-v3 strong {
+  color: rgba(248, 250, 252, 0.98) !important;
+  font-size: 0.82rem !important;
+  line-height: 1.18 !important;
+}
+
+.ox-home-confidence-list-v3 p,
+.ox-home-confidence-cta-v3 span {
+  color: rgba(203, 213, 225, 0.76) !important;
+  font-size: 0.68rem !important;
+  line-height: 1.35 !important;
+}
+
+.ox-home-confidence-cta-v3 {
+  margin-top: 12px !important;
+  padding: 12px 14px !important;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.14), rgba(234, 179, 8, 0.08)),
+    rgba(15, 23, 42, 0.34) !important;
+}
+
+:root[data-theme="light"] .ox-home-confidence-v3 {
+  border-color: rgba(14, 116, 144, 0.15) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(14, 165, 233, 0.14), transparent 36%),
+    radial-gradient(circle at 92% 12%, rgba(234, 179, 8, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 252, 0.82)) !important;
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+}
+
+:root[data-theme="light"] .ox-home-confidence-v3::before {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), transparent 48%),
+    radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.08), transparent 34%) !important;
+}
+
+:root[data-theme="light"] .ox-home-confidence-v3 h2,
+:root[data-theme="light"] .ox-home-confidence-list-v3 strong,
+:root[data-theme="light"] .ox-home-confidence-cta-v3 strong {
+  color: rgba(15, 23, 42, 0.96) !important;
+}
+
+:root[data-theme="light"] .ox-home-confidence-list-v3 article,
+:root[data-theme="light"] .ox-home-confidence-cta-v3 {
+  border-color: rgba(14, 116, 144, 0.13) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 244, 250, 0.76)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 10px 22px rgba(15, 23, 42, 0.06) !important;
+}
+
+:root[data-theme="light"] .ox-home-confidence-list-v3 article > span {
+  border-color: rgba(14, 116, 144, 0.16) !important;
+  color: rgba(14, 116, 144, 0.92) !important;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(34, 197, 94, 0.1)) !important;
+}
+
+:root[data-theme="light"] .ox-home-confidence-list-v3 p,
+:root[data-theme="light"] .ox-home-confidence-cta-v3 span {
+  color: rgba(70, 87, 108, 0.82) !important;
+}
+
+@media (max-width: 900px) {
+  .ox-home-confidence-v3 {
+    border-radius: 20px !important;
+  }
+
+  .ox-home-confidence-list-v3 article {
+    min-height: 48px !important;
+  }
+}
+
+/* oX NEXMOV - Home intelligence panels premium focus */
+.ox-home-intelligence-grid-v3 {
+  gap: 16px !important;
+  align-items: stretch !important;
+}
+
+.ox-home-intelligence-grid-v3 > article {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(125, 211, 252, 0.18) !important;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(56, 189, 248, 0.2), transparent 36%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.78)) !important;
+  box-shadow:
+    0 20px 46px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  isolation: isolate !important;
+}
+
+.ox-home-intelligence-grid-v3 > article::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  border-radius: inherit !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.09), transparent 44%),
+    radial-gradient(circle at 88% 12%, rgba(234, 179, 8, 0.12), transparent 30%) !important;
+  pointer-events: none !important;
+}
+
+.ox-home-intelligence-grid-v3 > article::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 18px !important;
+  right: 18px !important;
+  height: 3px !important;
+  border-radius: 0 0 999px 999px !important;
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.88), rgba(59, 130, 246, 0.72)) !important;
+}
+
+.ox-home-intelligence-grid-v3 h2 {
+  color: rgba(248, 250, 252, 0.98) !important;
+  font-size: clamp(1.05rem, 1.16vw, 1.3rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0 !important;
+}
+
+.ox-home-intelligence-grid-v3 article > p {
+  color: rgba(203, 213, 225, 0.78) !important;
+  font-size: 0.78rem !important;
+  line-height: 1.45 !important;
+}
+
+.ox-home-map-v3 {
+  border: 1px solid rgba(125, 211, 252, 0.18) !important;
+  border-radius: 20px !important;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(56, 189, 248, 0.28), transparent 12%),
+    radial-gradient(circle at 50% 48%, rgba(56, 189, 248, 0.18), transparent 42%),
+    url("/home-network.svg"),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(8, 15, 28, 0.95)) !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.26),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+}
+
+.ox-home-stats-v3 div {
+  border: 1px solid rgba(125, 211, 252, 0.16) !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035)),
+    rgba(15, 23, 42, 0.34) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.ox-home-stats-v3 strong {
+  color: rgba(248, 250, 252, 0.98) !important;
+  font-size: clamp(1.28rem, 1.5vw, 1.7rem) !important;
+  line-height: 1 !important;
+}
+
+.ox-home-stats-v3 span {
+  color: rgba(203, 213, 225, 0.76) !important;
+  font-size: 0.7rem !important;
+  line-height: 1.25 !important;
+}
+
+.ox-home-locations-v3 button,
+.ox-home-locations-v3 > span {
+  border: 1px solid rgba(125, 211, 252, 0.17) !important;
+  border-radius: 14px !important;
+  color: rgba(226, 232, 240, 0.94) !important;
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.12), rgba(15, 23, 42, 0.22)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+.ox-home-locations-v3 small {
+  color: rgba(186, 230, 253, 0.82) !important;
+}
+
+.ox-home-buyer-v3 {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(37, 99, 235, 0.22), transparent 34%),
+    radial-gradient(circle at 90% 10%, rgba(56, 189, 248, 0.14), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.78)) !important;
+}
+
+.ox-home-buyer-v3 ol {
+  display: grid !important;
+  gap: 12px !important;
+  margin-top: 16px !important;
+}
+
+.ox-home-buyer-v3 li {
+  min-height: 38px !important;
+  padding: 7px 9px 7px 42px !important;
+  border: 1px solid rgba(125, 211, 252, 0.13) !important;
+  border-radius: 16px !important;
+  color: rgba(226, 232, 240, 0.88) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+    rgba(15, 23, 42, 0.22) !important;
+}
+
+.ox-home-buyer-v3 li::before {
+  width: 26px !important;
+  height: 26px !important;
+  color: white !important;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.98), rgba(37, 99, 235, 0.96)) !important;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22) !important;
+}
+
+.ox-home-dealer-v3 {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(34, 197, 94, 0.16), transparent 34%),
+    radial-gradient(circle at 92% 10%, rgba(234, 179, 8, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.78)) !important;
+}
+
+.ox-home-dealer-v3::after {
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.74), rgba(14, 165, 233, 0.84), rgba(234, 179, 8, 0.58)) !important;
+}
+
+.ox-home-dealer-v3 ul {
+  display: grid !important;
+  gap: 9px !important;
+  margin-top: 16px !important;
+}
+
+.ox-home-dealer-v3 li {
+  min-height: 34px !important;
+  padding: 7px 9px 7px 38px !important;
+  border: 1px solid rgba(125, 211, 252, 0.13) !important;
+  border-radius: 16px !important;
+  color: rgba(226, 232, 240, 0.88) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+    rgba(15, 23, 42, 0.22) !important;
+}
+
+.ox-home-dealer-v3 li::before {
+  left: 9px !important;
+  width: 22px !important;
+  height: 22px !important;
+  color: white !important;
+  background:
+    linear-gradient(135deg, rgba(34, 197, 94, 0.92), rgba(14, 165, 233, 0.9)) !important;
+  box-shadow: 0 10px 20px rgba(14, 165, 233, 0.18) !important;
+}
+
+.ox-home-dealer-v3 button {
+  margin-top: 16px !important;
+  border-color: rgba(125, 211, 252, 0.26) !important;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.96), rgba(37, 99, 235, 0.96)) !important;
+  box-shadow: 0 16px 32px rgba(37, 99, 235, 0.22) !important;
+}
+
+:root[data-theme="light"] .ox-home-intelligence-grid-v3 > article {
+  border-color: rgba(14, 116, 144, 0.15) !important;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(14, 165, 233, 0.14), transparent 36%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 252, 0.82)) !important;
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+}
+
+:root[data-theme="light"] .ox-home-intelligence-grid-v3 h2,
+:root[data-theme="light"] .ox-home-stats-v3 strong {
+  color: rgba(15, 23, 42, 0.96) !important;
+}
+
+:root[data-theme="light"] .ox-home-intelligence-grid-v3 article > p,
+:root[data-theme="light"] .ox-home-stats-v3 span {
+  color: rgba(70, 87, 108, 0.82) !important;
+}
+
+:root[data-theme="light"] .ox-home-stats-v3 div,
+:root[data-theme="light"] .ox-home-buyer-v3 li,
+:root[data-theme="light"] .ox-home-dealer-v3 li {
+  border-color: rgba(14, 116, 144, 0.12) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 248, 251, 0.72)) !important;
+}
+
+:root[data-theme="light"] .ox-home-buyer-v3 li,
+:root[data-theme="light"] .ox-home-dealer-v3 li {
+  color: rgba(51, 65, 85, 0.88) !important;
+}
+
+:root[data-theme="light"] .ox-home-locations-v3 button,
+:root[data-theme="light"] .ox-home-locations-v3 > span {
+  border-color: rgba(14, 116, 144, 0.13) !important;
+  color: rgba(15, 23, 42, 0.88) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 244, 250, 0.76)) !important;
+}
+
+:root[data-theme="light"] .ox-home-locations-v3 small {
+  color: rgba(14, 116, 144, 0.84) !important;
+}
+
+:root[data-theme="light"] .ox-home-buyer-v3 {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(37, 99, 235, 0.12), transparent 34%),
+    radial-gradient(circle at 90% 10%, rgba(56, 189, 248, 0.1), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(239, 246, 255, 0.76)) !important;
+}
+
+:root[data-theme="light"] .ox-home-dealer-v3 {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(34, 197, 94, 0.1), transparent 34%),
+    radial-gradient(circle at 92% 10%, rgba(234, 179, 8, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 253, 244, 0.66)) !important;
+}
+
+@media (max-width: 900px) {
+  .ox-home-intelligence-grid-v3 {
+    gap: 12px !important;
+  }
+
+  .ox-home-intelligence-grid-v3 > article {
+    border-radius: 20px !important;
+  }
+
+  .ox-home-buyer-v3 li,
+  .ox-home-dealer-v3 li {
+    min-height: 36px !important;
+  }
+}
+
 /* oX NEXMOV - Public tabs geometry verification fix */
 .zero-km-page.ox-public-page {
   width: min(100% - 28px, 1530px) !important;
@@ -5054,6 +5568,1154 @@
 .faq-hero-copy > p:not(.eyebrow) {
   font-size: 0.72rem !important;
   line-height: 1.48 !important;
+}
+
+/* oX NEXMOV - Final search card fit and badge alignment */
+.ox-search-vehicle-grid .vehicle-card__rank,
+.ox-search-vehicle-grid .vehicle-card__year,
+.ox-search-vehicle-grid .vehicle-card__reserved,
+.ox-search-vehicle-grid .vehicle-card__market {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  min-height: 22px !important;
+  height: 22px !important;
+  padding: 0 8px !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__rank,
+.ox-search-vehicle-grid .vehicle-card__year {
+  font-size: 0.5rem !important;
+  letter-spacing: 0.055em !important;
+  font-weight: 950 !important;
+  max-width: 62% !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__year {
+  flex: 0 0 auto !important;
+  min-width: 48px !important;
+  max-width: 78px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__reserved {
+  top: 36px !important;
+  left: 10px !important;
+  max-width: min(170px, calc(100% - 20px)) !important;
+  height: 21px !important;
+  min-height: 21px !important;
+  padding: 0 8px !important;
+  font-size: 0.49rem !important;
+  letter-spacing: 0.055em !important;
+  color: rgba(255, 244, 214, 0.96) !important;
+  border-color: rgba(245, 158, 11, 0.42) !important;
+  background:
+    linear-gradient(180deg, rgba(71, 46, 13, 0.88), rgba(38, 30, 16, 0.82)) !important;
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__body {
+  gap: 7px !important;
+  padding: 10px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__identity {
+  min-height: 34px !important;
+  gap: 2px !important;
+  padding: 0 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__facts {
+  gap: 6px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__fact {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 29px !important;
+  padding: 0 8px !important;
+  border-radius: 12px !important;
+  color: rgba(226, 232, 240, 0.92) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__fact strong {
+  line-height: 1 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-box {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 52px !important;
+  padding: 8px 9px !important;
+  border-radius: 14px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-copy {
+  min-width: 0 !important;
+  gap: 3px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-label {
+  line-height: 1 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price {
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-side {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__market {
+  min-width: 0 !important;
+  max-width: 96px !important;
+  height: 21px !important;
+  min-height: 21px !important;
+  padding: 0 7px !important;
+  font-size: 0.5rem !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__market--below {
+  color: rgba(22, 101, 52, 0.98) !important;
+  border-color: rgba(34, 197, 94, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(187, 247, 208, 0.92), rgba(220, 252, 231, 0.68)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__market--above {
+  color: rgba(154, 52, 18, 0.94) !important;
+  border-color: rgba(251, 146, 60, 0.2) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 237, 213, 0.86), rgba(254, 215, 170, 0.54)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-icon {
+  width: 25px !important;
+  height: 25px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions {
+  gap: 6px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 33px !important;
+  padding: 0 9px !important;
+  line-height: 1 !important;
+  color: rgba(241, 245, 249, 0.94) !important;
+  border-color: rgba(125, 211, 252, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(38, 52, 73, 0.82), rgba(15, 23, 42, 0.74)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(2) {
+  color: rgba(226, 232, 240, 0.94) !important;
+  background:
+    linear-gradient(180deg, rgba(30, 64, 92, 0.56), rgba(15, 23, 42, 0.64)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(3),
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(4) {
+  min-height: 31px !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+  background:
+    linear-gradient(180deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.62)) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__reserved {
+  color: rgba(120, 53, 15, 0.96) !important;
+  border-color: rgba(217, 119, 6, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 247, 237, 0.94), rgba(254, 215, 170, 0.62)) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__btn {
+  color: rgba(15, 23, 42, 0.84) !important;
+  border-color: rgba(14, 116, 144, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 244, 250, 0.84)) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(2),
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(3),
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(4) {
+  color: rgba(15, 23, 42, 0.82) !important;
+}
+
+@media (max-width: 760px) {
+  .ox-search-vehicle-grid .vehicle-card__price-box {
+    min-height: 54px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__btn {
+    min-height: 38px !important;
+  }
+}
+
+/* oX NEXMOV - Search cards compact premium hierarchy */
+.ox-search-vehicle-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 14px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card {
+  border-radius: 20px !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(56, 189, 248, 0.1), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.93), rgba(2, 6, 23, 0.9)) !important;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media {
+  height: 178px !important;
+  min-height: 178px !important;
+  padding: 10px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__image,
+.ox-search-vehicle-grid .vehicle-card__placeholder {
+  inset: 10px !important;
+  width: calc(100% - 20px) !important;
+  height: calc(100% - 20px) !important;
+  border-radius: 15px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media::after {
+  height: 28% !important;
+  background: linear-gradient(180deg, transparent, rgba(2, 6, 23, 0.34)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__topbar {
+  top: 10px !important;
+  left: 10px !important;
+  right: 10px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__rank,
+.ox-search-vehicle-grid .vehicle-card__year,
+.ox-search-vehicle-grid .vehicle-card__reserved {
+  min-height: 22px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  font-size: 0.5rem !important;
+  letter-spacing: 0.06em !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__reserved {
+  top: 38px !important;
+  left: 10px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__body {
+  gap: 8px !important;
+  padding: 11px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__identity {
+  min-height: 36px !important;
+  gap: 2px !important;
+  padding-top: 0 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__identity .vehicle-card__title {
+  font-size: clamp(0.96rem, 1vw, 1.12rem) !important;
+  line-height: 1.06 !important;
+  color: rgba(248, 250, 252, 0.98) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__identity .vehicle-card__version {
+  color: rgba(203, 213, 225, 0.78) !important;
+  font-size: 0.66rem !important;
+  line-height: 1.18 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__facts {
+  gap: 7px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__fact {
+  min-height: 30px !important;
+  padding: 0 8px !important;
+  border-radius: 12px !important;
+  font-size: 0.58rem !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(15, 23, 42, 0.34) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__fact-icon,
+.ox-search-vehicle-grid .vehicle-card__fact-icon img {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__fact--location strong {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-box {
+  min-height: 56px !important;
+  padding: 9px 10px !important;
+  border-radius: 15px !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(14, 165, 233, 0.1), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.62), rgba(2, 6, 23, 0.7)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-label {
+  font-size: 0.58rem !important;
+  letter-spacing: 0.11em !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price {
+  font-size: clamp(1.02rem, 1.12vw, 1.22rem) !important;
+  line-height: 1 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-icon {
+  width: 28px !important;
+  height: 28px !important;
+  opacity: 0.82 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__market {
+  min-height: 22px !important;
+  padding: 0 7px !important;
+  border-radius: 999px !important;
+  font-size: 0.52rem !important;
+  font-weight: 950 !important;
+  background: rgba(14, 165, 233, 0.11) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__market--below {
+  color: rgba(187, 247, 208, 0.98) !important;
+  border-color: rgba(34, 197, 94, 0.22) !important;
+  background: rgba(34, 197, 94, 0.11) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__market--above {
+  color: rgba(254, 215, 170, 0.98) !important;
+  border-color: rgba(251, 146, 60, 0.22) !important;
+  background: rgba(251, 146, 60, 0.1) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions {
+  gap: 7px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__btn {
+  min-height: 34px !important;
+  padding: 0 9px !important;
+  border-radius: 999px !important;
+  color: rgba(226, 232, 240, 0.94) !important;
+  font-size: 0.58rem !important;
+  font-weight: 950 !important;
+  background:
+    linear-gradient(180deg, rgba(30, 41, 59, 0.74), rgba(15, 23, 42, 0.72)) !important;
+  border-color: rgba(125, 211, 252, 0.14) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__btn--primary {
+  color: #ffffff !important;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.98), rgba(37, 99, 235, 0.96)) !important;
+  border-color: rgba(125, 211, 252, 0.36) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(2) {
+  background:
+    linear-gradient(180deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.58)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(3),
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(4) {
+  min-height: 32px !important;
+  color: rgba(203, 213, 225, 0.9) !important;
+  font-size: 0.56rem !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__btn--disabled {
+  color: rgba(148, 163, 184, 0.82) !important;
+  opacity: 0.82 !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(14, 165, 233, 0.09), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(242, 249, 252, 0.86)) !important;
+  box-shadow:
+    0 14px 30px rgba(15, 23, 42, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__identity .vehicle-card__title {
+  color: rgba(15, 23, 42, 0.96) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__identity .vehicle-card__version {
+  color: rgba(51, 65, 85, 0.76) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__price-box,
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__fact {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(235, 247, 252, 0.76)) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__btn {
+  color: rgba(15, 23, 42, 0.82) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(232, 244, 250, 0.82)) !important;
+  border-color: rgba(14, 116, 144, 0.14) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__btn--primary {
+  color: #ffffff !important;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.98), rgba(37, 99, 235, 0.94)) !important;
+}
+
+@media (max-width: 760px) {
+  .ox-search-vehicle-grid .vehicle-card__media {
+    height: 172px !important;
+    min-height: 172px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__body {
+    gap: 8px !important;
+    padding: 10px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__price-box {
+    min-height: 56px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__btn {
+    min-height: 40px !important;
+  }
+}
+
+/* oX NEXMOV - Search public cards premium decision pass */
+.ox-search-results {
+  padding: 16px !important;
+  border-color: rgba(125, 211, 252, 0.18) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.92)) !important;
+}
+
+.ox-search-results-toolbar {
+  align-items: end !important;
+  padding: 2px 2px 12px !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12) !important;
+}
+
+.ox-search-vehicle-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(292px, 1fr)) !important;
+  gap: 16px !important;
+  margin-top: 16px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card {
+  position: relative !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(125, 211, 252, 0.16) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.9)) !important;
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 18px !important;
+  right: 18px !important;
+  height: 3px !important;
+  border-radius: 0 0 999px 999px !important;
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.84), rgba(59, 130, 246, 0.66)) !important;
+  pointer-events: none !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card--elite::after,
+.ox-search-vehicle-grid .vehicle-card--platinum::after {
+  background: linear-gradient(90deg, rgba(234, 179, 8, 0.86), rgba(56, 189, 248, 0.74)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media {
+  height: 198px !important;
+  min-height: 198px !important;
+  padding: 12px !important;
+  border-bottom-color: rgba(125, 211, 252, 0.12) !important;
+  background:
+    radial-gradient(circle at 50% 72%, rgba(14, 165, 233, 0.16), transparent 42%),
+    linear-gradient(180deg, rgba(8, 15, 28, 0.96), rgba(2, 6, 23, 0.98)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media::before {
+  inset: 12px !important;
+  height: auto !important;
+  border-radius: 17px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 45%),
+    rgba(15, 23, 42, 0.18) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__image,
+.ox-search-vehicle-grid .vehicle-card__placeholder {
+  position: absolute !important;
+  inset: 12px !important;
+  width: calc(100% - 24px) !important;
+  height: calc(100% - 24px) !important;
+  min-height: 0 !important;
+  border-radius: 17px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__image {
+  object-fit: cover !important;
+  object-position: center center !important;
+  filter:
+    saturate(1.04)
+    contrast(1.03)
+    drop-shadow(0 14px 18px rgba(0, 0, 0, 0.32)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__placeholder {
+  border-color: rgba(125, 211, 252, 0.18) !important;
+  background:
+    radial-gradient(circle at 50% 34%, rgba(56, 189, 248, 0.18), transparent 38%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(8, 15, 28, 0.96)) !important;
+  color: rgba(226, 232, 240, 0.84) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__topbar {
+  top: 12px !important;
+  left: 12px !important;
+  right: 12px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__rank,
+.ox-search-vehicle-grid .vehicle-card__year,
+.ox-search-vehicle-grid .vehicle-card__market {
+  min-height: 24px !important;
+  border-width: 1px !important;
+  background: rgba(8, 15, 28, 0.72) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media-title {
+  left: 20px !important;
+  right: 20px !important;
+  bottom: 20px !important;
+  z-index: 5 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__title {
+  max-width: 100% !important;
+  font-size: 1rem !important;
+  line-height: 1.08 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-shadow: 0 8px 20px rgba(0, 0, 0, 0.44) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__version {
+  color: rgba(226, 232, 240, 0.78) !important;
+  font-size: 0.68rem !important;
+  text-shadow: 0 8px 18px rgba(0, 0, 0, 0.42) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__body {
+  gap: 10px !important;
+  padding: 13px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__facts {
+  gap: 8px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__fact {
+  min-height: 34px !important;
+  border-color: rgba(125, 211, 252, 0.14) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025)),
+    rgba(15, 23, 42, 0.42) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-box {
+  min-height: 66px !important;
+  border-color: rgba(125, 211, 252, 0.2) !important;
+  background:
+    radial-gradient(circle at 88% 22%, rgba(14, 165, 233, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.74), rgba(2, 6, 23, 0.78)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-label {
+  color: rgba(186, 230, 253, 0.84) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price {
+  color: rgba(248, 250, 252, 0.98) !important;
+  font-size: clamp(1.08rem, 1.22vw, 1.32rem) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin-top: 0 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__btn {
+  min-height: 38px !important;
+  border-radius: 999px !important;
+  font-size: 0.62rem !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__btn--primary {
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.96), rgba(37, 99, 235, 0.96)) !important;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.2) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(3),
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(4) {
+  min-height: 34px !important;
+  opacity: 0.9 !important;
+}
+
+:root[data-theme="light"] .ox-search-results {
+  border-color: rgba(14, 116, 144, 0.14) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.1), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(239, 248, 252, 0.82)) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card {
+  border-color: rgba(14, 116, 144, 0.14) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 252, 0.86)) !important;
+  box-shadow:
+    0 16px 34px rgba(15, 23, 42, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__media {
+  background:
+    radial-gradient(circle at 50% 72%, rgba(14, 165, 233, 0.12), transparent 42%),
+    linear-gradient(180deg, rgba(238, 248, 252, 0.92), rgba(255, 255, 255, 0.96)) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__fact,
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__price-box {
+  border-color: rgba(14, 116, 144, 0.12) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 244, 250, 0.74)) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__price {
+  color: rgba(15, 23, 42, 0.96) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__price-label {
+  color: rgba(14, 116, 144, 0.82) !important;
+}
+
+@media (max-width: 760px) {
+  .ox-search-results {
+    padding: 12px !important;
+  }
+
+  .ox-search-vehicle-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    margin-top: 12px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__media {
+    height: 188px !important;
+    min-height: 188px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__body {
+    padding: 11px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__btn {
+    min-height: 42px !important;
+    font-size: 0.64rem !important;
+  }
+}
+
+/* oX NEXMOV - Search card readability correction */
+.ox-search-vehicle-grid .vehicle-card__media::after {
+  height: 64% !important;
+  background:
+    linear-gradient(180deg, rgba(2, 6, 23, 0.08), rgba(2, 6, 23, 0.52) 48%, rgba(2, 6, 23, 0.88)) !important;
+  z-index: 3 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__rank,
+.ox-search-vehicle-grid .vehicle-card__year {
+  color: rgba(248, 250, 252, 0.98) !important;
+  border-color: rgba(186, 230, 253, 0.48) !important;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.78)) !important;
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card--inicio .vehicle-card__rank {
+  color: rgba(255, 244, 214, 0.98) !important;
+  border-color: rgba(245, 158, 11, 0.56) !important;
+  background: rgba(59, 36, 8, 0.88) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card--elite .vehicle-card__rank,
+.ox-search-vehicle-grid .vehicle-card--platinum .vehicle-card__rank {
+  color: rgba(255, 250, 230, 0.98) !important;
+  border-color: rgba(234, 179, 8, 0.62) !important;
+  background: rgba(44, 34, 12, 0.88) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__year {
+  color: rgba(219, 234, 254, 0.96) !important;
+  border-color: rgba(125, 211, 252, 0.32) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__reserved {
+  top: 42px !important;
+  color: rgba(255, 247, 214, 0.98) !important;
+  border-color: rgba(245, 158, 11, 0.62) !important;
+  background:
+    linear-gradient(180deg, rgba(92, 56, 10, 0.94), rgba(44, 34, 12, 0.9)) !important;
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media-title {
+  display: grid !important;
+  gap: 4px !important;
+  width: fit-content !important;
+  max-width: calc(100% - 40px) !important;
+  padding: 8px 10px !important;
+  border: 1px solid rgba(226, 232, 240, 0.18) !important;
+  border-radius: 14px !important;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.62)) !important;
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media-title .vehicle-card__title,
+.ox-search-vehicle-grid .vehicle-card__title {
+  color: #ffffff !important;
+  font-weight: 950 !important;
+  opacity: 1 !important;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.72),
+    0 12px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media-title .vehicle-card__version,
+.ox-search-vehicle-grid .vehicle-card__version {
+  color: rgba(241, 245, 249, 0.94) !important;
+  opacity: 1 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.68) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__placeholder .vehicle-card__media-title,
+.ox-search-vehicle-grid .vehicle-card__placeholder span {
+  color: rgba(248, 250, 252, 0.96) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__rank,
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__year {
+  color: rgba(8, 47, 73, 0.96) !important;
+  border-color: rgba(14, 116, 144, 0.3) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(224, 242, 254, 0.86)) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__media-title {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.62)) !important;
+}
+
+/* oX NEXMOV - Search cards clean image / title in body */
+.ox-search-vehicle-grid .vehicle-card__media-title {
+  display: none !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media::after {
+  height: 36% !important;
+  background:
+    linear-gradient(180deg, transparent, rgba(2, 6, 23, 0.42)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__identity {
+  display: grid !important;
+  gap: 4px !important;
+  min-height: 46px !important;
+  padding: 2px 1px 0 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__identity .vehicle-card__title,
+.ox-search-vehicle-grid .vehicle-card__body > .vehicle-card__identity .vehicle-card__title {
+  margin: 0 !important;
+  color: rgba(248, 250, 252, 0.98) !important;
+  font-size: clamp(1rem, 1.14vw, 1.24rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0 !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-shadow: none !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__identity .vehicle-card__version,
+.ox-search-vehicle-grid .vehicle-card__body > .vehicle-card__identity .vehicle-card__version {
+  margin: 0 !important;
+  color: rgba(203, 213, 225, 0.82) !important;
+  font-size: 0.72rem !important;
+  line-height: 1.25 !important;
+  font-weight: 760 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-shadow: none !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__placeholder {
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__rank,
+.ox-search-vehicle-grid .vehicle-card__year {
+  font-size: 0.54rem !important;
+  max-width: 64% !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__reserved {
+  max-width: calc(100% - 24px) !important;
+  font-size: 0.55rem !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__fact strong {
+  color: rgba(248, 250, 252, 0.95) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__fact > span {
+  color: rgba(125, 211, 252, 0.96) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__identity .vehicle-card__title,
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__body > .vehicle-card__identity .vehicle-card__title {
+  color: rgba(15, 23, 42, 0.96) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__identity .vehicle-card__version,
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__body > .vehicle-card__identity .vehicle-card__version {
+  color: rgba(51, 65, 85, 0.78) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__fact strong {
+  color: rgba(15, 23, 42, 0.9) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__fact > span {
+  color: rgba(14, 116, 144, 0.92) !important;
+}
+
+@media (max-width: 760px) {
+  .ox-search-vehicle-grid .vehicle-card__identity {
+    min-height: 44px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__identity .vehicle-card__title {
+    font-size: 1.04rem !important;
+  }
+}
+
+/* oX NEXMOV - Join Network dealer plans premium focus */
+.join-network-plan-section .join-network-plans {
+  gap: 14px !important;
+  align-items: stretch !important;
+}
+
+.join-network-plan-section .join-network-plan-card {
+  position: relative !important;
+  display: grid !important;
+  grid-template-rows: auto auto auto auto 1fr auto !important;
+  gap: 12px !important;
+  overflow: hidden !important;
+  padding: 18px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(125, 211, 252, 0.18) !important;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.18), transparent 38%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.82)) !important;
+  box-shadow:
+    0 20px 44px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  isolation: isolate !important;
+}
+
+.join-network-plan-section .join-network-plan-card::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  border-radius: inherit !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 42%),
+    radial-gradient(circle at 86% 14%, rgba(14, 165, 233, 0.16), transparent 30%) !important;
+  pointer-events: none !important;
+}
+
+.join-network-plan-section .join-network-plan-card::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 18px !important;
+  right: 18px !important;
+  height: 3px !important;
+  border-radius: 0 0 999px 999px !important;
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.85), rgba(59, 130, 246, 0.72)) !important;
+}
+
+.join-network-plan-section .join-network-plan-card > span {
+  width: fit-content !important;
+  padding: 6px 9px !important;
+  border: 1px solid rgba(125, 211, 252, 0.22) !important;
+  border-radius: 999px !important;
+  color: rgba(186, 230, 253, 0.98) !important;
+  background: rgba(14, 165, 233, 0.12) !important;
+  font-size: 0.66rem !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.join-network-plan-section .join-network-plan-card > strong {
+  max-width: 92% !important;
+  color: rgba(248, 250, 252, 0.98) !important;
+  font-size: clamp(1.18rem, 1.35vw, 1.5rem) !important;
+  line-height: 1.02 !important;
+}
+
+.join-network-plan-section .join-network-plan-card > p {
+  min-height: 42px !important;
+  margin: 0 !important;
+  color: rgba(203, 213, 225, 0.78) !important;
+  font-size: 0.78rem !important;
+  line-height: 1.42 !important;
+}
+
+.join-network-plan-section .join-network-plan-meta {
+  min-height: 42px !important;
+  display: grid !important;
+  align-items: center !important;
+  padding: 10px 12px !important;
+  border: 1px solid rgba(125, 211, 252, 0.16) !important;
+  border-radius: 14px !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035)),
+    rgba(15, 23, 42, 0.38) !important;
+}
+
+.join-network-plan-section .join-network-plan-meta small {
+  color: inherit !important;
+  font-size: 0.72rem !important;
+  font-weight: 850 !important;
+  line-height: 1.35 !important;
+}
+
+.join-network-plan-section .join-network-plan-card ul {
+  align-content: start !important;
+  gap: 7px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.join-network-plan-section .join-network-plan-card li {
+  position: relative !important;
+  padding-left: 14px !important;
+  color: rgba(226, 232, 240, 0.82) !important;
+  font-size: 0.74rem !important;
+  line-height: 1.35 !important;
+}
+
+.join-network-plan-section .join-network-plan-card li::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0.46em !important;
+  left: 0 !important;
+  width: 5px !important;
+  height: 5px !important;
+  border-radius: 50% !important;
+  background: rgba(56, 189, 248, 0.86) !important;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1) !important;
+}
+
+.join-network-plan-section .join-network-plan-card button {
+  width: 100% !important;
+  min-height: 44px !important;
+  margin-top: 2px !important;
+  border: 1px solid rgba(125, 211, 252, 0.24) !important;
+  border-radius: 999px !important;
+  color: white !important;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.96), rgba(37, 99, 235, 0.96)) !important;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.22) !important;
+  font-weight: 950 !important;
+}
+
+.join-network-plan-section .join-network-plan-card button:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.28) !important;
+}
+
+.join-network-plan-section .join-network-plan-pro::after {
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.9), rgba(34, 197, 94, 0.7)) !important;
+}
+
+.join-network-plan-section .join-network-plan-elite::after {
+  background: linear-gradient(90deg, rgba(234, 179, 8, 0.86), rgba(14, 165, 233, 0.76)) !important;
+}
+
+.join-network-plan-section .join-network-plan-platinum::after {
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.9), rgba(56, 189, 248, 0.82), rgba(99, 102, 241, 0.76)) !important;
+}
+
+.join-network-plan-section .join-network-plan-elite,
+.join-network-plan-section .join-network-plan-platinum {
+  border-color: rgba(234, 179, 8, 0.24) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(234, 179, 8, 0.16), transparent 34%),
+    radial-gradient(circle at 86% 10%, rgba(56, 189, 248, 0.14), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.93), rgba(2, 6, 23, 0.82)) !important;
+}
+
+.join-network-plan-section .join-network-plan-elite > span,
+.join-network-plan-section .join-network-plan-platinum > span {
+  color: rgba(254, 243, 199, 0.98) !important;
+  border-color: rgba(234, 179, 8, 0.24) !important;
+  background: rgba(234, 179, 8, 0.12) !important;
+}
+
+.join-network-plan-section .join-network-plan-elite li::before,
+.join-network-plan-section .join-network-plan-platinum li::before {
+  background: rgba(234, 179, 8, 0.88) !important;
+  box-shadow: 0 0 0 4px rgba(234, 179, 8, 0.1) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-card {
+  border-color: rgba(14, 116, 144, 0.16) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.14), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 252, 0.84)) !important;
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-card::before {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), transparent 48%),
+    radial-gradient(circle at 86% 14%, rgba(14, 165, 233, 0.1), transparent 30%) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-card > span {
+  color: rgba(14, 116, 144, 0.92) !important;
+  border-color: rgba(14, 116, 144, 0.14) !important;
+  background: rgba(14, 165, 233, 0.08) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-card > strong {
+  color: rgba(15, 23, 42, 0.96) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-card > p {
+  color: rgba(70, 87, 108, 0.82) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-meta {
+  color: rgba(30, 41, 59, 0.84) !important;
+  border-color: rgba(14, 116, 144, 0.13) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(241, 248, 251, 0.76)) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-card li {
+  color: rgba(51, 65, 85, 0.86) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-elite,
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-platinum {
+  border-color: rgba(217, 119, 6, 0.2) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(251, 191, 36, 0.16), transparent 34%),
+    radial-gradient(circle at 86% 10%, rgba(14, 165, 233, 0.1), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 251, 235, 0.72)) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-elite > span,
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-platinum > span {
+  color: rgba(146, 64, 14, 0.9) !important;
+  border-color: rgba(217, 119, 6, 0.18) !important;
+  background: rgba(251, 191, 36, 0.12) !important;
+}
+
+@media (max-width: 900px) {
+  .join-network-plan-section .join-network-plan-card {
+    padding: 16px !important;
+    border-radius: 20px !important;
+  }
 }
 
 /* oX NEXMOV - Compare decision board final mobile override */
