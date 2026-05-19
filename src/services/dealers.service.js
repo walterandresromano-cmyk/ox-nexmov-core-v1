@@ -168,7 +168,7 @@ export async function uploadCurrentDealerLogo({ dealerId, file }) {
       dealer: null,
       logoUrl: null,
       error: {
-        message: "Supabase no estÃ¡ configurado.",
+        message: "Supabase no está configurado.",
       },
     };
   }
@@ -193,7 +193,7 @@ export async function uploadCurrentDealerLogo({ dealerId, file }) {
       logoUrl: null,
       error: {
         code: "file_missing",
-        message: "SeleccionÃ¡ una imagen institucional para subir.",
+        message: "Seleccioná una imagen institucional para subir.",
       },
     };
   }
@@ -208,7 +208,7 @@ export async function uploadCurrentDealerLogo({ dealerId, file }) {
       logoUrl: null,
       error: {
         code: "invalid_file_type",
-        message: "UsÃ¡ una imagen JPG, PNG o WebP.",
+        message: "Usá una imagen JPG, PNG o WebP.",
       },
     };
   }
@@ -254,7 +254,7 @@ export async function uploadCurrentDealerLogo({ dealerId, file }) {
       logoUrl: null,
       error: {
         code: "public_url_missing",
-        message: "No se pudo obtener la URL pÃºblica de la imagen.",
+        message: "No se pudo obtener la URL pública de la imagen.",
       },
     };
   }

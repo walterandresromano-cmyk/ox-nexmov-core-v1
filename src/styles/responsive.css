@@ -4996,6 +4996,205 @@
   line-height: 1.48 !important;
 }
 
+/* oX NEXMOV - Admin/Dealer compact operational cards */
+@media (max-width: 900px) {
+  .admin-panel .panel-head-row,
+  .dealer-panel .panel-head-row,
+  .admin-panel .admin-section-block,
+  .dealer-panel .dealer-leads-section,
+  .dealer-panel .dealer-module-card-open {
+    padding: 12px !important;
+    border-radius: 18px !important;
+  }
+
+  .admin-panel .admin-kpi-grid,
+  .dealer-panel .dealer-modules-grid,
+  .dealer-dashboard-shell,
+  .dealer-dashboard-ops,
+  .dealer-feature-preview-grid {
+    gap: 8px !important;
+  }
+
+  .admin-panel .admin-kpi-card,
+  .admin-panel .dealer-module-card,
+  .dealer-panel .dealer-status-card,
+  .dealer-panel .dealer-module-card,
+  .dealer-dashboard-primary-card,
+  .dealer-dashboard-mini-card,
+  .dealer-dashboard-plan-card,
+  .dealer-feature-preview-card {
+    min-height: 0 !important;
+    padding: 11px !important;
+    border-radius: 15px !important;
+  }
+
+  .admin-panel .admin-kpi-card strong,
+  .dealer-panel .dealer-status-card strong,
+  .dealer-dashboard-primary-card h2,
+  .dealer-dashboard-mini-card strong,
+  .dealer-dashboard-plan-card strong {
+    font-size: clamp(0.98rem, 5vw, 1.18rem) !important;
+  }
+
+  .admin-panel .admin-kpi-card p,
+  .admin-panel .dealer-module-card p,
+  .dealer-panel .dealer-status-card p,
+  .dealer-panel .dealer-module-card p,
+  .dealer-dashboard-primary-card p,
+  .dealer-dashboard-mini-card p,
+  .dealer-dashboard-plan-card p {
+    font-size: 0.72rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .admin-panel .admin-toolbar {
+    padding: 10px !important;
+    gap: 8px !important;
+    border-radius: 16px !important;
+  }
+
+  .admin-panel .empty-state,
+  .dealer-panel .empty-state {
+    padding: 12px !important;
+    border-radius: 15px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .dealer-panel > .dealer-header-control {
+    grid-template-columns: 1fr !important;
+    gap: 9px !important;
+    padding: 12px !important;
+  }
+
+  .dealer-header-intro {
+    order: 1;
+    gap: 7px;
+    padding: 0;
+  }
+
+  .dealer-header-identity {
+    order: 2;
+  }
+
+  .dealer-header-ops {
+    order: 3;
+    gap: 8px;
+  }
+
+  .dealer-header-intro h1 {
+    font-size: clamp(1.38rem, 9vw, 1.82rem) !important;
+  }
+
+  .dealer-header-intro > p:not(.eyebrow):not(.admin-session-note) {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 0.78rem !important;
+    line-height: 1.36 !important;
+  }
+
+  .dealer-header-chips {
+    gap: 6px;
+  }
+
+  .dealer-header-chips span {
+    min-height: 25px;
+    padding: 6px 8px;
+    font-size: 0.66rem;
+  }
+
+  .dealer-header-identity .dealer-institutional-card {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    align-items: center;
+    gap: 9px;
+    padding: 8px !important;
+  }
+
+  .dealer-header-identity .dealer-institutional-media {
+    min-height: 74px !important;
+  }
+
+  .dealer-header-identity .dealer-institutional-media img {
+    height: 78px !important;
+  }
+
+  .dealer-header-identity .dealer-institutional-actions p {
+    display: block;
+    font-size: 0.68rem;
+  }
+
+  .dealer-header-identity .dealer-institutional-upload-btn {
+    min-height: 40px !important;
+  }
+
+  .dealer-switcher-row,
+  .dealer-header-ops .dealer-contact-card--compact .dealer-contact-form {
+    grid-template-columns: 1fr;
+  }
+
+  .dealer-header-ops .dealer-switcher {
+    padding: 9px;
+  }
+
+  .dealer-header-ops .dealer-switcher select,
+  .dealer-header-ops .dealer-switcher .admin-refresh-btn,
+  .dealer-header-ops .dealer-contact-card--compact .dealer-contact-form input,
+  .dealer-header-ops .dealer-contact-card--compact .dealer-contact-form .table-action-btn {
+    width: 100%;
+    min-height: 42px !important;
+  }
+
+  .dealer-header-mobile-primary {
+    order: 4;
+  }
+}
+
+@media (max-width: 900px) {
+  .dealer-panel > .dealer-header-control {
+    align-items: stretch !important;
+  }
+
+  .dealer-header-intro {
+    padding-right: 0;
+  }
+
+  .dealer-header-identity .dealer-institutional-card {
+    height: auto;
+    gap: 8px;
+  }
+
+  .dealer-header-identity .dealer-institutional-media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .dealer-header-identity .dealer-institutional-actions {
+    gap: 6px;
+  }
+
+  .dealer-header-identity .dealer-institutional-upload-btn {
+    min-height: 38px !important;
+  }
+
+  .dealer-header-ops {
+    padding: 9px;
+    border-radius: 16px;
+  }
+
+  .dealer-header-ops .dealer-contact-card--compact {
+    padding-top: 8px !important;
+  }
+
+  .dealer-header-ops .dealer-switcher select,
+  .dealer-header-ops .dealer-switcher .admin-refresh-btn,
+  .dealer-header-ops .dealer-contact-card--compact .dealer-contact-form input,
+  .dealer-header-ops .dealer-contact-card--compact .dealer-contact-form .table-action-btn {
+    min-height: 40px !important;
+  }
+}
+
 /* oX NEXMOV - Public information pages mobile app refinement */
 @media (max-width: 900px) {
   .join-network-page,

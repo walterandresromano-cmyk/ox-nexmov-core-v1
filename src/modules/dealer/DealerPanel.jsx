@@ -773,21 +773,18 @@ export default function DealerPanel({ authProfile }) {
       >
         <div className="dealer-profile-contact-head">
           <p className="eyebrow">Perfil comercial</p>
-          <h3>{compact ? "WhatsApp comercial" : "WhatsApp de contacto"}</h3>
+          <h3>{compact ? "Contacto comercial" : "WhatsApp de contacto"}</h3>
           {compact && (
             <p className="dealer-contact-compact-copy">
-              NÃºmero principal para consultas de compradores.
+              Número principal para consultas.
             </p>
           )}
-          <p>
-            Este número se usará para que los compradores contacten tus
-            publicaciones por WhatsApp.
-          </p>
+          <p>Este número se usará en tus publicaciones.</p>
         </div>
 
         <form className="dealer-contact-form" onSubmit={handleSaveDealerWhatsapp}>
           <label>
-            WhatsApp de contacto
+            Número de contacto
             <input
               value={whatsappForm}
               onChange={(event) => {
@@ -800,7 +797,7 @@ export default function DealerPanel({ authProfile }) {
           </label>
 
           {normalizedPreview && (
-            <small>Formato WhatsApp: +{normalizedPreview}</small>
+            <small>Formato: +{normalizedPreview}</small>
           )}
 
           {whatsappError && <div className="auth-warning">{whatsappError}</div>}
@@ -813,7 +810,7 @@ export default function DealerPanel({ authProfile }) {
             className="table-action-btn"
             disabled={savingWhatsapp}
           >
-            {savingWhatsapp ? "Guardando..." : "Guardar WhatsApp"}
+            {savingWhatsapp ? "Guardando..." : "Guardar"}
           </button>
         </form>
       </div>
@@ -952,7 +949,7 @@ export default function DealerPanel({ authProfile }) {
             <h2>Funciones visibles para todos los planes</h2>
             <p>
               Cada herramienta queda visible con su alcance actual. Para
-              habilitar funciones superiores, solicitÃ¡ upgrade desde soporte.
+              habilitar funciones superiores, solicitá upgrade desde soporte.
             </p>
           </div>
 
@@ -1234,14 +1231,21 @@ export default function DealerPanel({ authProfile }) {
   return (
     <section className="page-section">
       <div className="container panel dealer-panel">
-         <div className="panel-head-row">
-  <div>
+        <div className="panel-head-row dealer-header-control">
+          <div className="dealer-header-intro">
     <p className="eyebrow">Panel dealer único</p>
     <h1>{isPlatinum ? "Panel Dealer Platinum" : "Panel dealer"}</h1>
     <p>
-      {isPlatinum ? "Máxima presencia para operaciones de alto volumen." : "Un único panel completo. Las funciones se habilitan según plan,"}
-      {!isPlatinum && " estado de cuenta y beneficios otorgados por admin."}
+      {isPlatinum
+        ? "Máxima presencia para operaciones de alto volumen."
+        : "Identidad comercial, operación y contacto en un solo centro de control."}
     </p>
+
+    <div className="dealer-header-chips">
+      <span>{permissions.rankLabel}</span>
+      <span>{getPlanStatusLabel(dealer.planStatus)}</span>
+      <span>{capacityLabel}</span>
+    </div>
 
     {isPlatinum && (
       <div className="dealer-platinum-header-badges">
@@ -1259,6 +1263,7 @@ export default function DealerPanel({ authProfile }) {
     )}
   </div>
 
+          <div className="dealer-header-identity">
   <div className="dealer-institutional-card">
     <div className="dealer-institutional-media">
       {dealerLogo ? (
@@ -1269,15 +1274,14 @@ export default function DealerPanel({ authProfile }) {
       ) : (
         <div className="dealer-institutional-empty">
           <strong>Sin imagen institucional</strong>
-          <span>CargÃ¡ una imagen clara de tu agencia.</span>
+          <span>Cargá una imagen clara.</span>
         </div>
       )}
     </div>
 
     <div className="dealer-institutional-actions">
       <p>
-        UsÃ¡ una imagen institucional clara de tu agencia. Se mostrarÃ¡ en tu
-        perfil y ayudarÃ¡ a generar confianza.
+        Imagen institucional de tu agencia.
       </p>
 
       <button
@@ -1310,25 +1314,30 @@ export default function DealerPanel({ authProfile }) {
       )}
     </div>
   </div>
+          </div>
 
+          <div className="dealer-header-ops">
   <div className="dealer-switcher">
 
         
             <label>Dealer operativo</label>
-            <select
-              value={dealer.id}
-              onChange={(event) => setSelectedDealerId(event.target.value)}
-            >
-              {dealers.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.commercialName} · {item.plan}
-                </option>
-              ))}
-            </select>
+            <div className="dealer-switcher-row">
+              <select
+                value={dealer.id}
+                onChange={(event) => setSelectedDealerId(event.target.value)}
+              >
+                {dealers.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.commercialName} · {item.plan}
+                  </option>
+                ))}
+              </select>
 
-            <button className="admin-refresh-btn" onClick={refreshDealerPanel}>
-              Actualizar panel
-            </button>
+              <button className="admin-refresh-btn" onClick={refreshDealerPanel}>
+                Actualizar panel
+              </button>
+            </div>
+          </div>
 
             {renderDealerWhatsappContactCard({ compact: true })}
 
@@ -1339,7 +1348,7 @@ export default function DealerPanel({ authProfile }) {
               title={
                 !publishCheck.allowed
                   ? publishBlockReason ||
-                    "No podÃ©s crear publicaciones hasta regularizar tu plan comercial."
+                    "No podés crear publicaciones hasta regularizar tu plan comercial."
                   : undefined
               }
               onClick={() => {
@@ -1348,7 +1357,7 @@ export default function DealerPanel({ authProfile }) {
                 }
               }}
             >
-              Publicar vehÃ­culo
+              Publicar vehículo
             </button>
           </div>
         </div>
