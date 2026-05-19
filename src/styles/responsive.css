@@ -1914,6 +1914,66 @@
   }
 }
 
+/* oX NEXMOV - Compare decision board mobile */
+@media (max-width: 860px) {
+  .compare-modal {
+    padding: 14px !important;
+  }
+
+  .compare-modal-header {
+    display: grid;
+    gap: 12px;
+    margin: -14px -14px 14px !important;
+    padding: 14px !important;
+  }
+
+  .compare-modal-actions {
+    justify-content: stretch;
+    border-radius: 18px;
+  }
+
+  .compare-modal-actions button {
+    flex: 1 1 120px;
+    min-height: 42px;
+  }
+
+  .compare-modal-scroll {
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  .compare-grid,
+  .compare-grid.compare-count-1,
+  .compare-grid.compare-count-2,
+  .compare-grid.compare-count-3,
+  .compare-grid.compare-count-4 {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(280px, 86vw);
+    grid-template-columns: none;
+    align-items: stretch;
+    width: max-content;
+  }
+
+  .compare-card-remove {
+    width: 34px;
+    height: 34px;
+    top: 12px;
+    left: 12px;
+  }
+
+  .compare-card-media {
+    margin: 9px 9px 0;
+  }
+
+  .compare-card-body {
+    padding: 11px;
+  }
+
+  .compare-spec-row {
+    grid-template-columns: minmax(72px, 0.72fr) minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   :root[data-theme="light"] .dealer-mobile-home-head {
     border-color: rgba(2, 132, 199, 0.16);
@@ -4994,6 +5054,39 @@
 .faq-hero-copy > p:not(.eyebrow) {
   font-size: 0.72rem !important;
   line-height: 1.48 !important;
+}
+
+/* oX NEXMOV - Compare decision board final mobile override */
+@media (max-width: 860px) {
+  .compare-modal-scroll {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+  }
+
+  .compare-grid,
+  .compare-grid.compare-count-1,
+  .compare-grid.compare-count-2,
+  .compare-grid.compare-count-3,
+  .compare-grid.compare-count-4 {
+    display: grid !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: minmax(280px, 86vw) !important;
+    grid-template-columns: none !important;
+    width: max-content !important;
+  }
+
+  .compare-card-remove {
+    width: 34px !important;
+    height: 34px !important;
+    top: 12px !important;
+    left: 12px !important;
+    right: auto !important;
+  }
+
+  .compare-card-media {
+    margin: 9px 9px 0 !important;
+    border-radius: 14px !important;
+  }
 }
 
 /* oX NEXMOV - Admin/Dealer compact operational cards */

@@ -317,8 +317,8 @@ function CompareVehicleCard({
         type="button"
         className="compare-card-remove"
         onClick={() => onRemove(vehicle.id)}
-        title="Quitar de comparación"
-        aria-label={`Quitar ${title} de la comparación`}
+        title="Quitar vehículo de la comparación"
+        aria-label="Quitar vehículo de la comparación"
       >
         ×
       </button>
@@ -327,7 +327,10 @@ function CompareVehicleCard({
         {imageUrl ? (
           <img className="compare-card-image" src={imageUrl} alt={title} loading="lazy" />
         ) : (
-          <strong>{title}</strong>
+          <div className="compare-card-placeholder">
+            <span>Imagen no disponible</span>
+            <strong>{title}</strong>
+          </div>
         )}
 
         {images.length > 1 && (
@@ -450,6 +453,8 @@ export default function CompareTray({ appActions, onNavigate }) {
   const [selectedDetailVehicle, setSelectedDetailVehicle] = useState(null);
   const [contactVehicle, setContactVehicle] = useState(null);
   const [galleryIndexes, setGalleryIndexes] = useState({});
+  const [restoreCompareAfterDetail, setRestoreCompareAfterDetail] =
+    useState(false);
 
   const compareItems = appActions?.compareItems || [];
   const removeFromCompare = appActions?.removeFromCompare || (() => {});
@@ -487,6 +492,22 @@ export default function CompareTray({ appActions, onNavigate }) {
         [vehicleKey]: nextIndex,
       };
     });
+  }
+
+  function openDetailFromCompare(vehicle) {
+    setRestoreCompareAfterDetail(showCompareModal);
+    setShowCompareModal(false);
+    setSelectedDetailVehicle(vehicle);
+  }
+
+  function closeDetailFromCompare() {
+    setSelectedDetailVehicle(null);
+
+    if (restoreCompareAfterDetail && compareItems.length > 0) {
+      setShowCompareModal(true);
+    }
+
+    setRestoreCompareAfterDetail(false);
   }
 
   return (
@@ -604,7 +625,7 @@ export default function CompareTray({ appActions, onNavigate }) {
                       galleryIndex={galleryIndexes[vehicleKey] || 0}
                       onGalleryMove={moveCompareImage}
                       onRemove={removeFromCompare}
-                      onOpenDetail={setSelectedDetailVehicle}
+                      onOpenDetail={openDetailFromCompare}
                     />
                     );
                   })}
@@ -627,7 +648,7 @@ export default function CompareTray({ appActions, onNavigate }) {
         <VehicleDetailModal
           vehicle={selectedDetailVehicle}
           dealer={selectedDealer}
-          onClose={() => setSelectedDetailVehicle(null)}
+          onClose={closeDetailFromCompare}
           onCompare={() => addToCompare(selectedDetailVehicle)}
           onFavorite={() => toggleFavorite(selectedDetailVehicle)}
           favoriteActive={isFavorite(selectedDetailVehicle.id)}
@@ -635,6 +656,7 @@ export default function CompareTray({ appActions, onNavigate }) {
             setContactVehicle(selectedDetailVehicle);
             setSelectedDetailVehicle(null);
             setShowCompareModal(false);
+            setRestoreCompareAfterDetail(false);
           }}
         />
       )}
