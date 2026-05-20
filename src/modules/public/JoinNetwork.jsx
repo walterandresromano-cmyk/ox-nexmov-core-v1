@@ -294,6 +294,12 @@ export default function JoinNetwork({ onNavigate }) {
               </article>
             ))}
           </div>
+
+          <p className="join-network-commercial-note">
+            oX NEXMOV no garantiza volumen de consultas ni ventas. Las
+            herramientas disponibles dependen del plan contratado, beneficios
+            habilitados y estado de la beta comercial.
+          </p>
         </section>
 
         <section className="join-network-section join-network-dealers">
@@ -412,6 +418,12 @@ export default function JoinNetwork({ onNavigate }) {
               </article>
             ))}
           </div>
+
+          <p className="join-network-commercial-note">
+            Los planes definen cupos, visibilidad y herramientas de trabajo. La
+            contratación de un plan no implica resultados comerciales
+            garantizados.
+          </p>
         </section>
 
         <section className="join-network-section join-network-difference">

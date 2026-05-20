@@ -12,6 +12,9 @@ import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import { listDealersForAdmin } from "../../services/dealers.service.js";
 import { listVehicleLeadsForCurrentUser } from "../../services/leads.service.js";
 import { listSupportTicketsForCurrentUser } from "../../services/tickets.service.js";
+import { listVehiclesForAdmin } from "../../services/adminVehicles.service.js";
+import { listSellVehicleLeadsForAdmin } from "../../services/sellVehicle.service.js";
+import { listZeroKmFinancingLeadsForCurrentUser } from "../../services/zeroKm.service.js";
 import {
   createDealerFromAdmin,
   activateDealerFromAdmin,
@@ -157,6 +160,13 @@ export default function AdminPanel({ authProfile }) {
   const [ticketSearchText, setTicketSearchText] = useState("");
   const [ticketStatusFilter, setTicketStatusFilter] = useState("all");
 
+  const [adminVehicles, setAdminVehicles] = useState([]);
+  const [adminVehiclesError, setAdminVehiclesError] = useState("");
+  const [sellVehicleLeads, setSellVehicleLeads] = useState([]);
+  const [sellVehicleLeadsError, setSellVehicleLeadsError] = useState("");
+  const [zeroKmLeads, setZeroKmLeads] = useState([]);
+  const [zeroKmLeadsError, setZeroKmLeadsError] = useState("");
+
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [selectedDealerForSlots, setSelectedDealerForSlots] = useState(null);
   const [selectedDealer, setSelectedDealer] = useState(null);
@@ -264,8 +274,65 @@ export default function AdminPanel({ authProfile }) {
     setLoadingTickets(false);
   }
 
+  async function loadAdminVehiclesSummary() {
+    setAdminVehiclesError("");
+
+    const { vehicles: supabaseVehicles, error } = await listVehiclesForAdmin();
+
+    if (error) {
+      setAdminVehicles([]);
+      setAdminVehiclesError(
+        error.message || "No se pudieron cargar publicaciones."
+      );
+      return;
+    }
+
+    setAdminVehicles(supabaseVehicles || []);
+  }
+
+  async function loadSellVehicleLeadsSummary() {
+    setSellVehicleLeadsError("");
+
+    const { leads: supabaseLeads, error } =
+      await listSellVehicleLeadsForAdmin();
+
+    if (error) {
+      setSellVehicleLeads([]);
+      setSellVehicleLeadsError(
+        error.message || "No se pudieron cargar solicitudes de venta."
+      );
+      return;
+    }
+
+    setSellVehicleLeads(supabaseLeads || []);
+  }
+
+  async function loadZeroKmLeadsSummary() {
+    setZeroKmLeadsError("");
+
+    const { leads: supabaseLeads, error } =
+      await listZeroKmFinancingLeadsForCurrentUser();
+
+    if (error) {
+      setZeroKmLeads([]);
+      setZeroKmLeadsError(
+        error.message || "No se pudieron cargar consultas 0km."
+      );
+      return;
+    }
+
+    setZeroKmLeads(supabaseLeads || []);
+  }
+
   async function refreshAdminPanel() {
-    await Promise.all([loadDealers(), loadLeads(), loadTickets()]);
+    await Promise.all([
+      loadDealers(),
+      loadLeads(),
+      loadTickets(),
+      loadAdminVehiclesSummary(),
+      loadSellVehicleLeadsSummary(),
+      loadZeroKmLeadsSummary(),
+    ]);
   }
 
   async function handleTicketUpdated() {
@@ -608,6 +675,15 @@ export default function AdminPanel({ authProfile }) {
   }, [tickets, ticketSearchText, ticketStatusFilter]);
 
   const totalDealers = dealers.length;
+  const activeDealers = dealers.filter(
+    (dealer) => dealer.planStatus === "active" || dealer.planStatus === "expiring"
+  ).length;
+  const pendingDealers = dealers.filter(
+    (dealer) => dealer.planStatus === "pending_activation"
+  ).length;
+  const suspendedDealers = dealers.filter(
+    (dealer) => dealer.planStatus === "suspended"
+  ).length;
 
   const expiringDealers = dealers.filter(
     (dealer) => dealer.currentPeriod?.expiresInDays <= 14
@@ -639,6 +715,35 @@ export default function AdminPanel({ authProfile }) {
   const urgentTickets = tickets.filter(
     (ticket) => ticket.priority === "urgent"
   ).length;
+  const openTickets = tickets.filter((ticket) =>
+    ["new", "in_progress"].includes(ticket.status)
+  ).length;
+
+  const totalVehicles = adminVehicles.length;
+  const activeVehicles = adminVehicles.filter((vehicle) => vehicle.is_active).length;
+  const reviewVehicles = adminVehicles.filter(
+    (vehicle) =>
+      vehicle.review_status === "needs_review" ||
+      vehicle.publication_status === "review"
+  ).length;
+
+  const totalSellVehicleLeads = sellVehicleLeads.length;
+  const newSellVehicleLeads = sellVehicleLeads.filter(
+    (lead) => lead.status === "new"
+  ).length;
+
+  const totalZeroKmLeads = zeroKmLeads.length;
+  const newZeroKmLeads = zeroKmLeads.filter((lead) => lead.status === "new").length;
+
+  const adminAttentionTotal =
+    reviewVehicles +
+    newLeads +
+    openTickets +
+    newZeroKmLeads +
+    newSellVehicleLeads +
+    pendingDealers +
+    expiringDealers +
+    suspendedDealers;
 
   function getDealerForTicket(ticket) {
     const ticketDealerId = String(
@@ -682,6 +787,45 @@ export default function AdminPanel({ authProfile }) {
     [ADMIN_MODULES.TICKETS]: "Tickets internos",
   }[activeModule];
 
+  function getAdminDateValue(item) {
+    return (
+      item?.created_at ||
+      item?.createdAt ||
+      item?.updated_at ||
+      item?.updatedAt ||
+      item?.submitted_at ||
+      item?.submittedAt ||
+      item?.last_message_at ||
+      ""
+    );
+  }
+
+  function getRecentItems(items, limit = 4) {
+    return [...items]
+      .sort(
+        (firstItem, secondItem) =>
+          new Date(getAdminDateValue(secondItem) || 0) -
+          new Date(getAdminDateValue(firstItem) || 0)
+      )
+      .slice(0, limit);
+  }
+
+  function getLeadBuyerName(lead) {
+    return (
+      [lead?.buyer_first_name, lead?.buyer_last_name].filter(Boolean).join(" ") ||
+      lead?.buyer_email ||
+      "Lead comercial"
+    );
+  }
+
+  function getVehicleAdminTitle(vehicle) {
+    return (
+      [vehicle?.brand, vehicle?.model, vehicle?.version]
+        .filter(Boolean)
+        .join(" ") || "Publicación"
+    );
+  }
+
   function renderBackToSummaryButton() {
     if (!activeModule) return null;
 
@@ -708,8 +852,253 @@ export default function AdminPanel({ authProfile }) {
   }
 
   function renderSummary() {
+    const kpiCards = [
+      {
+        label: "Dealers activos",
+        value: activeDealers,
+        text: `${totalDealers} dealers cargados en la red.`,
+        module: ADMIN_MODULES.DEALERS,
+        tone: "success",
+      },
+      {
+        label: "Publicaciones activas",
+        value: activeVehicles,
+        text: `${totalVehicles} publicaciones totales.`,
+        module: ADMIN_MODULES.VEHICLES,
+        tone: "info",
+      },
+      {
+        label: "En revisión",
+        value: reviewVehicles,
+        text: "Publicaciones que necesitan decisión admin.",
+        module: ADMIN_MODULES.VEHICLES,
+        tone: reviewVehicles > 0 ? "warning" : "neutral",
+      },
+      {
+        label: "Leads nuevos",
+        value: newLeads,
+        text: `${totalLeads} consultas comprador-dealer.`,
+        module: ADMIN_MODULES.COMMERCIAL_LEADS,
+        tone: newLeads > 0 ? "warning" : "neutral",
+      },
+      {
+        label: "Tickets abiertos",
+        value: openTickets,
+        text: `${urgentTickets} marcados como urgentes.`,
+        module: ADMIN_MODULES.TICKETS,
+        tone: urgentTickets > 0 ? "danger" : "info",
+      },
+      {
+        label: "Consultas 0km",
+        value: totalZeroKmLeads,
+        text: `${newZeroKmLeads} nuevas para revisar.`,
+        module: ADMIN_MODULES.ZERO_KM,
+        tone: newZeroKmLeads > 0 ? "warning" : "neutral",
+      },
+      {
+        label: "Vender vehículo",
+        value: totalSellVehicleLeads,
+        text: `${newSellVehicleLeads} solicitudes nuevas.`,
+        module: ADMIN_MODULES.SELL_VEHICLE,
+        tone: newSellVehicleLeads > 0 ? "warning" : "neutral",
+      },
+    ];
+
+    const operationalAlerts = [
+      {
+        label: "Publicaciones pendientes de revisión",
+        value: reviewVehicles,
+        text: "Revisar contenido, imágenes y estado antes de mantenerlas visibles.",
+        module: ADMIN_MODULES.VEHICLES,
+        tone: "warning",
+      },
+      {
+        label: "Tickets abiertos",
+        value: openTickets,
+        text: "Casos de soporte que pueden frenar operación de dealers.",
+        module: ADMIN_MODULES.TICKETS,
+        tone: urgentTickets > 0 ? "danger" : "warning",
+      },
+      {
+        label: "Leads sin primera gestión",
+        value: newLeads,
+        text: "Consultas comerciales que todavía no pasaron a contactado.",
+        module: ADMIN_MODULES.COMMERCIAL_LEADS,
+        tone: "warning",
+      },
+      {
+        label: "Dealers por vencer o en gracia",
+        value: expiringDealers + expiredDealers,
+        text: "Seguimiento comercial de planes, vencimientos y continuidad.",
+        module: ADMIN_MODULES.DEALERS,
+        tone: expiredDealers > 0 ? "danger" : "warning",
+      },
+      {
+        label: "Dealers pendientes o suspendidos",
+        value: pendingDealers + suspendedDealers,
+        text: "Altas pendientes, accesos comerciales o cuentas fuera de operación.",
+        module: ADMIN_MODULES.DEALERS,
+        tone: suspendedDealers > 0 ? "danger" : "warning",
+      },
+      {
+        label: "0km y vender vehículo por revisar",
+        value: newZeroKmLeads + newSellVehicleLeads,
+        text: "Canales públicos que necesitan seguimiento operativo.",
+        module:
+          newZeroKmLeads >= newSellVehicleLeads
+            ? ADMIN_MODULES.ZERO_KM
+            : ADMIN_MODULES.SELL_VEHICLE,
+        tone: "info",
+      },
+    ];
+
+    const activeAlerts = operationalAlerts.filter((alert) => alert.value > 0);
+    const recentActivity = [
+      ...getRecentItems(leads, 3).map((lead) => ({
+        type: "Lead",
+        title: getLeadBuyerName(lead),
+        detail:
+          lead.vehicle_title_snapshot ||
+          [lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ") ||
+          "Consulta comercial",
+        date: getAdminDateValue(lead),
+        module: ADMIN_MODULES.COMMERCIAL_LEADS,
+      })),
+      ...getRecentItems(adminVehicles, 3).map((vehicle) => ({
+        type: "Publicación",
+        title: getVehicleAdminTitle(vehicle),
+        detail: vehicle.dealer_name || vehicle.city || "Inventario",
+        date: getAdminDateValue(vehicle),
+        module: ADMIN_MODULES.VEHICLES,
+      })),
+      ...getRecentItems(tickets, 3).map((ticket) => ({
+        type: "Ticket",
+        title: ticket.subject || "Ticket interno",
+        detail: ticket.dealer_name || ticket.category || ticket.status,
+        date: getAdminDateValue(ticket),
+        module: ADMIN_MODULES.TICKETS,
+      })),
+      ...getRecentItems(dealers, 3).map((dealer) => ({
+        type: "Dealer",
+        title: dealer.commercialName || dealer.name || "Dealer",
+        detail: `${getDealerPlanValue(dealer) || "sin plan"} · ${getPlanStatusLabel(
+          dealer.planStatus
+        )}`,
+        date: getAdminDateValue(dealer),
+        module: ADMIN_MODULES.DEALERS,
+      })),
+    ]
+      .sort(
+        (firstItem, secondItem) =>
+          new Date(secondItem.date || 0) - new Date(firstItem.date || 0)
+      )
+      .slice(0, 6);
+
     return (
       <>
+        <section className="admin-ops-dashboard">
+          <div className="admin-ops-hero">
+            <div>
+              <span>Resumen operativo</span>
+              <h2>Qué necesita atención hoy</h2>
+              <p>
+                Lectura central de dealers, publicaciones, leads, tickets y
+                canales públicos para decidir rápido dónde intervenir.
+              </p>
+            </div>
+
+            <div className="admin-ops-attention-card">
+              <span>Atención total</span>
+              <strong>{adminAttentionTotal}</strong>
+              <p>
+                {adminAttentionTotal > 0
+                  ? "Casos con potencial impacto operativo o comercial."
+                  : "Sin alertas operativas críticas en este momento."}
+              </p>
+            </div>
+          </div>
+
+          <div className="admin-ops-kpi-grid">
+            {kpiCards.map((card) => (
+              <button
+                key={card.label}
+                type="button"
+                className={`admin-ops-kpi-card admin-ops-tone-${card.tone}`}
+                onClick={() => openModule(card.module)}
+              >
+                <span>{card.label}</span>
+                <strong>{card.value}</strong>
+                <p>{card.text}</p>
+              </button>
+            ))}
+          </div>
+
+          <div className="admin-ops-grid">
+            <section className="admin-ops-panel admin-ops-panel--alerts">
+              <div className="admin-ops-panel-head">
+                <div>
+                  <span>Alertas operativas</span>
+                  <h3>Prioridad de gestión</h3>
+                </div>
+              </div>
+
+              {activeAlerts.length === 0 ? (
+                <div className="admin-ops-empty">
+                  No hay alertas operativas pendientes con los datos cargados.
+                </div>
+              ) : (
+                <div className="admin-ops-alert-list">
+                  {activeAlerts.map((alert) => (
+                    <button
+                      key={alert.label}
+                      type="button"
+                      className={`admin-ops-alert admin-ops-tone-${alert.tone}`}
+                      onClick={() => openModule(alert.module)}
+                    >
+                      <strong>{alert.value}</strong>
+                      <span>{alert.label}</span>
+                      <p>{alert.text}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            <section className="admin-ops-panel">
+              <div className="admin-ops-panel-head">
+                <div>
+                  <span>Actividad reciente</span>
+                  <h3>Últimos movimientos</h3>
+                </div>
+              </div>
+
+              {recentActivity.length === 0 ? (
+                <div className="admin-ops-empty">
+                  La actividad reciente aparecerá cuando existan datos reales.
+                </div>
+              ) : (
+                <div className="admin-ops-activity-list">
+                  {recentActivity.map((item) => (
+                    <button
+                      key={`${item.type}-${item.title}-${item.date}`}
+                      type="button"
+                      className="admin-ops-activity"
+                      onClick={() => openModule(item.module)}
+                    >
+                      <span>{item.type}</span>
+                      <strong>{item.title}</strong>
+                      <p>{item.detail}</p>
+                      <small>{formatDateTime(item.date)}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
+        </section>
+
+        {false && (
+          <>
         <div className="admin-kpi-grid">
           <article className="admin-kpi-card">
             <span>Dealers</span>
@@ -788,7 +1177,10 @@ export default function AdminPanel({ authProfile }) {
           </article>
         </div>
 
-        <div className="admin-section-block">
+          </>
+        )}
+
+        <div className="admin-section-block admin-quick-actions-block">
           <div className="buyer-section-head">
             <div>
               <h2>Accesos operativos</h2>
@@ -2077,6 +2469,15 @@ export default function AdminPanel({ authProfile }) {
         {dealersError && <div className="auth-warning">{dealersError}</div>}
         {leadsError && <div className="auth-warning">{leadsError}</div>}
         {ticketsError && <div className="auth-warning">{ticketsError}</div>}
+        {adminVehiclesError && (
+          <div className="auth-warning">{adminVehiclesError}</div>
+        )}
+        {sellVehicleLeadsError && (
+          <div className="auth-warning">{sellVehicleLeadsError}</div>
+        )}
+        {zeroKmLeadsError && (
+          <div className="auth-warning">{zeroKmLeadsError}</div>
+        )}
 
         {loadingDealers && (
           <div className="auth-message">Cargando dealers desde Supabase...</div>

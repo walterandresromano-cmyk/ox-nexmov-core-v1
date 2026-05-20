@@ -54,12 +54,21 @@ export default function Footer({ onNavigate }) {
           oX NEXMOV no es titular de los vehículos publicados. Las operaciones
           comerciales, documentación, precios finales, disponibilidad y
           condiciones de financiación son responsabilidad del dealer,
-          concesionaria o anunciante correspondiente.
+          concesionaria o anunciante correspondiente. La plataforma no garantiza
+          leads, ventas, aprobaciones crediticias ni condiciones finales.
+        </p>
+
+        <p className="footer-legal-note footer-security-note">
+          Consultá nuestras recomendaciones de seguridad y publicaciones
+          sospechosas antes de avanzar con una operación.
         </p>
 
         <nav className="footer-legal-links" aria-label="Links legales">
           <button type="button" onClick={() => onNavigate("terms")}>
             Términos y condiciones
+          </button>
+          <button type="button" onClick={() => onNavigate("faq")}>
+            Seguridad y publicaciones sospechosas
           </button>
         </nav>
       </div>

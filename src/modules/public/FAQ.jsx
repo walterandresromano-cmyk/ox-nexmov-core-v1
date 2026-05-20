@@ -78,6 +78,11 @@
         answer:
           "Antes de abrir un canal comercial, la plataforma registra la acción para mantener trazabilidad interna del lead.",
       },
+      {
+        question: "¿Contactar implica reservar o comprar?",
+        answer:
+          "No. El contacto genera trazabilidad comercial, pero no implica reserva, compra ni obligación de operación.",
+      },
     ],
   },
   {
@@ -91,6 +96,11 @@
           "Es un canal para consultar alternativas de financiación sobre vehículos cero kilómetro sin cargar datos sensibles al inicio.",
       },
       {
+        question: "¿La financiación está aprobada por oX NEXMOV?",
+        answer:
+          "No. La consulta no implica aprobación crediticia. Las cuotas, tasas, entregas y condiciones finales dependen del proveedor, plan, modelo y situación del solicitante.",
+      },
+      {
         question: "¿Quién recibe esos leads?",
         answer:
           "Pueden ser trabajados por administración, usuarios internos especiales o dealers asignados según criterio operativo.",
@@ -99,6 +109,11 @@
         question: "¿Qué es “Vender mi vehículo”?",
         answer:
           "Es un módulo para que una persona cargue su intención de venta y la plataforma pueda derivarla a dealers habilitados.",
+      },
+      {
+        question: "¿Cargar mi vehículo garantiza una oferta?",
+        answer:
+          "No. La solicitud no es tasación oficial ni garantiza venta u oferta. La evaluación depende del interés de dealers habilitados y de las condiciones acordadas entre las partes.",
       },
       {
         question: "¿Todos los dealers reciben esas oportunidades?",
@@ -123,9 +138,19 @@
           "La diferencia está en cupos, señales comerciales, presencia visual, métricas y herramientas operativas.",
       },
       {
+        question: "¿oX NEXMOV garantiza leads o ventas?",
+        answer:
+          "No. La plataforma ordena publicaciones, consultas y herramientas comerciales, pero no garantiza volumen de leads, ventas ni resultados comerciales.",
+      },
+      {
         question: "¿Elite es ilimitado?",
         answer:
           "No. Elite tiene hasta 50 publicaciones por período. Platinum es el único plan con publicaciones ilimitadas.",
+      },
+      {
+        question: "¿Todas las herramientas están disponibles para todos los planes?",
+        answer:
+          "No. Las herramientas disponibles dependen del plan contratado, beneficios habilitados y estado de la beta comercial.",
       },
     ],
   },
@@ -145,12 +170,61 @@
           "Nombre, email, teléfono y contexto de la operación, solo para gestionar la oportunidad comercial.",
       },
       {
+        question: "¿oX NEXMOV certifica el estado mecánico del vehículo?",
+        answer:
+          "No. La información publicada, incluyendo mantenimiento o estado declarado, debe verificarse con el dealer o vendedor antes de concretar una operación.",
+      },
+      {
+        question: "¿Los costos de mantenimiento son oficiales?",
+        answer:
+          "No. Cuando aparecen, son datos orientativos declarados por el vendedor. oX NEXMOV no calcula, verifica ni garantiza esos importes.",
+      },
+      {
         question: "¿Puedo revisar políticas legales?",
         answer:
           "Sí. Las páginas legales explican términos, privacidad, cookies y canales de contacto institucional.",
       },
     ],
-  },];
+  },
+  {
+    eyebrow: "Seguridad y publicaciones sospechosas",
+    title: "Prevención, trazabilidad y decisión informada.",
+    text: "oX NEXMOV reduce el contacto anónimo y ayuda a ordenar operaciones, pero cada comprador debe verificar la información antes de avanzar.",
+    security: true,
+    items: [
+      {
+        question: "¿Cómo protege oX NEXMOV el contacto entre comprador y dealer?",
+        answer:
+          "Para contactar a un dealer, oX NEXMOV solicita registro y genera trazabilidad comercial. Esto ayuda a reducir consultas falsas, spam y operaciones sospechosas. El contacto no implica reserva, compra ni obligación de operación.",
+      },
+      {
+        question: "¿oX NEXMOV garantiza que una publicación es 100% segura?",
+        answer:
+          "No. oX NEXMOV organiza información y consultas comerciales, pero los datos publicados pueden ser declarados por dealers o vendedores. Antes de concretar una operación, el comprador debe verificar documentación, estado del vehículo, titularidad y condiciones acordadas.",
+      },
+      {
+        question: "¿Qué señales pueden indicar una publicación sospechosa?",
+        answer:
+          "Precio demasiado bajo sin explicación, pedido de dinero por fuera de canales claros, negativa a mostrar documentación, datos inconsistentes, presión para cerrar rápido, contacto por medios no declarados o imágenes que no coinciden.",
+      },
+      {
+        question: "¿Qué debo hacer si veo una publicación sospechosa?",
+        answer:
+          "No avances con pagos ni entregas de dinero. Guardá la información de la publicación y contactá a soporte de oX NEXMOV para que pueda ser revisada.",
+      },
+      {
+        question: "¿oX NEXMOV certifica el estado mecánico del vehículo?",
+        answer:
+          "No. La plataforma no certifica mecánicamente los vehículos. Los datos publicados y datos orientativos de mantenimiento son declarados por el vendedor o dealer, salvo que se indique expresamente lo contrario en futuras etapas.",
+      },
+      {
+        question: "¿Debo pagar una seña desde oX NEXMOV?",
+        answer:
+          "No existe pago de seña dentro de oX NEXMOV en esta etapa. Cualquier operación económica debe ser acordada directamente entre las partes, verificando identidad, documentación y condiciones.",
+      },
+    ],
+  },
+];
 
 const quickTopics = [
   "Buscar vehículos",
@@ -160,6 +234,7 @@ const quickTopics = [
   "Financiación 0km",
   "Vender mi vehículo",
   "Leads trazables",
+  "Publicaciones sospechosas",
   "Soporte interno",
 ];
 
@@ -196,7 +271,10 @@ export default function FAQ({ onNavigate }) {
         </section>
 
         {faqSections.map((section) => (
-          <section key={section.eyebrow} className="faq-section">
+          <section
+            key={section.eyebrow}
+            className={`faq-section${section.security ? " faq-section--security" : ""}`}
+          >
             <div className="faq-section-head">
               <p className="eyebrow">{section.eyebrow}</p>
               <h2>{section.title}</h2>

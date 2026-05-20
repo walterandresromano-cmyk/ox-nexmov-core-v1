@@ -7351,6 +7351,17 @@ body::-webkit-scrollbar {
   font-weight: var(--ox-fw-medium);
 }
 
+.footer-security-note {
+  width: fit-content;
+  padding: 10px 12px;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-radius: var(--ox-radius-lg);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+    rgba(15, 23, 42, 0.34);
+  color: var(--ox-text-soft);
+}
+
 .footer-legal-links {
   display: flex;
   flex-wrap: wrap;
@@ -7383,6 +7394,14 @@ body::-webkit-scrollbar {
 .auth-legal-note a:hover,
 .auth-legal-note button:hover {
   color: var(--ox-text);
+}
+
+:root[data-theme="light"] .footer-security-note {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+    rgba(255, 255, 255, 0.62);
+  color: #375066;
 }
 
 .auth-legal-note,
@@ -13063,4 +13082,322 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .compare-spec-row.is-highlight {
   background:
     linear-gradient(90deg, rgba(14, 165, 233, 0.11), rgba(255, 255, 255, 0.36)) !important;
+}
+/* oX NEXMOV - Admin operational dashboard */
+.admin-ops-dashboard {
+  display: grid;
+  gap: 14px;
+  margin: 14px 0;
+}
+
+.admin-ops-hero,
+.admin-ops-panel,
+.admin-ops-kpi-card,
+.admin-ops-alert,
+.admin-ops-activity {
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(8, 15, 28, 0.64));
+  box-shadow:
+    0 16px 38px rgba(2, 6, 23, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.admin-ops-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 260px);
+  align-items: stretch;
+  gap: 12px;
+  padding: clamp(16px, 2.2vw, 24px);
+  border-radius: 20px;
+}
+
+.admin-ops-hero > div:first-child,
+.admin-ops-attention-card,
+.admin-ops-panel-head,
+.admin-ops-kpi-card,
+.admin-ops-alert,
+.admin-ops-activity {
+  min-width: 0;
+}
+
+.admin-ops-hero span,
+.admin-ops-panel-head span,
+.admin-ops-kpi-card span,
+.admin-ops-alert span,
+.admin-ops-activity span,
+.admin-ops-attention-card span {
+  display: inline-flex;
+  width: fit-content;
+  color: rgba(125, 211, 252, 0.95);
+  font-size: var(--ox-fs-micro);
+  font-weight: var(--ox-fw-black);
+  letter-spacing: var(--ox-ls-eyebrow);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.admin-ops-hero h2,
+.admin-ops-panel h3 {
+  margin: 7px 0 0;
+  color: var(--ox-text);
+  line-height: var(--ox-lh-compact);
+}
+
+.admin-ops-hero h2 {
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+}
+
+.admin-ops-hero p,
+.admin-ops-kpi-card p,
+.admin-ops-alert p,
+.admin-ops-activity p,
+.admin-ops-attention-card p,
+.admin-ops-empty {
+  margin: 0;
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-body-sm);
+  line-height: var(--ox-lh-body);
+}
+
+.admin-ops-hero > div:first-child > p {
+  max-width: 72ch;
+  margin-top: 8px;
+}
+
+.admin-ops-attention-card {
+  display: grid;
+  align-content: center;
+  gap: 7px;
+  padding: 14px;
+  border: 1px solid rgba(250, 204, 21, 0.18);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(250, 204, 21, 0.11), transparent 36%),
+    rgba(15, 23, 42, 0.42);
+}
+
+.admin-ops-attention-card strong {
+  color: rgba(248, 250, 252, 0.98);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 0.95;
+}
+
+.admin-ops-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-ops-kpi-card,
+.admin-ops-alert,
+.admin-ops-activity {
+  appearance: none;
+  display: grid;
+  gap: 7px;
+  width: 100%;
+  min-width: 0;
+  border-radius: 17px;
+  padding: 13px;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease);
+}
+
+.admin-ops-kpi-card strong {
+  color: var(--ox-text);
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  line-height: 1;
+}
+
+.admin-ops-kpi-card:hover,
+.admin-ops-alert:hover,
+.admin-ops-activity:hover {
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.34);
+  box-shadow:
+    0 18px 42px rgba(2, 6, 23, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.065);
+}
+
+.admin-ops-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.admin-ops-panel {
+  display: grid;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 20px;
+}
+
+.admin-ops-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-ops-alert-list,
+.admin-ops-activity-list {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-ops-alert {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.admin-ops-alert strong {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--ox-text);
+  font-size: 1.05rem;
+}
+
+.admin-ops-alert p {
+  grid-column: 2;
+}
+
+.admin-ops-activity {
+  gap: 5px;
+}
+
+.admin-ops-activity strong {
+  color: var(--ox-text);
+  font-size: var(--ox-fs-body);
+  line-height: var(--ox-lh-compact);
+  overflow-wrap: anywhere;
+}
+
+.admin-ops-activity small {
+  color: rgba(148, 163, 184, 0.72);
+  font-size: var(--ox-fs-micro);
+  font-weight: var(--ox-fw-bold);
+}
+
+.admin-ops-empty {
+  padding: 14px;
+  border: 1px dashed rgba(148, 163, 184, 0.22);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.22);
+}
+
+.admin-ops-tone-warning {
+  border-color: rgba(250, 204, 21, 0.22);
+}
+
+.admin-ops-tone-danger {
+  border-color: rgba(248, 113, 113, 0.28);
+}
+
+.admin-ops-tone-success {
+  border-color: rgba(74, 222, 128, 0.18);
+}
+
+.admin-ops-tone-info {
+  border-color: rgba(56, 189, 248, 0.24);
+}
+
+:root[data-theme="light"] .admin-ops-hero,
+:root[data-theme="light"] .admin-ops-panel,
+:root[data-theme="light"] .admin-ops-kpi-card,
+:root[data-theme="light"] .admin-ops-alert,
+:root[data-theme="light"] .admin-ops-activity {
+  border-color: rgba(14, 116, 144, 0.13);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(235, 247, 253, 0.86));
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+:root[data-theme="light"] .admin-ops-hero span,
+:root[data-theme="light"] .admin-ops-panel-head span,
+:root[data-theme="light"] .admin-ops-kpi-card span,
+:root[data-theme="light"] .admin-ops-alert span,
+:root[data-theme="light"] .admin-ops-activity span,
+:root[data-theme="light"] .admin-ops-attention-card span {
+  color: #0f6f91;
+}
+
+:root[data-theme="light"] .admin-ops-hero h2,
+:root[data-theme="light"] .admin-ops-panel h3,
+:root[data-theme="light"] .admin-ops-kpi-card strong,
+:root[data-theme="light"] .admin-ops-alert strong,
+:root[data-theme="light"] .admin-ops-activity strong,
+:root[data-theme="light"] .admin-ops-attention-card strong {
+  color: #07172b;
+}
+
+:root[data-theme="light"] .admin-ops-hero p,
+:root[data-theme="light"] .admin-ops-kpi-card p,
+:root[data-theme="light"] .admin-ops-alert p,
+:root[data-theme="light"] .admin-ops-activity p,
+:root[data-theme="light"] .admin-ops-attention-card p,
+:root[data-theme="light"] .admin-ops-empty {
+  color: #3b5368;
+}
+
+:root[data-theme="light"] .admin-ops-attention-card {
+  border-color: rgba(180, 139, 32, 0.20);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(253, 230, 138, 0.34), transparent 34%),
+    rgba(255, 255, 255, 0.66);
+}
+
+:root[data-theme="light"] .admin-ops-empty {
+  border-color: rgba(14, 116, 144, 0.14);
+  background: rgba(255, 255, 255, 0.62);
+}
+
+@media (max-width: 1100px) {
+  .admin-ops-kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .admin-ops-hero,
+  .admin-ops-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-ops-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-ops-dashboard {
+    gap: 10px;
+    margin: 10px 0;
+  }
+
+  .admin-ops-hero,
+  .admin-ops-panel,
+  .admin-ops-kpi-card,
+  .admin-ops-alert,
+  .admin-ops-activity {
+    border-radius: 16px;
+  }
+
+  .admin-ops-kpi-card,
+  .admin-ops-alert,
+  .admin-ops-activity {
+    padding: 11px;
+  }
 }

@@ -631,23 +631,25 @@ export default function VehicleDetailModal({
 
             <div className="vehicle-detail-insurance-next-box">
               <div>
-                <span>Seguro</span>
-                <strong>Cotizá tu seguro</strong>
+                <span>Próximamente</span>
+                <strong>Seguro del vehículo</strong>
                 <p>
-                  Próximamente vas a poder cotizar el seguro de este vehículo
-                  con un proveedor autorizado.
+                  Estamos preparando una opción para consultar seguros con
+                  proveedores o productores autorizados. La compra del vehículo
+                  no implica contratación de seguro.
                 </p>
               </div>
 
               <button type="button" disabled>
-                Próximamente
+                Función próximamente
               </button>
             </div>
 
             <p className="vehicle-detail-legal-note">
               La información de esta publicación fue declarada por el dealer
               anunciante. Verificá disponibilidad, precio final, documentación y
-              condiciones antes de avanzar.
+              condiciones antes de avanzar. oX NEXMOV no certifica el estado
+              mecánico ni garantiza la operación comercial.
             </p>
           </div>
         </div>

@@ -593,6 +593,13 @@
 .vehicle-detail-insurance-next-box {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
+  border-color: rgba(250, 204, 21, 0.16);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(250, 204, 21, 0.075), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.58), rgba(8, 15, 28, 0.56));
+  box-shadow:
+    0 10px 24px rgba(2, 6, 23, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .vehicle-detail-insurance-next-box > div {
@@ -604,14 +611,14 @@
 .vehicle-detail-insurance-next-box button {
   min-height: 34px;
   padding: 0 13px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid rgba(250, 204, 21, 0.18);
   border-radius: var(--ox-radius-pill);
-  background: rgba(15, 23, 42, 0.52);
-  color: rgba(203, 213, 225, 0.78);
+  background: rgba(15, 23, 42, 0.34);
+  color: rgba(226, 232, 240, 0.70);
   font-size: var(--ox-fs-button-sm);
   font-weight: var(--ox-fw-black);
   cursor: not-allowed;
-  opacity: 0.82;
+  opacity: 0.76;
 }
 
 .detail-spec-grid {
@@ -903,11 +910,27 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.86);
 }
 
+:root[data-theme="light"] .vehicle-detail-insurance-next-box {
+  border-color: rgba(180, 139, 32, 0.20);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(253, 230, 138, 0.36), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(241, 246, 250, 0.78));
+  box-shadow:
+    0 10px 24px rgba(33, 48, 71, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
 :root[data-theme="light"] .vehicle-detail-maintenance-head span,
 :root[data-theme="light"] .vehicle-detail-insurance-next-box span {
   border-color: rgba(14, 116, 144, 0.18);
   background: rgba(224, 242, 254, 0.72);
   color: #0f2f45;
+}
+
+:root[data-theme="light"] .vehicle-detail-insurance-next-box span {
+  border-color: rgba(180, 139, 32, 0.20);
+  background: rgba(255, 247, 214, 0.78);
+  color: #5f4311;
 }
 
 :root[data-theme="light"] .vehicle-detail-maintenance-head strong,
@@ -927,9 +950,9 @@
 }
 
 :root[data-theme="light"] .vehicle-detail-insurance-next-box button {
-  border-color: rgba(14, 116, 144, 0.14);
-  background: rgba(255, 255, 255, 0.72);
-  color: #5b7082;
+  border-color: rgba(180, 139, 32, 0.18);
+  background: rgba(255, 255, 255, 0.62);
+  color: #66737f;
 }
 
 @media (max-width: 900px) {

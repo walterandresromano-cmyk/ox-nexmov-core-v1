@@ -184,7 +184,8 @@ export default function ContactGate({
 
             <p className="contact-legal-note">
               Este paso ayuda a evitar consultas falsas, spam y operaciones
-              sospechosas.
+              sospechosas. No implica reserva, compra ni obligación de
+              operación.
             </p>
 
             <button className="primary-action" onClick={onRequireLogin}>
@@ -221,7 +222,8 @@ export default function ContactGate({
 
             <p className="contact-legal-note">
               Al continuar, oX NEXMOV registrará esta consulta para generar
-              trazabilidad del contacto comercial.
+              trazabilidad del contacto comercial. No implica reserva, compra
+              ni obligación de operación.
             </p>
 
             <button className="primary-action" type="submit" disabled={submitting}>
@@ -243,7 +245,8 @@ export default function ContactGate({
 
             <p>
               Registramos esta consulta para que el contacto sea trazable y el
-              dealer pueda responderte mejor.
+              dealer pueda responderte mejor. No implica reserva ni compromiso
+              de compra.
             </p>
 
             {error && <p className="form-error">{error}</p>}

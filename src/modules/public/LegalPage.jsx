@@ -136,7 +136,13 @@ export default function LegalPage({ currentRoute = "terms", onNavigate }) {
           </div>
 
           <p className="legal-review-note">
-            Texto provisorio y revisable. Para consultas, escribinos a{" "}
+            oX NEXMOV organiza información, publicaciones y consultas
+            comerciales para facilitar la comparación y el contacto entre
+            compradores, vendedores y dealers. Los datos publicados pueden ser
+            declarados por terceros y deben ser verificados antes de concretar
+            cualquier operación. La plataforma no garantiza ventas, financiación
+            aprobada, tasaciones oficiales, certificaciones mecánicas ni
+            condiciones comerciales finales. Para consultas, escribinos a{" "}
             <a href="mailto:soporte@oxnexmov.com.ar">
               soporte@oxnexmov.com.ar
             </a>
