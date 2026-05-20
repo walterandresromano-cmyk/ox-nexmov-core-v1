@@ -337,17 +337,18 @@ export default function JoinNetwork({ onNavigate }) {
                   key={dealer.id}
                   className={`join-network-dealer-card join-network-dealer-${dealer.planClass}`}
                 >
-                  <div className="join-network-dealer-logo">
                     {dealer.logo ? (
-                      <img
-                        src={dealer.logo}
-                        alt={`Imagen institucional de ${dealer.name}`}
-                        loading="lazy"
-                      />
-                    ) : (
+                    <img
+                      className="join-network-dealer-img"
+                      src={dealer.logo}
+                      alt={`Imagen institucional de ${dealer.name}`}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="join-network-dealer-initials">
                       <span>{dealer.initials}</span>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   <div className="join-network-dealer-content">
                     <span className="join-network-dealer-badge">

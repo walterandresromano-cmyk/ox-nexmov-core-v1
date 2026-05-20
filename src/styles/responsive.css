@@ -8264,17 +8264,11 @@
   padding: 12px !important;
 }
 
-.join-network-page .join-network-dealer-logo {
+.join-network-page .join-network-dealer-initials {
   border-radius: 16px !important;
   background:
     radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12), transparent 38%),
     linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.86)) !important;
-}
-
-.join-network-page .join-network-dealer-logo img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
 }
 
 .join-network-page .join-network-final {

@@ -354,17 +354,79 @@
    FEATURED CARD
    ========================================================= */
 
-.ox-home-featured-card-v3 {
+.ox-home-featured-deck {
+  display: grid;
   align-self: center;
   justify-self: end;
   width: min(100%, 220px);
   z-index: 5;
+  padding-bottom: 28px;
+}
+
+.ox-home-featured-deck > * {
+  grid-area: 1 / 1;
+  transition:
+    transform 0.52s cubic-bezier(0.34, 1.3, 0.64, 1),
+    opacity 0.44s ease;
+  cursor: pointer;
+}
+
+.ox-home-featured-deck-pos-0 {
+  transform: none;
+  opacity: 1;
+  cursor: default;
+}
+
+.ox-home-featured-deck-pos-1 {
+  transform: translateY(10px) translateX(6px) rotate(2.5deg) scale(0.95);
+  opacity: 0.8;
+}
+
+.ox-home-featured-deck-pos-2 {
+  transform: translateY(19px) translateX(11px) rotate(4.5deg) scale(0.90);
+  opacity: 0.62;
+}
+
+.ox-home-featured-deck-pos-3 {
+  transform: translateY(27px) translateX(15px) rotate(6.5deg) scale(0.85);
+  opacity: 0.45;
+}
+
+.ox-home-featured-deck-pos-1 .ox-home-featured-card-content,
+.ox-home-featured-deck-pos-2 .ox-home-featured-card-content,
+.ox-home-featured-deck-pos-3 .ox-home-featured-card-content {
+  visibility: hidden;
+}
+
+.ox-home-featured-deck-pos-0 .ox-home-featured-card-content button {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.3s ease 0.2s;
+}
+
+.ox-home-featured-card-v3 {
   border: 1px solid rgba(148, 163, 184, 0.22);
   border-radius: var(--ox-radius-xl);
-  padding: var(--ox-space-6);
+  padding: 0;
   background: var(--ox-surface-card);
   box-shadow: var(--ox-shadow-card);
   backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.ox-home-featured-card-top-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+}
+
+.ox-home-featured-card-content {
+  display: flex;
+  flex-direction: column;
+  padding: var(--ox-space-6);
 }
 
 .ox-home-featured-badge-v3 {
@@ -2052,6 +2114,13 @@
     linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.90));
 }
 
+.ox-home-featured-deck-pos-0.ox-home-featured-card-v3 {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.09), transparent 30%),
+    radial-gradient(circle at 92% 0%, rgba(245, 184, 75, 0.04), transparent 28%),
+    linear-gradient(180deg, #0f172a, #020617);
+}
+
 .ox-home-featured-vehicles-v3,
 .ox-home-confidence-v3,
 .ox-home-inventory-v3,
@@ -2108,6 +2177,12 @@
   box-shadow:
     0 16px 44px rgba(33, 48, 71, 0.10),
     inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+:root[data-theme="light"] .ox-home-featured-deck-pos-0.ox-home-featured-card-v3 {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(14, 165, 233, 0.10), transparent 28%),
+    linear-gradient(180deg, #ffffff, #e6f5fc);
 }
 
 :root[data-theme="light"] .ox-home-primary-actions-v3 button:not(:first-child),

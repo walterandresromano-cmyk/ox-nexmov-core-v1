@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
+import VehicleDetailModal from "../../components/cards/VehicleDetailModal.jsx";
+import ContactGate from "./ContactGate.jsx";
 import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
+import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
 import { listPublicLatestVehicles } from "../../services/vehicles.service.js";
 
@@ -387,6 +390,12 @@ export default function Home({ onNavigate, appActions = {} }) {
 
   const latestVehiclesCarouselRef = useRef(null);
 
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [selectedFeaturedVehicle, setSelectedFeaturedVehicle] = useState(null);
+  const [selectedFeaturedDealer, setSelectedFeaturedDealer] = useState(null);
+  const [showFeaturedDetail, setShowFeaturedDetail] = useState(false);
+  const [showFeaturedContactGate, setShowFeaturedContactGate] = useState(false);
+
   const safeAppActions = {
     authUser: appActions?.authUser || null,
     authProfile: appActions?.authProfile || null,
@@ -465,13 +474,16 @@ export default function Home({ onNavigate, appActions = {} }) {
     return () => window.clearInterval(interval);
   }, [latestVehicles.length]);
 
-  const featuredVehicle = latestVehicles[0] || null;
-  const featuredDealer = featuredVehicle
-    ? buildDealerForVehicle(featuredVehicle)
-    : null;
-  const featuredSignal = featuredVehicle
-    ? getVehicleSignal(featuredVehicle, 0)
-    : null;
+  const featuredVehicles = latestVehicles.slice(0, 4);
+  const featuredCount = featuredVehicles.length;
+
+  useEffect(() => {
+    if (featuredCount <= 1) return;
+    const id = setInterval(() => {
+      setFeaturedIndex((prev) => (prev + 1) % featuredCount);
+    }, 3500);
+    return () => clearInterval(id);
+  }, [featuredCount]);
 
   const homeStats = useMemo(() => {
     const totalActiveVehicles = publicDealers.reduce(
@@ -526,6 +538,7 @@ export default function Home({ onNavigate, appActions = {} }) {
   }
 
   return (
+    <>
     <section className="page-section ox-home-page-v3">
       <div className="container ox-home-shell-v3">
         <section className="ox-home-hero-v3">
@@ -653,52 +666,68 @@ export default function Home({ onNavigate, appActions = {} }) {
             </div>
           </div>
 
-          <aside className="ox-home-featured-card-v3">
-            <span className="ox-home-featured-badge-v3">
-              {featuredSignal?.label || "Destacado"}
-            </span>
+          <div className="ox-home-featured-deck">
+            {featuredVehicles
+              .map((vehicle, i) => ({
+                vehicle,
+                i,
+                pos: (i - featuredIndex + featuredVehicles.length) % featuredVehicles.length,
+              }))
+              .sort((a, b) => b.pos - a.pos)
+              .map(({ vehicle, i, pos }) => {
+              const signal = getVehicleSignal(vehicle, i);
+              const dealer = buildDealerForVehicle(vehicle);
+              const imgSrc = vehicle.mainImageUrl || vehicle.imageUrl || null;
 
-            <h2>
-              {featuredVehicle
-                ? `${featuredVehicle.brand} ${featuredVehicle.model}`
-                : "Unidad destacada"}
-            </h2>
+              return (
+                <aside
+                  key={vehicle.id}
+                  className={`ox-home-featured-card-v3 ox-home-featured-deck-pos-${pos}`}
+                  onClick={pos !== 0 ? () => setFeaturedIndex(i) : undefined}
+                >
+                  {imgSrc && (
+                    <img
+                      className="ox-home-featured-card-top-img"
+                      src={imgSrc}
+                      alt=""
+                      aria-hidden="true"
+                      loading={pos === 0 ? "eager" : "lazy"}
+                    />
+                  )}
 
-            <p>
-              {featuredVehicle
-                ? `${featuredVehicle.version || "Sin versión"} · ${
-                    featuredVehicle.year || "Sin año"
-                  } · ${formatKm(featuredVehicle.kilometers || featuredVehicle.km)}`
-                : "Publicación real con lectura comercial."}
-            </p>
+                  <div className="ox-home-featured-card-content">
+                    <span className="ox-home-featured-badge-v3">{signal.label}</span>
 
-            <strong>
-              {featuredVehicle ? formatARS(featuredVehicle.price) : "Consultar"}
-            </strong>
+                    <h2>{vehicle.brand} {vehicle.model}</h2>
 
-            <small>
-              {featuredDealer
-                ? `${featuredDealer.commercialName} · ${getPlanLabel(
-                    featuredDealer.plan
-                  )}`
-                : "Dealer verificado"}
-            </small>
+                    <p>
+                      {vehicle.version || "Sin versión"} · {vehicle.year || "Sin año"} · {formatKm(vehicle.kilometers || vehicle.km)}
+                    </p>
 
-            <em>{featuredSignal?.text || "Buena lectura comercial"}</em>
+                    <strong>{formatARS(vehicle.price)}</strong>
 
-            <button
-              type="button"
-              onClick={() =>
-                goToSearch(
-                  featuredVehicle
-                    ? `${featuredVehicle.brand} ${featuredVehicle.model}`
-                    : ""
-                )
-              }
-            >
-              Ver detalle
-            </button>
-          </aside>
+                    <small>
+                      {dealer.commercialName} · {getPlanLabel(dealer.plan)}
+                    </small>
+
+                    <em>{signal.text}</em>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        registerVehicleDetailView(vehicle.id);
+                        setSelectedFeaturedVehicle(vehicle);
+                        setSelectedFeaturedDealer(dealer);
+                        setShowFeaturedDetail(true);
+                      }}
+                    >
+                      Ver detalle
+                    </button>
+                  </div>
+                </aside>
+              );
+            })}
+          </div>
         </section>
 
         {latestVehiclesError && (
@@ -907,5 +936,32 @@ export default function Home({ onNavigate, appActions = {} }) {
         </section>
       </div>
     </section>
+
+    {showFeaturedDetail && selectedFeaturedVehicle && (
+      <VehicleDetailModal
+        vehicle={selectedFeaturedVehicle}
+        dealer={selectedFeaturedDealer}
+        onClose={() => setShowFeaturedDetail(false)}
+        onCompare={() => safeAppActions?.addToCompare?.(selectedFeaturedVehicle)}
+        onFavorite={() => safeAppActions?.toggleFavorite?.(selectedFeaturedVehicle)}
+        favoriteActive={safeAppActions?.isFavorite?.(selectedFeaturedVehicle.id)}
+        onContact={() => {
+          setShowFeaturedDetail(false);
+          setShowFeaturedContactGate(true);
+        }}
+      />
+    )}
+
+    {showFeaturedContactGate && selectedFeaturedVehicle && (
+      <ContactGate
+        vehicle={selectedFeaturedVehicle}
+        dealer={selectedFeaturedDealer}
+        authUser={safeAppActions?.authUser}
+        authProfile={safeAppActions?.authProfile}
+        onClose={() => setShowFeaturedContactGate(false)}
+        onNavigate={onNavigate}
+      />
+    )}
+    </>
   );
 }
