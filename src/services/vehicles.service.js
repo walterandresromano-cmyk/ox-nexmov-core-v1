@@ -165,6 +165,7 @@ export function mapVehicleFromSupabase(row) {
     maintenance_info: row.maintenance_info ?? null,
     show_maintenance_info: Boolean(row.show_maintenance_info ?? false),
 
+    views: Number(row.views ?? 0),
     badges: row.featured ? ["featured"] : [],
     raw: row,
   };

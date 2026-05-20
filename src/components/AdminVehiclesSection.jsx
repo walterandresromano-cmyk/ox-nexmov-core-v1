@@ -213,6 +213,7 @@ export default function AdminVehiclesSection() {
                 <th>Precio</th>
                 <th>Estado</th>
                 <th>Revisión</th>
+                <th>Vistas</th>
                 <th>Acciones</th>
                 <th>Detalle</th>
                 <th>Editar</th>
@@ -273,6 +274,10 @@ export default function AdminVehiclesSection() {
                         ? "Necesita revisión"
                         : "Aprobada"}
                     </span>
+                  </td>
+
+                  <td>
+                    <strong>{Number(vehicle.views ?? 0)}</strong>
                   </td>
 
                   <td>

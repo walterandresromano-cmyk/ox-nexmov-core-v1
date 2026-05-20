@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import VehicleDetailModal from "./cards/VehicleDetailModal.jsx";
 import ContactGate from "../modules/public/ContactGate.jsx";
 import { getEffectiveDealerPermissions } from "../lib/permissions.js";
+import { registerVehicleDetailView } from "../services/vehicleViews.service.js";
 
 function getNumber(value) {
   const number = Number(value);
@@ -495,6 +496,7 @@ export default function CompareTray({ appActions, onNavigate }) {
   }
 
   function openDetailFromCompare(vehicle) {
+    registerVehicleDetailView(vehicle.id || vehicle.vehicle_id);
     setRestoreCompareAfterDetail(showCompareModal);
     setShowCompareModal(false);
     setSelectedDetailVehicle(vehicle);

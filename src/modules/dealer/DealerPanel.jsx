@@ -991,6 +991,19 @@ export default function DealerPanel({ authProfile }) {
     (vehicle) => vehicle.is_active
   ).length;
 
+  const totalDetailViews = dealerVehicles.reduce(
+    (sum, vehicle) => sum + Number(vehicle.views ?? 0),
+    0
+  );
+
+  const mostViewedVehicle = dealerVehicles.length > 0
+    ? dealerVehicles.reduce(
+        (best, vehicle) =>
+          Number(vehicle.views ?? 0) > Number(best.views ?? 0) ? vehicle : best,
+        dealerVehicles[0]
+      )
+    : null;
+
   const reviewVehiclesCount = dealerVehicles.filter(
     (vehicle) => vehicle.review_status === "needs_review"
   ).length;
@@ -1821,6 +1834,7 @@ export default function DealerPanel({ authProfile }) {
                       <th>Financiación</th>
                       <th>Publicación</th>
                       <th>Revisión</th>
+                      <th>Vistas</th>
                       <th>Acciones</th>
                       <th>Detalle</th>
                       <th>Editar</th>
@@ -1888,6 +1902,10 @@ export default function DealerPanel({ authProfile }) {
                               : "Aprobada"}
                           </span>
                           {vehicle.reserved && <span>Reservada</span>}
+                        </td>
+
+                        <td>
+                          <strong>{Number(vehicle.views ?? 0)}</strong>
                         </td>
 
                         <td>
@@ -2259,13 +2277,83 @@ export default function DealerPanel({ authProfile }) {
           <div className="dealer-leads-section">
             <ModuleBackButton
               title="Métricas"
-              description="Lectura operativa de leads, publicaciones, interacción y rendimiento comercial."
+              description="Rendimiento de publicaciones basado en vistas de detalle y leads recibidos."
+              onRefresh={loadDealerVehicles}
             />
 
-            <div className="empty-state">
-              Nivel habilitado: {permissions.metricsLevel}. El módulo de
-              métricas avanzadas queda preparado para una fase posterior.
+            <div className="dealer-status-grid">
+              <article className="dealer-status-card">
+                <span>Vistas totales</span>
+                <strong>{totalDetailViews}</strong>
+                <p>Aperturas de detalle contabilizadas en todas tus publicaciones.</p>
+              </article>
+
+              <article className="dealer-status-card">
+                <span>Publicación más vista</span>
+                <strong>
+                  {mostViewedVehicle
+                    ? `${mostViewedVehicle.brand} ${mostViewedVehicle.model}`
+                    : "—"}
+                </strong>
+                <p>
+                  {mostViewedVehicle
+                    ? `${Number(mostViewedVehicle.views ?? 0)} vistas · ${mostViewedVehicle.version || "Sin versión"}`
+                    : "Sin publicaciones"}
+                </p>
+              </article>
+
+              <article className="dealer-status-card">
+                <span>Leads recibidos</span>
+                <strong>{leads.length}</strong>
+                <p>Consultas comerciales totales de este dealer.</p>
+              </article>
+
+              <article className="dealer-status-card">
+                <span>Publicaciones activas</span>
+                <strong>{activeVehiclesCount}</strong>
+                <p>Unidades visibles públicamente en este momento.</p>
+              </article>
             </div>
+
+            {dealerVehicles.length > 0 && (
+              <div className="admin-table-wrap" style={{ marginTop: "24px" }}>
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Publicación</th>
+                      <th>Vistas</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...dealerVehicles]
+                      .sort((a, b) => Number(b.views ?? 0) - Number(a.views ?? 0))
+                      .map((vehicle) => (
+                        <tr key={vehicle.vehicle_id}>
+                          <td>
+                            <strong>{vehicle.brand} {vehicle.model}</strong>
+                            <span>{vehicle.version || "Sin versión"}</span>
+                          </td>
+                          <td>
+                            <strong>{Number(vehicle.views ?? 0)}</strong>
+                          </td>
+                          <td>
+                            <span
+                              className={
+                                vehicle.is_active
+                                  ? "admin-chip success"
+                                  : "admin-chip warning"
+                              }
+                            >
+                              {vehicle.is_active ? "Activa" : "No visible"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 

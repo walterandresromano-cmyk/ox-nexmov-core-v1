@@ -4,6 +4,7 @@ import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleDetailModal from "./VehicleDetailModal.jsx";
+import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 
 const fallbackDealer = {
   id: "dealer-fallback",
@@ -233,7 +234,10 @@ export default function VehicleCardPublic({
             <button
               type="button"
               className="vehicle-card__btn vehicle-card__btn--primary"
-              onClick={() => setShowDetailModal(true)}
+              onClick={() => {
+                registerVehicleDetailView(vehicle.id);
+                setShowDetailModal(true);
+              }}
             >
               Ver detalle
             </button>
