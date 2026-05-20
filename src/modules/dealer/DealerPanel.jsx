@@ -666,10 +666,6 @@ export default function DealerPanel({ authProfile }) {
       return;
     }
 
-    console.log("[Dealer WhatsApp update] dealer state:", dealer);
-    console.log("[Dealer WhatsApp update] dealerId:", dealerId);
-    console.log("[Dealer WhatsApp update] normalizedWhatsapp:", normalizedWhatsapp);
-
     setSavingWhatsapp(true);
 
     const { dealer: updatedDealer, error } =

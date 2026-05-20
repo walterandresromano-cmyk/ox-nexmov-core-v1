@@ -136,7 +136,9 @@ export default function App() {
     const { profile, error } = await getProfileByUserId(user.id);
 
     if (error) {
-      console.warn("No se pudo leer profile:", error.message);
+      if (import.meta.env.DEV) {
+        console.warn("No se pudo leer profile:", error.message);
+      }
       setAuthError(error.message || "No se pudo leer el perfil.");
       setAuthProfile(null);
       return null;

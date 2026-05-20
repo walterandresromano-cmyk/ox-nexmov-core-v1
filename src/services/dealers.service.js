@@ -10,6 +10,11 @@ const ALLOWED_DEALER_LOGO_TYPES = new Set([
 ]);
 const ALLOWED_DEALER_LOGO_EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp"]);
 
+function warnInDev(message, error) {
+  if (!import.meta.env.DEV) return;
+  console.warn(message, error?.message || error?.code || "");
+}
+
 function sanitizeFileName(name) {
   return String(name || "imagen")
     .normalize("NFD")
@@ -337,7 +342,7 @@ export async function updateDealerWhatsappById(dealerId, normalizedWhatsapp) {
     .single();
 
   if (checkError) {
-    console.log("[updateDealerWhatsapp] ownership check error:", checkError);
+    warnInDev("[updateDealerWhatsapp] ownership check failed", checkError);
     return {
       dealer: null,
       error: {
@@ -348,7 +353,7 @@ export async function updateDealerWhatsappById(dealerId, normalizedWhatsapp) {
   }
 
   if (!existingDealer) {
-    console.log("[updateDealerWhatsapp] dealer not found or not owned by user");
+    warnInDev("[updateDealerWhatsapp] dealer not found or not owned by user");
     return {
       dealer: null,
       error: {
@@ -357,15 +362,6 @@ export async function updateDealerWhatsappById(dealerId, normalizedWhatsapp) {
       },
     };
   }
-
-  console.log("[updateDealerWhatsapp] payload:", {
-    dealerId,
-    resolvedDealerId,
-    normalizedWhatsapp,
-    normalizedValue,
-    userId: user.id,
-    existingDealerProfileId: existingDealer.profile_id
-  });
 
   const { count, error } = await supabase
     .from("dealers")
@@ -380,16 +376,8 @@ export async function updateDealerWhatsappById(dealerId, normalizedWhatsapp) {
     .eq("id", resolvedDealerId)
     .eq("profile_id", user.id); // Verificación adicional de ownership
 
-  console.log("[updateDealerWhatsapp] result:", {
-    data: null, // no mostrar data sensible
-    error,
-    count,
-    status: null,
-    statusText: null
-  });
-
   if (error) {
-    console.log("[updateDealerWhatsapp] update error:", error);
+    warnInDev("[updateDealerWhatsapp] update failed", error);
     return {
       dealer: null,
       error: {
@@ -400,7 +388,7 @@ export async function updateDealerWhatsappById(dealerId, normalizedWhatsapp) {
   }
 
   if (count === 0) {
-    console.log("[updateDealerWhatsapp] count = 0, dealer not updated");
+    warnInDev("[updateDealerWhatsapp] dealer not updated");
     return {
       dealer: null,
       error: {

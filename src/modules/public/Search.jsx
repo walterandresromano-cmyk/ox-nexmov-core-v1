@@ -1,13 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
-import { mockDealers, mockVehicles } from "../../data/mockData.js";
 import { listPublicVehicles } from "../../services/vehicles.service.js";
-
-function getMockDealer(vehicle) {
-  if (!ALLOW_MOCK_FALLBACK) return null;
-  return mockDealers.find((dealer) => dealer.id === vehicle.dealerId);
-}
 
 function normalizeSearchText(value) {
   return String(value || "")
@@ -745,16 +739,12 @@ function FilterDropdown({
   );
 }
 
-const ALLOW_MOCK_FALLBACK = import.meta.env.DEV;
-
 export default function Search({
   appActions,
   onNavigate,
   initialSearchQuery = "",
 }) {
-  const [vehicles, setVehicles] = useState(
-    ALLOW_MOCK_FALLBACK ? mockVehicles : []
-  );
+  const [vehicles, setVehicles] = useState([]);
   const [loadingVehicles, setLoadingVehicles] = useState(true);
   const [vehiclesError, setVehiclesError] = useState("");
   const [searchText, setSearchText] = useState("");
@@ -780,23 +770,15 @@ export default function Search({
     const { vehicles: supabaseVehicles, error } = await listPublicVehicles();
 
     if (error) {
-      setVehicles(ALLOW_MOCK_FALLBACK ? mockVehicles : []);
-      setVehiclesError(
-        ALLOW_MOCK_FALLBACK
-          ? "No pudimos cargar vehículos públicos. Modo desarrollo: usando inventario local de demostración."
-          : "No pudimos cargar vehículos disponibles en este momento."
-      );
+      setVehicles([]);
+      setVehiclesError("No pudimos cargar vehículos disponibles en este momento.");
       setLoadingVehicles(false);
       return;
     }
 
     if (!supabaseVehicles.length) {
-      setVehicles(ALLOW_MOCK_FALLBACK ? mockVehicles : []);
-      setVehiclesError(
-        ALLOW_MOCK_FALLBACK
-          ? "No hay vehículos públicos cargados. Modo desarrollo: usando inventario local de demostración."
-          : "No hay vehículos publicados disponibles."
-      );
+      setVehicles([]);
+      setVehiclesError("No hay vehículos publicados disponibles.");
       setLoadingVehicles(false);
       return;
     }
@@ -820,7 +802,7 @@ export default function Search({
 
   function getDealer(vehicle) {
     if (vehicle.dealer) return vehicle.dealer;
-    return getMockDealer(vehicle);
+    return null;
   }
 
   const parsedSearch = useMemo(

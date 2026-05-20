@@ -8,7 +8,6 @@ import LeadStatusSelect from "../../components/LeadStatusSelect.jsx";
 import TicketDetailModal from "../../components/TicketDetailModal.jsx";
 import TicketStatusSelect from "../../components/TicketStatusSelect.jsx";
 import AdminZeroKmLeadsSection from "../../components/AdminZeroKmLeadsSection.jsx";
-import { mockDealers } from "../../data/mockData.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import { listDealersForAdmin } from "../../services/dealers.service.js";
 import { listVehicleLeadsForCurrentUser } from "../../services/leads.service.js";
@@ -45,8 +44,6 @@ const PLAN_OPTIONS = [
   { value: "elite", label: "Elite" },
   { value: "platinum", label: "Platinum" },
 ];
-
-const ALLOW_MOCK_FALLBACK = import.meta.env.DEV;
 
 function formatLimit(limit) {
   return limit === Infinity ? "Ilimitado" : limit;
@@ -144,9 +141,7 @@ export default function AdminPanel({ authProfile }) {
   const [planFilter, setPlanFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const [dealers, setDealers] = useState(
-    ALLOW_MOCK_FALLBACK ? mockDealers : []
-  );
+  const [dealers, setDealers] = useState([]);
   const [loadingDealers, setLoadingDealers] = useState(true);
   const [dealersError, setDealersError] = useState("");
 
@@ -204,23 +199,15 @@ export default function AdminPanel({ authProfile }) {
     const { dealers: supabaseDealers, error } = await listDealersForAdmin();
 
     if (error) {
-      setDealers(ALLOW_MOCK_FALLBACK ? mockDealers : []);
-      setDealersError(
-        ALLOW_MOCK_FALLBACK
-          ? `${error.message}. Modo desarrollo: usando datos mock como respaldo temporal.`
-          : "No pudimos cargar dealers reales en este momento."
-      );
+      setDealers([]);
+      setDealersError("No pudimos cargar dealers reales en este momento.");
       setLoadingDealers(false);
       return;
     }
 
     if (!supabaseDealers.length) {
-      setDealers(ALLOW_MOCK_FALLBACK ? mockDealers : []);
-      setDealersError(
-        ALLOW_MOCK_FALLBACK
-          ? "Supabase devolvió 0 dealers. Modo desarrollo: usando datos mock como respaldo temporal."
-          : "No hay dealers reales cargados en la red."
-      );
+      setDealers([]);
+      setDealersError("No hay dealers reales cargados en la red.");
       setLoadingDealers(false);
       return;
     }

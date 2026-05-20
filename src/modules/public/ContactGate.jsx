@@ -76,12 +76,6 @@ export default function ContactGate({
   const normalizedDealerWhatsapp = normalizeWhatsAppArgentina(rawDealerWhatsapp);
   const hasDealerWhatsapp = Boolean(normalizedDealerWhatsapp);
 
-  if (import.meta.env.DEV) {
-    console.log("[ContactGate vehicle]", vehicle);
-    console.log("[ContactGate whatsapp raw]", rawDealerWhatsapp);
-    console.log("[ContactGate whatsapp normalized]", normalizedDealerWhatsapp);
-  }
-
   const whatsappUrl = createdLead
     ? getWhatsAppUrl(
         normalizedDealerWhatsapp,

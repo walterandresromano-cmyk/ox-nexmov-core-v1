@@ -71,7 +71,9 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
     const { error } = await signOut();
 
     if (error) {
-      console.error("No se pudo cerrar sesión:", error.message);
+      if (import.meta.env.DEV) {
+        console.error("No se pudo cerrar sesión:", error.message);
+      }
       setLoggingOut(false);
       return;
     }
