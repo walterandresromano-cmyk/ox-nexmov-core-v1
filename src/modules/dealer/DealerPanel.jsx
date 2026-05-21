@@ -24,6 +24,7 @@ import { listVehiclesForCurrentDealer } from "../../services/dealerVehicles.serv
 import { listVehicleLeadsForCurrentUser } from "../../services/leads.service.js";
 import { listSupportTicketsForCurrentUser } from "../../services/tickets.service.js";
 import { listSellVehicleLeadsForCurrentDealer } from "../../services/sellVehicle.service.js";
+import { listDealerNotifications, markDealerNotificationsRead } from "../../services/dealerNotifications.service.js";
 
 const DEALER_MOBILE_SECTIONS = [
   { id: "home", label: "Inicio" },
@@ -327,6 +328,9 @@ export default function DealerPanel({ authProfile }) {
   const [loadingTickets, setLoadingTickets] = useState(true);
   const [ticketsError, setTicketsError] = useState("");
 
+  const [notifications, setNotifications] = useState([]);
+  const [markingRead, setMarkingRead] = useState(false);
+
   const [showVehicleModal, setShowVehicleModal] = useState(false);
 
   const [whatsappForm, setWhatsappForm] = useState("");
@@ -452,6 +456,18 @@ export default function DealerPanel({ authProfile }) {
     setLoadingTickets(false);
   }
 
+  async function loadNotifications() {
+    const { notifications: data } = await listDealerNotifications();
+    setNotifications(data || []);
+  }
+
+  async function handleMarkAllRead() {
+    setMarkingRead(true);
+    await markDealerNotificationsRead();
+    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+    setMarkingRead(false);
+  }
+
   async function refreshDealerPanel() {
     await Promise.all([
       loadDealers(),
@@ -459,6 +475,7 @@ export default function DealerPanel({ authProfile }) {
       loadLeads(),
       loadTickets(),
       loadSellVehicleLeads(),
+      loadNotifications(),
     ]);
   }
 
@@ -1024,6 +1041,8 @@ export default function DealerPanel({ authProfile }) {
     ["new", "open", "in_progress", "waiting_dealer"].includes(ticket.status)
   ).length;
 
+  const unreadNotificationsCount = notifications.filter((n) => !n.is_read).length;
+
   function renderDealerMobileTabs() {
     return (
       <nav className="dealer-mobile-tabs" aria-label="Secciones dealer mobile">
@@ -1450,6 +1469,12 @@ export default function DealerPanel({ authProfile }) {
                 Actualizar panel
               </button>
             </div>
+
+            {unreadNotificationsCount > 0 && (
+              <span className="dealer-notifications-header-chip">
+                {unreadNotificationsCount} aviso{unreadNotificationsCount !== 1 ? "s" : ""} sin leer
+              </span>
+            )}
           </div>
 
             {renderDealerWhatsappContactCard({ compact: true })}
@@ -1731,6 +1756,47 @@ export default function DealerPanel({ authProfile }) {
             <p>Publicaciones pendientes de revisión.</p>
           </article>
         </div>
+
+        {activeDealerModule === "summary" && notifications.length > 0 && (
+          <div className="dealer-notifications-section">
+            <div className="dealer-notifications-head">
+              <div>
+                <span>Avisos del administrador</span>
+                {unreadNotificationsCount > 0 && (
+                  <strong className="dealer-notifications-badge">
+                    {unreadNotificationsCount} sin leer
+                  </strong>
+                )}
+              </div>
+              {unreadNotificationsCount > 0 && (
+                <button
+                  type="button"
+                  className="table-action-btn"
+                  onClick={handleMarkAllRead}
+                  disabled={markingRead}
+                >
+                  {markingRead ? "Marcando..." : "Marcar como leídas"}
+                </button>
+              )}
+            </div>
+            <ul className="dealer-notifications-list">
+              {notifications.slice(0, 8).map((notification) => (
+                <li
+                  key={notification.id}
+                  className={`dealer-notification-item${notification.is_read ? "" : " is-unread"}`}
+                >
+                  <span className="dealer-notification-msg">{notification.message}</span>
+                  <time className="dealer-notification-time">
+                    {new Intl.DateTimeFormat("es-AR", {
+                      dateStyle: "short",
+                      timeStyle: "short",
+                    }).format(new Date(notification.created_at))}
+                  </time>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {activeDealerModule === "summary" && (
           <div className="dealer-modules-grid">

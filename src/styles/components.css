@@ -2806,9 +2806,7 @@
 .clickable-module-card:hover {
   transform: translateY(-2px);
   border-color: rgba(56, 189, 248, 0.35);
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.28),
-    0 0 0 1px rgba(56, 189, 248, 0.10);
+  box-shadow: var(--ox-shadow-card-hover);
 }
 
 .dealer-module-card--locked {
@@ -2869,6 +2867,171 @@
 
 .clickable-module-card {
   min-height: 186px;
+}
+
+/* =========================================================
+   oX NEXMOV Core v1 — Dealer Notifications Section
+   ========================================================= */
+
+.dealer-notifications-section {
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: var(--ox-radius-2xl);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(56, 189, 248, 0.07), transparent 32%),
+    var(--ox-surface-card-quiet);
+  box-shadow: var(--ox-shadow-card);
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.dealer-notifications-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.dealer-notifications-head > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.dealer-notifications-head span {
+  color: var(--ox-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.dealer-notifications-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  padding: 2px 8px;
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  border-radius: var(--ox-radius-pill);
+  background: rgba(14, 165, 233, 0.12);
+  color: rgba(125, 211, 252, 0.98);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.dealer-notifications-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.dealer-notification-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-lg);
+  background: rgba(15, 27, 45, 0.42);
+  transition: border-color 0.16s ease;
+}
+
+.dealer-notification-item.is-unread {
+  border-color: rgba(56, 189, 248, 0.22);
+  background:
+    radial-gradient(circle at 0% 50%, rgba(56, 189, 248, 0.06), transparent 50%),
+    rgba(15, 27, 45, 0.52);
+}
+
+.dealer-notification-item.is-unread::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.88);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.50);
+}
+
+.dealer-notification-msg {
+  flex: 1;
+  min-width: 0;
+  color: rgba(226, 232, 240, 0.90);
+  font-size: var(--ox-fs-body-sm);
+  line-height: var(--ox-lh-body);
+}
+
+.dealer-notification-time {
+  flex-shrink: 0;
+  color: var(--ox-muted);
+  font-size: var(--ox-fs-micro);
+  white-space: nowrap;
+  padding-top: 2px;
+}
+
+:root[data-theme="light"] .dealer-notifications-section {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(14, 165, 233, 0.06), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(225, 242, 252, 0.86));
+}
+
+:root[data-theme="light"] .dealer-notification-item {
+  border-color: rgba(14, 116, 144, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+:root[data-theme="light"] .dealer-notification-item.is-unread {
+  border-color: rgba(14, 116, 144, 0.22);
+  background: rgba(224, 242, 254, 0.62);
+}
+
+:root[data-theme="light"] .dealer-notification-msg {
+  color: #1e293b;
+}
+
+.dealer-notifications-header-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 3px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.30);
+  border-radius: var(--ox-radius-pill);
+  background: rgba(14, 165, 233, 0.10);
+  color: rgba(125, 211, 252, 0.96);
+  font-size: 0.70rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin-top: 8px;
+}
+
+:root[data-theme="light"] .dealer-notifications-header-chip {
+  border-color: rgba(14, 116, 144, 0.22);
+  background: rgba(224, 242, 254, 0.72);
+  color: #0f4c6a;
+}
+
+@media (max-width: 640px) {
+  .dealer-notification-item {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .dealer-notification-item.is-unread {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .dealer-notification-time {
+    align-self: flex-end;
+    white-space: normal;
+  }
 }
 
 /* =========================================================
@@ -6313,6 +6476,10 @@ body::-webkit-scrollbar {
 .vehicle-card__btn:hover {
   transform: translateY(-1px);
   border-color: var(--ox-border-accent);
+}
+
+.dealer-module-card button:not(:disabled):hover {
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.18), 0 6px 22px rgba(37, 99, 235, 0.20);
 }
 
 .dealer-status-card,

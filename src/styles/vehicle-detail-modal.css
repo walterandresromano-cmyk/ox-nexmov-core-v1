@@ -705,6 +705,10 @@
   box-shadow: 0 14px 32px rgba(37, 99, 235, 0.22);
 }
 
+.detail-actions .primary-action:not(:disabled):hover {
+  box-shadow: var(--ox-shadow-glow-primary);
+}
+
 .detail-actions button.favorite-active {
   border-color: rgba(245, 184, 75, 0.34);
   background: rgba(245, 184, 75, 0.10);

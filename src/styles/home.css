@@ -310,16 +310,22 @@
 }
 
 .ox-home-hero-car-v3 {
+  display: block;
   position: relative;
   z-index: 3;
   width: min(112%, 710px);
   max-width: none;
-  max-height: 325px;
-  object-fit: contain;
   transform: translateX(-2px) translateY(16px) scale(1.04);
   filter:
     drop-shadow(0 30px 38px rgba(0, 0, 0, 0.70))
     drop-shadow(0 0 56px rgba(37, 99, 235, 0.32));
+}
+
+.ox-home-hero-car-v3 img {
+  display: block;
+  width: 100%;
+  max-height: 325px;
+  object-fit: contain;
 }
 
 .ox-home-hero-car-fallback-v3 {
@@ -1277,8 +1283,11 @@
 
   .ox-home-hero-car-v3 {
     width: min(128%, 640px);
-    max-height: 390px;
     transform: translateY(24px) scale(1.12);
+  }
+
+  .ox-home-hero-car-v3 img {
+    max-height: 390px;
   }
 
   .ox-home-trust-strip-v3 {
@@ -1549,8 +1558,11 @@
 
   .ox-home-hero-car-v3 {
     width: min(116%, 390px);
-    max-height: 250px;
     transform: translateY(20px) scale(1.04);
+  }
+
+  .ox-home-hero-car-v3 img {
+    max-height: 250px;
   }
 
   .ox-home-featured-deck {

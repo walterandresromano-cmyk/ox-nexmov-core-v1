@@ -652,16 +652,18 @@ export default function Home({ onNavigate, appActions = {} }) {
           <div className="ox-home-hero-stage-v3">
             <div className="ox-home-neon-frame-v3"></div>
 
-            <img
-              className="ox-home-hero-car-v3"
-              src="/hero-car.png"
-              alt="Vehículo institucional oX NEXMOV"
-              width="1300"
-              height="867"
-              onError={(event) => {
-                event.currentTarget.style.display = "none";
-              }}
-            />
+            <picture className="ox-home-hero-car-v3">
+              <source srcSet="/hero-car.webp" type="image/webp" />
+              <img
+                src="/hero-car.png"
+                alt="Vehículo institucional oX NEXMOV"
+                width="1300"
+                height="867"
+                onError={(event) => {
+                  event.currentTarget.parentElement.style.display = "none";
+                }}
+              />
+            </picture>
 
             <div className="ox-home-hero-car-fallback-v3">
               <span>oX NEXMOV</span>

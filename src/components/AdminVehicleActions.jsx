@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { updateAdminVehicleStatus } from "../services/adminVehicles.service.js";
+import { createDealerNotification, buildNotificationMessage } from "../services/dealerNotifications.service.js";
 
 const ACTIONS = [
   { value: "approve_review", label: "Aprobar revisión" },
@@ -62,11 +63,22 @@ export default function AdminVehicleActions({ vehicle, onUpdated, onAction }) {
     setSaved(true);
     setLoading(false);
 
+    const vehicleTitle = `${vehicle.brand} ${vehicle.model} ${vehicle.year ?? ""}`.trim();
+
     if (onAction) {
       onAction({
         action,
-        target: `${vehicle.brand} ${vehicle.model} ${vehicle.year ?? ""}`.trim(),
+        target: vehicleTitle,
         result: "success",
+      });
+    }
+
+    if (vehicle.dealer_id) {
+      createDealerNotification({
+        dealerId: vehicle.dealer_id,
+        vehicleId: vehicle.vehicle_id,
+        action,
+        message: buildNotificationMessage(action, vehicleTitle),
       });
     }
 

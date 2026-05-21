@@ -313,13 +313,20 @@
   min-height: 36px;
   border: 1px solid rgba(125, 211, 252, 0.4);
   border-radius: 999px;
-  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  background: var(--ox-surface-primary);
   color: white;
   padding: 0 15px;
   font-size: var(--ox-fs-button);
   font-weight: var(--ox-fw-black);
   cursor: pointer;
   box-shadow: 0 12px 28px rgba(37, 99, 235, 0.20);
+  transition: transform 0.22s var(--ox-ease), box-shadow 0.22s var(--ox-ease), border-color 0.22s ease;
+}
+
+.faq-final button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(125, 211, 252, 0.68);
+  box-shadow: var(--ox-shadow-glow-primary);
 }
 
 .faq-final button + button {

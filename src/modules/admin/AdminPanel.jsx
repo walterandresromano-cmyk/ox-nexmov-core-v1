@@ -22,6 +22,7 @@ import {
   uploadDealerLogoFromAdmin,
   suspendDealerFromAdmin,
 } from "../../services/adminDealers.service.js";
+import { persistAdminAction, listAdminActionLogs } from "../../services/adminActionLog.service.js";
 
 const ADMIN_MODULES = {
   DEALERS: "dealers",
@@ -157,18 +158,40 @@ export default function AdminPanel({ authProfile }) {
   const [adminActionLog, setAdminActionLog] = useState([]);
 
   function logAdminAction({ action, target, detail = "", result = "success" }) {
-    setAdminActionLog((prev) => [
-      {
-        id: Date.now() + Math.random(),
-        timestamp: new Date().toISOString(),
-        action,
-        target,
-        detail,
-        result,
-        adminEmail: authProfile?.email || "admin",
-      },
-      ...prev,
-    ]);
+    const entry = {
+      id: Date.now() + Math.random(),
+      timestamp: new Date().toISOString(),
+      action,
+      target,
+      detail,
+      result,
+      adminEmail: authProfile?.email || "admin",
+    };
+    setAdminActionLog((prev) => [entry, ...prev]);
+    persistAdminAction({
+      action,
+      target,
+      detail,
+      result,
+      adminEmail: authProfile?.email || "",
+    });
+  }
+
+  async function loadActionLogs() {
+    const { logs } = await listAdminActionLogs({ limit: 200 });
+    if (logs.length > 0) {
+      setAdminActionLog(
+        logs.map((log) => ({
+          id: log.id,
+          timestamp: log.created_at,
+          action: log.action,
+          target: log.target,
+          detail: log.detail || "",
+          result: log.result || "success",
+          adminEmail: log.admin_email || "admin",
+        }))
+      );
+    }
   }
 
   const [searchText, setSearchText] = useState("");
@@ -622,6 +645,9 @@ export default function AdminPanel({ authProfile }) {
     setActiveAdminMobileSection(nextMobileSection || "summary");
     setActiveModule(moduleName);
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if (moduleName === ADMIN_MODULES.ACTION_LOG) {
+      loadActionLogs();
+    }
   }
 
   function openDealerDetail(dealer) {
@@ -645,6 +671,7 @@ export default function AdminPanel({ authProfile }) {
 
   useEffect(() => {
     refreshAdminPanel();
+    loadActionLogs();
   }, []);
 
   const filteredDealers = useMemo(() => {
@@ -840,7 +867,7 @@ export default function AdminPanel({ authProfile }) {
     [ADMIN_MODULES.SELL_VEHICLE]: "Vender mi vehículo",
     [ADMIN_MODULES.ZERO_KM]: "Financiación 0km",
     [ADMIN_MODULES.TICKETS]: "Tickets internos",
-    [ADMIN_MODULES.ACTION_LOG]: "Registro de sesión",
+    [ADMIN_MODULES.ACTION_LOG]: "Registro de acciones",
   }[activeModule];
 
   function getAdminDateValue(item) {
@@ -1306,11 +1333,11 @@ export default function AdminPanel({ authProfile }) {
               className="dealer-module-card clickable-module-card"
               onClick={() => openModule(ADMIN_MODULES.ACTION_LOG)}
             >
-              <h3>Registro de sesión</h3>
+              <h3>Registro de acciones</h3>
               <p>
                 {adminActionLog.length > 0
-                  ? `${adminActionLog.length} acción${adminActionLog.length !== 1 ? "es" : ""} registrada${adminActionLog.length !== 1 ? "s" : ""} en esta sesión.`
-                  : "Sin acciones registradas aún en esta sesión."}
+                  ? `${adminActionLog.length} acción${adminActionLog.length !== 1 ? "es" : ""} registrada${adminActionLog.length !== 1 ? "s" : ""}.`
+                  : "Historial persistido de acciones admin."}
               </p>
               <button type="button">Ver registro</button>
             </article>
@@ -2538,18 +2565,22 @@ export default function AdminPanel({ authProfile }) {
         <div className="admin-section-block">
           <div className="buyer-section-head">
             <div>
-              <h2>Registro de sesión</h2>
+              <h2>Registro de acciones</h2>
               <p>
-                Acciones administrativas realizadas durante la sesión activa.
-                Este registro no persiste al cerrar o recargar la página.
+                Historial persistido de acciones administrativas. Se actualiza al abrir este módulo.
               </p>
             </div>
-            {renderBackToSummaryButton()}
+            <div className="admin-action-row">
+              <button className="admin-refresh-btn" onClick={loadActionLogs}>
+                Actualizar registro
+              </button>
+              {renderBackToSummaryButton()}
+            </div>
           </div>
 
           {adminActionLog.length === 0 ? (
             <div className="empty-state">
-              Sin acciones registradas en esta sesión.
+              Sin acciones registradas.
             </div>
           ) : (
             <div className="admin-table-wrap">
@@ -2570,7 +2601,8 @@ export default function AdminPanel({ authProfile }) {
                       <td>
                         <strong>
                           {new Intl.DateTimeFormat("es-AR", {
-                            timeStyle: "medium",
+                            dateStyle: "short",
+                            timeStyle: "short",
                           }).format(new Date(entry.timestamp))}
                         </strong>
                       </td>

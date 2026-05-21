@@ -220,7 +220,8 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
   --ox-shadow-card-hover:
     0 22px 64px rgba(33, 48, 71, 0.16),
-    0 0 0 1px rgba(2, 132, 199, 0.08),
+    0 0 0 1px rgba(2, 132, 199, 0.18),
+    0 6px 20px rgba(2, 132, 199, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.88);
   --ox-shadow-panel:
     0 24px 70px rgba(33, 48, 71, 0.14),
