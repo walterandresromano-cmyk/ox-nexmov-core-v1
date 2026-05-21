@@ -43,6 +43,45 @@
   display: none;
 }
 
+.vehicle-detail-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--ox-space-3);
+  justify-content: center;
+  margin-bottom: var(--ox-space-4);
+}
+
+.vehicle-detail-nav-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--ox-radius-pill);
+  border: 1px solid var(--ox-border-strong);
+  background: var(--ox-surface-2);
+  color: var(--ox-text-primary);
+  font-size: var(--ox-text-lg);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+
+.vehicle-detail-nav-btn:hover:not(:disabled) {
+  background: var(--ox-surface-3);
+  border-color: var(--ox-accent);
+}
+
+.vehicle-detail-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.vehicle-detail-nav-counter {
+  font-size: var(--ox-text-sm);
+  color: var(--ox-text-secondary);
+  min-width: 52px;
+  text-align: center;
+}
+
 .vehicle-detail-close {
   position: absolute;
   top: var(--ox-space-6);

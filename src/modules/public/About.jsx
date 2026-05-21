@@ -1,4 +1,6 @@
-﻿const aboutPillars = [
+﻿import "../../styles/about.css";
+
+const aboutPillars = [
   {
     eyebrow: "Comprador primero",
     title: "Claridad",

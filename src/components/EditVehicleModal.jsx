@@ -221,6 +221,7 @@ export default function EditVehicleModal({
   const [submitting, setSubmitting] = useState(false);
   const [savedVehicle, setSavedVehicle] = useState(null);
   const [error, setError] = useState("");
+  const [forceApproveWarnings, setForceApproveWarnings] = useState(null);
 
   const [catalogTree, setCatalogTree] = useState([]);
   const [loadingCatalog, setLoadingCatalog] = useState(true);
@@ -351,14 +352,9 @@ export default function EditVehicleModal({
 
     if (validationErrors.length > 0) {
       if (mode === "admin" && form.forceApprove) {
-        const confirmed = window.confirm(
-          `Esta publicación tiene datos incompletos o inconsistentes. Si la aprobás, quedará visible para compradores. Confirmá que revisaste la información.\n\n${validationErrors.join("\n")}`
-        );
-
-        if (!confirmed) {
-          setSubmitting(false);
-          return;
-        }
+        setForceApproveWarnings(validationErrors);
+        setSubmitting(false);
+        return;
       } else {
         setError(
           `Los cambios dejan la publicación incompleta. ${validationErrors.join(" ")}`
@@ -367,6 +363,13 @@ export default function EditVehicleModal({
         return;
       }
     }
+
+    await executeUpdate();
+  }
+
+  async function executeUpdate() {
+    setSubmitting(true);
+    setError("");
 
     const submitForm = {
       ...form,
@@ -815,6 +818,39 @@ export default function EditVehicleModal({
             </div>
 
             {error && <p className="form-error">{error}</p>}
+
+            {forceApproveWarnings && (
+              <div className="admin-confirm-inline">
+                <p>
+                  Esta publicación tiene datos incompletos o inconsistentes.
+                  Si la aprobás, quedará visible para compradores. Revisá
+                  antes de confirmar:
+                </p>
+                <ul style={{ margin: "6px 0 8px", paddingLeft: "18px", fontSize: "0.82rem", color: "var(--ox-text-secondary)" }}>
+                  {forceApproveWarnings.map((w, i) => <li key={i}>{w}</li>)}
+                </ul>
+                <div className="admin-confirm-inline-actions">
+                  <button
+                    type="button"
+                    className="admin-confirm-inline-btn admin-confirm-inline-btn--confirm"
+                    disabled={submitting}
+                    onClick={() => {
+                      setForceApproveWarnings(null);
+                      executeUpdate();
+                    }}
+                  >
+                    {submitting ? "Guardando..." : "Confirmar igualmente"}
+                  </button>
+                  <button
+                    type="button"
+                    className="admin-confirm-inline-btn admin-confirm-inline-btn--cancel"
+                    onClick={() => setForceApproveWarnings(null)}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            )}
 
             <p className="dealer-legal-note">
               Declaro que la información actualizada sobre el vehículo, precio,

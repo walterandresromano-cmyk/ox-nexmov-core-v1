@@ -59,8 +59,10 @@
 }
 
 .auth-hero-copy h1 span {
-  color: #38bdf8;
-  text-shadow: 0 0 24px rgba(56, 189, 248, 0.26);
+  color: transparent;
+  background: linear-gradient(115deg, #38bdf8 0%, #818cf8 55%, #c084fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .auth-hero-copy > p {
@@ -233,12 +235,13 @@
 
 .auth-mode-row button.active,
 .auth-actions button:hover {
-  border-color: rgba(56, 189, 248, 0.45);
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.60);
   background:
     radial-gradient(circle at 28% 0%, rgba(255, 255, 255, 0.16), transparent 28%),
-    linear-gradient(135deg, #0ea5e9, #2563eb);
+    var(--ox-surface-primary);
   color: white;
-  box-shadow: 0 14px 34px rgba(37, 99, 235, 0.28);
+  box-shadow: var(--ox-shadow-glow-primary);
 }
 
 .auth-form {
@@ -281,10 +284,10 @@
 }
 
 .auth-form input:focus {
-  border-color: rgba(56, 189, 248, 0.48);
+  border-color: rgba(56, 189, 248, 0.54);
   box-shadow:
-    0 0 0 4px rgba(56, 189, 248, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    0 0 0 4px rgba(56, 189, 248, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
 }
 
 .auth-form .primary-action {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { signOut } from "../services/auth.service.js";
+import { normalizeRole } from "../lib/auth.js";
 
 const NAV_ITEMS = [
   { id: "home", label: "Inicio" },
@@ -12,15 +13,6 @@ const NAV_ITEMS = [
   { id: "faq", label: "Preguntas frecuentes" },
 ];
 
-function normalizeRole(role) {
-  const value = String(role || "").trim().toLowerCase();
-
-  if (value === "comprador") return "buyer";
-  if (value === "soporte") return "support";
-  if (value === "internal_0km") return "internal0km";
-
-  return value;
-}
 
 function getPrivatePanelForRole(role) {
   const normalizedRole = normalizeRole(role);
@@ -73,7 +65,7 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
           onClick={() => onNavigate("home")}
           aria-label="Ir al inicio de oX NEXMOV"
         >
-          <img className="brand-logo-img" src="/logo.svg" alt="oX NEXMOV" />
+          <img className="brand-logo-img" src="/logo.svg" alt="oX NEXMOV" width="180" height="34" />
         </button>
 
         <nav className="desktop-nav" aria-label="Navegación principal">

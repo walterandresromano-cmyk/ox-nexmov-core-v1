@@ -1,4 +1,6 @@
-﻿const faqSections = [
+﻿import "../../styles/faq.css";
+
+const faqSections = [
   {
     eyebrow: "Compradores",
     title: "Buscar, comparar y consultar vehículos.",

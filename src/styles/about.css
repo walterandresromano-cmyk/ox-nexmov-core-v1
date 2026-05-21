@@ -104,7 +104,7 @@
 
 .about-hero-copy h1 span {
   color: transparent;
-  background: linear-gradient(90deg, #60a5fa, #0284c7, #38bdf8);
+  background: linear-gradient(115deg, #38bdf8 0%, #818cf8 55%, #c084fc 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -308,13 +308,20 @@
   min-height: 36px;
   border: 1px solid rgba(125, 211, 252, 0.4);
   border-radius: 999px;
-  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  background: var(--ox-surface-primary);
   color: white;
   padding: 0 15px;
   font-size: var(--ox-fs-button);
   font-weight: var(--ox-fw-black);
   cursor: pointer;
   box-shadow: 0 12px 28px rgba(37, 99, 235, 0.20);
+  transition: transform 0.22s var(--ox-ease), box-shadow 0.22s var(--ox-ease), border-color 0.22s ease;
+}
+
+.about-final button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(125, 211, 252, 0.68);
+  box-shadow: var(--ox-shadow-glow-primary);
 }
 
 .about-final button + button {

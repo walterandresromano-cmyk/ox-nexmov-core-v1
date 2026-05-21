@@ -30,6 +30,20 @@ const ADMIN_MODULES = {
   SELL_VEHICLE: "sellVehicle",
   ZERO_KM: "zeroKm",
   TICKETS: "tickets",
+  ACTION_LOG: "actionLog",
+};
+
+const ACTION_LABELS = {
+  suspend_dealer: "Suspender dealer",
+  activate_dealer: "Activar dealer",
+  update_plan: "Actualizar plan",
+  create_dealer: "Crear dealer",
+  approve_review: "Aprobar revisión",
+  pause: "Pausar publicación",
+  reactivate: "Reactivar publicación",
+  reserve: "Reservar publicación",
+  mark_sold: "Marcar vendida",
+  send_to_review: "Enviar a revisión",
 };
 
 const ADMIN_MOBILE_SECTIONS = [
@@ -140,6 +154,23 @@ export default function AdminPanel({ authProfile }) {
   const [activeAdminMobileSection, setActiveAdminMobileSection] =
     useState("summary");
 
+  const [adminActionLog, setAdminActionLog] = useState([]);
+
+  function logAdminAction({ action, target, detail = "", result = "success" }) {
+    setAdminActionLog((prev) => [
+      {
+        id: Date.now() + Math.random(),
+        timestamp: new Date().toISOString(),
+        action,
+        target,
+        detail,
+        result,
+        adminEmail: authProfile?.email || "admin",
+      },
+      ...prev,
+    ]);
+  }
+
   const [searchText, setSearchText] = useState("");
   const [planFilter, setPlanFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -200,6 +231,7 @@ export default function AdminPanel({ authProfile }) {
   const [dealerLogoSuccess, setDealerLogoSuccess] = useState("");
   const [suspendingDealer, setSuspendingDealer] = useState(false);
   const [suspendDealerError, setSuspendDealerError] = useState("");
+  const [suspendConfirmPending, setSuspendConfirmPending] = useState(false);
 
 
   async function loadDealers() {
@@ -386,6 +418,12 @@ export default function AdminPanel({ authProfile }) {
       return;
     }
 
+    logAdminAction({
+      action: "create_dealer",
+      target: cleanForm.name,
+      detail: `${cleanForm.email} · ${cleanForm.planCode} · ${cleanForm.city}, ${cleanForm.province}`,
+    });
+
     setShowCreateDealer(false);
     setNewDealerForm({
       name: "",
@@ -416,40 +454,50 @@ export default function AdminPanel({ authProfile }) {
       return;
     }
 
+    logAdminAction({
+      action: "activate_dealer",
+      target: selectedDealer.commercialName,
+      detail: `Plan: ${selectedDealer.plan || selectedDealer.planCode || "—"}`,
+    });
+
     await refreshAdminPanel();
     setSelectedDealer(null);
     setActiveModule(ADMIN_MODULES.DEALERS);
     setActivatingDealer(false);
   }
 
-  async function handleSuspendSelectedDealer() {
-  if (!selectedDealer?.id) return;
-
-  const confirmed = window.confirm(
-    `Vas a suspender a ${selectedDealer.commercialName}. Sus publicaciones se pausarán por sistema y dejará de aparecer en la web pública. ¿Confirmás la suspensión?`
-  );
-
-  if (!confirmed) return;
-
-  setSuspendingDealer(true);
-  setSuspendDealerError("");
-
-  const { error } = await suspendDealerFromAdmin({
-    dealerId: selectedDealer.id,
-    reason: "Suspensión manual desde panel admin.",
-  });
-
-  if (error) {
-    setSuspendDealerError(error.message || "No se pudo suspender el dealer.");
-    setSuspendingDealer(false);
-    return;
+  function handleSuspendSelectedDealer() {
+    if (!selectedDealer?.id) return;
+    setSuspendDealerError("");
+    setSuspendConfirmPending(true);
   }
 
-  await refreshAdminPanel();
-  setSelectedDealer(null);
-  setActiveModule(ADMIN_MODULES.DEALERS);
-  setSuspendingDealer(false);
-}
+  async function handleSuspendConfirmed() {
+    setSuspendConfirmPending(false);
+    setSuspendingDealer(true);
+    setSuspendDealerError("");
+
+    const { error } = await suspendDealerFromAdmin({
+      dealerId: selectedDealer.id,
+      reason: "Suspensión manual desde panel admin.",
+    });
+
+    if (error) {
+      setSuspendDealerError(error.message || "No se pudo suspender el dealer.");
+      setSuspendingDealer(false);
+      return;
+    }
+
+    logAdminAction({
+      action: "suspend_dealer",
+      target: selectedDealer.commercialName,
+    });
+
+    await refreshAdminPanel();
+    setSelectedDealer(null);
+    setActiveModule(ADMIN_MODULES.DEALERS);
+    setSuspendingDealer(false);
+  }
 
   async function handleUpdateDealerPlan() {
     if (!selectedDealer?.id) return;
@@ -467,6 +515,12 @@ export default function AdminPanel({ authProfile }) {
       setUpdatingDealerPlan(false);
       return;
     }
+
+    logAdminAction({
+      action: "update_plan",
+      target: selectedDealer.commercialName,
+      detail: `Nuevo plan: ${dealerPlanForm.planCode}`,
+    });
 
     await refreshAdminPanel();
     setSelectedDealer(null);
@@ -554,6 +608,7 @@ export default function AdminPanel({ authProfile }) {
       [ADMIN_MODULES.SELL_VEHICLE]: "system",
       [ADMIN_MODULES.ZERO_KM]: "system",
       [ADMIN_MODULES.TICKETS]: "tickets",
+      [ADMIN_MODULES.ACTION_LOG]: "system",
     }[moduleName];
 
     setSelectedDealer(null);
@@ -785,6 +840,7 @@ export default function AdminPanel({ authProfile }) {
     [ADMIN_MODULES.SELL_VEHICLE]: "Vender mi vehículo",
     [ADMIN_MODULES.ZERO_KM]: "Financiación 0km",
     [ADMIN_MODULES.TICKETS]: "Tickets internos",
+    [ADMIN_MODULES.ACTION_LOG]: "Registro de sesión",
   }[activeModule];
 
   function getAdminDateValue(item) {
@@ -1245,6 +1301,19 @@ export default function AdminPanel({ authProfile }) {
               <p>Gestión de soporte entre admin, soporte operativo y dealers.</p>
               <button type="button">Abrir soporte</button>
             </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule(ADMIN_MODULES.ACTION_LOG)}
+            >
+              <h3>Registro de sesión</h3>
+              <p>
+                {adminActionLog.length > 0
+                  ? `${adminActionLog.length} acción${adminActionLog.length !== 1 ? "es" : ""} registrada${adminActionLog.length !== 1 ? "s" : ""} en esta sesión.`
+                  : "Sin acciones registradas aún en esta sesión."}
+              </p>
+              <button type="button">Ver registro</button>
+            </article>
           </div>
         </div>
       </>
@@ -1306,20 +1375,46 @@ export default function AdminPanel({ authProfile }) {
               Crear ticket
             </button>
               {selectedDealer.planStatus !== "suspended" && (
-            <button
-              type="button"
-              className="admin-refresh-btn"
-              onClick={handleSuspendSelectedDealer}
-              disabled={suspendingDealer}
-              style={{
-                borderColor: "rgba(248, 113, 113, 0.36)",
-                color: "#fecaca",
-                background: "rgba(127, 29, 29, 0.28)",
-              }}
-            >
-              {suspendingDealer ? "Suspendiendo..." : "Suspender dealer"}
-            </button>
-          )}
+                suspendConfirmPending ? (
+                  <div className="admin-confirm-inline">
+                    <p>
+                      Vas a suspender a <strong>{selectedDealer.commercialName}</strong>.
+                      Sus publicaciones se pausarán y dejará de aparecer en la red pública.
+                    </p>
+                    <div className="admin-confirm-inline-actions">
+                      <button
+                        type="button"
+                        className="admin-confirm-inline-btn admin-confirm-inline-btn--confirm"
+                        onClick={handleSuspendConfirmed}
+                        disabled={suspendingDealer}
+                      >
+                        Confirmar suspensión
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-confirm-inline-btn admin-confirm-inline-btn--cancel"
+                        onClick={() => setSuspendConfirmPending(false)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="admin-refresh-btn"
+                    onClick={handleSuspendSelectedDealer}
+                    disabled={suspendingDealer}
+                    style={{
+                      borderColor: "rgba(248, 113, 113, 0.36)",
+                      color: "#fecaca",
+                      background: "rgba(127, 29, 29, 0.28)",
+                    }}
+                  >
+                    {suspendingDealer ? "Suspendiendo..." : "Suspender dealer"}
+                  </button>
+                )
+              )}
 
 
 
@@ -2388,7 +2483,7 @@ export default function AdminPanel({ authProfile }) {
             {renderBackToSummaryButton()}
           </div>
 
-          <AdminVehiclesSection />
+          <AdminVehiclesSection onLogAction={logAdminAction} />
         </div>
       );
     }
@@ -2436,6 +2531,82 @@ export default function AdminPanel({ authProfile }) {
 
     if (activeModule === ADMIN_MODULES.TICKETS) {
       return renderTicketsModule();
+    }
+
+    if (activeModule === ADMIN_MODULES.ACTION_LOG) {
+      return (
+        <div className="admin-section-block">
+          <div className="buyer-section-head">
+            <div>
+              <h2>Registro de sesión</h2>
+              <p>
+                Acciones administrativas realizadas durante la sesión activa.
+                Este registro no persiste al cerrar o recargar la página.
+              </p>
+            </div>
+            {renderBackToSummaryButton()}
+          </div>
+
+          {adminActionLog.length === 0 ? (
+            <div className="empty-state">
+              Sin acciones registradas en esta sesión.
+            </div>
+          ) : (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Hora</th>
+                    <th>Acción</th>
+                    <th>Objetivo</th>
+                    <th>Detalle</th>
+                    <th>Admin</th>
+                    <th>Resultado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminActionLog.map((entry) => (
+                    <tr key={entry.id}>
+                      <td>
+                        <strong>
+                          {new Intl.DateTimeFormat("es-AR", {
+                            timeStyle: "medium",
+                          }).format(new Date(entry.timestamp))}
+                        </strong>
+                      </td>
+                      <td>
+                        <strong>
+                          {ACTION_LABELS[entry.action] || entry.action}
+                        </strong>
+                      </td>
+                      <td>
+                        <span>{entry.target}</span>
+                      </td>
+                      <td>
+                        <span>{entry.detail || "—"}</span>
+                      </td>
+                      <td>
+                        <span>{entry.adminEmail}</span>
+                      </td>
+                      <td>
+                        <span
+                          className={
+                            entry.result === "success"
+                              ? "admin-chip success"
+                              : "admin-chip danger"
+                          }
+                        >
+                          {entry.result === "success" ? "OK" : "Error"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      );
     }
 
     return renderSummary();

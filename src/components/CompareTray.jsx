@@ -3,6 +3,14 @@ import VehicleDetailModal from "./cards/VehicleDetailModal.jsx";
 import ContactGate from "../modules/public/ContactGate.jsx";
 import { getEffectiveDealerPermissions } from "../lib/permissions.js";
 import { registerVehicleDetailView } from "../services/vehicleViews.service.js";
+import {
+  getVehicleImages,
+  getVehicleTitle,
+  getLocationLabel,
+  getVehicleStatus,
+  getVehicleKey,
+} from "../lib/vehicle.js";
+import { getDealerName, getDealerForVehicle } from "../lib/dealer.js";
 
 function getNumber(value) {
   const number = Number(value);
@@ -27,159 +35,6 @@ function formatKilometers(value) {
   if (!number) return "No informado";
 
   return `${number.toLocaleString("es-AR")} km`;
-}
-
-function getImageUrl(image) {
-  if (!image) return "";
-  if (typeof image === "string") return image;
-
-  return (
-    image.url ||
-    image.publicUrl ||
-    image.src ||
-    image.imageUrl ||
-    image.image_url ||
-    image.thumbnail ||
-    image.thumbnailUrl ||
-    ""
-  );
-}
-
-function getVehicleImages(vehicle) {
-  if (!vehicle) return [];
-
-  const images = [];
-  const seen = new Set();
-
-  function addImage(image) {
-    const url = getImageUrl(image);
-    const cleanUrl = String(url || "").trim();
-
-    if (!cleanUrl || seen.has(cleanUrl)) return;
-
-    seen.add(cleanUrl);
-    images.push(cleanUrl);
-  }
-
-  function addImages(value) {
-    if (!value) return;
-
-    if (typeof value === "string") {
-      const trimmed = value.trim();
-
-      if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
-        try {
-          addImages(JSON.parse(trimmed));
-          return;
-        } catch {
-          addImage(trimmed);
-          return;
-        }
-      }
-
-      addImage(trimmed);
-      return;
-    }
-
-    if (Array.isArray(value)) {
-      value.forEach(addImage);
-      return;
-    }
-
-    addImage(value);
-  }
-
-  const candidates = [
-    vehicle.mainImageUrl,
-    vehicle.main_image_url,
-    vehicle.coverImage,
-    vehicle.imageUrl,
-    vehicle.image_url,
-    vehicle.image,
-    vehicle.thumbnail,
-    vehicle.raw?.main_image_url,
-    vehicle.raw?.image_url,
-    vehicle.raw?.image,
-    vehicle.raw?.thumbnail,
-  ];
-
-  candidates.forEach(addImage);
-
-  const imageCollections = [
-    vehicle.images,
-    vehicle.images_json,
-    vehicle.imageUrls,
-    vehicle.image_urls,
-    vehicle.photos,
-    vehicle.raw?.images_json,
-    vehicle.raw?.images,
-    vehicle.raw?.image_urls,
-    vehicle.raw?.photos,
-  ];
-
-  imageCollections.forEach(addImages);
-
-  return images.slice(0, 12);
-}
-
-function getVehicleTitle(vehicle) {
-  return (
-    [vehicle?.brand || vehicle?.make, vehicle?.model].filter(Boolean).join(" ") ||
-    "Vehículo disponible"
-  );
-}
-
-function getLocation(vehicle) {
-  if (vehicle?.location) return vehicle.location;
-
-  const city = vehicle?.city || vehicle?.raw?.city;
-  const province = vehicle?.province || vehicle?.raw?.province;
-
-  if (city && province) return `${city}, ${province}`;
-  if (city) return city;
-  if (province) return province;
-
-  return "No informado";
-}
-
-function getDealerName(vehicle) {
-  return (
-    vehicle?.dealer?.commercialName ||
-    vehicle?.dealer?.commercial_name ||
-    vehicle?.dealerName ||
-    vehicle?.dealer_name ||
-    vehicle?.raw?.dealer_name ||
-    "Dealer no informado"
-  );
-}
-
-function getDealerForVehicle(vehicle) {
-  const plan =
-    vehicle?.dealer?.plan ||
-    vehicle?.dealerPlan ||
-    vehicle?.dealer_plan ||
-    vehicle?.subscription_plan ||
-    vehicle?.raw?.dealer_plan ||
-    vehicle?.raw?.subscription_plan ||
-    "inicio";
-
-  return (
-    vehicle?.dealer || {
-      id: vehicle?.dealerId || vehicle?.dealer_id || "dealer-fallback",
-      commercialName: getDealerName(vehicle),
-      plan,
-      planStatus: "active",
-      province: vehicle?.province || "",
-      city: vehicle?.city || "",
-      logo: null,
-      phone: "",
-      benefits: {},
-      currentPeriod: {
-        publicationsUsed: 0,
-        expiresInDays: 30,
-      },
-    }
-  );
 }
 
 function getDealerRank(vehicle) {
@@ -214,37 +69,10 @@ function getMarketDelta(vehicle) {
   };
 }
 
-function getVehicleStatus(vehicle) {
-  if (
-    vehicle?.reserved ||
-    vehicle?.status === "reserved" ||
-    vehicle?.publicationStatus === "reserved" ||
-    vehicle?.raw?.reserved
-  ) {
-    return "Reservado";
-  }
-
-  if (vehicle?.status === "paused") return "Pausado";
-  if (vehicle?.publicationStatus === "paused_by_system") {
-    return "Pausado por sistema";
-  }
-
-  return "Activo";
-}
-
 function getFinancingLabel(vehicle) {
   return vehicle?.hasFinancing || vehicle?.financing || vehicle?.raw?.financing
     ? "Disponible"
     : "No informada";
-}
-
-function getVehicleKey(vehicle, index = 0) {
-  return (
-    vehicle?.id ||
-    vehicle?.vehicle_id ||
-    vehicle?.slug ||
-    `${vehicle?.brand || vehicle?.make || "vehicle"}-${vehicle?.model || index}`
-  );
 }
 
 function getCompareTrayMessage(compareItems, appNotice) {
@@ -301,7 +129,7 @@ function CompareVehicleCard({
   const images = getVehicleImages(vehicle);
   const safeGalleryIndex =
     images.length > 0 ? Math.min(galleryIndex, images.length - 1) : 0;
-  const imageUrl = images[safeGalleryIndex] || "";
+  const imageUrl = images[safeGalleryIndex]?.url || "";
   const title = getVehicleTitle(vehicle);
   const market = getMarketDelta(vehicle);
   const dealerRank = getDealerRank(vehicle);
@@ -361,7 +189,7 @@ function CompareVehicleCard({
             <div className="compare-card-gallery-dots" aria-hidden="true">
               {images.slice(0, 6).map((image, imageIndex) => (
                 <span
-                  key={`${image}-${imageIndex}`}
+                  key={`${image.url}-${imageIndex}`}
                   className={
                     imageIndex === safeGalleryIndex
                       ? "compare-card-gallery-dot is-active"
@@ -416,7 +244,7 @@ function CompareVehicleCard({
           <SpecRow label="Km" highlight>
             {formatKilometers(kilometers)}
           </SpecRow>
-          <SpecRow label="Ubicación">{getLocation(vehicle)}</SpecRow>
+          <SpecRow label="Ubicación">{getLocationLabel(vehicle)}</SpecRow>
           <SpecRow label="Estado">{getVehicleStatus(vehicle)}</SpecRow>
           <SpecRow label="Financiación" highlight>
             {getFinancingLabel(vehicle)}

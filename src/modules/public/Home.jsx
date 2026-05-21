@@ -17,37 +17,37 @@ const quickSearches = [
 ];
 
 const trustItems = [
-  { title: "Dealers verificados", text: "Red validada", icon: "◇" },
-  { title: "Comparador real", text: "Hasta 4 vehículos", icon: "⇄" },
-  { title: "Consultas trazables", text: "Antes del WhatsApp", icon: "◎" },
-  { title: "Financiación clara", text: "Sin sorpresas", icon: "$" },
-  { title: "Publicaciones revisadas", text: "Datos coherentes", icon: "✓" },
+  { title: "Dealers verificados", text: "Habilitados por administración", icon: "◇" },
+  { title: "Comparador real", text: "Lado a lado con datos reales", icon: "⇄" },
+  { title: "Contactos trazables", text: "Registrados antes del chat", icon: "◎" },
+  { title: "Financiación visible", text: "Entrega, cuotas y tasa siempre claros", icon: "$" },
+  { title: "Publicaciones auditadas", text: "Revisadas antes de publicarse", icon: "✓" },
 ];
 
 const confidenceItems = [
   {
     title: "Dealers verificados",
-    text: "Publican solo quienes cumplen nuestros estándares.",
+    text: "Publican solo quienes superan el proceso de habilitación de administración.",
   },
   {
     title: "Comparador real",
-    text: "Compará hasta 4 vehículos con datos clave lado a lado.",
+    text: "Compará hasta 4 vehículos con precio, financiación y datos clave lado a lado.",
   },
   {
-    title: "Consultas trazables",
-    text: "Cada contacto queda registrado antes del WhatsApp.",
+    title: "Contactos trazables",
+    text: "Cada consulta queda registrada antes de llegar al WhatsApp del dealer.",
   },
   {
-    title: "Financiación clara",
-    text: "Entrega, cuotas, tasa y condiciones siempre visibles.",
+    title: "Financiación visible",
+    text: "Entrega, cuotas, tasa y condiciones siempre informadas en la publicación.",
   },
   {
-    title: "Publicaciones revisadas",
-    text: "Datos coherentes. Si algo no cuadra, se revisa.",
+    title: "Publicaciones auditadas",
+    text: "Administración revisa cada publicación antes de que esté disponible.",
   },
   {
     title: "Soporte real",
-    text: "Personas que te ayudan cuando se necesita resolver.",
+    text: "Personas que ayudan a resolver cuando algo no funciona como debería.",
   },
 ];
 
@@ -544,20 +544,21 @@ export default function Home({ onNavigate, appActions = {} }) {
         <section className="ox-home-hero-v3">
           <div className="ox-home-hero-copy-v3">
             <p className="ox-home-eyebrow-v3">
-              La plataforma líder en Argentina
+              Red automotriz verificada · Argentina
             </p>
 
             <h1>
-              Comprá mejor.
+              Comprá con datos reales.
               <br />
-              Vendé mejor.
+              Vendé con confianza.
               <br />
-              Decidí con <span>más información.</span>
+              Decidí con <span>contexto completo.</span>
             </h1>
 
             <p>
-              Buscá, compará y contactá dealers verificados con más claridad
-              antes de decidir.
+              Publicaciones revisadas, dealers habilitados, financiación
+              visible. Compará y contactá con todo el contexto antes de
+              decidir.
             </p>
 
             <form
@@ -655,6 +656,8 @@ export default function Home({ onNavigate, appActions = {} }) {
               className="ox-home-hero-car-v3"
               src="/hero-car.png"
               alt="Vehículo institucional oX NEXMOV"
+              width="1300"
+              height="867"
               onError={(event) => {
                 event.currentTarget.style.display = "none";
               }}

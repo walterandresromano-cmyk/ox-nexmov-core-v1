@@ -1,3 +1,4 @@
+import "../../styles/sellVehicle.css";
 import { useState } from "react";
 import { createSellVehicleLead } from "../../services/sellVehicle.service.js";
 

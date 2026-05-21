@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 import { createVehicleContactLead } from "../../services/leads.service.js";
+import { getDealerPhone } from "../../lib/dealer.js";
 
 const initialForm = {
   message: "",
@@ -15,47 +16,6 @@ function getWhatsAppUrl(phone, message) {
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
-function getDealerWhatsappFromVehicle(vehicle, dealer) {
-  return (
-    dealer?.dealerWhatsapp ||
-    dealer?.dealer_whatsapp ||
-    dealer?.phone ||
-    dealer?.phoneWhatsapp ||
-    dealer?.phone_whatsapp ||
-    dealer?.contactPhone ||
-    dealer?.contact_phone ||
-    dealer?.phone_visible ||
-    dealer?.dealerPhone ||
-    dealer?.dealer_phone ||
-    vehicle?.dealerWhatsapp ||
-    vehicle?.dealer_whatsapp ||
-    vehicle?.phoneWhatsapp ||
-    vehicle?.phone_whatsapp ||
-    vehicle?.contactPhone ||
-    vehicle?.contact_phone ||
-    vehicle?.dealerPhone ||
-    vehicle?.dealer_phone ||
-    vehicle?.dealer?.dealerWhatsapp ||
-    vehicle?.dealer?.dealer_whatsapp ||
-    vehicle?.dealer?.phone ||
-    vehicle?.dealer?.phoneWhatsapp ||
-    vehicle?.dealer?.phone_whatsapp ||
-    vehicle?.dealer?.contactPhone ||
-    vehicle?.dealer?.contact_phone ||
-    vehicle?.dealer?.dealerPhone ||
-    vehicle?.dealer?.dealer_phone ||
-    vehicle?.raw?.dealerWhatsapp ||
-    vehicle?.raw?.dealer_whatsapp ||
-    vehicle?.raw?.phoneWhatsapp ||
-    vehicle?.raw?.phone_whatsapp ||
-    vehicle?.raw?.contactPhone ||
-    vehicle?.raw?.contact_phone ||
-    vehicle?.raw?.dealerPhone ||
-    vehicle?.raw?.dealer_phone ||
-    vehicle?.raw?.dealer_phone_whatsapp ||
-    ""
-  );
-}
 
 export default function ContactGate({
   vehicle,
@@ -72,7 +32,7 @@ export default function ContactGate({
   const [createdLead, setCreatedLead] = useState(null);
   const [leadWasReused, setLeadWasReused] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const rawDealerWhatsapp = getDealerWhatsappFromVehicle(vehicle, dealer);
+  const rawDealerWhatsapp = getDealerPhone(vehicle, dealer);
   const normalizedDealerWhatsapp = normalizeWhatsAppArgentina(rawDealerWhatsapp);
   const hasDealerWhatsapp = Boolean(normalizedDealerWhatsapp);
 

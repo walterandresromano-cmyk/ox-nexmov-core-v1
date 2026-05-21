@@ -2,9 +2,16 @@ import { useState } from "react";
 
 import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
+import {
+  getVehicleImageUrl,
+  getVehicleTitle,
+  getLocationLabel,
+  isVehicleReserved,
+} from "../../lib/vehicle.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleDetailModal from "./VehicleDetailModal.jsx";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
+import { SpeedometerIcon, PriceTagIcon } from "../icons/VehicleIcons.jsx";
 
 const fallbackDealer = {
   id: "dealer-fallback",
@@ -21,66 +28,6 @@ const fallbackDealer = {
   benefits: {},
 };
 
-function isVehicleReserved(vehicle) {
-  return (
-    vehicle?.reserved === true ||
-    vehicle?.status === "reserved" ||
-    vehicle?.publicationStatus === "reserved" ||
-    vehicle?.raw?.reserved === true ||
-    vehicle?.raw?.publication_status === "reserved" ||
-    vehicle?.raw?.status === "reserved"
-  );
-}
-
-function getVehicleImageUrl(vehicle) {
-  if (!vehicle) return "";
-
-  if (vehicle.mainImageUrl) return vehicle.mainImageUrl;
-  if (vehicle.imageUrl) return vehicle.imageUrl;
-  if (vehicle.main_image_url) return vehicle.main_image_url;
-  if (vehicle.image_url) return vehicle.image_url;
-
-  if (Array.isArray(vehicle.images) && vehicle.images.length > 0) {
-    const firstImage = vehicle.images[0];
-
-    if (typeof firstImage === "string") return firstImage;
-    if (firstImage?.url) return firstImage.url;
-    if (firstImage?.publicUrl) return firstImage.publicUrl;
-  }
-
-  if (vehicle.raw?.main_image_url) return vehicle.raw.main_image_url;
-  if (vehicle.raw?.image_url) return vehicle.raw.image_url;
-
-  const rawImages = vehicle.raw?.images_json;
-
-  if (Array.isArray(rawImages) && rawImages.length > 0) {
-    const firstRawImage = rawImages[0];
-
-    if (typeof firstRawImage === "string") return firstRawImage;
-    if (firstRawImage?.url) return firstRawImage.url;
-    if (firstRawImage?.publicUrl) return firstRawImage.publicUrl;
-  }
-
-  return "";
-}
-
-function getVehicleTitle(vehicle) {
-  return (
-    [vehicle?.brand, vehicle?.model].filter(Boolean).join(" ") ||
-    "Vehículo disponible"
-  );
-}
-
-function getLocationLabel(vehicle) {
-  const city = String(vehicle?.city || "").trim();
-  const province = String(vehicle?.province || "").trim();
-
-  if (city && province) return `${city}, ${province}`;
-  if (city) return city;
-  if (province) return province;
-
-  return "Ubicación a confirmar";
-}
 
 function getRankClass(rankTheme) {
   const normalizedRank = String(rankTheme || "inicio").trim().toLowerCase();
@@ -118,6 +65,8 @@ export default function VehicleCardPublic({
   dealer,
   appActions,
   onNavigate,
+  vehicles,
+  getDealer,
 }) {
   const [showContactGate, setShowContactGate] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -189,8 +138,8 @@ export default function VehicleCardPublic({
 
           <div className="vehicle-card__facts">
             <div className="vehicle-card__fact">
-              <span className="vehicle-card__fact-icon" aria-hidden="true">
-                <img src="/icons/speedometer.png" alt="" />
+              <span className="vehicle-card__fact-icon">
+                <SpeedometerIcon size={14} />
               </span>
               <strong>{formatKm(vehicle.kilometers)}</strong>
             </div>
@@ -218,8 +167,8 @@ export default function VehicleCardPublic({
                 </span>
               )}
 
-              <span className="vehicle-card__price-icon" aria-hidden="true">
-                <img src="/icons/price.png" alt="" />
+              <span className="vehicle-card__price-icon">
+                <PriceTagIcon size={14} />
               </span>
             </div>
           </div>
@@ -296,6 +245,10 @@ export default function VehicleCardPublic({
             setShowDetailModal(false);
             setShowContactGate(true);
           }}
+          vehicles={vehicles}
+          getDealer={getDealer}
+          appActions={appActions}
+          onNavigate={onNavigate}
         />
       )}
 

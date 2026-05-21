@@ -10,43 +10,40 @@ const ACTIONS = [
   { value: "send_to_review", label: "Enviar a revisión" },
 ];
 
-function confirmAdminVehicleAction(action) {
-  const messages = {
-    approve_review:
-      "Confirmá que revisaste la información comercial antes de aprobar esta publicación.",
-    pause:
-      "Esta publicación dejará de estar visible para compradores. ¿Querés pausarla?",
-    reactivate:
-      "Esta publicación volverá a estar disponible según las reglas comerciales del dealer. ¿Querés reactivarla?",
-    reserve: "Confirmá que esta publicación debe marcarse como reservada.",
-    mark_sold: "Confirmá que esta publicación debe marcarse como vendida.",
-    send_to_review:
-      "Esta publicación volverá a revisión para que el dealer corrija la información. ¿Querés continuar?",
-  };
+const CONFIRM_MESSAGES = {
+  approve_review:
+    "Revisaste la información comercial. Esta publicación quedará aprobada y visible.",
+  pause: "Esta publicación dejará de estar visible para compradores.",
+  reactivate:
+    "Esta publicación volverá a estar disponible según las reglas del dealer.",
+  reserve: "La publicación quedará marcada como reservada.",
+  mark_sold: "La publicación quedará marcada como vendida. Esta acción es definitiva.",
+  send_to_review:
+    "La publicación volverá a revisión para que el dealer corrija la información.",
+};
 
-  const message = messages[action];
-
-  if (!message) return true;
-
-  return window.confirm(message);
-}
-
-export default function AdminVehicleActions({ vehicle, onUpdated }) {
+export default function AdminVehicleActions({ vehicle, onUpdated, onAction }) {
   const [action, setAction] = useState("");
+  const [pendingConfirm, setPendingConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleApply() {
+  function handleApply() {
     if (!action) {
       setError("Elegí una acción.");
       return;
     }
+    setError("");
+    setPendingConfirm(true);
+  }
 
-    if (!confirmAdminVehicleAction(action)) {
-      return;
-    }
+  function handleCancel() {
+    setPendingConfirm(false);
+  }
 
+  async function handleConfirm() {
+    setPendingConfirm(false);
     setLoading(true);
     setSaved(false);
     setError("");
@@ -64,15 +61,46 @@ export default function AdminVehicleActions({ vehicle, onUpdated }) {
 
     setSaved(true);
     setLoading(false);
+
+    if (onAction) {
+      onAction({
+        action,
+        target: `${vehicle.brand} ${vehicle.model} ${vehicle.year ?? ""}`.trim(),
+        result: "success",
+      });
+    }
+
     setAction("");
 
     if (onUpdated) {
       await onUpdated();
     }
 
-    window.setTimeout(() => {
-      setSaved(false);
-    }, 1600);
+    window.setTimeout(() => setSaved(false), 1600);
+  }
+
+  if (pendingConfirm) {
+    return (
+      <div className="admin-confirm-inline">
+        <p>{CONFIRM_MESSAGES[action]}</p>
+        <div className="admin-confirm-inline-actions">
+          <button
+            type="button"
+            className="admin-confirm-inline-btn admin-confirm-inline-btn--confirm"
+            onClick={handleConfirm}
+          >
+            Confirmar
+          </button>
+          <button
+            type="button"
+            className="admin-confirm-inline-btn admin-confirm-inline-btn--cancel"
+            onClick={handleCancel}
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

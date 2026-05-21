@@ -1,3 +1,4 @@
+import "../../styles/search.css";
 import { useEffect, useMemo, useState } from "react";
 
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
@@ -650,6 +651,28 @@ const EMPTY_ADVANCED_FILTERS = {
   dealerRank: "",
 };
 
+const SEARCH_STORAGE_KEY = "ox-nexmov-search";
+
+function readSearchStorage() {
+  try {
+    const stored = window.sessionStorage.getItem(SEARCH_STORAGE_KEY);
+    if (!stored) return null;
+    return JSON.parse(stored);
+  } catch {
+    return null;
+  }
+}
+
+function getInitialSearchText() {
+  return readSearchStorage()?.searchText || "";
+}
+
+function getInitialFilters() {
+  const stored = readSearchStorage()?.filters;
+  if (!stored || typeof stored !== "object") return EMPTY_ADVANCED_FILTERS;
+  return { ...EMPTY_ADVANCED_FILTERS, ...stored };
+}
+
 const SEARCH_QUICK_ACTIONS = [
   "SUV financiada",
   "Primer auto",
@@ -747,9 +770,9 @@ export default function Search({
   const [vehicles, setVehicles] = useState([]);
   const [loadingVehicles, setLoadingVehicles] = useState(true);
   const [vehiclesError, setVehiclesError] = useState("");
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(getInitialSearchText);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [filters, setFilters] = useState(EMPTY_ADVANCED_FILTERS);
+  const [filters, setFilters] = useState(getInitialFilters);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   function updateFilter(name, value) {
@@ -790,6 +813,17 @@ export default function Search({
   useEffect(() => {
     loadVehicles();
   }, []);
+
+  useEffect(() => {
+    try {
+      window.sessionStorage.setItem(
+        SEARCH_STORAGE_KEY,
+        JSON.stringify({ searchText, filters })
+      );
+    } catch {
+      // sessionStorage unavailable
+    }
+  }, [searchText, filters]);
 
   useEffect(() => {
     const nextQuery = String(initialSearchQuery || "").trim();
@@ -1071,12 +1105,6 @@ export default function Search({
           </div>
 
           {vehiclesError && <div className="auth-warning">{vehiclesError}</div>}
-
-          {loadingVehicles && (
-            <div className="auth-message">
-              Cargando vehículos desde Supabase...
-            </div>
-          )}
         </section>
 
         <section className="ox-search-workspace">
@@ -1394,15 +1422,28 @@ export default function Search({
             </div>
 
             <div className="vehicle-grid ox-search-vehicle-grid">
-              {filteredVehicles.map((vehicle) => (
-                <VehicleCardPublic
-                  key={vehicle.id}
-                  vehicle={vehicle}
-                  dealer={getDealer(vehicle)}
-                  appActions={appActions}
-                  onNavigate={onNavigate}
-                />
-              ))}
+              {loadingVehicles
+                ? Array.from({ length: 6 }, (_, n) => (
+                    <div key={n} className="vehicle-card-skeleton">
+                      <div className="vehicle-card-skeleton__image ox-shimmer" />
+                      <div className="vehicle-card-skeleton__body">
+                        <div className="vehicle-card-skeleton__line ox-shimmer" />
+                        <div className="vehicle-card-skeleton__line vehicle-card-skeleton__line--short ox-shimmer" />
+                        <div className="vehicle-card-skeleton__price ox-shimmer" />
+                      </div>
+                    </div>
+                  ))
+                : filteredVehicles.map((vehicle) => (
+                    <VehicleCardPublic
+                      key={vehicle.id}
+                      vehicle={vehicle}
+                      dealer={getDealer(vehicle)}
+                      appActions={appActions}
+                      onNavigate={onNavigate}
+                      vehicles={filteredVehicles}
+                      getDealer={getDealer}
+                    />
+                  ))}
             </div>
 
             {filteredVehicles.length === 0 && (

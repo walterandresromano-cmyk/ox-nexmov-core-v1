@@ -4,86 +4,9 @@ import { createPortal } from "react-dom";
 import "../../styles/vehicle-detail-modal.css";
 import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
+import { getVehicleImages, isVehicleReserved } from "../../lib/vehicle.js";
+import ContactGate from "../../modules/public/ContactGate.jsx";
 
-function getVehicleImages(vehicle) {
-  const images = [];
-  const seen = new Set();
-
-  function addImage(image, name) {
-    const url =
-      typeof image === "string"
-        ? image
-        : image?.url ||
-          image?.publicUrl ||
-          image?.src ||
-          image?.imageUrl ||
-          image?.image_url ||
-          image?.thumbnail ||
-          image?.thumbnailUrl ||
-          "";
-
-    const cleanUrl = String(url || "").trim();
-
-    if (!cleanUrl || seen.has(cleanUrl)) return;
-
-    seen.add(cleanUrl);
-    images.push({
-      url: cleanUrl,
-      name: image?.name || image?.alt || name || `Imagen ${images.length + 1}`,
-    });
-  }
-
-  function addImages(value, namePrefix = "Imagen") {
-    if (!value) return;
-
-    if (Array.isArray(value)) {
-      value.forEach((image, index) => {
-        addImage(image, `${namePrefix} ${index + 1}`);
-      });
-      return;
-    }
-
-    addImage(value, namePrefix);
-  }
-
-  addImage(vehicle?.mainImageUrl, "Portada");
-  addImage(vehicle?.main_image_url, "Portada");
-  addImage(vehicle?.coverImage, "Portada");
-  addImage(vehicle?.cover_image, "Portada");
-  addImage(vehicle?.imageUrl, "Imagen principal");
-  addImage(vehicle?.image_url, "Imagen principal");
-  addImage(vehicle?.image, "Imagen principal");
-  addImage(vehicle?.thumbnail, "Miniatura");
-
-  addImages(vehicle?.images, "Imagen");
-  addImages(vehicle?.images_json, "Imagen");
-  addImages(vehicle?.imageUrls, "Imagen");
-  addImages(vehicle?.image_urls, "Imagen");
-  addImages(vehicle?.photos, "Foto");
-
-  addImage(vehicle?.raw?.main_image_url, "Portada");
-  addImage(vehicle?.raw?.cover_image, "Portada");
-  addImage(vehicle?.raw?.image_url, "Imagen principal");
-  addImage(vehicle?.raw?.image, "Imagen principal");
-  addImage(vehicle?.raw?.thumbnail, "Miniatura");
-  addImages(vehicle?.raw?.images_json, "Imagen");
-  addImages(vehicle?.raw?.images, "Imagen");
-  addImages(vehicle?.raw?.image_urls, "Imagen");
-  addImages(vehicle?.raw?.photos, "Foto");
-
-  return images.slice(0, 12);
-}
-
-function isVehicleReserved(vehicle) {
-  return (
-    vehicle?.reserved === true ||
-    vehicle?.status === "reserved" ||
-    vehicle?.publicationStatus === "reserved" ||
-    vehicle?.raw?.reserved === true ||
-    vehicle?.raw?.publication_status === "reserved" ||
-    vehicle?.raw?.status === "reserved"
-  );
-}
 
 const MAINTENANCE_SOURCE_KEYS = [
   "maintenance",
@@ -190,11 +113,29 @@ export default function VehicleDetailModal({
   onCompare,
   onFavorite,
   favoriteActive,
+  vehicles,
+  getDealer,
+  appActions,
+  onNavigate,
 }) {
-  const permissions = getEffectiveDealerPermissions(dealer);
+  const [currentVehicle, setCurrentVehicle] = useState(vehicle);
+  const [showContactGate, setShowContactGate] = useState(false);
+
+  const currentDealer = useMemo(() => {
+    if (vehicles && getDealer) return getDealer(currentVehicle) || dealer;
+    return dealer;
+  }, [currentVehicle, vehicles, getDealer, dealer]);
+
+  const currentIndex = vehicles
+    ? vehicles.findIndex((v) => v.id === currentVehicle.id)
+    : -1;
+  const hasPrev = currentIndex > 0;
+  const hasNext = currentIndex >= 0 && currentIndex < (vehicles?.length ?? 0) - 1;
+
+  const permissions = getEffectiveDealerPermissions(currentDealer);
   const isPlatinumDealer = permissions.rankTheme === "platinum";
-  const delta = getMarketDelta(vehicle);
-  const images = useMemo(() => getVehicleImages(vehicle), [vehicle]);
+  const delta = getMarketDelta(currentVehicle);
+  const images = useMemo(() => getVehicleImages(currentVehicle), [currentVehicle]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomScale, setZoomScale] = useState(1);
@@ -204,11 +145,22 @@ export default function VehicleDetailModal({
   const dragOriginRef = useRef({ x: 0, y: 0, position: { x: 0, y: 0 } });
   const imageWasDraggedRef = useRef(false);
   const selectedImage = images[selectedImageIndex];
-  const reserved = isVehicleReserved(vehicle);
+  const reserved = isVehicleReserved(currentVehicle);
+  const currentFavoriteActive = appActions
+    ? appActions.isFavorite?.(currentVehicle.id)
+    : favoriteActive;
   const maintenanceInfo = useMemo(
-    () => getVehicleMaintenanceInfo(vehicle),
-    [vehicle]
+    () => getVehicleMaintenanceInfo(currentVehicle),
+    [currentVehicle]
   );
+
+  function goTo(index) {
+    if (!vehicles || index < 0 || index >= vehicles.length) return;
+    setCurrentVehicle(vehicles[index]);
+    setSelectedImageIndex(0);
+    resetImageZoom();
+    setShowContactGate(false);
+  }
 
   function clampZoomPosition(position, scale = zoomScale) {
     const frame = mainImageRef.current;
@@ -242,7 +194,17 @@ export default function VehicleDetailModal({
   useEffect(() => {
     setSelectedImageIndex(0);
     resetImageZoom();
-  }, [vehicle?.id, vehicle?.vehicle_id, images[0]?.url]);
+  }, [currentVehicle?.id, currentVehicle?.vehicle_id, images[0]?.url]);
+
+  useEffect(() => {
+    function handleKey(event) {
+      if (event.key === "ArrowLeft") goTo(currentIndex - 1);
+      if (event.key === "ArrowRight") goTo(currentIndex + 1);
+      if (event.key === "Escape") handleClose();
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [currentIndex, hasPrev, hasNext]);
 
   function toggleImageZoom() {
     if (!selectedImage?.url) return;
@@ -328,6 +290,32 @@ export default function VehicleDetailModal({
           ×
         </button>
 
+        {vehicles && vehicles.length > 1 && (
+          <div className="vehicle-detail-nav">
+            <button
+              type="button"
+              className="vehicle-detail-nav-btn"
+              disabled={!hasPrev}
+              onClick={() => goTo(currentIndex - 1)}
+              aria-label="Vehículo anterior"
+            >
+              ←
+            </button>
+            <span className="vehicle-detail-nav-counter">
+              {currentIndex + 1} / {vehicles.length}
+            </span>
+            <button
+              type="button"
+              className="vehicle-detail-nav-btn"
+              disabled={!hasNext}
+              onClick={() => goTo(currentIndex + 1)}
+              aria-label="Siguiente vehículo"
+            >
+              →
+            </button>
+          </div>
+        )}
+
         <div className="vehicle-detail-layout">
           <div className="vehicle-detail-gallery">
             <div className="detail-gallery-frame">
@@ -346,7 +334,7 @@ export default function VehicleDetailModal({
                 {selectedImage?.url ? (
                   <img
                     src={selectedImage.url}
-                    alt={`${vehicle.brand} ${vehicle.model}`}
+                    alt={`${currentVehicle.brand} ${currentVehicle.model}`}
                     loading="lazy"
                     draggable="false"
                     style={{
@@ -355,7 +343,7 @@ export default function VehicleDetailModal({
                   />
                 ) : (
                   <span>
-                    {vehicle.brand} {vehicle.model}
+                    {currentVehicle.brand} {currentVehicle.model}
                   </span>
                 )}
 
@@ -429,33 +417,33 @@ export default function VehicleDetailModal({
             <div className="vehicle-detail-quick-specs">
               <div>
                 <span>Año</span>
-                <strong>{vehicle.year}</strong>
+                <strong>{currentVehicle.year}</strong>
               </div>
               <div>
                 <span>Kilómetros</span>
-                <strong>{formatKm(vehicle.kilometers)}</strong>
+                <strong>{formatKm(currentVehicle.kilometers)}</strong>
               </div>
-              {vehicle.fuelType && (
+              {currentVehicle.fuelType && (
                 <div>
                   <span>Combustible</span>
-                  <strong>{vehicle.fuelType}</strong>
+                  <strong>{currentVehicle.fuelType}</strong>
                 </div>
               )}
-              {vehicle.transmission && (
+              {currentVehicle.transmission && (
                 <div>
                   <span>Transmisión</span>
-                  <strong>{vehicle.transmission}</strong>
+                  <strong>{currentVehicle.transmission}</strong>
                 </div>
               )}
-              {vehicle.bodyType && (
+              {currentVehicle.bodyType && (
                 <div>
                   <span>Carrocería</span>
-                  <strong>{vehicle.bodyType}</strong>
+                  <strong>{currentVehicle.bodyType}</strong>
                 </div>
               )}
               <div>
                 <span>Ubicación</span>
-                <strong>{vehicle.city}, {vehicle.province}</strong>
+                <strong>{currentVehicle.city}, {currentVehicle.province}</strong>
               </div>
             </div>
 
@@ -489,11 +477,11 @@ export default function VehicleDetailModal({
             <div className="vehicle-detail-title-card">
               <p className="eyebrow">Detalle del vehículo</p>
               <h2>
-                {vehicle.brand} {vehicle.model}
+                {currentVehicle.brand} {currentVehicle.model}
               </h2>
               <p>
-                {vehicle.version} · {vehicle.year} ·{" "}
-                {formatKm(vehicle.kilometers)}
+                {currentVehicle.version} · {currentVehicle.year} ·{" "}
+                {formatKm(currentVehicle.kilometers)}
               </p>
             </div>
 
@@ -514,12 +502,12 @@ export default function VehicleDetailModal({
               </div>
             )}
 
-            <strong className="detail-price">{formatARS(vehicle.price)}</strong>
+            <strong className="detail-price">{formatARS(currentVehicle.price)}</strong>
 
             {delta && (
               <div className="detail-market-box">
                 <span>Referencia de mercado</span>
-                <strong>{formatARS(vehicle.marketReferencePrice)}</strong>
+                <strong>{formatARS(currentVehicle.marketReferencePrice)}</strong>
                 <p>
                   {delta.isBelowMarket
                     ? `${delta.percent.toFixed(1)}% debajo de la referencia cargada`
@@ -532,7 +520,14 @@ export default function VehicleDetailModal({
               <button
                 type="button"
                 className="primary-action"
-                onClick={onContact}
+                onClick={() => {
+                  if (reserved) return;
+                  if (appActions) {
+                    setShowContactGate(true);
+                  } else {
+                    onContact?.();
+                  }
+                }}
                 disabled={reserved}
                 title={
                   reserved
@@ -543,52 +538,61 @@ export default function VehicleDetailModal({
                 {reserved ? "Unidad reservada" : "Contactar dealer"}
               </button>
 
-              <button type="button" onClick={onCompare}>
+              <button
+                type="button"
+                onClick={() => {
+                  if (appActions) appActions.addToCompare?.(currentVehicle);
+                  else onCompare?.();
+                }}
+              >
                 Agregar a comparar
               </button>
 
               <button
                 type="button"
-                className={favoriteActive ? "favorite-active" : ""}
-                onClick={onFavorite}
+                className={currentFavoriteActive ? "favorite-active" : ""}
+                onClick={() => {
+                  if (appActions) appActions.toggleFavorite?.(currentVehicle);
+                  else onFavorite?.();
+                }}
               >
-                {favoriteActive ? "Guardado" : "Guardar favorito"}
+                {currentFavoriteActive ? "Guardado" : "Guardar favorito"}
               </button>
             </div>
 
             <div className="detail-dealer-box">
               <span>Dealer</span>
-              <strong>{dealer.commercialName}</strong>
+              <strong>{currentDealer.commercialName}</strong>
               <p>
-                {dealer.city}, {dealer.province}
+                {currentDealer.city}, {currentDealer.province}
               </p>
             </div>
 
-            {vehicle.hasFinancing && (vehicle.delivery > 0 || vehicle.months > 0 || vehicle.rate > 0) && (
+            {currentVehicle.hasFinancing && (currentVehicle.delivery > 0 || currentVehicle.months > 0 || currentVehicle.rate > 0) && (
               <div className="vehicle-detail-financing-details">
                 <p className="vehicle-detail-financing-label">Condiciones de financiación</p>
-                {vehicle.delivery > 0 && (
+                {currentVehicle.delivery > 0 && (
                   <div>
                     <span>Entrega</span>
-                    <strong>{formatARS(vehicle.delivery)}</strong>
+                    <strong>{formatARS(currentVehicle.delivery)}</strong>
                   </div>
                 )}
-                {vehicle.months > 0 && (
+                {currentVehicle.months > 0 && (
                   <div>
                     <span>Cuotas</span>
-                    <strong>{vehicle.months} meses</strong>
+                    <strong>{currentVehicle.months} meses</strong>
                   </div>
                 )}
-                {vehicle.rate > 0 && (
+                {currentVehicle.rate > 0 && (
                   <div>
                     <span>Tasa</span>
-                    <strong>{vehicle.rate}%</strong>
+                    <strong>{currentVehicle.rate}%</strong>
                   </div>
                 )}
               </div>
             )}
 
-            {vehicle.hasFinancing && (
+            {currentVehicle.hasFinancing && (
               <p className="finance-legal-note">
                 Los valores de financiación son informativos y pueden variar
                 según aprobación crediticia, entidad financiera, condiciones del
@@ -624,7 +628,7 @@ export default function VehicleDetailModal({
             <div className="detail-notes-box">
               <span>Detalles del dealer</span>
               <p>
-                {vehicle.details ||
+                {currentVehicle.details ||
                   "La unidad se encuentra disponible para consultar. Las condiciones comerciales y de financiación deben confirmarse con el dealer."}
               </p>
             </div>
@@ -657,5 +661,26 @@ export default function VehicleDetailModal({
     </div>
   );
 
-  return createPortal(modal, document.body);
+  return (
+    <>
+      {createPortal(modal, document.body)}
+      {showContactGate && appActions && !reserved && createPortal(
+        <ContactGate
+          vehicle={currentVehicle}
+          dealer={currentDealer}
+          authUser={appActions.authUser}
+          authProfile={appActions.authProfile}
+          onClose={() => setShowContactGate(false)}
+          onRequireLogin={() => {
+            setShowContactGate(false);
+            handleClose();
+            onNavigate?.("login");
+          }}
+          onNavigate={onNavigate}
+          onLeadCreated={() => setShowContactGate(false)}
+        />,
+        document.body
+      )}
+    </>
+  );
 }

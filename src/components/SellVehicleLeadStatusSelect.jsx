@@ -6,7 +6,6 @@ const STATUS_OPTIONS = [
   { value: "seen", label: "Vista" },
   { value: "assigned", label: "Asignada" },
   { value: "contacted", label: "Contactado" },
-  { value: "negociación", label: "Negociación" },
   { value: "negotiation", label: "Negociación" },
   { value: "closed", label: "Cerrada" },
   { value: "lost", label: "Perdida" },
@@ -56,13 +55,11 @@ export default function SellVehicleLeadStatusSelect({ lead, onUpdated }) {
   return (
     <div className="lead-status-control">
       <select value={value} onChange={handleChange} disabled={loading}>
-        {STATUS_OPTIONS.filter((item) => item.value !== "negociación").map(
-          (option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          )
-        )}
+        {STATUS_OPTIONS.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
       </select>
 
       {loading && <span>Guardando...</span>}

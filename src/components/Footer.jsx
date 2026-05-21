@@ -9,7 +9,7 @@ export default function Footer({ onNavigate }) {
             onClick={() => onNavigate("home")}
             aria-label="Ir al inicio de oX NEXMOV"
           >
-            <img className="footer-logo-img" src="/logo.svg" alt="oX NEXMOV" />
+            <img className="footer-logo-img" src="/logo.svg" alt="oX NEXMOV" width="180" height="34" />
           </button>
 
           <p>

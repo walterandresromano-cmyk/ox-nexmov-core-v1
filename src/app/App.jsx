@@ -1,23 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 
 import Layout from "../components/Layout.jsx";
+import NotFound from "../modules/public/NotFound.jsx";
 import Home from "../modules/public/Home.jsx";
-import Search from "../modules/public/Search.jsx";
-import ZeroKm from "../modules/public/ZeroKm.jsx";
-import SellVehicle from "../modules/public/SellVehicle.jsx";
-import JoinNetwork from "../modules/public/JoinNetwork.jsx";
-import About from "../modules/public/About.jsx";
-import FAQ from "../modules/public/FAQ.jsx";
-import LegalPage from "../modules/public/LegalPage.jsx";
-import AuthPanel from "../modules/auth/AuthPanel.jsx";
-import BuyerPanel from "../modules/buyer/BuyerPanel.jsx";
-import DealerPanel from "../modules/dealer/DealerPanel.jsx";
-import AdminPanel from "../modules/admin/AdminPanel.jsx";
-import Internal0kmPanel from "../modules/internal0km/Internal0kmPanel.jsx";
-import SupportPanel from "../modules/support/SupportPanel.jsx";
+const Search           = lazy(() => import("../modules/public/Search.jsx"));
+const ZeroKm           = lazy(() => import("../modules/public/ZeroKm.jsx"));
+const SellVehicle      = lazy(() => import("../modules/public/SellVehicle.jsx"));
+const JoinNetwork      = lazy(() => import("../modules/public/JoinNetwork.jsx"));
+const About            = lazy(() => import("../modules/public/About.jsx"));
+const FAQ              = lazy(() => import("../modules/public/FAQ.jsx"));
+const LegalPage        = lazy(() => import("../modules/public/LegalPage.jsx"));
+const AuthPanel        = lazy(() => import("../modules/auth/AuthPanel.jsx"));
+const BuyerPanel       = lazy(() => import("../modules/buyer/BuyerPanel.jsx"));
+const DealerPanel      = lazy(() => import("../modules/dealer/DealerPanel.jsx"));
+const AdminPanel       = lazy(() => import("../modules/admin/AdminPanel.jsx"));
+const Internal0kmPanel = lazy(() => import("../modules/internal0km/Internal0kmPanel.jsx"));
+const SupportPanel     = lazy(() => import("../modules/support/SupportPanel.jsx"));
 
 import { getCurrentSession } from "../services/auth.service.js";
 import { getProfileByUserId } from "../services/profiles.service.js";
+import { normalizeRole } from "../lib/auth.js";
 
 const ROUTES = {
   home: Home,
@@ -58,8 +60,52 @@ const PUBLIC_ROUTES = new Set([
   "login",
 ]);
 
+const ROUTE_TITLES = {
+  home: "oX NEXMOV — Marketplace de vehículos verificados",
+  search: "Buscar vehículos — oX NEXMOV",
+  zeroKm: "Financiación 0km — oX NEXMOV",
+  sellVehicle: "Vender mi vehículo — oX NEXMOV",
+  joinNetwork: "Sumate a la red de dealers — oX NEXMOV",
+  about: "Quiénes somos — oX NEXMOV",
+  faq: "Preguntas frecuentes — oX NEXMOV",
+  terms: "Términos y condiciones — oX NEXMOV",
+  privacy: "Política de privacidad — oX NEXMOV",
+  cookies: "Política de cookies — oX NEXMOV",
+  consumerDefense: "Defensa del consumidor — oX NEXMOV",
+  regret: "Botón de arrepentimiento — oX NEXMOV",
+  serviceCancel: "Cancelación del servicio — oX NEXMOV",
+  login: "Ingresar — oX NEXMOV",
+  buyer: "Mi panel — oX NEXMOV",
+  dealer: "Panel dealer — oX NEXMOV",
+  admin: "Panel admin — oX NEXMOV",
+  internal0km: "Panel 0km — oX NEXMOV",
+  support: "Panel soporte — oX NEXMOV",
+};
+
+const ROUTE_DESCRIPTIONS = {
+  home: "Encontrá tu próximo vehículo en oX NEXMOV. Publicaciones de dealers verificados con datos reales, comparador y consultas trazables.",
+  search: "Buscá vehículos por marca, modelo, precio, kilómetros, financiación y ubicación. Dealers verificados en Argentina.",
+  zeroKm: "Financiación 0km con entrega inmediata. Explorá opciones de cuotas y condiciones antes de contactar al dealer.",
+  sellVehicle: "Vendé tu vehículo a través de la red de dealers verificados de oX NEXMOV. Proceso claro y trazable.",
+  joinNetwork: "Sumá tu agencia a oX NEXMOV. Publicaciones premium, leads trazables y herramientas comerciales para dealers verificados.",
+  about: "Conocé quiénes somos y por qué construimos oX NEXMOV como un marketplace de vehículos verificados en Argentina.",
+  faq: "Preguntas frecuentes sobre oX NEXMOV: cómo funciona, cómo publicar, cómo contactar dealers y cómo comparar vehículos.",
+};
+
 const THEME_STORAGE_KEY = "ox-nexmov-theme";
 const THEME_OPTIONS = new Set(["dark", "light"]);
+const COMPARE_STORAGE_KEY = "ox-nexmov-compare";
+
+function getInitialCompareItems() {
+  try {
+    const stored = window.sessionStorage.getItem(COMPARE_STORAGE_KEY);
+    if (!stored) return [];
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
 
 function getInitialTheme() {
   if (typeof window === "undefined") return "dark";
@@ -75,15 +121,6 @@ function getInitialTheme() {
   return "dark";
 }
 
-function normalizeRole(role) {
-  const value = String(role || "buyer").trim().toLowerCase();
-
-  if (value === "comprador") return "buyer";
-  if (value === "soporte") return "support";
-  if (value === "internal_0km") return "internal0km";
-
-  return value;
-}
 
 function getHomeRouteForRole(role) {
   const normalizedRole = normalizeRole(role);
@@ -116,7 +153,7 @@ function canAccessRoute(route, role, authUser) {
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState("home");
-  const [compareItems, setCompareItems] = useState([]);
+  const [compareItems, setCompareItems] = useState(getInitialCompareItems);
   const [favoriteItems, setFavoriteItems] = useState([]);
   const [authUser, setAuthUser] = useState(null);
   const [authProfile, setAuthProfile] = useState(null);
@@ -243,6 +280,14 @@ export default function App() {
   }, [appNotice]);
 
   useEffect(() => {
+    try {
+      window.sessionStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(compareItems));
+    } catch {
+      // sessionStorage unavailable
+    }
+  }, [compareItems]);
+
+  useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
     window.localStorage.setItem(THEME_STORAGE_KEY, theme);
@@ -340,7 +385,20 @@ export default function App() {
     return getHomeRouteForRole(authProfile?.role);
   }, [currentRoute, authProfile, authUser]);
 
-  const CurrentPage = ROUTES[safeCurrentRoute] || Home;
+  useEffect(() => {
+    document.title = ROUTE_TITLES[safeCurrentRoute] || "oX NEXMOV";
+
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement("meta");
+      metaDescription.setAttribute("name", "description");
+      document.head.appendChild(metaDescription);
+    }
+    const description = ROUTE_DESCRIPTIONS[safeCurrentRoute] || "";
+    metaDescription.setAttribute("content", description);
+  }, [safeCurrentRoute]);
+
+  const CurrentPage = ROUTES[safeCurrentRoute] || NotFound;
 
   const appActions = {
     compareItems,
@@ -381,17 +439,19 @@ export default function App() {
       onNavigate={navigate}
       appActions={appActions}
     >
-      <CurrentPage
-        onNavigate={navigate}
-        appActions={appActions}
-        authUser={authUser}
-        authProfile={authProfile}
-        authLoading={authLoading}
-        authError={authError}
-        onAuthChange={handleAuthChange}
-        initialSearchQuery={safeCurrentRoute === "search" ? searchQueryFromHome : ""}
-        currentRoute={safeCurrentRoute}
-      />
+      <Suspense fallback={<div className="route-loading" />}>
+        <CurrentPage
+          onNavigate={navigate}
+          appActions={appActions}
+          authUser={authUser}
+          authProfile={authProfile}
+          authLoading={authLoading}
+          authError={authError}
+          onAuthChange={handleAuthChange}
+          initialSearchQuery={safeCurrentRoute === "search" ? searchQueryFromHome : ""}
+          currentRoute={safeCurrentRoute}
+        />
+      </Suspense>
     </Layout>
   );
 }

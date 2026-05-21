@@ -1,4 +1,5 @@
-﻿import { DEALER_PLANS } from "../../config/plans.js";
+﻿import "../../styles/joinNetwork.css";
+import { DEALER_PLANS } from "../../config/plans.js";
 
 import { useEffect, useMemo, useState } from "react";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
@@ -314,7 +315,7 @@ export default function JoinNetwork({ onNavigate }) {
 
           {isLoadingNetworkDealers ? (
             <div
-              className="join-network-dealer-grid join-network-dealer-grid-loading"
+              className="join-network-dealer-grid"
               aria-label="Cargando dealers de la red"
             >
               {[0, 1, 2, 3].map((item) => (
@@ -322,11 +323,10 @@ export default function JoinNetwork({ onNavigate }) {
                   key={item}
                   className="join-network-dealer-card join-network-dealer-card-loading"
                 >
-                  <div className="join-network-dealer-logo" />
-                  <span className="join-network-dealer-badge">Verificando</span>
-                  <strong>Agencia oX</strong>
-                  <p>Red oX NEXMOV</p>
-                  <small>Dealer verificado dentro de la red oX.</small>
+                  <div className="join-network-dealer-logo ox-shimmer" />
+                  <div className="join-network-dealer-skeleton-bar join-network-dealer-skeleton-bar--short ox-shimmer" />
+                  <div className="join-network-dealer-skeleton-bar join-network-dealer-skeleton-bar--wide ox-shimmer" />
+                  <div className="join-network-dealer-skeleton-bar ox-shimmer" />
                 </article>
               ))}
             </div>

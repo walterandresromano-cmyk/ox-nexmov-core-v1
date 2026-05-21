@@ -56,8 +56,10 @@
 }
 
 .join-network-hero-copy h1 span {
-  color: #38bdf8;
-  text-shadow: none;
+  color: transparent;
+  background: linear-gradient(115deg, #38bdf8 0%, #818cf8 55%, #c084fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .join-network-hero-copy > p {
@@ -80,13 +82,21 @@
   min-height: 38px;
   border: 1px solid rgba(125, 211, 252, 0.4);
   border-radius: 999px;
-  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  background: var(--ox-surface-primary);
   color: white;
   padding: 0 17px;
   font-size: 0.7rem;
   font-weight: 950;
   cursor: pointer;
   box-shadow: none;
+  transition: transform 0.22s var(--ox-ease), box-shadow 0.22s var(--ox-ease), border-color 0.22s ease;
+}
+
+.join-network-actions button:hover,
+.join-network-final button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(125, 211, 252, 0.68);
+  box-shadow: var(--ox-shadow-glow-primary);
 }
 
 .join-network-actions .secondary-btn {

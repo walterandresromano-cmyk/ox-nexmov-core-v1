@@ -33,7 +33,7 @@ function formatKm(value) {
   return `${Number(value || 0).toLocaleString("es-AR")} km`;
 }
 
-export default function AdminVehiclesSection() {
+export default function AdminVehiclesSection({ onLogAction }) {
   const [vehicles, setVehicles] = useState([]);
   const [loadingVehicles, setLoadingVehicles] = useState(true);
   const [vehiclesError, setVehiclesError] = useState("");
@@ -284,6 +284,7 @@ export default function AdminVehiclesSection() {
                     <AdminVehicleActions
                       vehicle={vehicle}
                       onUpdated={loadVehicles}
+                      onAction={onLogAction}
                     />
                   </td>
 

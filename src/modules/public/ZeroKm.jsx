@@ -1,3 +1,4 @@
+import "../../styles/zeroKm.css";
 import { useState } from "react";
 import { createZeroKmFinancingLead } from "../../services/zeroKm.service.js";
 

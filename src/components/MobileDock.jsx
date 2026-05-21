@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { signOut } from "../services/auth.service.js";
+import { normalizeRole } from "../lib/auth.js";
 
 const PUBLIC_DOCK_ITEMS = [
   { id: "home", label: "Inicio" },
@@ -15,15 +16,6 @@ const MORE_DOCK_ITEMS = [
   { id: "faq", label: "Preguntas frecuentes" },
 ];
 
-function normalizeRole(role) {
-  const value = String(role || "").trim().toLowerCase();
-
-  if (value === "comprador") return "buyer";
-  if (value === "soporte") return "support";
-  if (value === "internal_0km") return "internal0km";
-
-  return value;
-}
 
 function getPrivatePanelForRole(role) {
   const normalizedRole = normalizeRole(role);

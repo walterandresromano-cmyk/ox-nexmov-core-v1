@@ -258,10 +258,10 @@
 .sell-vehicle-form input:focus,
 .sell-vehicle-form select:focus,
 .sell-vehicle-form textarea:focus {
-  border-color: rgba(56, 189, 248, 0.42);
+  border-color: rgba(56, 189, 248, 0.54);
   box-shadow:
-    0 0 0 3px rgba(56, 189, 248, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    0 0 0 3px rgba(56, 189, 248, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
 }
 
 .sell-vehicle-form .primary-action,

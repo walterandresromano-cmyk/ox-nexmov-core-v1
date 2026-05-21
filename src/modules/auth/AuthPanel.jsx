@@ -1,3 +1,4 @@
+import "../../styles/auth.css";
 import { useState } from "react";
 import {
   signInWithEmail,

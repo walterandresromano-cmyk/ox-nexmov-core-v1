@@ -33,6 +33,11 @@ button {
   cursor: pointer;
 }
 
+.route-loading {
+  min-height: 60vh;
+  background: transparent;
+}
+
 input,
 select,
 textarea {
