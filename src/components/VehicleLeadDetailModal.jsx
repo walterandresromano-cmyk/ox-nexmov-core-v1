@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 
 import LeadStatusSelect from "./LeadStatusSelect.jsx";
 import { updateVehicleLeadStatus } from "../services/leads.service.js";
+import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
+
+function getWhatsAppLink(phone) {
+  const normalized = normalizeWhatsAppArgentina(phone);
+  return normalized ? `https://wa.me/${normalized}` : null;
+}
 
 function formatDateTime(dateValue) {
   if (!dateValue) return "Sin fecha";
@@ -44,13 +50,17 @@ function getStatusLabel(status) {
 
 export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
   const [notes, setNotes] = useState(lead?.notes || "");
+  const [nextActionNote, setNextActionNote] = useState(lead?.next_action_note || "");
+  const [nextActionDate, setNextActionDate] = useState(lead?.next_action_date || "");
   const [savingNotes, setSavingNotes] = useState(false);
   const [notesSaved, setNotesSaved] = useState(false);
   const [notesError, setNotesError] = useState("");
 
   useEffect(() => {
     setNotes(lead?.notes || "");
-  }, [lead?.notes]);
+    setNextActionNote(lead?.next_action_note || "");
+    setNextActionDate(lead?.next_action_date || "");
+  }, [lead?.notes, lead?.next_action_note, lead?.next_action_date]);
 
   if (!lead) return null;
 
@@ -63,6 +73,8 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
       leadId: lead.lead_id,
       crmStatus: lead.crm_status || "new",
       notes,
+      nextActionNote: nextActionNote.trim() || null,
+      nextActionDate: nextActionDate || null,
     });
 
     if (error) {
@@ -110,6 +122,19 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
             </strong>
             <p>{lead.buyer_email || "Email no informado"}</p>
             <p>{lead.buyer_phone || "Teléfono no informado"}</p>
+            {lead.buyer_phone && (() => {
+              const waLink = getWhatsAppLink(lead.buyer_phone);
+              return waLink ? (
+                <a
+                  href={waLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="lead-whatsapp-btn lead-whatsapp-btn--modal"
+                >
+                  Contactar por WhatsApp
+                </a>
+              ) : null;
+            })()}
           </article>
 
           <article className="ticket-detail-card ticket-detail-main">
@@ -182,9 +207,44 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
                 setNotesSaved(false);
                 setNotesError("");
               }}
-              rows={6}
-              placeholder="Ej: Se llamó al comprador, no respondió. Volver a intentar mañana. Consultó financiación y aceptaría permuta."
+              rows={5}
+              placeholder="Ej: Se llamó al comprador, no respondió. Consultó financiación y aceptaría permuta."
             />
+          </article>
+
+          <article className="ticket-detail-card ticket-detail-main">
+            <span>Seguimiento</span>
+
+            <div className="lead-followup-form">
+              <label className="lead-followup-label">
+                Próxima acción
+                <input
+                  type="text"
+                  className="lead-followup-input"
+                  value={nextActionNote}
+                  onChange={(event) => {
+                    setNextActionNote(event.target.value);
+                    setNotesSaved(false);
+                    setNotesError("");
+                  }}
+                  placeholder="Ej: Llamar para confirmar visita, enviar cotización..."
+                />
+              </label>
+
+              <label className="lead-followup-label">
+                Fecha de seguimiento
+                <input
+                  type="date"
+                  className="lead-followup-input lead-followup-date"
+                  value={nextActionDate}
+                  onChange={(event) => {
+                    setNextActionDate(event.target.value);
+                    setNotesSaved(false);
+                    setNotesError("");
+                  }}
+                />
+              </label>
+            </div>
 
             <div className="lead-notes-actions">
               <button
@@ -192,10 +252,10 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
                 onClick={handleSaveNotes}
                 disabled={savingNotes}
               >
-                {savingNotes ? "Guardando..." : "Guardar notas"}
+                {savingNotes ? "Guardando..." : "Guardar"}
               </button>
 
-              {notesSaved && <span>Notas guardadas</span>}
+              {notesSaved && <span>Guardado</span>}
               {notesError && <small>{notesError}</small>}
             </div>
           </article>

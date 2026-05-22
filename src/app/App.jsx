@@ -10,6 +10,7 @@ const JoinNetwork      = lazy(() => import("../modules/public/JoinNetwork.jsx"))
 const About            = lazy(() => import("../modules/public/About.jsx"));
 const FAQ              = lazy(() => import("../modules/public/FAQ.jsx"));
 const LegalPage        = lazy(() => import("../modules/public/LegalPage.jsx"));
+const DealerProfile    = lazy(() => import("../modules/public/DealerProfile.jsx"));
 const AuthPanel        = lazy(() => import("../modules/auth/AuthPanel.jsx"));
 const BuyerPanel       = lazy(() => import("../modules/buyer/BuyerPanel.jsx"));
 const DealerPanel      = lazy(() => import("../modules/dealer/DealerPanel.jsx"));
@@ -46,6 +47,7 @@ const ROUTES = {
   admin: AdminPanel,
   internal0km: Internal0kmPanel,
   support: SupportPanel,
+  dealerProfile: DealerProfile,
 };
 
 const PUBLIC_ROUTES = new Set([
@@ -63,6 +65,7 @@ const PUBLIC_ROUTES = new Set([
   "regret",
   "serviceCancel",
   "login",
+  "dealerProfile",
 ]);
 
 const ROUTE_TITLES = {
@@ -85,6 +88,7 @@ const ROUTE_TITLES = {
   admin: "Panel admin — oX NEXMOV",
   internal0km: "Panel 0km — oX NEXMOV",
   support: "Panel soporte — oX NEXMOV",
+  dealerProfile: "Dealer — oX NEXMOV",
 };
 
 const ROUTE_DESCRIPTIONS = {
@@ -158,6 +162,7 @@ function canAccessRoute(route, role, authUser) {
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState("home");
+  const [routeParams, setRouteParams] = useState({});
   const [compareItems, setCompareItems] = useState(getInitialCompareItems);
   const [favoriteItems, setFavoriteItems] = useState([]);
   const [authUser, setAuthUser] = useState(null);
@@ -210,6 +215,7 @@ export default function App() {
       return;
     }
 
+    setRouteParams(payload || {});
     setCurrentRoute(safeNextRoute);
   }
 
@@ -475,6 +481,7 @@ export default function App() {
           onAuthChange={handleAuthChange}
           initialSearchQuery={safeCurrentRoute === "search" ? searchQueryFromHome : ""}
           currentRoute={safeCurrentRoute}
+          routeParams={routeParams}
         />
       </Suspense>
     </Layout>

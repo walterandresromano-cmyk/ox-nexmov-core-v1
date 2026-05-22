@@ -1080,6 +1080,26 @@ export default function AdminPanel({ authProfile }) {
 
     return (
       <>
+        {reviewVehicles > 0 && (
+          <div className="admin-review-banner">
+            <div className="admin-review-banner-content">
+              <strong>{reviewVehicles}</strong>
+              <span>
+                publicación{reviewVehicles !== 1 ? "es" : ""} pendiente
+                {reviewVehicles !== 1 ? "s" : ""} de revisión antes de quedar
+                visible{reviewVehicles !== 1 ? "s" : ""} en la red.
+              </span>
+            </div>
+            <button
+              type="button"
+              className="admin-review-banner-btn"
+              onClick={() => openModule(ADMIN_MODULES.VEHICLES)}
+            >
+              Ir a publicaciones
+            </button>
+          </div>
+        )}
+
         <section className="admin-ops-dashboard">
           <div className="admin-ops-hero">
             <div>

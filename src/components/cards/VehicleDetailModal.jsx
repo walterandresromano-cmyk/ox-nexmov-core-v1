@@ -566,6 +566,22 @@ export default function VehicleDetailModal({
               <p>
                 {currentDealer.city}, {currentDealer.province}
               </p>
+              {onNavigate &&
+                currentDealer.id &&
+                currentDealer.id !== "dealer-fallback" &&
+                currentDealer.id !== "dealer-snapshot" && (
+                  <button
+                    type="button"
+                    className="dealer-profile-link-btn"
+                    onClick={() =>
+                      onNavigate("dealerProfile", {
+                        dealerId: currentDealer.id,
+                      })
+                    }
+                  >
+                    Ver más de este dealer →
+                  </button>
+                )}
             </div>
 
             {currentVehicle.hasFinancing && (currentVehicle.delivery > 0 || currentVehicle.months > 0 || currentVehicle.rate > 0) && (

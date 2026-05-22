@@ -408,10 +408,48 @@ export async function listVehicleLeadsForCurrentUser() {
   };
 }
 
+// MIGRATION – run in Supabase SQL editor before using next_action fields:
+//
+// alter table vehicle_action_leads
+//   add column if not exists next_action_note text,
+//   add column if not exists next_action_date date;
+//
+// create or replace function public.update_vehicle_lead_status(
+//   p_lead_id        bigint,
+//   p_crm_status     text,
+//   p_notes          text    default null,
+//   p_next_action_note text  default null,
+//   p_next_action_date date  default null
+// )
+// returns setof vehicle_action_leads
+// language plpgsql security definer as $$
+// begin
+//   return query
+//   update vehicle_action_leads
+//   set
+//     crm_status         = p_crm_status,
+//     notes              = coalesce(p_notes, notes),
+//     next_action_note   = coalesce(p_next_action_note, next_action_note),
+//     next_action_date   = coalesce(p_next_action_date, next_action_date),
+//     updated_at         = now()
+//   where lead_id = p_lead_id
+//     and (
+//       dealer_id in (select id from dealers where user_id = auth.uid())
+//       or exists (select 1 from profiles where id = auth.uid() and role = 'admin')
+//     )
+//   returning *;
+// end;
+// $$;
+//
+// Note: get_vehicle_leads_for_current_user must select next_action_note and
+// next_action_date (add them to the select list or use select * on the table).
+
 export async function updateVehicleLeadStatus({
   leadId,
   crmStatus,
   notes = null,
+  nextActionNote = null,
+  nextActionDate = null,
 }) {
   if (!isSupabaseConfigured || !supabase) {
     return {
@@ -426,6 +464,8 @@ export async function updateVehicleLeadStatus({
     p_lead_id: leadId,
     p_crm_status: crmStatus,
     p_notes: notes,
+    p_next_action_note: nextActionNote,
+    p_next_action_date: nextActionDate,
   });
 
   return {

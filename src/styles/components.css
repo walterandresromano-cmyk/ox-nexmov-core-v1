@@ -14364,3 +14364,466 @@ body::-webkit-scrollbar {
   justify-content: center;
   flex-wrap: wrap;
 }
+
+/* ── Dealer public profile page ─────────────────────────────── */
+
+.dealer-profile-page {
+  padding-top: 32px;
+  padding-bottom: 64px;
+  display: grid;
+  gap: 32px;
+}
+
+.dealer-profile-back-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  color: var(--ox-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: color 0.15s;
+  width: fit-content;
+}
+
+.dealer-profile-back-btn:hover {
+  color: var(--ox-text);
+}
+
+.dealer-profile-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 32px;
+  background: var(--ox-card);
+  border: 1px solid var(--ox-border);
+  border-radius: 20px;
+  flex-wrap: wrap;
+}
+
+.dealer-profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+  min-width: 0;
+}
+
+.dealer-profile-logo {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid var(--ox-border);
+  flex-shrink: 0;
+}
+
+.dealer-profile-logo-placeholder {
+  width: 88px;
+  height: 88px;
+  border-radius: 14px;
+  background: var(--ox-card-2);
+  border: 1px solid var(--ox-border);
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ox-muted);
+  flex-shrink: 0;
+}
+
+.dealer-profile-info {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dealer-profile-info h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ox-text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.dealer-profile-location {
+  font-size: 0.9rem;
+  color: var(--ox-muted);
+  margin: 0;
+}
+
+.dealer-profile-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.dealer-profile-plan-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--ox-card-2);
+  border: 1px solid var(--ox-border);
+  color: var(--ox-text);
+}
+
+.dealer-profile-stat-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: var(--ox-card-2);
+  border: 1px solid var(--ox-border);
+  color: var(--ox-muted);
+}
+
+.dealer-profile-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 22px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 10px;
+  color: #4ade80;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.dealer-profile-wa-btn:hover {
+  background: rgba(34, 197, 94, 0.22);
+}
+
+.dealer-profile-section-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ox-muted);
+  margin: 0;
+}
+
+.dealer-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.dealer-profile-grid .vehicle-card {
+  width: 100% !important;
+  max-width: 320px !important;
+  min-height: 492px !important;
+  max-height: none !important;
+  height: auto !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  justify-self: center !important;
+  align-self: start !important;
+}
+
+.dealer-profile-grid .vehicle-card::before,
+.dealer-profile-grid .vehicle-card::after {
+  display: none !important;
+}
+
+.dealer-profile-link-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ox-accent);
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.15s;
+  display: block;
+}
+
+.dealer-profile-link-btn:hover {
+  opacity: 0.75;
+}
+
+:root.light .dealer-profile-header {
+  background: var(--ox-card);
+  border-color: var(--ox-border);
+}
+
+:root.light .dealer-profile-wa-btn {
+  background: rgba(22, 163, 74, 0.08);
+  border-color: rgba(22, 163, 74, 0.25);
+  color: #16a34a;
+}
+
+:root.light .dealer-profile-wa-btn:hover {
+  background: rgba(22, 163, 74, 0.16);
+}
+
+/* ── Dealer leads: new row highlight, badges, WhatsApp ──────── */
+
+.lead-row--new {
+  background: rgba(251, 191, 36, 0.05);
+  border-left: 3px solid rgba(251, 191, 36, 0.5);
+}
+
+.lead-new-badge {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 7px;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fbbf24;
+  text-transform: uppercase;
+}
+
+.lead-buyer-phone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.lead-whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4ade80;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+.lead-whatsapp-btn:hover {
+  background: rgba(34, 197, 94, 0.22);
+}
+
+.lead-whatsapp-btn--modal {
+  margin-top: 8px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+
+:root.light .lead-row--new {
+  background: rgba(245, 158, 11, 0.05);
+  border-left-color: rgba(245, 158, 11, 0.4);
+}
+
+:root.light .lead-new-badge {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #b45309;
+}
+
+:root.light .lead-whatsapp-btn {
+  background: rgba(22, 163, 74, 0.08);
+  border-color: rgba(22, 163, 74, 0.25);
+  color: #16a34a;
+}
+
+:root.light .lead-whatsapp-btn:hover {
+  background: rgba(22, 163, 74, 0.16);
+}
+
+.lead-followup-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 5px;
+}
+
+.lead-followup-chip {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.lead-followup-note {
+  font-size: 0.78rem;
+  color: var(--ox-muted);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: default;
+}
+
+:root.light .lead-followup-note {
+  color: var(--ox-muted);
+}
+
+.lead-followup-chip--upcoming {
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  color: #a5b4fc;
+}
+
+.lead-followup-chip--today {
+  background: rgba(251, 191, 36, 0.14);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: #fbbf24;
+}
+
+.lead-followup-chip--overdue {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+:root.light .lead-followup-chip--upcoming {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.22);
+  color: #4f46e5;
+}
+
+:root.light .lead-followup-chip--today {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #b45309;
+}
+
+:root.light .lead-followup-chip--overdue {
+  background: rgba(220, 38, 38, 0.07);
+  border-color: rgba(220, 38, 38, 0.2);
+  color: #dc2626;
+}
+
+.lead-followup-form {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.lead-followup-label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--ox-muted);
+  font-weight: 500;
+}
+
+.lead-followup-input {
+  padding: 8px 12px;
+  background: var(--ox-card-2);
+  border: 1px solid var(--ox-border);
+  border-radius: 8px;
+  color: var(--ox-text);
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+.lead-followup-input:focus {
+  outline: none;
+  border-color: var(--ox-accent);
+}
+
+.lead-followup-date {
+  max-width: 200px;
+  color-scheme: dark;
+}
+
+:root.light .lead-followup-date {
+  color-scheme: light;
+}
+
+/* ── Admin review banner ─────────────────────────────────────── */
+
+.admin-review-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.admin-review-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-review-banner-content strong {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f87171;
+  line-height: 1;
+}
+
+.admin-review-banner-content span {
+  font-size: 0.9rem;
+  color: var(--ox-muted);
+  line-height: 1.4;
+}
+
+.admin-review-banner-btn {
+  padding: 8px 18px;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #f87171;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.admin-review-banner-btn:hover {
+  background: rgba(239, 68, 68, 0.24);
+}
+
+:root.light .admin-review-banner {
+  background: rgba(220, 38, 38, 0.07);
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+:root.light .admin-review-banner-content strong {
+  color: #dc2626;
+}
+
+:root.light .admin-review-banner-content span {
+  color: var(--ox-muted);
+}
+
+:root.light .admin-review-banner-btn {
+  background: rgba(220, 38, 38, 0.09);
+  border-color: rgba(220, 38, 38, 0.22);
+  color: #dc2626;
+}
+
+:root.light .admin-review-banner-btn:hover {
+  background: rgba(220, 38, 38, 0.18);
+}
