@@ -19,6 +19,7 @@ import {
   listDealersForCurrentUser,
   uploadCurrentDealerLogo,
   updateDealerWhatsappById,
+  updateDealerProfileById,
 } from "../../services/dealers.service.js";
 import { listVehiclesForCurrentDealer } from "../../services/dealerVehicles.service.js";
 import { listVehicleLeadsForCurrentUser } from "../../services/leads.service.js";
@@ -374,7 +375,7 @@ function formatKm(value) {
   return `${Number(value || 0).toLocaleString("es-AR")} km`;
 }
 
-export default function DealerPanel({ authProfile }) {
+export default function DealerPanel({ authProfile, onNavigate }) {
   const [activeDealerModule, setActiveDealerModule] = useState("summary");
   const [activeDealerMobileSection, setActiveDealerMobileSection] =
     useState("home");
@@ -413,6 +414,11 @@ export default function DealerPanel({ authProfile }) {
   const [dealerLogoError, setDealerLogoError] = useState("");
   const [dealerLogoSuccess, setDealerLogoSuccess] = useState("");
   const dealerLogoInputRef = useRef(null);
+
+  const [profileForm, setProfileForm] = useState({ name: "", city: "", province: "" });
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileError, setProfileError] = useState("");
+  const [profileSuccess, setProfileSuccess] = useState("");
 
   async function loadDealers() {
     setLoadingDealers(true);
@@ -651,6 +657,17 @@ export default function DealerPanel({ authProfile }) {
     setDealerLogoError("");
     setDealerLogoSuccess("");
   }, [dealer?.id, dealer?.logo, dealer?.raw?.logo_url]);
+
+  useEffect(() => {
+    if (!dealer?.id) return;
+    setProfileForm({
+      name: dealer.commercialName || dealer.name || "",
+      city: dealer.city || "",
+      province: dealer.province || "",
+    });
+    setProfileError("");
+    setProfileSuccess("");
+  }, [dealer?.id]);
 
   if (!dealer) {
     return (
@@ -1046,6 +1063,83 @@ export default function DealerPanel({ authProfile }) {
           })}
         </div>
       </section>
+    );
+  }
+
+  async function handleSaveDealerProfile(event) {
+    event?.preventDefault?.();
+    if (savingProfile) return;
+    setProfileError("");
+    setProfileSuccess("");
+    if (!profileForm.name.trim()) {
+      setProfileError("El nombre comercial no puede estar vacío.");
+      return;
+    }
+    setSavingProfile(true);
+    const { error } = await updateDealerProfileById(dealer.id, profileForm);
+    if (error) {
+      setProfileError(error.message || "No se pudo actualizar el perfil.");
+      setSavingProfile(false);
+      return;
+    }
+    setDealers((prev) =>
+      prev.map((d) =>
+        d.id === dealer.id
+          ? { ...d, commercialName: profileForm.name, name: profileForm.name, city: profileForm.city, province: profileForm.province }
+          : d
+      )
+    );
+    setProfileSuccess("Perfil actualizado correctamente.");
+    setSavingProfile(false);
+  }
+
+  function renderDealerProfileEditor() {
+    return (
+      <div className="dealer-mobile-plan-card dealer-profile-edit-card">
+        <p className="eyebrow">Perfil comercial</p>
+        <h3>Datos del dealer</h3>
+        <p>Nombre, ciudad y provincia que aparecen en tu perfil público.</p>
+        <form className="dealer-contact-form" onSubmit={handleSaveDealerProfile}>
+          <label>
+            Nombre comercial
+            <input
+              value={profileForm.name}
+              onChange={(e) => setProfileForm((f) => ({ ...f, name: e.target.value }))}
+              placeholder="Ej: Automotores Rodríguez"
+            />
+          </label>
+          <label>
+            Ciudad
+            <input
+              value={profileForm.city}
+              onChange={(e) => setProfileForm((f) => ({ ...f, city: e.target.value }))}
+              placeholder="Ej: San Miguel"
+            />
+          </label>
+          <label>
+            Provincia
+            <input
+              value={profileForm.province}
+              onChange={(e) => setProfileForm((f) => ({ ...f, province: e.target.value }))}
+              placeholder="Ej: Buenos Aires"
+            />
+          </label>
+          {profileError && <div className="auth-warning">{profileError}</div>}
+          {profileSuccess && <div className="auth-message">{profileSuccess}</div>}
+          <button type="submit" className="table-action-btn" disabled={savingProfile}>
+            {savingProfile ? "Guardando…" : "Guardar perfil"}
+          </button>
+        </form>
+        {onNavigate && dealer?.id && (
+          <button
+            type="button"
+            className="dealer-profile-preview-btn"
+            onClick={() => onNavigate("dealerProfile", { dealerId: dealer.id })}
+          >
+            Ver mi perfil público →
+          </button>
+        )}
+      </div>
     );
   }
 
@@ -1488,6 +1582,7 @@ export default function DealerPanel({ authProfile }) {
         </div>
 
         {renderPlanComparison()}
+        {renderDealerProfileEditor()}
       </div>
     );
   }
@@ -2248,6 +2343,7 @@ export default function DealerPanel({ authProfile }) {
         {showVehicleModal && (
           <CreateVehicleModal
             dealer={dealer}
+            dealerVehicles={dealerVehicles}
             onClose={() => setShowVehicleModal(false)}
             onCreated={refreshDealerPanel}
           />

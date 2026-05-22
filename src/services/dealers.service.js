@@ -450,6 +450,43 @@ export async function updateDealerWhatsappById(dealerId, normalizedWhatsapp) {
   };
 }
 
+export async function updateDealerProfileById(dealerId, { name, city, province }) {
+  if (!isSupabaseConfigured || !supabase) {
+    return { error: { message: "Supabase no está configurado." } };
+  }
+
+  const resolvedId = String(dealerId || "").trim();
+  if (!resolvedId) return { error: { message: "ID de dealer inválido." } };
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user?.id) {
+    return { error: { message: "Necesitás estar autenticado." } };
+  }
+
+  const payload = {};
+  if (name && name.trim()) payload.name = name.trim();
+  if (city !== undefined) payload.city = city.trim();
+  if (province !== undefined) payload.province = province.trim();
+  payload.updated_at = new Date().toISOString();
+
+  const { error } = await supabase
+    .from("dealers")
+    .update(payload)
+    .eq("id", resolvedId)
+    .eq("profile_id", user.id);
+
+  if (error) {
+    warnInDev("[updateDealerProfileById] update failed", error);
+    return { error: { message: "No se pudo actualizar el perfil." } };
+  }
+
+  return { error: null };
+}
+
 export async function updateDealerContactForCurrentUser({
   dealerId,
   whatsapp,

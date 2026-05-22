@@ -204,8 +204,46 @@ function buildMaintenanceInfo(form) {
   return Object.values(info).some((v) => v !== null) ? info : null;
 }
 
-export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
+const PREFILL_FIELDS = [
+  "brand", "model", "version", "bodyType", "transmission", "fuelType",
+  "province", "city", "financing", "delivery", "months", "rate",
+  "show_maintenance_info", "insurance_monthly_amount", "insurance_provider",
+  "insurance_coverage_type", "fuel_consumption", "fuel_tank_liters",
+  "fuel_full_tank_cost", "patent_cost", "estimated_service_cost",
+  "estimated_monthly_maintenance", "maintenance_notes",
+];
+
+function vehicleToForm(v) {
+  return {
+    brand: v.brand || "",
+    model: v.model || "",
+    version: v.version || "",
+    bodyType: v.body_type || "",
+    transmission: v.transmission || "",
+    fuelType: v.fuel_type || "",
+    province: v.province || "",
+    city: v.city || "",
+    financing: Boolean(v.financing),
+    delivery: v.delivery ? String(v.delivery) : "",
+    months: v.months ? String(v.months) : "",
+    rate: v.rate ? String(v.rate) : "",
+    show_maintenance_info: Boolean(v.show_maintenance_info),
+    insurance_monthly_amount: v.insurance_monthly_amount ? String(v.insurance_monthly_amount) : "",
+    insurance_provider: v.insurance_provider || "",
+    insurance_coverage_type: v.insurance_coverage_type || "",
+    fuel_consumption: v.fuel_consumption ? String(v.fuel_consumption) : "",
+    fuel_tank_liters: v.fuel_tank_liters ? String(v.fuel_tank_liters) : "",
+    fuel_full_tank_cost: v.fuel_full_tank_cost ? String(v.fuel_full_tank_cost) : "",
+    patent_cost: v.patent_cost ? String(v.patent_cost) : "",
+    estimated_service_cost: v.estimated_service_cost ? String(v.estimated_service_cost) : "",
+    estimated_monthly_maintenance: v.estimated_monthly_maintenance ? String(v.estimated_monthly_maintenance) : "",
+    maintenance_notes: v.maintenance_notes || "",
+  };
+}
+
+export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerVehicles = [] }) {
   const [form, setForm] = useState(initialForm);
+  const [prefillSource, setPrefillSource] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
   const [createdVehicle, setCreatedVehicle] = useState(null);
   const [uploadSummary, setUploadSummary] = useState(null);
@@ -269,6 +307,19 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
 
     return selectedModel.versions || [];
   }, [selectedModel]);
+
+  function applyPrefill(vehicleId) {
+    setPrefillSource(vehicleId);
+    if (!vehicleId) return;
+    const source = dealerVehicles.find((v) => String(v.vehicle_id) === vehicleId);
+    if (!source) return;
+    const mapped = vehicleToForm(source);
+    setForm((current) => {
+      const next = { ...current };
+      PREFILL_FIELDS.forEach((k) => { if (mapped[k] !== undefined) next[k] = mapped[k]; });
+      return next;
+    });
+  }
 
   function updateField(field, value) {
     setForm((current) => ({
@@ -507,6 +558,28 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated }) {
           </div>
         ) : (
           <form className="zero-km-form" onSubmit={handleSubmit}>
+            {dealerVehicles.length > 0 && (
+              <div className="create-vehicle-prefill">
+                <label>
+                  Completar desde publicación anterior
+                  <select
+                    value={prefillSource}
+                    onChange={(e) => applyPrefill(e.target.value)}
+                  >
+                    <option value="">— Elegí un vehículo para precargar datos —</option>
+                    {dealerVehicles.map((v) => (
+                      <option key={v.vehicle_id} value={String(v.vehicle_id)}>
+                        {v.brand} {v.model} {v.version || ""} · {v.year}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="form-hint">
+                    Precarga marca, modelo, versión, ubicación, financiación y datos de mantenimiento. El precio, km e imágenes se completan manualmente.
+                  </span>
+                </label>
+              </div>
+            )}
+
             {catalogError && <div className="auth-warning">{catalogError}</div>}
 
             {createBlockMessage && (
