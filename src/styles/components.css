@@ -668,6 +668,44 @@
   padding: 18px;
 }
 
+.admin-kpi-card--clickable {
+  cursor: pointer;
+  transition:
+    border-color var(--ox-duration-fast) var(--ox-ease),
+    box-shadow var(--ox-duration-fast) var(--ox-ease),
+    transform var(--ox-duration-fast) var(--ox-ease);
+}
+
+.admin-kpi-card--clickable:hover {
+  border-color: var(--ox-border-accent);
+  box-shadow: var(--ox-shadow-card-hover);
+  transform: translateY(-1px);
+}
+
+.admin-kpi-card--active {
+  border-color: var(--ox-border-accent);
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.22),
+    0 8px 28px rgba(37, 99, 235, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.admin-kpi-card--active strong {
+  color: var(--ox-cyan);
+}
+
+.admin-kpi-card--review.admin-kpi-card--active {
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(239, 68, 68, 0.20),
+    0 8px 28px rgba(239, 68, 68, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.admin-kpi-card--review.admin-kpi-card--active strong {
+  color: var(--ox-red);
+}
+
 .admin-kpi-card span {
   display: block;
   color: var(--ox-muted);
@@ -1935,6 +1973,145 @@
   color: #fecaca;
   font-size: 0.82rem;
   font-weight: 800;
+}
+
+.buyer-profile-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.buyer-profile-summary .admin-session-note {
+  margin-top: 0;
+}
+
+.buyer-profile-phone {
+  font-size: var(--ox-fs-caption);
+  color: var(--ox-muted);
+  margin: 0;
+}
+
+.buyer-edit-profile-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--ox-cyan);
+  font-size: var(--ox-fs-caption);
+  font-weight: var(--ox-fw-medium);
+  cursor: pointer;
+  text-align: left;
+  width: fit-content;
+}
+
+.buyer-edit-profile-btn:hover {
+  color: var(--ox-cyan-soft);
+}
+
+.buyer-profile-saved {
+  font-size: var(--ox-fs-caption);
+  color: var(--ox-green);
+  font-weight: var(--ox-fw-medium);
+}
+
+.buyer-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-md);
+  background: var(--ox-card);
+  padding: 18px 20px;
+  margin-bottom: 4px;
+}
+
+.buyer-profile-form-fields {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.buyer-profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.buyer-profile-field label {
+  font-size: var(--ox-fs-caption);
+  color: var(--ox-muted);
+  font-weight: var(--ox-fw-medium);
+}
+
+.buyer-profile-field input {
+  height: var(--ox-input-h);
+  background: var(--ox-surface-input);
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-xs);
+  color: var(--ox-text);
+  font-size: var(--ox-fs-input);
+  font-weight: var(--ox-fw-medium);
+  padding: 0 10px;
+  outline: none;
+  transition: border-color var(--ox-duration-fast) var(--ox-ease);
+}
+
+.buyer-profile-field input:focus {
+  border-color: var(--ox-border-accent);
+}
+
+.buyer-profile-form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .buyer-profile-form-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Buyer stat card accents */
+.buyer-stat--leads    { border-top: 3px solid var(--ox-cyan); }
+.buyer-stat--compare  { border-top: 3px solid #a78bfa; }
+.buyer-stat--favorites { border-top: 3px solid var(--ox-amber); }
+.buyer-stat--financing { border-top: 3px solid var(--ox-green); }
+
+.buyer-stat--leads strong    { color: var(--ox-cyan); }
+.buyer-stat--compare strong  { color: #a78bfa; }
+.buyer-stat--favorites strong { color: var(--ox-amber); }
+.buyer-stat--financing strong { color: var(--ox-green); }
+
+/* Activity strip — lighter than full dealer-leads-section */
+.buyer-activity-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-md);
+  background: rgba(15, 26, 48, 0.52);
+  flex-wrap: wrap;
+}
+
+.buyer-activity-strip > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.buyer-activity-strip strong {
+  font-size: var(--ox-fs-body-sm);
+  font-weight: var(--ox-fw-bold);
+  color: var(--ox-text);
+}
+
+.buyer-activity-strip span {
+  font-size: var(--ox-fs-caption);
+  color: var(--ox-muted);
 }
 
 .buyer-privacy-note {
@@ -7211,6 +7388,30 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .admin-panel .admin-kpi-card strong,
 :root[data-theme="light"] .dealer-panel .dealer-status-card strong {
   color: var(--ox-text);
+}
+
+:root[data-theme="light"] .admin-kpi-card--active {
+  border-color: var(--ox-border-accent);
+  background: rgba(224, 243, 252, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(2, 132, 199, 0.18),
+    0 6px 20px rgba(2, 132, 199, 0.08);
+}
+
+:root[data-theme="light"] .admin-kpi-card--active strong {
+  color: var(--ox-cyan);
+}
+
+:root[data-theme="light"] .admin-kpi-card--review.admin-kpi-card--active {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(254, 242, 242, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(239, 68, 68, 0.16),
+    0 6px 20px rgba(239, 68, 68, 0.07);
+}
+
+:root[data-theme="light"] .admin-kpi-card--review.admin-kpi-card--active strong {
+  color: #b91c1c;
 }
 
 :root[data-theme="light"] .admin-panel .panel-head-row p,
@@ -12739,16 +12940,35 @@ body::-webkit-scrollbar {
 
 :root[data-theme="light"] .buyer-panel .panel-head-row {
   background:
-    radial-gradient(circle at 14% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
-    linear-gradient(180deg, rgba(20, 33, 52, 0.97), rgba(8, 14, 26, 0.99));
-  border-color: rgba(15, 23, 42, 0.22);
-  box-shadow:
-    0 16px 48px rgba(8, 14, 26, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(226, 244, 253, 0.92));
+  border-color: var(--ox-border);
+  box-shadow: var(--ox-shadow-card);
+  color: var(--ox-text);
 }
 
 :root[data-theme="light"] .buyer-panel .panel-head-row::before {
-  opacity: 0.38;
+  opacity: 0.22;
+}
+
+:root[data-theme="light"] .buyer-panel .panel-head-row h1 {
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .buyer-panel .panel-head-row > div > p:not(.eyebrow):not(.admin-session-note) {
+  color: var(--ox-muted);
+}
+
+:root[data-theme="light"] .buyer-panel .panel-head-row .eyebrow {
+  color: var(--ox-cyan);
+}
+
+:root[data-theme="light"] .buyer-panel .panel-head-row .admin-session-note {
+  color: var(--ox-muted);
+}
+
+:root[data-theme="light"] .buyer-panel .panel-head-row .buyer-profile-phone {
+  color: var(--ox-muted-2);
 }
 
 :root[data-theme="light"] .buyer-panel .admin-refresh-btn,
@@ -12767,6 +12987,102 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .buyer-panel .buyer-privacy-note {
   background: rgba(243, 249, 254, 0.50);
   border-color: var(--ox-border);
+}
+
+:root[data-theme="light"] .buyer-panel .buyer-profile-form {
+  background: rgba(243, 249, 254, 0.60);
+  border-color: var(--ox-border);
+}
+
+:root[data-theme="light"] .buyer-panel .buyer-profile-field input {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--ox-border);
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .buyer-edit-profile-btn {
+  color: var(--ox-cyan);
+}
+
+/* Activity strip */
+:root[data-theme="light"] .buyer-panel .buyer-activity-strip {
+  background: rgba(240, 248, 254, 0.72);
+  border-color: var(--ox-border);
+}
+
+/* Stat card text */
+:root[data-theme="light"] .buyer-panel .dealer-status-card strong {
+  color: inherit;
+}
+:root[data-theme="light"] .buyer-panel .buyer-stat--leads strong    { color: var(--ox-cyan); }
+:root[data-theme="light"] .buyer-panel .buyer-stat--compare strong  { color: #7c3aed; }
+:root[data-theme="light"] .buyer-panel .buyer-stat--favorites strong { color: #b45309; }
+:root[data-theme="light"] .buyer-panel .buyer-stat--financing strong { color: #166534; }
+
+:root[data-theme="light"] .buyer-panel .dealer-status-card p {
+  color: var(--ox-muted);
+}
+
+/* Tables */
+:root[data-theme="light"] .buyer-panel .admin-table-wrap {
+  border-color: var(--ox-border);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--ox-shadow-card);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-table {
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-table thead th {
+  background: rgba(232, 246, 253, 0.96);
+  border-bottom-color: var(--ox-border);
+  color: var(--ox-cyan);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-table tbody td {
+  border-bottom-color: var(--ox-border);
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-table td strong {
+  color: var(--ox-text);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-table td span {
+  color: var(--ox-muted);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-table tbody tr:hover {
+  background: rgba(14, 165, 233, 0.04);
+}
+
+/* Chips en buyer panel */
+:root[data-theme="light"] .buyer-panel .admin-chip {
+  background: rgba(226, 242, 252, 0.72);
+  color: var(--ox-text-soft);
+  border-color: var(--ox-border);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-chip.success {
+  color: #166534 !important;
+  background: rgba(34, 197, 94, 0.12);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-chip.warning {
+  color: #92400e !important;
+  background: rgba(245, 158, 11, 0.12);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-chip.orange {
+  color: #9a3412 !important;
+  background: rgba(249, 115, 22, 0.12);
+}
+
+:root[data-theme="light"] .buyer-panel .admin-chip.danger {
+  color: #991b1b !important;
+  background: rgba(239, 68, 68, 0.12);
 }
 
 .legal-copy {

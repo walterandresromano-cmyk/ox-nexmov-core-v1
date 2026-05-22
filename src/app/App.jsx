@@ -20,6 +20,11 @@ const SupportPanel     = lazy(() => import("../modules/support/SupportPanel.jsx"
 import { getCurrentSession } from "../services/auth.service.js";
 import { getProfileByUserId } from "../services/profiles.service.js";
 import { normalizeRole } from "../lib/auth.js";
+import {
+  listBuyerFavorites,
+  addBuyerFavorite,
+  removeBuyerFavorite,
+} from "../services/buyerFavorites.service.js";
 
 const ROUTES = {
   home: Home,
@@ -226,6 +231,7 @@ export default function App() {
     if (!user) {
       setAuthProfile(null);
       setAuthError("");
+      setFavoriteItems([]);
 
       if (options.redirect !== false) {
         setCurrentRoute("home");
@@ -234,7 +240,10 @@ export default function App() {
       return;
     }
 
-    const profile = await loadProfileForUser(user);
+    const [profile] = await Promise.all([
+      loadProfileForUser(user),
+      listBuyerFavorites().then(({ favorites }) => setFavoriteItems(favorites)),
+    ]);
 
     if (options.redirectByRole) {
       setCurrentRoute(getHomeRouteForRole(profile?.role));
@@ -251,7 +260,10 @@ export default function App() {
       setAuthUser(user);
 
       if (user) {
-        const profile = await loadProfileForUser(user);
+        const [profile] = await Promise.all([
+          loadProfileForUser(user),
+          listBuyerFavorites().then(({ favorites }) => setFavoriteItems(favorites)),
+        ]);
         setCurrentRoute(getHomeRouteForRole(profile?.role));
       }
 
@@ -343,21 +355,34 @@ export default function App() {
   }
 
   function toggleFavorite(vehicle) {
-    setFavoriteItems((current) => {
-      const alreadyExists = current.some((item) => item.id === vehicle.id);
+    const alreadyExists = favoriteItems.some((item) => item.id === vehicle.id);
 
-      if (alreadyExists) {
-        return current.filter((item) => item.id !== vehicle.id);
+    if (alreadyExists) {
+      setFavoriteItems((current) => current.filter((item) => item.id !== vehicle.id));
+      if (authUser?.id) removeBuyerFavorite(vehicle.id);
+    } else {
+      setFavoriteItems((current) => [...current, vehicle]);
+      if (authUser?.id) {
+        addBuyerFavorite({
+          vehicleId: vehicle.id,
+          vehicleSnapshot: {
+            brand: vehicle.brand || "",
+            model: vehicle.model || "",
+            version: vehicle.version || "",
+            year: vehicle.year || null,
+            kilometers: vehicle.kilometers || 0,
+            price: vehicle.price || 0,
+            city: vehicle.city || "",
+            province: vehicle.province || "",
+          },
+        });
       }
-
-      return [...current, vehicle];
-    });
+    }
   }
 
   function removeFavorite(vehicleId) {
-    setFavoriteItems((current) =>
-      current.filter((item) => item.id !== vehicleId)
-    );
+    setFavoriteItems((current) => current.filter((item) => item.id !== vehicleId));
+    if (authUser?.id) removeBuyerFavorite(vehicleId);
   }
 
   function isFavorite(vehicleId) {

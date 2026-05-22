@@ -136,25 +136,37 @@ export default function AdminVehiclesSection({ onLogAction }) {
       )}
 
       <div className="admin-kpi-grid">
-        <article className="admin-kpi-card">
+        <article
+          className={`admin-kpi-card admin-kpi-card--clickable${statusFilter === "all" && reviewFilter === "all" ? " admin-kpi-card--active" : ""}`}
+          onClick={() => { setStatusFilter("all"); setReviewFilter("all"); }}
+        >
           <span>Total publicaciones</span>
           <strong>{total}</strong>
-          <p>Inventario total cargado.</p>
+          <p>Ver todo el inventario.</p>
         </article>
 
-        <article className="admin-kpi-card">
+        <article
+          className={`admin-kpi-card admin-kpi-card--clickable${statusFilter === "active" ? " admin-kpi-card--active" : ""}`}
+          onClick={() => { setStatusFilter("active"); setReviewFilter("all"); }}
+        >
           <span>Activas</span>
           <strong>{active}</strong>
           <p>Visibles o disponibles públicamente.</p>
         </article>
 
-        <article className="admin-kpi-card">
+        <article
+          className={`admin-kpi-card admin-kpi-card--clickable${reviewFilter === "needs_review" ? " admin-kpi-card--active admin-kpi-card--review" : ""}`}
+          onClick={() => { setReviewFilter("needs_review"); setStatusFilter("all"); }}
+        >
           <span>En revisión</span>
           <strong>{review}</strong>
           <p>Requieren intervención del admin.</p>
         </article>
 
-        <article className="admin-kpi-card">
+        <article
+          className={`admin-kpi-card admin-kpi-card--clickable${statusFilter === "reserved" ? " admin-kpi-card--active" : ""}`}
+          onClick={() => { setStatusFilter("reserved"); setReviewFilter("all"); }}
+        >
           <span>Reservadas</span>
           <strong>{reserved}</strong>
           <p>Unidades apartadas por dealers.</p>

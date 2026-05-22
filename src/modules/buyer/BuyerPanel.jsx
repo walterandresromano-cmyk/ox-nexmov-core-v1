@@ -7,6 +7,8 @@ import {
   listZeroKmLeadsForCurrentBuyer,
 } from "../../services/buyer.service.js";
 
+import { updateBuyerProfile } from "../../services/profiles.service.js";
+
 function formatDateTime(dateValue) {
   if (!dateValue) return "Sin fecha";
 
@@ -93,6 +95,16 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const [loadingSellVehicleLeads, setLoadingSellVehicleLeads] = useState(true);
   const [sellVehicleLeadsError, setSellVehicleLeadsError] = useState("");
 
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [profileForm, setProfileForm] = useState({
+    fullName: authProfile?.full_name || "",
+    phoneVisible: authProfile?.phone_visible || "",
+    phoneWhatsapp: authProfile?.phone_whatsapp || "",
+  });
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileError, setProfileError] = useState("");
+  const [profileSaved, setProfileSaved] = useState(false);
+
   const favorites = appActions?.favoriteItems || [];
   const compareItems = appActions?.compareItems || [];
 
@@ -165,6 +177,43 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     refreshBuyerPanel();
   }, []);
 
+  useEffect(() => {
+    setProfileForm({
+      fullName: authProfile?.full_name || "",
+      phoneVisible: authProfile?.phone_visible || "",
+      phoneWhatsapp: authProfile?.phone_whatsapp || "",
+    });
+  }, [authProfile?.full_name, authProfile?.phone_visible, authProfile?.phone_whatsapp]);
+
+  async function handleSaveProfile(event) {
+    event.preventDefault();
+    setProfileSaving(true);
+    setProfileError("");
+    setProfileSaved(false);
+
+    const { error } = await updateBuyerProfile({
+      fullName: profileForm.fullName,
+      phoneVisible: profileForm.phoneVisible,
+      phoneWhatsapp: profileForm.phoneWhatsapp,
+    });
+
+    if (error) {
+      setProfileError(error.message || "No se pudo guardar el perfil.");
+      setProfileSaving(false);
+      return;
+    }
+
+    setProfileSaved(true);
+    setProfileSaving(false);
+    setEditingProfile(false);
+
+    if (appActions?.refreshAuthProfile) {
+      appActions.refreshAuthProfile();
+    }
+
+    window.setTimeout(() => setProfileSaved(false), 1800);
+  }
+
   const totalActivity = useMemo(() => {
     return vehicleLeads.length + zeroKmLeads.length;
   }, [vehicleLeads.length, zeroKmLeads.length]);
@@ -185,9 +234,27 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             </p>
 
             {(authProfile || authUser) && (
-              <p className="admin-session-note">
-                {authProfile?.email || authUser?.email}
-              </p>
+              <div className="buyer-profile-summary">
+                <p className="admin-session-note">
+                  {authProfile?.full_name
+                    ? <><strong>{authProfile.full_name}</strong> · {authProfile?.email || authUser?.email}</>
+                    : authProfile?.email || authUser?.email}
+                </p>
+                {authProfile?.phone_visible && (
+                  <p className="buyer-profile-phone">{authProfile.phone_visible}</p>
+                )}
+                <button
+                  type="button"
+                  className="buyer-edit-profile-btn"
+                  onClick={() => {
+                    setEditingProfile((prev) => !prev);
+                    setProfileError("");
+                  }}
+                >
+                  {editingProfile ? "Cancelar edición" : "Editar perfil"}
+                </button>
+                {profileSaved && <span className="buyer-profile-saved">Guardado</span>}
+              </div>
             )}
           </div>
 
@@ -200,6 +267,79 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             </button>
           </div>
         </div>
+
+        {editingProfile && (
+          <form className="buyer-profile-form" onSubmit={handleSaveProfile}>
+            <div className="buyer-profile-form-fields">
+              <div className="buyer-profile-field">
+                <label htmlFor="bp-fullname">Nombre completo</label>
+                <input
+                  id="bp-fullname"
+                  type="text"
+                  value={profileForm.fullName}
+                  onChange={(e) =>
+                    setProfileForm((f) => ({ ...f, fullName: e.target.value }))
+                  }
+                  placeholder="Tu nombre"
+                  maxLength={80}
+                  disabled={profileSaving}
+                />
+              </div>
+              <div className="buyer-profile-field">
+                <label htmlFor="bp-phone">Teléfono</label>
+                <input
+                  id="bp-phone"
+                  type="tel"
+                  value={profileForm.phoneVisible}
+                  onChange={(e) =>
+                    setProfileForm((f) => ({ ...f, phoneVisible: e.target.value }))
+                  }
+                  placeholder="Ej. +54 9 11 1234-5678"
+                  maxLength={30}
+                  disabled={profileSaving}
+                />
+              </div>
+              <div className="buyer-profile-field">
+                <label htmlFor="bp-whatsapp">WhatsApp</label>
+                <input
+                  id="bp-whatsapp"
+                  type="tel"
+                  value={profileForm.phoneWhatsapp}
+                  onChange={(e) =>
+                    setProfileForm((f) => ({
+                      ...f,
+                      phoneWhatsapp: e.target.value,
+                    }))
+                  }
+                  placeholder="Ej. +54 9 11 1234-5678"
+                  maxLength={30}
+                  disabled={profileSaving}
+                />
+              </div>
+            </div>
+            <div className="buyer-profile-form-actions">
+              <button
+                type="submit"
+                className="primary-action"
+                disabled={profileSaving}
+              >
+                {profileSaving ? "Guardando..." : "Guardar cambios"}
+              </button>
+              <button
+                type="button"
+                className="admin-refresh-btn"
+                onClick={() => {
+                  setEditingProfile(false);
+                  setProfileError("");
+                }}
+                disabled={profileSaving}
+              >
+                Cancelar
+              </button>
+            </div>
+            {profileError && <p className="auth-warning">{profileError}</p>}
+          </form>
+        )}
 
         {vehicleLeadsError && (
           <div className="auth-warning">{vehicleLeadsError}</div>
@@ -216,7 +356,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
         )}
 
         <div className="dealer-status-grid">
-          <article className="dealer-status-card">
+          <article className="dealer-status-card buyer-stat--leads">
             <span>Consultas activas</span>
             <strong>{vehicleLeads.length}</strong>
             <p>
@@ -226,7 +366,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             </p>
           </article>
 
-          <article className="dealer-status-card">
+          <article className="dealer-status-card buyer-stat--compare">
             <span>Comparaciones</span>
             <strong>{compareItems.length} / 4</strong>
             <p>
@@ -236,7 +376,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             </p>
           </article>
 
-          <article className="dealer-status-card">
+          <article className="dealer-status-card buyer-stat--favorites">
             <span>Favoritos</span>
             <strong>{favorites.length}</strong>
             <p>
@@ -246,7 +386,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             </p>
           </article>
 
-          <article className="dealer-status-card">
+          <article className="dealer-status-card buyer-stat--financing">
             <span>Financiación 0km</span>
             <strong>{zeroKmLeads.length}</strong>
             <p>
@@ -257,36 +397,31 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           </article>
         </div>
 
-        <div className="dealer-leads-section">
-          <div className="buyer-section-head">
-            <div>
-              {totalActivity === 0 ? (
-                <>
-                  <h2>Empezá buscando vehículos</h2>
-                  <p>
-                    Guardá favoritos, compará hasta 4 unidades y consultá
-                    dealers verificados.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <h2>Retomá tu actividad</h2>
-                  <p>
-                    Tenés {vehicleLeads.length}{" "}
-                    consulta{vehicleLeads.length !== 1 ? "s" : ""} activa
-                    {vehicleLeads.length !== 1 ? "s" : ""} con dealers.
-                  </p>
-                </>
-              )}
-            </div>
-
-            <button
-              className="primary-action"
-              onClick={() => onNavigate?.("search")}
-            >
-              {totalActivity === 0 ? "Buscar vehículos" : "Ver más vehículos"}
-            </button>
+        <div className="buyer-activity-strip">
+          <div>
+            {totalActivity === 0 ? (
+              <>
+                <strong>Empezá buscando vehículos</strong>
+                <span>
+                  Guardá favoritos, compará hasta 4 unidades y consultá dealers verificados.
+                </span>
+              </>
+            ) : (
+              <>
+                <strong>Retomá tu actividad</strong>
+                <span>
+                  {vehicleLeads.length} consulta{vehicleLeads.length !== 1 ? "s" : ""} activa{vehicleLeads.length !== 1 ? "s" : ""} con dealers
+                  {favorites.length > 0 ? ` · ${favorites.length} favorito${favorites.length !== 1 ? "s" : ""}` : ""}.
+                </span>
+              </>
+            )}
           </div>
+          <button
+            className="primary-action"
+            onClick={() => onNavigate?.("search")}
+          >
+            {totalActivity === 0 ? "Buscar vehículos" : "Ver más vehículos"}
+          </button>
         </div>
 
         <div className="dealer-leads-section">

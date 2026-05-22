@@ -13,7 +13,7 @@ import {
   canDealerPublish,
   getEffectiveDealerPermissions,
 } from "../../lib/permissions.js";
-import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
+import { normalizeWhatsAppArgentina, formatRelativeTime } from "../../lib/formatters.js";
 
 import {
   listDealersForCurrentUser,
@@ -1786,11 +1786,11 @@ export default function DealerPanel({ authProfile }) {
                   className={`dealer-notification-item${notification.is_read ? "" : " is-unread"}`}
                 >
                   <span className="dealer-notification-msg">{notification.message}</span>
-                  <time className="dealer-notification-time">
-                    {new Intl.DateTimeFormat("es-AR", {
-                      dateStyle: "short",
-                      timeStyle: "short",
-                    }).format(new Date(notification.created_at))}
+                  <time
+                    className="dealer-notification-time"
+                    title={new Intl.DateTimeFormat("es-AR", { dateStyle: "short", timeStyle: "short" }).format(new Date(notification.created_at))}
+                  >
+                    {formatRelativeTime(notification.created_at)}
                   </time>
                 </li>
               ))}

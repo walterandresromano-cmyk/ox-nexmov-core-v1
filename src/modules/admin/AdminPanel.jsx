@@ -23,6 +23,7 @@ import {
   suspendDealerFromAdmin,
 } from "../../services/adminDealers.service.js";
 import { persistAdminAction, listAdminActionLogs } from "../../services/adminActionLog.service.js";
+import { formatRelativeTime } from "../../lib/formatters.js";
 
 const ADMIN_MODULES = {
   DEALERS: "dealers",
@@ -2599,11 +2600,8 @@ export default function AdminPanel({ authProfile }) {
                   {adminActionLog.map((entry) => (
                     <tr key={entry.id}>
                       <td>
-                        <strong>
-                          {new Intl.DateTimeFormat("es-AR", {
-                            dateStyle: "short",
-                            timeStyle: "short",
-                          }).format(new Date(entry.timestamp))}
+                        <strong title={new Intl.DateTimeFormat("es-AR", { dateStyle: "short", timeStyle: "short" }).format(new Date(entry.timestamp))}>
+                          {formatRelativeTime(entry.timestamp)}
                         </strong>
                       </td>
                       <td>

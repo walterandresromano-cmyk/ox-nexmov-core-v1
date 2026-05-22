@@ -1,3 +1,25 @@
+export function formatRelativeTime(dateValue) {
+  if (!dateValue) return "";
+
+  const date = new Date(dateValue);
+  if (isNaN(date.getTime())) return "";
+
+  const diffMs = Date.now() - date.getTime();
+  const diffMin = Math.floor(diffMs / 60_000);
+  const diffH = Math.floor(diffMs / 3_600_000);
+  const diffD = Math.floor(diffMs / 86_400_000);
+
+  if (diffMin < 1) return "ahora";
+  if (diffMin < 60) return `hace ${diffMin} min`;
+  if (diffH < 24) return `hace ${diffH} h`;
+  if (diffD === 1) return "ayer";
+  if (diffD < 7) return `hace ${diffD} días`;
+
+  return new Intl.DateTimeFormat("es-AR", {
+    dateStyle: "short",
+  }).format(date);
+}
+
 export function formatARS(value) {
   if (!Number.isFinite(value)) return "Consultar";
 
