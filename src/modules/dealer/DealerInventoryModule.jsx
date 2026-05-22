@@ -5,6 +5,11 @@ import DealerVehicleDetailModal from "../../components/DealerVehicleDetailModal.
 import EditVehicleModal from "../../components/EditVehicleModal.jsx";
 import EditVehicleImagesModal from "../../components/EditVehicleImagesModal.jsx";
 import { formatARS, formatKm } from "../../lib/formatters.js";
+import {
+  getPublicationScore,
+  getScoreLabel,
+  getScoreChipClass,
+} from "../../lib/publicationScore.js";
 
 function formatDateTime(dateValue) {
   if (!dateValue) return "Sin fecha";
@@ -52,6 +57,7 @@ export default function DealerInventoryModule({ dealerVehicles, onRefresh, onBac
                 <th>Financiación</th>
                 <th>Publicación</th>
                 <th>Revisión</th>
+                <th>Calidad</th>
                 <th>Vistas</th>
                 <th>Acciones</th>
                 <th>Detalle</th>
@@ -118,6 +124,24 @@ export default function DealerInventoryModule({ dealerVehicles, onRefresh, onBac
                         : "Aprobada"}
                     </span>
                     {vehicle.reserved && <span>Reservada</span>}
+                  </td>
+
+                  <td>
+                    {(() => {
+                      const { score, missing } = getPublicationScore(vehicle);
+                      return (
+                        <span
+                          className={`admin-chip ${getScoreChipClass(score)}`}
+                          title={
+                            missing.length > 0
+                              ? `Falta: ${missing.join(", ")}`
+                              : "Publicación completa"
+                          }
+                        >
+                          {score}% · {getScoreLabel(score)}
+                        </span>
+                      );
+                    })()}
                   </td>
 
                   <td>

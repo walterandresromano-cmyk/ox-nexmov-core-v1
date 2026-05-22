@@ -26,6 +26,78 @@ import { listSupportTicketsForCurrentUser } from "../../services/tickets.service
 import { listSellVehicleLeadsForCurrentDealer } from "../../services/sellVehicle.service.js";
 import { listDealerNotifications, markDealerNotificationsRead } from "../../services/dealerNotifications.service.js";
 
+const PLAN_TIERS = [
+  {
+    id: "inicio",
+    label: "Inicio",
+    quota: "5 publicaciones",
+    features: [
+      "5 publicaciones por período",
+      "Señales básicas en publicaciones",
+      "Métricas de vistas",
+      "Financiación informativa",
+    ],
+    locked: [
+      "Financiación completa",
+      "Señales premium",
+      "Métricas de conversión",
+      "Oportunidades VMV",
+      "Soporte prioritario",
+    ],
+  },
+  {
+    id: "pro",
+    label: "Pro",
+    quota: "15 publicaciones",
+    features: [
+      "15 publicaciones por período",
+      "Señales avanzadas",
+      "Métricas de conversión",
+      "Financiación completa",
+      "Datos de mantenimiento",
+    ],
+    locked: [
+      "Señales premium",
+      "Métricas de respuesta",
+      "Oportunidades VMV",
+      "Soporte prioritario",
+    ],
+  },
+  {
+    id: "elite",
+    label: "Elite",
+    quota: "30 publicaciones",
+    features: [
+      "30 publicaciones por período",
+      "Señales premium en todas las cards",
+      "Métricas completas",
+      "Financiación completa",
+      "Oportunidades Vender mi vehículo",
+      "Badge Elite visible",
+    ],
+    locked: [
+      "Publicaciones ilimitadas",
+      "Soporte prioritario",
+    ],
+  },
+  {
+    id: "platinum",
+    label: "Platinum",
+    quota: "Ilimitadas",
+    features: [
+      "Publicaciones ilimitadas",
+      "Señales completas con badge Platinum",
+      "Métricas completas y avanzadas",
+      "Financiación completa",
+      "Oportunidades Vender mi vehículo",
+      "Soporte con prioridad Platinum",
+    ],
+    locked: [],
+  },
+];
+
+const PLAN_ORDER = ["inicio", "pro", "elite", "platinum"];
+
 const DEALER_MOBILE_SECTIONS = [
   { id: "home", label: "Inicio" },
   { id: "publish", label: "Publicar" },
@@ -821,21 +893,13 @@ export default function DealerPanel({ authProfile }) {
     }
 
     if (featureId === "metrics") {
-      const hasStandardMetrics = permissions.metricsLevel !== "basic";
-      const hasAdvancedMetrics =
-        permissions.metricsLevel === "advanced" || permissions.metricsLevel === "full";
-
       return {
-        available: false,
-        tone: hasAdvancedMetrics ? "soon" : hasStandardMetrics ? "limited" : "locked",
-        module: "support",
-        status: hasAdvancedMetrics
-          ? "Proximamente"
-          : hasStandardMetrics
-          ? `Nivel ${permissions.metricsLevel}`
-          : "Disponible en Pro",
-        ctaLabel: hasAdvancedMetrics ? "Proximamente" : "Solicitar upgrade",
-        disabled: hasAdvancedMetrics,
+        available: true,
+        tone: "active",
+        module: "metrics",
+        status: "Activo",
+        ctaLabel: "Ver métricas",
+        disabled: false,
       };
     }
 
@@ -982,6 +1046,72 @@ export default function DealerPanel({ authProfile }) {
           })}
         </div>
       </section>
+    );
+  }
+
+  function renderPlanComparison() {
+    const currentPlanKey = String(permissions.planId || "inicio").toLowerCase();
+    const currentIdx = PLAN_ORDER.indexOf(currentPlanKey);
+
+    return (
+      <div className="dealer-plan-comparison">
+        <div className="dealer-plan-comparison-head">
+          <h3>Comparativa de planes</h3>
+          <p>
+            Tu plan actual está resaltado. Solicitá upgrade desde soporte para
+            acceder a funciones de planes superiores.
+          </p>
+        </div>
+        <div className="dealer-plan-comparison-grid">
+          {PLAN_TIERS.map((tier) => {
+            const tierIdx = PLAN_ORDER.indexOf(tier.id);
+            const isCurrent = tier.id === currentPlanKey;
+            const isUpgrade = tierIdx > currentIdx;
+            const cardClass = isCurrent
+              ? "dealer-plan-comparison-card is-current"
+              : isUpgrade
+              ? "dealer-plan-comparison-card is-upgrade"
+              : "dealer-plan-comparison-card is-lower";
+
+            return (
+              <article key={tier.id} className={cardClass}>
+                <div className="dealer-plan-comparison-card-head">
+                  <strong className={`dealer-plan-comparison-label rank-${tier.id}`}>
+                    {tier.label}
+                  </strong>
+                  <span className="dealer-plan-comparison-quota">{tier.quota}</span>
+                  {isCurrent && (
+                    <span className="dealer-plan-comparison-current-badge">
+                      Tu plan actual
+                    </span>
+                  )}
+                </div>
+                <ul className="dealer-plan-comparison-features">
+                  {tier.features.map((f) => (
+                    <li key={f} className="is-included">
+                      <span aria-hidden="true">✓</span> {f}
+                    </li>
+                  ))}
+                  {tier.locked.map((f) => (
+                    <li key={f} className="is-locked">
+                      <span aria-hidden="true">—</span> {f}
+                    </li>
+                  ))}
+                </ul>
+                {isUpgrade && (
+                  <button
+                    type="button"
+                    className="dealer-plan-comparison-upgrade-btn"
+                    onClick={() => openModule("support")}
+                  >
+                    Solicitar upgrade a {tier.label}
+                  </button>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      </div>
     );
   }
 
@@ -1356,6 +1486,8 @@ export default function DealerPanel({ authProfile }) {
             </button>
           </article>
         </div>
+
+        {renderPlanComparison()}
       </div>
     );
   }
@@ -1897,18 +2029,15 @@ export default function DealerPanel({ authProfile }) {
             </article>
 
             <article
-              className={`dealer-module-card dealer-module-card--locked${
+              className={`dealer-module-card clickable-module-card${
                 isPlatinum ? " dealer-platinum-tool-card" : ""
               }`}
+              onClick={() => openModule("metrics")}
             >
               <h3>Métricas</h3>
-              <p>
-                {isPlatinum
-                  ? "Métricas completas incluidas en tu plan. Módulo avanzado preparado para próximas fases."
-                  : `Nivel habilitado: ${permissions.metricsLevel}`}
-              </p>
-              <button type="button" disabled>
-                {isPlatinum ? "Preparado para próximas fases" : "Proximamente"}
+              <p>Vistas, conversión, tiempo de respuesta y calidad de publicaciones.</p>
+              <button type="button" onClick={() => openModule("metrics")}>
+                Ver métricas
               </button>
             </article>
 
@@ -2098,10 +2227,12 @@ export default function DealerPanel({ authProfile }) {
             limit={limit}
             isPlatinum={isPlatinum}
             rankLabel={permissions.rankLabel}
+            planId={permissions.planId}
             onRefresh={loadDealerVehicles}
             onBack={handleModuleBack}
             onOpenInventory={() => openModule("inventory")}
             onOpenLeads={() => openModule("leads")}
+            onOpenSupport={() => openModule("support")}
           />
         )}
 
