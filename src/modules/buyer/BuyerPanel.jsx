@@ -8,6 +8,11 @@ import {
 } from "../../services/buyer.service.js";
 
 import { updateBuyerProfile } from "../../services/profiles.service.js";
+import {
+  createBuyerGarageService,
+  listBuyerGarageServices,
+  listBuyerGarageVehicles,
+} from "../../services/buyerGarage.service.js";
 
 function formatDateTime(dateValue) {
   if (!dateValue) return "Sin fecha";
@@ -78,10 +83,52 @@ function getSellLeadStatusLabel(status) {
   return labels[status] || "Recibida";
 }
 
+function getVehicleLeadChipClass(status) {
+  if (["sold", "closed"].includes(status)) return "success";
+  if (["negotiation", "reserved"].includes(status)) return "warning";
+  if (["lost", "no_response"].includes(status)) return "danger";
+  return "";
+}
+
+function getZeroKmChipClass(status) {
+  if (["approved", "closed"].includes(status)) return "success";
+  if (["prequalified", "documents_requested"].includes(status)) return "warning";
+  if (["rejected", "lost"].includes(status)) return "danger";
+  return "";
+}
+
+function getSellLeadChipClass(status) {
+  if (status === "closed") return "success";
+  if (["assigned", "negotiation"].includes(status)) return "warning";
+  if (status === "lost") return "danger";
+  return "";
+}
+
 function getVehicleTitle(vehicle) {
   return [vehicle.brand, vehicle.model, vehicle.version]
     .filter(Boolean)
     .join(" ");
+}
+
+function getNextGarageHint(services) {
+  if (!services.length) return "Carga el primer servicio para iniciar el historial.";
+  const last = services[0];
+  const lastKm = Number(last.mileage || 0);
+  if (!lastKm) return "Proximo control: revisar kilometraje y service preventivo.";
+  return `Proximo control sugerido cerca de ${Number(lastKm + 10000).toLocaleString("es-AR")} km.`;
+}
+
+function getServiceTypeLabel(value) {
+  const labels = {
+    oil: "Aceite y filtros",
+    brakes: "Frenos",
+    tires: "Cubiertas",
+    battery: "Bateria",
+    inspection: "Revision general",
+    repair: "Reparacion",
+    other: "Otro",
+  };
+  return labels[value] || value || "Servicio";
 }
 
 export default function BuyerPanel({ authUser, authProfile, appActions, onNavigate }) {
@@ -104,6 +151,20 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileError, setProfileError] = useState("");
   const [profileSaved, setProfileSaved] = useState(false);
+  const [garageVehicles, setGarageVehicles] = useState([]);
+  const [garageVehiclesError, setGarageVehiclesError] = useState("");
+  const [garageServices, setGarageServices] = useState([]);
+  const [garageSource, setGarageSource] = useState("local");
+  const [selectedGarageVehicleId, setSelectedGarageVehicleId] = useState("");
+  const [garageSaving, setGarageSaving] = useState(false);
+  const [garageSaved, setGarageSaved] = useState(false);
+  const [garageForm, setGarageForm] = useState({
+    serviceDate: new Date().toISOString().slice(0, 10),
+    mileage: "",
+    serviceType: "oil",
+    cost: "",
+    notes: "",
+  });
 
   const favorites = appActions?.favoriteItems || [];
   const compareItems = appActions?.compareItems || [];
@@ -170,7 +231,31 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
       loadVehicleLeads(),
       loadZeroKmLeads(),
       loadSellVehicleLeads(),
+      loadGarageVehicles(),
+      loadGarageServices(),
     ]);
+  }
+
+  async function loadGarageVehicles() {
+    setGarageVehiclesError("");
+
+    const { vehicles, error } = await listBuyerGarageVehicles();
+
+    setGarageVehicles(vehicles || []);
+
+    if (error) {
+      setGarageVehiclesError(
+        "No pudimos cargar las unidades asignadas a tu Garage oX."
+      );
+    }
+  }
+
+  async function loadGarageServices() {
+    const { services, source } = await listBuyerGarageServices({
+      userId: authUser?.id || authProfile?.id || authProfile?.email,
+    });
+    setGarageServices(services || []);
+    setGarageSource(source || "local");
   }
 
   useEffect(() => {
@@ -218,6 +303,43 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     return vehicleLeads.length + zeroKmLeads.length;
   }, [vehicleLeads.length, zeroKmLeads.length]);
 
+  useEffect(() => {
+    if (!selectedGarageVehicleId && garageVehicles.length > 0) {
+      setSelectedGarageVehicleId(garageVehicles[0].id);
+    }
+  }, [garageVehicles, selectedGarageVehicleId]);
+
+  async function handleSaveGarageService(event) {
+    event.preventDefault();
+    if (!selectedGarageVehicleId) return;
+
+    setGarageSaving(true);
+    setGarageSaved(false);
+
+    const { service } = await createBuyerGarageService({
+      userId: authUser?.id || authProfile?.id || authProfile?.email,
+      service: {
+        ...garageForm,
+        garageVehicleId: selectedGarageVehicleId,
+      },
+    });
+
+    if (service) {
+      await loadGarageServices();
+      setGarageForm({
+        serviceDate: new Date().toISOString().slice(0, 10),
+        mileage: "",
+        serviceType: "oil",
+        cost: "",
+        notes: "",
+      });
+      setGarageSaved(true);
+      window.setTimeout(() => setGarageSaved(false), 1800);
+    }
+
+    setGarageSaving(false);
+  }
+
   const isLoading = loadingVehicleLeads || loadingZeroKmLeads || loadingSellVehicleLeads;
 
   return (
@@ -258,7 +380,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             )}
           </div>
 
-          <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start", flexWrap: "wrap" }}>
+          <div className="buyer-panel-head-actions">
             <button className="admin-refresh-btn" onClick={refreshBuyerPanel}>
               Actualizar
             </button>
@@ -350,6 +472,9 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
         {zeroKmLeadsError && (
           <div className="auth-warning">{zeroKmLeadsError}</div>
         )}
+        {garageVehiclesError && (
+          <div className="auth-warning">{garageVehiclesError}</div>
+        )}
 
         {isLoading && (
           <div className="auth-message">Cargando actividad...</div>
@@ -422,6 +547,193 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           >
             {totalActivity === 0 ? "Buscar vehículos" : "Ver más vehículos"}
           </button>
+        </div>
+
+        <div className="dealer-leads-section buyer-garage-section">
+          <div className="buyer-section-head">
+            <div>
+              <p className="eyebrow">Garage oX</p>
+              <h2>Garage oX</h2>
+              <p>
+                Historial privado de tus unidades dentro de la plataforma.
+              </p>
+            </div>
+          </div>
+
+          <div className="buyer-garage-hero">
+            <div>
+              <span>Historial premium</span>
+              <strong>Unidad, servicios y recorrido en un solo lugar.</strong>
+              <p>
+                Registro organizado para conservar la trazabilidad del vehiculo.
+              </p>
+            </div>
+            <div className="buyer-garage-hero-metrics">
+              <span>Historial</span>
+              <strong>{garageServices.length}</strong>
+              <small>registros cargados</small>
+            </div>
+          </div>
+
+          {garageVehicles.length === 0 ? (
+            <div className="buyer-garage-empty">
+              <strong>Tu garage todavia esta esperando su primera unidad.</strong>
+              <p>
+                Las unidades asignadas por el dealer aparecen aca con su historial listo para completar.
+              </p>
+              <button className="primary-action" onClick={() => onNavigate?.("search")}>
+                Buscar vehiculos
+              </button>
+            </div>
+          ) : (
+            <div className="buyer-garage-layout">
+              <div className="buyer-garage-list">
+                {garageVehicles.map((vehicle) => {
+                  const services = garageServices.filter(
+                    (service) => service.garageVehicleId === vehicle.id
+                  );
+                  const isSelected = selectedGarageVehicleId === vehicle.id;
+
+                  return (
+                    <button
+                      key={vehicle.id}
+                      type="button"
+                      className={`buyer-garage-vehicle-card${isSelected ? " is-active" : ""}`}
+                      onClick={() => setSelectedGarageVehicleId(vehicle.id)}
+                    >
+                      <span>Vehiculo comprado</span>
+                      <strong>{vehicle.title}</strong>
+                      <p>{vehicle.dealer} · {formatARS(vehicle.price)}</p>
+                      <div className="buyer-garage-card-meta">
+                        <span>{vehicle.status}</span>
+                        <span>{services.length} servicio{services.length !== 1 ? "s" : ""}</span>
+                      </div>
+                      <small>{getNextGarageHint(services)}</small>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <form className="buyer-garage-service-form" onSubmit={handleSaveGarageService}>
+                <div>
+                  <span className="eyebrow">Nuevo registro</span>
+                  <h3>Agregar servicio</h3>
+                  <p>
+                    Registro privado de mantenimiento, kilometraje y trabajos realizados.
+                  </p>
+                </div>
+
+                <div className="buyer-garage-form-grid">
+                  <label>
+                    Fecha
+                    <input
+                      type="date"
+                      value={garageForm.serviceDate}
+                      onChange={(e) =>
+                        setGarageForm((f) => ({ ...f, serviceDate: e.target.value }))
+                      }
+                      required
+                    />
+                  </label>
+                  <label>
+                    Kilometraje
+                    <input
+                      type="number"
+                      min="0"
+                      value={garageForm.mileage}
+                      onChange={(e) =>
+                        setGarageForm((f) => ({ ...f, mileage: e.target.value }))
+                      }
+                      placeholder="Ej. 45000"
+                    />
+                  </label>
+                  <label>
+                    Tipo
+                    <select
+                      value={garageForm.serviceType}
+                      onChange={(e) =>
+                        setGarageForm((f) => ({ ...f, serviceType: e.target.value }))
+                      }
+                    >
+                      <option value="oil">Aceite y filtros</option>
+                      <option value="brakes">Frenos</option>
+                      <option value="tires">Cubiertas</option>
+                      <option value="battery">Bateria</option>
+                      <option value="inspection">Revision general</option>
+                      <option value="repair">Reparacion</option>
+                      <option value="other">Otro</option>
+                    </select>
+                  </label>
+                  <label>
+                    Costo
+                    <input
+                      type="number"
+                      min="0"
+                      value={garageForm.cost}
+                      onChange={(e) =>
+                        setGarageForm((f) => ({ ...f, cost: e.target.value }))
+                      }
+                      placeholder="Opcional"
+                    />
+                  </label>
+                </div>
+
+                <label className="buyer-garage-notes">
+                  Detalle
+                  <textarea
+                    value={garageForm.notes}
+                    onChange={(e) =>
+                      setGarageForm((f) => ({ ...f, notes: e.target.value }))
+                    }
+                    rows={3}
+                    placeholder="Ej. Cambio de aceite, filtros, revision de tren delantero..."
+                  />
+                </label>
+
+                <div className="buyer-garage-form-actions">
+                  <button
+                    type="submit"
+                    className="primary-action"
+                    disabled={garageSaving || !selectedGarageVehicleId}
+                  >
+                    {garageSaving ? "Guardando..." : "Guardar servicio"}
+                  </button>
+                  {garageSaved && <span>Servicio guardado</span>}
+                  {garageSource === "local" && (
+                    <small>Registro local hasta activar persistencia Supabase.</small>
+                  )}
+                </div>
+              </form>
+
+              <div className="buyer-garage-history">
+                <div>
+                  <span className="eyebrow">Historial</span>
+                  <h3>Servicios registrados</h3>
+                </div>
+                {garageServices.filter((service) => service.garageVehicleId === selectedGarageVehicleId).length === 0 ? (
+                  <p className="buyer-garage-history-empty">
+                    Todavia no hay servicios cargados para este vehiculo.
+                  </p>
+                ) : (
+                  <div className="buyer-garage-service-list">
+                    {garageServices
+                      .filter((service) => service.garageVehicleId === selectedGarageVehicleId)
+                      .map((service) => (
+                        <article key={service.id} className="buyer-garage-service-item">
+                          <span>{formatDateTime(service.serviceDate)}</span>
+                          <strong>{getServiceTypeLabel(service.serviceType)}</strong>
+                          <p>
+                            {service.mileage ? `${Number(service.mileage).toLocaleString("es-AR")} km` : "Sin km"}
+                            {service.cost ? ` · ${formatARS(service.cost)}` : ""}
+                          </p>
+                          {service.notes && <small>{service.notes}</small>}
+                        </article>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="dealer-leads-section">
@@ -538,7 +850,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                       </td>
 
                       <td>
-                        <span className="admin-chip success">
+                        <span className={`admin-chip ${getVehicleLeadChipClass(lead.crm_status)}`.trim()}>
                           {getVehicleLeadStatusLabel(lead.crm_status)}
                         </span>
                       </td>

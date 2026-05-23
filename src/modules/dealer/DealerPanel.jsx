@@ -100,7 +100,6 @@ const PLAN_TIERS = [
 const PLAN_ORDER = ["inicio", "pro", "elite", "platinum"];
 
 const DEALER_MOBILE_SECTIONS = [
-  { id: "home", label: "Inicio" },
   { id: "publish", label: "Publicar" },
   { id: "vehicles", label: "Inventario" },
   { id: "leads", label: "Leads" },
@@ -1230,36 +1229,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
     (vehicle) => vehicle.review_status === "needs_review"
   ).length;
 
-  const financingVehiclesCount = dealerVehicles.filter(
-    (vehicle) => vehicle.financing || vehicle.hasFinancing
-  ).length;
-
-  const marketReferenceVehiclesCount = dealerVehicles.filter(
-    (vehicle) =>
-      Number(
-        vehicle.marketReferencePrice ||
-          vehicle.market_reference_price ||
-          vehicle.avg ||
-          0
-      ) > 0
-  ).length;
-
-  const photoReadyVehiclesCount = dealerVehicles.filter((vehicle) => {
-    const images = vehicle.images || vehicle.images_json || [];
-    return Boolean(
-      vehicle.mainImageUrl ||
-        vehicle.main_image_url ||
-        vehicle.imageUrl ||
-        vehicle.image_url ||
-        (Array.isArray(images) && images.length > 0)
-    );
-  }).length;
-
   const newLeadsCount = leads.filter((lead) => lead.crm_status === "new").length;
-
-  const negotiationLeadsCount = leads.filter(
-    (lead) => lead.crm_status === "negotiation"
-  ).length;
 
   const openTicketsCount = tickets.filter((ticket) =>
     ["new", "open", "in_progress", "waiting_dealer"].includes(ticket.status)
@@ -1332,7 +1302,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
           <article className="dealer-mobile-kpi-card">
             <span>Activas</span>
             <strong>{activeVehiclesCount}</strong>
-            <p>{activeVehiclesCount} activas</p>
+            <p>publicaciones</p>
           </article>
 
           <article className="dealer-mobile-kpi-card">
@@ -1762,227 +1732,37 @@ export default function DealerPanel({ authProfile, onNavigate }) {
         {activeDealerModule === "summary" && (
           <>
           {renderDealerOnboarding()}
-          <section className="dealer-dashboard-shell" aria-label="Resumen operativo dealer">
-            <article className="dealer-dashboard-primary-card">
-              <span>Acción principal</span>
-              <h2>Alta de vehículo</h2>
-              <p>Cargá una unidad con fotos, precio, financiación y datos comerciales.</p>
-              <div className="dealer-dashboard-primary-meta">
-                <strong>{activeVehiclesCount} activas</strong>
-                <span>{dealerVehicles.length} publicaciones cargadas</span>
-              </div>
-              <button
-                type="button"
-                className="primary-action"
-                disabled={!publishCheck.allowed}
-                onClick={() => {
-                  if (publishCheck.allowed) openModule("publish");
-                }}
-              >
-                Publicar vehículo
-              </button>
-              {!publishCheck.allowed && (
-                <small className="dealer-module-lock-reason">
-                  {publishBlockReason || "No disponible por el estado del plan."}
-                </small>
-              )}
-            </article>
 
-            <div className="dealer-dashboard-ops">
-              <article className="dealer-dashboard-mini-card">
-                <span>Inventario</span>
-                <strong>{activeVehiclesCount} activas</strong>
-                <p>{reviewVehiclesCount} en revisión</p>
-                <button type="button" onClick={() => openModule("inventory")}>
-                  Abrir inventario
-                </button>
-              </article>
-
-              <article className="dealer-dashboard-mini-card">
-                <span>Leads</span>
-                <strong>{newLeadsCount} nuevos</strong>
-                <p>{leads.length} consultas totales</p>
-                <button type="button" onClick={() => openModule("leads")}>
-                  Abrir leads
-                </button>
-              </article>
-
-              <article className="dealer-dashboard-mini-card">
-                <span>Soporte</span>
-                <strong>{openTicketsCount} abiertos</strong>
-                <p>{isPlatinum ? "Prioridad Platinum visible" : "Seguimiento interno"}</p>
-                <button type="button" onClick={() => openModule("support")}>
-                  Abrir soporte
-                </button>
-              </article>
-
-              <article className="dealer-dashboard-mini-card">
-                <span>Oportunidades</span>
-                <strong>{sellVehicleLeads.length}</strong>
-                <p>Vender mi vehículo asignadas</p>
-                <button
-                  type="button"
-                  disabled={!permissions.sellVehicleLeads}
-                  onClick={() => {
-                    if (permissions.sellVehicleLeads) openModule("sellVehicle");
-                  }}
-                >
-                  Ver oportunidades
-                </button>
-              </article>
+          <div className="dealer-summary-stats-bar">
+            <div className="dealer-summary-stat">
+              <span>Publicaciones activas</span>
+              <strong>{activeVehiclesCount}</strong>
+              <p>{dealerVehicles.length} cargadas · {reviewVehiclesCount} en revisión</p>
             </div>
+            <div className="dealer-summary-stat">
+              <span>Leads nuevos</span>
+              <strong>{newLeadsCount}</strong>
+              <p>{leads.length} consultas totales</p>
+            </div>
+            <div className="dealer-summary-stat">
+              <span>Soporte</span>
+              <strong>{openTicketsCount}</strong>
+              <p>{isPlatinum ? "Prioridad Platinum" : "Tickets abiertos"}</p>
+            </div>
+            <div className={`dealer-summary-stat${isPlatinum ? " is-platinum" : ""}`}>
+              <span>{isPlatinum ? "Platinum · ilimitado" : "Cupo del período"}</span>
+              <strong>{isPlatinum ? `${used}` : capacityLabel}</strong>
+              <p>{isPlatinum ? `${used} publicadas · sin límite` : secondaryCapacityLabel}</p>
+            </div>
+            <div className="dealer-summary-stat">
+              <span>Vencimiento</span>
+              <strong>{expiresInDays}d</strong>
+              <p>{getPlanAlertLabel(expiresInDays)}</p>
+            </div>
+          </div>
 
-            <aside className="dealer-dashboard-account">
-              <article
-                className={`dealer-dashboard-plan-card${
-                  isPlatinum ? " dealer-dashboard-plan-card--platinum" : ""
-                }`}
-              >
-                <span>{isPlatinum ? "Platinum · ilimitado" : "Mi plan"}</span>
-                <strong>{isPlatinum ? "Publicaciones ilimitadas" : capacityLabel}</strong>
-                <p>{secondaryCapacityLabel}</p>
-                <div className="dealer-dashboard-chip-row">
-                  {(isPlatinum
-                    ? ["Señales completas", "Soporte prioritario", "Herramientas avanzadas"]
-                    : planBenefitBadges.slice(0, 3)
-                  ).map((badge) => (
-                    <span key={badge}>{badge}</span>
-                  ))}
-                </div>
-              </article>
-            </aside>
-          </section>
-
-          {renderDealerFeaturePreview()}
           </>
         )}
-
-        <div className="dealer-status-grid">
-          <article
-            className={`dealer-status-card rank-${permissions.rankTheme}${
-              isPlatinum ? " dealer-plan-platinum-card" : ""
-            }`}
-          >
-            <span>Plan actual</span>
-            <strong>{permissions.rankLabel}</strong>
-            <p>
-              {dealer.commercialName} · {dealer.city}, {dealer.province}
-            </p>
-          </article>
-
-          <article className="dealer-status-card">
-            <span>Oportunidades venta</span>
-            <strong>{sellVehicleLeads.length}</strong>
-            <p>Solicitudes “Vender mi vehículo” asignadas por admin.</p>
-          </article>
-          <article className="dealer-status-card">
-            <span>Cupo usado en este período</span>
-            <strong>{capacityLabel}</strong>
-            <p>{secondaryCapacityLabel}</p>
-            {extraQuota > 0 && (
-              <p>Cupo extra temporal: {extraQuota} publicaciones.</p>
-            )}
-          </article>
-
-          <article
-            className={`dealer-status-card dealer-plan-benefits-card${
-              isPlatinum ? " dealer-plan-platinum-card" : ""
-            }`}
-          >
-            <span>Beneficios de tu plan</span>
-            <strong>{isPlatinum ? "Nivel máximo" : permissions.planLabel}</strong>
-            <p>
-              {isPlatinum
-                ? "Métricas completas incluidas en tu plan. Módulo avanzado preparado para próximas fases."
-                : "Capacidades comerciales habilitadas para este período."}
-            </p>
-            <div className="dealer-plan-benefits-grid">
-              {planBenefitBadges.map((badge) => (
-                <span key={badge} className="dealer-plan-benefit-chip">
-                  {badge}
-                </span>
-              ))}
-            </div>
-          </article>
-
-          {isPlatinum && (
-            <article className="dealer-status-card platinum-operational-card">
-              <span>Señales operativas de tu stock</span>
-              <strong>Lectura Platinum</strong>
-              <p>
-                Señales calculadas solo con datos cargados en tus publicaciones.
-              </p>
-              <div className="platinum-operational-chip-row">
-                <span className="platinum-operational-chip">
-                  {financingVehiclesCount} con financiación
-                </span>
-                <span className="platinum-operational-chip">
-                  {marketReferenceVehiclesCount} con referencia de mercado
-                </span>
-                <span className="platinum-operational-chip">
-                  {photoReadyVehiclesCount} con fotos
-                </span>
-                <span className="platinum-operational-chip">
-                  {reviewVehiclesCount} en revisión
-                </span>
-              </div>
-            </article>
-          )}
-
-          <article className="dealer-status-card">
-            <span>Estado comercial</span>
-            <strong>{getPlanStatusLabel(dealer.planStatus)}</strong>
-            <p className={getPlanStatusAlertClass(dealer.planStatus, expiresInDays)}>
-              {planStatusDescription}
-            </p>
-            {!publishCheck.allowed && (
-              <button
-                type="button"
-                className="table-action-btn"
-                onClick={() => openModule("support")}
-              >
-                Contactar administración
-              </button>
-            )}
-          </article>
-
-          <article className="dealer-status-card">
-            <span>Vehículos activos</span>
-            <strong>{activeVehiclesCount}</strong>
-            <p>{dealerVehicles.length} publicaciones totales del dealer.</p>
-          </article>
-        </div>
-
-        <div className="dealer-status-grid">
-          <article className="dealer-status-card">
-            <span>Leads nuevos</span>
-            <strong>{newLeadsCount}</strong>
-            <p>{leads.length} leads visibles para este dealer.</p>
-          </article>
-
-          <article className="dealer-status-card">
-            <span>Negociación</span>
-            <strong>{negotiationLeadsCount}</strong>
-            <p>Oportunidades comerciales activas.</p>
-          </article>
-
-          <article className="dealer-status-card">
-            <span>Tickets abiertos</span>
-            <strong>{openTicketsCount}</strong>
-            <p>Consultas internas pendientes o en proceso.</p>
-            {isPlatinum && (
-              <span className="dealer-platinum-priority-badge">
-                Prioridad Platinum
-              </span>
-            )}
-          </article>
-
-          <article className="dealer-status-card">
-            <span>En revisión</span>
-            <strong>{reviewVehiclesCount}</strong>
-            <p>Publicaciones pendientes de revisión.</p>
-          </article>
-        </div>
 
         {activeDealerModule === "summary" && notifications.length > 0 && (
           <div className="dealer-notifications-section">
@@ -2027,182 +1807,122 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
         {activeDealerModule === "summary" && (
           <div className="dealer-modules-grid">
+
             <article
-              className={
-                permissions.sellVehicleLeads
-                  ? "dealer-module-card clickable-module-card"
-                  : "dealer-module-card dealer-module-card--locked"
-              }
+              data-module="inventory"
+              className="dealer-module-card clickable-module-card"
               onClick={() => openModule("inventory")}
             >
-              <h3>Mis vehículos</h3>
-              <p>
-                {dealerVehicles.length > 0
-                  ? `${dealerVehicles.length} publicaciones reales cargadas.`
-                  : "Todavía no hay publicaciones reales para este dealer."}
-              </p>
+              <div className="dealer-mc-kpi">
+                <strong>{activeVehiclesCount}</strong>
+                <span>activas{reviewVehiclesCount > 0 ? ` · ${reviewVehiclesCount} en revisión` : ""}</span>
+              </div>
+              <h3>Inventario</h3>
+              <p>Publicaciones activas, pausadas y stock disponible.</p>
               <button type="button">Abrir inventario</button>
             </article>
 
             <article
-              className={
-                publishCheck.allowed
-                  ? "dealer-module-card clickable-module-card"
-                  : "dealer-module-card dealer-module-card--locked"
-              }
-              onClick={() => {
-                if (publishCheck.allowed) openModule("publish");
-              }}
+              data-module="publish"
+              className={publishCheck.allowed ? "dealer-module-card clickable-module-card" : "dealer-module-card dealer-module-card--locked"}
+              onClick={() => { if (publishCheck.allowed) openModule("publish"); }}
             >
-              <h3>Alta de vehículo</h3>
-              <p>
-                Carga guiada por catálogo, validación automática y control de
-                cupo.
-              </p>
+              <div className="dealer-mc-kpi">
+                <strong>{isPlatinum ? "∞" : remaining}</strong>
+                <span>{isPlatinum ? "sin límite" : `disponibles de ${formatLimit(limit)}`}</span>
+              </div>
+              <h3>Publicar vehículo</h3>
+              <p>Carga guiada con validación automática de cupo y catálogo.</p>
               {!publishCheck.allowed && (
-                <small className="dealer-module-lock-reason">
-                  {publishBlockReason || "No disponible por el estado del plan."}
-                </small>
+                <small className="dealer-module-lock-reason">{publishBlockReason}</small>
               )}
-              <button type="button" disabled={!publishCheck.allowed}>
-                Publicar vehículo
-              </button>
-              {!publishCheck.allowed && (
-                <button
-                  type="button"
-                  className="table-action-btn"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    openModule("support");
-                  }}
-                >
-                  Contactar administración
-                </button>
-              )}
+              <button type="button" disabled={!publishCheck.allowed}>Publicar vehículo</button>
             </article>
 
             <article
+              data-module="leads"
               className="dealer-module-card clickable-module-card"
               onClick={() => openModule("leads")}
             >
+              <div className="dealer-mc-kpi">
+                <strong>{newLeadsCount}</strong>
+                <span>nuevos · {leads.length} total</span>
+              </div>
               <h3>Leads recibidos</h3>
-              <p>
-                {leads.length > 0
-                  ? `${leads.length} consultas reales recibidas.`
-                  : "Todavía no hay consultas reales para este dealer."}
-              </p>
-              <button type="button">Abrir leads</button>
+              <p>Consultas de compradores sobre tus publicaciones.</p>
+              <button type="button">Gestionar leads</button>
             </article>
 
             <article
-              className={`dealer-module-card dealer-module-card--locked${
-                isPlatinum ? " dealer-platinum-tool-card" : ""
-              }`}
-            >
-              <h3>Financiación</h3>
-              <p>
-                {isPlatinum
-                  ? "Incluido en Platinum. Herramientas completas preparadas para configuración comercial avanzada."
-                  : permissions.fullFinancingTools
-                  ? "Financiación propia, bancaria y simulador visible al comprador."
-                  : "Financiación básica informada. Herramientas completas disponibles en planes superiores."}
-              </p>
-              {isPlatinum && (
-                <div className="platinum-operational-chip-row">
-                  <span className="platinum-operational-chip">Visualizaciones</span>
-                  <span className="platinum-operational-chip">Leads</span>
-                  <span className="platinum-operational-chip">WhatsApp</span>
-                  <span className="platinum-operational-chip">Comparaciones</span>
-                  <span className="platinum-operational-chip">
-                    Publicaciones activas
-                  </span>
-                </div>
-              )}
-              <button type="button" disabled>
-                {isPlatinum ? "Incluido en Platinum" : "Proximamente"}
-              </button>
-            </article>
-
-            <article
-              className={`dealer-module-card clickable-module-card${
-                isPlatinum ? " dealer-platinum-tool-card" : ""
-              }`}
+              data-module="metrics"
+              className="dealer-module-card clickable-module-card"
               onClick={() => openModule("metrics")}
             >
+              <div className="dealer-mc-kpi">
+                <strong>{totalDetailViews}</strong>
+                <span>vistas totales</span>
+              </div>
               <h3>Métricas</h3>
-              <p>Vistas, conversión, tiempo de respuesta y calidad de publicaciones.</p>
-              <button type="button" onClick={() => openModule("metrics")}>
-                Ver métricas
-              </button>
+              <p>Vistas, conversión y calidad de publicaciones.</p>
+              <button type="button">Ver métricas</button>
             </article>
 
             <article
-              className={`dealer-module-card clickable-module-card${
-                isPlatinum ? " dealer-platinum-tool-card" : ""
-              }`}
-              onClick={() => {
-                if (permissions.sellVehicleLeads) {
-                  openModule("sellVehicle");
-                }
-              }}
+              data-module="sellVehicle"
+              className={`dealer-module-card${permissions.sellVehicleLeads ? " clickable-module-card" : " dealer-module-card--locked"}`}
+              onClick={() => { if (permissions.sellVehicleLeads) openModule("sellVehicle"); }}
             >
+              <div className="dealer-mc-kpi">
+                <strong>{sellVehicleLeads.length}</strong>
+                <span>asignadas</span>
+              </div>
               <h3>Vender mi vehículo</h3>
-              <p>
-                {permissions.sellVehicleLeads
-                  ? isPlatinum
-                    ? "Habilitado para oportunidades comerciales asignadas por admin. Sin asignación automática simulada."
-                    : "Habilitado para recibir oportunidades asignadas por admin."
-                  : "No habilitado por defecto. Admin puede activarlo como beneficio."}
-              </p>
-              {isPlatinum && (
-                <span className="platinum-opportunity-state">
-                  {sellVehicleLeads.length} oportunidades reales asignadas
-                </span>
-              )}
-              <button type="button" disabled={!permissions.sellVehicleLeads}>
-                Ver oportunidades
-              </button>
+              <p>{permissions.sellVehicleLeads ? "Oportunidades comerciales asignadas por administración." : "Requiere habilitación por administración."}</p>
+              <button type="button" disabled={!permissions.sellVehicleLeads}>Ver oportunidades</button>
             </article>
 
             <article
-              className={
-                reviewVehiclesCount > 0
-                  ? "dealer-module-card clickable-module-card"
-                  : "dealer-module-card dealer-module-card--locked"
-              }
-              onClick={() => {
-                if (reviewVehiclesCount > 0) openModule("urgent");
-              }}
+              data-module="urgent"
+              className={reviewVehiclesCount > 0 ? "dealer-module-card clickable-module-card" : "dealer-module-card dealer-module-card--locked"}
+              onClick={() => { if (reviewVehiclesCount > 0) openModule("urgent"); }}
             >
-              <h3>Urgencias / Observaciones</h3>
-              <p>
-                Publicaciones observadas, revisión urgente y correcciones
-                necesarias.
-              </p>
-              <button type="button" disabled={reviewVehiclesCount === 0}>
-                Ver urgencias
-              </button>
+              <div className="dealer-mc-kpi">
+                <strong>{reviewVehiclesCount}</strong>
+                <span>observadas</span>
+              </div>
+              <h3>Urgencias</h3>
+              <p>Publicaciones que requieren corrección o revisión urgente.</p>
+              <button type="button" disabled={reviewVehiclesCount === 0}>Ver urgencias</button>
             </article>
 
             <article
-              className={`dealer-module-card clickable-module-card${
-                isPlatinum ? " dealer-platinum-tool-card" : ""
-              }`}
+              data-module="support"
+              className="dealer-module-card clickable-module-card"
               onClick={() => openModule("support")}
             >
-              <h3>Soporte admin</h3>
-              <p>
-                {isPlatinum
-                  ? "Tus tickets se identifican con prioridad Platinum para seguimiento interno."
-                  : "Tickets internos estilo Remedy para resolver consultas sin salir de la plataforma."}
-              </p>
-              {isPlatinum && (
-                <span className="dealer-platinum-priority-badge">
-                  Prioridad Platinum
-                </span>
-              )}
+              <div className="dealer-mc-kpi">
+                <strong>{openTicketsCount}</strong>
+                <span>abiertos</span>
+              </div>
+              <h3>Soporte</h3>
+              <p>{isPlatinum ? "Atención con prioridad Platinum incluida." : "Tickets y consultas a administración."}</p>
+              {isPlatinum && <span className="dealer-platinum-priority-badge">Prioridad Platinum</span>}
               <button type="button">Abrir soporte</button>
             </article>
+
+            <article
+              data-module="financing"
+              className="dealer-module-card dealer-module-card--locked"
+            >
+              <div className="dealer-mc-kpi">
+                <strong>—</strong>
+                <span>próximamente</span>
+              </div>
+              <h3>Financiación</h3>
+              <p>{permissions.fullFinancingTools ? "Herramientas de financiación disponibles en tu plan." : "Disponible en planes Pro y superiores."}</p>
+              <button type="button" disabled>{isPlatinum ? "Incluido en Platinum" : "Próximamente"}</button>
+            </article>
+
           </div>
         )}
 

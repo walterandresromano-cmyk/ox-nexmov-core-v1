@@ -26,11 +26,25 @@ function getPrivatePanelForRole(role) {
   return null;
 }
 
+function getFirstName(authProfile, authUser) {
+  const fullName = String(authProfile?.full_name || "").trim();
+  if (fullName) return fullName.split(/\s+/)[0];
+
+  const email = String(authProfile?.email || authUser?.email || "").trim();
+  if (email) return email.split("@")[0];
+
+  return "comprador";
+}
+
 export default function Header({ currentRoute, onNavigate, appActions }) {
   const authUser = appActions?.authUser;
   const authProfile = appActions?.authProfile;
   const isLoggedIn = Boolean(authUser?.id);
   const privatePanel = getPrivatePanelForRole(authProfile?.role);
+  const privatePanelLabel =
+    privatePanel?.id === "buyer"
+      ? `Hola, ${getFirstName(authProfile, authUser)}`
+      : privatePanel?.label;
   const theme = appActions?.theme || "dark";
   const nextThemeLabel = theme === "dark" ? "Modo claro" : "Modo oscuro";
 
@@ -96,11 +110,13 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
             <button
               type="button"
               className={
-                currentRoute === privatePanel.id ? "login-btn active" : "login-btn"
+                currentRoute === privatePanel.id
+                  ? "login-btn private-panel-btn active"
+                  : "login-btn private-panel-btn"
               }
               onClick={() => onNavigate(privatePanel.id)}
             >
-              {privatePanel.label}
+              {privatePanelLabel}
             </button>
           )}
 

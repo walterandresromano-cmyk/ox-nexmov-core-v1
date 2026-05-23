@@ -66,6 +66,56 @@ function formatFollowUpDate(dateStr) {
   }).format(new Date(dateStr + "T00:00:00"));
 }
 
+function getFollowUpLabel(state) {
+  if (state === "overdue") return "Vencido";
+  if (state === "today") return "Hoy";
+  if (state === "upcoming") return "Proxima accion";
+  return "Seguimiento";
+}
+
+function getLeadStatusLabel(status) {
+  const labels = {
+    new: "Nuevo",
+    nuevo: "Nuevo",
+    seen: "Visto",
+    contacted: "Contactado",
+    contactado: "Contactado",
+    negotiation: "Negociacion",
+    in_progress: "En gestion",
+    en_gestion: "En gestion",
+    reserved: "Reservado",
+    sold: "Vendido",
+    closed: "Cerrado",
+    cerrado: "Cerrado",
+    lost: "Perdido",
+    perdido: "Perdido",
+    no_response: "Sin respuesta",
+  };
+
+  return labels[String(status || "").toLowerCase()] || status || "Sin estado";
+}
+
+function getCloseReason(lead) {
+  return (
+    lead?.close_reason ||
+    lead?.closed_reason ||
+    lead?.lost_reason ||
+    lead?.loss_reason ||
+    lead?.closing_reason ||
+    lead?.closeReason ||
+    lead?.lostReason ||
+    ""
+  );
+}
+
+function getBuyerName(lead) {
+  return `${lead.buyer_first_name || ""} ${lead.buyer_last_name || ""}`.trim() || "Comprador";
+}
+
+function getVehicleLabel(lead) {
+  return [lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ") || lead.vehicle_title_snapshot || "Vehiculo consultado";
+}
+
 const PIPELINE_STAGES = [
   { key: "all",         label: "Todos",          match: () => true },
   { key: "new",         label: "Nuevos",          match: (s) => ["new", "nuevo"].includes(s) },
@@ -204,6 +254,86 @@ function QuickAdvanceBtn({ lead, onUpdated }) {
   );
 }
 
+function LeadCrmCard({ lead, onOpen, onUpdated }) {
+  const vehicleLabel = getVehicleLabel(lead);
+  const buyerName = getBuyerName(lead);
+  const waLink = getWhatsAppLink(lead.buyer_phone, buyerName, vehicleLabel);
+  const isNew = lead.crm_status === "new";
+  const followUpState = getFollowUpState(lead.next_action_date);
+  const closeReason = getCloseReason(lead);
+
+  return (
+    <article className={`lead-crm-card${isNew ? " is-new" : ""}${followUpState ? ` has-followup is-${followUpState}` : ""}`}>
+      <div className="lead-crm-card-head">
+        <div>
+          <span className="lead-crm-date" title={formatDateTime(lead.created_at)}>
+            {formatRelativeTime(lead.created_at)}
+          </span>
+          <strong>{buyerName}</strong>
+          <p>{lead.buyer_email || "Email no informado"}</p>
+        </div>
+        <span className={`lead-crm-status lead-crm-status--${String(lead.crm_status || "new").toLowerCase()}`}>
+          {getLeadStatusLabel(lead.crm_status)}
+        </span>
+      </div>
+
+      <div className="lead-crm-vehicle">
+        <span>Vehiculo</span>
+        <strong>{vehicleLabel}</strong>
+        <p>{lead.vehicle_version || lead.vehicle_title_snapshot || "Sin version informada"}</p>
+      </div>
+
+      {(followUpState || lead.next_action_note) && (
+        <div className="lead-crm-followup">
+          {followUpState && (
+            <span className={`lead-followup-chip lead-followup-chip--${followUpState}`}>
+              {getFollowUpLabel(followUpState)}: {formatFollowUpDate(lead.next_action_date)}
+            </span>
+          )}
+          {lead.next_action_note && <p>{lead.next_action_note}</p>}
+        </div>
+      )}
+
+      <div className="lead-crm-message">
+        <span>Mensaje</span>
+        <p>{lead.message || "Sin mensaje."}</p>
+      </div>
+
+      {closeReason && (
+        <div className="lead-crm-close-reason">
+          <span>Motivo registrado</span>
+          <p>{closeReason}</p>
+        </div>
+      )}
+
+      <div className="lead-crm-actions">
+        {lead.buyer_phone && waLink && (
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="lead-whatsapp-btn"
+            title="Abrir WhatsApp con mensaje pre-armado"
+          >
+            WhatsApp
+          </a>
+        )}
+        <button className="table-action-btn" type="button" onClick={() => onOpen(lead)}>
+          Ver detalle
+        </button>
+      </div>
+
+      <div className="lead-crm-management">
+        <NoteEditor lead={lead} onUpdated={onUpdated} />
+        <div className="lead-status-with-advance">
+          <LeadStatusSelect lead={lead} onUpdated={onUpdated} />
+          <QuickAdvanceBtn lead={lead} onUpdated={onUpdated} />
+        </div>
+      </div>
+    </article>
+  );
+}
+
 export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
   const [selectedLead, setSelectedLead] = useState(null);
   const [activeStage, setActiveStage] = useState("all");
@@ -232,6 +362,28 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
 
     return list;
   }, [leads, activeStage, search]);
+
+  const followUpAgenda = useMemo(() => {
+    const priority = { overdue: 0, today: 1, upcoming: 2 };
+
+    return leads
+      .filter((lead) => lead.next_action_date)
+      .map((lead) => ({
+        lead,
+        state: getFollowUpState(lead.next_action_date),
+      }))
+      .filter((item) => item.state)
+      .sort((a, b) => {
+        const stateDiff = priority[a.state] - priority[b.state];
+        if (stateDiff !== 0) return stateDiff;
+        return new Date(a.lead.next_action_date) - new Date(b.lead.next_action_date);
+      })
+      .slice(0, 5);
+  }, [leads]);
+
+  const urgentFollowUps = followUpAgenda.filter((item) =>
+    ["overdue", "today"].includes(item.state)
+  ).length;
 
   async function handleOpenLead(lead) {
     setSelectedLead(lead);
@@ -270,6 +422,49 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
         <div className="empty-state">Todavía no hay leads reales para mostrar.</div>
       ) : (
         <>
+          <section className="dealer-followup-agenda">
+            <div className="dealer-followup-agenda-head">
+              <div>
+                <span>Agenda comercial</span>
+                <strong>Proximos seguimientos</strong>
+                <p>
+                  {urgentFollowUps > 0
+                    ? `${urgentFollowUps} accion${urgentFollowUps !== 1 ? "es" : ""} requieren atencion hoy.`
+                    : "Sin seguimientos vencidos para hoy."}
+                </p>
+              </div>
+              <button
+                type="button"
+                className="table-action-btn"
+                onClick={() => setActiveStage("all")}
+              >
+                Ver todos
+              </button>
+            </div>
+
+            {followUpAgenda.length === 0 ? (
+              <div className="dealer-followup-empty">
+                Agrega una proxima accion en cada lead para construir tu agenda comercial.
+              </div>
+            ) : (
+              <div className="dealer-followup-list">
+                {followUpAgenda.map(({ lead, state }) => (
+                  <button
+                    key={lead.lead_id}
+                    type="button"
+                    className={`dealer-followup-item is-${state}`}
+                    onClick={() => handleOpenLead(lead)}
+                  >
+                    <span>{getFollowUpLabel(state)}</span>
+                    <strong>{getBuyerName(lead)}</strong>
+                    <p>{getVehicleLabel(lead)}</p>
+                    <small>{formatFollowUpDate(lead.next_action_date)}</small>
+                  </button>
+                ))}
+              </div>
+            )}
+          </section>
+
           {/* Pipeline stage bar */}
           <div className="leads-pipeline-bar">
             {PIPELINE_STAGES.map((stage) => (
@@ -304,6 +499,17 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
               Sin leads en este estado.
             </div>
           ) : (
+            <>
+            <div className="dealer-leads-card-grid">
+              {filtered.map((lead) => (
+                <LeadCrmCard
+                  key={lead.lead_id}
+                  lead={lead}
+                  onOpen={handleOpenLead}
+                  onUpdated={onRefresh}
+                />
+              ))}
+            </div>
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead>
@@ -408,6 +614,7 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </>
       )}

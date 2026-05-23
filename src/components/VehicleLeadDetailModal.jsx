@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import LeadStatusSelect from "./LeadStatusSelect.jsx";
+import { assignVehicleToBuyerGarage } from "../services/buyerGarage.service.js";
 import { updateVehicleLeadStatus } from "../services/leads.service.js";
 import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
 
@@ -48,6 +49,19 @@ function getStatusLabel(status) {
   return labels[status] || status || "Sin estado";
 }
 
+function getCloseReason(lead) {
+  return (
+    lead?.close_reason ||
+    lead?.closed_reason ||
+    lead?.lost_reason ||
+    lead?.loss_reason ||
+    lead?.closing_reason ||
+    lead?.closeReason ||
+    lead?.lostReason ||
+    ""
+  );
+}
+
 export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
   const [notes, setNotes] = useState(lead?.notes || "");
   const [nextActionNote, setNextActionNote] = useState(lead?.next_action_note || "");
@@ -55,6 +69,9 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
   const [savingNotes, setSavingNotes] = useState(false);
   const [notesSaved, setNotesSaved] = useState(false);
   const [notesError, setNotesError] = useState("");
+  const [assigningGarage, setAssigningGarage] = useState(false);
+  const [garageMessage, setGarageMessage] = useState("");
+  const [garageError, setGarageError] = useState("");
 
   useEffect(() => {
     setNotes(lead?.notes || "");
@@ -63,6 +80,7 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
   }, [lead?.notes, lead?.next_action_note, lead?.next_action_date]);
 
   if (!lead) return null;
+  const closeReason = getCloseReason(lead);
 
   async function handleSaveNotes() {
     setSavingNotes(true);
@@ -93,6 +111,49 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
     window.setTimeout(() => {
       setNotesSaved(false);
     }, 1600);
+  }
+
+  async function handleAssignGarage() {
+    const buyerName =
+      [lead.buyer_first_name, lead.buyer_last_name].filter(Boolean).join(" ") ||
+      lead.buyer_email ||
+      lead.buyer_phone ||
+      "este comprador";
+    const vehicleName =
+      [lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ") ||
+      lead.vehicle_title_snapshot ||
+      "esta unidad";
+
+    const confirmed = window.confirm(
+      `Asignar ${vehicleName} al Garage oX de ${buyerName}?`
+    );
+
+    if (!confirmed) return;
+
+    setAssigningGarage(true);
+    setGarageMessage("");
+    setGarageError("");
+
+    const { error } = await assignVehicleToBuyerGarage({
+      leadId: lead.lead_id,
+      vehicleId: lead.vehicle_id,
+      note: "Asignacion directa desde detalle de lead.",
+    });
+
+    if (error) {
+      setGarageError(
+        error.message || "No se pudo asignar la unidad al Garage oX."
+      );
+      setAssigningGarage(false);
+      return;
+    }
+
+    setGarageMessage("Unidad asignada al Garage oX del comprador.");
+    setAssigningGarage(false);
+
+    if (onUpdated) {
+      await onUpdated();
+    }
   }
 
   return (
@@ -151,6 +212,29 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
             <p>Vehículo ID: {lead.vehicle_id || "No informado"}</p>
           </article>
 
+          <article className="ticket-detail-card ticket-detail-main vehicle-lead-garage-assignment">
+            <span>Garage oX</span>
+            <strong>Asignacion directa al comprador</strong>
+            <p>
+              Usa este lead para asociar la unidad al comprador identificado por
+              nombre, email o telefono.
+            </p>
+            <button
+              type="button"
+              className="table-action-btn"
+              onClick={handleAssignGarage}
+              disabled={assigningGarage || !lead.vehicle_id || !lead.lead_id}
+            >
+              {assigningGarage ? "Asignando..." : "Asignar a Garage oX"}
+            </button>
+            {garageMessage && (
+              <small className="garage-assign-success">{garageMessage}</small>
+            )}
+            {garageError && (
+              <small className="garage-assign-error">{garageError}</small>
+            )}
+          </article>
+
           <article className="ticket-detail-card">
             <span>Dealer</span>
             <strong>
@@ -178,6 +262,14 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
             <strong>{getStatusLabel(lead.crm_status)}</strong>
             <p>Estado comercial de seguimiento.</p>
           </article>
+
+          {closeReason && (
+            <article className="ticket-detail-card">
+              <span>Motivo registrado</span>
+              <strong>{closeReason}</strong>
+              <p>Motivo de cierre o perdida informado para este lead.</p>
+            </article>
+          )}
 
           <article className="ticket-detail-card">
             <span>Fecha de creación</span>
