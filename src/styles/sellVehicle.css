@@ -404,3 +404,61 @@
     padding: 14px;
   }
 }
+
+/* oX NEXMOV - Public visual system phase 2 */
+.sell-vehicle-panel,
+.sell-vehicle-info-card,
+.sell-vehicle-form,
+.sell-vehicle-login-gate .sell-vehicle-info-card,
+.sell-vehicle-panel .auth-warning {
+  border-color: var(--ox-border-premium);
+  box-shadow: var(--ox-shadow-premium-soft);
+}
+
+.sell-vehicle-info-card,
+.sell-vehicle-form {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.09), transparent 30%),
+    radial-gradient(circle at 94% 0%, rgba(245, 184, 75, 0.045), transparent 28%),
+    var(--ox-surface-premium-soft);
+}
+
+.sell-vehicle-panel > p,
+.sell-vehicle-info-card p,
+.sell-vehicle-form label,
+.sell-vehicle-form .contact-summary span {
+  color: var(--ox-text-secondary-strong);
+}
+
+.sell-vehicle-form input,
+.sell-vehicle-form select,
+.sell-vehicle-form textarea {
+  border-color: var(--ox-border-premium);
+}
+
+:root[data-theme="light"] .sell-vehicle-panel {
+  border-color: var(--ox-border-premium);
+  background: var(--ox-surface-hero);
+  box-shadow: var(--ox-shadow-panel);
+}
+
+:root[data-theme="light"] .sell-vehicle-info-card,
+:root[data-theme="light"] .sell-vehicle-form,
+:root[data-theme="light"] .sell-vehicle-login-gate .sell-vehicle-info-card {
+  border-color: var(--ox-border-premium);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.09), transparent 30%),
+    radial-gradient(circle at 94% 0%, rgba(245, 184, 75, 0.07), transparent 28%),
+    var(--ox-surface-premium-soft);
+  box-shadow: var(--ox-shadow-premium-soft);
+}
+
+:root[data-theme="light"] .sell-vehicle-form input,
+:root[data-theme="light"] .sell-vehicle-form select,
+:root[data-theme="light"] .sell-vehicle-form textarea {
+  border-color: var(--ox-border-premium);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 246, 252, 0.90));
+  color: var(--ox-text);
+  color-scheme: light;
+}

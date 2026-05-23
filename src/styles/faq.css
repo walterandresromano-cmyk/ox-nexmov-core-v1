@@ -530,3 +530,46 @@
     width: 100%;
   }
 }
+
+/* oX NEXMOV - Public visual system phase 2 */
+.faq-hero,
+.faq-hero-card,
+.faq-topics,
+.faq-section,
+.faq-card,
+.faq-final {
+  border-color: var(--ox-border-premium);
+  box-shadow: var(--ox-shadow-premium-soft);
+}
+
+.faq-hero-card,
+.faq-topics,
+.faq-section,
+.faq-card {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
+    radial-gradient(circle at 94% 0%, rgba(245, 184, 75, 0.045), transparent 28%),
+    var(--ox-surface-premium-soft);
+}
+
+.faq-hero-copy > p,
+.faq-section-head > p,
+.faq-final p,
+.faq-card p,
+.faq-hero-card p {
+  color: var(--ox-text-secondary-strong);
+}
+
+.faq-topics span {
+  border-color: var(--ox-border-premium);
+}
+
+:root[data-theme="light"] .faq-hero,
+:root[data-theme="light"] .faq-hero-card,
+:root[data-theme="light"] .faq-topics,
+:root[data-theme="light"] .faq-section,
+:root[data-theme="light"] .faq-card,
+:root[data-theme="light"] .faq-final {
+  border-color: var(--ox-border-premium);
+  box-shadow: var(--ox-shadow-premium-soft);
+}

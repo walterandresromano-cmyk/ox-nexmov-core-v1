@@ -1078,6 +1078,48 @@ export default function AdminPanel({ authProfile }) {
       )
       .slice(0, 6);
 
+    const dealerFunnelRows = Object.values(
+      leads.reduce((acc, lead) => {
+        const dealerName =
+          lead.dealer_name_real ||
+          lead.dealer_name_snapshot ||
+          lead.dealer_name ||
+          "Dealer sin identificar";
+        const status = String(lead.crm_status || "new").toLowerCase();
+
+        if (!acc[dealerName]) {
+          acc[dealerName] = {
+            dealerName,
+            total: 0,
+            new: 0,
+            negotiation: 0,
+            closed: 0,
+            lost: 0,
+          };
+        }
+
+        acc[dealerName].total += 1;
+
+        if (["new", "nuevo"].includes(status)) {
+          acc[dealerName].new += 1;
+        } else if (
+          ["negotiation", "in_progress", "en_gestion", "assigned", "asignado", "reserved"].includes(status)
+        ) {
+          acc[dealerName].negotiation += 1;
+        } else if (["closed", "cerrado", "sold"].includes(status)) {
+          acc[dealerName].closed += 1;
+        } else if (
+          ["lost", "perdido", "no_response", "cancelled", "cancelado", "archived", "archivado"].includes(status)
+        ) {
+          acc[dealerName].lost += 1;
+        }
+
+        return acc;
+      }, {})
+    )
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 6);
+
     return (
       <>
         {reviewVehicles > 0 && (
@@ -1199,6 +1241,45 @@ export default function AdminPanel({ authProfile }) {
               )}
             </section>
           </div>
+
+          <section className="admin-ops-panel admin-dealer-funnel-panel">
+            <div className="admin-ops-panel-head">
+              <div>
+                <span>Embudo por dealer</span>
+                <h3>Comparativa comercial</h3>
+              </div>
+              <button
+                type="button"
+                className="table-action-btn"
+                onClick={() => openModule(ADMIN_MODULES.COMMERCIAL_LEADS)}
+              >
+                Ver leads
+              </button>
+            </div>
+
+            {dealerFunnelRows.length === 0 ? (
+              <div className="admin-ops-empty">
+                El embudo por dealer aparecerá cuando existan leads reales.
+              </div>
+            ) : (
+              <div className="admin-dealer-funnel-list">
+                {dealerFunnelRows.map((row) => (
+                  <article key={row.dealerName} className="admin-dealer-funnel-row">
+                    <div>
+                      <strong>{row.dealerName}</strong>
+                      <span>{row.total} lead{row.total !== 1 ? "s" : ""}</span>
+                    </div>
+                    <div className="admin-dealer-funnel-metrics">
+                      <span>Nuevos <b>{row.new}</b></span>
+                      <span>Neg. <b>{row.negotiation}</b></span>
+                      <span>Cerrados <b>{row.closed}</b></span>
+                      <span>Perdidos <b>{row.lost}</b></span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
         </section>
 
         {false && (

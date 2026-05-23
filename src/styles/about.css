@@ -467,3 +467,47 @@
     width: 100%;
   }
 }
+
+/* oX NEXMOV - Public visual system phase 2 */
+.about-hero,
+.about-hero-card,
+.about-pillar-card,
+.about-vision-card,
+.about-section,
+.about-final {
+  border-color: var(--ox-border-premium);
+  box-shadow: var(--ox-shadow-premium-soft);
+}
+
+.about-hero-card,
+.about-pillar-card,
+.about-vision-card,
+.about-section {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
+    radial-gradient(circle at 94% 0%, rgba(245, 184, 75, 0.045), transparent 28%),
+    var(--ox-surface-premium-soft);
+}
+
+.about-hero-copy > p,
+.about-section-head > p,
+.about-final p,
+.about-pillar-card p,
+.about-vision-card p,
+.about-hero-card p {
+  color: var(--ox-text-secondary-strong);
+}
+
+.about-benefits-list span {
+  border-color: var(--ox-border-premium);
+}
+
+:root[data-theme="light"] .about-hero,
+:root[data-theme="light"] .about-hero-card,
+:root[data-theme="light"] .about-pillar-card,
+:root[data-theme="light"] .about-vision-card,
+:root[data-theme="light"] .about-section,
+:root[data-theme="light"] .about-final {
+  border-color: var(--ox-border-premium);
+  box-shadow: var(--ox-shadow-premium-soft);
+}

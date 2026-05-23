@@ -6314,20 +6314,47 @@
 
 :root[data-theme="light"] .ox-home-featured-card-v3 {
   background:
-    radial-gradient(circle at 16% 0%, rgba(56, 189, 248, 0.16), transparent 36%),
-    linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(2, 6, 23, 0.78)) !important;
-  border-color: rgba(148, 163, 184, 0.22) !important;
+    radial-gradient(circle at 16% 0%, rgba(14, 165, 233, 0.12), transparent 36%),
+    radial-gradient(circle at 92% 0%, rgba(245, 184, 75, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(231, 246, 252, 0.92)) !important;
+  border-color: rgba(14, 116, 144, 0.16) !important;
+  box-shadow:
+    0 18px 42px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
 }
 
 :root[data-theme="light"] .ox-home-featured-card-v3 h2,
-:root[data-theme="light"] .ox-home-featured-card-v3 strong,
-:root[data-theme="light"] .ox-home-featured-card-v3 button {
-  color: rgba(248, 250, 252, 0.96) !important;
+:root[data-theme="light"] .ox-home-featured-card-v3 strong {
+  color: #0f172a !important;
 }
 
 :root[data-theme="light"] .ox-home-featured-card-v3 p,
 :root[data-theme="light"] .ox-home-featured-card-v3 small {
-  color: rgba(203, 213, 225, 0.72) !important;
+  color: #475569 !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-badge-v3 {
+  color: #075985 !important;
+  border-color: rgba(14, 116, 144, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(224, 242, 254, 0.96), rgba(186, 230, 253, 0.68)) !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 em {
+  color: #047857 !important;
+  border: 1px solid rgba(16, 185, 129, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(220, 252, 231, 0.94), rgba(187, 247, 208, 0.68)) !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 button {
+  color: #0f172a !important;
+  border-color: rgba(14, 116, 144, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(224, 242, 254, 0.86)) !important;
+  box-shadow:
+    0 10px 22px rgba(33, 48, 71, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94) !important;
 }
 
 @media (max-width: 1180px) {
@@ -6361,6 +6388,381 @@
     max-height: 205px !important;
     transform: translateY(12px) scale(1.02) !important;
   }
+}
+
+/* oX NEXMOV - Phase 4 mobile and detail polish */
+@media (max-width: 760px) {
+  .ox-home-page-v3,
+  .ox-search-page,
+  .zero-km-page,
+  .sell-vehicle-page,
+  .join-network-page,
+  .about-page,
+  .faq-page,
+  .buyer-panel,
+  .dealer-panel,
+  .admin-panel {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .ox-home-shell-v3,
+  .ox-search-shell,
+  .zero-km-panel,
+  .sell-vehicle-panel,
+  .join-network-panel,
+  .about-panel,
+  .faq-panel,
+  .buyer-panel,
+  .dealer-panel,
+  .admin-panel {
+    width: min(100% - 18px, 460px) !important;
+    gap: 10px !important;
+  }
+
+  .ox-search-hero,
+  .ox-search-results,
+  .ox-search-side-card,
+  .ox-search-empty-state,
+  .zero-km-capabilities article,
+  .zero-km-info-card,
+  .zero-km-simulator-preview,
+  .zero-km-responsible-note,
+  .zero-km-form,
+  .sell-vehicle-info-card,
+  .sell-vehicle-form,
+  .join-network-value-card,
+  .join-network-proposal-card,
+  .join-network-plan-card,
+  .join-network-step-card,
+  .about-section,
+  .about-pillar-card,
+  .about-vision-card,
+  .faq-section,
+  .faq-card,
+  .buyer-panel .panel-head-row,
+  .buyer-panel .dealer-status-card,
+  .buyer-panel .dealer-leads-section,
+  .buyer-panel .buyer-profile-summary,
+  .buyer-panel .buyer-garage-section,
+  .dealer-panel .panel-head-row,
+  .dealer-panel .dealer-status-card,
+  .dealer-panel .dealer-module-card,
+  .dealer-panel .dealer-module-card-open,
+  .dealer-panel .dealer-leads-section,
+  .dealer-panel .dealer-notifications-section,
+  .admin-panel .panel-head-row,
+  .admin-panel .admin-section-block,
+  .admin-panel .admin-kpi-card,
+  .admin-panel .dealer-module-card,
+  .admin-panel .admin-ops-panel {
+    border-radius: 18px !important;
+    box-shadow: var(--ox-shadow-premium-soft) !important;
+  }
+
+  .ox-search-primary-btn,
+  .ox-search-update-btn,
+  .ox-search-compare-btn,
+  .primary-action,
+  .secondary-action,
+  .table-action-btn,
+  .admin-refresh-btn,
+  .vehicle-card__btn,
+  .compare-card-detail,
+  .modal-close-btn,
+  .contact-modal button,
+  .join-network-actions button,
+  .join-network-final-actions button,
+  .about-final-actions button,
+  .faq-final-actions button,
+  .buyer-panel .buyer-edit-profile-btn,
+  .buyer-panel .buyer-section-head button,
+  .dealer-panel .dealer-module-card button,
+  .dealer-panel .dealer-mobile-tab {
+    min-height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .ox-home-chips-v3 button,
+  .ox-search-suggested button,
+  .faq-topics span,
+  .admin-chip,
+  .lead-crm-status,
+  .lead-followup-chip,
+  .dealer-plan-badge,
+  .dealer-notifications-badge,
+  .dealer-notifications-header-chip,
+  .vehicle-card__rank,
+  .vehicle-card__year,
+  .vehicle-card__status,
+  .compare-card-badge {
+    min-height: 30px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    text-align: center !important;
+  }
+
+  .ox-search-input-wrap input,
+  .ox-filter-section input,
+  .ox-filter-section select,
+  .zero-km-form input,
+  .zero-km-form select,
+  .zero-km-form textarea,
+  .sell-vehicle-form input,
+  .sell-vehicle-form select,
+  .sell-vehicle-form textarea,
+  .admin-search input,
+  .admin-filter select,
+  .lead-status-control select,
+  .lead-notes-textarea,
+  .buyer-profile-form input,
+  .buyer-profile-form select,
+  .buyer-profile-form textarea {
+    min-height: 42px !important;
+    font-size: 16px !important;
+    border-radius: 13px !important;
+  }
+
+  .admin-table-wrap,
+  .dealer-panel .admin-table-wrap,
+  .buyer-panel .admin-table-wrap {
+    width: 100% !important;
+    overflow-x: auto !important;
+    border-radius: 18px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-table tbody td,
+  .dealer-panel .admin-table tbody td,
+  .buyer-panel .admin-table tbody td {
+    min-width: 0 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .modal-backdrop {
+    padding: 8px !important;
+  }
+
+  .compare-modal,
+  .vehicle-detail-modal,
+  .dealer-vehicle-detail-modal,
+  .contact-modal,
+  .ticket-detail-modal {
+    width: min(100% - 10px, 720px) !important;
+    max-height: calc(100dvh - 18px) !important;
+    border-radius: 20px !important;
+  }
+
+  .compare-card-remove,
+  .modal-close-btn,
+  .vehicle-detail-zoom-button {
+    min-width: 32px !important;
+    min-height: 32px !important;
+  }
+
+  .compare-modal-actions,
+  .vehicle-detail-actions,
+  .contact-modal-actions,
+  .admin-action-row,
+  .dealer-panel .admin-action-row,
+  .buyer-panel .admin-action-row {
+    gap: 8px !important;
+  }
+
+  :root[data-theme="light"] .admin-table-wrap,
+  :root[data-theme="light"] .dealer-panel .admin-table-wrap,
+  :root[data-theme="light"] .buyer-panel .admin-table-wrap,
+  :root[data-theme="light"] .compare-modal,
+  :root[data-theme="light"] .vehicle-detail-modal,
+  :root[data-theme="light"] .dealer-vehicle-detail-modal,
+  :root[data-theme="light"] .contact-modal,
+  :root[data-theme="light"] .ticket-detail-modal {
+    background:
+      radial-gradient(circle at 14% 0%, rgba(14, 165, 233, 0.10), transparent 32%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(239, 248, 252, 0.92)) !important;
+    border-color: rgba(14, 116, 144, 0.16) !important;
+  }
+
+  :root[data-theme="light"] .secondary-action,
+  :root[data-theme="light"] .table-action-btn,
+  :root[data-theme="light"] .admin-refresh-btn,
+  :root[data-theme="light"] .buyer-panel .buyer-edit-profile-btn,
+  :root[data-theme="light"] .dealer-panel .dealer-mobile-tab {
+    color: #0f172a !important;
+    border-color: rgba(14, 116, 144, 0.18) !important;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(224, 242, 254, 0.82)) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .ox-home-shell-v3,
+  .ox-search-shell,
+  .zero-km-panel,
+  .sell-vehicle-panel,
+  .join-network-panel,
+  .about-panel,
+  .faq-panel,
+  .buyer-panel,
+  .dealer-panel,
+  .admin-panel {
+    width: min(100% - 12px, 420px) !important;
+  }
+
+  .buyer-panel .panel-head-row,
+  .dealer-panel .panel-head-row,
+  .admin-panel .panel-head-row,
+  .ox-search-hero,
+  .zero-km-panel,
+  .sell-vehicle-panel,
+  .join-network-hero,
+  .about-hero,
+  .faq-hero {
+    padding-inline: 14px !important;
+  }
+
+  .compare-modal,
+  .vehicle-detail-modal,
+  .dealer-vehicle-detail-modal,
+  .contact-modal,
+  .ticket-detail-modal {
+    width: calc(100% - 6px) !important;
+    border-radius: 18px !important;
+  }
+}
+
+/* oX NEXMOV - Panel visual system phase 3 mobile */
+@media (max-width: 760px) {
+  .admin-panel .admin-table tbody tr,
+  .dealer-panel .admin-table tbody tr,
+  .buyer-panel .admin-table tbody tr {
+    border-color: var(--ox-border-premium) !important;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
+      var(--ox-surface-premium-soft) !important;
+    box-shadow: var(--ox-shadow-premium-soft) !important;
+  }
+
+  .dealer-mobile-tabs,
+  .dealer-mobile-home,
+  .dealer-mobile-plan,
+  .dealer-mobile-kpi-card,
+  .dealer-mobile-plan-card {
+    border-color: var(--ox-border-premium) !important;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
+      var(--ox-surface-premium-soft) !important;
+    box-shadow: var(--ox-shadow-premium-soft) !important;
+  }
+
+  .dealer-mobile-tab {
+    border-color: var(--ox-border-premium) !important;
+    background: var(--ox-surface-button) !important;
+    color: var(--ox-text-soft) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 8px 18px rgba(0, 0, 0, 0.10) !important;
+  }
+
+  .dealer-mobile-tab.is-active {
+    color: #ffffff !important;
+    border-color: rgba(125, 211, 252, 0.52) !important;
+    background: var(--ox-surface-primary) !important;
+    box-shadow: var(--ox-shadow-glow-primary) !important;
+  }
+
+  :root.light .admin-panel .admin-table tbody tr,
+  :root.light .dealer-panel .admin-table tbody tr,
+  :root.light .buyer-panel .admin-table tbody tr,
+  :root.light .dealer-mobile-tabs,
+  :root.light .dealer-mobile-home,
+  :root.light .dealer-mobile-plan,
+  :root.light .dealer-mobile-kpi-card,
+  :root.light .dealer-mobile-plan-card,
+  :root[data-theme="light"] .admin-panel .admin-table tbody tr,
+  :root[data-theme="light"] .dealer-panel .admin-table tbody tr,
+  :root[data-theme="light"] .buyer-panel .admin-table tbody tr,
+  :root[data-theme="light"] .dealer-mobile-tabs,
+  :root[data-theme="light"] .dealer-mobile-home,
+  :root[data-theme="light"] .dealer-mobile-plan,
+  :root[data-theme="light"] .dealer-mobile-kpi-card,
+  :root[data-theme="light"] .dealer-mobile-plan-card {
+    border-color: var(--ox-border-premium) !important;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.08), transparent 30%),
+      var(--ox-surface-premium-soft) !important;
+    box-shadow: var(--ox-shadow-premium-soft) !important;
+  }
+
+  :root.light .dealer-mobile-tab,
+  :root[data-theme="light"] .dealer-mobile-tab {
+    color: var(--ox-text-soft) !important;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(230, 244, 251, 0.88)) !important;
+  }
+
+  :root.light .dealer-mobile-tab.is-active,
+  :root[data-theme="light"] .dealer-mobile-tab.is-active {
+    color: #ffffff !important;
+    background: var(--ox-surface-primary) !important;
+  }
+}
+
+/* Home hero featured card: final light-mode guard */
+html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3,
+:root[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 {
+  border-color: rgba(14, 116, 144, 0.16) !important;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.12), transparent 34%),
+    radial-gradient(circle at 92% 6%, rgba(245, 184, 75, 0.10), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(230, 245, 252, 0.94)) !important;
+  color: #0f172a !important;
+  box-shadow:
+    0 18px 42px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94) !important;
+}
+
+html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 h2,
+html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 strong,
+:root[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 h2,
+:root[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 strong {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 p,
+html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 small,
+:root[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 p,
+:root[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 small {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-badge-v3,
+:root[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-badge-v3 {
+  color: #075985 !important;
+  border-color: rgba(14, 116, 144, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(224, 242, 254, 0.98), rgba(186, 230, 253, 0.70)) !important;
+}
+
+html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 em,
+:root[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 em {
+  color: #047857 !important;
+  border: 1px solid rgba(16, 185, 129, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(220, 252, 231, 0.96), rgba(187, 247, 208, 0.70)) !important;
+}
+
+html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 button,
+:root[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-card-v3 button {
+  color: #0f172a !important;
+  border-color: rgba(14, 116, 144, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(224, 242, 254, 0.88)) !important;
+  box-shadow:
+    0 10px 22px rgba(33, 48, 71, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
 }
 
 /* oX NEXMOV - Home hero PNG transparent final lock */
@@ -11811,20 +12213,47 @@
 
 :root[data-theme="light"] .ox-home-featured-card-v3 {
   background:
-    radial-gradient(circle at 16% 0%, rgba(56, 189, 248, 0.16), transparent 36%),
-    linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(2, 6, 23, 0.78)) !important;
-  border-color: rgba(148, 163, 184, 0.22) !important;
+    radial-gradient(circle at 16% 0%, rgba(14, 165, 233, 0.12), transparent 36%),
+    radial-gradient(circle at 92% 0%, rgba(245, 184, 75, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(231, 246, 252, 0.92)) !important;
+  border-color: rgba(14, 116, 144, 0.16) !important;
+  box-shadow:
+    0 18px 42px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
 }
 
 :root[data-theme="light"] .ox-home-featured-card-v3 h2,
-:root[data-theme="light"] .ox-home-featured-card-v3 strong,
-:root[data-theme="light"] .ox-home-featured-card-v3 button {
-  color: rgba(248, 250, 252, 0.96) !important;
+:root[data-theme="light"] .ox-home-featured-card-v3 strong {
+  color: #0f172a !important;
 }
 
 :root[data-theme="light"] .ox-home-featured-card-v3 p,
 :root[data-theme="light"] .ox-home-featured-card-v3 small {
-  color: rgba(203, 213, 225, 0.72) !important;
+  color: #475569 !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-badge-v3 {
+  color: #075985 !important;
+  border-color: rgba(14, 116, 144, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(224, 242, 254, 0.96), rgba(186, 230, 253, 0.68)) !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 em {
+  color: #047857 !important;
+  border: 1px solid rgba(16, 185, 129, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(220, 252, 231, 0.94), rgba(187, 247, 208, 0.68)) !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 button {
+  color: #0f172a !important;
+  border-color: rgba(14, 116, 144, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(224, 242, 254, 0.86)) !important;
+  box-shadow:
+    0 10px 22px rgba(33, 48, 71, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94) !important;
 }
 
 @media (max-width: 1180px) {

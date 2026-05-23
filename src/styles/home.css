@@ -2233,6 +2233,73 @@
     linear-gradient(180deg, #ffffff, #e6f5fc);
 }
 
+:root[data-theme="light"] .ox-home-featured-card-v3 {
+  border-color: rgba(14, 116, 144, 0.16);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.11), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(232, 246, 252, 0.92));
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 42%),
+    radial-gradient(circle at 80% 0%, rgba(245, 184, 75, 0.12), transparent 34%);
+}
+
+:root[data-theme="light"] .ox-home-featured-card-top-img {
+  border-bottom: 1px solid rgba(14, 116, 144, 0.12);
+}
+
+:root[data-theme="light"] .ox-home-featured-card-content {
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-theme="light"] .ox-home-featured-badge-v3 {
+  color: #075985;
+  border-color: rgba(14, 116, 144, 0.18);
+  background:
+    linear-gradient(180deg, rgba(224, 242, 254, 0.95), rgba(186, 230, 253, 0.62));
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 h2,
+:root[data-theme="light"] .ox-home-featured-card-v3 strong {
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 p,
+:root[data-theme="light"] .ox-home-featured-card-v3 small {
+  color: #475569;
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 em {
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.16);
+  background:
+    linear-gradient(180deg, rgba(220, 252, 231, 0.92), rgba(187, 247, 208, 0.66));
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 button {
+  border-color: rgba(14, 116, 144, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(224, 242, 254, 0.82));
+  color: #0f172a;
+  box-shadow:
+    0 10px 22px rgba(33, 48, 71, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 button:hover {
+  border-color: rgba(14, 165, 233, 0.34);
+  background:
+    linear-gradient(180deg, rgba(240, 249, 255, 0.98), rgba(186, 230, 253, 0.76));
+  color: #075985;
+}
+
 :root[data-theme="light"] .ox-home-primary-actions-v3 button:not(:first-child),
 :root[data-theme="light"] .ox-home-chips-v3 button,
 :root[data-theme="light"] .ox-home-section-actions-v3 button,
@@ -2247,4 +2314,61 @@
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(224, 243, 252, 0.80));
   color: #1f3448;
+}
+
+/* oX NEXMOV - Public visual system phase 2 */
+.ox-home-featured-vehicles-v3,
+.ox-home-confidence-v3,
+.ox-home-inventory-v3,
+.ox-home-buyer-v3,
+.ox-home-dealer-v3,
+.ox-home-bottom-trust-v3 {
+  box-shadow: var(--ox-shadow-premium-soft);
+}
+
+.ox-home-section-head-v3 h2,
+.ox-home-inventory-v3 h2,
+.ox-home-buyer-v3 h2,
+.ox-home-dealer-v3 h2 {
+  color: var(--ox-text);
+}
+
+.ox-home-section-head-v3 p,
+.ox-home-inventory-v3 > p,
+.ox-home-buyer-v3 > p,
+.ox-home-dealer-v3 > p {
+  color: var(--ox-text-secondary-strong);
+}
+
+.ox-home-trust-strip-v3,
+.ox-home-confidence-list-v3 article,
+.ox-home-stats-v3 div,
+.ox-home-locations-v3 button,
+.ox-home-locations-v3 > span,
+.ox-home-buyer-v3 li,
+.ox-home-dealer-v3 li {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 24px rgba(0, 0, 0, 0.10);
+}
+
+:root[data-theme="light"] .ox-home-featured-vehicles-v3,
+:root[data-theme="light"] .ox-home-confidence-v3,
+:root[data-theme="light"] .ox-home-inventory-v3,
+:root[data-theme="light"] .ox-home-buyer-v3,
+:root[data-theme="light"] .ox-home-dealer-v3,
+:root[data-theme="light"] .ox-home-bottom-trust-v3 {
+  box-shadow: var(--ox-shadow-premium-soft);
+}
+
+:root[data-theme="light"] .ox-home-trust-strip-v3,
+:root[data-theme="light"] .ox-home-confidence-list-v3 article,
+:root[data-theme="light"] .ox-home-stats-v3 div,
+:root[data-theme="light"] .ox-home-locations-v3 button,
+:root[data-theme="light"] .ox-home-locations-v3 > span,
+:root[data-theme="light"] .ox-home-buyer-v3 li,
+:root[data-theme="light"] .ox-home-dealer-v3 li {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    0 10px 24px rgba(33, 48, 71, 0.07);
 }

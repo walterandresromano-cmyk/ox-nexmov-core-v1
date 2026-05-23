@@ -50,6 +50,9 @@ function getStatusLabel(status) {
 }
 
 function getCloseReason(lead) {
+  const notes = String(lead?.notes || "");
+  const noteReason = notes.match(/Motivo de cierre:\s*(.+)/i)?.[1]?.trim();
+
   return (
     lead?.close_reason ||
     lead?.closed_reason ||
@@ -58,8 +61,55 @@ function getCloseReason(lead) {
     lead?.closing_reason ||
     lead?.closeReason ||
     lead?.lostReason ||
+    noteReason ||
     ""
   );
+}
+
+function getLeadTimeline(lead, closeReason) {
+  const items = [];
+
+  if (lead?.created_at) {
+    items.push({
+      label: "Consulta creada",
+      value: formatDateTime(lead.created_at),
+      text: "El comprador genero la consulta comercial.",
+    });
+  }
+
+  if (lead?.crm_status && lead.crm_status !== "new") {
+    items.push({
+      label: "Estado actualizado",
+      value: getStatusLabel(lead.crm_status),
+      text: "El dealer actualizo el seguimiento del lead.",
+    });
+  }
+
+  if (lead?.next_action_date || lead?.next_action_note) {
+    items.push({
+      label: "Seguimiento programado",
+      value: lead.next_action_date ? formatDateTime(lead.next_action_date) : "Sin fecha",
+      text: lead.next_action_note || "Proxima accion comercial cargada.",
+    });
+  }
+
+  if (closeReason) {
+    items.push({
+      label: "Motivo comercial",
+      value: closeReason,
+      text: "Motivo informado para el cierre o perdida.",
+    });
+  }
+
+  if (lead?.updated_at && lead.updated_at !== lead.created_at) {
+    items.push({
+      label: "Ultima actualizacion",
+      value: formatDateTime(lead.updated_at),
+      text: "Ultimo movimiento registrado en el seguimiento.",
+    });
+  }
+
+  return items;
 }
 
 export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
@@ -81,6 +131,7 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
 
   if (!lead) return null;
   const closeReason = getCloseReason(lead);
+  const leadTimeline = getLeadTimeline(lead, closeReason);
 
   async function handleSaveNotes() {
     setSavingNotes(true);
@@ -286,6 +337,20 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
           <article className="ticket-detail-card ticket-detail-main">
             <span>Mensaje del comprador</span>
             <p>{lead.message || "Sin mensaje adicional."}</p>
+          </article>
+
+          <article className="ticket-detail-card ticket-detail-main vehicle-lead-timeline-card">
+            <span>Timeline comercial</span>
+            <strong>Historial del seguimiento</strong>
+            <div className="vehicle-lead-timeline">
+              {leadTimeline.map((item) => (
+                <div key={`${item.label}-${item.value}`} className="vehicle-lead-timeline-item">
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                  <p>{item.text}</p>
+                </div>
+              ))}
+            </div>
           </article>
 
           <article className="ticket-detail-card ticket-detail-main">

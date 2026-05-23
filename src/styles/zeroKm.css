@@ -698,3 +698,51 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* oX NEXMOV - Public visual system phase 2 */
+.zero-km-capabilities article,
+.zero-km-info-card,
+.zero-km-simulator-preview,
+.zero-km-responsible-note,
+.zero-km-form,
+.zero-km-form-head,
+.zero-km-form-group {
+  border-color: var(--ox-border-premium);
+  box-shadow: var(--ox-shadow-premium-soft);
+}
+
+.zero-km-capabilities article,
+.zero-km-info-card,
+.zero-km-simulator-preview,
+.zero-km-form {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.09), transparent 30%),
+    radial-gradient(circle at 94% 0%, rgba(245, 184, 75, 0.045), transparent 28%),
+    var(--ox-surface-premium-soft);
+}
+
+.zero-km-info-card p,
+.zero-km-simulator-preview p,
+.zero-km-responsible-note p,
+.zero-km-capabilities p,
+.finance-legal-note,
+.form-legal-note {
+  color: var(--ox-text-secondary-strong);
+}
+
+.zero-km-form input,
+.zero-km-form select,
+.zero-km-form textarea {
+  border-color: var(--ox-border-premium);
+}
+
+:root[data-theme="light"] .zero-km-capabilities article,
+:root[data-theme="light"] .zero-km-info-card,
+:root[data-theme="light"] .zero-km-simulator-preview,
+:root[data-theme="light"] .zero-km-responsible-note,
+:root[data-theme="light"] .zero-km-form,
+:root[data-theme="light"] .zero-km-form-head,
+:root[data-theme="light"] .zero-km-form-group {
+  border-color: var(--ox-border-premium);
+  box-shadow: var(--ox-shadow-premium-soft);
+}
