@@ -120,6 +120,7 @@ export default function VehicleDetailModal({
 }) {
   const [currentVehicle, setCurrentVehicle] = useState(vehicle);
   const [showContactGate, setShowContactGate] = useState(false);
+  const [shareState, setShareState] = useState("idle");
 
   const currentDealer = useMemo(() => {
     if (vehicles && getDealer) return getDealer(currentVehicle) || dealer;
@@ -276,6 +277,33 @@ export default function VehicleDetailModal({
   function handleClose() {
     resetImageZoom();
     onClose();
+  }
+
+  async function handleShare() {
+    const brand = currentVehicle.brand || "";
+    const model = currentVehicle.model || "";
+    const year = currentVehicle.year ? ` ${currentVehicle.year}` : "";
+    const title = `${brand} ${model}${year}`.trim();
+    const price = formatARS(currentVehicle.price);
+    const url = window.location.origin;
+    const shareText = `${title} — ${price}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: `${title} en oX NEXMOV`, text: shareText, url });
+      } catch {
+        // user cancelled
+      }
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(`${shareText}\n${url}`);
+      setShareState("copied");
+      setTimeout(() => setShareState("idle"), 2200);
+    } catch {
+      // clipboard unavailable
+    }
   }
 
   const modal = (
@@ -557,6 +585,15 @@ export default function VehicleDetailModal({
                 }}
               >
                 {currentFavoriteActive ? "Guardado" : "Guardar favorito"}
+              </button>
+
+              <button
+                type="button"
+                className={`vehicle-share-btn${shareState === "copied" ? " vehicle-share-btn--copied" : ""}`}
+                onClick={handleShare}
+                aria-label="Compartir este vehículo"
+              >
+                {shareState === "copied" ? "¡Copiado!" : "Compartir"}
               </button>
             </div>
 

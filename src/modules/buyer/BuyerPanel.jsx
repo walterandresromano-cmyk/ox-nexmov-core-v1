@@ -847,10 +847,21 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
         )}
 
         {isLoading && (
-          <div className="auth-message">Cargando actividad...</div>
+          <div className="buyer-panel-skeleton">
+            <div className="buyer-skeleton-stats">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="dealer-status-card buyer-skeleton-card ox-shimmer" />
+              ))}
+            </div>
+            <div className="buyer-skeleton-rows">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="buyer-skeleton-row ox-shimmer" />
+              ))}
+            </div>
+          </div>
         )}
 
-        <div className="dealer-status-grid">
+        <div className="dealer-status-grid" style={isLoading ? { display: "none" } : undefined}>
           <article className="dealer-status-card buyer-stat--leads">
             <span>Consultas activas</span>
             <strong>{vehicleLeads.length}</strong>
@@ -869,6 +880,24 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 ? "Seleccioná vehículos para comparar."
                 : "Vehículos seleccionados para comparar."}
             </p>
+            {compareItems.length === 0 && (
+              <button
+                type="button"
+                className="buyer-stat-cta-btn"
+                onClick={() => onNavigate?.("search")}
+              >
+                Ir a buscar →
+              </button>
+            )}
+            {compareItems.length >= 2 && (
+              <button
+                type="button"
+                className="buyer-stat-cta-btn"
+                onClick={() => appActions?.openCompare?.()}
+              >
+                Ver comparación →
+              </button>
+            )}
           </article>
 
           <article className="dealer-status-card buyer-stat--favorites">
@@ -892,7 +921,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           </article>
         </div>
 
-        <div className="buyer-activity-strip">
+        <div className="buyer-activity-strip" style={isLoading ? { display: "none" } : undefined}>
           <div>
             {totalActivity === 0 ? (
               <>

@@ -423,16 +423,28 @@ export default function App() {
   }, [currentRoute, authProfile, authUser]);
 
   useEffect(() => {
-    document.title = ROUTE_TITLES[safeCurrentRoute] || "oX NEXMOV";
+    const title = ROUTE_TITLES[safeCurrentRoute] || "oX NEXMOV";
+    const description = ROUTE_DESCRIPTIONS[safeCurrentRoute] || "Encontrá tu próximo vehículo en oX NEXMOV. Publicaciones de dealers verificados con datos reales.";
+    const url = window.location.origin;
 
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement("meta");
-      metaDescription.setAttribute("name", "description");
-      document.head.appendChild(metaDescription);
+    document.title = title;
+
+    function setMetaContent(attr, attrValue, content) {
+      let el = document.querySelector(`meta[${attr}="${attrValue}"]`);
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, attrValue);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
     }
-    const description = ROUTE_DESCRIPTIONS[safeCurrentRoute] || "";
-    metaDescription.setAttribute("content", description);
+
+    setMetaContent("name", "description", description);
+    setMetaContent("property", "og:title", title);
+    setMetaContent("property", "og:description", description);
+    setMetaContent("property", "og:url", url);
+    setMetaContent("name", "twitter:title", title);
+    setMetaContent("name", "twitter:description", description);
   }, [safeCurrentRoute]);
 
   const CurrentPage = ROUTES[safeCurrentRoute] || NotFound;

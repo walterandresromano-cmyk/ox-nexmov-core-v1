@@ -13703,3 +13703,107 @@ textarea:focus-visible,
     max-width: unset;
   }
 }
+
+/* ── Share button ────────────────────────────────────────── */
+.vehicle-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: transparent;
+  color: var(--text-secondary, rgba(203, 213, 225, 0.8));
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s, background 0.18s;
+}
+.vehicle-share-btn:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  color: rgba(56, 189, 248, 0.9);
+  background: rgba(56, 189, 248, 0.06);
+}
+.vehicle-share-btn--copied {
+  border-color: rgba(134, 239, 172, 0.45) !important;
+  color: rgba(134, 239, 172, 0.9) !important;
+  background: rgba(20, 83, 45, 0.18) !important;
+}
+
+/* ── Search history ──────────────────────────────────────── */
+.vehicle-autocomplete-history-head {
+  padding: 0.4rem 0.85rem 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.6);
+  pointer-events: none;
+}
+.vehicle-autocomplete-item--history {
+  color: rgba(203, 213, 225, 0.75) !important;
+}
+.vehicle-autocomplete-item--history:hover {
+  color: rgba(203, 213, 225, 1) !important;
+}
+.vehicle-autocomplete-history-icon {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  margin-right: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* ── BuyerPanel skeletons ─────────────────────────────────── */
+.buyer-panel-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0.5rem 0 1.5rem;
+}
+.buyer-skeleton-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.buyer-skeleton-card {
+  height: 100px;
+  border-radius: 10px;
+}
+.buyer-skeleton-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.buyer-skeleton-row {
+  height: 48px;
+  border-radius: 8px;
+}
+@media (max-width: 860px) {
+  .buyer-skeleton-stats {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+@media (max-width: 480px) {
+  .buyer-skeleton-stats {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Buyer stat CTA button ────────────────────────────────── */
+.buyer-stat-cta-btn {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 5px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.06);
+  color: rgba(56, 189, 248, 0.85);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.buyer-stat-cta-btn:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.55);
+}

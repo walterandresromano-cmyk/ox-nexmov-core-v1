@@ -676,6 +676,31 @@ const EMPTY_ADVANCED_FILTERS = {
 };
 
 const SEARCH_STORAGE_KEY = "ox-nexmov-search";
+const SEARCH_HISTORY_KEY = "ox-nexmov-search-history";
+const SEARCH_HISTORY_MAX = 5;
+
+function readSearchHistory() {
+  try {
+    const stored = window.localStorage.getItem(SEARCH_HISTORY_KEY);
+    if (!stored) return [];
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed.slice(0, SEARCH_HISTORY_MAX) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveSearchHistory(query) {
+  const trimmed = String(query || "").trim();
+  if (trimmed.length < 2) return;
+  try {
+    const current = readSearchHistory();
+    const updated = [trimmed, ...current.filter((q) => q !== trimmed)].slice(0, SEARCH_HISTORY_MAX);
+    window.localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(updated));
+  } catch {
+    // localStorage unavailable
+  }
+}
 
 function readSearchStorage() {
   try {
@@ -800,6 +825,7 @@ export default function Search({
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState("default");
   const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
+  const [searchHistory, setSearchHistory] = useState(readSearchHistory);
 
   function updateFilter(name, value) {
     setFilters((currentFilters) => ({
@@ -885,9 +911,18 @@ export default function Search({
     [publicSearchVehicles, debouncedSearchText]
   );
 
+  function commitSearch(query) {
+    const trimmed = String(query || "").trim();
+    if (trimmed.length >= 2) {
+      saveSearchHistory(trimmed);
+      setSearchHistory(readSearchHistory());
+    }
+    setShowSuggestions(false);
+  }
+
   function handleSuggestionSelect(suggestion) {
     setSearchText(suggestion.searchValue);
-    setShowSuggestions(false);
+    commitSearch(suggestion.searchValue);
 
     setFilters((currentFilters) => ({
       ...currentFilters,
@@ -1092,6 +1127,29 @@ export default function Search({
                 placeholder="Ej: SUV automática financiada en Buenos Aires"
               />
 
+              {showSuggestions && normalizeSearchText(searchText).length < 2 && searchHistory.length > 0 && (
+                <div className="vehicle-autocomplete-dropdown">
+                  <div className="vehicle-autocomplete-list">
+                    <div className="vehicle-autocomplete-history-head">Búsquedas recientes</div>
+                    {searchHistory.map((query) => (
+                      <button
+                        key={query}
+                        type="button"
+                        className="vehicle-autocomplete-item vehicle-autocomplete-item--history"
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => {
+                          setSearchText(query);
+                          setShowSuggestions(false);
+                        }}
+                      >
+                        <span className="vehicle-autocomplete-history-icon" aria-hidden="true">↺</span>
+                        <span className="vehicle-autocomplete-main">{query}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {showSuggestions && normalizeSearchText(searchText).length >= 2 && (
                 <div className="vehicle-autocomplete-dropdown">
                   {visibleSuggestions.length > 0 ? (
@@ -1125,7 +1183,7 @@ export default function Search({
             <button
               type="button"
               className="ox-search-primary-btn"
-              onClick={() => setShowSuggestions(false)}
+              onClick={() => commitSearch(searchText)}
             >
               Buscar
             </button>

@@ -15,6 +15,15 @@ const NAV_ITEMS = [
   { id: "sellVehicle", label: "Garage oX" },
 ];
 
+const ROUTE_PREFETCH = {
+  search: () => import("../modules/public/Search.jsx"),
+  zeroKm: () => import("../modules/public/ZeroKm.jsx"),
+  joinNetwork: () => import("../modules/public/JoinNetwork.jsx"),
+  about: () => import("../modules/public/About.jsx"),
+  faq: () => import("../modules/public/FAQ.jsx"),
+  sellVehicle: () => import("../modules/public/SellVehicle.jsx"),
+};
+
 
 function getPrivatePanelForRole(role) {
   const normalizedRole = normalizeRole(role);
@@ -110,6 +119,7 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
                 item.id === "sellVehicle" && garagePulse ? "is-pulsing" : "",
                 currentRoute === item.id ? "active" : "",
               ].filter(Boolean).join(" ")}
+              onMouseEnter={() => ROUTE_PREFETCH[item.id]?.()}
               onClick={() => handleNavClick(item.id)}
             >
               {item.label}
