@@ -12996,3 +12996,710 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     transform: translateY(12px) scale(1.02) !important;
   }
 }
+
+/* =========================================================
+   oX NEXMOV — Mobile experience surgical fixes
+   ========================================================= */
+
+/* E. Floating theme button — hidden by default, shown on mobile */
+.mobile-theme-float-btn {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  /* Hide header theme toggle — replaced by floating button */
+  .theme-toggle-btn {
+    display: none !important;
+  }
+
+  /* Floating theme button */
+  .mobile-theme-float-btn {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 10px);
+    left: 14px;
+    z-index: 79;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(125, 211, 252, 0.22);
+    border-radius: 12px;
+    background:
+      linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(4, 10, 24, 0.84));
+    color: rgba(186, 230, 253, 0.94);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+      0 8px 22px rgba(0, 0, 0, 0.28),
+      0 0 0 1px rgba(255, 255, 255, 0.025),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  :root[data-theme="light"] .mobile-theme-float-btn {
+    border-color: rgba(14, 116, 144, 0.16);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(232, 246, 252, 0.76));
+    color: rgba(3, 80, 120, 0.9);
+    box-shadow:
+      0 8px 20px rgba(33, 48, 71, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.72),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  }
+
+  /* A. Search — reduce letter-spacing on labels/eyebrow */
+  .ox-search-eyebrow {
+    letter-spacing: 0.05em !important;
+    padding: 4px 9px !important;
+  }
+
+  .ox-search-input-wrap label {
+    letter-spacing: 0.04em !important;
+    font-size: 0.6rem !important;
+  }
+
+  /* C. Cards — soften glow on mobile */
+  .ox-search-vehicle-grid .vehicle-card {
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card::after {
+    height: 2px !important;
+    opacity: 0.5 !important;
+    background: linear-gradient(90deg, rgba(14, 165, 233, 0.6), rgba(59, 130, 246, 0.46)) !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card--elite::after,
+  .ox-search-vehicle-grid .vehicle-card--platinum::after {
+    background: linear-gradient(90deg, rgba(234, 179, 8, 0.62), rgba(56, 189, 248, 0.54)) !important;
+  }
+}
+
+/* B. Hero car — contain within stage on mobile, avoid accidental crop */
+@media (max-width: 760px) {
+  .ox-home-hero-stage-v3 {
+    overflow: hidden !important;
+  }
+
+  .ox-home-hero-car-v3 {
+    width: min(106%, 370px) !important;
+    max-height: 195px !important;
+    transform: translateY(8px) scale(1.01) !important;
+  }
+}
+
+/* D. Acceso operativo in Mas menu — subtle accent styling */
+.mobile-dock-more-btn--access {
+  border-color: rgba(125, 211, 252, 0.18) !important;
+  color: rgba(186, 230, 253, 0.9) !important;
+}
+
+:root[data-theme="light"] .mobile-dock-more-btn--access {
+  border-color: rgba(14, 116, 144, 0.18) !important;
+  color: rgba(3, 80, 120, 0.88) !important;
+}
+
+/* oX NEXMOV — Flechas de navegacion bajo titulo en mobile */
+@media (max-width: 760px) {
+  .ox-home-section-head-v3 {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .ox-home-section-actions-v3 {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+}
+
+/* home carousel — remove top-of-card shine */
+.ox-home-vehicles-carousel-v3 .vehicle-card::before {
+  display: none !important;
+}
+
+/* home hero — fix 3-col grid overflow on narrow mobile */
+@media (max-width: 680px) {
+  .ox-home-hero-v3 {
+    grid-template-columns: 1fr !important;
+    min-height: unset !important;
+  }
+  .ox-home-hero-stage-v3,
+  .ox-home-featured-card-v3 {
+    display: none !important;
+  }
+  .ox-home-search-v3 {
+    width: 100% !important;
+  }
+}
+
+/* buyer garage — animated save feedback */
+@keyframes ox-fade-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.buyer-garage-form-actions span {
+  animation: ox-fade-in 0.22s ease-out both;
+}
+
+/* search — active filter chips */
+.ox-search-active-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.ox-search-chip-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(186, 230, 253, 0.92);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.ox-search-chip-active:hover {
+  background: rgba(14, 165, 233, 0.16);
+  border-color: rgba(125, 211, 252, 0.5);
+}
+
+.ox-search-chip-active span:last-child {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  line-height: 1;
+}
+
+.ox-search-chip-clear-all {
+  padding: 4px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(148, 163, 184, 0.7);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.ox-search-chip-clear-all:hover {
+  color: rgba(203, 213, 225, 0.9);
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+:root[data-theme="light"] .ox-search-chip-active {
+  border-color: rgba(14, 165, 233, 0.35);
+  background: rgba(14, 165, 233, 0.06);
+  color: rgba(2, 132, 199, 0.9);
+}
+
+:root[data-theme="light"] .ox-search-chip-clear-all {
+  color: rgba(100, 116, 139, 0.8);
+  border-color: rgba(100, 116, 139, 0.25);
+}
+
+/* search — sort select */
+.ox-search-sort-select {
+  padding: 5px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 8px;
+  background: var(--ox-surface-input, rgba(15, 23, 42, 0.7));
+  color: rgba(203, 213, 225, 0.9);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+:root[data-theme="light"] .ox-search-sort-select {
+  background: rgba(248, 250, 252, 0.9);
+  color: rgba(15, 23, 42, 0.85);
+  border-color: rgba(100, 116, 139, 0.25);
+}
+
+/* search — apply mobile filters button (only visible on mobile) */
+.ox-search-apply-mobile-filters {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .ox-search-apply-mobile-filters {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(14, 165, 233, 0.16);
+    color: rgba(186, 230, 253, 0.95);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  :root[data-theme="light"] .ox-search-apply-mobile-filters {
+    background: rgba(14, 165, 233, 0.12);
+    color: rgba(2, 132, 199, 0.9);
+  }
+}
+
+/* buyer tables — horizontal scroll on narrow mobile */
+@media (max-width: 680px) {
+  .admin-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+  }
+
+  .admin-table {
+    min-width: 480px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 10px !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* auth — real-time field hints */
+.auth-field-hint {
+  display: block;
+  margin-top: -6px;
+  margin-bottom: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.auth-field-hint--warn {
+  color: #fbbf24;
+}
+
+.auth-field-hint--ok {
+  color: #86efac;
+}
+
+/* zerokm — calculator inputs */
+.zero-km-calculator .zero-km-calc-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.zero-km-calculator .zero-km-calc-inputs label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(203, 213, 225, 0.8);
+}
+
+.zero-km-calculator .zero-km-calc-inputs input,
+.zero-km-calculator .zero-km-calc-inputs select {
+  padding: 7px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  color: rgba(248, 250, 252, 0.9);
+  font-size: 0.82rem;
+}
+
+:root[data-theme="light"] .zero-km-calculator .zero-km-calc-inputs label {
+  color: rgba(30, 41, 59, 0.8);
+}
+
+:root[data-theme="light"] .zero-km-calculator .zero-km-calc-inputs input,
+:root[data-theme="light"] .zero-km-calculator .zero-km-calc-inputs select {
+  background: rgba(248, 250, 252, 0.9);
+  color: rgba(15, 23, 42, 0.9);
+  border-color: rgba(100, 116, 139, 0.25);
+}
+
+@media (max-width: 540px) {
+  .zero-km-calculator .zero-km-calc-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === POLISH: global focus-visible ring ===
+   Browsers hide focus rings for mouse users but show them for keyboard.
+   Many components do outline:none without a replacement — this fixes that. */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="tab"]:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.72) !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+
+/* Buttons with their own border-radius need inherit */
+.primary-action:focus-visible,
+.secondary-action:focus-visible,
+.dock-btn:focus-visible,
+.mobile-dock-more-btn:focus-visible,
+.ox-search-chip-active:focus-visible,
+.ox-search-chip-clear-all:focus-visible {
+  border-radius: inherit;
+}
+
+:root[data-theme="light"] button:focus-visible,
+:root[data-theme="light"] a:focus-visible,
+:root[data-theme="light"] input:focus-visible,
+:root[data-theme="light"] select:focus-visible,
+:root[data-theme="light"] textarea:focus-visible {
+  outline-color: rgba(2, 132, 199, 0.7) !important;
+}
+
+/* === POLISH: lift minimum readable opacity for secondary text ===
+   Small labels and captions at 0.5-0.6 alpha fail WCAG AA at small sizes.
+   Bumping floor to 0.72 keeps the hierarchy while staying readable. */
+.ox-home-page-v3 .vehicle-card .vehicle-card-meta,
+.ox-home-page-v3 .vehicle-card .vehicle-card-dealer,
+.ox-search-vehicle-grid .vehicle-card .vehicle-card-meta,
+.ox-search-vehicle-grid .vehicle-card .vehicle-card-dealer {
+  opacity: 1 !important;
+  color: rgba(203, 213, 225, 0.78) !important;
+}
+
+.zero-km-page small,
+.zero-km-page .zero-km-responsible-note p {
+  color: rgba(203, 213, 225, 0.78) !important;
+}
+
+/* error boundary dev detail */
+.error-boundary-detail {
+  margin-top: 24px;
+  padding: 14px 16px;
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: 10px;
+  background: rgba(127, 29, 29, 0.18);
+  color: rgba(252, 165, 165, 0.9);
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* buyer — sale initiated confirmation */
+.buyer-garage-sale-sent {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid rgba(134, 239, 172, 0.25);
+  border-radius: 12px;
+  background: rgba(20, 83, 45, 0.18);
+  animation: ox-fade-in 0.22s ease-out both;
+}
+
+.buyer-garage-sale-sent strong {
+  color: #86efac;
+  font-size: 0.85rem;
+}
+
+.buyer-garage-sale-sent span {
+  color: rgba(203, 213, 225, 0.8);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.buyer-garage-sale-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* ============================================================
+   NOTIFICATION SYSTEM
+   ============================================================ */
+
+/* Bell button */
+.notif-bell-wrap {
+  position: relative;
+}
+
+.notif-bell-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(203, 213, 225, 0.82);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.notif-bell-btn:hover {
+  background: rgba(148, 163, 184, 0.08);
+  border-color: rgba(125, 211, 252, 0.28);
+  color: rgba(186, 230, 253, 0.95);
+}
+
+.notif-bell-icon--ringing {
+  animation: bell-ring 0.5s ease-in-out;
+}
+
+@keyframes bell-ring {
+  0%, 100% { transform: rotate(0deg); }
+  20%       { transform: rotate(12deg); }
+  40%       { transform: rotate(-10deg); }
+  60%       { transform: rotate(8deg); }
+  80%       { transform: rotate(-6deg); }
+}
+
+/* Badge */
+.notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 800;
+  line-height: 17px;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Dropdown panel */
+.notif-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 200;
+  width: 320px;
+  max-height: 420px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 14px;
+  background: rgba(8, 14, 32, 0.96);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(18px);
+  animation: ox-fade-in 0.18s ease-out both;
+  overflow: hidden;
+}
+
+.notif-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  flex-shrink: 0;
+}
+
+.notif-panel-head strong {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(248, 250, 252, 0.92);
+}
+
+.notif-mark-read {
+  font-size: 0.68rem;
+  color: rgba(125, 211, 252, 0.8);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.notif-mark-read:hover {
+  color: rgba(186, 230, 253, 1);
+}
+
+.notif-panel-list {
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
+}
+
+.notif-empty {
+  padding: 24px 16px;
+  text-align: center;
+  color: rgba(148, 163, 184, 0.6);
+  font-size: 0.78rem;
+}
+
+/* Notification items */
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.07);
+  transition: background 0.12s;
+}
+
+.notif-item:hover {
+  background: rgba(148, 163, 184, 0.05);
+}
+
+.notif-item--unread {
+  background: rgba(14, 165, 233, 0.05);
+}
+
+.notif-item-dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.3);
+}
+
+.notif-item--unread .notif-item-dot {
+  background: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
+}
+
+.notif-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-item-body p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(203, 213, 225, 0.88);
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.notif-item--unread .notif-item-body p {
+  color: rgba(248, 250, 252, 0.95);
+  font-weight: 500;
+}
+
+.notif-item-time {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.65rem;
+  color: rgba(148, 163, 184, 0.5);
+}
+
+/* Toast stack — fixed bottom-right */
+.notif-toast-stack {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  max-width: 320px;
+}
+
+.notif-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(8, 14, 32, 0.95);
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  color: rgba(203, 213, 225, 0.92);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  pointer-events: auto;
+  animation: toast-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.notif-toast--dealer { border-color: rgba(125, 211, 252, 0.28); }
+.notif-toast--buyer  { border-color: rgba(134, 239, 172, 0.28); }
+.notif-toast--admin  { border-color: rgba(251, 191, 36, 0.28); }
+
+.notif-toast span { flex: 1; }
+
+.notif-toast-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: rgba(148, 163, 184, 0.6);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+  pointer-events: auto;
+}
+
+.notif-toast-close:hover { color: rgba(203, 213, 225, 0.9); }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(24px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* Light mode overrides */
+:root[data-theme="light"] .notif-bell-btn {
+  color: rgba(30, 41, 59, 0.7);
+  border-color: rgba(100, 116, 139, 0.2);
+}
+
+:root[data-theme="light"] .notif-panel,
+:root[data-theme="light"] .notif-toast {
+  background: rgba(248, 250, 252, 0.97);
+  border-color: rgba(100, 116, 139, 0.18);
+  color: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme="light"] .notif-panel-head strong,
+:root[data-theme="light"] .notif-item-body p,
+:root[data-theme="light"] .notif-item--unread .notif-item-body p {
+  color: rgba(15, 23, 42, 0.9);
+}
+
+:root[data-theme="light"] .notif-toast {
+  color: rgba(15, 23, 42, 0.88);
+}
+
+/* Mobile adjustments */
+@media (max-width: 860px) {
+  .notif-panel {
+    right: -10px;
+    width: min(300px, calc(100vw - 24px));
+  }
+
+  .notif-toast-stack {
+    bottom: 90px;
+    right: 12px;
+    left: 12px;
+    max-width: unset;
+  }
+}

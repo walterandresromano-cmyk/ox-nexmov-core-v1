@@ -55,7 +55,7 @@ export default function SellVehicle({ authUser, onNavigate }) {
                 type="button"
                 onClick={() => onNavigate?.(isLoggedIn ? "buyer" : "login")}
               >
-                {isLoggedIn ? "Ingresar a mi Garage oX" : "Ingresar a Garage oX"}
+                {isLoggedIn ? "Abrir mi Garage oX" : "Crear mi Garage oX"}
               </button>
               <button
                 className="admin-refresh-btn"

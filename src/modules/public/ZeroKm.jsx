@@ -1,5 +1,5 @@
 import "../../styles/zeroKm.css";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { createZeroKmFinancingLead } from "../../services/zeroKm.service.js";
 
 const initialForm = {
@@ -17,6 +17,114 @@ const initialForm = {
   monthlyIncomeRange: "",
   message: "",
 };
+
+function formatARS(n) {
+  if (!n || isNaN(n)) return "—";
+  return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(n);
+}
+
+function ZeroKmCalculator() {
+  const [vehiclePrice, setVehiclePrice] = useState("");
+  const [downPayment, setDownPayment] = useState("");
+  const [termMonths, setTermMonths] = useState("36");
+  const [monthlyIncome, setMonthlyIncome] = useState("");
+
+  const result = useMemo(() => {
+    const price = Number(String(vehiclePrice).replace(/\D/g, "")) || 0;
+    const down = Number(String(downPayment).replace(/\D/g, "")) || 0;
+    const term = Number(termMonths) || 36;
+    const income = Number(String(monthlyIncome).replace(/\D/g, "")) || 0;
+
+    if (!price || price <= down) return null;
+
+    const financed = price - down;
+    const monthlyRate = 0.035;
+    const cuota = financed * (monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
+    const totalPaid = cuota * term;
+    const incomePercent = income > 0 ? Math.round((cuota / income) * 100) : null;
+
+    return { cuota, totalPaid, financed, incomePercent };
+  }, [vehiclePrice, downPayment, termMonths, monthlyIncome]);
+
+  return (
+    <article className="zero-km-simulator-preview zero-km-calculator">
+      <div>
+        <span>Simulador</span>
+        <h2>Estimación de cuota mensual</h2>
+        <p>
+          Referencia orientativa. Las condiciones reales dependen del proveedor y plan vigente.
+        </p>
+
+        <div className="zero-km-calc-inputs">
+          <label>
+            Precio del vehículo
+            <input
+              type="number"
+              placeholder="Ej: 15000000"
+              value={vehiclePrice}
+              onChange={(e) => setVehiclePrice(e.target.value)}
+            />
+          </label>
+
+          <label>
+            Entrega / anticipo
+            <input
+              type="number"
+              placeholder="Ej: 5000000"
+              value={downPayment}
+              onChange={(e) => setDownPayment(e.target.value)}
+            />
+          </label>
+
+          <label>
+            Plazo
+            <select value={termMonths} onChange={(e) => setTermMonths(e.target.value)}>
+              <option value="12">12 meses</option>
+              <option value="24">24 meses</option>
+              <option value="36">36 meses</option>
+              <option value="48">48 meses</option>
+              <option value="60">60 meses</option>
+              <option value="72">72 meses</option>
+            </select>
+          </label>
+
+          <label>
+            Ingreso mensual (opcional)
+            <input
+              type="number"
+              placeholder="Para calcular % del ingreso"
+              value={monthlyIncome}
+              onChange={(e) => setMonthlyIncome(e.target.value)}
+            />
+          </label>
+        </div>
+      </div>
+
+      <div className="zero-km-preview-grid" aria-live="polite">
+        <div>
+          <span>Cuota estimada</span>
+          <strong>{result ? formatARS(result.cuota) : "$ —"}</strong>
+        </div>
+        <div>
+          <span>Monto financiado</span>
+          <strong>{result ? formatARS(result.financed) : "$ —"}</strong>
+        </div>
+        <div>
+          <span>Total a pagar</span>
+          <strong>{result ? formatARS(result.totalPaid) : "$ —"}</strong>
+        </div>
+        <div>
+          <span>% del ingreso</span>
+          <strong>
+            {result?.incomePercent != null
+              ? `${result.incomePercent}%`
+              : "—"}
+          </strong>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 export default function ZeroKm({ authUser, authProfile }) {
   const [form, setForm] = useState(() => ({
@@ -138,35 +246,7 @@ export default function ZeroKm({ authUser, authProfile }) {
           </article>
         </section>
 
-        <article className="zero-km-simulator-preview">
-          <div>
-            <span>Próximamente</span>
-            <h2>Simulador de alcance de cuota</h2>
-            <p>
-              Estamos preparando una herramienta para relacionar ingreso
-              mensual, cuota pura, variación estimada y capacidad de pago.
-            </p>
-            <a href="#zero-km-form">Dejar consulta ahora</a>
-          </div>
-          <div className="zero-km-preview-grid" aria-hidden="true">
-            <div>
-              <span>Ingreso mensual</span>
-              <strong>$ --</strong>
-            </div>
-            <div>
-              <span>Cuota estimada</span>
-              <strong>$ --</strong>
-            </div>
-            <div>
-              <span>% de ingreso</span>
-              <strong>--%</strong>
-            </div>
-            <div>
-              <span>Variación posible</span>
-              <strong>Variable</strong>
-            </div>
-          </div>
-        </article>
+        <ZeroKmCalculator />
 
         <div className="zero-km-grid ox-public-content">
           <div className="zero-km-side-stack">
@@ -427,8 +507,7 @@ export default function ZeroKm({ authUser, authProfile }) {
               <div className="lead-created-box">
                 <h3>Consulta enviada</h3>
                 <p>
-                  Consulta enviada. Un asesor podrá contactarte para continuar
-                  el proceso.
+                  Un asesor podrá contactarte para continuar el proceso.
                 </p>
 
                 <div className="contact-summary">
@@ -439,16 +518,26 @@ export default function ZeroKm({ authUser, authProfile }) {
                     pondremos en contacto por los datos que cargaste.
                   </span>
                 </div>
+
+                <button
+                  type="button"
+                  className="admin-refresh-btn"
+                  onClick={() => setCreatedLead(null)}
+                >
+                  Hacer otra consulta
+                </button>
               </div>
             )}
 
-            <button
-              className="primary-action"
-              type="submit"
-              disabled={submitting}
-            >
-              {submitting ? "Enviando consulta..." : "Consultar financiación"}
-            </button>
+            {!createdLead && (
+              <button
+                className="primary-action"
+                type="submit"
+                disabled={submitting}
+              >
+                {submitting ? "Enviando consulta..." : "Consultar financiación"}
+              </button>
+            )}
 
             <p className="form-legal-note">
               Al enviar esta consulta, aceptás que oX NEXMOV registre tus datos

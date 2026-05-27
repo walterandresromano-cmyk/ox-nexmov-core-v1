@@ -632,6 +632,30 @@ function matchesAdvancedFilters(vehicle, dealer, filters) {
   return true;
 }
 
+const FILTER_CHIP_LABELS = {
+  brand: "Marca",
+  model: "Modelo",
+  version: "Versión",
+  yearFrom: "Año desde",
+  yearTo: "Año hasta",
+  priceMin: "Precio mín.",
+  priceMax: "Precio máx.",
+  kmMax: "Km máx.",
+  province: "Provincia",
+  city: "Ciudad",
+  vehicleType: "Tipo",
+  fuel: "Combustible",
+  transmission: "Transmisión",
+  financing: "Financiación",
+  status: "Estado",
+  dealerRank: "Dealer",
+};
+
+const FILTER_CHIP_VALUE_LABELS = {
+  financing: { yes: "Con financiación", no: "Sin financiación" },
+  status: { reserved: "Reservados", available: "Disponibles" },
+};
+
 const EMPTY_ADVANCED_FILTERS = {
   brand: "",
   model: "",
@@ -774,6 +798,8 @@ export default function Search({
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filters, setFilters] = useState(getInitialFilters);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [sortOrder, setSortOrder] = useState("default");
+  const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
 
   function updateFilter(name, value) {
     setFilters((currentFilters) => ({
@@ -834,6 +860,11 @@ export default function Search({
     setShowSuggestions(false);
   }, [initialSearchQuery]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearchText(searchText), 260);
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
   function getDealer(vehicle) {
     if (vehicle.dealer) return vehicle.dealer;
     return null;
@@ -850,8 +881,8 @@ export default function Search({
   );
 
   const visibleSuggestions = useMemo(
-    () => buildVehicleAutocompleteSuggestions(publicSearchVehicles, searchText, 8),
-    [publicSearchVehicles, searchText]
+    () => buildVehicleAutocompleteSuggestions(publicSearchVehicles, debouncedSearchText, 8),
+    [publicSearchVehicles, debouncedSearchText]
   );
 
   function handleSuggestionSelect(suggestion) {
@@ -956,10 +987,29 @@ export default function Search({
       .map((item) => item.vehicle);
   }, [publicSearchVehicles, searchText, parsedSearch, filters]);
 
+  const sortedVehicles = useMemo(() => {
+    const list = [...filteredVehicles];
+    if (sortOrder === "price_asc") return list.sort((a, b) => getVehiclePrice(a) - getVehiclePrice(b));
+    if (sortOrder === "price_desc") return list.sort((a, b) => getVehiclePrice(b) - getVehiclePrice(a));
+    if (sortOrder === "km_asc") return list.sort((a, b) => getVehicleKm(a) - getVehicleKm(b));
+    if (sortOrder === "newest") return list.sort((a, b) => getVehicleYear(b) - getVehicleYear(a));
+    return list;
+  }, [filteredVehicles, sortOrder]);
+
   const activeAdvancedFiltersCount = useMemo(
     () => Object.values(filters).filter(Boolean).length,
     [filters]
   );
+
+  const activeFilterChips = useMemo(() => {
+    return Object.entries(filters)
+      .filter(([, value]) => Boolean(value))
+      .map(([key, value]) => ({
+        key,
+        label: FILTER_CHIP_LABELS[key] || key,
+        value: FILTER_CHIP_VALUE_LABELS[key]?.[value] || value,
+      }));
+  }, [filters]);
 
   const searchSummary = useMemo(() => {
     if (!searchText.trim()) {
@@ -1085,7 +1135,7 @@ export default function Search({
           <div className="ox-search-status">
             <span>{searchSummary}</span>
             <strong>
-              {filteredVehicles.length} de {publicSearchVehicles.length} vehículos
+              {sortedVehicles.length} de {publicSearchVehicles.length} vehículos
             </strong>
           </div>
 
@@ -1369,6 +1419,14 @@ export default function Search({
               >
                 Actualizar vehículos
               </button>
+
+              <button
+                type="button"
+                className="ox-search-apply-mobile-filters"
+                onClick={() => setIsMobileFiltersOpen(false)}
+              >
+                Aplicar filtros
+              </button>
             </div>
           </div>
           </aside>
@@ -1378,15 +1436,52 @@ export default function Search({
               <div>
                 <h2>Resultados</h2>
                 <p>
-                  Mostrando {filteredVehicles.length} unidades disponibles con
+                  Mostrando {sortedVehicles.length} unidades disponibles con
                   lectura comercial.
                 </p>
               </div>
 
               <div className="ox-search-result-actions">
-                <button type="button">Más relevantes</button>
+                <select
+                  className="ox-search-sort-select"
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value)}
+                  aria-label="Ordenar resultados"
+                >
+                  <option value="default">Más relevantes</option>
+                  <option value="price_asc">Precio: menor a mayor</option>
+                  <option value="price_desc">Precio: mayor a menor</option>
+                  <option value="km_asc">Km: menor a mayor</option>
+                  <option value="newest">Más recientes</option>
+                </select>
               </div>
             </div>
+
+            {activeFilterChips.length > 0 && (
+              <div className="ox-search-active-chips" aria-label="Filtros activos">
+                {activeFilterChips.map((chip) => (
+                  <button
+                    key={chip.key}
+                    type="button"
+                    className="ox-search-chip-active"
+                    onClick={() => updateFilter(chip.key, "")}
+                    aria-label={`Quitar filtro ${chip.label}`}
+                  >
+                    <span>{chip.label}: {chip.value}</span>
+                    <span aria-hidden="true">×</span>
+                  </button>
+                ))}
+                {activeFilterChips.length > 1 && (
+                  <button
+                    type="button"
+                    className="ox-search-chip-clear-all"
+                    onClick={clearAdvancedFilters}
+                  >
+                    Limpiar todo
+                  </button>
+                )}
+              </div>
+            )}
 
             <div className="vehicle-grid ox-search-vehicle-grid">
               {loadingVehicles
@@ -1400,20 +1495,20 @@ export default function Search({
                       </div>
                     </div>
                   ))
-                : filteredVehicles.map((vehicle) => (
+                : sortedVehicles.map((vehicle) => (
                     <VehicleCardPublic
                       key={vehicle.id}
                       vehicle={vehicle}
                       dealer={getDealer(vehicle)}
                       appActions={appActions}
                       onNavigate={onNavigate}
-                      vehicles={filteredVehicles}
+                      vehicles={sortedVehicles}
                       getDealer={getDealer}
                     />
                   ))}
             </div>
 
-            {filteredVehicles.length === 0 && (
+            {sortedVehicles.length === 0 && (
               <div className="ox-search-empty-state" role="status" aria-live="polite">
                 <div className="ox-search-empty-state-copy">
                   <h3>No hay resultados con esta búsqueda.</h3>

@@ -319,6 +319,11 @@ export default function AuthPanel({
                     placeholder="Mínimo 6 caracteres"
                   />
                 </label>
+                {newPasswordForm.password.length > 0 && newPasswordForm.password.length < 6 && (
+                  <small className="auth-field-hint auth-field-hint--warn">
+                    Mínimo 6 caracteres ({newPasswordForm.password.length}/6)
+                  </small>
+                )}
 
                 <label>
                   Repetir contraseña
@@ -331,6 +336,19 @@ export default function AuthPanel({
                     placeholder="Repetí la nueva contraseña"
                   />
                 </label>
+                {newPasswordForm.confirmPassword.length > 0 &&
+                  newPasswordForm.password !== newPasswordForm.confirmPassword && (
+                  <small className="auth-field-hint auth-field-hint--warn">
+                    Las contraseñas no coinciden.
+                  </small>
+                )}
+                {newPasswordForm.confirmPassword.length > 0 &&
+                  newPasswordForm.password === newPasswordForm.confirmPassword &&
+                  newPasswordForm.password.length >= 6 && (
+                  <small className="auth-field-hint auth-field-hint--ok">
+                    Las contraseñas coinciden.
+                  </small>
+                )}
 
                 <button className="primary-action" type="submit">
                   Actualizar contraseña
@@ -453,6 +471,16 @@ export default function AuthPanel({
                     placeholder="Mínimo 6 caracteres"
                   />
                 </label>
+                {registerForm.password.length > 0 && registerForm.password.length < 6 && (
+                  <small className="auth-field-hint auth-field-hint--warn">
+                    Mínimo 6 caracteres ({registerForm.password.length}/6)
+                  </small>
+                )}
+                {registerForm.password.length >= 6 && (
+                  <small className="auth-field-hint auth-field-hint--ok">
+                    Contraseña válida.
+                  </small>
+                )}
 
                 <p className="auth-legal-note">
                   Al registrarme acepto los{" "}

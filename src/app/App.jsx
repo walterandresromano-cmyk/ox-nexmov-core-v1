@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 
 import Layout from "../components/Layout.jsx";
+import ErrorBoundary from "../components/ErrorBoundary.jsx";
 import NotFound from "../modules/public/NotFound.jsx";
 import Home from "../modules/public/Home.jsx";
 const Search           = lazy(() => import("../modules/public/Search.jsx"));
@@ -28,6 +29,7 @@ import {
 } from "../services/buyerFavorites.service.js";
 
 const ROUTES = {
+  notFound: NotFound,
   home: Home,
   search: Search,
   zeroKm: ZeroKm,
@@ -409,6 +411,10 @@ export default function App() {
   }
 
   const safeCurrentRoute = useMemo(() => {
+    const routeKnown = currentRoute in ROUTES;
+
+    if (!routeKnown) return "notFound";
+
     if (canAccessRoute(currentRoute, authProfile?.role, authUser)) {
       return currentRoute;
     }
@@ -470,20 +476,22 @@ export default function App() {
       onNavigate={navigate}
       appActions={appActions}
     >
-      <Suspense fallback={<div className="route-loading" />}>
-        <CurrentPage
-          onNavigate={navigate}
-          appActions={appActions}
-          authUser={authUser}
-          authProfile={authProfile}
-          authLoading={authLoading}
-          authError={authError}
-          onAuthChange={handleAuthChange}
-          initialSearchQuery={safeCurrentRoute === "search" ? searchQueryFromHome : ""}
-          currentRoute={safeCurrentRoute}
-          routeParams={routeParams}
-        />
-      </Suspense>
+      <ErrorBoundary onNavigate={navigate}>
+        <Suspense fallback={<div className="route-loading" />}>
+          <CurrentPage
+            onNavigate={navigate}
+            appActions={appActions}
+            authUser={authUser}
+            authProfile={authProfile}
+            authLoading={authLoading}
+            authError={authError}
+            onAuthChange={handleAuthChange}
+            initialSearchQuery={safeCurrentRoute === "search" ? searchQueryFromHome : ""}
+            currentRoute={safeCurrentRoute}
+            routeParams={routeParams}
+          />
+        </Suspense>
+      </ErrorBoundary>
     </Layout>
   );
 }

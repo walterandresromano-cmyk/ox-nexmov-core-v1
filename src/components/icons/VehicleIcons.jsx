@@ -13,11 +13,12 @@ export function SpeedometerIcon({ className = "", size = 16 }) {
       className={className}
       aria-hidden="true"
     >
-      <path d="M12 2a10 10 0 1 0 10 10" />
-      <path d="M12 12 7 7" />
-      <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
-      <path d="M16.24 7.76 19 5" />
-      <path d="M5 19a7 7 0 0 1 9.9-9.9" />
+      {/* Gauge face — 240° arc, opening at bottom */}
+      <path d="M3.34 19a10 10 0 1 1 17.32 0" />
+      {/* Needle from center pivot pointing upper-right */}
+      <line x1="12" y1="14" x2="16.5" y2="9" />
+      {/* Center pivot dot */}
+      <circle cx="12" cy="14" r="1.5" fill="currentColor" stroke="none" />
     </svg>
   );
 }

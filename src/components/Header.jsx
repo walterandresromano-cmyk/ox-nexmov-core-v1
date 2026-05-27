@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { signOut } from "../services/auth.service.js";
 import { normalizeRole } from "../lib/auth.js";
+import { useNotifications } from "../hooks/useNotifications.js";
+import NotificationBell from "./NotificationBell.jsx";
 
 const NAV_ITEMS = [
   { id: "home", label: "Inicio" },
@@ -51,6 +53,11 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
   const [garagePulse, setGaragePulse] = useState(false);
+
+  const { notifications, unreadCount, markAllRead, toasts, dismissToast } = useNotifications({
+    authUser,
+    authProfile,
+  });
 
   async function handleLogout() {
     setLoggingOut(true);
@@ -120,6 +127,16 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
           >
             <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>
           </button>
+
+          {isLoggedIn && (
+            <NotificationBell
+              notifications={notifications}
+              unreadCount={unreadCount}
+              markAllRead={markAllRead}
+              toasts={toasts}
+              dismissToast={dismissToast}
+            />
+          )}
 
           {isLoggedIn && privatePanel && (
             <button

@@ -412,47 +412,48 @@ export default function Home({ onNavigate, appActions = {} }) {
     isFavorite: appActions?.isFavorite || (() => false),
   };
 
-  useEffect(() => {
-    async function loadPublicDealers() {
-      setLoadingDealers(true);
-      setDealersError("");
+  async function loadPublicDealers() {
+    setLoadingDealers(true);
+    setDealersError("");
 
-      const { dealers, error } = await listPublicActiveDealers();
+    const { dealers, error } = await listPublicActiveDealers();
 
-      if (error) {
-        setPublicDealers([]);
-        setDealersError(
-          error.message || "No se pudieron cargar los dealers activos."
-        );
-        setLoadingDealers(false);
-        return;
-      }
-
-      setPublicDealers(dealers || []);
+    if (error) {
+      setPublicDealers([]);
+      setDealersError(
+        error.message || "No se pudieron cargar los dealers activos."
+      );
       setLoadingDealers(false);
+      return;
     }
 
-    async function loadLatestVehicles() {
-      setLoadingLatestVehicles(true);
-      setLatestVehiclesError("");
+    setPublicDealers(dealers || []);
+    setLoadingDealers(false);
+  }
 
-      const { vehicles, error } = await listPublicLatestVehicles({ limit: 8 });
+  async function loadLatestVehicles() {
+    setLoadingLatestVehicles(true);
+    setLatestVehiclesError("");
 
-      if (error) {
-        setLatestVehicles([]);
-        setLatestVehiclesError(
-          "No pudimos cargar vehículos disponibles en este momento."
-        );
-        setLoadingLatestVehicles(false);
-        return;
-      }
+    const { vehicles, error } = await listPublicLatestVehicles({ limit: 8 });
 
-      setLatestVehicles(vehicles || []);
+    if (error) {
+      setLatestVehicles([]);
+      setLatestVehiclesError(
+        "No pudimos cargar vehículos disponibles en este momento."
+      );
       setLoadingLatestVehicles(false);
+      return;
     }
 
+    setLatestVehicles(vehicles || []);
+    setLoadingLatestVehicles(false);
+  }
+
+  useEffect(() => {
     loadPublicDealers();
     loadLatestVehicles();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -462,8 +463,9 @@ export default function Home({ onNavigate, appActions = {} }) {
     if (!carousel) return;
 
     const interval = window.setInterval(() => {
+      const cardWidth = carousel.firstElementChild?.offsetWidth || 330;
       const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-      const nextScroll = carousel.scrollLeft + 330;
+      const nextScroll = carousel.scrollLeft + cardWidth;
 
       carousel.scrollTo({
         left: nextScroll >= maxScroll ? 0 : nextScroll,
@@ -531,8 +533,9 @@ export default function Home({ onNavigate, appActions = {} }) {
     const carousel = latestVehiclesCarouselRef.current;
     if (!carousel) return;
 
+    const cardWidth = carousel.firstElementChild?.offsetWidth || 330;
     carousel.scrollBy({
-      left: direction === "next" ? 330 : -330,
+      left: direction === "next" ? cardWidth : -cardWidth,
       behavior: "smooth",
     });
   }
@@ -647,6 +650,7 @@ export default function Home({ onNavigate, appActions = {} }) {
                 alt="Vehículo institucional oX NEXMOV"
                 width="1300"
                 height="867"
+                decoding="async"
                 onError={(event) => {
                   event.currentTarget.parentElement.style.display = "none";
                 }}
@@ -685,6 +689,7 @@ export default function Home({ onNavigate, appActions = {} }) {
                       alt=""
                       aria-hidden="true"
                       loading={pos === 0 ? "eager" : "lazy"}
+                      decoding="async"
                     />
                   )}
 
@@ -724,10 +729,32 @@ export default function Home({ onNavigate, appActions = {} }) {
         </section>
 
         {latestVehiclesError && (
-          <div className="auth-warning">{latestVehiclesError}</div>
+          <div className="auth-warning">
+            {latestVehiclesError}
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={loadLatestVehicles}
+              style={{ marginLeft: "10px" }}
+            >
+              Reintentar
+            </button>
+          </div>
         )}
 
-        {dealersError && <div className="auth-warning">{dealersError}</div>}
+        {dealersError && (
+          <div className="auth-warning">
+            {dealersError}
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={loadPublicDealers}
+              style={{ marginLeft: "10px" }}
+            >
+              Reintentar
+            </button>
+          </div>
+        )}
 
         <section className="ox-home-main-grid-v3">
           <div className="ox-home-featured-vehicles-v3">
@@ -751,7 +778,20 @@ export default function Home({ onNavigate, appActions = {} }) {
             </div>
 
             {loadingLatestVehicles && (
-              <div className="auth-message">Cargando últimos ingresos...</div>
+              <div className="ox-home-vehicles-carousel-v3 ox-home-vehicles-skeleton-v3" aria-hidden="true">
+                {Array.from({ length: 5 }, (_, n) => (
+                  <div key={n} className="ox-home-vehicle-wrap-v3">
+                    <div className="vehicle-card-skeleton">
+                      <div className="vehicle-card-skeleton__image ox-shimmer" style={{ height: "108px" }} />
+                      <div className="vehicle-card-skeleton__body">
+                        <div className="vehicle-card-skeleton__line ox-shimmer" />
+                        <div className="vehicle-card-skeleton__line vehicle-card-skeleton__line--short ox-shimmer" />
+                        <div className="vehicle-card-skeleton__price ox-shimmer" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
 
             {!loadingLatestVehicles && latestVehicles.length === 0 && (

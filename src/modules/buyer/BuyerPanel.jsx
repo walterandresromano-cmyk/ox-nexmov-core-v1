@@ -290,6 +290,10 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const [selectedGarageVehicleId, setSelectedGarageVehicleId] = useState("");
   const [garageSaving, setGarageSaving] = useState(false);
   const [garageSaved, setGarageSaved] = useState(false);
+  const [garageServiceError, setGarageServiceError] = useState("");
+  const [saleLeadSending, setSaleLeadSending] = useState(false);
+  const [saleLeadSent, setSaleLeadSent] = useState(false);
+  const [saleLeadError, setSaleLeadError] = useState("");
   const [garageForm, setGarageForm] = useState({
     serviceDate: new Date().toISOString().slice(0, 10),
     mileage: "",
@@ -468,6 +472,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
 
     setGarageSaving(true);
     setGarageSaved(false);
+    setGarageServiceError("");
 
     const { service } = await createBuyerGarageService({
       userId: authUser?.id || authProfile?.id || authProfile?.email,
@@ -488,9 +493,46 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
       });
       setGarageSaved(true);
       window.setTimeout(() => setGarageSaved(false), 1800);
+    } else {
+      setGarageServiceError("No se pudo guardar el servicio. Intentá de nuevo.");
     }
 
     setGarageSaving(false);
+  }
+
+  async function handleInitiateSale(vehicle) {
+    if (!vehicle) return;
+
+    setSaleLeadSending(true);
+    setSaleLeadSent(false);
+    setSaleLeadError("");
+
+    const { error } = await createSellVehicleLead({
+      fullName: authProfile?.full_name || authUser?.email || "Usuario Garage oX",
+      email: authProfile?.email || authUser?.email || "",
+      phone: authProfile?.phone_visible || authProfile?.phone_whatsapp || "",
+      province: vehicle.province || "Sin provincia",
+      city: vehicle.city || "Sin ciudad",
+      brand: vehicle.brand,
+      model: vehicle.model,
+      version: vehicle.version,
+      year: vehicle.year,
+      km: vehicle.km,
+      expectedPrice: vehicle.expectedPrice,
+      condition: vehicle.condition,
+      hasDebt: false,
+      hasFinancing: false,
+      acceptsDealerContact: true,
+      message: vehicle.notes || "Solicitud generada desde Garage oX para evaluación futura.",
+    });
+
+    if (error) {
+      setSaleLeadError("No se pudo registrar la solicitud. Intentá de nuevo.");
+    } else {
+      setSaleLeadSent(true);
+    }
+
+    setSaleLeadSending(false);
   }
 
   function updateGarageVehicleField(field, value) {
@@ -503,7 +545,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   function startGarageVehicleEdit(vehicle) {
     if (!isOwnedGarageVehicle(vehicle)) {
       setGarageVehicleError(
-        "Esta unidad fue asignada por un dealer. Por ahora solo podÃ©s editar vehÃ­culos propios cargados por vos."
+        "Esta unidad fue asignada por un dealer. Por ahora solo podés editar vehículos propios cargados por vos."
       );
       setShowGarageVehicleForm(true);
       return;
@@ -1250,6 +1292,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                       <button
                         key={tabId}
                         type="button"
+                        role="tab"
+                        aria-selected={activeGarageTab === tabId}
                         className={activeGarageTab === tabId ? "is-active" : ""}
                         onClick={() => setActiveGarageTab(tabId)}
                       >
@@ -1259,7 +1303,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                   </div>
 
                   {activeGarageTab === "summary" && (
-                    <div className="buyer-garage-tab-panel">
+                    <div className="buyer-garage-tab-panel" role="tabpanel">
                       <div className="buyer-garage-summary-grid">
                         <article>
                           <span>Kilometraje</span>
@@ -1375,6 +1419,9 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     {garageSaving ? "Guardando..." : "Guardar servicio"}
                   </button>
                   {garageSaved && <span>Servicio guardado</span>}
+                  {garageServiceError && (
+                    <small className="garage-inline-error">{garageServiceError}</small>
+                  )}
                   {garageSource === "local" && (
                     <small>Registro local hasta activar persistencia Supabase.</small>
                   )}
@@ -1383,7 +1430,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                   )}
 
                   {activeGarageTab === "deadlines" && (
-                    <div className="buyer-garage-tab-panel">
+                    <div className="buyer-garage-tab-panel" role="tabpanel">
                       <div className="buyer-garage-summary-grid">
                         <article>
                           <span>VTV</span>
@@ -1444,39 +1491,84 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                   {activeGarageTab === "sale" && (
                     <div className="buyer-garage-tab-panel buyer-garage-sale-panel">
                       <span className="eyebrow">Venta futura</span>
-                      <h3>Preparacion comercial</h3>
+                      <h3>Preparación comercial</h3>
                       <p>
-                        Esta card puede convertirse en base de publicacion cuando decidas avanzar:
-                        historial, vencimientos y datos propios quedan ordenados para evaluar el vehiculo.
+                        Completá los datos del vehículo para que esta card tenga valor comercial
+                        al momento de publicar. Cuanto más historial, mayor contexto para el comprador.
                       </p>
                       <div className="buyer-garage-sale-readiness">
                         <span className={selectedGarageServices.length > 0 ? "is-ready" : ""}>
-                          Historial {selectedGarageServices.length > 0 ? "iniciado" : "pendiente"}
+                          {selectedGarageServices.length > 0 ? "✓" : "·"} Historial {selectedGarageServices.length > 0 ? `iniciado (${selectedGarageServices.length} registro${selectedGarageServices.length !== 1 ? "s" : ""})` : "pendiente"}
                         </span>
                         <span className={selectedGarageVehicle.km ? "is-ready" : ""}>
-                          Km {selectedGarageVehicle.km ? "cargado" : "pendiente"}
+                          {selectedGarageVehicle.km ? "✓" : "·"} Km {selectedGarageVehicle.km ? `cargado (${Number(selectedGarageVehicle.km).toLocaleString("es-AR")})` : "pendiente"}
                         </span>
                         <span className={selectedGarageVehicle.vtvDueDate || selectedGarageVehicle.insuranceDueDate ? "is-ready" : ""}>
-                          Vencimientos {(selectedGarageVehicle.vtvDueDate || selectedGarageVehicle.insuranceDueDate) ? "cargados" : "pendientes"}
+                          {(selectedGarageVehicle.vtvDueDate || selectedGarageVehicle.insuranceDueDate) ? "✓" : "·"} Vencimientos {(selectedGarageVehicle.vtvDueDate || selectedGarageVehicle.insuranceDueDate) ? "cargados" : "pendientes"}
+                        </span>
+                        <span className={selectedGarageVehicle.expectedPrice ? "is-ready" : ""}>
+                          {selectedGarageVehicle.expectedPrice ? "✓" : "·"} Precio esperado {selectedGarageVehicle.expectedPrice ? `cargado ($${Number(selectedGarageVehicle.expectedPrice).toLocaleString("es-AR")})` : "pendiente"}
                         </span>
                       </div>
-                      <button
-                        type="button"
-                        className="secondary-action"
-                        onClick={() => {
-                          if (isOwnedGarageVehicle(selectedGarageVehicle)) {
-                            startGarageVehicleEdit(selectedGarageVehicle);
-                            return;
-                          }
-
-                          resetGarageVehicleForm();
-                          setShowGarageVehicleForm(true);
-                        }}
-                      >
-                        {isOwnedGarageVehicle(selectedGarageVehicle)
-                          ? "Editar card"
-                          : "Cargar unidad propia"}
-                      </button>
+                      <div className="buyer-garage-sale-actions">
+                        {saleLeadSent ? (
+                          <div className="buyer-garage-sale-sent">
+                            <strong>Solicitud registrada.</strong>
+                            <span>
+                              El equipo de oX NEXMOV revisará los datos y se pondrá en contacto.
+                            </span>
+                            <button
+                              type="button"
+                              className="admin-refresh-btn"
+                              onClick={() => setSaleLeadSent(false)}
+                            >
+                              Enviar otra solicitud
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <button
+                              type="button"
+                              className="primary-action"
+                              disabled={saleLeadSending || !isOwnedGarageVehicle(selectedGarageVehicle)}
+                              onClick={() => handleInitiateSale(selectedGarageVehicle)}
+                            >
+                              {saleLeadSending ? "Registrando..." : "Iniciar proceso de venta"}
+                            </button>
+                            <button
+                              type="button"
+                              className="secondary-action"
+                              onClick={() => {
+                                if (isOwnedGarageVehicle(selectedGarageVehicle)) {
+                                  startGarageVehicleEdit(selectedGarageVehicle);
+                                } else {
+                                  resetGarageVehicleForm();
+                                  setShowGarageVehicleForm(true);
+                                }
+                              }}
+                            >
+                              {isOwnedGarageVehicle(selectedGarageVehicle)
+                                ? "Completar datos"
+                                : "Cargar unidad propia"}
+                            </button>
+                            <button
+                              type="button"
+                              className="admin-refresh-btn"
+                              onClick={() => setActiveGarageTab("services")}
+                            >
+                              Cargar servicio
+                            </button>
+                          </>
+                        )}
+                        {saleLeadError && (
+                          <small className="garage-inline-error">{saleLeadError}</small>
+                        )}
+                        {!isOwnedGarageVehicle(selectedGarageVehicle) && (
+                          <small style={{ color: "rgba(203,213,225,0.6)" }}>
+                            Solo podés iniciar el proceso con vehículos propios.
+                          </small>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
