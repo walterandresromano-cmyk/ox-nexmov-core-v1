@@ -1981,7 +1981,7 @@
 
 /* ── Hero 2-col: buscador + oportunidades ── */
 .ox-search-hero {
-  grid-template-columns: minmax(0, 1fr) 244px;
+  grid-template-columns: minmax(0, 1fr) 490px;
   align-items: start;
 }
 
@@ -1993,6 +1993,7 @@
 
 .ox-search-hero-opor {
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   padding-left: 16px;
   border-left: 1px solid rgba(148, 163, 184, 0.10);
@@ -2000,7 +2001,8 @@
 }
 
 .ox-search-opor-label {
-  margin: 0 0 4px;
+  grid-column: 1 / -1;
+  margin: 0 0 2px;
   color: rgba(125, 211, 252, 0.72);
   font-size: 0.56rem;
   font-weight: 950;
@@ -2134,6 +2136,7 @@
   min-height: auto;
   margin-top: 16px;
   gap: 5px;
+  max-width: 660px;
 }
 
 .ox-search-command:focus-within {
@@ -2188,7 +2191,9 @@
   box-shadow: none !important;
   border-radius: 0;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
+  max-width: 660px;
   color: rgba(148, 163, 184, 0.72);
   font-size: 0.62rem;
 }

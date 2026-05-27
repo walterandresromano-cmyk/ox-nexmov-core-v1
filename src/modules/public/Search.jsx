@@ -1065,7 +1065,7 @@ export default function Search({
   const oportunidadVehicles = useMemo(() => {
     return publicSearchVehicles
       .filter((v) => v.mainImageUrl || v.imageUrl)
-      .slice(0, 3);
+      .slice(0, 6);
   }, [publicSearchVehicles]);
 
   const radarTrigger = useMemo(() => {

@@ -540,18 +540,6 @@
   padding: 24px 34px 28px !important;
 }
 
-.ox-home-hero-copy-v3 h1,
-.ox-search-title-block h1,
-.zero-km-panel .ox-public-title,
-.sell-vehicle-panel > h1,
-.join-network-hero-copy h1,
-.about-hero-copy h1,
-.faq-hero-copy h1 {
-  font-size: clamp(1.72rem, 1.98vw, 2.28rem) !important;
-  line-height: 1 !important;
-  margin-top: 14px !important;
-}
-
 @media (max-width: 760px) {
   .zero-km-page.ox-public-page {
     width: min(100% - 20px, 430px) !important;
@@ -566,17 +554,6 @@
   .about-hero,
   .faq-hero {
     padding: 18px 13px 20px !important;
-  }
-
-  .ox-home-hero-copy-v3 h1,
-  .ox-search-title-block h1,
-  .zero-km-panel .ox-public-title,
-  .sell-vehicle-panel > h1,
-  .join-network-hero-copy h1,
-  .about-hero-copy h1,
-  .faq-hero-copy h1 {
-    font-size: clamp(1.5rem, 6.7vw, 1.95rem) !important;
-    line-height: 1.04 !important;
   }
 }
 
@@ -607,14 +584,6 @@
   box-shadow: none !important;
 }
 
-.join-network-hero-copy h1 {
-  max-width: 680px !important;
-  margin-top: 14px !important;
-  font-size: clamp(1.32rem, 1.54vw, 1.72rem) !important;
-  line-height: 1.12 !important;
-  letter-spacing: -0.018em !important;
-}
-
 .join-network-hero-copy h1 span {
   display: inline !important;
 }
@@ -630,11 +599,6 @@
   .join-network-panel > .join-network-hero {
     padding: 0 !important;
     gap: 14px;
-  }
-
-  .join-network-hero-copy h1 {
-    font-size: clamp(1.18rem, 5.4vw, 1.48rem) !important;
-    line-height: 1.12 !important;
   }
 
   .join-network-hero-copy > p {
@@ -2549,16 +2513,6 @@
     border-radius: 24px;
   }
 
-  .ox-search-eyebrow {
-    margin-bottom: 16px;
-    font-size: 0.66rem;
-  }
-
-  .ox-search-title-block h1 {
-    font-size: clamp(2.65rem, 14vw, 4rem);
-    line-height: 0.9;
-  }
-
   .ox-search-title-block > p {
     margin-top: 14px;
     font-size: 0.82rem;
@@ -2822,20 +2776,6 @@
   border-color: var(--ox-border);
   background: var(--ox-surface-card);
   box-shadow: var(--ox-shadow-card);
-}
-
-:root[data-theme="light"] h1,
-:root[data-theme="light"] h2,
-:root[data-theme="light"] h3,
-:root[data-theme="light"] h4,
-:root[data-theme="light"] strong,
-:root[data-theme="light"] .brand-button,
-:root[data-theme="light"] .ox-public-title,
-:root[data-theme="light"] .ox-home-hero-copy-v3 h1,
-:root[data-theme="light"] .ox-search-title-block h1,
-:root[data-theme="light"] .vehicle-detail-title-card h2 {
-  color: var(--ox-text);
-  text-shadow: none;
 }
 
 :root[data-theme="light"] p,
@@ -4641,16 +4581,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.join-network-hero-copy h1,
-.about-hero-copy h1,
-.faq-hero-copy h1,
-.sell-vehicle-panel > h1,
-.zero-km-panel .ox-public-title,
-.legal-title {
-  letter-spacing: 0;
-  text-wrap: balance;
-}
-
 .join-network-hero-copy > p,
 .about-hero-copy > p,
 .faq-hero-copy > p,
@@ -4901,16 +4831,6 @@
   .about-hero,
   .faq-hero {
     gap: 14px;
-  }
-
-  .join-network-hero-copy h1,
-  .about-hero-copy h1,
-  .faq-hero-copy h1,
-  .sell-vehicle-panel > h1,
-  .zero-km-panel .ox-public-title,
-  .legal-title {
-    font-size: clamp(1.9rem, 9.3vw, 2.5rem);
-    line-height: 1;
   }
 
   .join-network-hero-copy > p,
@@ -5264,14 +5184,6 @@
   box-shadow: none !important;
 }
 
-.join-network-hero-copy h1 {
-  max-width: 760px !important;
-  margin-top: 14px !important;
-  font-size: clamp(1.5rem, 1.86vw, 2.02rem) !important;
-  line-height: 1.08 !important;
-  letter-spacing: -0.024em !important;
-}
-
 .join-network-hero-copy h1 span {
   display: inline !important;
 }
@@ -5298,11 +5210,6 @@
   .join-network-panel > .join-network-hero {
     padding: 0 !important;
     gap: 14px;
-  }
-
-  .join-network-hero-copy h1 {
-    font-size: clamp(1.28rem, 6vw, 1.68rem) !important;
-    line-height: 1.12 !important;
   }
 
   .join-network-hero-copy > p {
@@ -5393,37 +5300,6 @@
   align-content: start !important;
 }
 
-.ox-home-eyebrow-v3,
-.ox-search-eyebrow,
-.zero-km-panel .ox-public-eyebrow,
-.sell-vehicle-panel > .eyebrow,
-.join-network-panel .eyebrow,
-.about-panel .eyebrow,
-.faq-panel .eyebrow {
-  min-height: 28px !important;
-  margin: 0 !important;
-  padding: 0 12px !important;
-  font-size: 0.58rem !important;
-  line-height: 1 !important;
-  letter-spacing: 0.13em !important;
-}
-
-.ox-home-hero-copy-v3 h1,
-.ox-search-title-block h1,
-.zero-km-panel .ox-public-title,
-.sell-vehicle-panel > h1,
-.join-network-hero-copy h1,
-.about-hero-copy h1,
-.faq-hero-copy h1 {
-  max-width: 820px !important;
-  margin: 14px 0 0 !important;
-  font-size: clamp(1.75rem, 2.02vw, 2.36rem) !important;
-  line-height: 0.98 !important;
-  letter-spacing: -0.035em !important;
-  font-weight: 950 !important;
-  text-wrap: balance !important;
-}
-
 .join-network-hero-copy h1 span,
 .about-hero-copy h1 span,
 .faq-hero-copy h1 span {
@@ -5488,17 +5364,6 @@
     border-radius: 24px 24px 0 0 !important;
   }
 
-  .ox-home-hero-copy-v3 h1,
-  .ox-search-title-block h1,
-  .zero-km-panel .ox-public-title,
-  .sell-vehicle-panel > h1,
-  .join-network-hero-copy h1,
-  .about-hero-copy h1,
-  .faq-hero-copy h1 {
-    font-size: clamp(1.55rem, 7vw, 2.05rem) !important;
-    line-height: 1.04 !important;
-  }
-
   .ox-home-hero-copy-v3 > p,
   .ox-search-title-block > p,
   .zero-km-panel .ox-public-lead,
@@ -5531,19 +5396,6 @@
   }
 }
 
-/* oX NEXMOV - Public hero typography final equality */
-.ox-home-eyebrow-v3,
-.ox-search-eyebrow,
-.zero-km-panel .ox-public-eyebrow,
-.sell-vehicle-panel > .eyebrow,
-.join-network-panel .eyebrow,
-.about-panel .eyebrow,
-.faq-panel .eyebrow {
-  font-size: 0.72rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.13em !important;
-}
-
 .ox-home-hero-copy-v3 > p,
 .ox-search-title-block > p,
 .zero-km-panel .ox-public-lead,
@@ -5551,18 +5403,6 @@
 .join-network-hero-copy > p,
 .about-hero-copy > p,
 .faq-hero-copy > p {
-  font-size: 0.72rem !important;
-  line-height: 1.48 !important;
-}
-
-/* oX NEXMOV - Public hero lead/eyebrow selector cleanup */
-.ox-home-hero-copy-v3 > p:not(.ox-home-eyebrow-v3),
-.ox-search-title-block > p:not(.ox-search-eyebrow),
-.zero-km-panel .ox-public-lead,
-.sell-vehicle-panel > p:not(.eyebrow),
-.join-network-hero-copy > p:not(.eyebrow),
-.about-hero-copy > p:not(.eyebrow),
-.faq-hero-copy > p:not(.eyebrow) {
   font-size: 0.72rem !important;
   line-height: 1.48 !important;
 }
@@ -5612,35 +5452,6 @@
   margin-top: 0 !important;
   padding: var(--ox-space-8) !important;
   border-radius: var(--ox-radius-xl) !important;
-}
-
-.about-page .about-panel .eyebrow,
-.about-page .about-section-head .eyebrow,
-.about-page .about-final .eyebrow,
-.faq-page .faq-panel .eyebrow,
-.faq-page .faq-section-head .eyebrow,
-.faq-page .faq-final .eyebrow {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 28px !important;
-  height: 28px !important;
-  margin: 0 !important;
-  padding: 0 12px !important;
-  line-height: 1 !important;
-  font-size: 0.72rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.13em !important;
-}
-
-.about-page .about-hero-copy h1,
-.faq-page .faq-hero-copy h1 {
-  max-width: 820px !important;
-  margin: 14px 0 0 !important;
-  font-size: clamp(1.75rem, 2.02vw, 2.36rem) !important;
-  line-height: 0.98 !important;
-  letter-spacing: -0.035em !important;
-  font-weight: 950 !important;
 }
 
 .about-page .about-hero-copy > p,
@@ -5699,12 +5510,6 @@
   .faq-page .faq-hero {
     padding: 26px 13px 20px !important;
     border-radius: var(--ox-radius-2xl) !important;
-  }
-
-  .about-page .about-hero-copy h1,
-  .faq-page .faq-hero-copy h1 {
-    font-size: clamp(1.55rem, 7vw, 2.05rem) !important;
-    line-height: 1.04 !important;
   }
 
   .about-page .about-final-actions,
@@ -7234,19 +7039,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   box-shadow: 0 24px 62px rgba(33, 48, 71, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
 }
 
-.ox-home-eyebrow-v3,
-.ox-home-section-eyebrow-v3 {
-  min-height: 28px !important;
-  height: 28px !important;
-  padding: 0 12px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
-  border-color: rgba(14, 165, 233, 0.24) !important;
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(34, 211, 238, 0.1)) !important;
-}
-
 .ox-home-hero-copy-v3 {
   gap: 8px !important;
   align-content: start !important;
@@ -7442,11 +7234,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     border-radius: var(--ox-radius-2xl) !important;
   }
 
-  .ox-home-hero-copy-v3 h1 {
-    font-size: clamp(1.65rem, 8vw, 2.3rem) !important;
-    line-height: 1.04 !important;
-  }
-
   .ox-home-primary-actions-v3,
   .ox-home-section-actions-v3 {
     display: grid !important;
@@ -7508,18 +7295,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 .ox-home-hero-copy-v3 {
   align-content: start !important;
   gap: 8px !important;
-}
-
-.ox-home-eyebrow-v3,
-.ox-home-section-eyebrow-v3 {
-  min-height: 28px !important;
-  padding: 0 12px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
-  border-color: rgba(14, 165, 233, 0.24) !important;
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(34, 211, 238, 0.1)) !important;
 }
 
 .ox-home-hero-copy-v3 h1 {
@@ -7760,11 +7535,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   .ox-home-hero-v3 {
     padding: 23px 13px 18px !important;
     border-radius: var(--ox-radius-2xl) !important;
-  }
-
-  .ox-home-hero-copy-v3 h1 {
-    font-size: clamp(1.65rem, 8vw, 2.3rem) !important;
-    line-height: 1.04 !important;
   }
 
   .ox-home-primary-actions-v3,
@@ -8851,31 +8621,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   box-shadow: var(--ox-shadow-card) !important;
 }
 
-.join-network-page .join-network-panel .eyebrow,
-.join-network-page .join-network-section-head .eyebrow,
-.join-network-page .join-network-final .eyebrow {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 28px !important;
-  height: 28px !important;
-  margin: 0 !important;
-  padding: 0 12px !important;
-  line-height: 1 !important;
-  font-size: 0.72rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.13em !important;
-}
-
-.join-network-page .join-network-hero-copy h1 {
-  max-width: 820px !important;
-  margin: 14px 0 0 !important;
-  font-size: clamp(1.75rem, 2.02vw, 2.36rem) !important;
-  line-height: 0.98 !important;
-  letter-spacing: -0.035em !important;
-  font-weight: 950 !important;
-}
-
 .join-network-page .join-network-hero-copy h1 span {
   display: inline !important;
   color: transparent !important;
@@ -9181,11 +8926,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     border-radius: var(--ox-radius-2xl) !important;
   }
 
-  .join-network-page .join-network-hero-copy h1 {
-    font-size: clamp(1.55rem, 7vw, 2.05rem) !important;
-    line-height: 1.04 !important;
-  }
-
   .join-network-page .join-network-values,
   .join-network-page .join-network-proposal-grid,
   .join-network-page .join-network-plan-section .join-network-plans,
@@ -9235,29 +8975,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     linear-gradient(90deg, rgba(56, 189, 248, 0.10), transparent 34%),
     radial-gradient(circle at 75% 18%, rgba(96, 165, 250, 0.13), transparent 26%),
     linear-gradient(180deg, transparent 72%, rgba(2, 6, 23, 0.72)) !important;
-}
-
-.sell-vehicle-page .sell-vehicle-panel > .eyebrow {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 28px !important;
-  height: 28px !important;
-  margin: 0 !important;
-  padding: 0 12px !important;
-  line-height: 1 !important;
-  font-size: 0.72rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.13em !important;
-}
-
-.sell-vehicle-page .sell-vehicle-panel > h1 {
-  max-width: 820px !important;
-  margin: 14px 0 0 !important;
-  font-size: clamp(1.75rem, 2.02vw, 2.36rem) !important;
-  line-height: 0.98 !important;
-  letter-spacing: -0.035em !important;
-  font-weight: 950 !important;
 }
 
 .sell-vehicle-page .sell-vehicle-panel > p {
@@ -9516,11 +9233,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     border-radius: var(--ox-radius-2xl) !important;
   }
 
-  .sell-vehicle-page .sell-vehicle-panel > h1 {
-    font-size: clamp(1.55rem, 7vw, 2.05rem) !important;
-    line-height: 1.04 !important;
-  }
-
   .sell-vehicle-page .sell-vehicle-grid {
     gap: 10px !important;
   }
@@ -9588,35 +9300,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   border-radius: var(--ox-radius-xl) !important;
 }
 
-.about-page .about-panel .eyebrow,
-.about-page .about-section-head .eyebrow,
-.about-page .about-final .eyebrow,
-.faq-page .faq-panel .eyebrow,
-.faq-page .faq-section-head .eyebrow,
-.faq-page .faq-final .eyebrow {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 28px !important;
-  height: 28px !important;
-  margin: 0 !important;
-  padding: 0 12px !important;
-  line-height: 1 !important;
-  font-size: 0.72rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.13em !important;
-}
-
-.about-page .about-hero-copy h1,
-.faq-page .faq-hero-copy h1 {
-  max-width: 820px !important;
-  margin: 14px 0 0 !important;
-  font-size: clamp(1.75rem, 2.02vw, 2.36rem) !important;
-  line-height: 0.98 !important;
-  letter-spacing: -0.035em !important;
-  font-weight: 950 !important;
-}
-
 .about-page .about-hero-copy > p,
 .faq-page .faq-hero-copy > p {
   max-width: 820px !important;
@@ -9675,12 +9358,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     border-radius: var(--ox-radius-2xl) !important;
   }
 
-  .about-page .about-hero-copy h1,
-  .faq-page .faq-hero-copy h1 {
-    font-size: clamp(1.55rem, 7vw, 2.05rem) !important;
-    line-height: 1.04 !important;
-  }
-
   .about-page .about-final-actions,
   .faq-page .faq-final-actions {
     display: grid !important;
@@ -9711,30 +9388,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   margin-top: 0 !important;
 }
 
-.faq-page .faq-panel .eyebrow,
-.faq-page .faq-section-head .eyebrow,
-.faq-page .faq-final .eyebrow {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 28px !important;
-  height: 28px !important;
-  margin: 0 !important;
-  padding: 0 12px !important;
-  line-height: 1 !important;
-  font-size: 0.72rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.13em !important;
-}
-
-.faq-page .faq-hero-copy h1 {
-  max-width: 820px !important;
-  margin: 14px 0 0 !important;
-  font-size: clamp(1.75rem, 2.02vw, 2.36rem) !important;
-  line-height: 0.98 !important;
-  letter-spacing: -0.035em !important;
-}
-
 .faq-page .faq-hero-copy > p {
   max-width: 820px !important;
   margin: 8px 0 0 !important;
@@ -9745,11 +9398,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 @media (max-width: 760px) {
   .faq-page .faq-hero {
     padding: 26px 13px 20px !important;
-  }
-
-  .faq-page .faq-hero-copy h1 {
-    font-size: clamp(1.55rem, 7vw, 2.05rem) !important;
-    line-height: 1.04 !important;
   }
 }
 
@@ -9790,14 +9438,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   border: 1px solid rgba(148, 163, 184, 0.20) !important;
   background: var(--ox-surface-card) !important;
   box-shadow: var(--ox-shadow-card) !important;
-}
-
-.faq-page .faq-hero-copy h1 {
-  max-width: 760px !important;
-  margin: 14px 0 0 !important;
-  font-size: var(--ox-fs-hero-title) !important;
-  line-height: var(--ox-lh-tight) !important;
-  letter-spacing: var(--ox-ls-hero) !important;
 }
 
 .faq-page .faq-hero-copy > p {
@@ -9863,11 +9503,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     min-height: auto !important;
     padding: var(--ox-hero-padding) !important;
     border-radius: var(--ox-radius-2xl) !important;
-  }
-
-  .faq-page .faq-hero-copy h1 {
-    font-size: var(--ox-fs-page-title-mobile) !important;
-    line-height: 1.02 !important;
   }
 
   .faq-page .faq-hero-copy > p {
@@ -11654,16 +11289,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     border-radius: 18px;
   }
 
-  .join-network-hero-copy h1,
-  .about-hero-copy h1,
-  .faq-hero-copy h1,
-  .zero-km-panel .ox-public-title,
-  .sell-vehicle-panel > h1,
-  .legal-title {
-    font-size: clamp(1.42rem, 7.2vw, 2rem);
-    line-height: 1.08;
-  }
-
   .join-network-section,
   .join-network-problem,
   .join-network-final,
@@ -11760,23 +11385,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   .footer-legal-links {
     justify-content: flex-start;
   }
-}
-
-/* oX NEXMOV - Final visual stabilization */
-.ox-search-title-block h1,
-.zero-km-panel h1,
-.sell-vehicle-panel > h1,
-.join-network-hero-copy h1,
-.about-hero-copy h1,
-.faq-hero-copy h1,
-.auth-hero-copy h1,
-.panel-head-row h1,
-.admin-panel-head h1,
-.dealer-panel-head h1 {
-  max-width: 860px !important;
-  font-size: clamp(1.5rem, 2vw, 2.18rem) !important;
-  line-height: 1.06 !important;
-  letter-spacing: -0.022em !important;
 }
 
 .vehicle-detail-modal .vehicle-detail-title-card h2,
@@ -12094,19 +11702,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 @media (max-width: 760px) {
-  .ox-search-title-block h1,
-  .zero-km-panel h1,
-  .sell-vehicle-panel > h1,
-  .join-network-hero-copy h1,
-  .about-hero-copy h1,
-  .faq-hero-copy h1,
-  .auth-hero-copy h1,
-  .panel-head-row h1,
-  .admin-panel-head h1,
-  .dealer-panel-head h1 {
-    font-size: clamp(1.42rem, 7.2vw, 1.98rem) !important;
-    line-height: 1.08 !important;
-  }
 
   .vehicle-detail-modal .vehicle-detail-title-card h2,
   .contact-modal-head h2,
@@ -12232,29 +11827,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   }
 }
 
-.ox-home-eyebrow-v3,
-.ox-search-eyebrow,
-.zero-km-panel .ox-public-eyebrow,
-.sell-vehicle-panel > .eyebrow,
-.join-network-panel .eyebrow,
-.about-panel .eyebrow,
-.faq-panel .eyebrow {
-  font-size: 0.72rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.13em !important;
-  line-height: 1.48 !important;
-}
-
 @media (max-width: 760px) {
-  .ox-home-eyebrow-v3,
-  .ox-search-eyebrow,
-  .zero-km-panel .ox-public-eyebrow,
-  .sell-vehicle-panel > .eyebrow,
-  .join-network-panel .eyebrow,
-  .about-panel .eyebrow,
-  .faq-panel .eyebrow {
-    font-size: 0.72rem !important;
-  }
 
   .ox-home-hero-copy-v3 > p,
   .ox-search-title-block > p,
@@ -12354,31 +11927,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   .faq-final h2 {
     font-size: var(--ox-fs-section-title) !important;
   }
-}
-
-/* oX NEXMOV - Public hero final measured typography lock */
-.ox-home-eyebrow-v3,
-.ox-search-eyebrow,
-.zero-km-panel .ox-public-eyebrow,
-.sell-vehicle-panel > .eyebrow,
-.join-network-panel .eyebrow,
-.about-panel .eyebrow,
-.faq-panel .eyebrow {
-  font-size: 0.72rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.13em !important;
-  line-height: 1.48 !important;
-}
-
-.ox-home-hero-copy-v3 > p:not(.ox-home-eyebrow-v3),
-.ox-search-title-block > p:not(.ox-search-eyebrow),
-.zero-km-panel .ox-public-lead,
-.sell-vehicle-panel > p:not(.eyebrow),
-.join-network-hero-copy > p:not(.eyebrow),
-.about-hero-copy > p:not(.eyebrow),
-.faq-hero-copy > p:not(.eyebrow) {
-  font-size: 0.72rem !important;
-  line-height: 1.48 !important;
 }
 
 /* oX NEXMOV - ZeroKm true final card alignment lock */
@@ -12625,35 +12173,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   border-radius: var(--ox-radius-xl) !important;
 }
 
-.about-page .about-panel .eyebrow,
-.about-page .about-section-head .eyebrow,
-.about-page .about-final .eyebrow,
-.faq-page .faq-panel .eyebrow,
-.faq-page .faq-section-head .eyebrow,
-.faq-page .faq-final .eyebrow {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 28px !important;
-  height: 28px !important;
-  margin: 0 !important;
-  padding: 0 12px !important;
-  line-height: 1 !important;
-  font-size: 0.72rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.13em !important;
-}
-
-.about-page .about-hero-copy h1,
-.faq-page .faq-hero-copy h1 {
-  max-width: 820px !important;
-  margin: 14px 0 0 !important;
-  font-size: clamp(1.75rem, 2.02vw, 2.36rem) !important;
-  line-height: 0.98 !important;
-  letter-spacing: -0.035em !important;
-  font-weight: 950 !important;
-}
-
 .about-page .about-hero-copy > p,
 .faq-page .faq-hero-copy > p {
   max-width: 820px !important;
@@ -12710,12 +12229,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   .faq-page .faq-hero {
     padding: 26px 13px 20px !important;
     border-radius: var(--ox-radius-2xl) !important;
-  }
-
-  .about-page .about-hero-copy h1,
-  .faq-page .faq-hero-copy h1 {
-    font-size: clamp(1.55rem, 7vw, 2.05rem) !important;
-    line-height: 1.04 !important;
   }
 
   .about-page .about-final-actions,
@@ -12997,12 +12510,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
       0 8px 20px rgba(33, 48, 71, 0.12),
       0 0 0 1px rgba(255, 255, 255, 0.72),
       inset 0 1px 0 rgba(255, 255, 255, 0.92);
-  }
-
-  /* A. Search — reduce letter-spacing on labels/eyebrow */
-  .ox-search-eyebrow {
-    letter-spacing: 0.05em !important;
-    padding: 4px 9px !important;
   }
 
   .ox-search-input-wrap label {

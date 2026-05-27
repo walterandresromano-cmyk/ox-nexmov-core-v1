@@ -294,9 +294,9 @@
 .ox-home-neon-frame-v3 {
   position: absolute;
   z-index: 1;
-  left: 48%;
+  left: 50%;
   top: 38%;
-  width: min(410px, 27vw);
+  width: min(460px, 30vw);
   height: clamp(140px, 9vw, 180px);
   border: 2px solid rgba(37, 99, 235, 0.95);
   border-radius: 26px;
@@ -312,9 +312,9 @@
   display: block;
   position: relative;
   z-index: 3;
-  width: min(112%, 710px);
+  width: min(100%, 820px);
   max-width: none;
-  transform: translateX(-2px) translateY(16px) scale(1.04);
+  transform: translateY(16px) scale(1.04);
   filter:
     drop-shadow(0 30px 38px rgba(0, 0, 0, 0.70))
     drop-shadow(0 0 56px rgba(37, 99, 235, 0.32));
@@ -323,7 +323,7 @@
 .ox-home-hero-car-v3 img {
   display: block;
   width: 100%;
-  max-height: 325px;
+  max-height: 340px;
   object-fit: contain;
 }
 
@@ -1279,8 +1279,8 @@
   }
 
   .ox-home-hero-car-v3 {
-    width: min(128%, 640px);
-    transform: translateY(24px) scale(1.12);
+    width: min(100%, 700px);
+    transform: translateY(24px) scale(1.08);
   }
 
   .ox-home-hero-car-v3 img {

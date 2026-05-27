@@ -108,78 +108,8 @@ export default function ZeroKm({ authUser, authProfile }) {
         </div>
       </section>
 
-      <section
-        className="zero-km-capabilities"
-        aria-label="Criterios de consulta 0km"
-      >
-        <article>
-          <span>Próximamente</span>
-          <strong>Vehículos financiables</strong>
-          <p>Explorar unidades 0km con condiciones comerciales disponibles.</p>
-        </article>
-        <article>
-          <span>Comparación</span>
-          <strong>Entrega y plazos</strong>
-          <p>Leer entrega inicial, plazos y condiciones declaradas.</p>
-        </article>
-        <article>
-          <span>Disponibilidad</span>
-          <strong>Modelos y versiones</strong>
-          <p>Consultar alternativas según marca, modelo y zona.</p>
-        </article>
-        <article>
-          <span>Contexto</span>
-          <strong>Condiciones variables</strong>
-          <p>Considerar que disponibilidad, valores y plazos pueden cambiar.</p>
-        </article>
-        <article>
-          <span>Detalle</span>
-          <strong>Costos informados</strong>
-          <p>Diferenciar conceptos comerciales antes de avanzar.</p>
-        </article>
-      </section>
 
       <div className="zero-km-grid ox-public-content">
-          <div className="zero-km-side-stack">
-            <article className="zero-km-info-card" id="zero-km-how">
-              <span>Consulta guiada</span>
-              <h2>Datos justos para una primera lectura.</h2>
-              <p>
-                Una solicitud inicial clara, sin convertir la página en un
-                formulario financiero pesado.
-              </p>
-
-              <div className="zero-km-steps">
-                <div>
-                  <strong>1</strong>
-                  <span>Dejás una consulta 0km.</span>
-                </div>
-                <div>
-                  <strong>2</strong>
-                  <span>La oportunidad queda ordenada.</span>
-                </div>
-                <div>
-                  <strong>3</strong>
-                  <span>Se revisan disponibilidad y condiciones vigentes.</span>
-                </div>
-                <div>
-                  <strong>4</strong>
-                  <span>Avanzás solo si la propuesta tiene sentido.</span>
-                </div>
-              </div>
-            </article>
-
-            <article className="zero-km-responsible-note">
-              <span>Lectura responsable</span>
-              <p>
-                La disponibilidad, valores, entrega, plazos y condiciones
-                pueden variar según proveedor, modelo, plan y fecha de consulta.
-                oX NEXMOV organiza la solicitud, pero no garantiza condiciones
-                finales ni disponibilidad.
-              </p>
-            </article>
-          </div>
-
           <form className="zero-km-form" id="zero-km-form" onSubmit={handleSubmit}>
             <div className="zero-km-form-head">
               <span>Consulta guiada</span>
@@ -391,6 +321,46 @@ export default function ZeroKm({ authUser, authProfile }) {
               disponibilidad confirmada.
             </p>
           </form>
+
+          <div className="zero-km-side-stack">
+            <article className="zero-km-info-card" id="zero-km-how">
+              <span>Consulta guiada</span>
+              <h2>Datos justos para una primera lectura.</h2>
+              <p>
+                Una solicitud inicial clara, sin convertir la página en un
+                formulario financiero pesado.
+              </p>
+
+              <div className="zero-km-steps">
+                <div>
+                  <strong>1</strong>
+                  <span>Dejás una consulta 0km.</span>
+                </div>
+                <div>
+                  <strong>2</strong>
+                  <span>La oportunidad queda ordenada.</span>
+                </div>
+                <div>
+                  <strong>3</strong>
+                  <span>Se revisan disponibilidad y condiciones vigentes.</span>
+                </div>
+                <div>
+                  <strong>4</strong>
+                  <span>Avanzás solo si la propuesta tiene sentido.</span>
+                </div>
+              </div>
+            </article>
+
+            <article className="zero-km-responsible-note">
+              <span>Lectura responsable</span>
+              <p>
+                La disponibilidad, valores, entrega, plazos y condiciones
+                pueden variar según proveedor, modelo, plan y fecha de consulta.
+                oX NEXMOV organiza la solicitud, pero no garantiza condiciones
+                finales ni disponibilidad.
+              </p>
+            </article>
+          </div>
       </div>
     </section>
   );
