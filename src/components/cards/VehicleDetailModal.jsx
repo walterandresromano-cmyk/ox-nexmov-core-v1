@@ -6,6 +6,7 @@ import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import { getVehicleImages, isVehicleReserved } from "../../lib/vehicle.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
+import VehicleImage from "../VehicleImage.jsx";
 
 
 const MAINTENANCE_SOURCE_KEYS = [
@@ -360,11 +361,10 @@ export default function VehicleDetailModal({
                 onPointerLeave={stopZoomDrag}
               >
                 {selectedImage?.url ? (
-                  <img
+                  <VehicleImage
                     src={selectedImage.url}
                     alt={`${currentVehicle.brand} ${currentVehicle.model}`}
-                    loading="lazy"
-                    draggable="false"
+                    draggable={false}
                     style={{
                       transform: `translate3d(${zoomPosition.x}px, ${zoomPosition.y}px, 0) scale(${zoomScale})`,
                     }}

@@ -826,6 +826,7 @@ export default function Search({
   const [sortOrder, setSortOrder] = useState("default");
   const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
   const [searchHistory, setSearchHistory] = useState(readSearchHistory);
+  const [visibleCount, setVisibleCount] = useState(20);
 
   function updateFilter(name, value) {
     setFilters((currentFilters) => ({
@@ -1023,6 +1024,7 @@ export default function Search({
   }, [publicSearchVehicles, searchText, parsedSearch, filters]);
 
   const sortedVehicles = useMemo(() => {
+    setVisibleCount(20);
     const list = [...filteredVehicles];
     if (sortOrder === "price_asc") return list.sort((a, b) => getVehiclePrice(a) - getVehiclePrice(b));
     if (sortOrder === "price_desc") return list.sort((a, b) => getVehiclePrice(b) - getVehiclePrice(a));
@@ -1494,8 +1496,7 @@ export default function Search({
               <div>
                 <h2>Resultados</h2>
                 <p>
-                  Mostrando {sortedVehicles.length} unidades disponibles con
-                  lectura comercial.
+                  Mostrando {Math.min(visibleCount, sortedVehicles.length)} de {sortedVehicles.length} unidades disponibles.
                 </p>
               </div>
 
@@ -1553,7 +1554,7 @@ export default function Search({
                       </div>
                     </div>
                   ))
-                : sortedVehicles.map((vehicle) => (
+                : sortedVehicles.slice(0, visibleCount).map((vehicle) => (
                     <VehicleCardPublic
                       key={vehicle.id}
                       vehicle={vehicle}
@@ -1565,6 +1566,18 @@ export default function Search({
                     />
                   ))}
             </div>
+
+            {!loadingVehicles && visibleCount < sortedVehicles.length && (
+              <div className="ox-search-load-more">
+                <button
+                  type="button"
+                  className="ox-search-load-more-btn"
+                  onClick={() => setVisibleCount((c) => c + 20)}
+                >
+                  Ver más vehículos ({sortedVehicles.length - visibleCount} restantes)
+                </button>
+              </div>
+            )}
 
             {sortedVehicles.length === 0 && (
               <div className="ox-search-empty-state" role="status" aria-live="polite">
