@@ -104,7 +104,7 @@ begin
   limit 1;
 
   if v_lead.lead_id is null then
-    raise exception 'Lead no disponible para asignacion';
+    raise exception 'Lead no disponible para asignación';
   end if;
 
   insert into buyer_garage_vehicles (
@@ -311,7 +311,7 @@ function normalizeGarageVehicle(row) {
     garageAssignmentId: row.id,
     vehicleId: row.vehicle_id || snapshot.vehicle_id,
     leadId: row.lead_id || snapshot.lead_id,
-    title: title || snapshot.title || row.vehicle_title || "Vehiculo asignado",
+    title: title || snapshot.title || row.vehicle_title || "Vehículo asignado",
     price:
       snapshot.price ??
       row.price_snapshot ??
@@ -649,7 +649,7 @@ export async function uploadBuyerGarageVehiclePhoto({ garageVehicleId, file }) {
   if (!file) {
     return {
       photoUrl: "",
-      error: { message: "Selecciona una imagen para subir." },
+      error: { message: "Seleccioná una imagen para subir." },
     };
   }
 
@@ -673,7 +673,7 @@ export async function uploadBuyerGarageVehiclePhoto({ garageVehicleId, file }) {
   if (!dbId) {
     return {
       photoUrl: "",
-      error: { message: "Primero guarda el vehiculo para poder subir la foto." },
+      error: { message: "Primero guardá el vehículo para poder subir la foto." },
     };
   }
 
@@ -683,7 +683,7 @@ export async function uploadBuyerGarageVehiclePhoto({ garageVehicleId, file }) {
   if (userError || !user?.id) {
     return {
       photoUrl: "",
-      error: { message: "Necesitas iniciar sesion para subir la foto." },
+      error: { message: "Necesitás iniciar sesión para subir la foto." },
     };
   }
 
@@ -713,7 +713,7 @@ export async function uploadBuyerGarageVehiclePhoto({ garageVehicleId, file }) {
   if (!photoUrl) {
     return {
       photoUrl: "",
-      error: { message: "No pudimos obtener la URL publica de la foto." },
+      error: { message: "No pudimos obtener la URL pública de la foto." },
     };
   }
 

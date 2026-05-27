@@ -7,7 +7,7 @@ const LEAD_STATUS_OPTIONS = [
   { value: "new", label: "Nuevo" },
   { value: "seen", label: "Visto" },
   { value: "contacted", label: "Contactado" },
-  { value: "negotiation", label: "Negociacion" },
+  { value: "negotiation", label: "Negociación" },
   { value: "reserved", label: "Reservado" },
   { value: "sold", label: "Vendido" },
   { value: "lost", label: "Perdido" },
@@ -21,26 +21,26 @@ const CLOSE_REASON_OPTIONS = {
   sold: [
     "Vendido a este comprador",
     "Vendido por otro canal",
-    "Operacion declarada por el dealer",
+    "Operación declarada por el dealer",
   ],
   lost: [
     "Precio fuera de expectativa",
     "Sin respuesta del comprador",
-    "Comprador eligio otra unidad",
-    "Financiacion no avanzo",
+    "Comprador eligió otra unidad",
+    "Financiación no avanzó",
     "Fuera de zona",
     "Otro motivo",
   ],
   closed: [
-    "Gestion finalizada",
+    "Gestión finalizada",
     "Consulta resuelta",
-    "Operacion no concretada",
+    "Operación no concretada",
     "Otro motivo",
   ],
   no_response: [
-    "No respondio WhatsApp",
-    "No respondio llamada",
-    "No respondio email",
+    "No respondió WhatsApp",
+    "No respondió llamada",
+    "No respondió email",
     "Otro motivo",
   ],
 };
@@ -148,7 +148,7 @@ export default function LeadStatusSelect({ lead, onUpdated }) {
 
     if (CLOSING_STATUSES.has(nextStatus)) {
       const firstReason =
-        CLOSE_REASON_OPTIONS[nextStatus]?.[0] || "Gestion finalizada";
+        CLOSE_REASON_OPTIONS[nextStatus]?.[0] || "Gestión finalizada";
       setPendingStatus(nextStatus);
       setCloseReason(firstReason);
       setCloseDetail("");
@@ -163,7 +163,7 @@ export default function LeadStatusSelect({ lead, onUpdated }) {
 
   async function handleConfirmClose() {
     if (!pendingStatus || !closeReason.trim()) {
-      setError("Selecciona un motivo para cerrar el seguimiento.");
+      setError("Seleccioná un motivo para cerrar el seguimiento.");
       return;
     }
 
@@ -221,7 +221,7 @@ export default function LeadStatusSelect({ lead, onUpdated }) {
               value={closeDetail}
               onChange={(event) => setCloseDetail(event.target.value)}
               rows={2}
-              placeholder="Agrega contexto comercial si hace falta."
+              placeholder="Agregá contexto comercial si hace falta."
               disabled={loading}
             />
           </label>

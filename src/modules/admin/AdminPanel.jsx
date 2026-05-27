@@ -1746,7 +1746,7 @@ export default function AdminPanel({ authProfile }) {
             </strong>
             <p>
               {selectedDealerIsPlatinum
-                ? `${used} publicaciones creadas en el periodo.`
+                ? `${used} publicaciones creadas en el período.`
                 : limit === Infinity
                 ? "El plan no tiene límite de publicaciones."
                 : `${Math.max(limit - used, 0)} publicaciones disponibles.`}
@@ -2075,7 +2075,7 @@ export default function AdminPanel({ authProfile }) {
                           : `${used} / ${formatLimit(limit)}`}
                       </strong>
                       <span>
-                        {dealerIsPlatinum ? `${used} creadas en el periodo` : limit === Infinity
+                        {dealerIsPlatinum ? `${used} creadas en el período` : limit === Infinity
                           ? "Sin límite"
                           : `${Math.max(limit - used, 0)} restantes`}
                       </span>

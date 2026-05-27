@@ -80,9 +80,9 @@ function getLeadStatusLabel(status) {
     seen: "Visto",
     contacted: "Contactado",
     contactado: "Contactado",
-    negotiation: "Negociacion",
-    in_progress: "En gestion",
-    en_gestion: "En gestion",
+    negotiation: "Negociación",
+    in_progress: "En gestión",
+    en_gestion: "En gestión",
     reserved: "Reservado",
     sold: "Vendido",
     closed: "Cerrado",
@@ -113,7 +113,7 @@ function getBuyerName(lead) {
 }
 
 function getVehicleLabel(lead) {
-  return [lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ") || lead.vehicle_title_snapshot || "Vehiculo consultado";
+  return [lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ") || lead.vehicle_title_snapshot || "Vehículo consultado";
 }
 
 const PIPELINE_STAGES = [
@@ -278,9 +278,9 @@ function LeadCrmCard({ lead, onOpen, onUpdated }) {
       </div>
 
       <div className="lead-crm-vehicle">
-        <span>Vehiculo</span>
+        <span>Vehículo</span>
         <strong>{vehicleLabel}</strong>
-        <p>{lead.vehicle_version || lead.vehicle_title_snapshot || "Sin version informada"}</p>
+        <p>{lead.vehicle_version || lead.vehicle_title_snapshot || "Sin versión informada"}</p>
       </div>
 
       {(followUpState || lead.next_action_note) && (
@@ -426,10 +426,10 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
             <div className="dealer-followup-agenda-head">
               <div>
                 <span>Agenda comercial</span>
-                <strong>Proximos seguimientos</strong>
+                <strong>Próximos seguimientos</strong>
                 <p>
                   {urgentFollowUps > 0
-                    ? `${urgentFollowUps} accion${urgentFollowUps !== 1 ? "es" : ""} requieren atencion hoy.`
+                    ? `${urgentFollowUps} acción${urgentFollowUps !== 1 ? "es" : ""} requieren atención hoy.`
                     : "Sin seguimientos vencidos para hoy."}
                 </p>
               </div>
@@ -444,7 +444,7 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
 
             {followUpAgenda.length === 0 ? (
               <div className="dealer-followup-empty">
-                Agrega una proxima accion en cada lead para construir tu agenda comercial.
+                Agregá una próxima acción en cada lead para construir tu agenda comercial.
               </div>
             ) : (
               <div className="dealer-followup-list">

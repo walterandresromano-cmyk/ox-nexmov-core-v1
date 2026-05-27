@@ -373,7 +373,7 @@ function buildVehicleAutocompleteSuggestions(vehicles, query, limit = 8) {
 function getSuggestionTypeLabel(type) {
   if (type === "brand") return "Marca";
   if (type === "model") return "Modelo";
-  if (type === "version") return "Version";
+  if (type === "version") return "Versión";
   return "Sugerencia";
 }
 

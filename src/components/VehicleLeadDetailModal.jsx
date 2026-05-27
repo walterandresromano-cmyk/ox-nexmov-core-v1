@@ -97,7 +97,7 @@ function getLeadTimeline(lead, closeReason) {
     items.push({
       label: "Motivo comercial",
       value: closeReason,
-      text: "Motivo informado para el cierre o perdida.",
+      text: "Motivo informado para el cierre o pérdida.",
     });
   }
 
@@ -188,7 +188,7 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
     const { error } = await assignVehicleToBuyerGarage({
       leadId: lead.lead_id,
       vehicleId: lead.vehicle_id,
-      note: "Asignacion directa desde detalle de lead.",
+      note: "Asignación directa desde detalle de lead.",
     });
 
     if (error) {
@@ -265,10 +265,10 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
 
           <article className="ticket-detail-card ticket-detail-main vehicle-lead-garage-assignment">
             <span>Garage oX</span>
-            <strong>Asignacion directa al comprador</strong>
+            <strong>Asignación directa al comprador</strong>
             <p>
               Usa este lead para asociar la unidad al comprador identificado por
-              nombre, email o telefono.
+              nombre, email o teléfono.
             </p>
             <button
               type="button"
@@ -318,7 +318,7 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
             <article className="ticket-detail-card">
               <span>Motivo registrado</span>
               <strong>{closeReason}</strong>
-              <p>Motivo de cierre o perdida informado para este lead.</p>
+              <p>Motivo de cierre o pérdida informado para este lead.</p>
             </article>
           )}
 
