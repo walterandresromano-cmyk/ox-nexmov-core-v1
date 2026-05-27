@@ -8,6 +8,7 @@ import DealerSupportModule from "./DealerSupportModule.jsx";
 import DealerSellVehicleModule from "./DealerSellVehicleModule.jsx";
 import DealerMetricsModule from "./DealerMetricsModule.jsx";
 import DealerUrgentModule from "./DealerUrgentModule.jsx";
+import DealerRadarModule from "./DealerRadarModule.jsx";
 
 import {
   canDealerPublish,
@@ -103,6 +104,7 @@ const DEALER_MOBILE_SECTIONS = [
   { id: "publish", label: "Publicar" },
   { id: "vehicles", label: "Inventario" },
   { id: "leads", label: "Leads" },
+  { id: "radar", label: "Radar oX" },
   { id: "tickets", label: "Soporte" },
   { id: "plan", label: "Mi plan" },
 ];
@@ -110,59 +112,59 @@ const DEALER_MOBILE_SECTIONS = [
 const DEALER_FEATURE_PREVIEWS = [
   {
     id: "financing",
-    title: "Financiacion avanzada",
+    title: "Financiación avanzada",
     requiredPlan: "Pro",
     description:
-      "Mejora la lectura comercial de publicaciones con condiciones de financiacion mas claras.",
+      "Mejora la lectura comercial de publicaciones con condiciones de financiación más claras.",
   },
   {
     id: "metrics",
-    title: "Metricas comerciales",
+    title: "Métricas comerciales",
     requiredPlan: "Elite",
     description:
-      "Entende rendimiento, consultas y oportunidades para priorizar mejor tu stock.",
+      "Entendé rendimiento, consultas y oportunidades para priorizar mejor tu stock.",
   },
   {
     id: "premiumSignals",
-    title: "Senales premium",
+    title: "Señales premium",
     requiredPlan: "Elite",
     description:
-      "Destaca publicaciones con senales de confianza, precio y calidad del dato.",
+      "Destacá publicaciones con señales de confianza, precio y calidad del dato.",
   },
   {
     id: "sellVehicle",
-    title: "Oportunidades Vender mi vehiculo",
+    title: "Oportunidades Vender mi vehículo",
     requiredPlan: "Elite",
     description:
-      "Recibi oportunidades comerciales asignadas por administracion para evaluar unidades.",
+      "Recibí oportunidades comerciales asignadas por administración para evaluar unidades.",
   },
   {
     id: "visibility",
     title: "Visibilidad destacada",
     requiredPlan: "Elite",
     description:
-      "Aumenta presencia dentro de la red con beneficios de posicionamiento y lectura premium.",
+      "Aumentá presencia dentro de la red con beneficios de posicionamiento y lectura premium.",
   },
   {
     id: "maintenance",
     title: "Mantenimiento orientativo",
     requiredPlan: "Pro",
     description:
-      "Suma contexto util sobre mantenimiento para mejorar confianza en cada publicacion.",
+      "Sumá contexto útil sobre mantenimiento para mejorar confianza en cada publicación.",
   },
   {
     id: "extraQuota",
     title: "Cupos extra / beneficios",
     requiredPlan: "Admin",
     description:
-      "Solicita cupos temporales o beneficios comerciales especiales para campanas puntuales.",
+      "Solicitá cupos temporales o beneficios comerciales especiales para campañas puntuales.",
   },
   {
     id: "prioritySupport",
     title: "Soporte prioritario",
     requiredPlan: "Platinum",
     description:
-      "Gestiona consultas operativas con prioridad superior en cuentas de mayor volumen.",
+      "Gestioná consultas operativas con prioridad superior en cuentas de mayor volumen.",
   },
 ];
 
@@ -572,6 +574,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
       urgent: "vehicles",
       financing: "plan",
       metrics: "plan",
+      radar: "radar",
     }[moduleName];
 
     setActiveDealerMobileSection(nextMobileSection || "home");
@@ -604,6 +607,11 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
     if (sectionId === "tickets") {
       setActiveDealerModule("support");
+      return;
+    }
+
+    if (sectionId === "radar") {
+      setActiveDealerModule("radar");
     }
   }
 
@@ -1868,6 +1876,20 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             </article>
 
             <article
+              data-module="radar"
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule("radar")}
+            >
+              <div className="dealer-mc-kpi">
+                <strong>Radar</strong>
+                <span>oX</span>
+              </div>
+              <h3>Radar oX</h3>
+              <p>Señales de búsquedas activas sin vehículo disponible.</p>
+              <button type="button">Ver señales</button>
+            </article>
+
+            <article
               data-module="sellVehicle"
               className={`dealer-module-card${permissions.sellVehicleLeads ? " clickable-module-card" : " dealer-module-card--locked"}`}
               onClick={() => { if (permissions.sellVehicleLeads) openModule("sellVehicle"); }}
@@ -2056,6 +2078,12 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             dealerVehicles={dealerVehicles}
             reviewVehiclesCount={reviewVehiclesCount}
             onRefresh={loadDealerVehicles}
+            onBack={handleModuleBack}
+          />
+        )}
+
+        {activeDealerModule === "radar" && (
+          <DealerRadarModule
             onBack={handleModuleBack}
           />
         )}

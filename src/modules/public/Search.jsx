@@ -2,6 +2,7 @@ import "../../styles/search.css";
 import { useEffect, useMemo, useState } from "react";
 
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
+import RadarActivationModal from "../../components/RadarActivationModal.jsx";
 import { listPublicVehicles } from "../../services/vehicles.service.js";
 
 function normalizeSearchText(value) {
@@ -827,6 +828,8 @@ export default function Search({
   const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
   const [searchHistory, setSearchHistory] = useState(readSearchHistory);
   const [visibleCount, setVisibleCount] = useState(20);
+  const [radarModalOpen, setRadarModalOpen] = useState(false);
+  const [radarActivated, setRadarActivated] = useState(false);
 
   function updateFilter(name, value) {
     setFilters((currentFilters) => ({
@@ -891,6 +894,10 @@ export default function Search({
     const timer = setTimeout(() => setDebouncedSearchText(searchText), 260);
     return () => clearTimeout(timer);
   }, [searchText]);
+
+  useEffect(() => {
+    setRadarActivated(false);
+  }, [searchText, filters]);
 
   function getDealer(vehicle) {
     if (vehicle.dealer) return vehicle.dealer;
@@ -1048,6 +1055,16 @@ export default function Search({
       }));
   }, [filters]);
 
+  const radarTrigger = useMemo(() => {
+    if (!loadingVehicles && sortedVehicles.length === 0 && (searchText.trim().length >= 2 || activeFilterChips.length >= 1)) {
+      return "no_results";
+    }
+    if (!loadingVehicles && sortedVehicles.length > 0 && sortedVehicles.length <= 2 && activeFilterChips.length >= 2) {
+      return "few_results";
+    }
+    return null;
+  }, [loadingVehicles, sortedVehicles, searchText, activeFilterChips]);
+
   const searchSummary = useMemo(() => {
     if (!searchText.trim()) {
       if (activeAdvancedFiltersCount > 0) {
@@ -1101,6 +1118,7 @@ export default function Search({
   }, [searchText, parsedSearch, activeAdvancedFiltersCount]);
 
   return (
+    <>
     <section className="ox-search-page">
       <div className="ox-search-shell">
         <section className="ox-search-hero">
@@ -1615,6 +1633,50 @@ export default function Search({
                   </button>
                 </div>
 
+                {radarTrigger === "no_results" && !radarActivated && (
+                  <div className="ox-radar-cta">
+                    <div className="ox-radar-cta-body">
+                      <span className="ox-radar-cta-badge">Radar oX</span>
+                      <h4>¿Querés que te avisemos?</h4>
+                      <p>
+                        Registramos tu búsqueda. Cuando aparezca un vehículo
+                        que coincida, lo verás en tu Garage oX.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      className="ox-radar-cta-btn"
+                      onClick={() => setRadarModalOpen(true)}
+                    >
+                      Activar Radar oX
+                    </button>
+                  </div>
+                )}
+
+                {radarActivated && (
+                  <div className="ox-radar-confirmed">
+                    Radar oX activado. Revisá tu Garage oX para ver el estado.
+                  </div>
+                )}
+              </div>
+            )}
+
+            {!loadingVehicles && radarTrigger === "few_results" && !radarActivated && (
+              <div className="ox-radar-few-cta">
+                <div className="ox-radar-few-cta-inner">
+                  <span className="ox-radar-cta-badge">Radar oX</span>
+                  <p>
+                    Solo {sortedVehicles.length} resultado{sortedVehicles.length !== 1 ? "s" : ""} con estos filtros.
+                    Activá Radar oX para recibir alerta si aparecen más.
+                  </p>
+                  <button
+                    type="button"
+                    className="ox-radar-cta-btn ox-radar-cta-btn--inline"
+                    onClick={() => setRadarModalOpen(true)}
+                  >
+                    Activar Radar oX
+                  </button>
+                </div>
               </div>
             )}
           </main>
@@ -1681,5 +1743,18 @@ export default function Search({
         </section>
       </div>
     </section>
+
+    {radarModalOpen && (
+      <RadarActivationModal
+        searchText={searchText}
+        filters={filters}
+        parsedIntent={parsedSearch}
+        resultsCount={sortedVehicles.length}
+        triggerReason={radarTrigger || "no_results"}
+        onClose={() => setRadarModalOpen(false)}
+        onActivated={() => setRadarActivated(true)}
+      />
+    )}
+    </>
   );
 }

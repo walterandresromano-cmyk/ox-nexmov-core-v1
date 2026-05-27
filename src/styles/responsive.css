@@ -13855,3 +13855,594 @@ textarea:focus-visible,
   background: rgba(56, 189, 248, 0.18);
   border-color: var(--ox-cyan);
 }
+
+/* ── Radar oX CTA en Search ───────────────────────────────────────── */
+.ox-radar-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: var(--ox-radius-md);
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.06) 0%, rgba(2, 6, 23, 0.6) 100%);
+  flex-wrap: wrap;
+}
+.ox-radar-cta-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1 1 200px;
+}
+.ox-radar-cta-badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--ox-radius-xs);
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: var(--ox-cyan);
+  font-size: 0.7rem;
+  font-weight: var(--ox-fw-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  width: fit-content;
+}
+.ox-radar-cta h4 {
+  margin: 0;
+  font-size: var(--ox-fs-body);
+  font-weight: var(--ox-fw-semibold);
+  color: var(--ox-text);
+}
+.ox-radar-cta p {
+  margin: 0;
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+  line-height: var(--ox-lh-snug);
+}
+.ox-radar-cta-btn {
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--ox-radius-sm);
+  border: 1px solid var(--ox-cyan);
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--ox-cyan);
+  font-size: var(--ox-fs-sm);
+  font-weight: var(--ox-fw-semibold);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--ox-duration-fast), transform var(--ox-duration-fast);
+  flex-shrink: 0;
+}
+.ox-radar-cta-btn:hover {
+  background: rgba(56, 189, 248, 0.22);
+  transform: translateY(-1px);
+}
+.ox-radar-cta-btn--inline {
+  font-size: var(--ox-fs-xs, 0.75rem);
+  padding: 0.45rem 1rem;
+}
+.ox-radar-confirmed {
+  margin-top: 1rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: var(--ox-radius-sm);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: var(--ox-cyan);
+  font-size: var(--ox-fs-sm);
+  font-weight: var(--ox-fw-medium);
+}
+.ox-radar-few-cta {
+  margin-top: 1.25rem;
+}
+.ox-radar-few-cta-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: var(--ox-radius-sm);
+  background: rgba(56, 189, 248, 0.05);
+  flex-wrap: wrap;
+}
+.ox-radar-few-cta-inner p {
+  margin: 0;
+  flex: 1 1 180px;
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+}
+
+/* ── RadarActivationModal ─────────────────────────────────────────── */
+.radar-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(2, 6, 23, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+.radar-modal {
+  position: relative;
+  background: var(--ox-surface);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: var(--ox-radius-lg);
+  padding: 1.75rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+}
+.radar-modal-head {
+  margin-bottom: 1.25rem;
+}
+.radar-modal-eyebrow {
+  margin-bottom: 0.5rem;
+}
+.radar-modal-head h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.2rem;
+  font-weight: var(--ox-fw-bold);
+  color: var(--ox-text);
+}
+.radar-modal-head p {
+  margin: 0;
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+  line-height: var(--ox-lh-snug);
+}
+.radar-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--ox-text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--ox-radius-xs);
+  transition: color var(--ox-duration-fast);
+}
+.radar-modal-close:hover {
+  color: var(--ox-text);
+}
+.radar-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.radar-modal-criteria {
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: var(--ox-radius-sm);
+  background: rgba(56, 189, 248, 0.05);
+}
+.radar-modal-criteria-label {
+  font-size: var(--ox-fs-xs, 0.72rem);
+  font-weight: var(--ox-fw-semibold);
+  color: var(--ox-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem;
+}
+.radar-modal-criteria-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.radar-modal-criteria-item {
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--ox-radius-xs);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  color: var(--ox-text);
+  font-size: var(--ox-fs-sm);
+}
+.radar-modal-context {
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--ox-radius-xs);
+  border-left: 2px solid rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.04);
+}
+.radar-modal-notes-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+  font-weight: var(--ox-fw-medium);
+}
+.radar-modal-notes {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--ox-border-accent);
+  border-radius: var(--ox-radius-xs);
+  color: var(--ox-text);
+  font-size: var(--ox-fs-sm);
+  padding: 0.6rem 0.8rem;
+  resize: vertical;
+  min-height: 70px;
+  font-family: inherit;
+  line-height: var(--ox-lh-snug);
+}
+.radar-modal-notes:focus {
+  outline: none;
+  border-color: var(--ox-cyan);
+}
+.radar-modal-error {
+  color: #f87171;
+  font-size: var(--ox-fs-sm);
+  margin: 0;
+}
+.radar-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.radar-modal-btn-primary {
+  flex: 1 1 140px;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--ox-radius-sm);
+  border: 1px solid var(--ox-cyan);
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--ox-cyan);
+  font-size: var(--ox-fs-body);
+  font-weight: var(--ox-fw-semibold);
+  cursor: pointer;
+  transition: background var(--ox-duration-fast);
+}
+.radar-modal-btn-primary:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.25);
+}
+.radar-modal-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.radar-modal-btn-secondary {
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--ox-radius-sm);
+  border: 1px solid var(--ox-border-accent);
+  background: none;
+  color: var(--ox-text-muted);
+  font-size: var(--ox-fs-body);
+  cursor: pointer;
+  transition: color var(--ox-duration-fast), border-color var(--ox-duration-fast);
+}
+.radar-modal-btn-secondary:hover:not(:disabled) {
+  color: var(--ox-text);
+  border-color: var(--ox-text-muted);
+}
+.radar-modal-disclaimer {
+  margin: 0;
+  font-size: var(--ox-fs-xs, 0.72rem);
+  color: var(--ox-text-muted);
+  line-height: var(--ox-lh-snug);
+  opacity: 0.7;
+}
+
+/* ── BuyerPanel — Radar section ───────────────────────────────────── */
+.buyer-radar-section {
+  margin-top: 2rem;
+}
+.buyer-radar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.buyer-radar-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: var(--ox-radius-sm);
+  background: rgba(56, 189, 248, 0.04);
+}
+.buyer-radar-item-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.buyer-radar-item-criteria {
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text);
+  font-weight: var(--ox-fw-medium);
+}
+.buyer-radar-item-notes {
+  margin: 0;
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+  font-style: italic;
+}
+.buyer-radar-item-date {
+  font-size: var(--ox-fs-xs, 0.72rem);
+  color: var(--ox-text-muted);
+  opacity: 0.7;
+}
+.buyer-radar-item-delete {
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--ox-radius-xs);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  background: none;
+  color: #f87171;
+  font-size: var(--ox-fs-xs, 0.72rem);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--ox-duration-fast);
+  flex-shrink: 0;
+}
+.buyer-radar-item-delete:hover:not(:disabled) {
+  background: rgba(248, 113, 113, 0.1);
+}
+.buyer-radar-item-delete:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── DealerRadarModule ────────────────────────────────────────────── */
+.dealer-radar-module {
+  margin-top: 1.5rem;
+}
+.dealer-radar-empty {
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: var(--ox-text-muted);
+}
+.dealer-radar-empty strong {
+  display: block;
+  color: var(--ox-text);
+  margin-bottom: 0.5rem;
+}
+.dealer-radar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.dealer-radar-filter-input {
+  flex: 1 1 200px;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--ox-border-accent);
+  border-radius: var(--ox-radius-xs);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ox-text);
+  font-size: var(--ox-fs-sm);
+}
+.dealer-radar-filter-input:focus {
+  outline: none;
+  border-color: var(--ox-cyan);
+}
+.dealer-radar-count {
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+  white-space: nowrap;
+}
+.dealer-radar-list {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.dealer-radar-item {
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: var(--ox-radius-sm);
+  background: rgba(56, 189, 248, 0.035);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.dealer-radar-item-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.dealer-radar-trigger-badge {
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--ox-radius-xs);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: var(--ox-cyan);
+  font-size: 0.68rem;
+  font-weight: var(--ox-fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.dealer-radar-item-date {
+  font-size: var(--ox-fs-xs, 0.72rem);
+  color: var(--ox-text-muted);
+  margin-left: auto;
+}
+.dealer-radar-criteria-chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.dealer-radar-chip {
+  padding: 0.18rem 0.55rem;
+  border-radius: var(--ox-radius-xs);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--ox-border-accent);
+  color: var(--ox-text);
+  font-size: var(--ox-fs-sm);
+}
+.dealer-radar-no-criteria {
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+  font-style: italic;
+}
+.dealer-radar-notes {
+  margin: 0;
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+  font-style: italic;
+}
+.dealer-radar-item-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.5rem;
+}
+.dealer-radar-results-hint {
+  font-size: var(--ox-fs-xs, 0.72rem);
+  color: var(--ox-text-muted);
+  opacity: 0.75;
+}
+.dealer-radar-disclaimer {
+  font-size: var(--ox-fs-xs, 0.72rem);
+  color: var(--ox-text-muted);
+  opacity: 0.65;
+  line-height: var(--ox-lh-snug);
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--ox-border-accent);
+  border-radius: var(--ox-radius-xs);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ── Desktop nav v3 — pill flotante en activo, texto limpio en inactivo
+   Neutraliza Phase X (fondo individual en cada btn) y barra inferior.
+   Scoped: solo .desktop-nav — dock, footer e inputs no se tocan.
+   ─────────────────────────────────────────────────────────────────── */
+
+/* 1 · Contenedor: sin chrome propio — el header ya es el contexto visual */
+.desktop-nav {
+  border: none;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  gap: 1px;
+}
+
+/* 2 · Botón inactivo: solo texto, sin fondo, sin borde visible */
+.desktop-nav .nav-btn {
+  padding: 7px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(203, 213, 225, 0.60);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: none;
+  transition:
+    color var(--ox-duration-fast) var(--ox-ease),
+    background var(--ox-duration-fast) var(--ox-ease),
+    border-color var(--ox-duration-fast) var(--ox-ease);
+}
+
+/* Desactivar pseudo-elementos del Phase X */
+.desktop-nav .nav-btn::before,
+.desktop-nav .nav-btn::after {
+  display: none;
+}
+
+/* 3 · Activo: pill sutil — texto blanco + borde cyan tenue */
+.desktop-nav .nav-btn.active {
+  background: rgba(14, 165, 233, 0.13);
+  border-color: rgba(56, 189, 248, 0.30);
+  color: rgba(248, 250, 252, 0.97);
+  box-shadow: none;
+  transform: none;
+}
+
+/* 4 · Hover: fondo muy tenue, sin levitación */
+@media (hover: hover) and (pointer: fine) {
+  .desktop-nav .nav-btn:not(:disabled):hover {
+    color: rgba(248, 250, 252, 0.90);
+    background: rgba(255, 255, 255, 0.055);
+    border-color: transparent;
+    transform: none;
+    box-shadow: none;
+  }
+  .desktop-nav .nav-btn.active:not(:disabled):hover {
+    background: rgba(14, 165, 233, 0.18);
+    border-color: rgba(56, 189, 248, 0.38);
+  }
+}
+
+/* 5 · Press */
+.desktop-nav .nav-btn:not(:disabled):active {
+  transform: none;
+  opacity: 0.82;
+}
+
+/* 6 · Focus visible */
+.desktop-nav .nav-btn:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.48);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+/* 7 · Light mode — neutraliza el fondo blanco que daba Phase X */
+:root.light .desktop-nav,
+:root[data-theme="light"] .desktop-nav {
+  border: none;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+:root.light .desktop-nav .nav-btn,
+:root[data-theme="light"] .desktop-nav .nav-btn {
+  color: rgba(15, 32, 58, 0.52);
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+:root.light .desktop-nav .nav-btn.active,
+:root[data-theme="light"] .desktop-nav .nav-btn.active {
+  background: rgba(14, 165, 233, 0.10);
+  border-color: rgba(14, 116, 144, 0.24);
+  color: rgba(8, 20, 40, 0.97);
+  box-shadow: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :root.light .desktop-nav .nav-btn:not(:disabled):hover,
+  :root[data-theme="light"] .desktop-nav .nav-btn:not(:disabled):hover {
+    color: rgba(8, 20, 40, 0.82);
+    background: rgba(14, 165, 233, 0.07);
+    border-color: transparent;
+    transform: none;
+  }
+}
+
+/* ── Header action icons — coherencia visual entre theme-toggle y login-icon
+   El login-btn sin texto (solo SVG) debe tener las mismas dimensiones
+   que .theme-toggle-btn (34×34 grid centrado). ────────────────────────── */
+.header-role-actions .login-btn:not(.private-panel-btn):not(.logout-btn) {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  min-height: 34px;
+  padding: 0;
+}
+
+.header-role-actions .login-btn:not(.private-panel-btn):not(.logout-btn) svg,
+.theme-toggle-btn svg {
+  display: block;
+  flex-shrink: 0;
+}

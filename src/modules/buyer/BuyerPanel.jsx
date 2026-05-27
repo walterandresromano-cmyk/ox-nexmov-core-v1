@@ -6,6 +6,12 @@ import {
 } from "../../services/sellVehicle.service.js";
 
 import {
+  listRadarRequests,
+  deleteRadarRequest,
+  buildRadarCriteriaSummary,
+} from "../../services/radarRequests.service.js";
+
+import {
   listVehicleLeadsForCurrentBuyer,
   listZeroKmLeadsForCurrentBuyer,
 } from "../../services/buyer.service.js";
@@ -118,11 +124,11 @@ function getVehicleTitle(vehicle) {
 }
 
 function getNextGarageHint(services) {
-  if (!services.length) return "Carga el primer servicio para iniciar el historial.";
+  if (!services.length) return "Cargá el primer servicio para iniciar el historial.";
   const last = services[0];
   const lastKm = Number(last.mileage || 0);
-  if (!lastKm) return "Proximo control: revisar kilometraje y service preventivo.";
-  return `Proximo control sugerido cerca de ${Number(lastKm + 10000).toLocaleString("es-AR")} km.`;
+  if (!lastKm) return "Próximo control: revisar kilometraje y service preventivo.";
+  return `Próximo control sugerido cerca de ${Number(lastKm + 10000).toLocaleString("es-AR")} km.`;
 }
 
 function getServiceTypeLabel(value) {
@@ -313,6 +319,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const [garageVehiclePhotoSaved, setGarageVehiclePhotoSaved] = useState(false);
   const [activeGarageTab, setActiveGarageTab] = useState("summary");
   const [showBuyerActivityDetails, setShowBuyerActivityDetails] = useState(false);
+  const [radarRequests, setRadarRequests] = useState([]);
+  const [radarDeletingId, setRadarDeletingId] = useState(null);
 
   const favorites = appActions?.favoriteItems || [];
   const compareItems = appActions?.compareItems || [];
@@ -374,6 +382,21 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     setLoadingZeroKmLeads(false);
   }
 
+  async function loadRadarRequests() {
+    const { requests } = await listRadarRequests();
+    setRadarRequests(requests || []);
+  }
+
+  async function handleDeleteRadarRequest(id) {
+    if (radarDeletingId) return;
+    setRadarDeletingId(id);
+    const { error } = await deleteRadarRequest(id);
+    if (!error) {
+      setRadarRequests((prev) => prev.filter((r) => r.id !== id));
+    }
+    setRadarDeletingId(null);
+  }
+
   async function refreshBuyerPanel() {
     await Promise.all([
       loadVehicleLeads(),
@@ -381,6 +404,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
       loadSellVehicleLeads(),
       loadGarageVehicles(),
       loadGarageServices(),
+      loadRadarRequests(),
     ]);
   }
 
@@ -948,6 +972,62 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           </button>
         </div>
 
+        {radarRequests.length > 0 && (
+          <div className="dealer-leads-section buyer-radar-section">
+            <div className="buyer-section-head">
+              <div>
+                <p className="eyebrow">Radar oX</p>
+                <h2>Búsquedas activas</h2>
+                <p>Búsquedas registradas. Revisá si aparecieron coincidencias.</p>
+              </div>
+              <button
+                type="button"
+                className="primary-action"
+                onClick={() => onNavigate?.("search")}
+              >
+                Volver a buscar
+              </button>
+            </div>
+            <ul className="buyer-radar-list">
+              {radarRequests.map((req) => {
+                const parts = buildRadarCriteriaSummary(
+                  req.search_text,
+                  req.filters,
+                  req.parsed_intent
+                );
+                return (
+                  <li key={req.id} className="buyer-radar-item">
+                    <div className="buyer-radar-item-body">
+                      <div className="buyer-radar-item-criteria">
+                        {parts.length > 0
+                          ? parts.join(" · ")
+                          : "Búsqueda sin criterios específicos"}
+                      </div>
+                      {req.notes && (
+                        <p className="buyer-radar-item-notes">{req.notes}</p>
+                      )}
+                      <time className="buyer-radar-item-date">
+                        {new Intl.DateTimeFormat("es-AR", {
+                          dateStyle: "short",
+                        }).format(new Date(req.created_at))}
+                      </time>
+                    </div>
+                    <button
+                      type="button"
+                      className="buyer-radar-item-delete"
+                      disabled={radarDeletingId === req.id}
+                      onClick={() => handleDeleteRadarRequest(req.id)}
+                      aria-label="Cancelar esta búsqueda activa"
+                    >
+                      {radarDeletingId === req.id ? "…" : "Cancelar"}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
         <div className="dealer-leads-section buyer-garage-section">
           <div className="buyer-section-head">
             <div>
@@ -1355,7 +1435,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                           </strong>
                         </article>
                         <article>
-                          <span>Proximo paso</span>
+                          <span>Próximo paso</span>
                           <strong>{getNextGarageHint(selectedGarageServices)}</strong>
                         </article>
                       </div>
@@ -1497,7 +1577,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 </div>
                 {selectedGarageServices.length === 0 ? (
                   <p className="buyer-garage-history-empty">
-                    Todavia no hay servicios cargados para este vehiculo.
+                    Todavía no hay servicios cargados para este vehículo.
                   </p>
                 ) : (
                   <div className="buyer-garage-service-list">

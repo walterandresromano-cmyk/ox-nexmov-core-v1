@@ -869,6 +869,7 @@
 }
 
 .ox-search-hero {
+  z-index: 2;
   border-color: var(--ox-border-strong);
   box-shadow:
     var(--ox-shadow-panel),
