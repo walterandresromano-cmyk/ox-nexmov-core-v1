@@ -831,3 +831,141 @@
     padding: 12px;
   }
 }
+
+/* oX NEXMOV - Financiación 0km visual cleanup
+   Hero, módulos y formulario separados: evita cards anidadas pesadas. */
+.zero-km-page {
+  display: grid;
+  gap: 14px;
+}
+
+.zero-km-page .zero-km-panel {
+  gap: 12px;
+  min-height: 0;
+}
+
+.zero-km-page .zero-km-panel .ox-public-title span {
+  color: transparent;
+  background: linear-gradient(115deg, #38bdf8 0%, #818cf8 54%, #f5b84b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none;
+}
+
+.zero-km-page .zero-km-capabilities,
+.zero-km-page .zero-km-simulator-preview,
+.zero-km-page .zero-km-grid {
+  margin-top: 0;
+}
+
+.zero-km-page .zero-km-capabilities article {
+  min-height: 112px;
+  border-radius: 18px;
+}
+
+.zero-km-page .zero-km-simulator-preview {
+  min-height: 0;
+  border-radius: 22px;
+}
+
+.zero-km-page .zero-km-side-stack {
+  grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
+}
+
+.zero-km-page .zero-km-info-card,
+.zero-km-page .zero-km-responsible-note {
+  border-radius: 22px;
+}
+
+.zero-km-page .zero-km-form {
+  gap: 0;
+  padding: 20px;
+  border-radius: 22px;
+}
+
+.zero-km-page .zero-km-form-head,
+.zero-km-page .zero-km-form-group {
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.zero-km-page .zero-km-form-head {
+  padding: 0 0 15px;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.12);
+}
+
+.zero-km-page .zero-km-form-group {
+  padding: 15px 0;
+  border-top: 1px solid rgba(125, 211, 252, 0.08);
+}
+
+.zero-km-page .zero-km-form-head + .zero-km-form-group {
+  border-top: 0;
+}
+
+.zero-km-page .zero-km-form-group-message {
+  padding-bottom: 14px;
+}
+
+.zero-km-page .zero-km-form .form-grid-two {
+  gap: 10px 12px;
+}
+
+.zero-km-page .finance-legal-note,
+.zero-km-page .form-legal-note {
+  margin-top: 10px;
+  border-color: rgba(125, 211, 252, 0.10);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.32), rgba(2, 6, 23, 0.24));
+}
+
+.zero-km-page .zero-km-form .primary-action {
+  margin-top: 12px;
+}
+
+:root[data-theme="light"] .zero-km-page .zero-km-form-head,
+:root[data-theme="light"] .zero-km-page .zero-km-form-group {
+  background: transparent;
+  box-shadow: none;
+}
+
+:root[data-theme="light"] .zero-km-page .zero-km-form-head {
+  border-bottom-color: rgba(14, 116, 144, 0.13);
+}
+
+:root[data-theme="light"] .zero-km-page .zero-km-form-group {
+  border-top-color: rgba(14, 116, 144, 0.10);
+}
+
+:root[data-theme="light"] .zero-km-page .finance-legal-note,
+:root[data-theme="light"] .zero-km-page .form-legal-note {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(224, 243, 252, 0.54));
+}
+
+@media (max-width: 980px) {
+  .zero-km-page .zero-km-side-stack {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .zero-km-page {
+    gap: 12px;
+  }
+
+  .zero-km-page .zero-km-form {
+    padding: 16px;
+  }
+
+  .zero-km-page .zero-km-form-head {
+    padding-bottom: 13px;
+  }
+
+  .zero-km-page .zero-km-form-group {
+    padding: 13px 0;
+  }
+}

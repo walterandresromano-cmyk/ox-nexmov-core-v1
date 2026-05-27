@@ -1033,9 +1033,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             <div>
               <p className="eyebrow">Garage oX</p>
               <h2>Garage oX</h2>
-              <p>
-                Historial privado de tus unidades dentro de la plataforma.
-              </p>
+              <p>Tu colección privada de vehículos, servicios y próximos pasos.</p>
             </div>
             <button
               type="button"
@@ -1058,10 +1056,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           <div className="buyer-garage-hero">
             <div>
               <span>Historial premium</span>
-              <strong>Unidad, servicios y recorrido en un solo lugar.</strong>
-              <p>
-                Registro organizado para conservar la trazabilidad del vehículo.
-              </p>
+              <strong>Tu flota, con identidad propia.</strong>
+              <p>Cards vivas para conservar valor, memoria y recorrido.</p>
             </div>
             <div className="buyer-garage-hero-metrics">
               <span>Garage</span>
@@ -1077,8 +1073,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 <span className="eyebrow">{editingGarageVehicleId ? "Editando card" : "Vehículo propio"}</span>
                 <h3>{editingGarageVehicleId ? "Actualizar unidad" : "Cargar unidad familiar"}</h3>
                 <p>
-                  Sumá autos propios o familiares, registrá vencimientos y dejá
-                  preparada la base para una futura evaluación comercial.
+                  Sumá una unidad a tu colección y mantené su historia lista para
+                  evolucionar.
                 </p>
               </div>
               <label className="buyer-garage-sale-toggle">
@@ -1237,7 +1233,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 />
                 <div className="garage-framing-controls">
                   <p className="garage-framing-hint">
-                    Arrastrá la imagen para acomodar el vehículo dentro de la card.
+                    Ajustá el encuadre para que la card se vea impecable.
                   </p>
                   <button
                     type="button"
@@ -1260,7 +1256,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 value={garageVehicleForm.notes}
                 onChange={(event) => updateGarageVehicleField("notes", event.target.value)}
                 rows={3}
-                placeholder="Estado general, trabajos realizados, observaciones o datos útiles para conservar historial."
+                placeholder="Notas privadas, detalles de uso, trabajos realizados o próximos cuidados."
                 disabled={garageVehicleSaving}
               />
             </label>
@@ -1287,10 +1283,10 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
 
           {garageVehicles.length === 0 ? (
             <div className="buyer-garage-empty">
-              <strong>Tu Garage todavía está esperando su primera unidad.</strong>
+              <strong>Tu Garage está listo para recibir su primera card.</strong>
               <p>
-                Las unidades asignadas por un dealer o cargadas por vos aparecen
-                acá con su historial listo para completar.
+                Cuando compres o cargues un vehículo, va a aparecer acá como
+                parte de tu colección oX.
               </p>
               <button className="primary-action" onClick={() => onNavigate?.("search")}>
                 Buscar vehículos

@@ -1101,14 +1101,21 @@
   }
 
   .vehicle-detail-maintenance-block,
-  .vehicle-detail-insurance-next-box {
+  .vehicle-detail-insurance-next-box,
+  .vehicle-detail-used-financing {
     padding: 13px;
     border-radius: 18px;
   }
 
   .vehicle-detail-maintenance-grid,
-  .vehicle-detail-insurance-next-box {
+  .vehicle-detail-insurance-next-box,
+  .vehicle-detail-used-financing-inputs,
+  .vehicle-detail-used-financing-results {
     grid-template-columns: 1fr;
+  }
+
+  .vehicle-detail-used-financing-head {
+    display: grid;
   }
 
   .vehicle-detail-insurance-next-box button {
@@ -1292,6 +1299,171 @@
 
 :root[data-theme="light"] .vehicle-detail-financing-details strong {
   color: #07172b;
+}
+
+.vehicle-detail-used-financing {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(56, 189, 248, 0.13), transparent 30%),
+    radial-gradient(circle at 92% 8%, rgba(245, 184, 75, 0.07), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.86));
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.vehicle-detail-used-financing-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.vehicle-detail-used-financing-head div {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.vehicle-detail-used-financing-head span {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 24px;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid rgba(56, 189, 248, 0.26);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.09);
+  color: rgba(125, 211, 252, 0.95);
+  font-size: 0.54rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.vehicle-detail-used-financing-head strong {
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 1rem;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.vehicle-detail-used-financing-head p {
+  margin: 0;
+  flex: 0 0 auto;
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+.vehicle-detail-used-financing-inputs,
+.vehicle-detail-used-financing-results {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.vehicle-detail-used-financing-inputs label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: rgba(203, 213, 225, 0.76);
+  font-size: 0.58rem;
+  font-weight: 900;
+}
+
+.vehicle-detail-used-financing-inputs input,
+.vehicle-detail-used-financing-inputs select {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid rgba(125, 211, 252, 0.15);
+  border-radius: 13px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.82));
+  color: rgba(248, 250, 252, 0.96);
+  padding: 0 10px;
+  font-size: 0.66rem;
+  font-weight: 850;
+  outline: none;
+  color-scheme: dark;
+}
+
+.vehicle-detail-used-financing-inputs input:focus,
+.vehicle-detail-used-financing-inputs select:focus {
+  border-color: rgba(56, 189, 248, 0.46);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.09);
+}
+
+.vehicle-detail-used-financing-results div {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid rgba(125, 211, 252, 0.13);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(34, 211, 238, 0.10), transparent 34%),
+    rgba(2, 6, 23, 0.36);
+}
+
+.vehicle-detail-used-financing-results span {
+  display: block;
+  color: rgba(125, 211, 252, 0.78);
+  font-size: 0.52rem;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vehicle-detail-used-financing-results strong {
+  display: block;
+  margin-top: 6px;
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 0.82rem;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.vehicle-detail-used-financing > p {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.70);
+  font-size: 0.6rem;
+  line-height: 1.45;
+}
+
+:root[data-theme="light"] .vehicle-detail-used-financing {
+  border-color: rgba(14, 116, 144, 0.16);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(14, 165, 233, 0.12), transparent 30%),
+    radial-gradient(circle at 92% 8%, rgba(245, 184, 75, 0.10), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(226, 245, 252, 0.82));
+  box-shadow:
+    0 14px 34px rgba(33, 48, 71, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+:root[data-theme="light"] .vehicle-detail-used-financing-head strong,
+:root[data-theme="light"] .vehicle-detail-used-financing-head p,
+:root[data-theme="light"] .vehicle-detail-used-financing-results strong {
+  color: #07172b;
+}
+
+:root[data-theme="light"] .vehicle-detail-used-financing-inputs label,
+:root[data-theme="light"] .vehicle-detail-used-financing > p {
+  color: #536a82;
+}
+
+:root[data-theme="light"] .vehicle-detail-used-financing-inputs input,
+:root[data-theme="light"] .vehicle-detail-used-financing-inputs select,
+:root[data-theme="light"] .vehicle-detail-used-financing-results div {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(226, 244, 252, 0.78));
+  color: #07172b;
+  color-scheme: light;
 }
 
 /* Reduce right-column gap for more compact feel */

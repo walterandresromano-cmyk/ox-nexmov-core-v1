@@ -31,8 +31,7 @@
   display: grid;
   grid-template-columns:
     minmax(410px, 0.92fr)
-    minmax(500px, 1.04fr)
-    minmax(235px, 0.34fr);
+    minmax(0, 1fr);
   gap: var(--ox-space-8);
   align-items: center;
   min-height: 335px;
@@ -1238,9 +1237,7 @@
 
   .ox-home-hero-v3 {
     grid-template-columns: minmax(0, 1fr) minmax(360px, 0.86fr);
-    grid-template-areas:
-      "copy stage"
-      "copy card";
+    grid-template-areas: "copy stage";
     min-height: auto;
     padding: 26px;
   }

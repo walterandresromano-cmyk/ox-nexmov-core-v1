@@ -254,12 +254,11 @@ export default function JoinNetwork({ onNavigate }) {
 
         <section className="join-network-problem">
           <div className="join-network-section-head">
-            <p className="eyebrow">El problema</p>
-            <h2>Hoy el dealer necesita más que una vidriera digital.</h2>
+            <p className="eyebrow">Contexto comercial</p>
+            <h2>Una red pensada para vender con más claridad.</h2>
             <p>
-              La oportunidad no está solo en aparecer: está en construir
-              confianza, ordenar el contacto y diferenciar cada publicación con
-              información que el comprador pueda entender rápido.
+              Presencia, señales comerciales y trazabilidad reunidas en una
+              experiencia que mejora la percepción de cada agencia.
             </p>
           </div>
 
@@ -442,8 +441,8 @@ export default function JoinNetwork({ onNavigate }) {
 
         <section className="join-network-section">
           <div className="join-network-section-head">
-            <p className="eyebrow">Cómo funciona</p>
-            <h2>De la solicitud al panel dealer, sin fricción innecesaria.</h2>
+            <p className="eyebrow">Alta dealer</p>
+            <h2>Un ingreso simple a una operación más ordenada.</h2>
           </div>
 
           <div className="join-network-steps">
@@ -454,8 +453,8 @@ export default function JoinNetwork({ onNavigate }) {
                   <h3>{step}</h3>
                   <p>
                     {index === 0
-                      ? "Iniciás el proceso desde el acceso de dealer."
-                      : "La operación avanza dentro del circuito comercial de oX NEXMOV."}
+                      ? "La agencia inicia el alta desde el acceso operativo."
+                      : "Cada etapa suma contexto para trabajar mejor dentro de la red."}
                   </p>
                 </div>
               </article>
@@ -492,4 +491,3 @@ export default function JoinNetwork({ onNavigate }) {
     </section>
   );
 }
-

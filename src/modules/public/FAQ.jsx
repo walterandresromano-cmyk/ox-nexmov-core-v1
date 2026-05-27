@@ -228,18 +228,6 @@ const faqSections = [
   },
 ];
 
-const quickTopics = [
-  "Buscar vehículos",
-  "Comparar unidades",
-  "Contactar dealers",
-  "Planes dealer",
-  "Financiación 0km",
-  "Vender mi vehículo",
-  "Leads trazables",
-  "Publicaciones sospechosas",
-  "Soporte interno",
-];
-
 export default function FAQ({ onNavigate }) {
   return (
     <section className="page-section faq-page">
@@ -255,21 +243,6 @@ export default function FAQ({ onNavigate }) {
               dealers usen oX NEXMOV con claridad y confianza.
             </p>
           </div>
-
-          <aside className="faq-hero-card">
-            <span>Guía rápida</span>
-            <strong>Menos dudas. Más decisión.</strong>
-            <p>
-              Una guía rápida para entender cómo funciona la red, cuándo iniciar
-              sesión y cómo se trazan las oportunidades comerciales.
-            </p>
-          </aside>
-        </section>
-
-        <section className="faq-topics">
-          {quickTopics.map((topic) => (
-            <span key={topic}>{topic}</span>
-          ))}
         </section>
 
         {faqSections.map((section) => (
@@ -283,12 +256,14 @@ export default function FAQ({ onNavigate }) {
               <p>{section.text}</p>
             </div>
 
-            <div className="faq-grid">
+            <div className="faq-list">
               {section.items.map((item) => (
-                <article key={item.question} className="faq-card">
-                  <h3>{item.question}</h3>
+                <details key={item.question} className="faq-item">
+                  <summary>
+                    <span>{item.question}</span>
+                  </summary>
                   <p>{item.answer}</p>
-                </article>
+                </details>
               ))}
             </div>
           </section>

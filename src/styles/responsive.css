@@ -2792,7 +2792,6 @@
 :root[data-theme="light"] .faq-section,
 :root[data-theme="light"] .faq-final,
 :root[data-theme="light"] .faq-card,
-:root[data-theme="light"] .faq-topics,
 :root[data-theme="light"] .join-network-panel,
 :root[data-theme="light"] .join-network-hero-card,
 :root[data-theme="light"] .join-network-value-card,
@@ -4742,7 +4741,6 @@
 
 .join-network-benefits-list span,
 .about-benefits-list span,
-.faq-topics span,
 .zero-km-steps div,
 .sell-vehicle-steps div {
   border-color: rgba(148, 163, 184, 0.16);
@@ -4833,7 +4831,6 @@
 
 :root[data-theme="light"] .join-network-benefits-list span,
 :root[data-theme="light"] .about-benefits-list span,
-:root[data-theme="light"] .faq-topics span,
 :root[data-theme="light"] .zero-km-steps div,
 :root[data-theme="light"] .sell-vehicle-steps div {
   border-color: rgba(14, 116, 144, 0.12);
@@ -6883,7 +6880,6 @@ html[data-theme="light"] .zero-km-page .zero-km-preview-grid strong,
 
   .ox-home-chips-v3 button,
   .ox-search-suggested button,
-  .faq-topics span,
   .admin-chip,
   .lead-crm-status,
   .lead-followup-chip,
@@ -9811,7 +9807,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   line-height: var(--ox-lh-body) !important;
 }
 
-.faq-page .faq-topics,
 .faq-page .faq-section,
 .faq-page .faq-final {
   margin-top: 0 !important;
@@ -9819,13 +9814,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   border-radius: var(--ox-radius-2xl) !important;
   background: var(--ox-surface-card) !important;
   box-shadow: var(--ox-shadow-card) !important;
-}
-
-.faq-page .faq-topics {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 7px !important;
-  padding: var(--ox-panel-padding) !important;
 }
 
 .faq-page .faq-card {
@@ -9860,10 +9848,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     width: 100% !important;
   }
 
-  .faq-page .faq-topics {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
   .faq-page .faq-final-actions {
     justify-content: flex-start !important;
   }
@@ -9888,22 +9872,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
   .faq-page .faq-hero-copy > p {
     font-size: var(--ox-fs-body-mobile) !important;
-  }
-
-  .faq-page .faq-topics {
-    display: flex !important;
-    overflow-x: auto !important;
-    flex-wrap: nowrap !important;
-    padding: 10px !important;
-    scrollbar-width: none;
-  }
-
-  .faq-page .faq-topics::-webkit-scrollbar {
-    display: none;
-  }
-
-  .faq-page .faq-topics span {
-    flex: 0 0 auto !important;
   }
 
   .faq-page .faq-final-actions {
@@ -10009,7 +9977,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
 .zero-km-steps div,
 .sell-vehicle-steps div,
-.faq-topics span,
 .about-benefits-list span,
 .join-network-benefits-list span,
 .ox-search-suggested button,
@@ -10169,7 +10136,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
 :root[data-theme="light"] .zero-km-steps div,
 :root[data-theme="light"] .sell-vehicle-steps div,
-:root[data-theme="light"] .faq-topics span,
 :root[data-theme="light"] .about-benefits-list span,
 :root[data-theme="light"] .join-network-benefits-list span,
 :root[data-theme="light"] .ox-search-suggested button,
@@ -11752,22 +11718,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   .zero-km-info-card,
   .sell-vehicle-info-card {
     position: static;
-  }
-
-  .faq-topics {
-    display: flex;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    margin: 10px 0 12px;
-    scrollbar-width: none;
-  }
-
-  .faq-topics::-webkit-scrollbar {
-    display: none;
-  }
-
-  .faq-topics span {
-    flex: 0 0 auto;
   }
 
   .join-network-actions,
@@ -14445,4 +14395,175 @@ textarea:focus-visible,
 .theme-toggle-btn svg {
   display: block;
   flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DESKTOP COMPACT SCALE — Fase 1
+   Escala premium para 100% zoom. Sin zoom/transform global.
+   Un solo bloque: todos los cambios son min-width desktop.
+   Mobile (≤ 1120px) queda intacto.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 0. Lever principal: escala rem proporcional en desktop.
+   16px × 0.8 = 12.8px (zoom 80%). Usamos 13px para igualar
+   sin ser agresivo. Escala TODOS los rem de la web en desktop.
+   Px fijos (borders, shadows, heights de px) no se tocan. ── */
+@media (min-width: 1121px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+/* ── B. Sistema global — desde 1121px ── */
+@media (min-width: 1121px) {
+
+  /* B1. Tokens de layout — sin tocar tipografía del home
+     (el font-size: 13px ya escala los rem del hero correctamente) */
+  :root {
+    --ox-page-max:          1280px;
+    --ox-section-gap:       9px;
+    --ox-page-hero-padding: 16px 26px;
+    --ox-input-h-page:      36px;
+    --ox-button-h-page:     36px;
+  }
+
+  /* ── C. Shells hardcodeados a 1530px ── */
+  .ox-search-shell {
+    width: min(100% - 56px, 1280px);
+    max-width: 1280px;
+  }
+  .sell-vehicle-panel {
+    width: min(100% - 56px, 1280px);
+    max-width: 1280px;
+    padding: 18px 26px 20px;
+  }
+  .join-network-panel {
+    width: min(100% - 56px, 1280px);
+    max-width: 1280px;
+    padding: 20px 28px 24px;
+  }
+
+  /* ── D. Vehicle cards ── */
+  .vehicle-card-media {
+    height: 188px;
+  }
+  .vehicle-card-placeholder {
+    min-height: 188px;
+  }
+
+  /* ── E. Panel heads — solo el padding px que no escala con font-size ── */
+  .admin-panel-head,
+  .dealer-panel-head,
+  .buyer-panel-head,
+  .support-panel-head {
+    padding: clamp(14px, 1.6vw, 20px);
+  }
+
+  /* ── F. Public-page-panel: h1 con 4.8vw que NO escala con font-size ── */
+  .public-page-panel {
+    padding: clamp(12px, 1.4vw, 18px);
+  }
+  .public-page-panel .hero-panel {
+    padding: clamp(14px, 1.8vw, 22px);
+    margin-bottom: clamp(12px, 1.4vw, 18px);
+  }
+  .public-page-panel .hero-panel h1 {
+    font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  }
+
+  /* ── G. Search hero — padding px que no escala ── */
+  .ox-search-hero {
+    padding: 18px 24px 16px;
+  }
+  .ox-search-command {
+    min-height: 54px;
+  }
+
+  /* ── H. Modales ── */
+  .vehicle-detail-modal {
+    width: min(880px, calc(100vw - 32px));
+  }
+  .compare-modal {
+    max-width: min(1000px, calc(100vw - 32px));
+  }
+  .compare-modal.compare-count-1 {
+    max-width: min(460px, calc(100vw - 32px));
+  }
+  .compare-modal.compare-count-2 {
+    max-width: min(640px, calc(100vw - 32px));
+  }
+  .compare-modal.compare-count-3 {
+    max-width: min(820px, calc(100vw - 32px));
+  }
+  .compare-modal.compare-count-4 {
+    max-width: min(1000px, calc(100vw - 32px));
+  }
+}
+
+/* oX NEXMOV - Public hero typography contract
+   Última capa: todas las pestañas públicas comparten escala de título y eyebrow. */
+.ox-home-hero-copy-v3 h1,
+.ox-search-title-block h1,
+.zero-km-panel .ox-public-title,
+.zero-km-panel h1,
+.garage-public-page .garage-public-hero-text > h1,
+.sell-vehicle-panel > h1,
+.join-network-hero-copy h1,
+.about-hero-copy h1,
+.faq-hero-copy h1 {
+  max-width: 860px !important;
+  font-size: var(--ox-fs-page-title) !important;
+  line-height: var(--ox-lh-title) !important;
+  letter-spacing: 0 !important;
+  font-weight: var(--ox-fw-black) !important;
+  text-shadow: none !important;
+}
+
+.ox-home-eyebrow-v3,
+.ox-search-eyebrow,
+.zero-km-panel .ox-public-eyebrow,
+.garage-public-page .garage-public-hero-text > .eyebrow,
+.sell-vehicle-panel > .eyebrow,
+.join-network-panel .eyebrow,
+.about-panel .eyebrow,
+.faq-panel .eyebrow {
+  display: inline-flex !important;
+  width: fit-content !important;
+  min-height: 28px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  font-size: var(--ox-fs-caption) !important;
+  line-height: 1 !important;
+  font-weight: var(--ox-fw-black) !important;
+  letter-spacing: var(--ox-ls-eyebrow) !important;
+  text-transform: uppercase !important;
+}
+
+@media (max-width: 760px) {
+  .ox-home-hero-copy-v3 h1,
+  .ox-search-title-block h1,
+  .zero-km-panel .ox-public-title,
+  .zero-km-panel h1,
+  .garage-public-page .garage-public-hero-text > h1,
+  .sell-vehicle-panel > h1,
+  .join-network-hero-copy h1,
+  .about-hero-copy h1,
+  .faq-hero-copy h1 {
+    font-size: var(--ox-fs-page-title-mobile) !important;
+    line-height: 1.02 !important;
+  }
+
+  .ox-home-eyebrow-v3,
+  .ox-search-eyebrow,
+  .zero-km-panel .ox-public-eyebrow,
+  .garage-public-page .garage-public-hero-text > .eyebrow,
+  .sell-vehicle-panel > .eyebrow,
+  .join-network-panel .eyebrow,
+  .about-panel .eyebrow,
+  .faq-panel .eyebrow {
+    min-height: 26px !important;
+    font-size: var(--ox-fs-caption-mobile) !important;
+  }
 }

@@ -4,30 +4,30 @@ const GARAGE_FEATURES = [
   {
     id: "passport",
     label: "Pasaporte digital",
-    title: "De publicación a vehículo dentro de tu Garage.",
-    text: "Cuando una unidad se concreta dentro de oX, el dealer puede transferir la card al comprador para continuar su recorrido.",
+    title: "Pasaporte digital.",
+    text: "Cada unidad puede conservar identidad, recorrido y contexto propio.",
     icon: "◈",
     featured: true,
   },
   {
     id: "fleet",
     label: "Flota familiar",
-    title: "Cargá otros vehículos propios.",
-    text: "Sumá autos de tu familia, registrá kilometraje, datos principales, seguro, VTV y notas de mantenimiento.",
+    title: "Flota familiar.",
+    text: "Tus vehículos propios reunidos en una colección privada.",
     icon: "⊕",
   },
   {
     id: "services",
     label: "Servicios",
-    title: "Historial simple y ordenado.",
-    text: "Guardá cambios de aceite, frenos, cubiertas, batería, reparaciones y controles importantes en un solo lugar.",
+    title: "Servicios y vencimientos.",
+    text: "Controles, VTV, seguro y notas importantes siempre a mano.",
     icon: "≡",
   },
   {
     id: "resale",
     label: "Reventa futura",
-    title: "Prepará mejor una futura publicación.",
-    text: "Cuando quieras vender, el historial del Garage puede convertirse en contexto comercial para una evaluación más clara.",
+    title: "Valor futuro.",
+    text: "Un historial cuidado puede sumar confianza en una futura reventa.",
     icon: "↑",
     wide: true,
   },
@@ -43,11 +43,10 @@ export default function SellVehicle({ authUser, onNavigate }) {
         <div className="garage-public-hero">
           <div className="garage-public-hero-text">
             <p className="eyebrow">Garage oX</p>
-            <h1>Tu vehículo empieza a tener historia propia.</h1>
+            <h1>Garage oX</h1>
             <p>
-              Garage oX organiza unidades compradas en la plataforma, vehículos de
-              tu familia, servicios, vencimientos y datos útiles para conservar valor
-              antes de una futura reventa.
+              Tu historial automotriz privado: vehículos, servicios,
+              vencimientos y valor futuro en un solo lugar.
             </p>
             <div className="garage-public-actions">
               <button
@@ -55,14 +54,14 @@ export default function SellVehicle({ authUser, onNavigate }) {
                 type="button"
                 onClick={() => onNavigate?.(isLoggedIn ? "buyer" : "login")}
               >
-                {isLoggedIn ? "Abrir mi Garage oX" : "Crear mi Garage oX"}
+                {isLoggedIn ? "Ingresar a mi Garage" : "Ingresar a Garage oX"}
               </button>
               <button
                 className="admin-refresh-btn"
                 type="button"
                 onClick={() => onNavigate?.("search")}
               >
-                Buscar vehículos
+                Explorar vehículos
               </button>
             </div>
           </div>
@@ -106,8 +105,10 @@ export default function SellVehicle({ authUser, onNavigate }) {
                 feat.wide ? "garage-public-card--wide" : "",
               ].filter(Boolean).join(" ")}
             >
-              <div className="garage-public-card-icon">{feat.icon}</div>
-              <span>{feat.label}</span>
+              <div className="garage-public-card-kicker">
+                <span className="garage-public-card-icon">{feat.icon}</span>
+                <span>{feat.label}</span>
+              </div>
               <h2>{feat.title}</h2>
               <p>{feat.text}</p>
             </article>

@@ -1978,3 +1978,267 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.90),
     0 10px 22px rgba(33, 48, 71, 0.07);
 }
+
+/* ── Hero 2-col: buscador + oportunidades ── */
+.ox-search-hero {
+  grid-template-columns: minmax(0, 1fr) 244px;
+  align-items: start;
+}
+
+.ox-search-hero-main {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ox-search-hero-opor {
+  display: grid;
+  gap: 8px;
+  padding-left: 16px;
+  border-left: 1px solid rgba(148, 163, 184, 0.10);
+  align-self: start;
+}
+
+.ox-search-opor-label {
+  margin: 0 0 4px;
+  color: rgba(125, 211, 252, 0.72);
+  font-size: 0.56rem;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.ox-search-opor-card {
+  display: grid;
+  grid-template-columns: 66px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.52);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.ox-search-opor-card:hover {
+  border-color: rgba(56, 189, 248, 0.38);
+  background: rgba(14, 165, 233, 0.10);
+}
+
+.ox-search-opor-card img {
+  width: 66px;
+  height: 46px;
+  object-fit: cover;
+  border-radius: 9px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.ox-search-opor-card-info {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ox-search-opor-card-info strong {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: rgba(248, 250, 252, 0.96);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.ox-search-opor-card-info span {
+  font-size: 0.58rem;
+  color: rgba(203, 213, 225, 0.65);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ox-search-opor-card-info em {
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: rgba(125, 211, 252, 0.9);
+  line-height: 1;
+}
+
+@media (max-width: 760px) {
+  .ox-search-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .ox-search-hero-opor {
+    display: none;
+  }
+}
+
+:root[data-theme="light"] .ox-search-hero-opor {
+  border-left-color: rgba(15, 23, 42, 0.10);
+}
+
+:root[data-theme="light"] .ox-search-opor-label {
+  color: rgba(8, 100, 140, 0.82);
+}
+
+:root[data-theme="light"] .ox-search-opor-card {
+  border-color: rgba(15, 23, 42, 0.10);
+  background: rgba(240, 249, 255, 0.72);
+}
+
+:root[data-theme="light"] .ox-search-opor-card:hover {
+  border-color: rgba(14, 165, 233, 0.38);
+  background: rgba(14, 165, 233, 0.08);
+}
+
+:root[data-theme="light"] .ox-search-opor-card-info strong {
+  color: rgba(2, 6, 23, 0.96);
+}
+
+:root[data-theme="light"] .ox-search-opor-card-info span {
+  color: rgba(15, 23, 42, 0.55);
+}
+
+:root[data-theme="light"] .ox-search-opor-card-info em {
+  color: #0369a1;
+}
+
+/* ══ PREMIUM SEARCH BAR — patrón del buscador del home ══
+   .ox-search-command = contenedor visual (pill).
+   .ox-search-input-wrap = transparente adentro.
+   ══════════════════════════════════════════════════════ */
+
+/* Eyebrow: left-aligned igual al home */
+.ox-search-hero .ox-search-eyebrow {
+  display: block;
+  margin: 0;
+}
+
+/* Command = el pill visual, igual a ox-home-search-v3 */
+.ox-search-command {
+  align-items: stretch;
+  padding: 5px;
+  border: 1px solid var(--ox-border-accent);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(8, 15, 28, 0.92));
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.26),
+    0 0 0 1px rgba(56, 189, 248, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  min-height: auto;
+  margin-top: 16px;
+  gap: 5px;
+}
+
+.ox-search-command:focus-within {
+  border-color: rgba(125, 211, 252, 0.50);
+  box-shadow:
+    0 22px 52px rgba(0, 0, 0, 0.34),
+    0 0 0 3px rgba(56, 189, 248, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+/* Input-wrap: transparente dentro del pill */
+.ox-search-input-wrap {
+  padding: 0 4px 0 10px;
+  border: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  transition: none;
+  display: flex;
+  align-items: center;
+}
+
+.ox-search-input-wrap:focus-within {
+  border: none;
+  box-shadow: none;
+}
+
+/* Label oculto — el placeholder cumple la función */
+.ox-search-command .ox-search-input-wrap label {
+  display: none;
+}
+
+/* Input llena el pill (sin label arriba) */
+.ox-search-command .ox-search-input-wrap input {
+  background: transparent;
+  min-height: 44px;
+  width: 100%;
+}
+
+/* Botón Buscar: estirado a la altura del pill */
+.ox-search-primary-btn {
+  align-self: stretch;
+  min-width: 110px;
+}
+
+/* Status: texto limpio debajo del buscador, sin caja */
+.ox-search-status {
+  display: flex !important;
+  padding: 2px 4px;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  border-radius: 0;
+  justify-content: space-between;
+  gap: 12px;
+  color: rgba(148, 163, 184, 0.72);
+  font-size: 0.62rem;
+}
+
+/* Light mode */
+:root[data-theme="light"] .ox-search-command {
+  border-color: rgba(2, 132, 199, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(229, 245, 253, 0.90));
+  box-shadow:
+    0 18px 42px rgba(33, 48, 71, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+:root[data-theme="light"] .ox-search-command:focus-within {
+  border-color: rgba(2, 132, 199, 0.50);
+  box-shadow:
+    0 22px 48px rgba(33, 48, 71, 0.18),
+    0 0 0 3px rgba(14, 116, 144, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
+}
+
+:root[data-theme="light"] .ox-search-input-wrap {
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+
+/* Search hero fine alignment */
+.ox-search-hero .ox-search-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 15px;
+  line-height: 1;
+}
+
+.ox-search-status {
+  align-items: center;
+  min-height: 24px;
+  margin-top: 0;
+  padding: 0 8px;
+  line-height: 1.2;
+}
+
+.ox-search-status > span,
+.ox-search-status strong {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+}
+

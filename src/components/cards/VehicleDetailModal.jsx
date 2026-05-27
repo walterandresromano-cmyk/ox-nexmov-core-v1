@@ -41,6 +41,37 @@ function getPositiveNumber(value) {
   return Number.isFinite(number) && number > 0 ? number : null;
 }
 
+function parseFinancingNumber(value) {
+  const cleaned = String(value ?? "")
+    .trim()
+    .replace(/\$/g, "")
+    .replace(/\s/g, "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+}
+
+function calculateUsedVehicleFinancing({ price, downPayment, termMonths, monthlyIncome }) {
+  const vehiclePrice = parseFinancingNumber(price);
+  const down = parseFinancingNumber(downPayment);
+  const term = Number(termMonths) || 36;
+  const income = parseFinancingNumber(monthlyIncome);
+
+  if (!vehiclePrice || down >= vehiclePrice) return null;
+
+  const financed = vehiclePrice - down;
+  const monthlyRate = 0.035;
+  const monthlyPayment =
+    financed *
+    ((monthlyRate * Math.pow(1 + monthlyRate, term)) /
+      (Math.pow(1 + monthlyRate, term) - 1));
+  const totalPaid = monthlyPayment * term;
+  const incomePercent = income > 0 ? Math.round((monthlyPayment / income) * 100) : null;
+
+  return { financed, monthlyPayment, totalPaid, incomePercent };
+}
+
 function formatMaintenanceDate(value) {
   if (!value) return "";
 
@@ -122,6 +153,9 @@ export default function VehicleDetailModal({
   const [currentVehicle, setCurrentVehicle] = useState(vehicle);
   const [showContactGate, setShowContactGate] = useState(false);
   const [shareState, setShareState] = useState("idle");
+  const [financingDownPayment, setFinancingDownPayment] = useState("");
+  const [financingTermMonths, setFinancingTermMonths] = useState("36");
+  const [financingIncome, setFinancingIncome] = useState("");
 
   const currentDealer = useMemo(() => {
     if (vehicles && getDealer) return getDealer(currentVehicle) || dealer;
@@ -154,6 +188,23 @@ export default function VehicleDetailModal({
   const maintenanceInfo = useMemo(
     () => getVehicleMaintenanceInfo(currentVehicle),
     [currentVehicle]
+  );
+  const usedFinancingResult = useMemo(
+    () =>
+      calculateUsedVehicleFinancing({
+        price: currentVehicle.price,
+        downPayment: financingDownPayment || currentVehicle.delivery || "",
+        termMonths: financingTermMonths || currentVehicle.months || "36",
+        monthlyIncome: financingIncome,
+      }),
+    [
+      currentVehicle.price,
+      currentVehicle.delivery,
+      currentVehicle.months,
+      financingDownPayment,
+      financingTermMonths,
+      financingIncome,
+    ]
   );
 
   function goTo(index) {
@@ -196,6 +247,9 @@ export default function VehicleDetailModal({
   useEffect(() => {
     setSelectedImageIndex(0);
     resetImageZoom();
+    setFinancingDownPayment(currentVehicle?.delivery ? String(currentVehicle.delivery) : "");
+    setFinancingTermMonths(currentVehicle?.months ? String(currentVehicle.months) : "36");
+    setFinancingIncome("");
   }, [currentVehicle?.id, currentVehicle?.vehicle_id, images[0]?.url]);
 
   useEffect(() => {
@@ -543,6 +597,87 @@ export default function VehicleDetailModal({
                 </p>
               </div>
             )}
+
+            <div className="vehicle-detail-used-financing">
+              <div className="vehicle-detail-used-financing-head">
+                <div>
+                  <span>Simulación orientativa</span>
+                  <strong>Cuota estimada para este usado</strong>
+                </div>
+                <p>{formatARS(currentVehicle.price)}</p>
+              </div>
+
+              <div className="vehicle-detail-used-financing-inputs">
+                <label>
+                  Entrega
+                  <input
+                    type="number"
+                    min="0"
+                    value={financingDownPayment}
+                    onChange={(event) => setFinancingDownPayment(event.target.value)}
+                    placeholder="Ej: 5000000"
+                  />
+                </label>
+
+                <label>
+                  Plazo
+                  <select
+                    value={financingTermMonths}
+                    onChange={(event) => setFinancingTermMonths(event.target.value)}
+                  >
+                    <option value="12">12 meses</option>
+                    <option value="24">24 meses</option>
+                    <option value="36">36 meses</option>
+                    <option value="48">48 meses</option>
+                    <option value="60">60 meses</option>
+                    <option value="72">72 meses</option>
+                  </select>
+                </label>
+
+                <label>
+                  Ingreso mensual
+                  <input
+                    type="number"
+                    min="0"
+                    value={financingIncome}
+                    onChange={(event) => setFinancingIncome(event.target.value)}
+                    placeholder="Opcional"
+                  />
+                </label>
+              </div>
+
+              <div className="vehicle-detail-used-financing-results" aria-live="polite">
+                <div>
+                  <span>Cuota estimada</span>
+                  <strong>
+                    {usedFinancingResult
+                      ? formatARS(usedFinancingResult.monthlyPayment)
+                      : "$ —"}
+                  </strong>
+                </div>
+                <div>
+                  <span>Monto financiado</span>
+                  <strong>
+                    {usedFinancingResult
+                      ? formatARS(usedFinancingResult.financed)
+                      : "$ —"}
+                  </strong>
+                </div>
+                <div>
+                  <span>% ingreso</span>
+                  <strong>
+                    {usedFinancingResult?.incomePercent != null
+                      ? `${usedFinancingResult.incomePercent}%`
+                      : "—"}
+                  </strong>
+                </div>
+              </div>
+
+              <p>
+                Referencia no vinculante. La aprobación, tasa, gastos y condiciones
+                finales dependen del proveedor, dealer y análisis crediticio.
+              </p>
+            </div>
 
             <div className="detail-actions">
               <button

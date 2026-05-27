@@ -537,6 +537,13 @@ function buildVehicleAutocompleteSuggestions(vehicles, query, limit = 8) {
     .slice(0, limit);
 }
 
+function formatPrice(price) {
+  const n = Number(price || 0);
+  if (!n) return "Consultar";
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+  return `$${n.toLocaleString("es-AR")}`;
+}
+
 function getVehicleStatus(vehicle) {
   return normalizeText(
     getVehicleField(
@@ -1055,6 +1062,12 @@ export default function Search({
       }));
   }, [filters]);
 
+  const oportunidadVehicles = useMemo(() => {
+    return publicSearchVehicles
+      .filter((v) => v.mainImageUrl || v.imageUrl)
+      .slice(0, 3);
+  }, [publicSearchVehicles]);
+
   const radarTrigger = useMemo(() => {
     if (!loadingVehicles && sortedVehicles.length === 0 && (searchText.trim().length >= 2 || activeFilterChips.length >= 1)) {
       return "no_results";
@@ -1122,10 +1135,11 @@ export default function Search({
     <section className="ox-search-page">
       <div className="ox-search-shell">
         <section className="ox-search-hero">
+          <div className="ox-search-hero-main">
           <div className="ox-search-title-block">
             <p className="ox-search-eyebrow">Búsqueda inteligente</p>
             <h1>
-              Buscá con más claridad<span>.</span>
+              Buscá con más <span>claridad</span><span>.</span>
             </h1>
             <p>
               Filtrá vehículos por precio, ubicación, financiación, kilometraje
@@ -1218,6 +1232,33 @@ export default function Search({
           </div>
 
           {vehiclesError && <div className="auth-warning">{vehiclesError}</div>}
+          </div>
+
+          {oportunidadVehicles.length > 0 && (
+            <div className="ox-search-hero-opor">
+              <p className="ox-search-opor-label">Oportunidades</p>
+              {oportunidadVehicles.map((v) => (
+                <button
+                  key={v.id}
+                  type="button"
+                  className="ox-search-opor-card"
+                  onClick={() => {
+                    setSearchText(`${v.brand} ${v.model}`);
+                    commitSearch(`${v.brand} ${v.model}`);
+                  }}
+                >
+                  {(v.mainImageUrl || v.imageUrl) && (
+                    <img src={v.mainImageUrl || v.imageUrl} alt="" loading="lazy" decoding="async" />
+                  )}
+                  <div className="ox-search-opor-card-info">
+                    <strong>{v.brand} {v.model}</strong>
+                    <span>{v.year}</span>
+                    <em>{formatPrice(v.price)}</em>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </section>
 
         <section className="ox-search-workspace">
@@ -1701,7 +1742,7 @@ export default function Search({
 
             <div className="ox-search-side-card ox-search-signal-card">
               <span>Lectura</span>
-              <h2>Cómo leer las señales</h2>
+              <h2>Señales clave</h2>
               <ul>
                 <li>Precio bajo referencia.</li>
                 <li>Financiación disponible.</li>
@@ -1714,8 +1755,8 @@ export default function Search({
               <span>Contacto</span>
               <h2>Consulta trazable</h2>
               <p>
-                Para contactar a un dealer, oX NEXMOV registra la consulta
-                comercial para mayor claridad del proceso.
+                El contacto queda ordenado para que comprador y dealer sigan la
+                oportunidad con más claridad.
               </p>
             </div>
 

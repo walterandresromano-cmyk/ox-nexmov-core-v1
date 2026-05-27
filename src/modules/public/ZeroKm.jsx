@@ -1,5 +1,5 @@
 import "../../styles/zeroKm.css";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { createZeroKmFinancingLead } from "../../services/zeroKm.service.js";
 
 const initialForm = {
@@ -17,114 +17,6 @@ const initialForm = {
   monthlyIncomeRange: "",
   message: "",
 };
-
-function formatARS(n) {
-  if (!n || isNaN(n)) return "—";
-  return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(n);
-}
-
-function ZeroKmCalculator() {
-  const [vehiclePrice, setVehiclePrice] = useState("");
-  const [downPayment, setDownPayment] = useState("");
-  const [termMonths, setTermMonths] = useState("36");
-  const [monthlyIncome, setMonthlyIncome] = useState("");
-
-  const result = useMemo(() => {
-    const price = Number(String(vehiclePrice).replace(/\D/g, "")) || 0;
-    const down = Number(String(downPayment).replace(/\D/g, "")) || 0;
-    const term = Number(termMonths) || 36;
-    const income = Number(String(monthlyIncome).replace(/\D/g, "")) || 0;
-
-    if (!price || price <= down) return null;
-
-    const financed = price - down;
-    const monthlyRate = 0.035;
-    const cuota = financed * (monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
-    const totalPaid = cuota * term;
-    const incomePercent = income > 0 ? Math.round((cuota / income) * 100) : null;
-
-    return { cuota, totalPaid, financed, incomePercent };
-  }, [vehiclePrice, downPayment, termMonths, monthlyIncome]);
-
-  return (
-    <article className="zero-km-simulator-preview zero-km-calculator">
-      <div>
-        <span>Simulador</span>
-        <h2>Estimación de cuota mensual</h2>
-        <p>
-          Referencia orientativa. Las condiciones reales dependen del proveedor y plan vigente.
-        </p>
-
-        <div className="zero-km-calc-inputs">
-          <label>
-            Precio del vehículo
-            <input
-              type="number"
-              placeholder="Ej: 15000000"
-              value={vehiclePrice}
-              onChange={(e) => setVehiclePrice(e.target.value)}
-            />
-          </label>
-
-          <label>
-            Entrega / anticipo
-            <input
-              type="number"
-              placeholder="Ej: 5000000"
-              value={downPayment}
-              onChange={(e) => setDownPayment(e.target.value)}
-            />
-          </label>
-
-          <label>
-            Plazo
-            <select value={termMonths} onChange={(e) => setTermMonths(e.target.value)}>
-              <option value="12">12 meses</option>
-              <option value="24">24 meses</option>
-              <option value="36">36 meses</option>
-              <option value="48">48 meses</option>
-              <option value="60">60 meses</option>
-              <option value="72">72 meses</option>
-            </select>
-          </label>
-
-          <label>
-            Ingreso mensual (opcional)
-            <input
-              type="number"
-              placeholder="Para calcular % del ingreso"
-              value={monthlyIncome}
-              onChange={(e) => setMonthlyIncome(e.target.value)}
-            />
-          </label>
-        </div>
-      </div>
-
-      <div className="zero-km-preview-grid" aria-live="polite">
-        <div>
-          <span>Cuota estimada</span>
-          <strong>{result ? formatARS(result.cuota) : "$ —"}</strong>
-        </div>
-        <div>
-          <span>Monto financiado</span>
-          <strong>{result ? formatARS(result.financed) : "$ —"}</strong>
-        </div>
-        <div>
-          <span>Total a pagar</span>
-          <strong>{result ? formatARS(result.totalPaid) : "$ —"}</strong>
-        </div>
-        <div>
-          <span>% del ingreso</span>
-          <strong>
-            {result?.incomePercent != null
-              ? `${result.incomePercent}%`
-              : "—"}
-          </strong>
-        </div>
-      </div>
-    </article>
-  );
-}
 
 export default function ZeroKm({ authUser, authProfile }) {
   const [form, setForm] = useState(() => ({
@@ -196,85 +88,83 @@ export default function ZeroKm({ authUser, authProfile }) {
 
   return (
     <section className="zero-km-page ox-public-page">
-      <div className="zero-km-panel ox-public-hero">
+      <section className="zero-km-panel ox-public-hero">
         <p className="ox-public-eyebrow">Financiación 0km</p>
         <h1 className="ox-public-title">
-          Explorá opciones de financiación con más claridad
+          Explorá opciones 0km con <span>condiciones claras</span>
         </h1>
         <p className="ox-public-lead">
-          Consultá alternativas disponibles y dejá tus datos para recibir
-          asesoramiento sobre planes, cuotas y condiciones de financiación.
+          Consultá disponibilidad, entrega, plazos y condiciones comerciales
+          declaradas para unidades 0km, sin cargar datos sensibles.
         </p>
 
         <div className="zero-km-hero-actions">
           <a className="primary-action" href="#zero-km-form">
-            Consultar financiación
+            Consultar opciones 0km
           </a>
           <a className="secondary-action" href="#zero-km-how">
-            Cómo funciona
+            Ver criterios
           </a>
         </div>
+      </section>
 
-        <section
-          className="zero-km-capabilities"
-          aria-label="Qué vas a poder consultar"
-        >
-          <article>
-            <span>Próximamente</span>
-            <strong>Vehículos financiables</strong>
-            <p>Explorar unidades con planes o financiación disponible.</p>
-          </article>
-          <article>
-            <span>Comparación</span>
-            <strong>Cuotas y condiciones</strong>
-            <p>Leer entrega, cuotas, plazos y condiciones declaradas.</p>
-          </article>
-          <article>
-            <span>Análisis</span>
-            <strong>Ingreso mensual</strong>
-            <p>Estimar si una cuota se ajusta a tus ingresos.</p>
-          </article>
-          <article>
-            <span>Contexto</span>
-            <strong>Variación de cuota</strong>
-            <p>Considerar que los planes pueden cambiar con el tiempo.</p>
-          </article>
-          <article>
-            <span>Detalle</span>
-            <strong>Cuota pura y gastos</strong>
-            <p>Diferenciar conceptos antes de avanzar con una consulta.</p>
-          </article>
-        </section>
+      <section
+        className="zero-km-capabilities"
+        aria-label="Criterios de consulta 0km"
+      >
+        <article>
+          <span>Próximamente</span>
+          <strong>Vehículos financiables</strong>
+          <p>Explorar unidades 0km con condiciones comerciales disponibles.</p>
+        </article>
+        <article>
+          <span>Comparación</span>
+          <strong>Entrega y plazos</strong>
+          <p>Leer entrega inicial, plazos y condiciones declaradas.</p>
+        </article>
+        <article>
+          <span>Disponibilidad</span>
+          <strong>Modelos y versiones</strong>
+          <p>Consultar alternativas según marca, modelo y zona.</p>
+        </article>
+        <article>
+          <span>Contexto</span>
+          <strong>Condiciones variables</strong>
+          <p>Considerar que disponibilidad, valores y plazos pueden cambiar.</p>
+        </article>
+        <article>
+          <span>Detalle</span>
+          <strong>Costos informados</strong>
+          <p>Diferenciar conceptos comerciales antes de avanzar.</p>
+        </article>
+      </section>
 
-        <ZeroKmCalculator />
-
-        <div className="zero-km-grid ox-public-content">
+      <div className="zero-km-grid ox-public-content">
           <div className="zero-km-side-stack">
             <article className="zero-km-info-card" id="zero-km-how">
-              <span>Cómo funciona hoy</span>
-              <h2>Consulta guiada, sin cargar datos sensibles</h2>
+              <span>Consulta guiada</span>
+              <h2>Datos justos para una primera lectura.</h2>
               <p>
-                No pedimos DNI desde el inicio. La primera etapa registra datos
-                de contacto, ubicación, interés de vehículo y condiciones
-                aproximadas.
+                Una solicitud inicial clara, sin convertir la página en un
+                formulario financiero pesado.
               </p>
 
               <div className="zero-km-steps">
                 <div>
                   <strong>1</strong>
-                  <span>Completás una consulta.</span>
+                  <span>Dejás una consulta 0km.</span>
                 </div>
                 <div>
                   <strong>2</strong>
-                  <span>oX NEXMOV registra la solicitud.</span>
+                  <span>La oportunidad queda ordenada.</span>
                 </div>
                 <div>
                   <strong>3</strong>
-                  <span>Un asesor o usuario habilitado analiza la consulta.</span>
+                  <span>Se revisan disponibilidad y condiciones vigentes.</span>
                 </div>
                 <div>
                   <strong>4</strong>
-                  <span>Recibís contacto comercial según disponibilidad.</span>
+                  <span>Avanzás solo si la propuesta tiene sentido.</span>
                 </div>
               </div>
             </article>
@@ -282,10 +172,10 @@ export default function ZeroKm({ authUser, authProfile }) {
             <article className="zero-km-responsible-note">
               <span>Lectura responsable</span>
               <p>
-                Las cuotas, condiciones y disponibilidad pueden variar según
-                proveedor, modelo, plan y situación crediticia. oX NEXMOV
-                organiza la consulta, pero no garantiza aprobación ni
-                condiciones finales.
+                La disponibilidad, valores, entrega, plazos y condiciones
+                pueden variar según proveedor, modelo, plan y fecha de consulta.
+                oX NEXMOV organiza la solicitud, pero no garantiza condiciones
+                finales ni disponibilidad.
               </p>
             </article>
           </div>
@@ -293,16 +183,16 @@ export default function ZeroKm({ authUser, authProfile }) {
           <form className="zero-km-form" id="zero-km-form" onSubmit={handleSubmit}>
             <div className="zero-km-form-head">
               <span>Consulta guiada</span>
-              <h2>Datos para orientar la financiación</h2>
+              <h2>Tu consulta 0km</h2>
               <p>
-                Completá la información principal. La consulta no implica
-                aprobación crediticia ni contratación de un plan.
+                Dejanos una base simple para ubicar modelo, zona y preferencia
+                comercial.
               </p>
             </div>
 
             <div className="zero-km-form-group">
               <div className="zero-km-form-group-head">
-                <span>Datos personales</span>
+                <span>Datos de contacto</span>
               </div>
 
               <div className="form-grid-two">
@@ -359,7 +249,7 @@ export default function ZeroKm({ authUser, authProfile }) {
 
             <div className="zero-km-form-group">
               <div className="zero-km-form-group-head">
-                <span>Vehículo e inversión</span>
+                <span>Vehículo y condiciones</span>
               </div>
 
               <div className="form-grid-two">
@@ -434,51 +324,6 @@ export default function ZeroKm({ authUser, authProfile }) {
               </div>
             </div>
 
-            <div className="zero-km-form-group">
-              <div className="zero-km-form-group-head">
-                <span>Ingreso / situación</span>
-              </div>
-
-              <div className="form-grid-two">
-              <label>
-                Situación laboral
-                <select
-                  value={form.employmentType}
-                  onChange={(event) =>
-                    updateField("employmentType", event.target.value)
-                  }
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="relacion_dependencia">
-                    Relación de dependencia
-                  </option>
-                  <option value="monotributo">Monotributo</option>
-                  <option value="autonomo">Autónomo</option>
-                  <option value="empresa">Empresa</option>
-                  <option value="jubilado">Jubilado</option>
-                  <option value="otro">Otro</option>
-                </select>
-              </label>
-
-              <label>
-                Rango de ingresos
-                <select
-                  value={form.monthlyIncomeRange}
-                  onChange={(event) =>
-                    updateField("monthlyIncomeRange", event.target.value)
-                  }
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="hasta_500k">Hasta $500.000</option>
-                  <option value="500k_1m">$500.000 a $1.000.000</option>
-                  <option value="1m_2m">$1.000.000 a $2.000.000</option>
-                  <option value="2m_4m">$2.000.000 a $4.000.000</option>
-                  <option value="mas_4m">Más de $4.000.000</option>
-                </select>
-              </label>
-            </div>
-            </div>
-
             <div className="zero-km-form-group zero-km-form-group-message">
               <div className="zero-km-form-group-head">
                 <span>Mensaje</span>
@@ -490,14 +335,14 @@ export default function ZeroKm({ authUser, authProfile }) {
                 value={form.message}
                 onChange={(event) => updateField("message", event.target.value)}
                 rows={4}
-                placeholder="Contanos qué estás buscando o qué condición querés consultar."
+                placeholder="Contanos qué modelo, entrega o condición comercial querés consultar."
               />
               </label>
             </div>
 
             <p className="finance-legal-note">
               Dejanos tus datos para consultar opciones disponibles. La
-              información final dependerá del proveedor, plan y condiciones
+              información final dependerá del proveedor, disponibilidad y condiciones
               vigentes.
             </p>
 
@@ -535,18 +380,17 @@ export default function ZeroKm({ authUser, authProfile }) {
                 type="submit"
                 disabled={submitting}
               >
-                {submitting ? "Enviando consulta..." : "Consultar financiación"}
+                {submitting ? "Enviando consulta..." : "Consultar opciones 0km"}
               </button>
             )}
 
             <p className="form-legal-note">
               Al enviar esta consulta, aceptás que oX NEXMOV registre tus datos
-              para gestionar el contacto comercial vinculado a financiación 0km.
-              El envío de una consulta no implica aprobación crediticia ni
-              contratación de un plan.
+              para gestionar el contacto comercial vinculado a unidades 0km.
+              El envío de una consulta no implica reserva, contratación ni
+              disponibilidad confirmada.
             </p>
           </form>
-        </div>
       </div>
     </section>
   );

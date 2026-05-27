@@ -663,69 +663,6 @@ export default function Home({ onNavigate, appActions = {} }) {
             </div>
           </div>
 
-          <div className="ox-home-featured-deck">
-            {featuredVehicles
-              .map((vehicle, i) => ({
-                vehicle,
-                i,
-                pos: (i - featuredIndex + featuredVehicles.length) % featuredVehicles.length,
-              }))
-              .sort((a, b) => b.pos - a.pos)
-              .map(({ vehicle, i, pos }) => {
-              const signal = getVehicleSignal(vehicle, i);
-              const dealer = buildDealerForVehicle(vehicle);
-              const imgSrc = vehicle.mainImageUrl || vehicle.imageUrl || null;
-
-              return (
-                <aside
-                  key={vehicle.id}
-                  className={`ox-home-featured-card-v3 ox-home-featured-card--${dealer.plan || "inicio"} ox-home-featured-deck-pos-${pos}`}
-                  onClick={pos !== 0 ? () => setFeaturedIndex(i) : undefined}
-                >
-                  {imgSrc && (
-                    <img
-                      className="ox-home-featured-card-top-img"
-                      src={imgSrc}
-                      alt=""
-                      aria-hidden="true"
-                      loading={pos === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                    />
-                  )}
-
-                  <div className="ox-home-featured-card-content">
-                    <span className="ox-home-featured-badge-v3">{signal.label}</span>
-
-                    <h2>{vehicle.brand} {vehicle.model}</h2>
-
-                    <p>
-                      {vehicle.version || "Sin versión"} · {vehicle.year || "Sin año"} · {formatKm(vehicle.kilometers || vehicle.km)}
-                    </p>
-
-                    <strong>{formatARS(vehicle.price)}</strong>
-
-                    <small>
-                      {dealer.commercialName} · {getPlanLabel(dealer.plan)}
-                    </small>
-
-                    <em>{signal.text}</em>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        registerVehicleDetailView(vehicle.id);
-                        setSelectedFeaturedVehicle(vehicle);
-                        setSelectedFeaturedDealer(dealer);
-                        setShowFeaturedDetail(true);
-                      }}
-                    >
-                      Ver detalle
-                    </button>
-                  </div>
-                </aside>
-              );
-            })}
-          </div>
         </section>
 
         {latestVehiclesError && (
