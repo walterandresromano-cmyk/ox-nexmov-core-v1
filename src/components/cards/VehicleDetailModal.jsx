@@ -280,7 +280,7 @@ export default function VehicleDetailModal({
 
   const modal = (
     <div className="modal-backdrop vehicle-detail-backdrop">
-      <section className="vehicle-detail-modal">
+      <section className={`vehicle-detail-modal vehicle-detail-modal--${permissions.rankTheme}`}>
         <button
           type="button"
           className="modal-close-btn vehicle-detail-close"

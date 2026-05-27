@@ -462,3 +462,484 @@
   color: var(--ox-text);
   color-scheme: light;
 }
+
+/* oX NEXMOV - Garage oX public entry */
+.garage-public-panel {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 22px;
+  min-height: auto;
+}
+
+.garage-public-panel::after {
+  content: "";
+  position: absolute;
+  right: 42px;
+  top: 42px;
+  width: min(34vw, 430px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.14), transparent 62%);
+  filter: blur(6px);
+}
+
+/* Hero two-column */
+.garage-public-hero {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr min(42%, 480px);
+  align-items: center;
+  gap: 32px;
+  min-height: 270px;
+}
+
+.garage-public-hero-text > .eyebrow {
+  width: fit-content;
+  margin: 0;
+  padding: 5px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.34);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.09);
+  color: rgba(125, 211, 252, 0.98);
+  font-size: 0.58rem;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  box-shadow: 0 0 24px rgba(14, 165, 233, 0.12);
+}
+
+.garage-public-hero-text > h1 {
+  max-width: 820px;
+  margin: 14px 0 0;
+  color: rgba(248, 250, 252, 0.99);
+  font-size: clamp(1.9rem, 2.06vw, 2.6rem);
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+  font-weight: 950;
+}
+
+.garage-public-hero-text > p {
+  max-width: 520px;
+  margin: 10px 0 0;
+  color: rgba(203, 213, 225, 0.84);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+/* Decorative hero visual */
+.garage-public-hero-deco {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.garage-deco-card {
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98));
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.garage-deco-card-thumb {
+  width: 68px;
+  height: 68px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(125, 211, 252, 0.1);
+}
+
+.garage-deco-card-thumb-inner {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 40% 65%, rgba(56, 189, 248, 0.3), transparent 55%),
+    linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+}
+
+.garage-deco-card-body {
+  display: grid;
+  gap: 0;
+}
+
+.garage-deco-card-title {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 0.8rem;
+  font-weight: 850;
+  letter-spacing: -0.03em;
+}
+
+.garage-deco-card-sub {
+  margin: 2px 0 8px;
+  color: rgba(148, 163, 184, 0.68);
+  font-size: 0.58rem;
+}
+
+.garage-deco-card-tag {
+  display: inline-flex;
+  width: fit-content;
+  padding: 3px 9px;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.1);
+  color: rgba(125, 211, 252, 0.9);
+  font-size: 0.5rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.garage-deco-log {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.garage-deco-log-entry {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(203, 213, 225, 0.68);
+  font-size: 0.59rem;
+}
+
+.garage-deco-dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.9);
+  box-shadow: 0 0 7px rgba(34, 197, 94, 0.45);
+}
+
+.garage-deco-dot--amber {
+  background: rgba(245, 158, 11, 0.9);
+  box-shadow: 0 0 7px rgba(245, 158, 11, 0.45);
+}
+
+.garage-deco-dot--dim {
+  background: rgba(148, 163, 184, 0.45);
+  box-shadow: none;
+}
+
+/* CTA actions */
+.garage-public-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* Feature cards grid — 3 col, brick layout */
+.garage-public-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 0;
+  align-items: stretch;
+}
+
+.garage-public-card {
+  position: relative;
+  top: auto;
+  display: grid;
+  align-content: start;
+  min-height: 168px;
+  overflow: hidden;
+  padding: 20px;
+  border-radius: 24px;
+  isolation: isolate;
+}
+
+.garage-public-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 40%),
+    radial-gradient(circle at 96% 0%, rgba(56, 189, 248, 0.08), transparent 34%);
+}
+
+.garage-public-card > span,
+.garage-public-card h2,
+.garage-public-card p {
+  position: relative;
+  z-index: 1;
+}
+
+.garage-public-card > span {
+  min-height: 24px;
+  align-self: start;
+}
+
+.garage-public-card h2 {
+  max-width: 96%;
+  margin-top: 14px;
+  font-size: clamp(0.94rem, 0.82vw, 1.06rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.garage-public-card p {
+  max-width: 94%;
+  margin-top: 10px;
+  font-size: 0.68rem;
+  line-height: 1.48;
+  color: rgba(203, 213, 225, 0.78);
+}
+
+.garage-public-card::after {
+  display: none;
+}
+
+.garage-public-card--featured {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.18), transparent 36%),
+    radial-gradient(circle at 88% 0%, rgba(245, 184, 75, 0.09), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.90));
+}
+
+.garage-public-card--wide {
+  grid-column: auto;
+}
+
+.garage-public-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  background: rgba(14, 165, 233, 0.1);
+  color: rgba(125, 211, 252, 0.9);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+/* Disclaimer bar */
+.garage-public-note {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(125, 211, 252, 0.14);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.62), rgba(2, 6, 23, 0.72));
+  color: rgba(203, 213, 225, 0.78);
+  font-size: 0.68rem;
+  line-height: 1.42;
+  clear: both;
+}
+
+.garage-public-note strong {
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 0.72rem;
+}
+
+/* Light mode */
+:root[data-theme="light"] .garage-deco-card {
+  border-color: rgba(14, 116, 144, 0.22);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(232, 246, 252, 0.92));
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.09);
+}
+
+:root[data-theme="light"] .garage-deco-card-title {
+  color: rgba(7, 19, 36, 0.96);
+}
+
+:root[data-theme="light"] .garage-deco-card-sub {
+  color: rgba(71, 85, 105, 0.72);
+}
+
+:root[data-theme="light"] .garage-deco-card-thumb-inner {
+  background:
+    radial-gradient(ellipse at 40% 65%, rgba(14, 165, 233, 0.2), transparent 55%),
+    linear-gradient(145deg, rgba(226, 242, 252, 0.9), rgba(241, 248, 254, 0.95));
+}
+
+:root[data-theme="light"] .garage-deco-log {
+  border-color: rgba(14, 116, 144, 0.12);
+  background: rgba(241, 248, 254, 0.7);
+}
+
+:root[data-theme="light"] .garage-deco-log-entry {
+  color: rgba(51, 65, 85, 0.72);
+}
+
+:root[data-theme="light"] .garage-public-card--featured {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.14), transparent 36%),
+    radial-gradient(circle at 88% 0%, rgba(245, 184, 75, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(232, 246, 252, 0.76));
+}
+
+:root[data-theme="light"] .garage-public-card p {
+  color: rgba(51, 65, 85, 0.78);
+}
+
+:root[data-theme="light"] .garage-public-note {
+  border-color: rgba(14, 116, 144, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(232, 246, 252, 0.74));
+  color: rgba(51, 65, 85, 0.82);
+}
+
+:root[data-theme="light"] .garage-public-note strong {
+  color: rgba(7, 19, 36, 0.96);
+}
+
+:root[data-theme="light"] .garage-public-card-icon {
+  border-color: rgba(14, 116, 144, 0.22);
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(3, 105, 161, 0.9);
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .garage-public-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .garage-public-hero-deco {
+    display: none;
+  }
+
+  .garage-public-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .garage-public-card--featured,
+  .garage-public-card--wide {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .garage-public-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .garage-public-card--featured,
+  .garage-public-card--wide {
+    grid-column: auto;
+  }
+
+  .garage-public-note {
+    display: grid;
+  }
+
+  .garage-public-card {
+    min-height: 0;
+  }
+}
+
+/* Garage oX final layout lock: isolates this page from legacy Sell Vehicle rules. */
+.sell-vehicle-page .garage-public-panel {
+  display: grid !important;
+  grid-template-rows: auto auto auto !important;
+  gap: 18px !important;
+  align-items: stretch !important;
+  min-height: 0 !important;
+  padding-bottom: 28px !important;
+}
+
+.sell-vehicle-page .garage-public-hero {
+  min-height: 220px !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+.sell-vehicle-page .garage-public-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  margin: 0 !important;
+  align-items: stretch !important;
+}
+
+.sell-vehicle-page .garage-public-card {
+  position: relative !important;
+  top: auto !important;
+  transform: none !important;
+  align-self: stretch !important;
+  min-height: 158px !important;
+  padding: 18px !important;
+}
+
+.sell-vehicle-page .garage-public-card h2 {
+  margin-top: 12px !important;
+  color: rgba(248, 250, 252, 0.98) !important;
+  font-size: clamp(0.96rem, 0.82vw, 1.06rem) !important;
+  line-height: 1.1 !important;
+}
+
+.sell-vehicle-page .garage-public-card p {
+  margin-top: 9px !important;
+  color: rgba(203, 213, 225, 0.78) !important;
+  font-size: 0.68rem !important;
+  line-height: 1.5 !important;
+}
+
+.sell-vehicle-page .garage-public-note {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  align-self: stretch !important;
+}
+
+:root[data-theme="light"] .sell-vehicle-page .garage-public-card h2 {
+  color: #0d1726 !important;
+}
+
+:root[data-theme="light"] .sell-vehicle-page .garage-public-card p {
+  color: rgba(51, 65, 85, 0.78) !important;
+}
+
+@media (max-width: 980px) {
+  .sell-vehicle-page .garage-public-hero {
+    min-height: 0 !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .sell-vehicle-page .garage-public-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sell-vehicle-page .garage-public-card {
+    min-height: 0 !important;
+  }
+}

@@ -60,6 +60,55 @@ function getMarketBadge(delta) {
   };
 }
 
+function getVehicleStats(vehicle, locationLabel) {
+  const stats = [
+    {
+      key: "km",
+      value: formatKm(vehicle.kilometers),
+      icon: <SpeedometerIcon size={14} />,
+      featured: true,
+    },
+    {
+      key: "location",
+      value: locationLabel,
+      prefix: "ARG",
+      featured: true,
+    },
+  ];
+
+  const fuel = vehicle.fuelType || vehicle.fuel_type || vehicle.raw?.fuel_type;
+  const transmission = vehicle.transmission || vehicle.raw?.transmission;
+  const financing =
+    vehicle.hasFinancing || vehicle.financing || vehicle.raw?.financing;
+
+  if (financing) {
+    stats.push({
+      key: "financing",
+      value: "Financiación",
+      label: "Señal",
+      featured: true,
+    });
+  }
+
+  if (fuel) {
+    stats.push({
+      key: "fuel",
+      value: fuel,
+      label: "Combustible",
+    });
+  }
+
+  if (transmission) {
+    stats.push({
+      key: "transmission",
+      value: transmission,
+      label: "Caja",
+    });
+  }
+
+  return stats.slice(0, 4);
+}
+
 export default function VehicleCardPublic({
   vehicle,
   dealer,
@@ -82,6 +131,7 @@ export default function VehicleCardPublic({
   const imageUrl = getVehicleImageUrl(vehicle);
   const vehicleTitle = getVehicleTitle(vehicle);
   const locationLabel = getLocationLabel(vehicle);
+  const vehicleStats = getVehicleStats(vehicle, locationLabel);
 
   function requireLoginForContact() {
     setShowContactGate(false);
@@ -136,18 +186,22 @@ export default function VehicleCardPublic({
             )}
           </div>
 
-          <div className="vehicle-card__facts">
-            <div className="vehicle-card__fact">
-              <span className="vehicle-card__fact-icon">
-                <SpeedometerIcon size={14} />
-              </span>
-              <strong>{formatKm(vehicle.kilometers)}</strong>
-            </div>
-
-            <div className="vehicle-card__fact vehicle-card__fact--location">
-              <span aria-hidden="true">ARG</span>
-              <strong>{locationLabel}</strong>
-            </div>
+          <div className="vehicle-card__stats" aria-label="Datos destacados">
+            {vehicleStats.map((stat) => (
+              <div
+                className={
+                  stat.featured
+                    ? `vehicle-card__stat vehicle-card__stat--${stat.key} is-featured`
+                    : `vehicle-card__stat vehicle-card__stat--${stat.key}`
+                }
+                key={stat.key}
+              >
+                <span className="vehicle-card__stat-label">
+                  {stat.icon || stat.prefix || stat.label}
+                </span>
+                <strong>{stat.value}</strong>
+              </div>
+            ))}
           </div>
 
           <div className="vehicle-card__price-box">

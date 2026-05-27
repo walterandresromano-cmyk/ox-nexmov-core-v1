@@ -6390,6 +6390,404 @@
   }
 }
 
+/* oX NEXMOV - premium header responsive alignment */
+@media (max-width: 1320px) and (min-width: 861px) {
+  .header-inner {
+    width: min(100% - 32px, 1760px);
+    grid-template-columns: 190px minmax(0, 1fr) auto;
+    gap: 12px;
+  }
+
+  .brand-button {
+    width: 190px;
+  }
+
+  .brand-logo-img {
+    max-width: 172px;
+    height: 30px;
+  }
+
+  .desktop-nav {
+    justify-self: stretch;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .desktop-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .desktop-nav .nav-btn {
+    flex: 0 0 auto;
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 1120px) and (min-width: 861px) {
+  .desktop-nav .nav-btn:nth-last-child(-n + 2) {
+    display: inline-flex;
+  }
+
+  .header-inner {
+    grid-template-columns: 174px minmax(0, 1fr) auto;
+  }
+
+  .brand-button {
+    width: 174px;
+  }
+
+  .brand-logo-img {
+    max-width: 156px;
+  }
+}
+
+@media (max-width: 1080px) and (min-width: 861px) {
+  .header-role-actions {
+    display: inline-flex;
+  }
+
+  .login-btn.private-panel-btn {
+    max-width: 132px;
+  }
+}
+
+@media (max-width: 980px) and (min-width: 861px) {
+  .header-role-actions .login-btn:not(.private-panel-btn):not(.logout-btn) {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .header-inner {
+    min-height: 58px;
+  }
+
+  .brand-logo-img {
+    height: 30px;
+  }
+}
+
+/* oX NEXMOV - ZeroKm simulator metric cards final color guard */
+.zero-km-page .zero-km-preview-grid {
+  gap: 10px !important;
+}
+
+.zero-km-page .zero-km-preview-grid div {
+  min-height: 68px !important;
+  padding: 13px 14px !important;
+  border: 1px solid rgba(125, 211, 252, 0.18) !important;
+  border-radius: 17px !important;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(34, 211, 238, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(13, 25, 44, 0.82), rgba(5, 10, 22, 0.76)) !important;
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.zero-km-page .zero-km-preview-grid span {
+  color: rgba(125, 211, 252, 0.82) !important;
+  font-size: 0.58rem !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+
+.zero-km-page .zero-km-preview-grid strong {
+  margin-top: 7px !important;
+  color: rgba(248, 250, 252, 0.98) !important;
+  font-size: 0.94rem !important;
+  line-height: 1 !important;
+  font-weight: 950 !important;
+}
+
+html[data-theme="light"] .zero-km-page .zero-km-preview-grid div,
+:root[data-theme="light"] .zero-km-page .zero-km-preview-grid div,
+:root.light .zero-km-page .zero-km-preview-grid div {
+  border-color: rgba(14, 116, 144, 0.14) !important;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(14, 165, 233, 0.11), transparent 34%),
+    radial-gradient(circle at 100% 0%, rgba(245, 184, 75, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(226, 244, 252, 0.84)) !important;
+  box-shadow:
+    0 12px 26px rgba(33, 48, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90) !important;
+}
+
+html[data-theme="light"] .zero-km-page .zero-km-preview-grid span,
+:root[data-theme="light"] .zero-km-page .zero-km-preview-grid span,
+:root.light .zero-km-page .zero-km-preview-grid span {
+  color: #075985 !important;
+}
+
+html[data-theme="light"] .zero-km-page .zero-km-preview-grid strong,
+:root[data-theme="light"] .zero-km-page .zero-km-preview-grid strong,
+:root.light .zero-km-page .zero-km-preview-grid strong {
+  color: #07172b !important;
+}
+
+@media (max-width: 760px) {
+  .zero-km-page .zero-km-preview-grid {
+    gap: 8px !important;
+  }
+
+  .zero-km-page .zero-km-preview-grid div {
+    min-height: 62px !important;
+    padding: 12px !important;
+  }
+}
+
+/* oX NEXMOV - Home featured deck collectible polish */
+.ox-home-featured-deck {
+  width: min(100%, 246px) !important;
+  padding-bottom: 38px !important;
+  perspective: 900px !important;
+}
+
+.ox-home-featured-card-v3 {
+  width: min(100%, 236px) !important;
+  padding: 9px !important;
+  border-radius: 26px !important;
+  border-color: rgba(125, 211, 252, 0.20) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(34, 211, 238, 0.13), transparent 34%),
+    radial-gradient(circle at 88% 0%, rgba(245, 184, 75, 0.07), transparent 28%),
+    linear-gradient(180deg, rgba(14, 25, 44, 0.96), rgba(5, 10, 22, 0.98)) !important;
+  box-shadow:
+    0 26px 58px rgba(0, 0, 0, 0.36),
+    0 0 0 1px rgba(125, 211, 252, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  transform-style: preserve-3d !important;
+}
+
+.ox-home-featured-card-v3::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  border-radius: inherit !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 32%),
+    radial-gradient(circle at 52% 18%, rgba(59, 130, 246, 0.12), transparent 34%) !important;
+  pointer-events: none !important;
+}
+
+.ox-home-featured-card-v3::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 22px !important;
+  right: 22px !important;
+  top: 0 !important;
+  height: 3px !important;
+  border-radius: 0 0 999px 999px !important;
+  background: linear-gradient(90deg, rgba(34, 211, 238, 0.20), rgba(59, 130, 246, 0.76), rgba(245, 184, 75, 0.22)) !important;
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.18) !important;
+  pointer-events: none !important;
+}
+
+.ox-home-featured-card--elite::after {
+  background: linear-gradient(90deg, rgba(245, 184, 75, 0.22), rgba(245, 184, 75, 0.86), rgba(34, 211, 238, 0.22)) !important;
+}
+
+.ox-home-featured-card--platinum {
+  border-color: rgba(226, 232, 240, 0.34) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(226, 232, 240, 0.12), transparent 34%),
+    radial-gradient(circle at 88% 0%, rgba(125, 211, 252, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(14, 24, 40, 0.98), rgba(4, 8, 18, 0.99)) !important;
+}
+
+.ox-home-featured-card--platinum::after {
+  background: linear-gradient(90deg, rgba(226, 232, 240, 0.34), rgba(248, 250, 252, 0.88), rgba(125, 211, 252, 0.38)) !important;
+}
+
+.ox-home-featured-card-top-img {
+  position: relative !important;
+  z-index: 1 !important;
+  height: 118px !important;
+  aspect-ratio: auto !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(125, 211, 252, 0.15) !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.10), transparent 34%),
+    rgba(2, 6, 23, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 12px 24px rgba(0, 0, 0, 0.22) !important;
+}
+
+.ox-home-featured-card-content {
+  position: relative !important;
+  z-index: 1 !important;
+  padding: 12px 9px 8px !important;
+}
+
+.ox-home-featured-badge-v3 {
+  min-height: 24px !important;
+  padding: 0 10px !important;
+  border-color: rgba(125, 211, 252, 0.28) !important;
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.18), rgba(14, 116, 144, 0.10)) !important;
+  color: rgba(186, 230, 253, 0.96) !important;
+  font-size: 0.56rem !important;
+  letter-spacing: 0.08em !important;
+}
+
+.ox-home-featured-card-v3 h2 {
+  margin: 10px 0 5px !important;
+  font-size: 1.02rem !important;
+  line-height: 1.06 !important;
+  letter-spacing: 0 !important;
+}
+
+.ox-home-featured-card-v3 p,
+.ox-home-featured-card-v3 small {
+  font-size: 0.72rem !important;
+  line-height: 1.25 !important;
+}
+
+.ox-home-featured-card-v3 strong {
+  margin-top: 10px !important;
+  font-size: 1.34rem !important;
+  letter-spacing: 0 !important;
+}
+
+.ox-home-featured-card-v3 em {
+  min-height: 26px !important;
+  align-items: center !important;
+  margin-top: 10px !important;
+  padding: 0 10px !important;
+  border: 1px solid rgba(34, 197, 94, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(34, 197, 94, 0.18), rgba(21, 128, 61, 0.10)) !important;
+  color: rgba(187, 247, 208, 0.96) !important;
+  font-size: 0.66rem !important;
+}
+
+.ox-home-featured-card-v3 button {
+  min-height: 34px !important;
+  border-radius: 14px !important;
+  border-color: rgba(125, 211, 252, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.48)) !important;
+  color: rgba(248, 250, 252, 0.96) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.ox-home-featured-card-v3 button:hover {
+  border-color: rgba(125, 211, 252, 0.42) !important;
+  background:
+    linear-gradient(135deg, rgba(34, 211, 238, 0.28), rgba(37, 99, 235, 0.44)) !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 {
+  border-color: rgba(14, 116, 144, 0.16) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.12), transparent 34%),
+    radial-gradient(circle at 88% 0%, rgba(245, 184, 75, 0.10), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(231, 244, 250, 0.94)) !important;
+  box-shadow:
+    0 22px 48px rgba(33, 48, 71, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90) !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-card--platinum {
+  border-color: rgba(100, 116, 139, 0.22) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(226, 232, 240, 0.62), transparent 34%),
+    radial-gradient(circle at 88% 0%, rgba(125, 211, 252, 0.12), transparent 28%),
+    linear-gradient(180deg, #ffffff, #eef5f9) !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-card-top-img {
+  border-color: rgba(14, 116, 144, 0.12) !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.09), transparent 34%),
+    rgba(255, 255, 255, 0.56) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.86),
+    0 10px 22px rgba(33, 48, 71, 0.10) !important;
+}
+
+:root[data-theme="light"] .ox-home-featured-card-v3 button {
+  border-color: rgba(14, 116, 144, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(224, 242, 254, 0.78)) !important;
+  color: #0f2f45 !important;
+}
+
+@media (max-width: 920px) {
+  .ox-home-featured-deck {
+    justify-self: center !important;
+    width: min(100%, 248px) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .ox-home-featured-deck {
+    width: min(100%, 230px) !important;
+  }
+
+  .ox-home-featured-card-v3 {
+    width: min(100%, 224px) !important;
+  }
+
+  .ox-home-featured-card-top-img {
+    height: 108px !important;
+  }
+}
+
+/* oX NEXMOV - Home vehicle cards width polish */
+.ox-home-vehicles-carousel-v3 {
+  grid-auto-columns: minmax(278px, 312px) !important;
+}
+
+.ox-home-vehicle-wrap-v3 {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__media {
+  min-height: 186px !important;
+}
+
+@media (max-width: 900px) {
+  .ox-home-vehicle-wrap-v3 {
+    flex: 0 0 min(86vw, 336px) !important;
+    width: min(86vw, 336px) !important;
+    min-width: min(86vw, 336px) !important;
+    max-width: min(86vw, 336px) !important;
+  }
+
+  .ox-home-vehicles-carousel-v3 .vehicle-card__media {
+    min-height: 184px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .ox-home-vehicle-wrap-v3 {
+    flex-basis: min(88vw, 324px) !important;
+    width: min(88vw, 324px) !important;
+    min-width: min(88vw, 324px) !important;
+    max-width: min(88vw, 324px) !important;
+  }
+
+  .ox-home-vehicles-carousel-v3 .vehicle-card__media {
+    min-height: 176px !important;
+  }
+}
+
 /* oX NEXMOV - Phase 4 mobile and detail polish */
 @media (max-width: 760px) {
   .ox-home-page-v3,
@@ -11445,6 +11843,297 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 .vehicle-card__media img,
 .vehicle-card__image {
   object-position: center center !important;
+}
+
+/* oX NEXMOV - Vehicle Card collectible phase final guards */
+.ox-search-vehicle-grid .vehicle-card__stats,
+.ox-home-vehicles-carousel-v3 .vehicle-card__stats {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__stat,
+.ox-home-vehicles-carousel-v3 .vehicle-card__stat {
+  min-width: 0 !important;
+  min-height: 34px !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 0 9px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(125, 211, 252, 0.13) !important;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.58), rgba(2, 6, 23, 0.34)) !important;
+  color: rgba(226, 232, 240, 0.92) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__stat-label,
+.ox-home-vehicles-carousel-v3 .vehicle-card__stat-label {
+  min-width: 22px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: rgba(125, 211, 252, 0.94) !important;
+  font-size: 0.58rem !important;
+  line-height: 1 !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__stat strong,
+.ox-home-vehicles-carousel-v3 .vehicle-card__stat strong {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  color: inherit !important;
+  font-size: 0.66rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card--platinum,
+.ox-home-vehicles-carousel-v3 .vehicle-card--platinum {
+  border-color: rgba(226, 232, 240, 0.42) !important;
+  box-shadow:
+    0 26px 68px rgba(0, 0, 0, 0.40),
+    0 0 0 1px rgba(226, 232, 240, 0.10),
+    0 0 42px rgba(191, 219, 254, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card--platinum::after,
+.ox-home-vehicles-carousel-v3 .vehicle-card--platinum::after {
+  background: linear-gradient(90deg, rgba(226, 232, 240, 0.92), rgba(125, 211, 252, 0.52)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card--platinum .vehicle-card__rank,
+.ox-home-vehicles-carousel-v3 .vehicle-card--platinum .vehicle-card__rank {
+  color: rgba(248, 250, 252, 0.98) !important;
+  border-color: rgba(226, 232, 240, 0.50) !important;
+  background:
+    linear-gradient(180deg, rgba(226, 232, 240, 0.16), rgba(15, 23, 42, 0.78)) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__stat,
+:root[data-theme="light"] .ox-home-vehicles-carousel-v3 .vehicle-card__stat {
+  border-color: rgba(14, 116, 144, 0.12) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(232, 244, 250, 0.74)) !important;
+  color: rgba(15, 23, 42, 0.88) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__stat-label,
+:root[data-theme="light"] .ox-home-vehicles-carousel-v3 .vehicle-card__stat-label {
+  color: rgba(14, 116, 144, 0.90) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card--platinum,
+:root[data-theme="light"] .ox-home-vehicles-carousel-v3 .vehicle-card--platinum {
+  border-color: rgba(100, 116, 139, 0.24) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(226, 232, 240, 0.56), transparent 34%),
+    radial-gradient(circle at 88% 10%, rgba(125, 211, 252, 0.10), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(237, 244, 249, 0.94)) !important;
+}
+
+@media (max-width: 760px) {
+  .ox-search-vehicle-grid .vehicle-card__media,
+  .ox-home-vehicles-carousel-v3 .vehicle-card__media {
+    height: 188px !important;
+    min-height: 188px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__stats,
+  .ox-home-vehicles-carousel-v3 .vehicle-card__stats {
+    gap: 6px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__stat,
+  .ox-home-vehicles-carousel-v3 .vehicle-card__stat {
+    min-height: 34px !important;
+    padding-inline: 8px !important;
+  }
+}
+
+/* oX NEXMOV - Vehicle Card collectible level 3 final guards */
+.ox-search-vehicle-grid .vehicle-card,
+.ox-home-vehicles-carousel-v3 .vehicle-card {
+  padding: 7px !important;
+  border-radius: 31px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card::after,
+.ox-home-vehicles-carousel-v3 .vehicle-card::after {
+  left: 22px !important;
+  right: 22px !important;
+  height: 4px !important;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.18) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media,
+.ox-home-vehicles-carousel-v3 .vehicle-card__media {
+  height: 214px !important;
+  min-height: 214px !important;
+  margin: 1px 1px 0 !important;
+  padding: 13px !important;
+  border: 1px solid rgba(125, 211, 252, 0.16) !important;
+  border-radius: 24px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 14px 32px rgba(0, 0, 0, 0.20) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__media::before,
+.ox-home-vehicles-carousel-v3 .vehicle-card__media::before {
+  inset: 14px !important;
+  border-radius: 20px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__image,
+.ox-search-vehicle-grid .vehicle-card__placeholder,
+.ox-home-vehicles-carousel-v3 .vehicle-card__image,
+.ox-home-vehicles-carousel-v3 .vehicle-card__placeholder {
+  border-radius: 19px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__body,
+.ox-home-vehicles-carousel-v3 .vehicle-card__body {
+  padding: 14px 8px 8px !important;
+  gap: 10px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__identity,
+.ox-home-vehicles-carousel-v3 .vehicle-card__identity {
+  min-height: 48px !important;
+  padding: 2px 5px 0 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__price-box,
+.ox-home-vehicles-carousel-v3 .vehicle-card__price-box {
+  min-height: 70px !important;
+  border-radius: 20px !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__btn--primary,
+.ox-home-vehicles-carousel-v3 .vehicle-card__btn--primary {
+  min-height: 42px !important;
+  font-size: 0.66rem !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__media,
+:root[data-theme="light"] .ox-home-vehicles-carousel-v3 .vehicle-card__media {
+  border-color: rgba(14, 116, 144, 0.13) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.90),
+    0 14px 30px rgba(15, 23, 42, 0.08) !important;
+}
+
+@media (max-width: 760px) {
+  .ox-search-vehicle-grid .vehicle-card,
+  .ox-home-vehicles-carousel-v3 .vehicle-card {
+    padding: 6px !important;
+    border-radius: 27px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__media,
+  .ox-home-vehicles-carousel-v3 .vehicle-card__media {
+    height: 198px !important;
+    min-height: 198px !important;
+    border-radius: 22px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__body,
+  .ox-home-vehicles-carousel-v3 .vehicle-card__body {
+    padding: 12px 7px 7px !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__price-box,
+  .ox-home-vehicles-carousel-v3 .vehicle-card__price-box {
+    min-height: 66px !important;
+  }
+}
+
+/* oX NEXMOV - Vehicle Card fine collectible final guards */
+.ox-search-vehicle-grid .vehicle-card__placeholder,
+.ox-home-vehicles-carousel-v3 .vehicle-card__placeholder {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__placeholder::before,
+.ox-home-vehicles-carousel-v3 .vehicle-card__placeholder::before {
+  content: "oX" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  color: rgba(125, 211, 252, 0.08) !important;
+  font-size: 4.6rem !important;
+  font-weight: 950 !important;
+  letter-spacing: -0.08em !important;
+  pointer-events: none !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__placeholder span,
+.ox-home-vehicles-carousel-v3 .vehicle-card__placeholder span {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__stat--financing,
+.ox-home-vehicles-carousel-v3 .vehicle-card__stat--financing {
+  border-color: rgba(34, 197, 94, 0.22) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(34, 197, 94, 0.12), transparent 36%),
+    linear-gradient(180deg, rgba(14, 165, 80, 0.12), rgba(15, 23, 42, 0.38)) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__stat--financing .vehicle-card__stat-label,
+.ox-home-vehicles-carousel-v3 .vehicle-card__stat--financing .vehicle-card__stat-label {
+  color: rgba(134, 239, 172, 0.92) !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(3)::before,
+.ox-home-vehicles-carousel-v3 .vehicle-card__actions .vehicle-card__btn:nth-child(3)::before,
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(4)::before,
+.ox-home-vehicles-carousel-v3 .vehicle-card__actions .vehicle-card__btn:nth-child(4)::before {
+  content: "" !important;
+  display: inline-block !important;
+  width: 6px !important;
+  height: 6px !important;
+  margin-right: 6px !important;
+  border-radius: 999px !important;
+  background: rgba(125, 211, 252, 0.58) !important;
+  box-shadow: 0 0 10px rgba(125, 211, 252, 0.18) !important;
+  vertical-align: middle !important;
+}
+
+.ox-search-vehicle-grid .vehicle-card__actions .vehicle-card__btn:nth-child(4)::before,
+.ox-home-vehicles-carousel-v3 .vehicle-card__actions .vehicle-card__btn:nth-child(4)::before {
+  background: rgba(245, 184, 75, 0.68) !important;
+  box-shadow: 0 0 10px rgba(245, 184, 75, 0.18) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__placeholder::before,
+:root[data-theme="light"] .ox-home-vehicles-carousel-v3 .vehicle-card__placeholder::before {
+  color: rgba(14, 116, 144, 0.07) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__stat--financing,
+:root[data-theme="light"] .ox-home-vehicles-carousel-v3 .vehicle-card__stat--financing {
+  border-color: rgba(21, 128, 61, 0.18) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(34, 197, 94, 0.13), transparent 36%),
+    linear-gradient(180deg, rgba(240, 253, 244, 0.92), rgba(255, 255, 255, 0.78)) !important;
+}
+
+:root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card__stat--financing .vehicle-card__stat-label,
+:root[data-theme="light"] .ox-home-vehicles-carousel-v3 .vehicle-card__stat--financing .vehicle-card__stat-label {
+  color: rgba(21, 128, 61, 0.88) !important;
 }
 
 .dealer-platinum-hero,

@@ -1,6 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { listSellVehicleLeadsForCurrentBuyer } from "../../services/sellVehicle.service.js";
+import {
+  createSellVehicleLead,
+  listSellVehicleLeadsForCurrentBuyer,
+} from "../../services/sellVehicle.service.js";
 
 import {
   listVehicleLeadsForCurrentBuyer,
@@ -8,10 +11,14 @@ import {
 } from "../../services/buyer.service.js";
 
 import { updateBuyerProfile } from "../../services/profiles.service.js";
+import { getObjectPositionXY, normalizeImagePositionXY } from "../../lib/imagePosition.js";
 import {
+  createBuyerGarageVehicle,
   createBuyerGarageService,
   listBuyerGarageServices,
   listBuyerGarageVehicles,
+  updateBuyerGarageVehicle,
+  uploadBuyerGarageVehiclePhoto,
 } from "../../services/buyerGarage.service.js";
 
 function formatDateTime(dateValue) {
@@ -131,6 +138,131 @@ function getServiceTypeLabel(value) {
   return labels[value] || value || "Servicio";
 }
 
+function getGarageStatusLabel(status) {
+  const labels = {
+    active: "Asignado",
+    owned: "Propio",
+    preparing_sale: "Preparando venta",
+    listed: "Publicado",
+    reserved: "Reservado",
+    sold: "Vendido",
+    archived: "Histórico",
+  };
+
+  return labels[status] || "Activo";
+}
+
+function getGarageVehicleSourceLabel(vehicle) {
+  if (vehicle?.source === "owned" || vehicle?.source === "local") {
+    return "Vehículo propio";
+  }
+
+  return "Asignado por dealer";
+}
+
+function isOwnedGarageVehicle(vehicle) {
+  return vehicle?.source === "owned" || vehicle?.source === "local";
+}
+
+function getGarageVehicleFormFromVehicle(vehicle) {
+  const pos = normalizeImagePositionXY(vehicle?.imagePositionX, vehicle?.imagePositionY, vehicle?.imagePosition);
+  return {
+    brand: vehicle?.brand || "",
+    model: vehicle?.model || "",
+    version: vehicle?.version || "",
+    year: vehicle?.year || "",
+    km: vehicle?.km || "",
+    plate: vehicle?.plate || "",
+    province: vehicle?.province || "",
+    city: vehicle?.city || "",
+    expectedPrice: vehicle?.expectedPrice || vehicle?.price || "",
+    condition: vehicle?.condition || "",
+    vtvDueDate: vehicle?.vtvDueDate || "",
+    insuranceDueDate: vehicle?.insuranceDueDate || "",
+    insuranceCompany: vehicle?.insuranceCompany || "",
+    policyNumber: vehicle?.policyNumber || "",
+    notes: vehicle?.notes || "",
+    photoUrl: vehicle?.photoUrl || "",
+    imagePositionX: pos.x,
+    imagePositionY: pos.y,
+    saleIntent: vehicle?.status === "preparing_sale",
+  };
+}
+
+const initialGarageVehicleForm = {
+  brand: "",
+  model: "",
+  version: "",
+  year: "",
+  km: "",
+  plate: "",
+  province: "",
+  city: "",
+  expectedPrice: "",
+  condition: "",
+  vtvDueDate: "",
+  insuranceDueDate: "",
+  insuranceCompany: "",
+  policyNumber: "",
+  notes: "",
+  photoUrl: "",
+  imagePositionX: 50,
+  imagePositionY: 50,
+  saleIntent: false,
+};
+
+function DraggableImageFramer({ src, positionX, positionY, onPositionChange, disabled }) {
+  const containerRef = useRef(null);
+  const isDragging = useRef(false);
+  const startPtr = useRef({ x: 0, y: 0 });
+  const startPos = useRef({ x: 50, y: 50 });
+
+  function handlePointerDown(e) {
+    if (disabled) return;
+    isDragging.current = true;
+    startPtr.current = { x: e.clientX, y: e.clientY };
+    startPos.current = { x: positionX, y: positionY };
+    e.currentTarget.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  }
+
+  function handlePointerMove(e) {
+    if (!isDragging.current || !containerRef.current) return;
+    const { width, height } = containerRef.current.getBoundingClientRect();
+    const dx = e.clientX - startPtr.current.x;
+    const dy = e.clientY - startPtr.current.y;
+    const newX = Math.max(0, Math.min(100, startPos.current.x - (dx / width) * 100));
+    const newY = Math.max(0, Math.min(100, startPos.current.y - (dy / height) * 100));
+    onPositionChange(newX, newY);
+  }
+
+  function handlePointerUp() {
+    isDragging.current = false;
+  }
+
+  return (
+    <div
+      ref={containerRef}
+      className="garage-framing-area"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+    >
+      <img
+        src={src}
+        alt=""
+        className="garage-framing-image"
+        style={{ objectPosition: getObjectPositionXY(positionX, positionY) }}
+        draggable={false}
+      />
+      <div className="garage-framing-overlay">
+        <span>Arrastrá para acomodar</span>
+      </div>
+    </div>
+  );
+}
+
 export default function BuyerPanel({ authUser, authProfile, appActions, onNavigate }) {
   const [vehicleLeads, setVehicleLeads] = useState([]);
   const [zeroKmLeads, setZeroKmLeads] = useState([]);
@@ -165,6 +297,18 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     cost: "",
     notes: "",
   });
+  const [garageVehicleForm, setGarageVehicleForm] = useState(initialGarageVehicleForm);
+  const [garageVehicleSaving, setGarageVehicleSaving] = useState(false);
+  const [garageVehicleError, setGarageVehicleError] = useState("");
+  const [garageVehicleSaved, setGarageVehicleSaved] = useState(false);
+  const [showGarageVehicleForm, setShowGarageVehicleForm] = useState(false);
+  const [editingGarageVehicleId, setEditingGarageVehicleId] = useState("");
+  const [garageVehiclePhotoFile, setGarageVehiclePhotoFile] = useState(null);
+  const [garageVehiclePhotoPreview, setGarageVehiclePhotoPreview] = useState("");
+  const [garageVehiclePhotoUploading, setGarageVehiclePhotoUploading] = useState(false);
+  const [garageVehiclePhotoSaved, setGarageVehiclePhotoSaved] = useState(false);
+  const [activeGarageTab, setActiveGarageTab] = useState("summary");
+  const [showBuyerActivityDetails, setShowBuyerActivityDetails] = useState(false);
 
   const favorites = appActions?.favoriteItems || [];
   const compareItems = appActions?.compareItems || [];
@@ -239,7 +383,9 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   async function loadGarageVehicles() {
     setGarageVehiclesError("");
 
-    const { vehicles, error } = await listBuyerGarageVehicles();
+    const { vehicles, error } = await listBuyerGarageVehicles({
+      userId: authUser?.id || authProfile?.id || authProfile?.email,
+    });
 
     setGarageVehicles(vehicles || []);
 
@@ -304,8 +450,15 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   }, [vehicleLeads.length, zeroKmLeads.length]);
 
   useEffect(() => {
-    if (!selectedGarageVehicleId && garageVehicles.length > 0) {
-      setSelectedGarageVehicleId(garageVehicles[0].id);
+    if (!selectedGarageVehicleId) return;
+
+    const selectedStillExists = garageVehicles.some(
+      (vehicle) => vehicle.id === selectedGarageVehicleId
+    );
+
+    if (!selectedStillExists) {
+      setSelectedGarageVehicleId("");
+      setActiveGarageTab("summary");
     }
   }, [garageVehicles, selectedGarageVehicleId]);
 
@@ -340,7 +493,182 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     setGarageSaving(false);
   }
 
+  function updateGarageVehicleField(field, value) {
+    setGarageVehicleForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  }
+
+  function startGarageVehicleEdit(vehicle) {
+    if (!isOwnedGarageVehicle(vehicle)) {
+      setGarageVehicleError(
+        "Esta unidad fue asignada por un dealer. Por ahora solo podÃ©s editar vehÃ­culos propios cargados por vos."
+      );
+      setShowGarageVehicleForm(true);
+      return;
+    }
+
+    setGarageVehicleForm(getGarageVehicleFormFromVehicle(vehicle));
+    setGarageVehiclePhotoFile(null);
+    setGarageVehiclePhotoPreview(vehicle?.photoUrl || "");
+    setGarageVehiclePhotoSaved(false);
+    setEditingGarageVehicleId(vehicle.id);
+    setGarageVehicleError("");
+    setGarageVehicleSaved(false);
+    setShowGarageVehicleForm(true);
+  }
+
+  function resetGarageVehicleForm() {
+    setGarageVehicleForm(initialGarageVehicleForm);
+    setEditingGarageVehicleId("");
+    setGarageVehiclePhotoFile(null);
+    setGarageVehiclePhotoPreview("");
+    setGarageVehiclePhotoUploading(false);
+    setGarageVehiclePhotoSaved(false);
+    setGarageVehicleError("");
+    setGarageVehicleSaved(false);
+  }
+
+  function handleGarageVehiclePhotoChange(event) {
+    const file = event.target.files?.[0] || null;
+    setGarageVehiclePhotoSaved(false);
+
+    if (!file) {
+      setGarageVehiclePhotoFile(null);
+      setGarageVehiclePhotoPreview(garageVehicleForm.photoUrl || "");
+      return;
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      setGarageVehicleError("La foto debe ser JPG, PNG o WebP.");
+      event.target.value = "";
+      return;
+    }
+
+    if (file.size > 4 * 1024 * 1024) {
+      setGarageVehicleError("La foto no puede superar los 4 MB.");
+      event.target.value = "";
+      return;
+    }
+
+    setGarageVehicleError("");
+    setGarageVehiclePhotoFile(file);
+    setGarageVehiclePhotoPreview(URL.createObjectURL(file));
+  }
+
+  async function handleSaveGarageVehicle(event) {
+    event.preventDefault();
+
+    setGarageVehicleSaving(true);
+    setGarageVehicleError("");
+    setGarageVehicleSaved(false);
+
+    if (!garageVehicleForm.brand.trim()) {
+      setGarageVehicleError("Ingresá la marca del vehículo.");
+      setGarageVehicleSaving(false);
+      return;
+    }
+
+    if (!garageVehicleForm.model.trim()) {
+      setGarageVehicleError("Ingresá el modelo del vehículo.");
+      setGarageVehicleSaving(false);
+      return;
+    }
+
+    const garageUserId = authUser?.id || authProfile?.id || authProfile?.email;
+    const { vehicle } = editingGarageVehicleId
+      ? await updateBuyerGarageVehicle({
+          userId: garageUserId,
+          vehicleId: editingGarageVehicleId,
+          vehicle: garageVehicleForm,
+        })
+      : await createBuyerGarageVehicle({
+          userId: garageUserId,
+          vehicle: garageVehicleForm,
+        });
+
+    if (!vehicle) {
+      setGarageVehicleError("No pudimos guardar el vehículo en Garage oX.");
+      setGarageVehicleSaving(false);
+      return;
+    }
+
+    let photoUploadError = null;
+
+    if (garageVehiclePhotoFile) {
+      setGarageVehiclePhotoUploading(true);
+      const { photoUrl, error: uploadError } = await uploadBuyerGarageVehiclePhoto({
+        garageVehicleId: vehicle.id,
+        file: garageVehiclePhotoFile,
+      });
+
+      photoUploadError = uploadError;
+
+      if (photoUrl && !uploadError) {
+        setGarageVehiclePhotoSaved(true);
+      }
+
+      setGarageVehiclePhotoUploading(false);
+    }
+
+    if (garageVehicleForm.saleIntent && !editingGarageVehicleId) {
+      const { error: sellError } = await createSellVehicleLead({
+        fullName: authProfile?.full_name || authUser?.email || "Usuario Garage oX",
+        email: authProfile?.email || authUser?.email || "",
+        phone: authProfile?.phone_visible || authProfile?.phone_whatsapp || "",
+        province: garageVehicleForm.province || "Sin provincia",
+        city: garageVehicleForm.city || "Sin ciudad",
+        brand: garageVehicleForm.brand,
+        model: garageVehicleForm.model,
+        version: garageVehicleForm.version,
+        year: garageVehicleForm.year,
+        km: garageVehicleForm.km,
+        expectedPrice: garageVehicleForm.expectedPrice,
+        condition: garageVehicleForm.condition,
+        hasDebt: false,
+        hasFinancing: false,
+        acceptsDealerContact: true,
+        message:
+          garageVehicleForm.notes ||
+          "Solicitud generada desde Garage oX para evaluación futura.",
+      });
+
+      if (sellError && import.meta.env.DEV) {
+        console.warn("No se pudo generar solicitud de venta desde Garage oX.", sellError);
+      }
+    }
+
+    await Promise.all([loadGarageVehicles(), loadSellVehicleLeads()]);
+    setSelectedGarageVehicleId("");
+    if (photoUploadError) {
+      setGarageVehicleError(
+        photoUploadError.message ||
+          "Guardamos la card, pero no pudimos subir la foto."
+      );
+      setGarageVehicleSaved(true);
+      setGarageVehicleSaving(false);
+      return;
+    }
+
+    resetGarageVehicleForm();
+    setGarageVehicleSaved(true);
+    setShowGarageVehicleForm(false);
+    setActiveGarageTab("summary");
+    setGarageVehicleSaving(false);
+    window.setTimeout(() => setGarageVehicleSaved(false), 2200);
+  }
+
   const isLoading = loadingVehicleLeads || loadingZeroKmLeads || loadingSellVehicleLeads;
+  const selectedGarageVehicle =
+    garageVehicles.find((vehicle) => vehicle.id === selectedGarageVehicleId) || null;
+  const selectedGarageServices = selectedGarageVehicle
+    ? garageServices.filter(
+        (service) => service.garageVehicleId === selectedGarageVehicle.id
+      )
+    : [];
+  const lastSelectedGarageService = selectedGarageServices[0] || null;
 
   return (
     <section className="page-section">
@@ -558,6 +886,22 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 Historial privado de tus unidades dentro de la plataforma.
               </p>
             </div>
+            <button
+              type="button"
+              className="primary-action"
+              onClick={() => {
+                if (showGarageVehicleForm) {
+                  setShowGarageVehicleForm(false);
+                  resetGarageVehicleForm();
+                  return;
+                }
+
+                resetGarageVehicleForm();
+                setShowGarageVehicleForm(true);
+              }}
+            >
+              {showGarageVehicleForm ? "Cerrar carga" : "Agregar vehículo"}
+            </button>
           </div>
 
           <div className="buyer-garage-hero">
@@ -565,55 +909,387 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
               <span>Historial premium</span>
               <strong>Unidad, servicios y recorrido en un solo lugar.</strong>
               <p>
-                Registro organizado para conservar la trazabilidad del vehiculo.
+                Registro organizado para conservar la trazabilidad del vehículo.
               </p>
             </div>
             <div className="buyer-garage-hero-metrics">
-              <span>Historial</span>
-              <strong>{garageServices.length}</strong>
-              <small>registros cargados</small>
+              <span>Garage</span>
+              <strong>{garageVehicles.length}</strong>
+              <small>unidad{garageVehicles.length !== 1 ? "es" : ""} cargada{garageVehicles.length !== 1 ? "s" : ""}</small>
             </div>
           </div>
 
+          {showGarageVehicleForm && (
+          <form className="buyer-garage-owned-form" onSubmit={handleSaveGarageVehicle}>
+            <div className="buyer-garage-owned-head">
+              <div>
+                <span className="eyebrow">{editingGarageVehicleId ? "Editando card" : "Vehículo propio"}</span>
+                <h3>{editingGarageVehicleId ? "Actualizar unidad" : "Cargar unidad familiar"}</h3>
+                <p>
+                  Sumá autos propios o familiares, registrá vencimientos y dejá
+                  preparada la base para una futura evaluación comercial.
+                </p>
+              </div>
+              <label className="buyer-garage-sale-toggle">
+                <input
+                  type="checkbox"
+                  checked={garageVehicleForm.saleIntent}
+                  onChange={(event) =>
+                    updateGarageVehicleField("saleIntent", event.target.checked)
+                  }
+                />
+                Preparar para futura venta
+              </label>
+            </div>
+
+            <div className="buyer-garage-owned-grid">
+              <label>
+                Marca
+                <input
+                  value={garageVehicleForm.brand}
+                  onChange={(event) => updateGarageVehicleField("brand", event.target.value)}
+                  placeholder="Ej. Toyota"
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Modelo
+                <input
+                  value={garageVehicleForm.model}
+                  onChange={(event) => updateGarageVehicleField("model", event.target.value)}
+                  placeholder="Ej. Corolla"
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Versión
+                <input
+                  value={garageVehicleForm.version}
+                  onChange={(event) => updateGarageVehicleField("version", event.target.value)}
+                  placeholder="Ej. XEI 2.0"
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Año
+                <input
+                  type="number"
+                  value={garageVehicleForm.year}
+                  onChange={(event) => updateGarageVehicleField("year", event.target.value)}
+                  placeholder="2021"
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Kilómetros
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={garageVehicleForm.km}
+                  onChange={(event) => updateGarageVehicleField("km", event.target.value)}
+                  placeholder="62000"
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Dominio
+                <input
+                  value={garageVehicleForm.plate}
+                  onChange={(event) => updateGarageVehicleField("plate", event.target.value)}
+                  placeholder="Opcional"
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                VTV
+                <input
+                  type="date"
+                  value={garageVehicleForm.vtvDueDate}
+                  onChange={(event) => updateGarageVehicleField("vtvDueDate", event.target.value)}
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Seguro
+                <input
+                  type="date"
+                  value={garageVehicleForm.insuranceDueDate}
+                  onChange={(event) => updateGarageVehicleField("insuranceDueDate", event.target.value)}
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Aseguradora
+                <input
+                  value={garageVehicleForm.insuranceCompany}
+                  onChange={(event) => updateGarageVehicleField("insuranceCompany", event.target.value)}
+                  placeholder="Opcional"
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Estado
+                <select
+                  value={garageVehicleForm.condition}
+                  onChange={(event) => updateGarageVehicleField("condition", event.target.value)}
+                  disabled={garageVehicleSaving}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="excelente">Excelente</option>
+                  <option value="muy_bueno">Muy bueno</option>
+                  <option value="bueno">Bueno</option>
+                  <option value="regular">Regular</option>
+                  <option value="a_revisar">A revisar</option>
+                </select>
+              </label>
+              <label>
+                Valor esperado
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={garageVehicleForm.expectedPrice}
+                  onChange={(event) => updateGarageVehicleField("expectedPrice", event.target.value)}
+                  placeholder="Ej. 20.000.000"
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Ciudad
+                <input
+                  value={garageVehicleForm.city}
+                  onChange={(event) => updateGarageVehicleField("city", event.target.value)}
+                  placeholder="Opcional"
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+              <label>
+                Foto principal
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleGarageVehiclePhotoChange}
+                  disabled={garageVehicleSaving}
+                />
+              </label>
+            </div>
+
+            {(garageVehiclePhotoPreview || garageVehicleForm.photoUrl) && (
+              <div className="garage-framing-wrapper">
+                <DraggableImageFramer
+                  src={garageVehiclePhotoPreview || garageVehicleForm.photoUrl}
+                  positionX={garageVehicleForm.imagePositionX}
+                  positionY={garageVehicleForm.imagePositionY}
+                  onPositionChange={(x, y) =>
+                    setGarageVehicleForm((f) => ({ ...f, imagePositionX: x, imagePositionY: y }))
+                  }
+                  disabled={garageVehicleSaving}
+                />
+                <div className="garage-framing-controls">
+                  <p className="garage-framing-hint">
+                    Arrastrá la imagen para acomodar el vehículo dentro de la card.
+                  </p>
+                  <button
+                    type="button"
+                    className="garage-framing-reset"
+                    onClick={() => setGarageVehicleForm((f) => ({ ...f, imagePositionX: 50, imagePositionY: 50 }))}
+                    disabled={garageVehicleSaving}
+                  >
+                    Centrar imagen
+                  </button>
+                </div>
+                <p className="garage-framing-file-note">
+                  {garageVehiclePhotoFile ? "Foto lista para subir · " : "Foto actual · "}JPG, PNG o WebP · Máx. 4 MB
+                </p>
+              </div>
+            )}
+
+            <label className="buyer-garage-notes">
+              Notas del vehículo
+              <textarea
+                value={garageVehicleForm.notes}
+                onChange={(event) => updateGarageVehicleField("notes", event.target.value)}
+                rows={3}
+                placeholder="Estado general, trabajos realizados, observaciones o datos útiles para conservar historial."
+                disabled={garageVehicleSaving}
+              />
+            </label>
+
+            <div className="buyer-garage-form-actions">
+              <button
+                type="submit"
+                className="primary-action"
+                disabled={garageVehicleSaving}
+              >
+                {garageVehicleSaving
+                  ? "Guardando..."
+                  : editingGarageVehicleId
+                    ? "Actualizar card"
+                    : "Guardar en Garage oX"}
+              </button>
+              {garageVehicleSaved && <span>Vehículo guardado</span>}
+              {garageVehiclePhotoUploading && <span>Subiendo foto...</span>}
+              {garageVehiclePhotoSaved && <span>Foto actualizada</span>}
+              {garageVehicleError && <small className="garage-inline-error">{garageVehicleError}</small>}
+            </div>
+          </form>
+          )}
+
           {garageVehicles.length === 0 ? (
             <div className="buyer-garage-empty">
-              <strong>Tu garage todavia esta esperando su primera unidad.</strong>
+              <strong>Tu Garage todavía está esperando su primera unidad.</strong>
               <p>
-                Las unidades asignadas por el dealer aparecen aca con su historial listo para completar.
+                Las unidades asignadas por un dealer o cargadas por vos aparecen
+                acá con su historial listo para completar.
               </p>
               <button className="primary-action" onClick={() => onNavigate?.("search")}>
-                Buscar vehiculos
+                Buscar vehículos
               </button>
             </div>
           ) : (
-            <div className="buyer-garage-layout">
-              <div className="buyer-garage-list">
+            <div className="buyer-garage-collection">
+              <div className="buyer-garage-list buyer-garage-card-grid">
                 {garageVehicles.map((vehicle) => {
                   const services = garageServices.filter(
                     (service) => service.garageVehicleId === vehicle.id
                   );
                   const isSelected = selectedGarageVehicleId === vehicle.id;
+                  const latestService = services[0] || null;
 
                   return (
                     <button
                       key={vehicle.id}
                       type="button"
-                      className={`buyer-garage-vehicle-card${isSelected ? " is-active" : ""}`}
-                      onClick={() => setSelectedGarageVehicleId(vehicle.id)}
+                      className={`buyer-garage-vehicle-card buyer-garage-collector-card${isSelected ? " is-active" : ""}`}
+                      onClick={() => {
+                        setSelectedGarageVehicleId(vehicle.id);
+                        setActiveGarageTab("summary");
+                      }}
                     >
-                      <span>Vehiculo comprado</span>
-                      <strong>{vehicle.title}</strong>
-                      <p>{vehicle.dealer} · {formatARS(vehicle.price)}</p>
-                      <div className="buyer-garage-card-meta">
-                        <span>{vehicle.status}</span>
-                        <span>{services.length} servicio{services.length !== 1 ? "s" : ""}</span>
+                      <div className="buyer-garage-card-media">
+                        {vehicle.photoUrl ? (
+                          <img
+                            src={vehicle.photoUrl}
+                            alt=""
+                            loading="lazy"
+                            style={{ objectPosition: getObjectPositionXY(vehicle.imagePositionX, vehicle.imagePositionY) }}
+                          />
+                        ) : (
+                          <span>oX</span>
+                        )}
                       </div>
-                      <small>{getNextGarageHint(services)}</small>
+                      <div className="buyer-garage-card-main">
+                        <span>{getGarageVehicleSourceLabel(vehicle)}</span>
+                        <strong>{vehicle.title}</strong>
+                        <p>{vehicle.dealer} - {formatARS(vehicle.price)}</p>
+                      </div>
+                      <div className="buyer-garage-card-meta">
+                        <span>{getGarageStatusLabel(vehicle.status)}</span>
+                        <span>{services.length} servicio{services.length !== 1 ? "s" : ""}</span>
+                        {vehicle.vtvDueDate && (
+                          <span>VTV {formatDateTime(vehicle.vtvDueDate).split(",")[0]}</span>
+                        )}
+                        {vehicle.insuranceDueDate && (
+                          <span>Seguro {formatDateTime(vehicle.insuranceDueDate).split(",")[0]}</span>
+                        )}
+                      </div>
+                      <small>
+                        {latestService
+                          ? `Ultimo registro: ${getServiceTypeLabel(latestService.serviceType)}`
+                          : getNextGarageHint(services)}
+                      </small>
+                      <em>Explorar card</em>
                     </button>
                   );
                 })}
               </div>
 
+              {selectedGarageVehicle && (
+                <div className="buyer-garage-detail-panel">
+                  <div className="buyer-garage-passport">
+                    <div className="buyer-garage-passport-media" aria-hidden="true">
+                      {selectedGarageVehicle.photoUrl ? (
+                        <img
+                          src={selectedGarageVehicle.photoUrl}
+                          alt=""
+                          loading="lazy"
+                          style={{ objectPosition: getObjectPositionXY(selectedGarageVehicle.imagePositionX, selectedGarageVehicle.imagePositionY) }}
+                        />
+                      ) : (
+                        <span>oX</span>
+                      )}
+                    </div>
+                    <div className="buyer-garage-detail-head">
+                      <div>
+                        <span className="eyebrow">{getGarageVehicleSourceLabel(selectedGarageVehicle)}</span>
+                        <h3>{selectedGarageVehicle.title}</h3>
+                        <p>
+                          {selectedGarageVehicle.dealer} - {formatARS(selectedGarageVehicle.price)}
+                        </p>
+                      </div>
+                      <strong>{getGarageStatusLabel(selectedGarageVehicle.status)}</strong>
+                    </div>
+                    <div className="buyer-garage-passport-meta">
+                      <span>
+                        {selectedGarageVehicle.km
+                          ? `${Number(selectedGarageVehicle.km).toLocaleString("es-AR")} km`
+                          : "Km sin cargar"}
+                      </span>
+                      <span>{selectedGarageServices.length} registros</span>
+                      <span>{getNextGarageHint(selectedGarageServices)}</span>
+                    </div>
+                  </div>
+
+                  <div className="buyer-garage-tabs" role="tablist" aria-label="Secciones de Garage oX">
+                    {[
+                      ["summary", "Resumen"],
+                      ["services", "Servicios"],
+                      ["deadlines", "Vencimientos"],
+                      ["history", "Historial"],
+                      ["sale", "Venta futura"],
+                    ].map(([tabId, label]) => (
+                      <button
+                        key={tabId}
+                        type="button"
+                        className={activeGarageTab === tabId ? "is-active" : ""}
+                        onClick={() => setActiveGarageTab(tabId)}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {activeGarageTab === "summary" && (
+                    <div className="buyer-garage-tab-panel">
+                      <div className="buyer-garage-summary-grid">
+                        <article>
+                          <span>Kilometraje</span>
+                          <strong>
+                            {selectedGarageVehicle.km
+                              ? `${Number(selectedGarageVehicle.km).toLocaleString("es-AR")} km`
+                              : "Sin cargar"}
+                          </strong>
+                        </article>
+                        <article>
+                          <span>Servicios</span>
+                          <strong>{selectedGarageServices.length}</strong>
+                        </article>
+                        <article>
+                          <span>Ultimo registro</span>
+                          <strong>
+                            {lastSelectedGarageService
+                              ? getServiceTypeLabel(lastSelectedGarageService.serviceType)
+                              : "Pendiente"}
+                          </strong>
+                        </article>
+                        <article>
+                          <span>Proximo paso</span>
+                          <strong>{getNextGarageHint(selectedGarageServices)}</strong>
+                        </article>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeGarageTab === "services" && (
               <form className="buyer-garage-service-form" onSubmit={handleSaveGarageService}>
                 <div>
                   <span className="eyebrow">Nuevo registro</span>
@@ -704,27 +1380,58 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                   )}
                 </div>
               </form>
+                  )}
 
+                  {activeGarageTab === "deadlines" && (
+                    <div className="buyer-garage-tab-panel">
+                      <div className="buyer-garage-summary-grid">
+                        <article>
+                          <span>VTV</span>
+                          <strong>
+                            {selectedGarageVehicle.vtvDueDate
+                              ? formatDateTime(selectedGarageVehicle.vtvDueDate).split(",")[0]
+                              : "Sin cargar"}
+                          </strong>
+                        </article>
+                        <article>
+                          <span>Seguro</span>
+                          <strong>
+                            {selectedGarageVehicle.insuranceDueDate
+                              ? formatDateTime(selectedGarageVehicle.insuranceDueDate).split(",")[0]
+                              : "Sin cargar"}
+                          </strong>
+                        </article>
+                        <article>
+                          <span>Estado</span>
+                          <strong>{getGarageStatusLabel(selectedGarageVehicle.status)}</strong>
+                        </article>
+                        <article>
+                          <span>Origen</span>
+                          <strong>{getGarageVehicleSourceLabel(selectedGarageVehicle)}</strong>
+                        </article>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeGarageTab === "history" && (
               <div className="buyer-garage-history">
                 <div>
                   <span className="eyebrow">Historial</span>
                   <h3>Servicios registrados</h3>
                 </div>
-                {garageServices.filter((service) => service.garageVehicleId === selectedGarageVehicleId).length === 0 ? (
+                {selectedGarageServices.length === 0 ? (
                   <p className="buyer-garage-history-empty">
                     Todavia no hay servicios cargados para este vehiculo.
                   </p>
                 ) : (
                   <div className="buyer-garage-service-list">
-                    {garageServices
-                      .filter((service) => service.garageVehicleId === selectedGarageVehicleId)
-                      .map((service) => (
+                    {selectedGarageServices.map((service) => (
                         <article key={service.id} className="buyer-garage-service-item">
                           <span>{formatDateTime(service.serviceDate)}</span>
                           <strong>{getServiceTypeLabel(service.serviceType)}</strong>
                           <p>
                             {service.mileage ? `${Number(service.mileage).toLocaleString("es-AR")} km` : "Sin km"}
-                            {service.cost ? ` · ${formatARS(service.cost)}` : ""}
+                            {service.cost ? ` - ${formatARS(service.cost)}` : ""}
                           </p>
                           {service.notes && <small>{service.notes}</small>}
                         </article>
@@ -732,10 +1439,79 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                   </div>
                 )}
               </div>
+                  )}
+
+                  {activeGarageTab === "sale" && (
+                    <div className="buyer-garage-tab-panel buyer-garage-sale-panel">
+                      <span className="eyebrow">Venta futura</span>
+                      <h3>Preparacion comercial</h3>
+                      <p>
+                        Esta card puede convertirse en base de publicacion cuando decidas avanzar:
+                        historial, vencimientos y datos propios quedan ordenados para evaluar el vehiculo.
+                      </p>
+                      <div className="buyer-garage-sale-readiness">
+                        <span className={selectedGarageServices.length > 0 ? "is-ready" : ""}>
+                          Historial {selectedGarageServices.length > 0 ? "iniciado" : "pendiente"}
+                        </span>
+                        <span className={selectedGarageVehicle.km ? "is-ready" : ""}>
+                          Km {selectedGarageVehicle.km ? "cargado" : "pendiente"}
+                        </span>
+                        <span className={selectedGarageVehicle.vtvDueDate || selectedGarageVehicle.insuranceDueDate ? "is-ready" : ""}>
+                          Vencimientos {(selectedGarageVehicle.vtvDueDate || selectedGarageVehicle.insuranceDueDate) ? "cargados" : "pendientes"}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        className="secondary-action"
+                        onClick={() => {
+                          if (isOwnedGarageVehicle(selectedGarageVehicle)) {
+                            startGarageVehicleEdit(selectedGarageVehicle);
+                            return;
+                          }
+
+                          resetGarageVehicleForm();
+                          setShowGarageVehicleForm(true);
+                        }}
+                      >
+                        {isOwnedGarageVehicle(selectedGarageVehicle)
+                          ? "Editar card"
+                          : "Cargar unidad propia"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>
 
+        <div className="buyer-activity-disclosure">
+          <div className="buyer-activity-disclosure-head">
+            <div>
+              <span className="eyebrow">Actividad del comprador</span>
+              <h2>Consultas, favoritos y movimientos comerciales</h2>
+              <p>
+                Información secundaria disponible cuando quieras revisar tu recorrido.
+              </p>
+            </div>
+            <div className="buyer-activity-disclosure-summary" aria-hidden="true">
+              <span>{favorites.length} favoritos</span>
+              <span>{vehicleLeads.length} consultas</span>
+              <span>{zeroKmLeads.length} 0km</span>
+              <span>{sellVehicleLeads.length} ventas</span>
+            </div>
+            <button
+              type="button"
+              className="admin-refresh-btn buyer-activity-toggle"
+              onClick={() => setShowBuyerActivityDetails((current) => !current)}
+              aria-expanded={showBuyerActivityDetails}
+            >
+              {showBuyerActivityDetails ? "Ocultar actividad" : "Ver actividad"}
+            </button>
+          </div>
+
+          {showBuyerActivityDetails && (
+            <div className="buyer-activity-disclosure-body">
         <div className="dealer-leads-section">
           <div className="buyer-section-head">
             <div>
@@ -1013,7 +1789,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           <div className="buyer-section-head">
             <div>
               <h2>Solicitudes de venta</h2>
-              <p>Vehículos que publicaste para que dealers evalúen tu unidad.</p>
+              <p>Vehículos que preparaste desde Garage oX para evaluación comercial.</p>
             </div>
 
             <button className="admin-refresh-btn" onClick={loadSellVehicleLeads}>
@@ -1023,10 +1799,10 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
 
           {sellVehicleLeads.length === 0 ? (
             <div className="empty-state">
-              <strong>Todavía no publicaste una solicitud de venta.</strong>
+              <strong>Todavía no preparaste una solicitud de venta.</strong>
               <p>
-                Si querés vender tu vehículo, usá la opción "Vender mi
-                vehículo" desde el menú.
+                Cargá un vehículo propio en Garage oX y marcá la opción de
+                preparación para futura venta.
               </p>
             </div>
           ) : (
@@ -1091,6 +1867,9 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             Este panel muestra solo tu actividad como comprador. Los datos de
             gestión interna son visibles únicamente para roles autorizados.
           </span>
+        </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

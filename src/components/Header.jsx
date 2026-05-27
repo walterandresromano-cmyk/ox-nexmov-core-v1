@@ -7,10 +7,10 @@ const NAV_ITEMS = [
   { id: "home", label: "Inicio" },
   { id: "search", label: "Buscar" },
   { id: "zeroKm", label: "Financiación 0km" },
-  { id: "sellVehicle", label: "Vender mi vehículo" },
   { id: "joinNetwork", label: "Sumate a la red" },
   { id: "about", label: "Quiénes somos" },
   { id: "faq", label: "Preguntas frecuentes" },
+  { id: "sellVehicle", label: "Garage oX" },
 ];
 
 
@@ -50,6 +50,7 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
 
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
+  const [garagePulse, setGaragePulse] = useState(false);
 
   async function handleLogout() {
     setLoggingOut(true);
@@ -70,6 +71,15 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
     onNavigate("home");
   }
 
+  function handleNavClick(itemId) {
+    if (itemId === "sellVehicle") {
+      setGaragePulse(true);
+      window.setTimeout(() => setGaragePulse(false), 620);
+    }
+
+    onNavigate(itemId);
+  }
+
   return (
     <header className="site-header">
       <div className="container header-inner">
@@ -87,8 +97,13 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
             <button
               key={item.id}
               type="button"
-              className={currentRoute === item.id ? "nav-btn active" : "nav-btn"}
-              onClick={() => onNavigate(item.id)}
+              className={[
+                "nav-btn",
+                item.id === "sellVehicle" ? "nav-btn--garage" : "",
+                item.id === "sellVehicle" && garagePulse ? "is-pulsing" : "",
+                currentRoute === item.id ? "active" : "",
+              ].filter(Boolean).join(" ")}
+              onClick={() => handleNavClick(item.id)}
             >
               {item.label}
             </button>
@@ -125,8 +140,10 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
               type="button"
               className="login-btn"
               onClick={() => onNavigate("login")}
+              aria-label="Acceso operativo"
+              title="Acceso operativo"
             >
-              Ingresar
+              <span aria-hidden="true">🔒</span>
             </button>
           )}
 

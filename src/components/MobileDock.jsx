@@ -6,7 +6,7 @@ import { normalizeRole } from "../lib/auth.js";
 const PUBLIC_DOCK_ITEMS = [
   { id: "home", label: "Inicio" },
   { id: "search", label: "Buscar" },
-  { id: "sellVehicle", label: "Vender" },
+  { id: "sellVehicle", label: "Garage" },
 ];
 
 const MORE_DOCK_ITEMS = [
@@ -88,7 +88,7 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
     { id: "more", label: "Más" },
     ...(isLoggedIn && privatePanel
       ? [privatePanel]
-      : [{ id: "login", label: "Ingresar" }]),
+      : [{ id: "login", label: "Acceso" }]),
   ];
 
   return (

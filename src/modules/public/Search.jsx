@@ -1081,21 +1081,6 @@ export default function Search({
             </button>
           </div>
 
-          <div className="ox-search-suggested">
-            <span>Búsquedas sugeridas:</span>
-            {SEARCH_QUICK_ACTIONS.map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => {
-                  setSearchText(item);
-                  setShowSuggestions(false);
-                }}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
 
           <div className="ox-search-status">
             <span>{searchSummary}</span>
@@ -1376,24 +1361,6 @@ export default function Search({
                 />
               </div>
 
-              <div className="ox-filter-section ox-filter-shortcuts">
-                <strong>Atajos inteligentes</strong>
-
-                <div>
-                  {SEARCH_QUICK_ACTIONS.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => {
-                        setSearchText(item);
-                        setShowSuggestions(false);
-                      }}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
               <button
                 type="button"
@@ -1482,21 +1449,6 @@ export default function Search({
                   </button>
                 </div>
 
-                <div className="ox-search-suggested">
-                  <span>Probá con:</span>
-                  {SEARCH_QUICK_ACTIONS.slice(0, 4).map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => {
-                        setSearchText(item);
-                        setShowSuggestions(false);
-                      }}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
               </div>
             )}
           </main>

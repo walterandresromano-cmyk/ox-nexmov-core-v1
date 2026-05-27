@@ -550,7 +550,7 @@ export default function Home({ onNavigate, appActions = {} }) {
             <h1>
               Comprá con datos reales.
               <br />
-              Vendé con confianza.
+              Guardá tu Garage.
               <br />
               Decidí con <span>contexto completo.</span>
             </h1>
@@ -620,20 +620,8 @@ export default function Home({ onNavigate, appActions = {} }) {
                 Ver financiación 0km
               </button>
               <button type="button" onClick={() => onNavigate("sellVehicle")}>
-                Vender mi vehículo
+                Garage oX
               </button>
-            </div>
-
-            <div className="ox-home-chips-v3">
-              {quickSearches.map((query) => (
-                <button
-                  key={query}
-                  type="button"
-                  onClick={() => goToSearch(query)}
-                >
-                  {query}
-                </button>
-              ))}
             </div>
 
             <div className="ox-home-trust-strip-v3">
@@ -687,7 +675,7 @@ export default function Home({ onNavigate, appActions = {} }) {
               return (
                 <aside
                   key={vehicle.id}
-                  className={`ox-home-featured-card-v3 ox-home-featured-deck-pos-${pos}`}
+                  className={`ox-home-featured-card-v3 ox-home-featured-card--${dealer.plan || "inicio"} ox-home-featured-deck-pos-${pos}`}
                   onClick={pos !== 0 ? () => setFeaturedIndex(i) : undefined}
                 >
                   {imgSrc && (
