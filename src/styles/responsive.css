@@ -13711,22 +13711,22 @@ textarea:focus-visible,
   gap: 0.35rem;
   padding: 0.45rem 1rem;
   border-radius: 6px;
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  border: 1px solid var(--ox-border);
   background: transparent;
-  color: var(--text-secondary, rgba(203, 213, 225, 0.8));
+  color: var(--ox-muted);
   font-size: 0.82rem;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.18s, color 0.18s, background 0.18s;
+  transition: border-color var(--ox-duration-fast), color var(--ox-duration-fast), background var(--ox-duration-fast);
 }
 .vehicle-share-btn:hover {
-  border-color: rgba(56, 189, 248, 0.45);
-  color: rgba(56, 189, 248, 0.9);
-  background: rgba(56, 189, 248, 0.06);
+  border-color: var(--ox-border-accent);
+  color: var(--ox-cyan);
+  background: var(--ox-primary-soft);
 }
 .vehicle-share-btn--copied {
   border-color: rgba(134, 239, 172, 0.45) !important;
-  color: rgba(134, 239, 172, 0.9) !important;
+  color: var(--ox-success) !important;
   background: rgba(20, 83, 45, 0.18) !important;
 }
 
@@ -13794,18 +13794,18 @@ textarea:focus-visible,
   display: inline-block;
   margin-top: 0.6rem;
   padding: 0.3rem 0.75rem;
-  border-radius: 5px;
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  background: rgba(56, 189, 248, 0.06);
-  color: rgba(56, 189, 248, 0.85);
-  font-size: 0.78rem;
-  font-weight: 500;
+  border-radius: var(--ox-radius-xs);
+  border: 1px solid var(--ox-border-accent);
+  background: var(--ox-primary-soft);
+  color: var(--ox-cyan);
+  font-size: var(--ox-fs-caption);
+  font-weight: var(--ox-fw-medium);
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background var(--ox-duration-fast), border-color var(--ox-duration-fast);
 }
 .buyer-stat-cta-btn:hover {
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--ox-cyan);
 }
 
 /* ── VehicleImage progressive load ───────────────────────── */
@@ -13842,16 +13842,16 @@ textarea:focus-visible,
 }
 .ox-search-load-more-btn {
   padding: 0.65rem 2rem;
-  border-radius: 8px;
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  background: rgba(56, 189, 248, 0.06);
-  color: rgba(56, 189, 248, 0.85);
-  font-size: 0.88rem;
-  font-weight: 500;
+  border-radius: var(--ox-radius-sm);
+  border: 1px solid var(--ox-border-accent);
+  background: var(--ox-primary-soft);
+  color: var(--ox-cyan);
+  font-size: var(--ox-fs-body);
+  font-weight: var(--ox-fw-medium);
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background var(--ox-duration-fast), border-color var(--ox-duration-fast);
 }
 .ox-search-load-more-btn:hover {
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--ox-cyan);
 }
