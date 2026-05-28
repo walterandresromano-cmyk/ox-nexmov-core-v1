@@ -383,6 +383,21 @@ export default function DealerInventoryModule({ dealerVehicles, onRefresh, onBac
                       >
                         {score}% · {getScoreLabel(score)}
                       </span>
+                      <span
+                        className={`dealer-inventory-quality-hint${
+                          score >= 90
+                            ? " dealer-inventory-quality-hint--excellent"
+                            : score >= 70
+                            ? " dealer-inventory-quality-hint--good"
+                            : " dealer-inventory-quality-hint--weak"
+                        }`}
+                      >
+                        {score >= 90
+                          ? "Excelente calidad"
+                          : score >= 70
+                          ? "Publicación sólida"
+                          : "Ver mejoras en detalle"}
+                      </span>
                     </td>
 
                     <td>

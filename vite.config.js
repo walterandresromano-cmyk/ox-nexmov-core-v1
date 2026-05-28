@@ -34,7 +34,7 @@ export default defineConfig({
         categories: ["shopping", "automotive"],
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,svg}"],
+        globPatterns: ["**/*.{js,css,html,ico}"],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,

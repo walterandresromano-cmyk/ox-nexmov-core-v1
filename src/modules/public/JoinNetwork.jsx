@@ -213,14 +213,14 @@ export default function JoinNetwork({ onNavigate }) {
       <div className="container panel join-network-panel">
         <section className="join-network-hero">
           <div className="join-network-hero-copy">
-            <p className="eyebrow">Red de dealers</p>
+            <p className="eyebrow ox-public-eyebrow">Red de dealers</p>
 
-            <h1>
+            <h1 className="ox-public-title">
               Sumá tu agencia a una nueva forma de{" "}
               <span>comercializar vehículos.</span>
             </h1>
 
-            <p>
+            <p className="ox-public-lead">
               oX NEXMOV reúne publicaciones, consultas, herramientas
               comerciales y señales de confianza para que cada dealer trabaje
               con más claridad.
@@ -240,16 +240,6 @@ export default function JoinNetwork({ onNavigate }) {
               </button>
             </div>
           </div>
-
-          <aside className="join-network-hero-card">
-            <span>Red premium</span>
-            <strong>Más claridad para vender mejor</strong>
-            <div className="join-network-signal-list">
-              {dealerSignals.map((signal) => (
-                <small key={signal}>{signal}</small>
-              ))}
-            </div>
-          </aside>
         </section>
 
         <section className="join-network-problem">
@@ -313,58 +303,48 @@ export default function JoinNetwork({ onNavigate }) {
           </div>
 
           {isLoadingNetworkDealers ? (
-            <div
-              className="join-network-dealer-grid"
-              aria-label="Cargando dealers de la red"
-            >
-              {[0, 1, 2, 3].map((item) => (
-                <article
-                  key={item}
-                  className="join-network-dealer-card join-network-dealer-card-loading"
-                >
-                  <div className="join-network-dealer-logo ox-shimmer" />
-                  <div className="join-network-dealer-skeleton-bar join-network-dealer-skeleton-bar--short ox-shimmer" />
-                  <div className="join-network-dealer-skeleton-bar join-network-dealer-skeleton-bar--wide ox-shimmer" />
-                  <div className="join-network-dealer-skeleton-bar ox-shimmer" />
-                </article>
+            <div className="jn-dealer-list" aria-label="Cargando dealers de la red">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="jn-dealer-row jn-dealer-row--loading">
+                  <div className="jn-dealer-avatar ox-shimmer" />
+                  <div className="jn-dealer-info">
+                    <div className="jn-dealer-skel jn-dealer-skel--name ox-shimmer" />
+                    <div className="jn-dealer-skel jn-dealer-skel--loc ox-shimmer" />
+                  </div>
+                  <div className="jn-dealer-skel jn-dealer-skel--badge ox-shimmer" />
+                </div>
               ))}
             </div>
           ) : publicDealers.length > 0 ? (
-            <div className="join-network-dealer-grid">
+            <div className="jn-dealer-list">
               {publicDealers.map((dealer) => (
-                <article
+                <div
                   key={dealer.id}
-                  className={`join-network-dealer-card join-network-dealer-${dealer.planClass}`}
+                  className={`jn-dealer-row jn-dealer-${dealer.planClass}`}
                 >
+                  <div className="jn-dealer-avatar">
                     {dealer.logo ? (
-                    <img
-                      className="join-network-dealer-img"
-                      src={dealer.logo}
-                      alt={`Imagen institucional de ${dealer.name}`}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="join-network-dealer-initials">
+                      <img src={dealer.logo} alt="" loading="lazy" />
+                    ) : (
                       <span>{dealer.initials}</span>
-                    </div>
-                  )}
-
-                  <div className="join-network-dealer-content">
-                    <span className="join-network-dealer-badge">
-                      {dealer.badge}
-                    </span>
-                    <strong>{dealer.name}</strong>
-                    <p>{dealer.location || "Red oX NEXMOV"}</p>
+                    )}
                   </div>
 
-                  <small>Dealer verificado dentro de la red oX.</small>
+                  <div className="jn-dealer-info">
+                    <strong>{dealer.name}</strong>
+                    <small>{dealer.location || "Red oX NEXMOV"}</small>
+                  </div>
+
+                  <span className={`jn-dealer-badge jn-dealer-badge--${dealer.planClass}`}>
+                    {dealer.badge}
+                  </span>
 
                   {dealer.activeVehiclesCount > 0 && (
-                    <span className="join-network-dealer-count">
-                      {dealer.activeVehiclesCount} publicaciones activas
+                    <span className="jn-dealer-count">
+                      {dealer.activeVehiclesCount} publicaciones
                     </span>
                   )}
-                </article>
+                </div>
               ))}
             </div>
           ) : (

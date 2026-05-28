@@ -234,11 +234,11 @@ export default function FAQ({ onNavigate }) {
       <div className="container panel faq-panel">
         <section className="faq-hero">
           <div className="faq-hero-copy">
-            <p className="eyebrow">Centro de ayuda</p>
+            <p className="eyebrow ox-public-eyebrow">Centro de ayuda</p>
 
-            <h1>Preguntas frecuentes</h1>
+            <h1 className="ox-public-title">Preguntas frecuentes</h1>
 
-            <p>
+            <p className="ox-public-lead">
               Resolvemos las dudas más importantes para que compradores y
               dealers usen oX NEXMOV con claridad y confianza.
             </p>

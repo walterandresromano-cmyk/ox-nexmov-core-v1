@@ -377,6 +377,26 @@ function getSuggestionTypeLabel(type) {
   return "Sugerencia";
 }
 
+function getGhostCompletion(query, suggestions) {
+  const rawQuery = String(query || "");
+  const normalizedQuery = normalizeSearchText(rawQuery);
+  if (normalizedQuery.length < 2 || !suggestions.length) return null;
+
+  const suggestion = suggestions.find((item) =>
+    normalizeSearchText(item.searchValue || item.label).startsWith(normalizedQuery)
+  );
+
+  if (!suggestion) return null;
+
+  const value = suggestion.searchValue || suggestion.label;
+  if (value.length <= rawQuery.length) return null;
+
+  return {
+    value,
+    suffix: value.slice(rawQuery.length),
+  };
+}
+
 export default function Home({ onNavigate, appActions = {} }) {
   const [publicDealers, setPublicDealers] = useState([]);
   const [loadingDealers, setLoadingDealers] = useState(true);
@@ -386,7 +406,6 @@ export default function Home({ onNavigate, appActions = {} }) {
   const [loadingLatestVehicles, setLoadingLatestVehicles] = useState(true);
   const [latestVehiclesError, setLatestVehiclesError] = useState("");
   const [heroSearchText, setHeroSearchText] = useState("");
-  const [showHeroSuggestions, setShowHeroSuggestions] = useState(false);
 
   const latestVehiclesCarouselRef = useRef(null);
 
@@ -517,6 +536,11 @@ export default function Home({ onNavigate, appActions = {} }) {
     [latestVehicles, heroSearchText]
   );
 
+  const heroGhostCompletion = useMemo(
+    () => getGhostCompletion(heroSearchText, heroAutocompleteSuggestions),
+    [heroSearchText, heroAutocompleteSuggestions]
+  );
+
   function goToSearch(query = "") {
     onNavigate("search", {
       query,
@@ -525,7 +549,6 @@ export default function Home({ onNavigate, appActions = {} }) {
 
   function handleHeroSearch(event) {
     event.preventDefault();
-    setShowHeroSuggestions(false);
     goToSearch(heroSearchText);
   }
 
@@ -568,51 +591,32 @@ export default function Home({ onNavigate, appActions = {} }) {
               className="ox-home-search-v3 vehicle-autocomplete"
               onSubmit={handleHeroSearch}
             >
-              <input
-                value={heroSearchText}
-                onFocus={() => setShowHeroSuggestions(true)}
-                onChange={(event) => {
-                  setHeroSearchText(event.target.value);
-                  setShowHeroSuggestions(true);
-                }}
-                placeholder="¿Qué vehículo estás buscando?"
-              />
+              <div className="vehicle-autocomplete-field">
+                {heroGhostCompletion && (
+                  <span className="vehicle-autocomplete-ghost" aria-hidden="true">
+                    <span>{heroSearchText}</span>
+                    {heroGhostCompletion.suffix}
+                  </span>
+                )}
+
+                <input
+                  value={heroSearchText}
+                  onChange={(event) => setHeroSearchText(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (
+                      heroGhostCompletion &&
+                      (event.key === "Tab" || event.key === "ArrowRight") &&
+                      event.currentTarget.selectionStart === heroSearchText.length
+                    ) {
+                      event.preventDefault();
+                      setHeroSearchText(heroGhostCompletion.value);
+                    }
+                  }}
+                  placeholder="¿Qué vehículo estás buscando?"
+                />
+              </div>
 
               <button type="submit">Buscar</button>
-
-              {showHeroSuggestions &&
-                normalizeSearchText(heroSearchText).length >= 2 && (
-                  <div className="vehicle-autocomplete-dropdown">
-                    {heroAutocompleteSuggestions.length > 0 ? (
-                      <div className="vehicle-autocomplete-list">
-                        {heroAutocompleteSuggestions.map((suggestion) => (
-                          <button
-                            key={`${suggestion.type}-${suggestion.label}`}
-                            type="button"
-                            className="vehicle-autocomplete-item"
-                            onMouseDown={(event) => event.preventDefault()}
-                            onClick={() => {
-                              setHeroSearchText(suggestion.searchValue);
-                              setShowHeroSuggestions(false);
-                              goToSearch(suggestion.searchValue);
-                            }}
-                          >
-                            <span className="vehicle-autocomplete-main">
-                              {suggestion.label}
-                            </span>
-                            <span className="vehicle-autocomplete-meta">
-                              {getSuggestionTypeLabel(suggestion.type)}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="vehicle-autocomplete-empty">
-                        Sin coincidencias disponibles.
-                      </div>
-                    )}
-                  </div>
-                )}
             </form>
 
             <div className="ox-home-primary-actions-v3">

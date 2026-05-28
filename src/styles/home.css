@@ -147,6 +147,14 @@
   font-weight: var(--ox-fw-medium);
 }
 
+.ox-home-search-v3 .vehicle-autocomplete-field {
+  min-width: 0;
+}
+
+.ox-home-search-v3 .vehicle-autocomplete-field input {
+  width: 100%;
+}
+
 .ox-home-search-v3 input::placeholder {
   color: rgba(203, 213, 225, 0.58);
 }

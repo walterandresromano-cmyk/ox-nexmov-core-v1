@@ -393,6 +393,27 @@ function getSuggestionTypeLabel(type) {
   return "Sugerencia";
 }
 
+function getGhostCompletion(query, suggestions) {
+  const rawQuery = String(query || "");
+  const normalizedQuery = normalizeSearchText(rawQuery);
+  if (normalizedQuery.length < 2 || !suggestions.length) return null;
+
+  const suggestion = suggestions.find((item) =>
+    normalizeSearchText(item.searchValue || item.label).startsWith(normalizedQuery)
+  );
+
+  if (!suggestion) return null;
+
+  const value = suggestion.searchValue || suggestion.label;
+  if (value.length <= rawQuery.length) return null;
+
+  return {
+    suggestion,
+    value,
+    suffix: value.slice(rawQuery.length),
+  };
+}
+
 function isVehicleVisibleForBuyer(vehicle) {
   const status = normalizeSearchText(
     getVehicleField(vehicle, "status", "publicationStatus", "publication_status")
@@ -926,6 +947,11 @@ export default function Search({
     [publicSearchVehicles, debouncedSearchText]
   );
 
+  const ghostCompletion = useMemo(
+    () => getGhostCompletion(searchText, visibleSuggestions),
+    [searchText, visibleSuggestions]
+  );
+
   function commitSearch(query) {
     const trimmed = String(query || "").trim();
     if (trimmed.length >= 2) {
@@ -1151,67 +1177,28 @@ export default function Search({
             <div className="ox-search-input-wrap vehicle-autocomplete">
               <label>¿Qué vehículo estás buscando?</label>
 
+              {ghostCompletion && (
+                <span className="vehicle-autocomplete-ghost" aria-hidden="true">
+                  <span>{searchText}</span>
+                  {ghostCompletion.suffix}
+                </span>
+              )}
+
               <input
                 value={searchText}
-                onFocus={() => setShowSuggestions(true)}
-                onChange={(event) => {
-                  setSearchText(event.target.value);
-                  setShowSuggestions(true);
+                onChange={(event) => setSearchText(event.target.value)}
+                onKeyDown={(event) => {
+                  if (
+                    ghostCompletion &&
+                    (event.key === "Tab" || event.key === "ArrowRight") &&
+                    event.currentTarget.selectionStart === searchText.length
+                  ) {
+                    event.preventDefault();
+                    handleSuggestionSelect(ghostCompletion.suggestion);
+                  }
                 }}
                 placeholder="Ej: SUV automática financiada en Buenos Aires"
               />
-
-              {showSuggestions && normalizeSearchText(searchText).length < 2 && searchHistory.length > 0 && (
-                <div className="vehicle-autocomplete-dropdown">
-                  <div className="vehicle-autocomplete-list">
-                    <div className="vehicle-autocomplete-history-head">Búsquedas recientes</div>
-                    {searchHistory.map((query) => (
-                      <button
-                        key={query}
-                        type="button"
-                        className="vehicle-autocomplete-item vehicle-autocomplete-item--history"
-                        onMouseDown={(event) => event.preventDefault()}
-                        onClick={() => {
-                          setSearchText(query);
-                          setShowSuggestions(false);
-                        }}
-                      >
-                        <span className="vehicle-autocomplete-history-icon" aria-hidden="true">↺</span>
-                        <span className="vehicle-autocomplete-main">{query}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {showSuggestions && normalizeSearchText(searchText).length >= 2 && (
-                <div className="vehicle-autocomplete-dropdown">
-                  {visibleSuggestions.length > 0 ? (
-                    <div className="vehicle-autocomplete-list">
-                      {visibleSuggestions.map((suggestion) => (
-                        <button
-                          key={`${suggestion.type}-${suggestion.label}`}
-                          type="button"
-                          className="vehicle-autocomplete-item"
-                          onMouseDown={(event) => event.preventDefault()}
-                          onClick={() => handleSuggestionSelect(suggestion)}
-                        >
-                          <span className="vehicle-autocomplete-main">
-                            {suggestion.label}
-                          </span>
-                          <span className="vehicle-autocomplete-meta">
-                            {getSuggestionTypeLabel(suggestion.type)}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="vehicle-autocomplete-empty">
-                      Sin coincidencias disponibles.
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
 
             <button

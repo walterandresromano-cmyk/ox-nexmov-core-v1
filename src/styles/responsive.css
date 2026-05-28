@@ -568,21 +568,7 @@
   }
 }
 
-/* oX NEXMOV - Join Network final header alignment */
-.join-network-panel > .join-network-hero {
-  min-height: auto !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  align-items: start !important;
-}
-
-:root[data-theme="light"] .join-network-panel > .join-network-hero {
-  background: transparent !important;
-  box-shadow: none !important;
-}
+/* oX NEXMOV - Join Network final header alignment - legacy stripped */
 
 .join-network-hero-copy h1 span {
   display: inline !important;
@@ -5425,33 +5411,54 @@
 .faq-page .faq-hero {
   position: relative !important;
   overflow: hidden !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px) !important;
-  align-items: start !important;
-  align-content: start !important;
-  gap: var(--ox-space-8) !important;
+  display: block !important;
   min-height: 0 !important;
-  padding: 32px 34px 28px !important;
+  padding: 24px 34px 28px !important;
   border: 1px solid rgba(148, 163, 184, 0.14) !important;
   border-radius: var(--ox-radius-hero) !important;
-  background: var(--ox-surface-hero) !important;
-  box-shadow: var(--ox-shadow-panel) !important;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(56, 189, 248, 0.12), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.055), transparent 25%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98)) !important;
+  box-shadow:
+    0 26px 78px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+}
+
+:root[data-theme="light"] .about-page .about-hero,
+:root[data-theme="light"] .faq-page .faq-hero {
+  border-color: rgba(14, 116, 144, 0.15) !important;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(14, 165, 233, 0.13), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.12), transparent 24%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 250, 0.95)) !important;
+  box-shadow:
+    0 24px 66px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+.about-page .about-hero::before,
+.about-page .about-hero::after,
+.faq-page .faq-hero::before,
+.faq-page .faq-hero::after {
+  content: none !important;
 }
 
 .about-page .about-hero-copy,
 .faq-page .faq-hero-copy {
+  position: relative !important;
+  z-index: 2 !important;
   align-self: start !important;
   align-content: start !important;
 }
 
-.about-page .about-hero-card,
-.faq-page .faq-hero-card {
-  align-self: start !important;
-  justify-self: end !important;
-  width: min(100%, 340px) !important;
-  margin-top: 0 !important;
-  padding: var(--ox-space-8) !important;
-  border-radius: var(--ox-radius-xl) !important;
+.about-page .about-hero-copy h1 span,
+.faq-page .faq-hero-copy h1 span {
+  display: inline !important;
+  color: transparent !important;
+  background: linear-gradient(90deg, #60a5fa, #0284c7, #38bdf8) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
 }
 
 .about-page .about-hero-copy > p,
@@ -5479,26 +5486,6 @@
   width: auto !important;
 }
 
-@media (max-width: 1100px) {
-  .about-page .about-hero,
-  .about-page .about-final,
-  .faq-page .faq-hero,
-  .faq-page .faq-final {
-    grid-template-columns: 1fr !important;
-  }
-
-  .about-page .about-hero-card,
-  .faq-page .faq-hero-card {
-    justify-self: stretch !important;
-    width: 100% !important;
-  }
-
-  .about-page .about-final-actions,
-  .faq-page .faq-final-actions {
-    justify-content: flex-start !important;
-  }
-}
-
 @media (max-width: 760px) {
   .about-page .about-panel,
   .faq-page .faq-panel {
@@ -5508,7 +5495,7 @@
 
   .about-page .about-hero,
   .faq-page .faq-hero {
-    padding: 26px 13px 20px !important;
+    padding: 20px 14px 22px !important;
     border-radius: var(--ox-radius-2xl) !important;
   }
 
@@ -8559,42 +8546,23 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 .join-network-page .join-network-hero {
   position: relative !important;
   overflow: hidden !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px) !important;
-  align-items: start !important;
-  align-content: start !important;
-  gap: var(--ox-space-8) !important;
+  display: block !important;
   min-height: 0 !important;
-  padding: 32px 34px 28px !important;
+  padding: 24px 34px 28px !important;
   border: 1px solid rgba(148, 163, 184, 0.14) !important;
   border-radius: var(--ox-radius-hero) !important;
-  background: var(--ox-surface-hero) !important;
-  box-shadow: var(--ox-shadow-panel) !important;
-}
-
-.join-network-page .join-network-hero::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  pointer-events: none !important;
   background:
-    linear-gradient(90deg, rgba(56, 189, 248, 0.10), transparent 34%),
-    radial-gradient(circle at 75% 18%, rgba(96, 165, 250, 0.13), transparent 26%),
-    linear-gradient(180deg, transparent 72%, rgba(2, 6, 23, 0.72)) !important;
+    radial-gradient(circle at 10% 6%, rgba(56, 189, 248, 0.12), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.055), transparent 25%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98)) !important;
+  box-shadow:
+    0 26px 78px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
 }
 
+.join-network-page .join-network-hero::before,
 .join-network-page .join-network-hero::after {
-  content: "" !important;
-  position: absolute !important;
-  left: 28% !important;
-  right: 6% !important;
-  bottom: 18% !important;
-  height: 1px !important;
-  pointer-events: none !important;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.38), transparent) !important;
-  box-shadow:
-    0 0 34px rgba(37, 99, 235, 0.40),
-    0 0 78px rgba(14, 165, 233, 0.20) !important;
+  content: none !important;
 }
 
 .join-network-page .join-network-hero-copy,
@@ -8831,12 +8799,12 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 :root[data-theme="light"] .join-network-page .join-network-hero {
   border-color: rgba(14, 116, 144, 0.15) !important;
   background:
-    radial-gradient(circle at 12% 9%, rgba(14, 165, 233, 0.12), transparent 30%),
-    radial-gradient(circle at 62% 28%, rgba(37, 99, 235, 0.10), transparent 42%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(220, 241, 252, 0.98)) !important;
+    radial-gradient(circle at 10% 6%, rgba(14, 165, 233, 0.13), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.12), transparent 24%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 250, 0.95)) !important;
   box-shadow:
-    0 24px 70px rgba(33, 48, 71, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+    0 24px 66px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
 }
 
 :root[data-theme="light"] .join-network-page .join-network-hero-copy h1,
@@ -8922,7 +8890,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   }
 
   .join-network-page .join-network-hero {
-    padding: 26px 13px 20px !important;
+    padding: 20px 14px 22px !important;
     border-radius: var(--ox-radius-2xl) !important;
   }
 
@@ -9271,33 +9239,54 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 .faq-page .faq-hero {
   position: relative !important;
   overflow: hidden !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px) !important;
-  align-items: start !important;
-  align-content: start !important;
-  gap: var(--ox-space-8) !important;
+  display: block !important;
   min-height: 0 !important;
-  padding: 32px 34px 28px !important;
+  padding: 24px 34px 28px !important;
   border: 1px solid rgba(148, 163, 184, 0.14) !important;
   border-radius: var(--ox-radius-hero) !important;
-  background: var(--ox-surface-hero) !important;
-  box-shadow: var(--ox-shadow-panel) !important;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(56, 189, 248, 0.12), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.055), transparent 25%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98)) !important;
+  box-shadow:
+    0 26px 78px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+}
+
+:root[data-theme="light"] .about-page .about-hero,
+:root[data-theme="light"] .faq-page .faq-hero {
+  border-color: rgba(14, 116, 144, 0.15) !important;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(14, 165, 233, 0.13), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.12), transparent 24%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 250, 0.95)) !important;
+  box-shadow:
+    0 24px 66px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+.about-page .about-hero::before,
+.about-page .about-hero::after,
+.faq-page .faq-hero::before,
+.faq-page .faq-hero::after {
+  content: none !important;
 }
 
 .about-page .about-hero-copy,
 .faq-page .faq-hero-copy {
+  position: relative !important;
+  z-index: 2 !important;
   align-self: start !important;
   align-content: start !important;
 }
 
-.about-page .about-hero-card,
-.faq-page .faq-hero-card {
-  align-self: start !important;
-  justify-self: end !important;
-  width: min(100%, 340px) !important;
-  margin-top: 0 !important;
-  padding: var(--ox-space-8) !important;
-  border-radius: var(--ox-radius-xl) !important;
+.about-page .about-hero-copy h1 span,
+.faq-page .faq-hero-copy h1 span {
+  display: inline !important;
+  color: transparent !important;
+  background: linear-gradient(90deg, #60a5fa, #0284c7, #38bdf8) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
 }
 
 .about-page .about-hero-copy > p,
@@ -9325,26 +9314,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   width: auto !important;
 }
 
-@media (max-width: 1100px) {
-  .about-page .about-hero,
-  .about-page .about-final,
-  .faq-page .faq-hero,
-  .faq-page .faq-final {
-    grid-template-columns: 1fr !important;
-  }
-
-  .about-page .about-hero-card,
-  .faq-page .faq-hero-card {
-    justify-self: stretch !important;
-    width: 100% !important;
-  }
-
-  .about-page .about-final-actions,
-  .faq-page .faq-final-actions {
-    justify-content: flex-start !important;
-  }
-}
-
 @media (max-width: 760px) {
   .about-page .about-panel,
   .faq-page .faq-panel {
@@ -9354,7 +9323,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
   .about-page .about-hero,
   .faq-page .faq-hero {
-    padding: 26px 13px 20px !important;
+    padding: 20px 14px 22px !important;
     border-radius: var(--ox-radius-2xl) !important;
   }
 
@@ -12144,33 +12113,54 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 .faq-page .faq-hero {
   position: relative !important;
   overflow: hidden !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px) !important;
-  align-items: start !important;
-  align-content: start !important;
-  gap: var(--ox-space-8) !important;
+  display: block !important;
   min-height: 0 !important;
-  padding: 32px 34px 28px !important;
+  padding: 24px 34px 28px !important;
   border: 1px solid rgba(148, 163, 184, 0.14) !important;
   border-radius: var(--ox-radius-hero) !important;
-  background: var(--ox-surface-hero) !important;
-  box-shadow: var(--ox-shadow-panel) !important;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(56, 189, 248, 0.12), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.055), transparent 25%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98)) !important;
+  box-shadow:
+    0 26px 78px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+}
+
+:root[data-theme="light"] .about-page .about-hero,
+:root[data-theme="light"] .faq-page .faq-hero {
+  border-color: rgba(14, 116, 144, 0.15) !important;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(14, 165, 233, 0.13), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.12), transparent 24%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 250, 0.95)) !important;
+  box-shadow:
+    0 24px 66px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+.about-page .about-hero::before,
+.about-page .about-hero::after,
+.faq-page .faq-hero::before,
+.faq-page .faq-hero::after {
+  content: none !important;
 }
 
 .about-page .about-hero-copy,
 .faq-page .faq-hero-copy {
+  position: relative !important;
+  z-index: 2 !important;
   align-self: start !important;
   align-content: start !important;
 }
 
-.about-page .about-hero-card,
-.faq-page .faq-hero-card {
-  align-self: start !important;
-  justify-self: end !important;
-  width: min(100%, 340px) !important;
-  margin-top: 0 !important;
-  padding: var(--ox-space-8) !important;
-  border-radius: var(--ox-radius-xl) !important;
+.about-page .about-hero-copy h1 span,
+.faq-page .faq-hero-copy h1 span {
+  display: inline !important;
+  color: transparent !important;
+  background: linear-gradient(90deg, #60a5fa, #0284c7, #38bdf8) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
 }
 
 .about-page .about-hero-copy > p,
@@ -12198,26 +12188,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   width: auto !important;
 }
 
-@media (max-width: 1100px) {
-  .about-page .about-hero,
-  .about-page .about-final,
-  .faq-page .faq-hero,
-  .faq-page .faq-final {
-    grid-template-columns: 1fr !important;
-  }
-
-  .about-page .about-hero-card,
-  .faq-page .faq-hero-card {
-    justify-self: stretch !important;
-    width: 100% !important;
-  }
-
-  .about-page .about-final-actions,
-  .faq-page .faq-final-actions {
-    justify-content: flex-start !important;
-  }
-}
-
 @media (max-width: 760px) {
   .about-page .about-panel,
   .faq-page .faq-panel {
@@ -12227,7 +12197,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
   .about-page .about-hero,
   .faq-page .faq-hero {
-    padding: 26px 13px 20px !important;
+    padding: 20px 14px 22px !important;
     border-radius: var(--ox-radius-2xl) !important;
   }
 
@@ -14009,11 +13979,20 @@ textarea:focus-visible,
 
 /* oX NEXMOV - Public hero typography contract
    Última capa: todas las pestañas públicas comparten escala de título y eyebrow. */
+.garage-public-page .garage-public-hero-text > h1 {
+  max-width: 860px !important;
+  font-size: var(--ox-fs-page-title) !important;
+  line-height: var(--ox-lh-title) !important;
+  letter-spacing: 0 !important;
+  font-weight: var(--ox-fw-black) !important;
+  text-shadow: none !important;
+  filter: drop-shadow(0 0 32px rgba(245, 158, 11, 0.45)) !important;
+}
+
 .ox-home-hero-copy-v3 h1,
 .ox-search-title-block h1,
 .zero-km-panel .ox-public-title,
 .zero-km-panel h1,
-.garage-public-page .garage-public-hero-text > h1,
 .sell-vehicle-panel > h1,
 .join-network-hero-copy h1,
 .about-hero-copy h1,

@@ -154,6 +154,69 @@
   position: relative;
 }
 
+.vehicle-autocomplete-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.vehicle-autocomplete-field input {
+  width: 100%;
+}
+
+.vehicle-autocomplete-ghost {
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  right: 14px;
+  top: 50%;
+  display: block;
+  overflow: hidden;
+  color: rgba(186, 230, 253, 0.70);
+  font-size: var(--ox-fs-input);
+  font-weight: 750;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-overflow: clip;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.vehicle-autocomplete-ghost span {
+  color: transparent;
+}
+
+.vehicle-autocomplete input {
+  position: relative;
+  z-index: 2;
+}
+
+.ox-home-search-v3 .vehicle-autocomplete-ghost {
+  left: 13px;
+  right: 13px;
+  color: rgba(186, 230, 253, 0.72);
+  font-weight: var(--ox-fw-medium);
+}
+
+.ox-search-input-wrap .vehicle-autocomplete-ghost {
+  left: 14px;
+  right: 14px;
+}
+
+:root[data-theme="light"] .vehicle-autocomplete-ghost {
+  color: rgba(14, 116, 144, 0.60);
+}
+
+:root[data-theme="light"] .ox-home-search-v3 .vehicle-autocomplete-ghost {
+  color: rgba(14, 116, 144, 0.62);
+}
+
+/* Autocomplete is now ghost text inside the input: no floating panels. */
+.vehicle-autocomplete-dropdown {
+  display: none !important;
+}
+
 .vehicle-autocomplete-dropdown {
   position: absolute;
   top: 100%;

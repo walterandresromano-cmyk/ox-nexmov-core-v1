@@ -59,27 +59,18 @@ export default function About({ onNavigate }) {
       <div className="container panel about-panel">
         <section className="about-hero">
           <div className="about-hero-copy">
-            <p className="eyebrow">Sobre oX NEXMOV</p>
+            <p className="eyebrow ox-public-eyebrow">Sobre oX NEXMOV</p>
 
-            <h1>
+            <h1 className="ox-public-title">
               Una plataforma creada para decidir con <span>más claridad.</span>
             </h1>
 
-            <p>
+            <p className="ox-public-lead">
               Ordenamos información, dealers, publicaciones y herramientas de
               comparación para que comprar o vender un vehículo sea una
               experiencia más clara, trazable y confiable.
             </p>
           </div>
-
-          <aside className="about-hero-card">
-            <span>Red automotriz inteligente</span>
-            <strong>Claridad en cada decisión</strong>
-            <p>
-              Tecnología, trazabilidad y criterio comercial al servicio de una
-              experiencia más confiable para compradores y dealers.
-            </p>
-          </aside>
         </section>
 
         <section className="about-pillars">

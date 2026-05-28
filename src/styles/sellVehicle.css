@@ -1010,7 +1010,6 @@
   font-size: var(--ox-fs-page-title) !important;
   line-height: var(--ox-lh-title) !important;
   letter-spacing: 0 !important;
-  text-shadow: none !important;
   -webkit-text-stroke: 0 transparent;
 }
 
@@ -1090,6 +1089,7 @@
 :root[data-theme="light"] .garage-public-page .garage-public-hero-text > h1 {
   color: #071324 !important;
   text-shadow: none !important;
+  filter: drop-shadow(0 0 22px rgba(245, 158, 11, 0.28)) !important;
 }
 
 :root[data-theme="light"] .garage-public-page .garage-public-hero-text > p {
@@ -1121,3 +1121,4 @@
     grid-template-columns: 1fr !important;
   }
 }
+

@@ -154,14 +154,20 @@
   border-bottom: 1px solid rgba(148, 163, 184, 0.12);
 }
 
-.join-network-value-card,
 .join-network-plan-card,
 .join-network-step-card,
-.join-network-section,
 .join-network-final {
   border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 18px;
   background: rgba(15, 23, 42, 0.34);
+  box-shadow: none;
+}
+
+.join-network-section,
+.join-network-value-card {
+  border: none;
+  border-radius: 0;
+  background: none;
   box-shadow: none;
 }
 
@@ -214,7 +220,7 @@
 
 .join-network-section {
   margin-top: 18px;
-  padding: 22px 28px;
+  padding: 0;
 }
 
 .join-network-section-head h2,
@@ -377,7 +383,6 @@
     width: 100%;
   }
 
-  .join-network-section,
   .join-network-final,
   .join-network-hero-card {
     padding: 14px;
@@ -473,12 +478,10 @@
 .join-network-problem {
   display: grid;
   gap: 18px;
-  padding: 22px 28px;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  border-radius: 22px;
-  background:
-    linear-gradient(135deg, rgba(15, 23, 42, 0.48), rgba(2, 6, 23, 0.36)),
-    radial-gradient(circle at 0% 0%, rgba(245, 158, 11, 0.08), transparent 30%);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
 }
 
 .join-network-proposal-grid,
@@ -492,15 +495,13 @@
 .join-network-proposal-card,
 .join-network-faq-card {
   position: relative;
-  overflow: hidden;
-  min-height: 132px;
-  padding: 15px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
-    rgba(2, 6, 23, 0.26);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  min-height: 0;
+  padding: 16px 0;
+  border: none;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
 }
 
 .join-network-proposal-card strong,
@@ -792,7 +793,7 @@
   }
 
   .join-network-problem {
-    padding: 14px;
+    padding: 0;
   }
 
   .join-network-proposal-card,
@@ -896,8 +897,6 @@
 .join-network-hero-card,
 .join-network-plan-card,
 .join-network-step-card,
-.join-network-proposal-card,
-.join-network-faq-card,
 .join-network-final,
 .join-network-commercial-note {
   border-color: var(--ox-border-premium);
@@ -906,14 +905,20 @@
 
 .join-network-plan-card,
 .join-network-step-card,
-.join-network-proposal-card,
-.join-network-faq-card,
 .join-network-final,
 .join-network-commercial-note {
   background:
     radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
     radial-gradient(circle at 94% 0%, rgba(245, 184, 75, 0.045), transparent 28%),
     var(--ox-surface-premium-soft);
+}
+
+.join-network-proposal-card,
+.join-network-faq-card {
+  border-color: transparent;
+  border-top-color: rgba(148, 163, 184, 0.12);
+  background: none;
+  box-shadow: none;
 }
 
 .join-network-hero-copy > p,
@@ -938,19 +943,186 @@
 :root[data-theme="light"] .join-network-hero-card,
 :root[data-theme="light"] .join-network-plan-card,
 :root[data-theme="light"] .join-network-step-card,
-:root[data-theme="light"] .join-network-proposal-card,
-:root[data-theme="light"] .join-network-faq-card,
 :root[data-theme="light"] .join-network-final,
 :root[data-theme="light"] .join-network-commercial-note {
   border-color: var(--ox-border-premium);
   box-shadow: var(--ox-shadow-premium-soft);
 }
 
-:root[data-theme="light"] .join-network-proposal-card,
-:root[data-theme="light"] .join-network-faq-card,
 :root[data-theme="light"] .join-network-final,
 :root[data-theme="light"] .join-network-commercial-note {
   background:
     radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.09), transparent 30%),
     var(--ox-surface-premium-soft);
+}
+
+:root[data-theme="light"] .join-network-proposal-card,
+:root[data-theme="light"] .join-network-faq-card {
+  border-color: transparent;
+  border-top-color: rgba(15, 23, 42, 0.12);
+  background: none;
+  box-shadow: none;
+}
+
+/* ── Dealer list — tabla premium ── */
+.jn-dealer-list {
+  display: grid;
+  gap: 0;
+  margin-top: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(8, 15, 28, 0.60);
+}
+
+.jn-dealer-row {
+  display: grid;
+  grid-template-columns: 56px 1fr auto auto;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.07);
+  border-left: 3px solid rgba(56, 189, 248, 0.30);
+  background: transparent;
+  transition: background 0.18s, border-left-color 0.18s;
+}
+
+.jn-dealer-row:last-child { border-bottom: none; }
+
+.jn-dealer-row:hover {
+  background: rgba(56, 189, 248, 0.04);
+  border-left-color: rgba(56, 189, 248, 0.70);
+}
+
+/* Tier accent colors */
+.jn-dealer-platinum { border-left-color: rgba(234, 179, 8, 0.50); }
+.jn-dealer-elite    { border-left-color: rgba(125, 211, 252, 0.45); }
+
+.jn-dealer-platinum:hover { border-left-color: rgba(234, 179, 8, 0.90); background: rgba(234, 179, 8, 0.03); }
+.jn-dealer-elite:hover    { border-left-color: rgba(125, 211, 252, 0.80); }
+
+/* Avatar */
+.jn-dealer-avatar {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(14, 165, 233, 0.20), rgba(99, 102, 241, 0.14));
+  border: 1px solid rgba(125, 211, 252, 0.14);
+  flex-shrink: 0;
+}
+
+.jn-dealer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jn-dealer-avatar span {
+  color: rgba(186, 230, 253, 0.94);
+  font-size: 0.92rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+}
+
+/* Info */
+.jn-dealer-info {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.jn-dealer-info strong {
+  color: rgba(248, 250, 252, 0.98);
+  font-size: 0.96rem;
+  font-weight: 900;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jn-dealer-info small {
+  color: rgba(148, 163, 184, 0.68);
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Badge */
+.jn-dealer-badge {
+  width: fit-content;
+  padding: 5px 12px;
+  border: 1px solid rgba(125, 211, 252, 0.20);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.10);
+  color: rgba(186, 230, 253, 0.92);
+  font-size: 0.58rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.jn-dealer-badge--platinum,
+.jn-dealer-badge--elite {
+  border-color: rgba(234, 179, 8, 0.28);
+  background: rgba(234, 179, 8, 0.09);
+  color: rgba(254, 243, 199, 0.94);
+}
+
+/* Count */
+.jn-dealer-count {
+  width: fit-content;
+  padding: 5px 12px;
+  border: 1px solid rgba(74, 222, 128, 0.20);
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.08);
+  color: rgba(187, 247, 208, 0.90);
+  font-size: 0.58rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* Loading */
+.jn-dealer-row--loading { pointer-events: none; opacity: 0.6; }
+.jn-dealer-skel { border-radius: 6px; height: 10px; }
+.jn-dealer-skel--name  { width: 180px; }
+.jn-dealer-skel--loc   { width: 100px; height: 8px; margin-top: 6px; }
+.jn-dealer-skel--badge { width: 90px; height: 26px; border-radius: 999px; }
+
+/* Light mode */
+:root[data-theme="light"] .jn-dealer-list {
+  border-color: rgba(15, 23, 42, 0.10);
+  background: rgba(255, 255, 255, 0.70);
+}
+:root[data-theme="light"] .jn-dealer-row {
+  border-bottom-color: rgba(15, 23, 42, 0.07);
+}
+:root[data-theme="light"] .jn-dealer-row:hover { background: rgba(14, 165, 233, 0.04); }
+:root[data-theme="light"] .jn-dealer-avatar {
+  border-color: rgba(14, 116, 144, 0.14);
+  background: linear-gradient(145deg, rgba(14, 165, 233, 0.10), rgba(99, 102, 241, 0.06));
+}
+:root[data-theme="light"] .jn-dealer-avatar span { color: rgba(12, 74, 110, 0.88); }
+:root[data-theme="light"] .jn-dealer-info strong { color: rgba(15, 23, 42, 0.94); }
+:root[data-theme="light"] .jn-dealer-info small  { color: rgba(70, 87, 108, 0.72); }
+:root[data-theme="light"] .jn-dealer-badge {
+  border-color: rgba(14, 116, 144, 0.16);
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(14, 116, 144, 0.88);
+}
+:root[data-theme="light"] .jn-dealer-badge--platinum,
+:root[data-theme="light"] .jn-dealer-badge--elite {
+  border-color: rgba(146, 64, 14, 0.18);
+  background: rgba(234, 179, 8, 0.06);
+  color: rgba(146, 64, 14, 0.88);
+}
+:root[data-theme="light"] .jn-dealer-count {
+  border-color: rgba(21, 128, 61, 0.16);
+  background: rgba(34, 197, 94, 0.06);
+  color: rgba(21, 128, 61, 0.88);
 }

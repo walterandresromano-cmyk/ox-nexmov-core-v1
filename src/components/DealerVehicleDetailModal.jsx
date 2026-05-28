@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 
 import DealerVehicleActions from "./DealerVehicleActions.jsx";
+import OxAssistantPanel from "./OxAssistantPanel.jsx";
+import { getVehicleAssistantInsights } from "../services/oxAssistant.service.js";
 
 function formatDateTime(dateValue) {
   if (!dateValue) return "Sin fecha";
@@ -128,6 +130,7 @@ export default function DealerVehicleDetailModal({
   const images = useMemo(() => getVehicleImages(vehicle), [vehicle]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const selectedImage = images[selectedImageIndex];
+  const assistantInsights = getVehicleAssistantInsights(vehicle);
 
   if (!vehicle) return null;
 
@@ -186,6 +189,16 @@ export default function DealerVehicleDetailModal({
                 ))}
               </div>
             )}
+
+            <div className="dealer-vehicle-assistant">
+              <OxAssistantPanel
+                compact
+                showSuggestions={false}
+                title="Calidad de publicación"
+                subtitle="Diagnóstico automático para mejorar esta unidad."
+                insights={assistantInsights}
+              />
+            </div>
           </div>
 
           <div className="ticket-detail-grid">
