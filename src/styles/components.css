@@ -14158,6 +14158,7 @@ body::-webkit-scrollbar {
 .admin-ops-hero h2,
 .admin-ops-panel h3 {
   margin: 7px 0 0;
+  font-size: 1.2em;
   color: var(--ox-text);
   line-height: var(--ox-lh-compact);
 }
