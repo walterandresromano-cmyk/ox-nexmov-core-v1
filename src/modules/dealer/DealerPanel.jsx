@@ -2094,7 +2094,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
               </div>
               <h3>Financiación</h3>
               <p>{permissions.fullFinancingTools ? "Herramientas de financiación disponibles en tu plan." : "Disponible en planes Pro y superiores."}</p>
-              <button type="button" disabled>{isPlatinum ? "Incluido en Platinum" : "Próximamente"}</button>
+              <button type="button" disabled>{isPlatinum ? "Incluido en Platinum" : "Disponible en plan Pro"}</button>
             </article>
 
           </div>
