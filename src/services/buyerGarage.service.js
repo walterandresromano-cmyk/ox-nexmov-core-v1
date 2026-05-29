@@ -65,7 +65,7 @@ create table if not exists buyer_garage_vehicles (
   id bigserial primary key,
   buyer_profile_id bigint not null references buyer_profiles(id),
   vehicle_id bigint not null references vehicles(id),
-  lead_id bigint references vehicle_action_leads(lead_id),
+  lead_id bigint references vehicle_action_leads(id),
   dealer_id bigint references dealers(id),
   assigned_by uuid not null default auth.uid(),
   assigned_at timestamptz not null default now(),

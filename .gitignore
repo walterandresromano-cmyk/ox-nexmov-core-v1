@@ -27,3 +27,4 @@ dist-ssr
 
 # Lighthouse reports
 lh-*.json
+.gstack/

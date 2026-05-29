@@ -156,7 +156,7 @@ export function useNotifications({ authUser, authProfile }) {
 
     const { data: leads } = await supabase
       .from("vehicle_action_leads")
-      .select("id, vehicle_brand, vehicle_model, crm_status, created_at")
+      .select("id, vehicle_title_snapshot, crm_status, created_at")
       .gte("created_at", since)
       .order("created_at", { ascending: false })
       .limit(30);
@@ -174,7 +174,7 @@ export function useNotifications({ authUser, authProfile }) {
 
       (leads || []).forEach((l) => {
         const key = `${l.id}lead`;
-        const title = `${l.vehicle_brand || ""} ${l.vehicle_model || ""}`.trim() || "Vehículo";
+        const title = l.vehicle_title_snapshot || "Vehículo";
         const isNew = !prevIds.has(key);
         if (isNew) pushToast(`Nuevo lead: ${title}`, "admin");
         items.push({ id: key, message: `Lead: ${title} — ${statusLabel(l.crm_status)}`, created_at: l.created_at, is_read: !isNew, type: "lead" });
