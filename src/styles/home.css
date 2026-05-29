@@ -2177,7 +2177,6 @@
     linear-gradient(180deg, #eef9ff, #dceff8 72%, #eaf6fb);
 }
 
-:root[data-theme="light"] .ox-home-hero-v3,
 :root[data-theme="light"] .ox-home-featured-card-v3,
 :root[data-theme="light"] .ox-home-featured-vehicles-v3,
 :root[data-theme="light"] .ox-home-confidence-v3,
@@ -2191,6 +2190,17 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(230, 245, 252, 0.88));
   box-shadow:
     0 16px 44px rgba(33, 48, 71, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+:root[data-theme="light"] .ox-home-hero-v3 {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    radial-gradient(circle at 72% 0%, rgba(14, 165, 233, 0.18), transparent 42%),
+    radial-gradient(circle at 8% 80%, rgba(37, 99, 235, 0.10), transparent 36%),
+    linear-gradient(160deg, rgba(240, 249, 255, 0.96), rgba(204, 237, 254, 0.90));
+  box-shadow:
+    0 16px 44px rgba(33, 48, 71, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
@@ -2370,7 +2380,7 @@
 
 :root[data-theme="light"] .ox-home-hero-road {
   mix-blend-mode: luminosity;
-  opacity: 0.14;
+  opacity: 0.26;
 }
 
 @media (max-width: 900px) {
