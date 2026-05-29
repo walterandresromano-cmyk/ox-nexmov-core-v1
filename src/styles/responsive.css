@@ -235,10 +235,9 @@
 }
 
 :root[data-theme="light"] .ox-home-confidence-list-v3 article > span {
-  border-color: rgba(14, 116, 144, 0.16) !important;
-  color: rgba(14, 116, 144, 0.92) !important;
-  background:
-    linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(34, 197, 94, 0.1)) !important;
+  color: rgba(3, 105, 161, 0.9) !important;
+  background: none !important;
+  border: none !important;
 }
 
 :root[data-theme="light"] .ox-home-confidence-list-v3 p,
