@@ -12452,7 +12452,8 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   .mobile-theme-float-btn {
     position: fixed;
     top: calc(env(safe-area-inset-top, 0px) + 10px);
-    left: 14px;
+    right: 14px;
+    left: auto;
     z-index: 79;
     display: flex;
     align-items: center;
