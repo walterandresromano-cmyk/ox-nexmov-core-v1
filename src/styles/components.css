@@ -22642,3 +22642,18 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .dealer-settings-logo-img {
   background: rgba(0, 0, 0, 0.04);
 }
+
+/* Admin quick-actions: first two cards span 2 cols for visual hierarchy */
+.admin-quick-actions-block .dealer-modules-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-quick-actions-block .dealer-modules-grid .dealer-module-card:first-child,
+.admin-quick-actions-block .dealer-modules-grid .dealer-module-card:nth-child(2) {
+  grid-column: span 2;
+}
+
+.admin-quick-actions-block .dealer-modules-grid .dealer-module-card:first-child h3,
+.admin-quick-actions-block .dealer-modules-grid .dealer-module-card:nth-child(2) h3 {
+  font-size: 1.1em;
+}
