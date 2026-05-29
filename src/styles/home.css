@@ -100,6 +100,7 @@
 .ox-home-hero-copy-v3 h1 {
   max-width: 560px;
   margin: 14px 0 0;
+  font-family: var(--ox-font-display);
   color: rgba(248, 250, 252, 0.99);
   font-size: var(--ox-fs-hero-title);
   line-height: var(--ox-lh-tight);
@@ -561,6 +562,7 @@
 .ox-home-buyer-v3 h2,
 .ox-home-dealer-v3 h2 {
   margin: 0;
+  font-family: var(--ox-font-display);
   color: rgba(248, 250, 252, 0.97);
   font-size: var(--ox-fs-section-title);
   line-height: 1;

@@ -2906,6 +2906,7 @@
 .support-panel-head h1,
 .buyer-panel-head h1 {
   margin: 8px 0 0;
+  font-family: var(--ox-font-display);
   color: rgba(248, 250, 252, 0.98);
   font-size: clamp(1.45rem, 3vw, 2.35rem);
   line-height: 1.04;
@@ -14164,6 +14165,7 @@ body::-webkit-scrollbar {
 }
 
 .admin-ops-hero h2 {
+  font-family: var(--ox-font-display);
   font-size: clamp(1.35rem, 2.6vw, 2rem);
 }
 
