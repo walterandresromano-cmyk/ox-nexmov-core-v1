@@ -7823,7 +7823,7 @@ body::-webkit-scrollbar {
   appearance: none;
   border: 0;
   background: transparent;
-  padding: 14px 0;
+  padding: 16px 0;
   color: var(--ox-cyan-soft);
   font: inherit;
   font-weight: var(--ox-fw-bold);
