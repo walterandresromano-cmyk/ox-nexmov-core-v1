@@ -7210,7 +7210,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
 @media (max-width: 760px) {
   .ox-home-shell-v3 {
-    width: min(100% - 20px, 430px) !important;
+    width: min(100% - 18px, 460px) !important;
     gap: 10px !important;
   }
 
@@ -7513,7 +7513,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
 @media (max-width: 760px) {
   .ox-home-shell-v3 {
-    width: min(100% - 20px, 430px) !important;
+    width: min(100% - 18px, 460px) !important;
     gap: 10px !important;
   }
 
@@ -7541,6 +7541,12 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
   .ox-home-featured-vehicles-v3 {
     padding: 12px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .ox-home-shell-v3 {
+    width: min(100% - 12px, 420px) !important;
   }
 }
 

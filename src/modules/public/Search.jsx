@@ -1161,6 +1161,7 @@ export default function Search({
     <section className="ox-search-page">
       <div className="ox-search-shell">
         <section className="ox-search-hero">
+          <div className="ox-search-hero-road" aria-hidden="true" />
           <div className="ox-search-hero-main">
           <div className="ox-search-title-block">
             <p className="ox-search-eyebrow">Búsqueda inteligente</p>
@@ -1246,6 +1247,18 @@ export default function Search({
               ))}
             </div>
           )}
+
+          <div className="ox-search-hero-brand" aria-hidden="true">
+            <img
+              className="ox-search-hero-logo"
+              src="/hero-car.svg"
+              alt=""
+              decoding="async"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          </div>
         </section>
 
         <section className="ox-search-workspace">

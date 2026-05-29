@@ -41,6 +41,7 @@ export default function SellVehicle({ authUser, onNavigate }) {
       <div className="container panel sell-vehicle-panel garage-public-panel">
 
         <div className="garage-public-hero">
+          <div className="garage-public-hero-bg" aria-hidden="true" />
           <div className="garage-public-hero-text">
             <p className="eyebrow">Garage oX</p>
             <h1>Garage oX</h1>
@@ -91,6 +92,18 @@ export default function SellVehicle({ authUser, onNavigate }) {
                 <span>Seguro al día</span>
               </div>
             </div>
+          </div>
+
+          <div className="garage-public-hero-brand" aria-hidden="true">
+            <img
+              className="garage-public-hero-logo"
+              src="/hero-car.svg"
+              alt=""
+              decoding="async"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
           </div>
         </div>
 

@@ -89,6 +89,7 @@ export default function ZeroKm({ authUser, authProfile }) {
   return (
     <section className="zero-km-page ox-public-page">
       <section className="zero-km-panel ox-public-hero">
+        <div className="zero-km-hero-road" aria-hidden="true" />
         <p className="ox-public-eyebrow">Financiación 0km</p>
         <h1 className="ox-public-title">
           Explorá opciones 0km con <span>condiciones claras</span>
@@ -105,6 +106,18 @@ export default function ZeroKm({ authUser, authProfile }) {
           <a className="secondary-action" href="#zero-km-how">
             Ver criterios
           </a>
+        </div>
+
+        <div className="zero-km-hero-brand" aria-hidden="true">
+          <img
+            className="zero-km-hero-logo"
+            src="/hero-car.svg"
+            alt=""
+            decoding="async"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+            }}
+          />
         </div>
       </section>
 

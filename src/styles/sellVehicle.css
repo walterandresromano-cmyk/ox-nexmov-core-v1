@@ -1122,3 +1122,228 @@
   }
 }
 
+/* Garage oX hero media layer: aligned with the public hero system. */
+.garage-public-page .garage-public-panel {
+  width: min(100% - calc(var(--ox-page-gutter) * 2), var(--ox-page-max)) !important;
+  max-width: var(--ox-page-max) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.garage-public-page .garage-public-panel::after {
+  display: none;
+}
+
+.garage-public-page .garage-public-hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px) !important;
+  min-height: 271px !important;
+  align-items: center !important;
+  padding: 24px 34px 28px !important;
+  border: 1px solid rgba(125, 211, 252, 0.22) !important;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.16), transparent 30%),
+    radial-gradient(circle at 70% 16%, rgba(37, 99, 235, 0.16), transparent 35%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98)) !important;
+  box-shadow:
+    0 24px 66px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.garage-public-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: url("/garage-hero-studio.png");
+  background-size: cover;
+  background-position: center 50%;
+  mix-blend-mode: luminosity;
+  opacity: 0.46;
+  filter: saturate(0.86) contrast(0.84) brightness(1.18);
+  transform: scale(1.01);
+  mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.96) 0%,
+    rgba(0, 0, 0, 0.74) 32%,
+    rgba(0, 0, 0, 0.30) 60%,
+    transparent 80%
+  );
+  -webkit-mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.96) 0%,
+    rgba(0, 0, 0, 0.74) 32%,
+    rgba(0, 0, 0, 0.30) 60%,
+    transparent 80%
+  );
+}
+
+.garage-public-page .garage-public-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(5, 15, 29, 0.84) 0%, rgba(5, 15, 29, 0.66) 42%, rgba(5, 15, 29, 0.18) 100%),
+    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.16), transparent 32%),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.06), rgba(2, 6, 23, 0.72));
+}
+
+.garage-public-page .garage-public-hero::after {
+  content: "";
+  position: absolute;
+  left: 38%;
+  right: 5%;
+  bottom: 13%;
+  z-index: -1;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.34), transparent);
+  box-shadow:
+    0 0 34px rgba(37, 99, 235, 0.34),
+    0 0 78px rgba(14, 165, 233, 0.18);
+}
+
+.garage-public-page .garage-public-hero-text,
+.garage-public-hero-brand {
+  position: relative;
+  z-index: 2;
+}
+
+.garage-public-page .garage-public-hero-deco {
+  display: none !important;
+}
+
+.garage-public-hero-brand {
+  position: absolute;
+  right: 30px;
+  bottom: 22px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.garage-public-hero-logo {
+  display: block;
+  width: clamp(132px, 13vw, 190px);
+  max-height: 62px;
+  object-fit: contain;
+  opacity: 0.94;
+}
+
+:root[data-theme="light"] .garage-public-page .garage-public-hero {
+  border-color: rgba(14, 116, 144, 0.15) !important;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(14, 165, 233, 0.13), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.12), transparent 24%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 250, 0.95)) !important;
+  box-shadow:
+    0 24px 66px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+:root[data-theme="light"] .garage-public-hero-bg {
+  mix-blend-mode: luminosity;
+  opacity: 0.24;
+  filter: grayscale(1) saturate(0.54) contrast(0.70) brightness(1.34);
+  mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.90) 0%,
+    rgba(0, 0, 0, 0.60) 28%,
+    rgba(0, 0, 0, 0.22) 56%,
+    transparent 76%
+  );
+  -webkit-mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.90) 0%,
+    rgba(0, 0, 0, 0.60) 28%,
+    rgba(0, 0, 0, 0.22) 56%,
+    transparent 76%
+  );
+}
+
+:root[data-theme="light"] .garage-public-page .garage-public-hero::before {
+  background:
+    linear-gradient(90deg, rgba(239, 249, 255, 0.98) 0%, rgba(229, 246, 253, 0.90) 42%, rgba(241, 248, 249, 0.50) 100%),
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.16), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(207, 235, 248, 0.52));
+}
+
+:root[data-theme="light"] .garage-public-page .garage-public-hero::after {
+  background: linear-gradient(90deg, transparent, rgba(14, 116, 144, 0.22), transparent);
+  box-shadow:
+    0 0 28px rgba(14, 165, 233, 0.18),
+    0 0 70px rgba(37, 99, 235, 0.10);
+}
+
+:root[data-theme="light"] .garage-public-hero-logo {
+  opacity: 0.88;
+  filter:
+    drop-shadow(0 8px 16px rgba(33, 48, 71, 0.16))
+    drop-shadow(0 0 12px rgba(255, 255, 255, 0.62));
+}
+
+@media (max-width: 900px) {
+  .garage-public-page .garage-public-panel {
+    width: min(100% - 20px, 430px) !important;
+  }
+
+  .garage-public-page .garage-public-hero {
+    min-height: 0 !important;
+    padding: 18px 13px 20px !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .garage-public-hero-bg {
+    background-position: center 48%;
+    opacity: 0.30;
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.60) 30%,
+      rgba(0, 0, 0, 0.82) 62%,
+      rgba(0, 0, 0, 0.46) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.60) 30%,
+      rgba(0, 0, 0, 0.82) 62%,
+      rgba(0, 0, 0, 0.46) 100%
+    );
+  }
+
+  .garage-public-hero-brand {
+    display: none;
+  }
+
+  :root[data-theme="light"] .garage-public-hero-bg {
+    opacity: 0.18;
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.48) 30%,
+      rgba(0, 0, 0, 0.68) 62%,
+      rgba(0, 0, 0, 0.30) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.48) 30%,
+      rgba(0, 0, 0, 0.68) 62%,
+      rgba(0, 0, 0, 0.30) 100%
+    );
+  }
+}
+

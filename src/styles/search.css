@@ -2310,3 +2310,201 @@
   min-height: 22px;
 }
 
+/* Search hero image layer: mirrors the Home hero background pattern. */
+.ox-search-hero {
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 236px;
+  border-color: rgba(125, 211, 252, 0.22);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.16), transparent 30%),
+    radial-gradient(circle at 70% 16%, rgba(37, 99, 235, 0.16), transparent 35%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.98));
+}
+
+.ox-search-hero-road {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: url("/search-hero-road.png");
+  background-size: cover;
+  background-position: center 54%;
+  mix-blend-mode: luminosity;
+  opacity: 0.46;
+  transform: scale(1.01);
+  mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.70) 28%,
+    rgba(0, 0, 0, 0.28) 58%,
+    transparent 78%
+  );
+  -webkit-mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.70) 28%,
+    rgba(0, 0, 0, 0.28) 58%,
+    transparent 78%
+  );
+}
+
+.ox-search-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(5, 15, 29, 0.90) 0%, rgba(5, 15, 29, 0.76) 42%, rgba(5, 15, 29, 0.22) 100%),
+    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.20), transparent 32%),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.10), rgba(2, 6, 23, 0.82));
+}
+
+.ox-search-hero::after {
+  content: "";
+  position: absolute;
+  left: 38%;
+  right: 5%;
+  bottom: 13%;
+  z-index: -1;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.34), transparent);
+  box-shadow:
+    0 0 34px rgba(37, 99, 235, 0.34),
+    0 0 78px rgba(14, 165, 233, 0.18);
+}
+
+.ox-search-hero-main,
+.ox-search-hero-opor,
+.ox-search-hero-brand {
+  position: relative;
+  z-index: 2;
+}
+
+.ox-search-hero-brand {
+  position: absolute;
+  right: 30px;
+  bottom: 18px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.ox-search-hero-logo {
+  display: block;
+  width: clamp(124px, 12vw, 176px);
+  max-height: 58px;
+  object-fit: contain;
+  opacity: 0.94;
+}
+
+:root[data-theme="light"] .ox-search-hero-road {
+  mix-blend-mode: luminosity;
+  opacity: 0.22;
+}
+
+:root[data-theme="light"] .ox-search-hero {
+  border-color: rgba(14, 116, 144, 0.15) !important;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(14, 165, 233, 0.13), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.12), transparent 24%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 250, 0.95)) !important;
+  box-shadow:
+    0 24px 66px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+:root[data-theme="light"] .ox-search-hero-road {
+  opacity: 0.30;
+  filter: grayscale(1) saturate(0.7) contrast(0.86) brightness(1.22);
+  mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.58) 27%,
+    rgba(0, 0, 0, 0.22) 55%,
+    transparent 75%
+  );
+  -webkit-mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.58) 27%,
+    rgba(0, 0, 0, 0.22) 55%,
+    transparent 75%
+  );
+}
+
+:root[data-theme="light"] .ox-search-hero::before {
+  background:
+    linear-gradient(90deg, rgba(239, 249, 255, 0.96) 0%, rgba(229, 246, 253, 0.84) 42%, rgba(241, 248, 249, 0.36) 100%),
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.20), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(207, 235, 248, 0.48));
+}
+
+:root[data-theme="light"] .ox-search-hero::after {
+  background: linear-gradient(90deg, transparent, rgba(14, 116, 144, 0.22), transparent);
+  box-shadow:
+    0 0 28px rgba(14, 165, 233, 0.18),
+    0 0 70px rgba(37, 99, 235, 0.10);
+}
+
+:root[data-theme="light"] .ox-search-hero-logo {
+  opacity: 0.88;
+  filter:
+    drop-shadow(0 8px 16px rgba(33, 48, 71, 0.16))
+    drop-shadow(0 0 12px rgba(255, 255, 255, 0.62));
+}
+
+@media (max-width: 900px) {
+  .ox-search-hero {
+    min-height: 0;
+  }
+
+  .ox-search-hero-road {
+    background-position: center 48%;
+    opacity: 0.48;
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.60) 30%,
+      rgba(0, 0, 0, 0.82) 62%,
+      rgba(0, 0, 0, 0.46) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.60) 30%,
+      rgba(0, 0, 0, 0.82) 62%,
+      rgba(0, 0, 0, 0.46) 100%
+    );
+  }
+
+  .ox-search-hero-brand {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  :root[data-theme="light"] .ox-search-hero-road {
+    opacity: 0.24;
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.48) 30%,
+      rgba(0, 0, 0, 0.68) 62%,
+      rgba(0, 0, 0, 0.30) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.48) 30%,
+      rgba(0, 0, 0, 0.68) 62%,
+      rgba(0, 0, 0, 0.30) 100%
+    );
+  }
+}
+

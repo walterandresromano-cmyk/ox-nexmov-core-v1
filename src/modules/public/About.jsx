@@ -58,6 +58,7 @@ export default function About({ onNavigate }) {
     <section className="page-section about-page">
       <div className="container panel about-panel">
         <section className="about-hero">
+          <div className="about-hero-road" aria-hidden="true" />
           <div className="about-hero-copy">
             <p className="eyebrow ox-public-eyebrow">Sobre oX NEXMOV</p>
 
@@ -70,6 +71,18 @@ export default function About({ onNavigate }) {
               comparación para que comprar o vender un vehículo sea una
               experiencia más clara, trazable y confiable.
             </p>
+          </div>
+
+          <div className="about-hero-brand" aria-hidden="true">
+            <img
+              className="about-hero-logo"
+              src="/hero-car.svg"
+              alt=""
+              decoding="async"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
           </div>
         </section>
 

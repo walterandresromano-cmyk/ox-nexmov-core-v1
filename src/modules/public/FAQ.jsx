@@ -233,6 +233,7 @@ export default function FAQ({ onNavigate }) {
     <section className="page-section faq-page">
       <div className="container panel faq-panel">
         <section className="faq-hero">
+          <div className="faq-hero-road" aria-hidden="true" />
           <div className="faq-hero-copy">
             <p className="eyebrow ox-public-eyebrow">Centro de ayuda</p>
 
@@ -242,6 +243,18 @@ export default function FAQ({ onNavigate }) {
               Resolvemos las dudas más importantes para que compradores y
               dealers usen oX NEXMOV con claridad y confianza.
             </p>
+          </div>
+
+          <div className="faq-hero-brand" aria-hidden="true">
+            <img
+              className="faq-hero-logo"
+              src="/hero-car.svg"
+              alt=""
+              decoding="async"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
           </div>
         </section>
 

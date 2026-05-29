@@ -212,6 +212,7 @@ export default function JoinNetwork({ onNavigate }) {
     <section className="page-section join-network-page">
       <div className="container panel join-network-panel">
         <section className="join-network-hero">
+          <div className="join-network-hero-road" aria-hidden="true" />
           <div className="join-network-hero-copy">
             <p className="eyebrow ox-public-eyebrow">Red de dealers</p>
 
@@ -239,6 +240,18 @@ export default function JoinNetwork({ onNavigate }) {
                 Ver publicaciones
               </button>
             </div>
+          </div>
+
+          <div className="join-network-hero-brand" aria-hidden="true">
+            <img
+              className="join-network-hero-logo"
+              src="/hero-car.svg"
+              alt=""
+              decoding="async"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
           </div>
         </section>
 
