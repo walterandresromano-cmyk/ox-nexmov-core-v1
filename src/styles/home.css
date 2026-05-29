@@ -766,13 +766,10 @@
 .ox-home-confidence-list-v3 article > span {
   display: inline-grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   flex: 0 0 auto;
-  border-radius: 10px;
   color: #38bdf8;
-  background: rgba(14, 165, 233, 0.10);
-  border: 1px solid rgba(56, 189, 248, 0.22);
   font-size: 0.72rem;
   font-weight: 950;
   line-height: 1;
@@ -1090,27 +1087,14 @@
   content: "✓";
   position: absolute;
   left: 0;
-  top: -1px;
+  top: 50%;
   display: grid;
   place-items: center;
   width: 18px;
   height: 18px;
-  border-radius: 999px;
-  background: rgba(14, 165, 233, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.22);
   color: #38bdf8;
-  font-size: 0.54rem;
+  font-size: 0.7rem;
   font-weight: 950;
-}
-
-.ox-home-dealer-v3 li::before {
-  display: inline-grid;
-  top: 50%;
-  width: 22px;
-  height: 22px;
-  font-size: 0.58rem;
-  line-height: 1;
-  text-align: center;
   transform: translateY(-50%);
 }
 
