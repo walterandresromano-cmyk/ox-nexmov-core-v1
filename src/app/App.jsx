@@ -118,6 +118,12 @@ function getInitialCompareItems() {
   }
 }
 
+function getInitialRouteFromHash() {
+  if (typeof window === "undefined") return "home";
+  const hash = window.location.hash.replace(/^#\/?/, "").split("?")[0].trim();
+  return PUBLIC_ROUTES.has(hash) ? hash : "home";
+}
+
 function getInitialTheme() {
   if (typeof window === "undefined") return "dark";
 
@@ -163,7 +169,7 @@ function canAccessRoute(route, role, authUser) {
 }
 
 export default function App() {
-  const [currentRoute, setCurrentRoute] = useState("home");
+  const [currentRoute, setCurrentRoute] = useState(getInitialRouteFromHash);
   const [routeParams, setRouteParams] = useState({});
   const [compareItems, setCompareItems] = useState(getInitialCompareItems);
   const [favoriteItems, setFavoriteItems] = useState([]);
@@ -214,11 +220,16 @@ export default function App() {
 
     if (!canAccessRoute(safeNextRoute, role, authUser)) {
       setCurrentRoute(getHomeRouteForRole(role));
+      window.location.hash = getHomeRouteForRole(role) === "home" ? "" : getHomeRouteForRole(role);
       return;
     }
 
     setRouteParams(payload || {});
     setCurrentRoute(safeNextRoute);
+    window.location.hash = safeNextRoute === "home" ? "" : safeNextRoute;
+    if (ROUTE_TITLES[safeNextRoute]) {
+      document.title = ROUTE_TITLES[safeNextRoute];
+    }
   }
 
   async function refreshAuthProfile(options = {}) {
@@ -312,6 +323,17 @@ export default function App() {
     document.documentElement.style.colorScheme = theme;
     window.localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
+
+  useEffect(() => {
+    function handleHashChange() {
+      const hash = window.location.hash.replace(/^#\/?/, "").split("?")[0].trim();
+      const target = PUBLIC_ROUTES.has(hash) ? hash : "home";
+      setCurrentRoute(target);
+      if (ROUTE_TITLES[target]) document.title = ROUTE_TITLES[target];
+    }
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   function toggleTheme() {
     setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
