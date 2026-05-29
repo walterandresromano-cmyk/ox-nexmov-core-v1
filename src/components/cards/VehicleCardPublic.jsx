@@ -46,6 +46,8 @@ function getMarketBadge(delta) {
   const absolutePercent = Math.abs(percent);
 
   if (absolutePercent < 0.1) return null;
+  // Differences over 100% indicate stale reference data (common in AR inflation context)
+  if (absolutePercent > 100) return null;
 
   if (delta.isBelowMarket) {
     return {
