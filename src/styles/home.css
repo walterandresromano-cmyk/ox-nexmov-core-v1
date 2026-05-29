@@ -293,10 +293,12 @@
 .ox-home-hero-stage-v3 {
   position: relative;
   display: grid;
-  place-items: center;
+  align-items: center;
+  justify-items: end;
   min-height: 245px;
   align-self: center;
   overflow: visible;
+  padding-right: 16px;
 }
 
 .ox-home-neon-frame-v3 {
@@ -320,19 +322,12 @@
   display: block;
   position: relative;
   z-index: 3;
-  width: min(100%, 820px);
-  max-width: none;
-  transform: translateY(16px) scale(1.04);
-  filter:
-    drop-shadow(0 30px 38px rgba(0, 0, 0, 0.70))
-    drop-shadow(0 0 56px rgba(37, 99, 235, 0.32));
-}
-
-.ox-home-hero-car-v3 img {
-  display: block;
-  width: 100%;
-  max-height: 340px;
+  width: min(100%, 200px);
+  max-height: 80px;
   object-fit: contain;
+  filter:
+    drop-shadow(0 8px 16px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 20px rgba(37, 99, 235, 0.18));
 }
 
 .ox-home-hero-car-fallback-v3 {
@@ -813,18 +808,6 @@
     linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(15, 23, 42, 0.8));
 }
 
-.ox-home-confidence-cta-v3::after {
-  content: "";
-  position: absolute;
-  right: 18px;
-  bottom: 12px;
-  width: 130px;
-  height: 40px;
-  opacity: 0.78;
-  background:
-    linear-gradient(0deg, transparent 45%, rgba(56, 189, 248, 0.55) 46%, transparent 48%),
-    radial-gradient(ellipse at 50% 100%, transparent 58%, rgba(56, 189, 248, 0.36) 59%, transparent 61%);
-}
 
 .ox-home-confidence-cta-v3 strong {
   position: relative;
@@ -1287,12 +1270,8 @@
   }
 
   .ox-home-hero-car-v3 {
-    width: min(100%, 700px);
-    transform: translateY(24px) scale(1.08);
-  }
-
-  .ox-home-hero-car-v3 img {
-    max-height: 390px;
+    width: min(100%, 220px);
+    max-height: 90px;
   }
 
   .ox-home-trust-strip-v3 {
@@ -1562,12 +1541,8 @@
   }
 
   .ox-home-hero-car-v3 {
-    width: min(116%, 390px);
-    transform: translateY(20px) scale(1.04);
-  }
-
-  .ox-home-hero-car-v3 img {
-    max-height: 250px;
+    width: min(100%, 180px);
+    max-height: 70px;
   }
 
   .ox-home-featured-deck {
@@ -2376,4 +2351,79 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.88),
     0 10px 24px rgba(33, 48, 71, 0.07);
+}
+
+/* ── Hero road atmospheric background ──────────────────────── */
+.ox-home-hero-road {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url('/hero-road.jpg');
+  background-size: cover;
+  background-position: center 58%;
+  mix-blend-mode: luminosity;
+  opacity: 0.52;
+  mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.70) 25%,
+    rgba(0, 0, 0, 0.28) 50%,
+    transparent 68%
+  );
+  -webkit-mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.70) 25%,
+    rgba(0, 0, 0, 0.28) 50%,
+    transparent 68%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+:root[data-theme="light"] .ox-home-hero-road {
+  mix-blend-mode: luminosity;
+  opacity: 0.14;
+}
+
+@media (max-width: 900px) {
+  .ox-home-hero-road {
+    background-position: center 28%;
+    opacity: 0.58;
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.10) 0%,
+      rgba(0, 0, 0, 0.72) 30%,
+      rgba(0, 0, 0, 0.88) 60%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.10) 0%,
+      rgba(0, 0, 0, 0.72) 30%,
+      rgba(0, 0, 0, 0.88) 60%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+  }
+}
+
+@media (max-width: 600px) {
+  .ox-home-hero-road {
+    background-position: center 25%;
+    opacity: 0.52;
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.65) 28%,
+      rgba(0, 0, 0, 0.82) 58%,
+      rgba(0, 0, 0, 0.48) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.65) 28%,
+      rgba(0, 0, 0, 0.82) 58%,
+      rgba(0, 0, 0, 0.48) 100%
+    );
+  }
 }

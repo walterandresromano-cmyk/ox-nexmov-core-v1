@@ -10,6 +10,7 @@ import { normalizeRole } from "../lib/auth.js";
 const POLL_MS = 30000;
 const ADMIN_SINCE_KEY = "ox-admin-notif-since";
 
+// Labels para dealer y admin — no se usan en la rama buyer
 const CRM_STATUS_LABELS = {
   new: "recibida",
   nuevo: "recibida",
@@ -26,6 +27,43 @@ function statusLabel(s) {
   return CRM_STATUS_LABELS[s] || s || "actualizada";
 }
 
+// ── Buyer-safe: solo transiciones comerciales visibles al comprador ──
+const BUYER_COMMERCIAL_TRANSITIONS = new Set(["contacted", "reserved", "sold", "closed"]);
+
+const BUYER_TRANSITION_MESSAGES = {
+  contacted: (title) => `El dealer respondió tu consulta sobre ${title}.`,
+  reserved:  (title) => `El vehículo ${title} fue reservado.`,
+  sold:      (title) => `La operación sobre ${title} fue completada.`,
+  closed:    (title) => `El dealer actualizó tu consulta sobre ${title}.`,
+};
+
+// ── Buyer read-state persistence (localStorage, sin SQL) ─────────────
+function getBuyerNotificationKey(leadId, status) {
+  return `buyer:${leadId}:${status}`;
+}
+
+function getReadBuyerNotificationKeys(userId) {
+  try {
+    const raw = localStorage.getItem(`ox_buyer_read_notifications:${userId}`);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw);
+    return new Set(Array.isArray(parsed) ? parsed : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveReadBuyerNotificationKeys(userId, keys) {
+  try {
+    localStorage.setItem(
+      `ox_buyer_read_notifications:${userId}`,
+      JSON.stringify([...keys])
+    );
+  } catch {
+    // localStorage no disponible o lleno
+  }
+}
+
 function makeId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
@@ -36,6 +74,7 @@ export function useNotifications({ authUser, authProfile }) {
   const channelRef = useRef(null);
   const pollRef = useRef(null);
   const prevLeadStatuses = useRef({});
+  const toastedKeysRef = useRef(new Set());
 
   const role = normalizeRole(authProfile?.role);
   const userId = authUser?.id;
@@ -64,33 +103,48 @@ export function useNotifications({ authUser, authProfile }) {
   }, [pushToast]);
 
   // ── Buyer ─────────────────────────────────────────────────────
+  // Solo transiciones comerciales son visibles. Estados internos del CRM dealer
+  // (seen, in_progress, negotiation, lost, etc.) se trackean silenciosamente
+  // sin generar toast, sin aparecer en la campana y sin exponer el valor crudo.
+  // La lectura se persiste en localStorage por usuario — sobrevive polling y reload.
   const fetchBuyer = useCallback(async () => {
     const { leads } = await listVehicleLeadsForCurrentBuyer();
     if (!leads?.length) return;
 
-    const items = leads.map((lead) => {
-      const title = `${lead.vehicle_brand || ""} ${lead.vehicle_model || ""}`.trim() || "Vehículo";
-      const prevStatus = prevLeadStatuses.current[lead.lead_id || lead.id];
-      const curStatus = lead.crm_status;
-      const changed = prevStatus && prevStatus !== curStatus;
+    const readKeys = getReadBuyerNotificationKeys(userId);
+    const items = [];
 
-      if (changed) {
-        pushToast(`Tu consulta sobre ${title} fue ${statusLabel(curStatus)}.`, "buyer");
+    for (const lead of leads) {
+      const leadId = lead.lead_id || lead.id;
+      const title = `${lead.vehicle_brand || ""} ${lead.vehicle_model || ""}`.trim() || "el vehículo";
+      const curStatus = lead.crm_status;
+      const isCommercial = BUYER_COMMERCIAL_TRANSITIONS.has(curStatus);
+
+      // Siempre trackear — necesario para detectar cambios futuros
+      prevLeadStatuses.current[leadId] = curStatus;
+
+      if (!isCommercial) continue;
+
+      const notificationKey = getBuyerNotificationKey(leadId, curStatus);
+      const alreadyRead = readKeys.has(notificationKey);
+
+      // Toast una sola vez por sesión por clave no leída
+      if (!alreadyRead && !toastedKeysRef.current.has(notificationKey)) {
+        pushToast(BUYER_TRANSITION_MESSAGES[curStatus](title), "buyer");
+        toastedKeysRef.current.add(notificationKey);
       }
 
-      prevLeadStatuses.current[lead.lead_id || lead.id] = curStatus;
-
-      return {
-        id: lead.lead_id || lead.id,
-        message: `${title} — ${statusLabel(curStatus)}`,
+      items.push({
+        id: leadId,
+        notification_key: notificationKey,
+        message: BUYER_TRANSITION_MESSAGES[curStatus](title),
         created_at: lead.created_at,
-        is_read: !changed && Boolean(prevStatus),
-        crm_status: curStatus,
-      };
-    });
+        is_read: alreadyRead,
+      });
+    }
 
     setNotifications(items);
-  }, [pushToast]);
+  }, [pushToast, userId]);
 
   // ── Admin ─────────────────────────────────────────────────────
   const fetchAdmin = useCallback(async () => {
@@ -148,9 +202,22 @@ export function useNotifications({ authUser, authProfile }) {
   }, [role, userId, fetchDealer, fetchBuyer, fetchAdmin]);
 
   const markAllRead = useCallback(async () => {
-    if (role === "dealer") await markDealerNotificationsRead();
+    if (role === "dealer") {
+      await markDealerNotificationsRead();
+      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+      return;
+    }
+    if (role === "buyer") {
+      setNotifications((prev) => {
+        const keys = getReadBuyerNotificationKeys(userId);
+        prev.forEach((n) => { if (n.notification_key) keys.add(n.notification_key); });
+        saveReadBuyerNotificationKeys(userId, keys);
+        return prev.map((n) => ({ ...n, is_read: true }));
+      });
+      return;
+    }
     setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
-  }, [role]);
+  }, [role, userId]);
 
   // ── Lifecycle ─────────────────────────────────────────────────
   useEffect(() => {

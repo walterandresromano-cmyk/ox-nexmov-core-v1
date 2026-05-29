@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 254 48" role="img" aria-label="oX NEXMOV">
+  <defs>
+    <linearGradient id="oxBlue6" x1="14" y1="12" x2="50" y2="36">
+      <stop offset="0%" stop-color="#dbeafe"/>
+      <stop offset="38%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+
+    <linearGradient id="word6" x1="76" y1="12" x2="238" y2="36">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="48%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <linearGradient id="divider6" x1="0" y1="13" x2="0" y2="35">
+      <stop offset="0%" stop-color="#93c5fd" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#60a5fa" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="glow6" x="-35%" y="-35%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="0" stdDeviation="1.15" flood-color="#3b82f6" flood-opacity="0.38"/>
+      <feDropShadow dx="0" dy="3" stdDeviation="4.5" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#glow6)">
+    <circle
+      cx="21"
+      cy="24"
+      r="5.7"
+      fill="none"
+      stroke="url(#oxBlue6)"
+      stroke-width="4.35"
+    />
+
+    <path
+      d="M32 16.65 L44 31.35"
+      fill="none"
+      stroke="url(#oxBlue6)"
+      stroke-width="4.95"
+      stroke-linecap="round"
+    />
+
+    <path
+      d="M44 16.65 L32 31.35"
+      fill="none"
+      stroke="url(#oxBlue6)"
+      stroke-width="4.95"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <rect
+    x="56"
+    y="13.5"
+    width="1.15"
+    height="21"
+    rx="0.6"
+    fill="url(#divider6)"
+  />
+
+  <rect
+    x="60.5"
+    y="18"
+    width="0.8"
+    height="12"
+    rx="0.4"
+    fill="#60a5fa"
+    opacity="0.22"
+  />
+
+  <text
+    x="76"
+    y="31"
+    font-family="Inter, Montserrat, Arial, Helvetica, sans-serif"
+    font-size="18"
+    font-weight="900"
+    letter-spacing="4.45"
+    fill="url(#word6)"
+  >NEXMOV</text>
+</svg>

@@ -6,6 +6,14 @@ import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
 import { listPublicLatestVehicles } from "../../services/vehicles.service.js";
+import {
+  ShieldCheckIcon,
+  ArrowsSwapIcon,
+  TargetIcon,
+  DollarSignIcon,
+  ClipboardCheckIcon,
+  CheckIcon,
+} from "../../components/icons/PublicIcons.jsx";
 
 const quickSearches = [
   "SUV financiada",
@@ -17,11 +25,11 @@ const quickSearches = [
 ];
 
 const trustItems = [
-  { title: "Dealers verificados", text: "Habilitados por administración", icon: "◇" },
-  { title: "Comparador real", text: "Lado a lado con datos reales", icon: "⇄" },
-  { title: "Contactos trazables", text: "Registrados antes del chat", icon: "◎" },
-  { title: "Financiación visible", text: "Entrega, cuotas y tasa siempre claros", icon: "$" },
-  { title: "Publicaciones auditadas", text: "Revisadas antes de publicarse", icon: "✓" },
+  { title: "Dealers verificados", text: "Habilitados por administración", icon: ShieldCheckIcon },
+  { title: "Comparador real", text: "Lado a lado con datos reales", icon: ArrowsSwapIcon },
+  { title: "Contactos trazables", text: "Registrados antes del chat", icon: TargetIcon },
+  { title: "Financiación visible", text: "Entrega, cuotas y tasa siempre claros", icon: DollarSignIcon },
+  { title: "Publicaciones auditadas", text: "Revisadas antes de publicarse", icon: ClipboardCheckIcon },
 ];
 
 const confidenceItems = [
@@ -568,6 +576,7 @@ export default function Home({ onNavigate, appActions = {} }) {
     <section className="page-section ox-home-page-v3">
       <div className="container ox-home-shell-v3">
         <section className="ox-home-hero-v3">
+          <div className="ox-home-hero-road" aria-hidden="true" />
           <div className="ox-home-hero-copy-v3">
             <p className="ox-home-eyebrow-v3">
               Red automotriz verificada · Argentina
@@ -632,39 +641,33 @@ export default function Home({ onNavigate, appActions = {} }) {
             </div>
 
             <div className="ox-home-trust-strip-v3">
-              {trustItems.map((item) => (
-                <article key={item.title}>
-                  <span>{item.icon}</span>
-                  <div>
-                    <strong>{item.title}</strong>
-                    <small>{item.text}</small>
-                  </div>
-                </article>
-              ))}
+              {trustItems.map((item) => {
+                const TrustIcon = item.icon;
+                return (
+                  <article key={item.title}>
+                    <span><TrustIcon size={18} /></span>
+                    <div>
+                      <strong>{item.title}</strong>
+                      <small>{item.text}</small>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
 
-          <div className="ox-home-hero-stage-v3">
-            <div className="ox-home-neon-frame-v3"></div>
+          <div className="ox-home-hero-stage-v3" />
 
-            <picture className="ox-home-hero-car-v3">
-              <source srcSet="/hero-car.webp" type="image/webp" />
-              <img
-                src="/hero-car.png"
-                alt="Vehículo institucional oX NEXMOV"
-                width="1300"
-                height="867"
-                decoding="async"
-                onError={(event) => {
-                  event.currentTarget.parentElement.style.display = "none";
-                }}
-              />
-            </picture>
-
-            <div className="ox-home-hero-car-fallback-v3">
-              <span>oX NEXMOV</span>
-              <strong>Vehículo institucional</strong>
-            </div>
+          <div className="ox-home-hero-brand">
+            <img
+              className="ox-home-hero-car-v3"
+              src="/hero-car.svg"
+              alt="oX NEXMOV"
+              decoding="async"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
           </div>
 
         </section>
@@ -784,7 +787,7 @@ export default function Home({ onNavigate, appActions = {} }) {
             <div className="ox-home-confidence-list-v3">
               {confidenceItems.map((item) => (
                 <article key={item.title}>
-                  <span>◇</span>
+                  <span><CheckIcon size={16} /></span>
                   <div>
                     <strong>{item.title}</strong>
                     <p>{item.text}</p>

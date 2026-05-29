@@ -22616,3 +22616,28 @@ body::-webkit-scrollbar {
     grid-column: 1;
   }
 }
+
+/* ── Ajustes mobile — logo card ─────────────────────────────────────────── */
+.dealer-settings-logo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dealer-settings-logo-img {
+  display: block;
+  width: 88px;
+  height: 66px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.dealer-settings-logo-card select {
+  width: 100%;
+  min-height: 38px;
+}
+
+:root[data-theme="light"] .dealer-settings-logo-img {
+  background: rgba(0, 0, 0, 0.04);
+}

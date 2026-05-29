@@ -101,12 +101,12 @@ const PLAN_TIERS = [
 const PLAN_ORDER = ["inicio", "pro", "elite", "platinum"];
 
 const DEALER_MOBILE_SECTIONS = [
-  { id: "publish", label: "Publicar" },
-  { id: "vehicles", label: "Inventario" },
+  { id: "home", label: "Resumen" },
+  { id: "vehicles", label: "Publicaciones" },
   { id: "leads", label: "Leads" },
-  { id: "radar", label: "Radar oX" },
   { id: "tickets", label: "Soporte" },
-  { id: "plan", label: "Mi plan" },
+  { id: "publish", label: "Publicar" },
+  { id: "plan", label: "Ajustes" },
 ];
 
 const DEALER_FEATURE_PREVIEWS = [
@@ -1246,8 +1246,9 @@ export default function DealerPanel({ authProfile, onNavigate }) {
   const unreadNotificationsCount = notifications.filter((n) => !n.is_read).length;
 
   function renderDealerMobileTabs() {
+    if (activeDealerMobileSection === "home") return null;
     return (
-      <nav className="dealer-mobile-tabs" aria-label="Secciones dealer mobile">
+      <nav className="dealer-mobile-tabs dealer-nav-grid" aria-label="Secciones dealer mobile">
         {DEALER_MOBILE_SECTIONS.map((section) => (
           <button
             key={section.id}
@@ -1266,84 +1267,87 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
   function renderDealerMobileHome() {
     return (
-      <div className="dealer-mobile-home">
-        <div className="dealer-mobile-home-head">
-          <div>
-            <span>{dealer.commercialName}</span>
-            <strong>{permissions.rankLabel}</strong>
-            <p>{getPlanStatusLabel(dealer.planStatus)}</p>
-            {isPlatinum && (
-              <span className="dealer-mobile-platinum-pill">
-                Platinum · publicaciones ilimitadas
-              </span>
-            )}
+      <>
+        <div className="dealer-mobile-home">
+          <div className="dealer-mobile-home-head">
+            <div>
+              <span>{dealer.commercialName}</span>
+              <strong>{permissions.rankLabel}</strong>
+              <p>{getPlanStatusLabel(dealer.planStatus)}</p>
+              {isPlatinum && (
+                <span className="dealer-mobile-platinum-pill">
+                  Platinum · publicaciones ilimitadas
+                </span>
+              )}
+            </div>
           </div>
 
-          <button
-            type="button"
-            className="primary-action"
-            disabled={!publishCheck.allowed}
-            onClick={() => {
-              if (publishCheck.allowed) {
-                setShowVehicleModal(true);
-              }
-            }}
-          >
-            Alta de vehículo
-          </button>
+          {!publishCheck.allowed && (
+            <div className="auth-warning dealer-mobile-warning">
+              <strong>{publishBlockReason || "No podés publicar ahora."}</strong>
+              <button
+                type="button"
+                className="table-action-btn"
+                onClick={() => openModule("support")}
+              >
+                Contactar admin
+              </button>
+            </div>
+          )}
+
+          <div className="dealer-mobile-kpi-grid">
+            <article className="dealer-mobile-kpi-card">
+              <span>Activas</span>
+              <strong>{activeVehiclesCount}</strong>
+              <p>publicaciones</p>
+            </article>
+
+            <article className="dealer-mobile-kpi-card">
+              <span>Plan</span>
+              <strong>{isPlatinum ? "Ilimitado" : `${used}/${formatLimit(limit)}`}</strong>
+              <p>{isPlatinum ? `${used} creadas` : `${remaining} disponibles`}</p>
+            </article>
+
+            <article className="dealer-mobile-kpi-card">
+              <span>Leads</span>
+              <strong>{newLeadsCount}</strong>
+              <p>Nuevos</p>
+            </article>
+
+            <article className="dealer-mobile-kpi-card">
+              <span>Tickets</span>
+              <strong>{openTicketsCount}</strong>
+              <p>Abiertos</p>
+            </article>
+
+            <article className="dealer-mobile-kpi-card">
+              <span>Revisión</span>
+              <strong>{reviewVehiclesCount}</strong>
+              <p>Observadas</p>
+            </article>
+
+            <article className="dealer-mobile-kpi-card">
+              <span>Vence</span>
+              <strong>{expiresInDays}</strong>
+              <p>Días</p>
+            </article>
+          </div>
         </div>
 
-        {!publishCheck.allowed && (
-          <div className="auth-warning dealer-mobile-warning">
-            <strong>{publishBlockReason || "No podés publicar ahora."}</strong>
+        <div className="dealer-mobile-quicknav">
+          <span className="dealer-mobile-quicknav-label">Accesos rápidos</span>
+          {DEALER_MOBILE_SECTIONS.filter((s) => s.id !== "home").map((section) => (
             <button
+              key={section.id}
               type="button"
-              className="table-action-btn"
-              onClick={() => openModule("support")}
+              className="dealer-mobile-quicknav-btn"
+              onClick={() => handleDealerMobileSectionChange(section.id)}
             >
-              Contactar admin
+              {section.label}
             </button>
-          </div>
-        )}
-
-        <div className="dealer-mobile-kpi-grid">
-          <article className="dealer-mobile-kpi-card">
-            <span>Activas</span>
-            <strong>{activeVehiclesCount}</strong>
-            <p>publicaciones</p>
-          </article>
-
-          <article className="dealer-mobile-kpi-card">
-            <span>Plan</span>
-            <strong>{isPlatinum ? "Ilimitado" : `${used}/${formatLimit(limit)}`}</strong>
-            <p>{isPlatinum ? `${used} creadas` : `${remaining} disponibles`}</p>
-          </article>
-
-          <article className="dealer-mobile-kpi-card">
-            <span>Leads</span>
-            <strong>{newLeadsCount}</strong>
-            <p>Nuevos</p>
-          </article>
-
-          <article className="dealer-mobile-kpi-card">
-            <span>Tickets</span>
-            <strong>{openTicketsCount}</strong>
-            <p>Abiertos</p>
-          </article>
-
-          <article className="dealer-mobile-kpi-card">
-            <span>Revisión</span>
-            <strong>{reviewVehiclesCount}</strong>
-            <p>Observadas</p>
-          </article>
-
-          <article className="dealer-mobile-kpi-card">
-            <span>Vence</span>
-            <strong>{expiresInDays}</strong>
-            <p>Días</p>
-          </article>
+          ))}
         </div>
-      </div>
+      </>
     );
   }
 
@@ -1565,6 +1569,154 @@ export default function DealerPanel({ authProfile, onNavigate }) {
     );
   }
 
+  function renderDealerMobileSettings() {
+    return (
+      <div className="dealer-mobile-plan">
+        <div className="buyer-section-head">
+          <div>
+            <h2>Ajustes</h2>
+            <p>Imagen institucional, contacto y configuración del dealer.</p>
+          </div>
+        </div>
+
+        <div className="dealer-mobile-plan-grid">
+          <article className="dealer-mobile-plan-card dealer-settings-logo-card">
+            <span>Imagen institucional</span>
+            {dealerLogo ? (
+              <img
+                src={dealerLogo}
+                alt={`Imagen de ${dealer.commercialName}`}
+                className="dealer-settings-logo-img"
+              />
+            ) : (
+              <p>Sin imagen institucional cargada.</p>
+            )}
+            <button
+              type="button"
+              className="table-action-btn"
+              onClick={() => dealerLogoInputRef.current?.click()}
+              disabled={uploadingDealerLogo}
+            >
+              {uploadingDealerLogo ? "Subiendo..." : "Actualizar imagen"}
+            </button>
+            {dealerLogoError && (
+              <div className="auth-warning">{dealerLogoError}</div>
+            )}
+            {dealerLogoSuccess && (
+              <div className="auth-message">{dealerLogoSuccess}</div>
+            )}
+          </article>
+
+          <article className="dealer-mobile-plan-card">
+            <span>Dealer operativo</span>
+            <select
+              value={dealer.id}
+              onChange={(event) => setSelectedDealerId(event.target.value)}
+            >
+              {dealers.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.commercialName} · {item.plan}
+                </option>
+              ))}
+            </select>
+            <button className="admin-refresh-btn" onClick={refreshDealerPanel}>
+              Actualizar panel
+            </button>
+            {unreadNotificationsCount > 0 && (
+              <span className="dealer-notifications-header-chip">
+                {unreadNotificationsCount} aviso{unreadNotificationsCount !== 1 ? "s" : ""} sin leer
+              </span>
+            )}
+          </article>
+        </div>
+
+        {renderDealerWhatsappContactCard()}
+        {renderDealerProfileEditor()}
+
+        <div className="dealer-mobile-plan-grid">
+          <article
+            className={`dealer-mobile-plan-card rank-${permissions.rankTheme}${
+              isPlatinum ? " dealer-plan-platinum-card" : ""
+            }`}
+          >
+            <span>Plan actual</span>
+            <strong>{permissions.rankLabel}</strong>
+            <p>
+              {dealer.city}, {dealer.province}
+            </p>
+          </article>
+
+          <article className="dealer-mobile-plan-card">
+            <span>Estado</span>
+            <strong>{getPlanStatusLabel(dealer.planStatus)}</strong>
+            <p>{planStatusDescription}</p>
+          </article>
+
+          <article className="dealer-mobile-plan-card">
+            <span>Cupo usado</span>
+            <strong>{capacityLabel}</strong>
+            <p>{secondaryCapacityLabel}</p>
+          </article>
+
+          <article className="dealer-mobile-plan-card">
+            <span>Vencimiento</span>
+            <strong>{expiresInDays} días</strong>
+            <p>{getPlanAlertLabel(expiresInDays)}</p>
+          </article>
+
+          {extraQuota > 0 && (
+            <article className="dealer-mobile-plan-card">
+              <span>Cupo extra</span>
+              <strong>{extraQuota}</strong>
+              <p>Temporal del período actual.</p>
+            </article>
+          )}
+
+          <article
+            className={`dealer-mobile-plan-card dealer-plan-benefits-card${
+              isPlatinum ? " dealer-plan-platinum-card" : ""
+            }`}
+          >
+            <span>Beneficios de tu plan</span>
+            <strong>{isPlatinum ? "Nivel máximo" : permissions.planLabel}</strong>
+            <p>
+              {isPlatinum
+                ? "Máxima presencia para operaciones de alto volumen."
+                : "Herramientas comerciales disponibles según tu plan."}
+            </p>
+            <div className="dealer-plan-benefits-grid">
+              {planBenefitBadges.map((badge) => (
+                <span key={badge} className="dealer-plan-benefit-chip">
+                  {badge}
+                </span>
+              ))}
+            </div>
+          </article>
+
+          <article className="dealer-mobile-plan-card">
+            <span>Soporte</span>
+            <strong>Admin</strong>
+            <p>Tickets para plan, cupo, leads o publicaciones.</p>
+            {isPlatinum && (
+              <span className="dealer-platinum-priority-badge">
+                Prioridad Platinum
+              </span>
+            )}
+            <button
+              type="button"
+              className="table-action-btn"
+              onClick={() => openModule("support")}
+            >
+              Abrir soporte
+            </button>
+          </article>
+        </div>
+
+        {renderPlanComparison()}
+      </div>
+    );
+  }
+
   return (
     <section className="page-section">
       <div className="container panel dealer-panel">
@@ -1686,7 +1838,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
             <button
               type="button"
-              className="primary-action dealer-header-mobile-primary"
+              className="table-action-btn dealer-header-mobile-primary"
               disabled={!publishCheck.allowed}
               title={
                 !publishCheck.allowed
@@ -1727,15 +1879,15 @@ export default function DealerPanel({ authProfile, onNavigate }) {
           </div>
         )}
 
-        {renderDealerMobileTabs()}
-
         {activeDealerMobileSection === "home" &&
           activeDealerModule === "summary" &&
           renderDealerMobileHome()}
 
+        {renderDealerMobileTabs()}
+
         {activeDealerMobileSection === "plan" &&
           activeDealerModule === "summary" &&
-          renderDealerMobilePlan()}
+          renderDealerMobileSettings()}
 
         {activeDealerModule === "summary" && (
           <>
