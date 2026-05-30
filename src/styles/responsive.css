@@ -14569,9 +14569,9 @@ textarea:focus-visible,
     height: auto !important;
     min-height: calc(100svh - 220px) !important;
     padding: 28px 20px 36px !important;
-    grid-template-rows: auto auto auto auto !important;
-    row-gap: 18px !important;
-    align-content: start !important;
+    grid-template-rows: auto auto 1fr auto !important;
+    row-gap: 0 !important;
+    align-content: stretch !important;
   }
 
   .ox-home-inventory-road {
@@ -14609,11 +14609,12 @@ textarea:focus-visible,
 
   .ox-home-stats-v3 {
     grid-row: 3 !important;
-    align-self: start !important;
+    align-self: center !important;
   }
 
   .ox-home-locations-v3 {
     grid-row: 4 !important;
+    align-self: end !important;
   }
 }
 
