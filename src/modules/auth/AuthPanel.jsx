@@ -1,5 +1,5 @@
 import "../../styles/auth.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   signInWithEmail,
   signOut,
@@ -14,6 +14,8 @@ const initialLogin = {
   email: "",
   password: "",
 };
+
+const PREFILL_LOGIN_EMAIL_KEY = "ox_prefill_login_email";
 
 const initialRegister = {
   fullName: "",
@@ -77,6 +79,30 @@ export default function AuthPanel({
     useState(initialResetPassword);
   const [newPasswordForm, setNewPasswordForm] = useState(initialNewPassword);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (mode !== "login") return;
+
+    let prefillEmail = "";
+
+    try {
+      prefillEmail =
+        window.sessionStorage.getItem(PREFILL_LOGIN_EMAIL_KEY) || "";
+      if (prefillEmail) {
+        window.sessionStorage.removeItem(PREFILL_LOGIN_EMAIL_KEY);
+      }
+    } catch {
+      prefillEmail = "";
+    }
+
+    if (!prefillEmail) return;
+
+    setLoginForm((current) => ({
+      ...current,
+      email: prefillEmail,
+      password: "",
+    }));
+  }, [mode]);
 
   function updateLogin(field, value) {
     setLoginForm((current) => ({

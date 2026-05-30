@@ -12,6 +12,8 @@ const initialForm = {
   confirmPassword: "",
 };
 
+const PREFILL_LOGIN_EMAIL_KEY = "ox_prefill_login_email";
+
 const invalidRecoveryMessage =
   "El enlace expiró o no es válido. Solicitá un nuevo recupero de contraseña.";
 
@@ -57,6 +59,18 @@ function getRecoveryParamsFromHash() {
     tokenHash: params.get("token_hash") || "",
     type: params.get("type") || "",
   };
+}
+
+function savePrefillLoginEmail(email) {
+  const cleanEmail = String(email || "").trim().toLowerCase();
+
+  if (!cleanEmail) return;
+
+  try {
+    window.sessionStorage.setItem(PREFILL_LOGIN_EMAIL_KEY, cleanEmail);
+  } catch {
+    // sessionStorage unavailable
+  }
 }
 
 export default function ResetPasswordPanel({ onAuthChange, onNavigate }) {
@@ -143,6 +157,12 @@ export default function ResetPasswordPanel({ onAuthChange, onNavigate }) {
       return;
     }
 
+    const { data: userData } =
+      isSupabaseConfigured && supabase
+        ? await supabase.auth.getUser()
+        : { data: null };
+
+    savePrefillLoginEmail(userData?.user?.email);
     setForm(initialForm);
     setUpdated(true);
     setLoading(false);
