@@ -1,6 +1,21 @@
 {
   "rewrites": [
     {
+      "source": "/vehiculo/:id",
+      "has": [
+        {
+          "type": "query",
+          "key": "app",
+          "value": "1"
+        }
+      ],
+      "destination": "/"
+    },
+    {
+      "source": "/vehiculo/:id",
+      "destination": "/api/vehicle-preview?id=:id"
+    },
+    {
       "source": "/(.*)",
       "destination": "/"
     }
