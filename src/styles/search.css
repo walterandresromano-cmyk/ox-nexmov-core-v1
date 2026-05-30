@@ -2328,7 +2328,7 @@
   z-index: -1;
   border-radius: inherit;
   pointer-events: none;
-  background-image: url("/search-hero-road.png");
+  background-image: url("/search-hero-road.webp");
   background-size: cover;
   background-position: center 54%;
   mix-blend-mode: luminosity;

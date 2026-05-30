@@ -538,7 +538,7 @@
   z-index: -2;
   border-radius: inherit;
   pointer-events: none;
-  background-image: url("/about-hero-city.png");
+  background-image: url("/about-hero-city.webp");
   background-size: cover;
   background-position: center 50%;
   mix-blend-mode: luminosity;

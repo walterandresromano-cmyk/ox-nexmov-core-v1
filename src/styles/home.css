@@ -2356,7 +2356,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background-image: url('/hero-road.jpg');
+  background-image: url('/hero-road.webp');
   background-size: cover;
   background-position: center 58%;
   mix-blend-mode: luminosity;
