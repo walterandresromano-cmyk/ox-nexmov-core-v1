@@ -14567,10 +14567,11 @@ textarea:focus-visible,
 
   .ox-home-inventory-v3 {
     height: auto !important;
-    min-height: 480px !important;
-    padding: 28px 20px 32px !important;
+    min-height: calc(100svh - 220px) !important;
+    padding: 28px 20px 36px !important;
     grid-template-rows: auto auto auto auto !important;
     row-gap: 18px !important;
+    align-content: start !important;
   }
 
   .ox-home-inventory-road {
