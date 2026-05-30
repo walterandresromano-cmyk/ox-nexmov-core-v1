@@ -341,14 +341,14 @@ export default function VehicleDetailModal({
     const year = currentVehicle.year ? ` ${currentVehicle.year}` : "";
     const title = `${brand} ${model}${year}`.trim();
     const price = formatARS(currentVehicle.price);
-    const url =
+    const vehicleShareUrl =
       shareUrl ||
       `${window.location.origin}/vehiculo/${encodeURIComponent(currentVehicle.id)}`;
     const shareText = `${title} — ${price}`;
 
     if (navigator.share) {
       try {
-        await navigator.share({ title: `${title} en oX NEXMOV`, text: shareText, url });
+        await navigator.share({ url: vehicleShareUrl });
       } catch {
         // user cancelled
       }
@@ -356,7 +356,7 @@ export default function VehicleDetailModal({
     }
 
     try {
-      await navigator.clipboard.writeText(`${shareText}\n${url}`);
+      await navigator.clipboard.writeText(`${shareText}\n${vehicleShareUrl}`);
       setShareState("copied");
       setTimeout(() => setShareState("idle"), 2200);
     } catch {
