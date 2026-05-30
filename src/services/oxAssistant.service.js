@@ -137,7 +137,7 @@ export function getMissingFieldSuggestion(field) {
   );
 }
 
-export function getVehicleAssistantSummary({ score, missing }) {
+function getVehicleAssistantSummary({ score, missing }) {
   if (score >= 90) {
     return "Publicación excelente. Está lista para promocionar con toda su fuerza.";
   }
@@ -153,7 +153,7 @@ export function getVehicleAssistantSummary({ score, missing }) {
   return "Publicación incompleta. Faltan datos importantes que reducen su visibilidad y credibilidad.";
 }
 
-export function getVehicleAssistantAlerts(vehicle, scoreData) {
+function getVehicleAssistantAlerts(vehicle, scoreData) {
   const v = vehicle || {};
   const { score } = scoreData || { score: 0 };
   const alerts = [];

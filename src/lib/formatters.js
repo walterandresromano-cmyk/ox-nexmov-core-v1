@@ -48,6 +48,7 @@ export function getMarketDelta(vehicle) {
   const percent = (amount / reference) * 100;
 
   return {
+    reference,
     amount,
     percent,
     isBelowMarket: amount > 0,

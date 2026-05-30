@@ -11,31 +11,7 @@ import {
   getVehicleKey,
 } from "../lib/vehicle.js";
 import { getDealerName, getDealerForVehicle } from "../lib/dealer.js";
-
-function getNumber(value) {
-  const number = Number(value);
-  return Number.isFinite(number) && number > 0 ? number : null;
-}
-
-function formatPrice(value) {
-  const number = getNumber(value);
-
-  if (!number) return "Consultar";
-
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS",
-    maximumFractionDigits: 0,
-  }).format(number);
-}
-
-function formatKilometers(value) {
-  const number = getNumber(value);
-
-  if (!number) return "No informado";
-
-  return `${number.toLocaleString("es-AR")} km`;
-}
+import { formatARS, formatKm, getMarketDelta } from "../lib/formatters.js";
 
 function getDealerRank(vehicle) {
   const permissions = getEffectiveDealerPermissions(getDealerForVehicle(vehicle));
@@ -43,29 +19,6 @@ function getDealerRank(vehicle) {
   return {
     label: permissions.rankLabel,
     className: permissions.rankTheme,
-  };
-}
-
-function getMarketDelta(vehicle) {
-  const price = getNumber(vehicle?.price);
-  const reference = getNumber(
-    vehicle?.marketReferencePrice ||
-      vehicle?.market_reference_price ||
-      vehicle?.referencePrice ||
-      vehicle?.reference_price ||
-      vehicle?.raw?.market_reference_price ||
-      vehicle?.raw?.reference_price ||
-      vehicle?.raw?.avg
-  );
-
-  if (!price || !reference) return null;
-
-  const percent = ((price - reference) / reference) * 100;
-
-  return {
-    reference,
-    percent,
-    isBelowMarket: percent < 0,
   };
 }
 
@@ -217,7 +170,7 @@ function CompareVehicleCard({
           </p>
         </div>
 
-        <strong className="compare-card-price">{formatPrice(vehicle.price)}</strong>
+        <strong className="compare-card-price">{formatARS(vehicle.price)}</strong>
 
         {market && (
           <div
@@ -233,7 +186,7 @@ function CompareVehicleCard({
                 ? `${Math.abs(market.percent).toFixed(1)}% debajo`
                 : `${market.percent.toFixed(1)}% arriba`}
             </strong>
-            <p>Ref. {formatPrice(market.reference)}</p>
+            <p>Ref. {formatARS(market.reference)}</p>
           </div>
         )}
 
@@ -242,14 +195,14 @@ function CompareVehicleCard({
             {vehicle.year || vehicle.raw?.year || "No informado"}
           </SpecRow>
           <SpecRow label="Km" highlight>
-            {formatKilometers(kilometers)}
+            {formatKm(kilometers)}
           </SpecRow>
           <SpecRow label="Ubicación">{getLocationLabel(vehicle)}</SpecRow>
           <SpecRow label="Estado">{getVehicleStatus(vehicle)}</SpecRow>
           <SpecRow label="Financiación" highlight>
             {getFinancingLabel(vehicle)}
           </SpecRow>
-          {delivery && <SpecRow label="Entrega">{formatPrice(delivery)}</SpecRow>}
+          {delivery && <SpecRow label="Entrega">{formatARS(delivery)}</SpecRow>}
           {months && <SpecRow label="Cuotas">{months} meses</SpecRow>}
           {rate && <SpecRow label="Tasa">{rate}%</SpecRow>}
           <SpecRow label="Combustible">
