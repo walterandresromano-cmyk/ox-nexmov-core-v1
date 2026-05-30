@@ -34,47 +34,38 @@ const trustItems = [
 
 const confidenceItems = [
   {
-    title: "Dealers verificados",
-    text: "Publican solo quienes superan el proceso de habilitación de administración.",
+    title: "Publicación revisada",
+    text: "Datos clave visibles antes de avanzar.",
+    details: [
+      "Precio, kilometraje y versión publicados",
+      "Ubicación y plaza comercial visibles",
+      "Fotos cargadas o estado informado",
+      "Señal, financiación y combustible claros",
+      "Comparación disponible antes del contacto",
+    ],
   },
   {
-    title: "Comparador real",
-    text: "Compará hasta 4 vehículos con precio, financiación y datos clave lado a lado.",
+    title: "Dealer identificado",
+    text: "Operadores habilitados dentro de la red.",
+    details: [
+      "Cuenta comercial asociada a cada unidad",
+      "Plan del dealer visible en la publicación",
+      "Teléfono validado antes de derivar",
+      "Historial operativo dentro de la plataforma",
+      "Soporte interno si la información no coincide",
+    ],
   },
   {
-    title: "Contactos trazables",
-    text: "Cada consulta queda registrada antes de llegar al WhatsApp del dealer.",
+    title: "Consulta trazable",
+    text: "Tu contacto queda registrado antes del chat.",
+    details: [
+      "Tu interés queda asociado al vehículo",
+      "El dealer recibe una consulta con contexto",
+      "No necesitás registrarte para explorar",
+      "Podés comparar alternativas antes de decidir",
+      "La conversación empieza con datos ordenados",
+    ],
   },
-  {
-    title: "Financiación visible",
-    text: "Entrega, cuotas, tasa y condiciones siempre informadas en la publicación.",
-  },
-  {
-    title: "Publicaciones auditadas",
-    text: "Administración revisa cada publicación antes de que esté disponible.",
-  },
-  {
-    title: "Soporte real",
-    text: "Personas que ayudan a resolver cuando algo no funciona como debería.",
-  },
-];
-
-const buyerSteps = [
-  "Buscás por modelo o necesidad.",
-  "Comparás opciones reales.",
-  "Revisás precio, financiación y dealer.",
-  "Te registrás solo al momento de contactar.",
-  "Consultás con trazabilidad.",
-];
-
-const dealerBenefits = [
-  "Publicaciones profesionales",
-  "Leads trazables",
-  "Métricas por vehículo",
-  "Cupos por plan",
-  "Panel operativo simple",
-  "Soporte interno tipo ticket",
-  "Diferenciación por señales reales",
 ];
 
 function getPlanLabel(plan) {
@@ -779,10 +770,18 @@ export default function Home({ onNavigate, appActions = {} }) {
             )}
           </div>
 
-          <aside className="ox-home-confidence-v3">
+        </section>
+
+        <aside className="ox-home-confidence-v3">
+          <div className="ox-home-confidence-head-v3">
             <h2>
-              Por qué confiar en <span>oX</span> NEXMOV
+              Antes de contactar, ya sabés más
             </h2>
+            <p>
+              Precio, ubicación, financiación y señales del dealer conviven
+              en una misma lectura, sin presión y sin pasos innecesarios.
+            </p>
+          </div>
 
             <div className="ox-home-confidence-list-v3">
               {confidenceItems.map((item) => (
@@ -791,6 +790,11 @@ export default function Home({ onNavigate, appActions = {} }) {
                   <div>
                     <strong>{item.title}</strong>
                     <p>{item.text}</p>
+                    <ul>
+                      {item.details.map((detail) => (
+                        <li key={detail}>{detail}</li>
+                      ))}
+                    </ul>
                   </div>
                 </article>
               ))}
@@ -799,15 +803,16 @@ export default function Home({ onNavigate, appActions = {} }) {
             <div className="ox-home-confidence-cta-v3">
               <strong>Menos incertidumbre. Más decisión.</strong>
               <span>
-                Precio, kilometraje, ubicación, financiación, dealer y
-                comparación en un solo lugar.
+                Cuando una unidad te interesa, el contacto sucede con contexto:
+                sabés quién publica, qué datos están visibles y cómo queda
+                registrada tu consulta.
               </span>
             </div>
-          </aside>
-        </section>
+        </aside>
 
         <section className="ox-home-intelligence-grid-v3">
           <article className="ox-home-inventory-v3">
+            <div className="ox-home-inventory-road" aria-hidden="true" />
             <h2>Inventario en todo el país</h2>
             <p>La red más activa de Argentina.</p>
 
@@ -855,62 +860,8 @@ export default function Home({ onNavigate, appActions = {} }) {
             </div>
           </article>
 
-          <article className="ox-home-buyer-v3">
-            <h2>Para compradores</h2>
-            <p>Un camino simple para comprar mejor.</p>
-
-            <ol>
-              {buyerSteps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
-            </ol>
-          </article>
-
-          <article className="ox-home-dealer-v3">
-            <h2>Para dealers</h2>
-            <p>Herramientas para vender mejor.</p>
-
-            <ul>
-              {dealerBenefits.map((benefit) => (
-                <li key={benefit}>{benefit}</li>
-              ))}
-            </ul>
-
-            <button type="button" onClick={() => onNavigate("joinNetwork")}>
-              Sumate a la red
-            </button>
-          </article>
         </section>
 
-        <section className="ox-home-bottom-trust-v3">
-          <article>
-            <strong>Confianza que se construye todos los días</strong>
-            <span>
-              Transparencia, tecnología y personas trabajando para que tomes
-              siempre la mejor decisión.
-            </span>
-          </article>
-
-          <article>
-            <strong>Seguridad de datos</strong>
-            <span>Protegemos tu información.</span>
-          </article>
-
-          <article>
-            <strong>Red verificada</strong>
-            <span>Dealers reales, no cualquiera.</span>
-          </article>
-
-          <article>
-            <strong>Tecnología propia</strong>
-            <span>Plataforma estable y moderna.</span>
-          </article>
-
-          <article>
-            <strong>Soporte real</strong>
-            <span>Personas que te ayudan.</span>
-          </article>
-        </section>
       </div>
     </section>
 
