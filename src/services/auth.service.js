@@ -121,7 +121,7 @@ export async function resetPasswordForEmail({ email }) {
   const cleanEmail = String(email || "").trim().toLowerCase();
 
   return supabase.auth.resetPasswordForEmail(cleanEmail, {
-    redirectTo: `${window.location.origin}/#/ingresar`,
+    redirectTo: `${window.location.origin}/#/reset-password`,
   });
 }
 

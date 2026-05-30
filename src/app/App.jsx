@@ -13,6 +13,7 @@ const FAQ              = lazy(() => import("../modules/public/FAQ.jsx"));
 const LegalPage        = lazy(() => import("../modules/public/LegalPage.jsx"));
 const DealerProfile    = lazy(() => import("../modules/public/DealerProfile.jsx"));
 const AuthPanel        = lazy(() => import("../modules/auth/AuthPanel.jsx"));
+const ResetPasswordPanel = lazy(() => import("../modules/auth/ResetPasswordPanel.jsx"));
 const BuyerPanel       = lazy(() => import("../modules/buyer/BuyerPanel.jsx"));
 const DealerPanel      = lazy(() => import("../modules/dealer/DealerPanel.jsx"));
 const AdminPanel       = lazy(() => import("../modules/admin/AdminPanel.jsx"));
@@ -44,6 +45,7 @@ const ROUTES = {
   regret: LegalPage,
   serviceCancel: LegalPage,
   login: AuthPanel,
+  resetPassword: ResetPasswordPanel,
   buyer: BuyerPanel,
   dealer: DealerPanel,
   admin: AdminPanel,
@@ -67,6 +69,7 @@ const PUBLIC_ROUTES = new Set([
   "regret",
   "serviceCancel",
   "login",
+  "resetPassword",
   "dealerProfile",
 ]);
 
@@ -85,6 +88,7 @@ const ROUTE_TITLES = {
   regret: "Botón de arrepentimiento — oX NEXMOV",
   serviceCancel: "Cancelación del servicio — oX NEXMOV",
   login: "Ingresar — oX NEXMOV",
+  resetPassword: "Crear nueva contraseña — oX NEXMOV",
   buyer: "Mi panel — oX NEXMOV",
   dealer: "Panel dealer — oX NEXMOV",
   admin: "Panel admin — oX NEXMOV",
@@ -120,8 +124,17 @@ function getInitialCompareItems() {
 
 function getInitialRouteFromHash() {
   if (typeof window === "undefined") return "home";
-  const hash = window.location.hash.replace(/^#\/?/, "").split("?")[0].trim();
+  const hash = getRouteFromHash();
   return PUBLIC_ROUTES.has(hash) ? hash : "home";
+}
+
+function getRouteFromHash() {
+  const rawHash = window.location.hash.replace(/^#\/?/, "").trim();
+  const hashRoute = rawHash.split(/[?#]/)[0].trim();
+
+  if (hashRoute === "reset-password") return "resetPassword";
+
+  return hashRoute;
 }
 
 function getInitialTheme() {
@@ -283,7 +296,9 @@ export default function App() {
           loadProfileForUser(user),
           listBuyerFavorites().then(({ favorites }) => setFavoriteItems(favorites)),
         ]);
-        setCurrentRoute(getHomeRouteForRole(profile?.role));
+        if (getRouteFromHash() !== "resetPassword") {
+          setCurrentRoute(getHomeRouteForRole(profile?.role));
+        }
       }
 
       setAuthLoading(false);
@@ -326,7 +341,7 @@ export default function App() {
 
   useEffect(() => {
     function handleHashChange() {
-      const hash = window.location.hash.replace(/^#\/?/, "").split("?")[0].trim();
+      const hash = getRouteFromHash();
       const target = PUBLIC_ROUTES.has(hash) ? hash : "home";
       setCurrentRoute(target);
       if (ROUTE_TITLES[target]) document.title = ROUTE_TITLES[target];
