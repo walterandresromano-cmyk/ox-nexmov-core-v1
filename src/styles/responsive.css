@@ -14560,10 +14560,17 @@ textarea:focus-visible,
 }
 
 @media (max-width: 760px) {
-  .ox-home-hero-v3,
-  .ox-home-inventory-v3 {
+  .ox-home-hero-v3 {
     height: auto !important;
     min-height: 335px !important;
+  }
+
+  .ox-home-inventory-v3 {
+    height: auto !important;
+    min-height: 480px !important;
+    padding: 28px 20px 32px !important;
+    grid-template-rows: auto auto auto auto !important;
+    row-gap: 18px !important;
   }
 
   .ox-home-inventory-road {
@@ -14583,10 +14590,6 @@ textarea:focus-visible,
       rgba(0, 0, 0, 0.90) 74%,
       black 90%
     ) !important;
-  }
-
-  .ox-home-inventory-v3 {
-    grid-template-rows: auto auto auto auto !important;
   }
 
   .ox-home-inventory-v3 > h2,
