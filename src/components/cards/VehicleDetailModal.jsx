@@ -335,28 +335,45 @@ export default function VehicleDetailModal({
     onClose();
   }
 
-  async function handleShare() {
+  function getVehicleShareUrl() {
+    return currentVehicle?.id
+      ? `${window.location.origin}/vehiculo/${encodeURIComponent(currentVehicle.id)}`
+      : window.location.href;
+  }
+
+  function getVehicleShareTitle() {
     const brand = currentVehicle.brand || "";
     const model = currentVehicle.model || "";
     const year = currentVehicle.year ? ` ${currentVehicle.year}` : "";
     const title = `${brand} ${model}${year}`.trim();
     const price = formatARS(currentVehicle.price);
-    const vehicleShareUrl =
-      shareUrl ||
-      `${window.location.origin}/vehiculo/${encodeURIComponent(currentVehicle.id)}`;
-    const shareText = `${title} — ${price}`;
 
-    if (navigator.share) {
-      try {
-        await navigator.share({ url: vehicleShareUrl });
-      } catch {
-        // user cancelled
-      }
-      return;
-    }
+    return [title, price && price !== "Consultar" ? price : ""]
+      .filter(Boolean)
+      .join(" — ");
+  }
+
+  function handleShareWhatsApp() {
+    const vehicleShareUrl = shareUrl || getVehicleShareUrl();
+    const vehicleShareTitle = getVehicleShareTitle();
+    const whatsappMessage = [
+      "Mirá esta unidad en oX NEXMOV.",
+      "",
+      vehicleShareTitle,
+      vehicleShareUrl,
+    ]
+      .filter(Boolean)
+      .join("\n");
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  }
+
+  async function handleCopyShareLink() {
+    const vehicleShareUrl = shareUrl || getVehicleShareUrl();
 
     try {
-      await navigator.clipboard.writeText(`${shareText}\n${vehicleShareUrl}`);
+      await navigator.clipboard.writeText(vehicleShareUrl);
       setShareState("copied");
       setTimeout(() => setShareState("idle"), 2200);
     } catch {
@@ -728,10 +745,19 @@ export default function VehicleDetailModal({
               <button
                 type="button"
                 className={`vehicle-share-btn${shareState === "copied" ? " vehicle-share-btn--copied" : ""}`}
-                onClick={handleShare}
-                aria-label="Compartir este vehículo"
+                onClick={handleShareWhatsApp}
+                aria-label="Compartir este vehiculo por WhatsApp"
               >
-                {shareState === "copied" ? "¡Copiado!" : "Compartir"}
+                Compartir por WhatsApp
+              </button>
+
+              <button
+                type="button"
+                className={`vehicle-share-btn${shareState === "copied" ? " vehicle-share-btn--copied" : ""}`}
+                onClick={handleCopyShareLink}
+                aria-label="Copiar enlace de este vehiculo"
+              >
+                {shareState === "copied" ? "¡Copiado!" : "Copiar enlace"}
               </button>
             </div>
 
