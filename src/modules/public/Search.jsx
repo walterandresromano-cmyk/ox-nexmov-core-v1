@@ -741,11 +741,91 @@ function readSearchStorage() {
   }
 }
 
+const SEARCH_QUERY_PARAM_TO_FILTER = {
+  marca: "brand",
+  modelo: "model",
+  version: "version",
+  provincia: "province",
+  ciudad: "city",
+  precio_min: "priceMin",
+  precio_max: "priceMax",
+  year_min: "yearFrom",
+  year_max: "yearTo",
+  km_max: "kmMax",
+};
+
+const SEARCH_FILTER_TO_QUERY_PARAM = Object.entries(
+  SEARCH_QUERY_PARAM_TO_FILTER
+).reduce(
+  (acc, [param, filterKey]) => ({
+    ...acc,
+    [filterKey]: param,
+  }),
+  {}
+);
+
+function readSearchQueryParams() {
+  if (typeof window === "undefined") {
+    return {
+      searchText: "",
+      filters: EMPTY_ADVANCED_FILTERS,
+      hasParams: false,
+    };
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const nextFilters = { ...EMPTY_ADVANCED_FILTERS };
+  const searchText = params.get("q") || "";
+  let hasParams = Boolean(searchText);
+
+  Object.entries(SEARCH_QUERY_PARAM_TO_FILTER).forEach(([param, filterKey]) => {
+    const value = params.get(param) || "";
+    if (!value) return;
+
+    nextFilters[filterKey] = value;
+    hasParams = true;
+  });
+
+  return {
+    searchText,
+    filters: nextFilters,
+    hasParams,
+  };
+}
+
+function hasSearchQueryParams() {
+  return readSearchQueryParams().hasParams;
+}
+
+function buildSearchQueryString(searchText, filters) {
+  const params = new URLSearchParams();
+  const cleanSearchText = String(searchText || "").trim();
+
+  if (cleanSearchText) {
+    params.set("q", cleanSearchText);
+  }
+
+  Object.entries(SEARCH_FILTER_TO_QUERY_PARAM).forEach(([filterKey, param]) => {
+    const value = String(filters?.[filterKey] || "").trim();
+    if (!value) return;
+
+    params.set(param, value);
+  });
+
+  return params.toString();
+}
+
 function getInitialSearchText() {
+  const queryState = readSearchQueryParams();
+  if (queryState.hasParams) return queryState.searchText;
+
   return readSearchStorage()?.searchText || "";
 }
 
 function getInitialFilters() {
+  const queryState = readSearchQueryParams();
+  if (queryState.hasParams) return queryState.filters;
+
   const stored = readSearchStorage()?.filters;
   if (!stored || typeof stored !== "object") return EMPTY_ADVANCED_FILTERS;
   return { ...EMPTY_ADVANCED_FILTERS, ...stored };
@@ -910,8 +990,42 @@ export default function Search({
   }, [searchText, filters]);
 
   useEffect(() => {
+    const queryString = buildSearchQueryString(searchText, filters);
+    const nextUrl = queryString ? `/buscar?${queryString}` : "/buscar";
+    const currentUrl = `${window.location.pathname}${window.location.search}`;
+
+    if (currentUrl !== nextUrl) {
+      window.history.replaceState({ route: "search" }, "", nextUrl);
+    }
+  }, [searchText, filters]);
+
+  useEffect(() => {
+    function handleSearchPopState() {
+      const queryState = readSearchQueryParams();
+
+      if (!queryState.hasParams) {
+        setSearchText("");
+        setFilters(EMPTY_ADVANCED_FILTERS);
+        setShowSuggestions(false);
+        return;
+      }
+
+      setSearchText(queryState.searchText);
+      setFilters(queryState.filters);
+      setShowSuggestions(false);
+    }
+
+    window.addEventListener("popstate", handleSearchPopState);
+
+    return () => {
+      window.removeEventListener("popstate", handleSearchPopState);
+    };
+  }, []);
+
+  useEffect(() => {
     const nextQuery = String(initialSearchQuery || "").trim();
 
+    if (hasSearchQueryParams()) return;
     if (!nextQuery) return;
 
     setSearchText(nextQuery);

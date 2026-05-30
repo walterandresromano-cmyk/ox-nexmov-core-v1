@@ -1,6 +1,66 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
 
+const PUBLIC_VEHICLE_SELECT = `
+  id,
+  created_at,
+  brand,
+  model,
+  version,
+  year,
+  price,
+  currency,
+  km,
+  body_type,
+  transmission,
+  fuel_type,
+  dealer_id,
+  dealer_name,
+  dealer_phone,
+  location,
+  province,
+  city,
+  main_image_url,
+  image_url,
+  images_json,
+  status,
+  publication_status,
+  financing,
+  featured,
+  description,
+  details,
+  avg,
+  market_reference_price,
+  usage,
+  views,
+  doors,
+  reserved,
+  reserved_by,
+  delivery,
+  months,
+  rate,
+  is_active,
+  review_status,
+  maintenance_info,
+  show_maintenance_info,
+  dealers (
+    id,
+    name,
+    plan_code,
+    plan_status,
+    logo_url,
+    image_url,
+    contact_phone,
+    phone_whatsapp,
+    province,
+    city,
+    extra_publish_slots,
+    publications_used,
+    plan_expires_at,
+    can_receive_sell_vehicle_leads
+  )
+`;
+
 function normalizeVehicleStatus(row) {
   if (row.reserved) return "reserved";
   if (!row.is_active) return "paused";
@@ -183,67 +243,7 @@ export async function listPublicVehicles() {
 
   const { data, error } = await supabase
     .from("vehicles")
-    .select(
-      `
-      id,
-      created_at,
-      brand,
-      model,
-      version,
-      year,
-      price,
-      currency,
-      km,
-      body_type,
-      transmission,
-      fuel_type,
-      dealer_id,
-      dealer_name,
-      dealer_phone,
-      location,
-      province,
-      city,
-      main_image_url,
-      image_url,
-      images_json,
-      status,
-      publication_status,
-      financing,
-      featured,
-      description,
-      details,
-      avg,
-      market_reference_price,
-      usage,
-      views,
-      doors,
-      reserved,
-      reserved_by,
-      delivery,
-      months,
-      rate,
-      is_active,
-      review_status,
-      maintenance_info,
-      show_maintenance_info,
-      dealers (
-        id,
-        name,
-        plan_code,
-        plan_status,
-        logo_url,
-        image_url,
-        contact_phone,
-        phone_whatsapp,
-        province,
-        city,
-        extra_publish_slots,
-        publications_used,
-        plan_expires_at,
-        can_receive_sell_vehicle_leads
-      )
-    `
-    )
+    .select(PUBLIC_VEHICLE_SELECT)
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
@@ -272,67 +272,7 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
 
   const { data, error } = await supabase
     .from("vehicles")
-    .select(
-      `
-      id,
-      created_at,
-      brand,
-      model,
-      version,
-      year,
-      price,
-      currency,
-      km,
-      body_type,
-      transmission,
-      fuel_type,
-      dealer_id,
-      dealer_name,
-      dealer_phone,
-      location,
-      province,
-      city,
-      main_image_url,
-      image_url,
-      images_json,
-      status,
-      publication_status,
-      financing,
-      featured,
-      description,
-      details,
-      avg,
-      market_reference_price,
-      usage,
-      views,
-      doors,
-      reserved,
-      reserved_by,
-      delivery,
-      months,
-      rate,
-      is_active,
-      review_status,
-      maintenance_info,
-      show_maintenance_info,
-      dealers (
-        id,
-        name,
-        plan_code,
-        plan_status,
-        logo_url,
-        image_url,
-        contact_phone,
-        phone_whatsapp,
-        province,
-        city,
-        extra_publish_slots,
-        publications_used,
-        plan_expires_at,
-        can_receive_sell_vehicle_leads
-      )
-    `
-    )
+    .select(PUBLIC_VEHICLE_SELECT)
     .eq("is_active", true)
     .order("created_at", { ascending: false })
     .limit(Number(limit || 8));
@@ -346,6 +286,47 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
 
   return {
     vehicles: (data || []).map(mapVehicleFromSupabase),
+    error: null,
+  };
+}
+
+export async function getPublicVehicleById(id) {
+  const vehicleId = String(id || "").trim();
+
+  if (!vehicleId) {
+    return {
+      vehicle: null,
+      error: {
+        message: "ID de vehÃ­culo invÃ¡lido.",
+      },
+    };
+  }
+
+  if (!isSupabaseConfigured || !supabase) {
+    return {
+      vehicle: null,
+      error: {
+        message: "Supabase no estÃ¡ configurado.",
+      },
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("vehicles")
+    .select(PUBLIC_VEHICLE_SELECT)
+    .eq("id", vehicleId)
+    .eq("is_active", true)
+    .maybeSingle();
+
+  if (error) {
+    return {
+      vehicle: null,
+      error,
+    };
+  }
+
+  return {
+    vehicle: data ? mapVehicleFromSupabase(data) : null,
     error: null,
   };
 }

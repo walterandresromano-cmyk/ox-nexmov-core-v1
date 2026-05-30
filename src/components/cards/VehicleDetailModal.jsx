@@ -149,6 +149,7 @@ export default function VehicleDetailModal({
   getDealer,
   appActions,
   onNavigate,
+  shareUrl,
 }) {
   const [currentVehicle, setCurrentVehicle] = useState(vehicle);
   const [showContactGate, setShowContactGate] = useState(false);
@@ -340,7 +341,9 @@ export default function VehicleDetailModal({
     const year = currentVehicle.year ? ` ${currentVehicle.year}` : "";
     const title = `${brand} ${model}${year}`.trim();
     const price = formatARS(currentVehicle.price);
-    const url = window.location.origin;
+    const url =
+      shareUrl ||
+      `${window.location.origin}/vehiculo/${encodeURIComponent(currentVehicle.id)}`;
     const shareText = `${title} — ${price}`;
 
     if (navigator.share) {

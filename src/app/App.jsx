@@ -12,6 +12,7 @@ const About            = lazy(() => import("../modules/public/About.jsx"));
 const FAQ              = lazy(() => import("../modules/public/FAQ.jsx"));
 const LegalPage        = lazy(() => import("../modules/public/LegalPage.jsx"));
 const DealerProfile    = lazy(() => import("../modules/public/DealerProfile.jsx"));
+const PublicVehicleDetailRoute = lazy(() => import("../modules/public/PublicVehicleDetailRoute.jsx"));
 const AuthPanel        = lazy(() => import("../modules/auth/AuthPanel.jsx"));
 const ResetPasswordPanel = lazy(() => import("../modules/auth/ResetPasswordPanel.jsx"));
 const BuyerPanel       = lazy(() => import("../modules/buyer/BuyerPanel.jsx"));
@@ -52,6 +53,7 @@ const ROUTES = {
   internal0km: Internal0kmPanel,
   support: SupportPanel,
   dealerProfile: DealerProfile,
+  vehicleDetail: PublicVehicleDetailRoute,
 };
 
 const PUBLIC_ROUTES = new Set([
@@ -71,7 +73,33 @@ const PUBLIC_ROUTES = new Set([
   "login",
   "resetPassword",
   "dealerProfile",
+  "vehicleDetail",
 ]);
+
+const PATH_TO_ROUTE = {
+  "/": "home",
+  "/buscar": "search",
+  "/financiacion": "zeroKm",
+  "/sumate": "joinNetwork",
+  "/quienes-somos": "about",
+  "/faq": "faq",
+  "/login": "login",
+  "/reset-password": "resetPassword",
+  "/legal/terminos": "terms",
+  "/legal/privacidad": "privacy",
+  "/legal/cookies": "cookies",
+  "/legal/defensa-consumidor": "consumerDefense",
+  "/legal/arrepentimiento": "regret",
+  "/legal/baja-servicio": "serviceCancel",
+};
+
+const ROUTE_TO_PATH = Object.entries(PATH_TO_ROUTE).reduce(
+  (acc, [path, route]) => ({
+    ...acc,
+    [route]: path,
+  }),
+  {}
+);
 
 const ROUTE_TITLES = {
   home: "oX NEXMOV — Marketplace de vehículos verificados",
@@ -95,6 +123,7 @@ const ROUTE_TITLES = {
   internal0km: "Panel 0km — oX NEXMOV",
   support: "Panel soporte — oX NEXMOV",
   dealerProfile: "Dealer — oX NEXMOV",
+  vehicleDetail: "Detalle de vehiculo - oX NEXMOV",
 };
 
 const ROUTE_DESCRIPTIONS = {
@@ -126,6 +155,60 @@ function getInitialRouteFromHash() {
   if (typeof window === "undefined") return "home";
   const hash = getRouteFromHash();
   return PUBLIC_ROUTES.has(hash) ? hash : "home";
+}
+
+function getInitialRouteFromLocation() {
+  if (typeof window === "undefined") return "home";
+
+  const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+  const vehicleId = getVehicleIdFromPath(pathname);
+
+  if (vehicleId) {
+    return "vehicleDetail";
+  }
+
+  const pathRoute = PATH_TO_ROUTE[pathname];
+  const hashRoute = getRouteFromHash();
+  const hasLegacyHashRoute = PUBLIC_ROUTES.has(hashRoute);
+
+  if (pathRoute && (pathname !== "/" || !hasLegacyHashRoute)) {
+    return pathRoute;
+  }
+
+  if (hasLegacyHashRoute) {
+    return hashRoute;
+  }
+
+  return "home";
+}
+
+function getInitialRouteParamsFromLocation() {
+  if (typeof window === "undefined") return {};
+
+  const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+  const vehicleId = getVehicleIdFromPath(pathname);
+
+  if (vehicleId) {
+    return { vehicleId };
+  }
+
+  return {};
+}
+
+function getVehicleIdFromPath(pathname) {
+  const normalizedPathname = String(pathname || "").replace(/\/+$/, "") || "/";
+
+  if (!normalizedPathname.startsWith("/vehiculo/")) return "";
+
+  return decodeURIComponent(normalizedPathname.slice("/vehiculo/".length)).trim();
+}
+
+function getRouteUrl(route, payload = {}) {
+  if (route === "vehicleDetail" && payload?.vehicleId) {
+    return `/vehiculo/${encodeURIComponent(payload.vehicleId)}`;
+  }
+
+  return ROUTE_TO_PATH[route] || `/#/${route}`;
 }
 
 function getRouteFromHash() {
@@ -182,8 +265,8 @@ function canAccessRoute(route, role, authUser) {
 }
 
 export default function App() {
-  const [currentRoute, setCurrentRoute] = useState(getInitialRouteFromHash);
-  const [routeParams, setRouteParams] = useState({});
+  const [currentRoute, setCurrentRoute] = useState(getInitialRouteFromLocation);
+  const [routeParams, setRouteParams] = useState(getInitialRouteParamsFromLocation);
   const [compareItems, setCompareItems] = useState(getInitialCompareItems);
   const [favoriteItems, setFavoriteItems] = useState([]);
   const [authUser, setAuthUser] = useState(null);
@@ -232,14 +315,26 @@ export default function App() {
     }
 
     if (!canAccessRoute(safeNextRoute, role, authUser)) {
-      setCurrentRoute(getHomeRouteForRole(role));
-      window.location.hash = getHomeRouteForRole(role) === "home" ? "" : getHomeRouteForRole(role);
+      const fallbackRoute = getHomeRouteForRole(role);
+      setCurrentRoute(fallbackRoute);
+      window.history.replaceState(
+        { route: fallbackRoute },
+        "",
+        getRouteUrl(fallbackRoute)
+      );
       return;
     }
 
     setRouteParams(payload || {});
     setCurrentRoute(safeNextRoute);
-    window.location.hash = safeNextRoute === "home" ? "" : safeNextRoute;
+
+    const nextUrl = getRouteUrl(safeNextRoute, payload || {});
+    const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+    if (currentUrl !== nextUrl) {
+      window.history.pushState({ route: safeNextRoute }, "", nextUrl);
+    }
+
     if (ROUTE_TITLES[safeNextRoute]) {
       document.title = ROUTE_TITLES[safeNextRoute];
     }
@@ -296,7 +391,7 @@ export default function App() {
           loadProfileForUser(user),
           listBuyerFavorites().then(({ favorites }) => setFavoriteItems(favorites)),
         ]);
-        if (getRouteFromHash() !== "resetPassword") {
+        if (!["resetPassword", "vehicleDetail"].includes(getInitialRouteFromLocation())) {
           setCurrentRoute(getHomeRouteForRole(profile?.role));
         }
       }
@@ -340,14 +435,20 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    function handleHashChange() {
-      const hash = getRouteFromHash();
-      const target = PUBLIC_ROUTES.has(hash) ? hash : "home";
+    function syncRouteFromLocation() {
+      const target = getInitialRouteFromLocation();
+      setRouteParams(getInitialRouteParamsFromLocation());
       setCurrentRoute(target);
       if (ROUTE_TITLES[target]) document.title = ROUTE_TITLES[target];
     }
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
+
+    window.addEventListener("hashchange", syncRouteFromLocation);
+    window.addEventListener("popstate", syncRouteFromLocation);
+
+    return () => {
+      window.removeEventListener("hashchange", syncRouteFromLocation);
+      window.removeEventListener("popstate", syncRouteFromLocation);
+    };
   }, []);
 
   function toggleTheme() {

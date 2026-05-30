@@ -240,6 +240,13 @@ export default function VehicleCardPublic({
               type="button"
               className="vehicle-card__btn vehicle-card__btn--primary"
               onClick={() => {
+                if (onNavigate) {
+                  onNavigate("vehicleDetail", {
+                    vehicleId: vehicle.id,
+                  });
+                  return;
+                }
+
                 registerVehicleDetailView(vehicle.id);
                 setShowDetailModal(true);
               }}
