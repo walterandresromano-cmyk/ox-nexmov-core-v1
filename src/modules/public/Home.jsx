@@ -5,7 +5,7 @@ import ContactGate from "./ContactGate.jsx";
 import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
-import { listPublicLatestVehicles } from "../../services/vehicles.service.js";
+import { listPublicLatestVehicles, getPublicInventoryStats } from "../../services/vehicles.service.js";
 import {
   ShieldCheckIcon,
   ArrowsSwapIcon,
@@ -408,6 +408,8 @@ export default function Home({ onNavigate, appActions = {} }) {
 
   const latestVehiclesCarouselRef = useRef(null);
 
+  const [extraStats, setExtraStats] = useState({ brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0 });
+
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [selectedFeaturedVehicle, setSelectedFeaturedVehicle] = useState(null);
   const [selectedFeaturedDealer, setSelectedFeaturedDealer] = useState(null);
@@ -471,6 +473,7 @@ export default function Home({ onNavigate, appActions = {} }) {
   useEffect(() => {
     loadPublicDealers();
     loadLatestVehicles();
+    getPublicInventoryStats().then(setExtraStats).catch(() => {});
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -522,11 +525,16 @@ export default function Home({ onNavigate, appActions = {} }) {
       (vehicle) => vehicle.mainImageUrl || vehicle.imageUrl
     ).length;
 
+    const provinces = new Set(
+      publicDealers.map((d) => d.province).filter(Boolean)
+    ).size;
+
     return {
       totalActiveVehicles,
       visibleDealers: publicDealers.length,
       activeLocations,
       vehiclesWithImages,
+      provinces,
     };
   }, [publicDealers, latestVehicles]);
 
@@ -840,6 +848,32 @@ export default function Home({ onNavigate, appActions = {} }) {
                 <strong>{formatCount(homeStats.vehiclesWithImages)}</strong>
                 <span>Imágenes cargadas hoy</span>
               </div>
+              <div>
+                <strong>{formatCount(extraStats.brands)}</strong>
+                <span>Marcas disponibles</span>
+              </div>
+              <div>
+                <strong>{formatCount(homeStats.provinces)}</strong>
+                <span>Provincias cubiertas</span>
+              </div>
+              <div>
+                <strong>{formatCount(extraStats.reserved)}</strong>
+                <span>Vehículos reservados</span>
+              </div>
+              <div>
+                <strong>{formatCount(extraStats.sold)}</strong>
+                <span>Vehículos vendidos</span>
+              </div>
+              <div>
+                <strong>{formatCount(extraStats.withFinancing)}</strong>
+                <span>Con financiación</span>
+              </div>
+              {extraStats.contacts > 0 && (
+                <div>
+                  <strong>{formatCount(extraStats.contacts)}</strong>
+                  <span>Contactos trazados</span>
+                </div>
+              )}
             </div>
 
             <div className="ox-home-locations-v3">

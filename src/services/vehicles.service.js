@@ -349,3 +349,29 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
     error: null,
   };
 }
+
+export async function getPublicInventoryStats() {
+  if (!isSupabaseConfigured || !supabase) {
+    return { brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0 };
+  }
+
+  const [brandsRes, reservedRes, soldRes, financingRes, contactsRes] = await Promise.all([
+    supabase.from("vehicles").select("brand").eq("is_active", true).not("brand", "is", null),
+    supabase.from("vehicles").select("*", { count: "exact", head: true }).eq("is_active", true).eq("reserved", true),
+    supabase.from("vehicles").select("*", { count: "exact", head: true }).eq("publication_status", "sold"),
+    supabase.from("vehicles").select("*", { count: "exact", head: true }).eq("is_active", true).not("financing", "is", null),
+    supabase.from("vehicle_action_leads").select("*", { count: "exact", head: true }),
+  ]);
+
+  const brands = new Set(
+    (brandsRes.data || []).map((r) => r.brand?.trim().toLowerCase()).filter(Boolean)
+  ).size;
+
+  return {
+    brands,
+    reserved: reservedRes.count || 0,
+    sold: soldRes.count || 0,
+    withFinancing: financingRes.count || 0,
+    contacts: contactsRes.count || 0,
+  };
+}
