@@ -1,10 +1,11 @@
 import "../../styles/auth.css";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   signOut,
   updateCurrentUserPassword,
 } from "../../services/auth.service.js";
+import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient.js";
 
 const initialForm = {
   password: "",
@@ -32,12 +33,77 @@ function getRecoveryErrorMessage(error) {
   return error?.message || "No se pudo actualizar la contraseña.";
 }
 
+function getRecoveryParamsFromHash() {
+  if (typeof window === "undefined") {
+    return {
+      tokenHash: "",
+      type: "",
+    };
+  }
+
+  const rawHash = window.location.hash || "";
+  const queryIndex = rawHash.indexOf("?");
+
+  if (queryIndex === -1) {
+    return {
+      tokenHash: "",
+      type: "",
+    };
+  }
+
+  const params = new URLSearchParams(rawHash.slice(queryIndex + 1));
+
+  return {
+    tokenHash: params.get("token_hash") || "",
+    type: params.get("type") || "",
+  };
+}
+
 export default function ResetPasswordPanel({ onAuthChange, onNavigate }) {
+  const verifiedOnceRef = useRef(false);
   const [form, setForm] = useState(initialForm);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [verificationFailed, setVerificationFailed] = useState(false);
   const [updated, setUpdated] = useState(false);
+
+  useEffect(() => {
+    async function verifyRecoveryToken() {
+      if (verifiedOnceRef.current) return;
+
+      const { tokenHash, type } = getRecoveryParamsFromHash();
+
+      if (!tokenHash || type !== "recovery") return;
+
+      verifiedOnceRef.current = true;
+      setVerifying(true);
+      setErrorMessage("");
+      setVerificationFailed(false);
+
+      if (!isSupabaseConfigured || !supabase) {
+        setVerifying(false);
+        setVerificationFailed(true);
+        setErrorMessage(invalidRecoveryMessage);
+        return;
+      }
+
+      const { error } = await supabase.auth.verifyOtp({
+        type: "recovery",
+        token_hash: tokenHash,
+      });
+
+      setVerifying(false);
+
+      if (error) {
+        setVerificationFailed(true);
+        setErrorMessage(invalidRecoveryMessage);
+      }
+    }
+
+    verifyRecoveryToken();
+  }, []);
 
   function updateField(field, value) {
     setForm((current) => ({
@@ -99,7 +165,11 @@ export default function ResetPasswordPanel({ onAuthChange, onNavigate }) {
           </div>
 
           <div className="auth-form-card">
-            {!updated ? (
+            {verifying && (
+              <div className="auth-message">Validando enlace de recupero...</div>
+            )}
+
+            {!updated && !verifying && !verificationFailed ? (
               <form className="auth-form" onSubmit={handleSubmit}>
                 <label>
                   Nueva contraseña
@@ -155,13 +225,15 @@ export default function ResetPasswordPanel({ onAuthChange, onNavigate }) {
                   {loading ? "Actualizando..." : "Actualizar contraseña"}
                 </button>
               </form>
-            ) : (
+            ) : null}
+
+            {updated ? (
               <div className="auth-actions">
                 <button type="button" onClick={goToLogin}>
                   Ir a ingresar
                 </button>
               </div>
-            )}
+            ) : null}
 
             {errorMessage && <div className="auth-warning">{errorMessage}</div>}
             {message && <div className="auth-message">{message}</div>}
