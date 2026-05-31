@@ -490,6 +490,13 @@ export default function VehicleDetailModal({
               </div>
             </div>
 
+            {currentVehicle.details && (
+              <div className="detail-vehicle-description">
+                <span>Descripción del vehículo</span>
+                <p>{currentVehicle.details}</p>
+              </div>
+            )}
+
             <div className="vehicle-detail-thumbs detail-thumbs">
               {images.map((image, index) => (
                 <button
@@ -615,12 +622,6 @@ export default function VehicleDetailModal({
                 )}
             </div>
 
-            {currentVehicle.details && (
-              <div className="detail-vehicle-description">
-                <span>Descripción del vehículo</span>
-                <p>{currentVehicle.details}</p>
-              </div>
-            )}
           </div>
 
           <div className="vehicle-detail-info">
