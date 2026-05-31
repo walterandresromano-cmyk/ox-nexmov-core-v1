@@ -684,14 +684,6 @@ export default function VehicleDetailModal({
               </div>
             )}
 
-            {currentVehicle.hasFinancing && (
-              <p className="finance-legal-note">
-                Los valores de financiación son informativos y pueden variar
-                según aprobación crediticia, entidad financiera, condiciones del
-                dealer y fecha de operación.
-              </p>
-            )}
-
             <div className="vehicle-detail-used-financing">
               <div className="vehicle-detail-used-financing-head">
                 <div>
@@ -851,6 +843,7 @@ export default function VehicleDetailModal({
               anunciante. Verificá disponibilidad, precio final, documentación
               y condiciones antes de avanzar. oX NEXMOV no certifica el estado
               mecánico ni garantiza la operación comercial.
+              {currentVehicle.hasFinancing && " Los valores de financiación son informativos y pueden variar según aprobación crediticia, entidad financiera, condiciones del dealer y fecha de operación."}
             </p>
             <img
               className="vehicle-detail-footer-logo"
