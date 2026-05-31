@@ -660,6 +660,13 @@ export default function VehicleDetailModal({
               </div>
             )}
 
+            {currentVehicle.details && (
+              <div className="detail-vehicle-description">
+                <span>Descripción del vehículo</span>
+                <p>{currentVehicle.details}</p>
+              </div>
+            )}
+
             {currentVehicle.hasFinancing && (currentVehicle.delivery > 0 || currentVehicle.months > 0 || currentVehicle.rate > 0) && (
               <div className="vehicle-detail-financing-details">
                 <p className="vehicle-detail-financing-label">Condiciones de financiación</p>
@@ -826,14 +833,6 @@ export default function VehicleDetailModal({
                 {shareState === "copied" ? "¡Copiado!" : "Copiar enlace"}
               </button>
             </div>
-
-            {currentVehicle.details && (
-              <div className="detail-vehicle-description">
-                <span>Descripción del vehículo</span>
-                <p>{currentVehicle.details}</p>
-              </div>
-            )}
-
 
           </div>
 
