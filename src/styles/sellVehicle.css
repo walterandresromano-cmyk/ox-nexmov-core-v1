@@ -1347,3 +1347,89 @@
   }
 }
 
+/* =========================================================
+   Garage oX — transparent column pattern (no cards in cards)
+   4-col desktop, 2-col tablet, 1-col mobile.
+   ========================================================= */
+
+.sell-vehicle-page .garage-public-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0 !important;
+  padding: 20px 0 !important;
+  border-top: 1px solid rgba(125, 211, 252, 0.14) !important;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.14) !important;
+}
+
+/* Strip card chrome from garage cards */
+.sell-vehicle-page .garage-public-grid .garage-public-card,
+:root[data-theme="light"] .sell-vehicle-page .garage-public-grid .garage-public-card,
+:root[data-theme="dark"] .sell-vehicle-page .garage-public-grid .garage-public-card {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+  padding: 0 20px !important;
+}
+
+.sell-vehicle-page .garage-public-grid .garage-public-card::before,
+.sell-vehicle-page .garage-public-grid .garage-public-card::after {
+  display: none !important;
+}
+
+/* border-right column separator */
+.sell-vehicle-page .garage-public-grid .garage-public-card {
+  border-right: 1px solid rgba(125, 211, 252, 0.16) !important;
+}
+
+.sell-vehicle-page .garage-public-grid .garage-public-card:last-child {
+  border-right: none !important;
+}
+
+:root[data-theme="light"] .sell-vehicle-page .garage-public-grid {
+  border-top-color: rgba(14, 116, 144, 0.13) !important;
+  border-bottom-color: rgba(14, 116, 144, 0.13) !important;
+}
+
+:root[data-theme="light"] .sell-vehicle-page .garage-public-grid .garage-public-card {
+  border-right-color: rgba(14, 116, 144, 0.14) !important;
+}
+
+/* Tablet: 2-col */
+@media (max-width: 980px) {
+  .sell-vehicle-page .garage-public-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .sell-vehicle-page .garage-public-grid .garage-public-card:nth-child(2) {
+    border-right: none !important;
+  }
+
+  .sell-vehicle-page .garage-public-grid .garage-public-card:nth-child(n+3) {
+    padding-top: 18px !important;
+    border-top: 1px solid rgba(125, 211, 252, 0.12) !important;
+  }
+
+  .sell-vehicle-page .garage-public-grid .garage-public-card:nth-child(4) {
+    border-right: none !important;
+  }
+}
+
+/* Mobile: 1-col */
+@media (max-width: 680px) {
+  .sell-vehicle-page .garage-public-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sell-vehicle-page .garage-public-grid .garage-public-card {
+    padding: 14px 0 !important;
+    border-right: none !important;
+    border-top: 1px solid rgba(125, 211, 252, 0.12) !important;
+  }
+
+  .sell-vehicle-page .garage-public-grid .garage-public-card:first-child {
+    border-top: none !important;
+    padding-top: 0 !important;
+  }
+}
+
