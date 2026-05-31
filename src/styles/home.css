@@ -2458,3 +2458,12 @@
     );
   }
 }
+
+.ox-home-confidence-list-v3 article,
+:root[data-theme="light"] .ox-home-confidence-list-v3 article,
+:root[data-theme="dark"] .ox-home-confidence-list-v3 article {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
