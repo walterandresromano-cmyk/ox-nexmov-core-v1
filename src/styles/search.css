@@ -621,7 +621,7 @@
 }
 
 .ox-search-vehicle-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   gap: var(--ox-space-7);
   margin-top: var(--ox-space-6);
 }
@@ -710,7 +710,7 @@
   }
 
   .ox-search-vehicle-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
   .ox-search-trust-strip {
@@ -842,7 +842,7 @@
    ========================================================= */
 
 .ox-search-vehicle-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   gap: var(--ox-space-7);
   margin-top: var(--ox-space-6);
 }
@@ -1642,7 +1642,7 @@
 }
 
 .ox-search-workspace {
-  grid-template-columns: minmax(260px, 290px) minmax(0, 1fr) minmax(270px, 304px);
+  grid-template-columns: minmax(260px, 290px) minmax(0, 1fr);
   gap: 14px;
 }
 
