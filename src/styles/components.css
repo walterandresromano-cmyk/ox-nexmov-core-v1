@@ -22481,3 +22481,35 @@ body::-webkit-scrollbar {
 .admin-quick-actions-block .dealer-modules-grid .dealer-module-card:nth-child(2) h3 {
   font-size: 1.1em;
 }
+
+/* =========================================================
+   oX NEXMOV — Card Focus Veil
+   Una sola card sin velo a la vez: primera por defecto,
+   hovered cuando el usuario interactúa.
+   ========================================================= */
+
+.vehicle-grid .vehicle-card,
+.dealer-profile-grid .vehicle-card {
+  opacity: 0.54;
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+/* Primera card siempre sin velo en reposo */
+.vehicle-grid .vehicle-card:first-child,
+.dealer-profile-grid .vehicle-card:first-child {
+  opacity: 1;
+}
+
+/* Cuando hay hover en el grid: la hovered gana, las demás se vuelan */
+.vehicle-grid:has(.vehicle-card:hover) .vehicle-card,
+.dealer-profile-grid:has(.vehicle-card:hover) .vehicle-card {
+  opacity: 0.54;
+}
+
+.vehicle-grid .vehicle-card:hover,
+.dealer-profile-grid .vehicle-card:hover {
+  opacity: 1;
+}
