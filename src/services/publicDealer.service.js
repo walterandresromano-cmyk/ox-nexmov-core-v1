@@ -1,6 +1,6 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
-import { mapVehicleFromSupabase } from "./vehicles.service.js";
+import { mapVehicleFromSupabase, isPublicVehicleVisible } from "./vehicles.service.js";
 
 export async function getDealerPublicProfile(dealerId) {
   if (!isSupabaseConfigured || !supabase || !dealerId) {
@@ -65,6 +65,7 @@ export async function getDealerPublicVehicles(dealerId) {
     )
     .eq("dealer_id", dealerId)
     .eq("is_active", true)
+    .eq("publication_status", "active")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -72,7 +73,7 @@ export async function getDealerPublicVehicles(dealerId) {
   }
 
   return {
-    vehicles: (data || []).map(mapVehicleFromSupabase),
+    vehicles: (data || []).map(mapVehicleFromSupabase).filter(isPublicVehicleVisible),
     error: null,
   };
 }

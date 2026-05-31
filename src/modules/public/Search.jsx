@@ -7,7 +7,7 @@ import {
   normalizeSearchText,
   scoreVehicleMatch,
 } from "../../lib/searchEngine.js";
-import { listPublicVehicles } from "../../services/vehicles.service.js";
+import { listPublicVehicles, isPublicVehicleVisible } from "../../services/vehicles.service.js";
 
 function normalizeText(value) {
   return normalizeSearchText(value);
@@ -408,35 +408,8 @@ function getGhostCompletion(query, suggestions) {
   };
 }
 
-function isVehicleVisibleForBuyer(vehicle) {
-  const status = normalizeSearchText(
-    getVehicleField(vehicle, "status", "publicationStatus", "publication_status")
-  );
-
-  const blockedStatus = [
-    "draft",
-    "borrador",
-    "paused",
-    "pausado",
-    "suspended",
-    "suspendido",
-    "expired",
-    "vencido",
-    "deleted",
-    "eliminado",
-    "inactive",
-    "inactivo",
-    "rejected",
-    "rechazado",
-  ];
-
-  if (blockedStatus.some((blocked) => status.includes(blocked))) return false;
-  if (vehicle.isPublished === false || vehicle.raw?.is_published === false) return false;
-  if (vehicle.active === false || vehicle.is_active === false) return false;
-  if (vehicle.raw?.active === false || vehicle.raw?.is_active === false) return false;
-
-  return true;
-}
+/* Usa la regla única de visibilidad pública del servicio */
+const isVehicleVisibleForBuyer = isPublicVehicleVisible;
 
 function getVehicleAutocompleteFields(vehicle) {
   const brand = String(

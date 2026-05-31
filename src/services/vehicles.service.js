@@ -67,6 +67,41 @@ function normalizeVehicleStatus(row) {
   return row.publication_status || row.status || "active";
 }
 
+/**
+ * Regla única de visibilidad pública para vehículos.
+ * Un vehículo solo puede aparecer en espacios públicos si:
+ *   - is_active = true
+ *   - publication_status = "active" (o vacío/desconocido → se permite por compatibilidad)
+ *   - status !== "sold" / "vendido"
+ * Los vehículos reservados pasan si el publication_status es "active".
+ */
+export function isPublicVehicleVisible(vehicle) {
+  if (!vehicle) return false;
+
+  // is_active debe ser true (vía raw si el campo no fue mapeado)
+  if (vehicle.raw?.is_active === false) return false;
+  if (vehicle.active === false || vehicle.is_active === false) return false;
+
+  // publication_status solo "active" es público
+  const pubStatus = String(
+    vehicle.publicationStatus ||
+    vehicle.publication_status ||
+    vehicle.raw?.publication_status ||
+    ""
+  )
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .trim();
+
+  if (pubStatus && pubStatus !== "active") return false;
+
+  // status "sold" / "vendido" nunca es público
+  const st = String(vehicle.status || vehicle.raw?.status || "").toLowerCase();
+  if (st.includes("sold") || st.includes("vendido")) return false;
+
+  return true;
+}
+
 function getDaysUntil(dateValue) {
   if (!dateValue) return 0;
 
@@ -245,6 +280,7 @@ export async function listPublicVehicles() {
     .from("vehicles")
     .select(PUBLIC_VEHICLE_SELECT)
     .eq("is_active", true)
+    .eq("publication_status", "active")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -255,7 +291,7 @@ export async function listPublicVehicles() {
   }
 
   return {
-    vehicles: (data || []).map(mapVehicleFromSupabase),
+    vehicles: (data || []).map(mapVehicleFromSupabase).filter(isPublicVehicleVisible),
     error: null,
   };
 }
@@ -274,6 +310,7 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
     .from("vehicles")
     .select(PUBLIC_VEHICLE_SELECT)
     .eq("is_active", true)
+    .eq("publication_status", "active")
     .order("created_at", { ascending: false })
     .limit(Number(limit || 8));
 
@@ -285,7 +322,7 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
   }
 
   return {
-    vehicles: (data || []).map(mapVehicleFromSupabase),
+    vehicles: (data || []).map(mapVehicleFromSupabase).filter(isPublicVehicleVisible),
     error: null,
   };
 }

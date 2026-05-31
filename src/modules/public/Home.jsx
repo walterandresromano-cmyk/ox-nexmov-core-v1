@@ -5,7 +5,7 @@ import ContactGate from "./ContactGate.jsx";
 import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
-import { listPublicLatestVehicles, getPublicInventoryStats } from "../../services/vehicles.service.js";
+import { listPublicLatestVehicles, getPublicInventoryStats, isPublicVehicleVisible } from "../../services/vehicles.service.js";
 import {
   ShieldCheckIcon,
   ArrowsSwapIcon,
@@ -226,43 +226,8 @@ function normalizeSearchText(value) {
     .trim();
 }
 
-function isVehicleVisibleForBuyer(vehicle) {
-  const status = normalizeSearchText(
-    [
-      vehicle.status,
-      vehicle.publicationStatus,
-      vehicle.publication_status,
-      vehicle.raw?.status,
-      vehicle.raw?.publication_status,
-    ]
-      .filter(Boolean)
-      .join(" ")
-  );
-
-  const blockedStatus = [
-    "draft",
-    "borrador",
-    "paused",
-    "pausado",
-    "suspended",
-    "suspendido",
-    "expired",
-    "vencido",
-    "deleted",
-    "eliminado",
-    "inactive",
-    "inactivo",
-    "rejected",
-    "rechazado",
-  ];
-
-  if (blockedStatus.some((blocked) => status.includes(blocked))) return false;
-  if (vehicle.isPublished === false || vehicle.raw?.is_published === false) return false;
-  if (vehicle.active === false || vehicle.is_active === false) return false;
-  if (vehicle.raw?.active === false || vehicle.raw?.is_active === false) return false;
-
-  return true;
-}
+/* isVehicleVisibleForBuyer is isPublicVehicleVisible imported from vehicles.service.js */
+const isVehicleVisibleForBuyer = isPublicVehicleVisible;
 
 function getVehicleAutocompleteFields(vehicle) {
   const brand = String(
@@ -466,7 +431,7 @@ export default function Home({ onNavigate, appActions = {} }) {
       return;
     }
 
-    setLatestVehicles(vehicles || []);
+    setLatestVehicles((vehicles || []).filter(isPublicVehicleVisible));
     setLoadingLatestVehicles(false);
   }
 
