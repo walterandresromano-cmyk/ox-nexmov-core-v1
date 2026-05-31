@@ -594,6 +594,14 @@ export default function VehicleDetailModal({
             )}
 
             <div className="detail-published-by">
+              {(currentDealer.logo || currentDealer.raw?.logo_url) && (
+                <img
+                  className="detail-published-by-bg"
+                  src={currentDealer.logo || currentDealer.raw?.logo_url}
+                  alt=""
+                  aria-hidden="true"
+                />
+              )}
               <div className="detail-published-by-header">
                 <span className="detail-published-by-label">Publicado por</span>
                 <span className={`admin-chip rank-${permissions.rankTheme}`}>
