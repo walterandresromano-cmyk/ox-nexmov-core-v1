@@ -666,6 +666,38 @@ export default function VehicleDetailModal({
               </div>
             )}
 
+            {currentVehicle.hasFinancing && (currentVehicle.delivery > 0 || currentVehicle.months > 0 || currentVehicle.rate > 0) && (
+              <div className="vehicle-detail-financing-details">
+                <p className="vehicle-detail-financing-label">Condiciones de financiación</p>
+                {currentVehicle.delivery > 0 && (
+                  <div>
+                    <span>Entrega</span>
+                    <strong>{formatARS(currentVehicle.delivery)}</strong>
+                  </div>
+                )}
+                {currentVehicle.months > 0 && (
+                  <div>
+                    <span>Cuotas</span>
+                    <strong>{currentVehicle.months} meses</strong>
+                  </div>
+                )}
+                {currentVehicle.rate > 0 && (
+                  <div>
+                    <span>Tasa</span>
+                    <strong>{currentVehicle.rate}%</strong>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {currentVehicle.hasFinancing && (
+              <p className="finance-legal-note">
+                Los valores de financiación son informativos y pueden variar
+                según aprobación crediticia, entidad financiera, condiciones del
+                dealer y fecha de operación.
+              </p>
+            )}
+
             <div className="vehicle-detail-used-financing">
               <div className="vehicle-detail-used-financing-head">
                 <div>
@@ -808,38 +840,6 @@ export default function VehicleDetailModal({
                 {shareState === "copied" ? "¡Copiado!" : "Copiar enlace"}
               </button>
             </div>
-
-            {currentVehicle.hasFinancing && (currentVehicle.delivery > 0 || currentVehicle.months > 0 || currentVehicle.rate > 0) && (
-              <div className="vehicle-detail-financing-details">
-                <p className="vehicle-detail-financing-label">Condiciones de financiación</p>
-                {currentVehicle.delivery > 0 && (
-                  <div>
-                    <span>Entrega</span>
-                    <strong>{formatARS(currentVehicle.delivery)}</strong>
-                  </div>
-                )}
-                {currentVehicle.months > 0 && (
-                  <div>
-                    <span>Cuotas</span>
-                    <strong>{currentVehicle.months} meses</strong>
-                  </div>
-                )}
-                {currentVehicle.rate > 0 && (
-                  <div>
-                    <span>Tasa</span>
-                    <strong>{currentVehicle.rate}%</strong>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {currentVehicle.hasFinancing && (
-              <p className="finance-legal-note">
-                Los valores de financiación son informativos y pueden variar
-                según aprobación crediticia, entidad financiera, condiciones del
-                dealer y fecha de operación.
-              </p>
-            )}
 
           </div>
 
