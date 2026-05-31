@@ -1675,7 +1675,7 @@
 }
 
 .vehicle-detail-layout {
-  margin-top: 36px !important;
+  margin-top: 8px !important;
 }
 
 .vehicle-detail-modal--elite::before {
@@ -1975,23 +1975,19 @@
 }
 
 .vehicle-detail-close.modal-close-btn {
-  top: 28px !important;
-  left: 22px !important;
-  right: auto !important;
-  width: 38px !important;
-  height: 38px !important;
-  min-width: 38px !important;
-  min-height: 38px !important;
-  border: 1px solid rgba(125, 211, 252, 0.16) !important;
-  background:
-    radial-gradient(circle at 38% 18%, rgba(255, 255, 255, 0.12), transparent 34%),
-    linear-gradient(180deg, rgba(15, 23, 42, 0.74), rgba(2, 6, 23, 0.58)) !important;
+  top: 14px !important;
+  right: 14px !important;
+  left: auto !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border: 1px solid rgba(125, 211, 252, 0.14) !important;
+  background: rgba(10, 18, 34, 0.72) !important;
   color: transparent !important;
-  box-shadow:
-    0 14px 30px rgba(0, 0, 0, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(16px) saturate(1.05) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(1.05) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
 }
 
 .vehicle-detail-close.modal-close-btn::before,
