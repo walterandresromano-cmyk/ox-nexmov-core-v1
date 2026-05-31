@@ -1975,6 +1975,7 @@
 }
 
 .vehicle-detail-close.modal-close-btn {
+  position: absolute !important;
   top: 14px !important;
   right: 14px !important;
   left: auto !important;
@@ -2147,12 +2148,13 @@
   }
 
   .vehicle-detail-close.modal-close-btn {
-    top: 24px !important;
-    left: 14px !important;
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    min-height: 36px !important;
+    top: 14px !important;
+    right: 14px !important;
+    left: auto !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
   }
 
   .detail-main-image {
