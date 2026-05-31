@@ -157,6 +157,8 @@ export default function VehicleDetailModal({
   const [financingDownPayment, setFinancingDownPayment] = useState("");
   const [financingTermMonths, setFinancingTermMonths] = useState("36");
   const [financingIncome, setFinancingIncome] = useState("");
+  const [termDropdownOpen, setTermDropdownOpen] = useState(false);
+  const termDropdownRef = useRef(null);
 
   const currentDealer = useMemo(() => {
     if (vehicles && getDealer) return getDealer(currentVehicle) || dealer;
@@ -244,6 +246,16 @@ export default function VehicleDetailModal({
     setIsDraggingImage(false);
     imageWasDraggedRef.current = false;
   }
+
+  useEffect(() => {
+    if (!termDropdownOpen) return;
+    const close = (e) => {
+      if (termDropdownRef.current && !termDropdownRef.current.contains(e.target))
+        setTermDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [termDropdownOpen]);
 
   useEffect(() => {
     setSelectedImageIndex(0);
@@ -712,20 +724,40 @@ export default function VehicleDetailModal({
                   />
                 </label>
 
-                <label>
-                  Plazo
-                  <select
-                    value={financingTermMonths}
-                    onChange={(event) => setFinancingTermMonths(event.target.value)}
+                <div
+                  className={`financing-term-dropdown${termDropdownOpen ? " is-open" : ""}`}
+                  ref={termDropdownRef}
+                >
+                  <span>Plazo</span>
+                  <button
+                    type="button"
+                    className="financing-term-trigger"
+                    onClick={() => setTermDropdownOpen((v) => !v)}
                   >
-                    <option value="12">12 meses</option>
-                    <option value="24">24 meses</option>
-                    <option value="36">36 meses</option>
-                    <option value="48">48 meses</option>
-                    <option value="60">60 meses</option>
-                    <option value="72">72 meses</option>
-                  </select>
-                </label>
+                    {financingTermMonths} meses
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+                      <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                  {termDropdownOpen && (
+                    <ul className="financing-term-options">
+                      {["12","24","36","48","60","72"].map((m) => (
+                        <li key={m}>
+                          <button
+                            type="button"
+                            className={financingTermMonths === m ? "is-active" : ""}
+                            onMouseDown={() => {
+                              setFinancingTermMonths(m);
+                              setTermDropdownOpen(false);
+                            }}
+                          >
+                            {m} meses
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
 
                 <label>
                   Ingreso mensual

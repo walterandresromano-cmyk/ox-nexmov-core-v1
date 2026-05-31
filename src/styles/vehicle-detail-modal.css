@@ -1442,6 +1442,123 @@
   line-height: 1.45;
 }
 
+/* ── Custom term dropdown ─────────────────────────────────── */
+.financing-term-dropdown {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.financing-term-dropdown > span {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(148, 163, 184, 0.72);
+}
+
+.financing-term-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid rgba(125, 211, 252, 0.15);
+  border-radius: 13px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.82));
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 0.66rem;
+  font-weight: 850;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.financing-term-trigger svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: transform 0.18s ease;
+}
+
+.financing-term-dropdown.is-open .financing-term-trigger {
+  border-color: rgba(56, 189, 248, 0.46);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.09);
+}
+
+.financing-term-dropdown.is-open .financing-term-trigger svg {
+  transform: rotate(180deg);
+}
+
+.financing-term-options {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 200;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(10, 20, 40, 0.98), rgba(2, 6, 23, 0.99));
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.48);
+}
+
+.financing-term-options li button {
+  display: block;
+  width: 100%;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: rgba(203, 213, 225, 0.82);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.financing-term-options li button:hover {
+  background: rgba(56, 189, 248, 0.10);
+  color: rgba(248, 250, 252, 1);
+}
+
+.financing-term-options li button.is-active {
+  background: rgba(56, 189, 248, 0.16);
+  color: rgba(125, 211, 252, 1);
+  font-weight: 900;
+}
+
+:root[data-theme="light"] .financing-term-trigger {
+  border-color: rgba(14, 116, 144, 0.20);
+  background: rgba(248, 250, 252, 0.92);
+  color: rgba(15, 23, 42, 0.92);
+}
+
+:root[data-theme="light"] .financing-term-options {
+  border-color: rgba(14, 116, 144, 0.16);
+  background: rgba(248, 250, 252, 0.98);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+:root[data-theme="light"] .financing-term-options li button {
+  color: rgba(15, 23, 42, 0.72);
+}
+
+:root[data-theme="light"] .financing-term-options li button:hover {
+  background: rgba(14, 116, 144, 0.08);
+  color: rgba(15, 23, 42, 1);
+}
+
+:root[data-theme="light"] .financing-term-options li button.is-active {
+  background: rgba(14, 116, 144, 0.14);
+  color: rgba(14, 116, 144, 1);
+}
+
 :root[data-theme="light"] .vehicle-detail-used-financing {
   border-color: rgba(14, 116, 144, 0.16);
   background:
