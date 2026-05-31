@@ -13153,6 +13153,7 @@ textarea:focus-visible,
 .vehicle-share-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
   padding: 0.45rem 1rem;
   border-radius: 6px;
