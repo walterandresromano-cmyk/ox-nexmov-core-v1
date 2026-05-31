@@ -822,7 +822,7 @@
   }
 
   .ox-search-vehicle-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .ox-search-trust-strip {
@@ -840,12 +840,6 @@
    Search results — vehicle cards aligned with Home scale
    Solo afecta las cards dentro de Buscar.
    ========================================================= */
-
-.ox-search-vehicle-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: var(--ox-space-7);
-  margin-top: var(--ox-space-6);
-}
 
 .ox-search-vehicle-grid .vehicle-card {
   width: 100%;
