@@ -15105,15 +15105,48 @@ body::-webkit-scrollbar {
 }
 
 .dealer-profile-header {
+  position: relative;
+  overflow: hidden;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 28px 32px;
-  background: var(--ox-card);
-  border: 1px solid var(--ox-border);
-  border-radius: 20px;
+  padding: 24px 28px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(34, 211, 238, 0.09), transparent 38%),
+    linear-gradient(180deg, rgba(10, 18, 34, 0.98), rgba(3, 7, 16, 0.995));
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  border-radius: 22px;
   flex-wrap: wrap;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.dealer-profile-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 28px;
+  right: 28px;
+  height: 3px;
+  border-radius: 0 0 999px 999px;
+  pointer-events: none;
+}
+
+.dealer-profile-header.rank-inicio::before {
+  background: linear-gradient(90deg, transparent, rgba(184, 135, 70, 0.82), transparent);
+}
+.dealer-profile-header.rank-pro::before {
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.82), transparent);
+}
+.dealer-profile-header.rank-elite::before {
+  background: linear-gradient(90deg, rgba(245, 197, 66, 0.22), rgba(245, 197, 66, 0.92), rgba(34, 211, 238, 0.28));
+  box-shadow: 0 0 24px rgba(245, 184, 75, 0.20);
+}
+.dealer-profile-header.rank-platinum::before {
+  background: linear-gradient(90deg, rgba(226, 232, 240, 0.35), rgba(248, 250, 252, 0.92), rgba(125, 211, 252, 0.42));
+  box-shadow: 0 0 22px rgba(226, 232, 240, 0.14);
 }
 
 .dealer-profile-identity {
@@ -15125,98 +15158,103 @@ body::-webkit-scrollbar {
 }
 
 .dealer-profile-logo {
-  width: 88px;
-  height: 88px;
+  width: 96px;
+  height: 96px;
   object-fit: cover;
-  border-radius: 14px;
-  border: 1px solid var(--ox-border);
+  border-radius: 18px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
   flex-shrink: 0;
+  background: rgba(15, 23, 42, 0.60);
 }
 
 .dealer-profile-logo-placeholder {
-  width: 88px;
-  height: 88px;
-  border-radius: 14px;
-  background: var(--ox-card-2);
-  border: 1px solid var(--ox-border);
+  width: 96px;
+  height: 96px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.86), rgba(2, 6, 23, 0.94));
+  border: 1px solid rgba(125, 211, 252, 0.14);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
   display: grid;
   place-items: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--ox-muted);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: rgba(148, 163, 184, 0.64);
   flex-shrink: 0;
 }
 
 .dealer-profile-info {
-  display: grid;
-  gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   min-width: 0;
-}
-
-.dealer-profile-info h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--ox-text);
-  margin: 0;
-  line-height: 1.2;
-}
-
-.dealer-profile-location {
-  font-size: 0.9rem;
-  color: var(--ox-muted);
-  margin: 0;
 }
 
 .dealer-profile-chips {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
-  margin-top: 4px;
 }
 
-.dealer-profile-plan-chip {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  background: var(--ox-card-2);
-  border: 1px solid var(--ox-border);
-  color: var(--ox-text);
+.dealer-profile-info h1 {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: rgba(248, 250, 252, 0.98);
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.dealer-profile-location {
+  font-size: 0.82rem;
+  color: rgba(148, 163, 184, 0.68);
+  margin: 0;
+  font-weight: 500;
+}
+
+.dealer-profile-stats {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 2px;
 }
 
 .dealer-profile-stat-chip {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   padding: 3px 10px;
-  border-radius: 6px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  background: var(--ox-card-2);
-  border: 1px solid var(--ox-border);
-  color: var(--ox-muted);
+  border-radius: 999px;
+  font-size: 0.70rem;
+  font-weight: 600;
+  background: rgba(15, 23, 42, 0.54);
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  color: rgba(148, 163, 184, 0.76);
 }
 
 .dealer-profile-wa-btn {
   display: inline-flex;
   align-items: center;
-  padding: 12px 22px;
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  border-radius: 10px;
-  color: #4ade80;
-  font-size: 0.9rem;
-  font-weight: 600;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 26px;
+  background: rgba(22, 101, 52, 0.26);
+  border: 1px solid rgba(37, 211, 102, 0.42);
+  border-radius: 999px;
+  color: rgba(134, 239, 172, 0.96);
+  font-size: 0.88rem;
+  font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
-  transition: background 0.15s;
   flex-shrink: 0;
   align-self: center;
+  box-shadow: 0 0 18px rgba(37, 211, 102, 0.08);
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
 .dealer-profile-wa-btn:hover {
-  background: rgba(34, 197, 94, 0.22);
+  background: rgba(22, 101, 52, 0.40);
+  border-color: rgba(37, 211, 102, 0.64);
+  box-shadow: 0 0 28px rgba(37, 211, 102, 0.18);
 }
 
 .dealer-profile-section-label {
@@ -15271,19 +15309,39 @@ body::-webkit-scrollbar {
   opacity: 0.75;
 }
 
+:root[data-theme="light"] .dealer-profile-header,
 :root.light .dealer-profile-header {
-  background: var(--ox-card);
-  border-color: var(--ox-border);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.07), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 248, 255, 0.96));
+  border-color: rgba(14, 116, 144, 0.16);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
+:root[data-theme="light"] .dealer-profile-wa-btn,
 :root.light .dealer-profile-wa-btn {
   background: rgba(22, 163, 74, 0.08);
-  border-color: rgba(22, 163, 74, 0.25);
+  border-color: rgba(22, 163, 74, 0.30);
   color: #16a34a;
+  box-shadow: none;
 }
 
+:root[data-theme="light"] .dealer-profile-wa-btn:hover,
 :root.light .dealer-profile-wa-btn:hover {
   background: rgba(22, 163, 74, 0.16);
+  border-color: rgba(22, 163, 74, 0.50);
+}
+
+:root[data-theme="light"] .dealer-profile-stat-chip,
+:root.light .dealer-profile-stat-chip {
+  background: rgba(241, 245, 249, 0.80);
+  border-color: rgba(148, 163, 184, 0.22);
+  color: rgba(71, 85, 105, 0.82);
+}
+
+:root[data-theme="light"] .dealer-profile-logo,
+:root.light .dealer-profile-logo {
+  border-color: rgba(148, 163, 184, 0.22);
 }
 
 /* ── Dealer leads: new row highlight, badges, WhatsApp ──────── */

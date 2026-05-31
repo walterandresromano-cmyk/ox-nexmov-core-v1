@@ -102,7 +102,7 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
           ← Volver a la búsqueda
         </button>
 
-        <header className="dealer-profile-header">
+        <header className={`dealer-profile-header rank-${dealer.plan}`}>
           <div className="dealer-profile-identity">
             {dealer.logo ? (
               <img
@@ -117,16 +117,16 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
             )}
 
             <div className="dealer-profile-info">
+              <div className="dealer-profile-chips">
+                <span className={`admin-chip rank-${dealer.plan}`}>
+                  Dealer {PLAN_LABELS[dealer.plan] || dealer.plan}
+                </span>
+              </div>
               <h1>{dealer.name}</h1>
               <p className="dealer-profile-location">
                 {[dealer.city, dealer.province].filter(Boolean).join(", ")}
               </p>
-              <div className="dealer-profile-chips">
-                <span
-                  className={`dealer-profile-plan-chip rank-${dealer.plan}`}
-                >
-                  {PLAN_LABELS[dealer.plan] || dealer.plan}
-                </span>
+              <div className="dealer-profile-stats">
                 <span className="dealer-profile-stat-chip">
                   {vehicles.length}{" "}
                   {vehicles.length === 1
