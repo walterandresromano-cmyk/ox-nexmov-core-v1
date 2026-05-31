@@ -3,17 +3,11 @@ import { useEffect, useMemo, useState } from "react";
 
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
 import RadarActivationModal from "../../components/RadarActivationModal.jsx";
+import {
+  normalizeSearchText,
+  scoreVehicleMatch,
+} from "../../lib/searchEngine.js";
 import { listPublicVehicles } from "../../services/vehicles.service.js";
-
-function normalizeSearchText(value) {
-  return String(value || "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^\w\s]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
 
 function normalizeText(value) {
   return normalizeSearchText(value);
@@ -1158,12 +1152,12 @@ export default function Search({
       : publicSearchVehicles
           .map((vehicle) => {
             const dealer = getDealer(vehicle);
-            const result = scoreVehicleForSearch(vehicle, dealer, parsedSearch);
+            const result = scoreVehicleMatch(vehicle, searchText, { dealer });
 
             return {
               vehicle,
               score: result.score,
-              hardFail: result.hardFail,
+              hardFail: !result.matched,
             };
           })
           .filter((item) => !item.hardFail && item.score > 0)
@@ -1175,7 +1169,7 @@ export default function Search({
         return matchesAdvancedFilters(item.vehicle, dealer, filters);
       })
       .map((item) => item.vehicle);
-  }, [publicSearchVehicles, searchText, parsedSearch, filters]);
+  }, [publicSearchVehicles, searchText, filters]);
 
   const sortedVehicles = useMemo(() => {
     setVisibleCount(20);
