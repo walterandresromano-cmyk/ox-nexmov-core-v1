@@ -1329,3 +1329,153 @@
     );
   }
 }
+
+/* =========================================================
+   Force transparent column styling — overrides responsive.css
+   Value cards, proposal cards, step cards: no nested card chrome.
+   Plan cards stay as cards (pricing options with CTA).
+   ========================================================= */
+
+.join-network-page .join-network-value-card,
+:root[data-theme="light"] .join-network-page .join-network-value-card,
+:root[data-theme="dark"] .join-network-page .join-network-value-card,
+.join-network-page .join-network-proposal-card,
+:root[data-theme="light"] .join-network-page .join-network-proposal-card,
+:root[data-theme="dark"] .join-network-page .join-network-proposal-card,
+.join-network-page .join-network-step-card,
+:root[data-theme="light"] .join-network-page .join-network-step-card,
+:root[data-theme="dark"] .join-network-page .join-network-step-card {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+}
+
+.join-network-page .join-network-value-card::before,
+.join-network-page .join-network-proposal-card::before,
+.join-network-page .join-network-step-card::before {
+  display: none !important;
+}
+
+/* Value cards: border-right column separator */
+.join-network-page .join-network-value-card {
+  padding: 0 20px !important;
+  border-right: 1px solid rgba(125, 211, 252, 0.16) !important;
+}
+
+.join-network-page .join-network-value-card:last-child {
+  border-right: none !important;
+}
+
+:root[data-theme="light"] .join-network-page .join-network-value-card {
+  border-right-color: rgba(14, 116, 144, 0.14) !important;
+}
+
+/* Proposal cards: border-top separator (3-col grid) */
+.join-network-page .join-network-proposal-card {
+  padding: 16px 0 !important;
+  border-top: 1px solid rgba(125, 211, 252, 0.14) !important;
+}
+
+:root[data-theme="light"] .join-network-page .join-network-proposal-card {
+  border-top-color: rgba(14, 116, 144, 0.13) !important;
+}
+
+/* Step cards: transparent with border-left separator */
+.join-network-page .join-network-step-card {
+  padding: 0 16px 0 16px !important;
+  border-left: 1px solid rgba(125, 211, 252, 0.16) !important;
+}
+
+.join-network-page .join-network-steps .join-network-step-card:first-child {
+  padding-left: 0 !important;
+  border-left: none !important;
+}
+
+:root[data-theme="light"] .join-network-page .join-network-step-card {
+  border-left-color: rgba(14, 116, 144, 0.14) !important;
+}
+
+/* Remove outer border/gap on values grid — sections are the panels */
+.join-network-page .join-network-values {
+  border-top: 1px solid rgba(125, 211, 252, 0.12) !important;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.12) !important;
+  gap: 0 !important;
+  padding: 20px 0 !important;
+}
+
+:root[data-theme="light"] .join-network-page .join-network-values {
+  border-top-color: rgba(14, 116, 144, 0.12) !important;
+  border-bottom-color: rgba(14, 116, 144, 0.12) !important;
+}
+
+.join-network-page .join-network-proposal-grid {
+  gap: 0 !important;
+}
+
+.join-network-page .join-network-steps {
+  gap: 0 !important;
+  padding: 20px 0 0 !important;
+  border-top: 1px solid rgba(125, 211, 252, 0.12) !important;
+}
+
+:root[data-theme="light"] .join-network-page .join-network-steps {
+  border-top-color: rgba(14, 116, 144, 0.12) !important;
+}
+
+/* Tablet: 2-col → reset col-2 left/right border */
+@media (max-width: 1100px) {
+  .join-network-page .join-network-value-card:nth-child(2) {
+    border-right: none !important;
+  }
+
+  .join-network-page .join-network-steps .join-network-step-card:nth-child(2) {
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+
+  .join-network-page .join-network-steps .join-network-step-card:nth-child(3),
+  .join-network-page .join-network-steps .join-network-step-card:nth-child(4),
+  .join-network-page .join-network-steps .join-network-step-card:nth-child(5),
+  .join-network-page .join-network-steps .join-network-step-card:nth-child(6) {
+    padding-top: 16px !important;
+    border-top: 1px solid rgba(125, 211, 252, 0.12) !important;
+    border-left: 1px solid rgba(125, 211, 252, 0.16) !important;
+  }
+
+  .join-network-page .join-network-steps .join-network-step-card:nth-child(odd):not(:first-child) {
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+}
+
+/* Mobile: all separators become border-top */
+@media (max-width: 760px) {
+  .join-network-page .join-network-value-card {
+    padding: 14px 0 !important;
+    border-right: none !important;
+    border-top: 1px solid rgba(125, 211, 252, 0.12) !important;
+  }
+
+  .join-network-page .join-network-value-card:first-child {
+    border-top: none !important;
+    padding-top: 0 !important;
+  }
+
+  .join-network-page .join-network-step-card {
+    padding: 12px 0 !important;
+    border-left: none !important;
+    border-top: 1px solid rgba(125, 211, 252, 0.12) !important;
+  }
+
+  .join-network-page .join-network-steps .join-network-step-card:first-child {
+    border-top: none !important;
+    padding-top: 0 !important;
+  }
+
+  :root[data-theme="light"] .join-network-page .join-network-value-card,
+  :root[data-theme="light"] .join-network-page .join-network-step-card {
+    border-top-color: rgba(14, 116, 144, 0.12) !important;
+  }
+}
