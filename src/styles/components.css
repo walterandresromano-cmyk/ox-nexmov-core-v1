@@ -22503,13 +22503,14 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-/* Cuando hay hover en el grid: la hovered gana, las demás se vuelan */
+/* Cuando hay hover en el grid: todas se diman, la hovered gana */
 .vehicle-grid:has(.vehicle-card:hover) .vehicle-card,
 .dealer-profile-grid:has(.vehicle-card:hover) .vehicle-card {
   opacity: 0.54;
 }
 
-.vehicle-grid .vehicle-card:hover,
-.dealer-profile-grid .vehicle-card:hover {
+/* Especificidad más alta que el :has() para que el hover gane */
+.vehicle-grid:has(.vehicle-card:hover) .vehicle-card:hover,
+.dealer-profile-grid:has(.vehicle-card:hover) .vehicle-card:hover {
   opacity: 1;
 }
