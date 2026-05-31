@@ -1259,28 +1259,30 @@ export default function Search({
             <div className="ox-search-input-wrap vehicle-autocomplete">
               <label>¿Qué vehículo estás buscando?</label>
 
-              {ghostCompletion && (
-                <span className="vehicle-autocomplete-ghost" aria-hidden="true">
-                  <span>{searchText}</span>
-                  {ghostCompletion.suffix}
-                </span>
-              )}
+              <div className="vehicle-autocomplete-field">
+                {ghostCompletion && (
+                  <span className="vehicle-autocomplete-ghost" aria-hidden="true">
+                    <span>{searchText}</span>
+                    {ghostCompletion.suffix}
+                  </span>
+                )}
 
-              <input
-                value={searchText}
-                onChange={(event) => setSearchText(event.target.value)}
-                onKeyDown={(event) => {
-                  if (
-                    ghostCompletion &&
-                    (event.key === "Tab" || event.key === "ArrowRight") &&
-                    event.currentTarget.selectionStart === searchText.length
-                  ) {
-                    event.preventDefault();
-                    handleSuggestionSelect(ghostCompletion.suggestion);
-                  }
-                }}
-                placeholder="Ej: SUV automática financiada en Buenos Aires"
-              />
+                <input
+                  value={searchText}
+                  onChange={(event) => setSearchText(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (
+                      ghostCompletion &&
+                      (event.key === "Tab" || event.key === "ArrowRight") &&
+                      event.currentTarget.selectionStart === searchText.length
+                    ) {
+                      event.preventDefault();
+                      handleSuggestionSelect(ghostCompletion.suggestion);
+                    }
+                  }}
+                  placeholder="Ej: SUV automática financiada en Buenos Aires"
+                />
+              </div>
             </div>
 
             <button

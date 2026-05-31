@@ -1609,6 +1609,10 @@
   padding: 0 4px;
 }
 
+.ox-search-input-wrap .vehicle-autocomplete-field {
+  width: 100%;
+}
+
 .ox-search-input-wrap input {
   min-height: 38px;
   border-radius: 13px;
