@@ -6958,7 +6958,7 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .login-btn.active,
 :root[data-theme="light"] .primary-action,
 :root[data-theme="light"] .vehicle-card__btn--primary {
-  color: #ffffff;
+  color: rgba(10, 28, 54, 0.92);
   background: var(--ox-surface-primary);
 }
 
@@ -20855,7 +20855,7 @@ body::-webkit-scrollbar {
 
 :root.light .vehicle-card__btn--primary,
 :root[data-theme="light"] .vehicle-card__btn--primary {
-  color: white;
+  color: rgba(10, 28, 54, 0.92);
 }
 
 @media (max-width: 760px) {
