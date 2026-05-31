@@ -1080,6 +1080,10 @@
     min-width: 0;
   }
 
+  .vehicle-detail-footer {
+    grid-template-columns: 1fr !important;
+  }
+
   .vehicle-detail-title-card {
     padding: 13px;
     border-radius: 18px;
@@ -1574,6 +1578,146 @@
 .vehicle-detail-layout {
   grid-template-columns: minmax(390px, 1fr) minmax(340px, 0.94fr) !important;
   gap: 16px !important;
+}
+
+/* ── Footer unificado ───────────────────────────────────── */
+.vehicle-detail-footer {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.2fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.vehicle-detail-footer > .detail-footer-insurance,
+.vehicle-detail-footer > .vehicle-detail-legal-note {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+/* Bloque "Publicado por" */
+.detail-published-by {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: var(--ox-radius-xl);
+  background: rgba(15, 23, 42, 0.54);
+}
+
+.detail-published-by-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.detail-published-by-label {
+  color: rgba(203, 213, 225, 0.62);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-published-by-name {
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 0.95rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+.detail-published-by-location {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.detail-published-by-trust {
+  margin: 0;
+  color: rgba(56, 189, 248, 0.82);
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.detail-published-by .dealer-profile-link-btn {
+  margin-top: 4px;
+  align-self: flex-start;
+}
+
+/* Descripción del vehículo (si existe) */
+.detail-vehicle-description {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: var(--ox-radius-xl);
+  background: rgba(15, 23, 42, 0.40);
+}
+
+.detail-vehicle-description span {
+  color: rgba(203, 213, 225, 0.62);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-vehicle-description p {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.82);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* Seguro — línea discreta */
+.detail-footer-insurance {
+  color: rgba(148, 163, 184, 0.58);
+  font-size: 0.7rem;
+  line-height: 1.3;
+  padding: 2px 0;
+}
+
+/* Light mode */
+:root[data-theme="light"] .detail-published-by {
+  border-color: rgba(14, 116, 144, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(224, 243, 252, 0.72));
+}
+
+:root[data-theme="light"] .detail-published-by-name {
+  color: rgba(15, 23, 42, 0.96);
+}
+
+:root[data-theme="light"] .detail-published-by-label {
+  color: rgba(70, 87, 108, 0.72);
+}
+
+:root[data-theme="light"] .detail-published-by-location {
+  color: rgba(70, 87, 108, 0.82);
+}
+
+:root[data-theme="light"] .detail-published-by-trust {
+  color: rgba(14, 116, 144, 0.82);
+}
+
+:root[data-theme="light"] .detail-vehicle-description {
+  border-color: rgba(14, 116, 144, 0.13);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(224, 243, 252, 0.60));
+}
+
+:root[data-theme="light"] .detail-vehicle-description span {
+  color: rgba(70, 87, 108, 0.72);
+}
+
+:root[data-theme="light"] .detail-vehicle-description p {
+  color: rgba(70, 87, 108, 0.88);
+}
+
+:root[data-theme="light"] .detail-footer-insurance {
+  color: rgba(70, 87, 108, 0.52);
 }
 
 .detail-gallery-frame {

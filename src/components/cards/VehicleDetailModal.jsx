@@ -761,30 +761,6 @@ export default function VehicleDetailModal({
               </button>
             </div>
 
-            <div className="detail-dealer-box">
-              <span>Dealer</span>
-              <strong>{currentDealer.commercialName}</strong>
-              <p>
-                {currentDealer.city}, {currentDealer.province}
-              </p>
-              {onNavigate &&
-                currentDealer.id &&
-                currentDealer.id !== "dealer-fallback" &&
-                currentDealer.id !== "dealer-snapshot" && (
-                  <button
-                    type="button"
-                    className="dealer-profile-link-btn"
-                    onClick={() =>
-                      onNavigate("dealerProfile", {
-                        dealerId: currentDealer.id,
-                      })
-                    }
-                  >
-                    Ver más de este dealer →
-                  </button>
-                )}
-            </div>
-
             {currentVehicle.hasFinancing && (currentVehicle.delivery > 0 || currentVehicle.months > 0 || currentVehicle.rate > 0) && (
               <div className="vehicle-detail-financing-details">
                 <p className="vehicle-detail-financing-label">Condiciones de financiación</p>
@@ -817,59 +793,58 @@ export default function VehicleDetailModal({
               </p>
             )}
 
-            {isPlatinumDealer && (
-              <div className="vehicle-detail-platinum-block">
-                <span className="vehicle-detail-platinum-kicker">
-                  Dealer Platinum
+          </div>
+
+          <div className="vehicle-detail-footer">
+            <div className="detail-published-by">
+              <div className="detail-published-by-header">
+                <span className="detail-published-by-label">Publicado por</span>
+                <span className={`admin-chip rank-${permissions.rankTheme}`}>
+                  {permissions.rankLabel}
                 </span>
-                <strong className="vehicle-detail-platinum-title">
-                  Máxima presencia dentro de oX NEXMOV.
-                </strong>
-                <p>
-                  Dealer con máxima presencia dentro de la red oX NEXMOV.
-                </p>
-                <div className="vehicle-detail-platinum-chips">
-                  <span className="vehicle-detail-platinum-chip">
-                    Publicaciones de alto volumen
-                  </span>
-                  <span className="vehicle-detail-platinum-chip">
-                    Señales comerciales completas
-                  </span>
-                  <span className="vehicle-detail-platinum-chip">
-                    Herramientas avanzadas
-                  </span>
-                </div>
+              </div>
+              <strong className="detail-published-by-name">
+                {currentDealer.commercialName}
+              </strong>
+              <p className="detail-published-by-location">
+                {currentDealer.city}, {currentDealer.province}
+              </p>
+              <p className="detail-published-by-trust">
+                Concesionaria verificada dentro de oX NEXMOV.
+              </p>
+              {onNavigate &&
+                currentDealer.id &&
+                currentDealer.id !== "dealer-fallback" &&
+                currentDealer.id !== "dealer-snapshot" && (
+                  <button
+                    type="button"
+                    className="dealer-profile-link-btn"
+                    onClick={() =>
+                      onNavigate("dealerProfile", {
+                        dealerId: currentDealer.id,
+                      })
+                    }
+                  >
+                    Ver más de este dealer →
+                  </button>
+                )}
+            </div>
+
+            {currentVehicle.details && (
+              <div className="detail-vehicle-description">
+                <span>Descripción del vehículo</span>
+                <p>{currentVehicle.details}</p>
               </div>
             )}
 
-            <div className="detail-notes-box">
-              <span>Detalles del dealer</span>
-              <p>
-                {currentVehicle.details ||
-                  "La unidad se encuentra disponible para consultar. Las condiciones comerciales y de financiación deben confirmarse con el dealer."}
-              </p>
-            </div>
-
-            <div className="vehicle-detail-insurance-next-box">
-              <div>
-                <span>Próximamente</span>
-                <strong>Seguro del vehículo</strong>
-                <p>
-                  Estamos preparando una opción para consultar seguros con
-                  proveedores o productores autorizados. La compra del vehículo
-                  no implica contratación de seguro.
-                </p>
-              </div>
-
-              <button type="button" disabled>
-                Función próximamente
-              </button>
-            </div>
+            <p className="detail-footer-insurance">
+              Seguro del vehículo: próximamente.
+            </p>
 
             <p className="vehicle-detail-legal-note">
               La información de esta publicación fue declarada por el dealer
-              anunciante. Verificá disponibilidad, precio final, documentación y
-              condiciones antes de avanzar. oX NEXMOV no certifica el estado
+              anunciante. Verificá disponibilidad, precio final, documentación
+              y condiciones antes de avanzar. oX NEXMOV no certifica el estado
               mecánico ni garantiza la operación comercial.
             </p>
           </div>
