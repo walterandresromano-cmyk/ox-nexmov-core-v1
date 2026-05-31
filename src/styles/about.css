@@ -163,15 +163,43 @@
   line-height: var(--ox-lh-body);
 }
 
-.about-pillars,
+.about-pillars {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: var(--ox-radius-2xl);
+  background: var(--ox-surface-card);
+  box-shadow: var(--ox-shadow-card);
+  padding: var(--ox-panel-padding);
+}
+
 .about-vision-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--ox-space-4);
 }
 
-.about-pillar-card,
-.about-vision-card,
+.about-pillar-card {
+  padding: 0 16px;
+  border-left: 1px solid rgba(125, 211, 252, 0.16);
+}
+
+.about-pillar-card:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.about-vision-card {
+  padding: 0 16px;
+  border-left: 1px solid rgba(125, 211, 252, 0.16);
+}
+
+.about-vision-card:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
 .about-section,
 .about-final {
   position: relative;
@@ -182,27 +210,8 @@
   box-shadow: var(--ox-shadow-card);
 }
 
-.about-pillar-card,
-.about-vision-card {
-  padding: 14px;
-}
-
-.about-pillar-card::before,
-.about-vision-card::before {
-  content: "";
-  position: absolute;
-  left: 14px;
-  top: 12px;
-  width: 22px;
-  height: 2px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #38bdf8, rgba(245, 184, 75, 0.72));
-  opacity: 0.72;
-}
-
 .about-pillar-card span {
   display: block;
-  margin-top: 8px;
   color: rgba(125, 211, 252, 0.88);
   font-size: var(--ox-fs-micro);
   line-height: 1;
@@ -255,10 +264,11 @@
 
 .about-vision-grid {
   margin-top: 14px;
+  gap: 0;
 }
 
 .about-vision-card h3 {
-  margin: 8px 0 0;
+  margin: 0 0 6px;
   color: rgba(248, 250, 252, 0.95);
   font-size: 0.76rem;
   line-height: 1.18;
@@ -368,8 +378,7 @@
 }
 
 :root[data-theme="light"] .about-hero-card,
-:root[data-theme="light"] .about-pillar-card,
-:root[data-theme="light"] .about-vision-card,
+:root[data-theme="light"] .about-pillars,
 :root[data-theme="light"] .about-section {
   border-color: rgba(14, 116, 144, 0.14);
   background:
@@ -378,6 +387,11 @@
   box-shadow:
     0 16px 44px rgba(33, 48, 71, 0.10),
     inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+:root[data-theme="light"] .about-pillar-card,
+:root[data-theme="light"] .about-vision-card {
+  border-left-color: rgba(14, 116, 144, 0.16);
 }
 
 :root[data-theme="light"] .about-benefits-list span {
@@ -420,6 +434,20 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .about-pillar-card:nth-child(2),
+  .about-vision-card:nth-child(2) {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .about-pillar-card:nth-child(3),
+  .about-pillar-card:nth-child(4),
+  .about-vision-card:nth-child(3),
+  .about-vision-card:nth-child(4) {
+    padding-top: 16px;
+    border-top: 1px solid rgba(125, 211, 252, 0.14);
+  }
+
   .about-final-actions {
     justify-content: flex-start;
   }
@@ -449,11 +477,47 @@
   .about-pillars,
   .about-vision-grid {
     grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .about-pillar-card,
+  .about-vision-card {
+    padding: 12px 0;
+    border-left: none;
+    border-top: 1px solid rgba(125, 211, 252, 0.14);
+  }
+
+  .about-pillar-card:first-child,
+  .about-vision-card:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  /* tablet 2-col border resets no longer needed on mobile */
+  .about-pillar-card:nth-child(2),
+  .about-vision-card:nth-child(2) {
+    border-left: none;
+    border-top: 1px solid rgba(125, 211, 252, 0.14);
+    padding-left: 0;
+    padding-top: 12px;
+  }
+
+  .about-pillar-card:nth-child(3),
+  .about-pillar-card:nth-child(4),
+  .about-vision-card:nth-child(3),
+  .about-vision-card:nth-child(4) {
+    padding-top: 12px;
+    border-top: 1px solid rgba(125, 211, 252, 0.14);
   }
 
   .about-section,
   .about-final,
   .about-hero-card {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .about-pillars {
     padding: 14px;
     border-radius: 18px;
   }
@@ -471,8 +535,7 @@
 /* oX NEXMOV - Public visual system phase 2 */
 .about-hero,
 .about-hero-card,
-.about-pillar-card,
-.about-vision-card,
+.about-pillars,
 .about-section,
 .about-final {
   border-color: var(--ox-border-premium);
@@ -480,8 +543,7 @@
 }
 
 .about-hero-card,
-.about-pillar-card,
-.about-vision-card,
+.about-pillars,
 .about-section {
   background:
     radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.08), transparent 30%),
@@ -504,8 +566,7 @@
 
 :root[data-theme="light"] .about-hero,
 :root[data-theme="light"] .about-hero-card,
-:root[data-theme="light"] .about-pillar-card,
-:root[data-theme="light"] .about-vision-card,
+:root[data-theme="light"] .about-pillars,
 :root[data-theme="light"] .about-section,
 :root[data-theme="light"] .about-final {
   border-color: var(--ox-border-premium);
