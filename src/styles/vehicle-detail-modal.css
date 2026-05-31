@@ -1080,10 +1080,6 @@
     min-width: 0;
   }
 
-  .vehicle-detail-footer {
-    grid-template-columns: 1fr !important;
-  }
-
   .vehicle-detail-title-card {
     padding: 13px;
     border-radius: 18px;
@@ -1580,19 +1576,12 @@
   gap: 16px !important;
 }
 
-/* ── Footer unificado ───────────────────────────────────── */
+/* ── Footer — solo seguro + disclaimer ───────────────────── */
 .vehicle-detail-footer {
   grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.2fr);
-  gap: 12px;
-  align-items: start;
-}
-
-.vehicle-detail-footer > .detail-footer-insurance,
-.vehicle-detail-footer > .vehicle-detail-legal-note {
-  grid-column: 1 / -1;
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* Bloque "Publicado por" */

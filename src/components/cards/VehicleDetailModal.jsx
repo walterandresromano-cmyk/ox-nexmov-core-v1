@@ -573,6 +573,47 @@ export default function VehicleDetailModal({
                 </p>
               </div>
             )}
+
+            <div className="detail-published-by">
+              <div className="detail-published-by-header">
+                <span className="detail-published-by-label">Publicado por</span>
+                <span className={`admin-chip rank-${permissions.rankTheme}`}>
+                  {permissions.rankLabel}
+                </span>
+              </div>
+              <strong className="detail-published-by-name">
+                {currentDealer.commercialName}
+              </strong>
+              <p className="detail-published-by-location">
+                {currentDealer.city}, {currentDealer.province}
+              </p>
+              <p className="detail-published-by-trust">
+                Concesionaria verificada dentro de oX NEXMOV.
+              </p>
+              {onNavigate &&
+                currentDealer.id &&
+                currentDealer.id !== "dealer-fallback" &&
+                currentDealer.id !== "dealer-snapshot" && (
+                  <button
+                    type="button"
+                    className="dealer-profile-link-btn"
+                    onClick={() =>
+                      onNavigate("dealerProfile", {
+                        dealerId: currentDealer.id,
+                      })
+                    }
+                  >
+                    Ver más de este dealer →
+                  </button>
+                )}
+            </div>
+
+            {currentVehicle.details && (
+              <div className="detail-vehicle-description">
+                <span>Descripción del vehículo</span>
+                <p>{currentVehicle.details}</p>
+              </div>
+            )}
           </div>
 
           <div className="vehicle-detail-info">
@@ -796,47 +837,6 @@ export default function VehicleDetailModal({
           </div>
 
           <div className="vehicle-detail-footer">
-            <div className="detail-published-by">
-              <div className="detail-published-by-header">
-                <span className="detail-published-by-label">Publicado por</span>
-                <span className={`admin-chip rank-${permissions.rankTheme}`}>
-                  {permissions.rankLabel}
-                </span>
-              </div>
-              <strong className="detail-published-by-name">
-                {currentDealer.commercialName}
-              </strong>
-              <p className="detail-published-by-location">
-                {currentDealer.city}, {currentDealer.province}
-              </p>
-              <p className="detail-published-by-trust">
-                Concesionaria verificada dentro de oX NEXMOV.
-              </p>
-              {onNavigate &&
-                currentDealer.id &&
-                currentDealer.id !== "dealer-fallback" &&
-                currentDealer.id !== "dealer-snapshot" && (
-                  <button
-                    type="button"
-                    className="dealer-profile-link-btn"
-                    onClick={() =>
-                      onNavigate("dealerProfile", {
-                        dealerId: currentDealer.id,
-                      })
-                    }
-                  >
-                    Ver más de este dealer →
-                  </button>
-                )}
-            </div>
-
-            {currentVehicle.details && (
-              <div className="detail-vehicle-description">
-                <span>Descripción del vehículo</span>
-                <p>{currentVehicle.details}</p>
-              </div>
-            )}
-
             <p className="detail-footer-insurance">
               Seguro del vehículo: próximamente.
             </p>
