@@ -371,7 +371,7 @@
 
 .ox-search-workspace {
   display: grid;
-  grid-template-columns: minmax(260px, 292px) minmax(0, 1fr) minmax(292px, 326px);
+  grid-template-columns: minmax(260px, 292px) minmax(0, 1fr);
   gap: var(--ox-section-gap);
   align-items: start;
 }

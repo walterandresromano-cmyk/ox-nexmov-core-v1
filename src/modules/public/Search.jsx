@@ -1830,53 +1830,6 @@ export default function Search({
             )}
           </main>
 
-          <aside className="ox-search-aside">
-            <div className="ox-search-side-card ox-search-decision-card">
-              <span>Decisión</span>
-              <h2>Compará mejor</h2>
-              <p>
-                Seleccioná hasta 4 vehículos para revisar precio, km,
-                financiación y ubicación lado a lado.
-              </p>
-
-              <button
-                type="button"
-                className="ox-search-compare-btn"
-                onClick={() => appActions?.openCompare?.()}
-              >
-                Ver comparador
-              </button>
-            </div>
-
-            <div className="ox-search-side-card ox-search-signal-card">
-              <span>Lectura</span>
-              <h2>Señales clave</h2>
-              <ul>
-                <li>Precio bajo referencia.</li>
-                <li>Financiación disponible.</li>
-                <li>Dealer verificado.</li>
-                <li>Vehículo comparable.</li>
-              </ul>
-            </div>
-
-            <div className="ox-search-side-card ox-search-contact-card">
-              <span>Contacto</span>
-              <h2>Consulta trazable</h2>
-              <p>
-                El contacto queda ordenado para que comprador y dealer sigan la
-                oportunidad con más claridad.
-              </p>
-            </div>
-
-            <div className="ox-search-side-card ox-search-tip-card">
-              <span>Consejo</span>
-              <h2>Abrí más opciones</h2>
-              <p>
-                Si hay pocos resultados, probá ampliar marca, precio o ubicación
-                antes de descartar alternativas.
-              </p>
-            </div>
-          </aside>
         </section>
 
         <section className="ox-search-trust-strip">
