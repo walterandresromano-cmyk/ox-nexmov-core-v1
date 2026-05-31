@@ -4405,32 +4405,32 @@ button.admin-kpi-card:focus-visible {
 .vehicle-card.rank-inicio,
 .vehicle-card:has(.dealer-rank-inicio),
 .vehicle-card:has(.rank-inicio) {
-  --ox-rank-spark: rgba(184, 135, 70, 0.42);
-  --ox-rank-spark-soft: rgba(184, 135, 70, 0.10);
+  --ox-rank-spark: rgba(184, 135, 70, 0.18);
+  --ox-rank-spark-soft: rgba(184, 135, 70, 0.05);
 }
 
 .vehicle-card.dealer-rank-pro,
 .vehicle-card.rank-pro,
 .vehicle-card:has(.dealer-rank-pro),
 .vehicle-card:has(.rank-pro) {
-  --ox-rank-spark: rgba(56, 189, 248, 0.44);
-  --ox-rank-spark-soft: rgba(56, 189, 248, 0.10);
+  --ox-rank-spark: rgba(56, 189, 248, 0.18);
+  --ox-rank-spark-soft: rgba(56, 189, 248, 0.05);
 }
 
 .vehicle-card.dealer-rank-elite,
 .vehicle-card.rank-elite,
 .vehicle-card:has(.dealer-rank-elite),
 .vehicle-card:has(.rank-elite) {
-  --ox-rank-spark: rgba(245, 197, 66, 0.48);
-  --ox-rank-spark-soft: rgba(245, 197, 66, 0.11);
+  --ox-rank-spark: rgba(245, 197, 66, 0.20);
+  --ox-rank-spark-soft: rgba(245, 197, 66, 0.06);
 }
 
 .vehicle-card.dealer-rank-platinum,
 .vehicle-card.rank-platinum,
 .vehicle-card:has(.dealer-rank-platinum),
 .vehicle-card:has(.rank-platinum) {
-  --ox-rank-spark: rgba(229, 231, 235, 0.46);
-  --ox-rank-spark-soft: rgba(229, 231, 235, 0.10);
+  --ox-rank-spark: rgba(229, 231, 235, 0.18);
+  --ox-rank-spark-soft: rgba(229, 231, 235, 0.05);
 }
 
 /* Borde luminoso base */
@@ -4447,11 +4447,11 @@ button.admin-kpi-card:focus-visible {
       135deg,
       transparent 0%,
       var(--ox-rank-spark-soft) 22%,
-      rgba(255, 255, 255, 0.05) 48%,
+      rgba(255, 255, 255, 0.03) 48%,
       var(--ox-rank-spark-soft) 72%,
       transparent 100%
     );
-  opacity: 0.48;
+  opacity: 0.30;
   mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -4467,15 +4467,15 @@ button.admin-kpi-card:focus-visible {
   content: "";
   position: absolute;
   z-index: 3;
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   pointer-events: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.60);
   box-shadow:
-    0 0 6px var(--ox-rank-spark),
-    0 0 14px var(--ox-rank-spark);
-  opacity: 0.50;
+    0 0 4px var(--ox-rank-spark),
+    0 0 8px var(--ox-rank-spark);
+  opacity: 0.28;
   animation: oxVehicleCardEdgeSpark 8.6s linear infinite;
 }
 
@@ -4522,12 +4522,12 @@ button.admin-kpi-card:focus-visible {
 
 /* Refuerzo al hover */
 .vehicle-card:hover::before {
-  opacity: 0.68;
+  opacity: 0.46;
 }
 
 .vehicle-card:hover::after {
-  opacity: 0.72;
-  filter: saturate(1.1);
+  opacity: 0.44;
+  filter: saturate(1.05);
 }
 
 /* Recorrido perimetral: top → right → bottom → left */
@@ -4822,14 +4822,14 @@ button.admin-kpi-card:focus-visible {
 
 /* El destello del borde también un poco más elegante */
 .vehicle-card::after {
-  opacity: 0.38;
+  opacity: 0.22;
   box-shadow:
-    0 0 5px var(--ox-rank-spark),
-    0 0 12px var(--ox-rank-spark);
+    0 0 4px var(--ox-rank-spark),
+    0 0 8px var(--ox-rank-spark);
 }
 
 .vehicle-card:hover::after {
-  opacity: 0.56;
+  opacity: 0.36;
 }
 
 /* =========================================================
