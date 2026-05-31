@@ -1588,8 +1588,23 @@
 .vehicle-detail-footer {
   grid-column: 1 / -1;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.vehicle-detail-footer .vehicle-detail-legal-note {
+  flex: 1;
+}
+
+.vehicle-detail-footer-logo {
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+:root[data-theme="light"] .vehicle-detail-footer-logo {
+  filter: brightness(0);
+  opacity: 0.22;
 }
 
 /* Bloque "Publicado por" */

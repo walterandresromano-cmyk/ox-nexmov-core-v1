@@ -844,16 +844,19 @@ export default function VehicleDetailModal({
           </div>
 
           <div className="vehicle-detail-footer">
-            <p className="detail-footer-insurance">
-              Seguro del vehículo: próximamente.
-            </p>
-
             <p className="vehicle-detail-legal-note">
               La información de esta publicación fue declarada por el dealer
               anunciante. Verificá disponibilidad, precio final, documentación
               y condiciones antes de avanzar. oX NEXMOV no certifica el estado
               mecánico ni garantiza la operación comercial.
             </p>
+            <img
+              className="vehicle-detail-footer-logo"
+              src="/logo.svg"
+              alt="oX NEXMOV"
+              width="120"
+              height="23"
+            />
           </div>
         </div>
       </section>
