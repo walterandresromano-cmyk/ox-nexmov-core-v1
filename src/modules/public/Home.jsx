@@ -756,23 +756,6 @@ export default function Home({ onNavigate, appActions = {} }) {
             </p>
           </div>
 
-            <div className="ox-home-confidence-list-v3">
-              {confidenceItems.map((item) => (
-                <article key={item.title}>
-                  <span><CheckIcon size={16} /></span>
-                  <div>
-                    <strong>{item.title}</strong>
-                    <p>{item.text}</p>
-                    <ul>
-                      {item.details.map((detail) => (
-                        <li key={detail}>{detail}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
-              ))}
-            </div>
-
             <div className="ox-home-confidence-cta-v3">
               <strong>Menos incertidumbre. Más decisión.</strong>
               <span>
