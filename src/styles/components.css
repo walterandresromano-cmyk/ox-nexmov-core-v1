@@ -4433,8 +4433,9 @@ button.admin-kpi-card:focus-visible {
   --ox-rank-spark-soft: rgba(229, 231, 235, 0.05);
 }
 
-/* Borde luminoso base */
+/* Borde luminoso base — desactivado */
 .vehicle-card::before {
+  display: none;
   content: "";
   position: absolute;
   inset: 0;
@@ -4442,16 +4443,7 @@ button.admin-kpi-card:focus-visible {
   pointer-events: none;
   border-radius: inherit;
   padding: 1px;
-  background:
-    linear-gradient(
-      135deg,
-      transparent 0%,
-      var(--ox-rank-spark-soft) 22%,
-      rgba(255, 255, 255, 0.03) 48%,
-      var(--ox-rank-spark-soft) 72%,
-      transparent 100%
-    );
-  opacity: 0.30;
+  opacity: 0;
   mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -4462,21 +4454,9 @@ button.admin-kpi-card:focus-visible {
   -webkit-mask-composite: xor;
 }
 
-/* Punto/destello que recorre el perímetro */
+/* Punto/destello que recorre el perímetro — desactivado */
 .vehicle-card::after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  width: 4px;
-  height: 4px;
-  pointer-events: none;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.60);
-  box-shadow:
-    0 0 4px var(--ox-rank-spark),
-    0 0 8px var(--ox-rank-spark);
-  opacity: 0.28;
-  animation: oxVehicleCardEdgeSpark 8.6s linear infinite;
+  display: none;
 }
 
 /* Velocidades sutilmente distintas por rango */
@@ -4520,14 +4500,10 @@ button.admin-kpi-card:focus-visible {
   animation-duration: 20s;
 }
 
-/* Refuerzo al hover */
-.vehicle-card:hover::before {
-  opacity: 0.46;
-}
-
+/* Refuerzo al hover — desactivado */
+.vehicle-card:hover::before,
 .vehicle-card:hover::after {
-  opacity: 0.44;
-  filter: saturate(1.05);
+  display: none;
 }
 
 /* Recorrido perimetral: top → right → bottom → left */
@@ -4820,17 +4796,6 @@ button.admin-kpi-card:focus-visible {
   filter: saturate(1.035);
 }
 
-/* El destello del borde también un poco más elegante */
-.vehicle-card::after {
-  opacity: 0.22;
-  box-shadow:
-    0 0 4px var(--ox-rank-spark),
-    0 0 8px var(--ox-rank-spark);
-}
-
-.vehicle-card:hover::after {
-  opacity: 0.36;
-}
 
 /* =========================================================
    oX NEXMOV — Hidden Scrollbar System
