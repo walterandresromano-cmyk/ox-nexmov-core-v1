@@ -856,3 +856,47 @@
     );
   }
 }
+
+/* =========================================================
+   FAQ — transparent row pattern (no cards within cards)
+   faq-item rows use border-top separators inside the section panel.
+   ========================================================= */
+
+.faq-page .faq-item,
+:root[data-theme="light"] .faq-page .faq-item,
+:root[data-theme="dark"] .faq-page .faq-item {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.faq-page .faq-item {
+  border-top: 1px solid rgba(125, 211, 252, 0.14) !important;
+}
+
+.faq-page .faq-list .faq-item:first-child {
+  border-top: none !important;
+}
+
+/* Security section: slightly accent color separator */
+.faq-page .faq-section--security .faq-item {
+  border-top-color: rgba(56, 189, 248, 0.16) !important;
+}
+
+:root[data-theme="light"] .faq-page .faq-item {
+  border-top-color: rgba(14, 116, 144, 0.13) !important;
+}
+
+:root[data-theme="light"] .faq-page .faq-item summary {
+  color: #0d1726 !important;
+}
+
+/* Keep summary hover feedback without card chrome */
+.faq-page .faq-item summary:hover {
+  color: rgba(125, 211, 252, 0.96);
+}
+
+:root[data-theme="light"] .faq-page .faq-item summary:hover {
+  color: #0284c7;
+}
