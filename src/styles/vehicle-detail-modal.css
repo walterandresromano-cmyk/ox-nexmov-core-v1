@@ -2379,6 +2379,11 @@
   color: rgba(226, 232, 240, 0.92) !important;
 }
 
+.detail-actions button.vehicle-share-btn--whatsapp {
+  border-color: rgba(37, 211, 102, 0.50) !important;
+  color: rgba(134, 239, 172, 0.92) !important;
+}
+
 .detail-actions button.favorite-active {
   border-color: rgba(245, 184, 75, 0.34) !important;
   background:
