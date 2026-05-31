@@ -22484,33 +22484,35 @@ body::-webkit-scrollbar {
 
 /* =========================================================
    oX NEXMOV — Card Focus Veil
-   Una sola card sin velo a la vez: primera por defecto,
-   hovered cuando el usuario interactúa.
+   Solo en dispositivos con mouse (hover: hover).
+   En touch el velo no aplica — todas las cards al 100%.
    ========================================================= */
 
-.vehicle-grid .vehicle-card,
-.dealer-profile-grid .vehicle-card {
-  opacity: 0.54;
-  transition:
-    opacity 0.22s ease,
-    transform 0.22s ease,
-    box-shadow 0.22s ease;
-}
+@media (hover: hover) and (pointer: fine) {
+  .vehicle-grid .vehicle-card,
+  .dealer-profile-grid .vehicle-card {
+    opacity: 0.54;
+    transition:
+      opacity 0.22s ease,
+      transform 0.22s ease,
+      box-shadow 0.22s ease;
+  }
 
-/* Primera card siempre sin velo en reposo */
-.vehicle-grid .vehicle-card:first-child,
-.dealer-profile-grid .vehicle-card:first-child {
-  opacity: 1;
-}
+  /* Primera card sin velo en reposo */
+  .vehicle-grid .vehicle-card:first-child,
+  .dealer-profile-grid .vehicle-card:first-child {
+    opacity: 1;
+  }
 
-/* Cuando hay hover en el grid: todas se diman, la hovered gana */
-.vehicle-grid:has(.vehicle-card:hover) .vehicle-card,
-.dealer-profile-grid:has(.vehicle-card:hover) .vehicle-card {
-  opacity: 0.54;
-}
+  /* Al hover: todas se diman */
+  .vehicle-grid:has(.vehicle-card:hover) .vehicle-card,
+  .dealer-profile-grid:has(.vehicle-card:hover) .vehicle-card {
+    opacity: 0.54;
+  }
 
-/* Especificidad más alta que el :has() para que el hover gane */
-.vehicle-grid:has(.vehicle-card:hover) .vehicle-card:hover,
-.dealer-profile-grid:has(.vehicle-card:hover) .vehicle-card:hover {
-  opacity: 1;
+  /* La card hovered recupera el 100% */
+  .vehicle-grid:has(.vehicle-card:hover) .vehicle-card:hover,
+  .dealer-profile-grid:has(.vehicle-card:hover) .vehicle-card:hover {
+    opacity: 1;
+  }
 }
