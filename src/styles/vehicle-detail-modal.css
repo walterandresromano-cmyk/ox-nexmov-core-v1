@@ -283,6 +283,14 @@
   margin: 0;
 }
 
+.vehicle-detail-thumb-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--ox-radius-md);
+  border: 1px dashed rgba(148, 163, 184, 0.10);
+  background: rgba(15, 23, 42, 0.28);
+}
+
 .detail-thumbs button {
   width: 100%;
   aspect-ratio: 1 / 1;

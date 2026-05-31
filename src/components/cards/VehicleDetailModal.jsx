@@ -490,31 +490,38 @@ export default function VehicleDetailModal({
               </div>
             </div>
 
-            {images.length > 1 && (
-              <div className="vehicle-detail-thumbs detail-thumbs">
-                {images.map((image, index) => (
-                  <button
-                    key={`${image.url}-${index}`}
-                    className={
-                      index === selectedImageIndex
-                        ? "vehicle-detail-thumb is-active active"
-                        : "vehicle-detail-thumb"
-                    }
-                    type="button"
-                    onClick={() => {
-                      setSelectedImageIndex(index);
-                      resetImageZoom();
-                    }}
-                    aria-label={`Ver imagen ${index + 1}`}
-                  >
-                    <img
-                      src={image.url}
-                      alt={image.name || `Imagen ${index + 1}`}
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="vehicle-detail-thumbs detail-thumbs">
+              {images.map((image, index) => (
+                <button
+                  key={`${image.url}-${index}`}
+                  className={
+                    index === selectedImageIndex
+                      ? "vehicle-detail-thumb is-active active"
+                      : "vehicle-detail-thumb"
+                  }
+                  type="button"
+                  onClick={() => {
+                    setSelectedImageIndex(index);
+                    resetImageZoom();
+                  }}
+                  aria-label={`Ver imagen ${index + 1}`}
+                >
+                  <img
+                    src={image.url}
+                    alt={image.name || `Imagen ${index + 1}`}
+                  />
+                </button>
+              ))}
+              {Array.from({ length: Math.max(0, 12 - images.length) }).map(
+                (_, i) => (
+                  <div
+                    key={`thumb-placeholder-${i}`}
+                    className="vehicle-detail-thumb-placeholder"
+                    aria-hidden="true"
+                  />
+                )
+              )}
+            </div>
 
             <div className="vehicle-detail-quick-specs">
               <div>
