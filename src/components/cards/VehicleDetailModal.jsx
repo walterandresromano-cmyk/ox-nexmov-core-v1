@@ -857,7 +857,7 @@ export default function VehicleDetailModal({
 
               <button
                 type="button"
-                className={`vehicle-share-btn${shareState === "copied" ? " vehicle-share-btn--copied" : ""}`}
+                className={`vehicle-share-btn vehicle-share-btn--whatsapp${shareState === "copied" ? " vehicle-share-btn--copied" : ""}`}
                 onClick={handleShareWhatsApp}
                 aria-label="Compartir este vehiculo por WhatsApp"
               >

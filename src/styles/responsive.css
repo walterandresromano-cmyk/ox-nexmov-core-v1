@@ -13170,6 +13170,15 @@ textarea:focus-visible,
   color: var(--ox-cyan);
   background: var(--ox-primary-soft);
 }
+.vehicle-share-btn--whatsapp {
+  border-color: rgba(37, 211, 102, 0.45);
+  color: rgba(134, 239, 172, 0.90);
+}
+.vehicle-share-btn--whatsapp:hover {
+  border-color: rgba(37, 211, 102, 0.72);
+  color: rgba(134, 239, 172, 1);
+  background: rgba(20, 83, 45, 0.18);
+}
 .vehicle-share-btn--copied {
   border-color: rgba(134, 239, 172, 0.45) !important;
   color: var(--ox-success) !important;
