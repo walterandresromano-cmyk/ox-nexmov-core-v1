@@ -18406,14 +18406,17 @@ body::-webkit-scrollbar {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  padding: 0 14px 10px;
 }
 
 .buyer-garage-card-meta span {
   padding: 5px 9px;
   border-radius: 999px;
-  border: 1px solid rgba(125, 211, 252, 0.16);
-  background: rgba(14, 165, 233, 0.08);
-  color: rgba(224, 242, 254, 0.90);
+  border: 1px solid var(--ox-border);
+  background: var(--ox-card-2);
+  color: var(--ox-text-soft);
+  font-size: 0.68rem;
+  font-weight: 850;
 }
 
 .buyer-garage-service-form,
@@ -18511,17 +18514,13 @@ body::-webkit-scrollbar {
 
 .buyer-garage-collector-card {
   position: relative;
-  min-height: 320px;
-  padding: 12px;
   overflow: hidden;
   align-content: start;
-  border-radius: 24px;
-  background:
-    radial-gradient(circle at 22% 0%, rgba(125, 211, 252, 0.18), transparent 34%),
-    linear-gradient(155deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.78));
-  box-shadow:
-    0 24px 54px rgba(2, 6, 23, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  padding: 0;
+  border-radius: var(--ox-radius);
+  border: 1px solid var(--ox-border);
+  background: var(--ox-card);
+  box-shadow: none;
   transition:
     transform 0.18s ease,
     border-color 0.18s ease,
@@ -18529,42 +18528,33 @@ body::-webkit-scrollbar {
 }
 
 .buyer-garage-collector-card::after {
-  content: "";
-  position: absolute;
-  inset: 10px;
-  pointer-events: none;
-  border-radius: 20px;
-  border: 1px solid rgba(125, 211, 252, 0.10);
+  display: none;
 }
 
 .buyer-garage-collector-card:hover,
 .buyer-garage-collector-card.is-active {
-  transform: translateY(-2px);
-  border-color: rgba(125, 211, 252, 0.38);
-  box-shadow:
-    0 28px 68px rgba(2, 6, 23, 0.40),
-    0 0 0 1px rgba(125, 211, 252, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.36);
+  box-shadow: var(--ox-shadow-card-hover);
 }
 
 .buyer-garage-card-media {
   display: grid;
-  height: clamp(180px, 22vw, 260px);
+  height: 200px;
   overflow: hidden;
   place-items: center;
-  border-radius: 18px;
-  border: 1px solid rgba(125, 211, 252, 0.18);
-  background:
-    radial-gradient(circle at 50% 44%, rgba(56, 189, 248, 0.20), transparent 36%),
-    linear-gradient(145deg, rgba(8, 15, 28, 0.72), rgba(15, 23, 42, 0.42));
+  border-radius: 0;
+  border: none;
+  background: var(--ox-card-2);
 }
 
 .buyer-garage-card-media span {
-  color: rgba(125, 211, 252, 0.18);
-  font-size: 2.4rem;
+  color: var(--ox-muted);
+  font-size: 1.8rem;
   font-weight: 950;
   letter-spacing: 0.02em;
   text-transform: none;
+  opacity: 0.32;
 }
 
 .buyer-garage-card-media img,
@@ -18575,19 +18565,28 @@ body::-webkit-scrollbar {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  border-radius: inherit;
+  border-radius: 0;
 }
 
 .buyer-garage-card-media:has(img),
 .buyer-garage-passport-media:has(img) {
   padding: 0;
-  background: rgba(2, 6, 23, 0.72);
+  background: var(--ox-card-2);
 }
 
 .buyer-garage-card-main {
   display: grid;
-  gap: 5px;
-  margin-top: 10px;
+  gap: 4px;
+  padding: 12px 14px 6px;
+  margin-top: 0;
+}
+
+.buyer-garage-collector-card > small {
+  display: block;
+  padding: 0 14px 6px;
+  color: var(--ox-muted);
+  font-size: 0.72rem;
+  line-height: 1.4;
 }
 
 .buyer-garage-collector-card em {
@@ -18595,12 +18594,12 @@ body::-webkit-scrollbar {
   align-items: center;
   justify-content: center;
   width: fit-content;
-  margin-top: auto;
+  margin: 4px 14px 14px;
   padding: 7px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(125, 211, 252, 0.18);
-  color: rgba(224, 242, 254, 0.92);
-  background: rgba(14, 165, 233, 0.10);
+  border: 1px solid var(--ox-border);
+  color: var(--ox-text);
+  background: var(--ox-card-2);
   font-size: 0.72rem;
   font-style: normal;
   font-weight: 900;
@@ -18915,26 +18914,12 @@ body::-webkit-scrollbar {
 
 :root.light .buyer-garage-collector-card,
 :root[data-theme="light"] .buyer-garage-collector-card {
-  border-color: rgba(14, 165, 233, 0.16);
-  background:
-    radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.12), transparent 34%),
-    linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(224, 242, 254, 0.62));
-  box-shadow:
-    0 22px 48px rgba(15, 23, 42, 0.11),
-    inset 0 1px 0 rgba(255, 255, 255, 0.94);
-}
-
-:root.light .buyer-garage-card-media,
-:root[data-theme="light"] .buyer-garage-card-media {
-  border-color: rgba(14, 165, 233, 0.16);
-  background:
-    radial-gradient(circle at 50% 44%, rgba(14, 165, 233, 0.14), transparent 38%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(224, 242, 254, 0.50));
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.07);
 }
 
 :root.light .buyer-garage-card-media span,
 :root[data-theme="light"] .buyer-garage-card-media span {
-  color: rgba(14, 165, 233, 0.16);
+  color: var(--ox-muted);
 }
 
 :root.light .buyer-garage-detail-panel,
