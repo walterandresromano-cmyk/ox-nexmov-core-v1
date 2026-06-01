@@ -18342,11 +18342,10 @@ body::-webkit-scrollbar {
 .buyer-garage-service-form,
 .buyer-garage-history,
 .buyer-garage-empty {
-  border-radius: 18px;
-  border: 1px solid rgba(125, 211, 252, 0.14);
-  background:
-    linear-gradient(145deg, rgba(15, 23, 42, 0.66), rgba(8, 15, 28, 0.46));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
 }
 
 .buyer-garage-list {
@@ -18358,22 +18357,22 @@ body::-webkit-scrollbar {
 .buyer-garage-vehicle-card {
   display: grid;
   gap: 6px;
-  padding: 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  background:
-    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.10), transparent 34%),
-    rgba(15, 23, 42, 0.42);
+  padding: 10px 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+  background: transparent;
   color: inherit;
   text-align: left;
   cursor: pointer;
 }
 
 .buyer-garage-vehicle-card.is-active {
-  border-color: rgba(56, 189, 248, 0.34);
-  background:
-    radial-gradient(circle at 12% 0%, rgba(14, 165, 233, 0.18), transparent 36%),
-    rgba(14, 165, 233, 0.08);
+  border-bottom-color: rgba(56, 189, 248, 0.34);
+  background: rgba(14, 165, 233, 0.06);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 0 -2px;
 }
 
 .buyer-garage-vehicle-card span,
@@ -18474,10 +18473,11 @@ body::-webkit-scrollbar {
 }
 
 .buyer-garage-service-item {
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.13);
-  background: rgba(15, 23, 42, 0.36);
+  padding: 10px 0;
+  border-radius: 0;
+  border: none;
+  border-top: 1px solid rgba(148, 163, 184, 0.10);
+  background: transparent;
 }
 
 .buyer-garage-service-item span {
@@ -18518,7 +18518,6 @@ body::-webkit-scrollbar {
   border-radius: 24px;
   background:
     radial-gradient(circle at 22% 0%, rgba(125, 211, 252, 0.18), transparent 34%),
-    radial-gradient(circle at 80% 12%, rgba(250, 204, 21, 0.08), transparent 32%),
     linear-gradient(155deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.78));
   box-shadow:
     0 24px 54px rgba(2, 6, 23, 0.34),
@@ -18626,12 +18625,10 @@ body::-webkit-scrollbar {
   grid-template-columns: minmax(190px, 0.45fr) minmax(0, 1fr);
   gap: 14px;
   align-items: stretch;
-  padding: 12px;
-  border-radius: 22px;
-  border: 1px solid rgba(125, 211, 252, 0.13);
-  background:
-    radial-gradient(circle at 12% 12%, rgba(125, 211, 252, 0.12), transparent 34%),
-    rgba(2, 6, 23, 0.22);
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  background: transparent;
 }
 
 .buyer-garage-passport-media {
@@ -18863,16 +18860,16 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .buyer-garage-service-form,
 :root[data-theme="light"] .buyer-garage-history,
 :root[data-theme="light"] .buyer-garage-empty {
-  border-color: rgba(14, 165, 233, 0.14);
-  background: rgba(255, 255, 255, 0.74);
+  border: none;
+  background: transparent;
 }
 
 :root.light .buyer-garage-vehicle-card,
 :root.light .buyer-garage-service-item,
 :root[data-theme="light"] .buyer-garage-vehicle-card,
 :root[data-theme="light"] .buyer-garage-service-item {
-  border-color: rgba(14, 165, 233, 0.12);
-  background: rgba(255, 255, 255, 0.76);
+  border-color: rgba(14, 165, 233, 0.14);
+  background: transparent;
 }
 
 :root.light .buyer-garage-vehicle-card strong,
@@ -18921,7 +18918,6 @@ body::-webkit-scrollbar {
   border-color: rgba(14, 165, 233, 0.16);
   background:
     radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.12), transparent 34%),
-    radial-gradient(circle at 84% 6%, rgba(234, 179, 8, 0.08), transparent 32%),
     linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(224, 242, 254, 0.62));
   box-shadow:
     0 22px 48px rgba(15, 23, 42, 0.11),
@@ -18954,10 +18950,8 @@ body::-webkit-scrollbar {
 
 :root.light .buyer-garage-passport,
 :root[data-theme="light"] .buyer-garage-passport {
-  border-color: rgba(14, 165, 233, 0.13);
-  background:
-    radial-gradient(circle at 12% 12%, rgba(14, 165, 233, 0.09), transparent 34%),
-    rgba(255, 255, 255, 0.58);
+  border: none;
+  background: transparent;
 }
 
 :root.light .buyer-garage-passport-media,
