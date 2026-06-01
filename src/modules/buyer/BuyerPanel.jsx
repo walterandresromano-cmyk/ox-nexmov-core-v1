@@ -498,7 +498,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     setGarageSaved(false);
     setGarageServiceError("");
 
-    const { service } = await createBuyerGarageService({
+    const { service, error: saveError } = await createBuyerGarageService({
       userId: authUser?.id || authProfile?.id || authProfile?.email,
       service: {
         ...garageForm,
@@ -518,7 +518,9 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
       setGarageSaved(true);
       window.setTimeout(() => setGarageSaved(false), 1800);
     } else {
-      setGarageServiceError("No se pudo guardar el servicio. Intentá de nuevo.");
+      setGarageServiceError(
+        saveError?.message || "No se pudo guardar el servicio. Intentá de nuevo."
+      );
     }
 
     setGarageSaving(false);

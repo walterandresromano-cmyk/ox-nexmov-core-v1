@@ -804,6 +804,16 @@ export async function createBuyerGarageService({ userId, service }) {
         source: "supabase",
       };
     }
+
+    // Surface the Supabase error to the caller instead of silently
+    // falling through to local — otherwise the caller shows "saved" while
+    // listBuyerGarageServices (which reads only from Supabase when configured)
+    // will never return the locally-written record, making it invisible.
+    return {
+      service: null,
+      error,
+      source: null,
+    };
   }
 
   const localRecord = normalizeRecord({
