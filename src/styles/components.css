@@ -18531,6 +18531,47 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+/* Flatten internal vehicle-card chrome inside garage collector cards */
+.buyer-garage-collector-card .vehicle-card__media {
+  background: var(--ox-card-2);
+  border-bottom: 1px solid var(--ox-border);
+}
+
+.buyer-garage-collector-card .vehicle-card__media::after {
+  display: none;
+}
+
+.buyer-garage-collector-card .vehicle-card__image {
+  border-radius: 0;
+  filter: none;
+}
+
+.buyer-garage-collector-card .vehicle-card__price-box {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 4px 0 0;
+}
+
+.buyer-garage-collector-card .vehicle-card__price-label {
+  color: var(--ox-primary);
+}
+
+.buyer-garage-collector-card .vehicle-card__price {
+  color: var(--ox-text);
+  font-size: 1.15rem;
+}
+
+.buyer-garage-collector-card .vehicle-card__fact {
+  background: var(--ox-card-2);
+  border-color: var(--ox-border);
+  color: var(--ox-text-soft);
+}
+
+.buyer-garage-collector-card .vehicle-card__fact > span {
+  color: var(--ox-primary);
+}
+
 .buyer-garage-collector-card:hover {
   transform: translateY(-3px);
   border-color: rgba(56, 189, 248, 0.36);
