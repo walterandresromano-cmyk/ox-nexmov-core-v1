@@ -1722,8 +1722,8 @@ export default function DealerPanel({ authProfile, onNavigate }) {
       <div className="container panel dealer-panel">
         <div className="panel-head-row dealer-header-control">
           <div className="dealer-header-intro">
-    <p className="eyebrow">Panel dealer único</p>
-    <h1>{isPlatinum ? "Panel Dealer Platinum" : "Panel dealer"}</h1>
+    <p className="eyebrow">{isPlatinum ? "Dealer Platinum" : "Panel dealer"}</p>
+    <h1>{dealer.commercialName || "Panel dealer"}</h1>
     <p>
       {isPlatinum
         ? "Máxima presencia para operaciones de alto volumen."
