@@ -2781,6 +2781,21 @@
   z-index: 1;
 }
 
+.panel-head-brand-watermark {
+  position: absolute;
+  right: clamp(18px, 2.4vw, 30px);
+  bottom: clamp(14px, 1.8vw, 22px);
+  z-index: 1;
+  opacity: 0.22;
+  pointer-events: none;
+  filter: brightness(10);
+}
+
+:root[data-theme="light"] .panel-head-brand-watermark {
+  filter: none;
+  opacity: 0.14;
+}
+
 .panel-head-row .eyebrow,
 .admin-panel-head .eyebrow,
 .dealer-panel-head .eyebrow,

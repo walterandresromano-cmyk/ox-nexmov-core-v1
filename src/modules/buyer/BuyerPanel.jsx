@@ -807,6 +807,15 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
               Buscar vehículos
             </button>
           </div>
+
+          <img
+            className="panel-head-brand-watermark"
+            src="/logo.svg"
+            alt=""
+            aria-hidden="true"
+            width="140"
+            height="26"
+          />
         </div>
 
         {editingProfile && (
