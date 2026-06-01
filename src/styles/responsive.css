@@ -14326,10 +14326,10 @@ textarea:focus-visible,
   min-height: 0 !important;
 }
 
-@media (min-width: 981px) {
+@media (min-width: 768px) {
   .ox-home-confidence-v3 {
     display: grid !important;
-    grid-template-columns: minmax(210px, 0.28fr) minmax(0, 1fr) minmax(250px, 0.3fr) !important;
+    grid-template-columns: minmax(180px, 0.28fr) minmax(0, 1fr) minmax(210px, 0.3fr) !important;
     align-items: stretch !important;
     gap: 14px !important;
   }
@@ -14350,7 +14350,7 @@ textarea:focus-visible,
   }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 767px) {
   .ox-home-confidence-v3 {
     display: grid !important;
     grid-template-columns: 1fr !important;
@@ -14544,6 +14544,29 @@ textarea:focus-visible,
 
 .ox-home-inventory-v3 > p {
   transform: translateY(0) !important;
+}
+
+/* At 1-col layout (≤1120px) the above cinematic positioning collides with
+   auto-placed stats — both land on grid-row:2. Fix: explicit row assignment. */
+@media (max-width: 1120px) {
+  .ox-home-inventory-v3 > h2 {
+    grid-row: 1 !important;
+    transform: none !important;
+    align-self: start !important;
+  }
+
+  .ox-home-inventory-v3 > p {
+    grid-row: 2 !important;
+    align-self: start !important;
+  }
+
+  .ox-home-stats-v3 {
+    grid-row: 3 !important;
+  }
+
+  .ox-home-locations-v3 {
+    grid-row: 4 !important;
+  }
 }
 
 .ox-home-inventory-road {

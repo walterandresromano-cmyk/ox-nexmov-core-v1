@@ -1313,6 +1313,21 @@
     grid-template-columns: 1fr;
   }
 
+  /* At 1-column layout the responsive.css overlay forces h2+p to grid-row:2
+     for the desktop cinematic effect — override it here so they don't collide
+     with the stats (also auto-placed at row 2). */
+  .ox-home-inventory-v3 > h2 {
+    grid-row: 1 !important;
+    transform: none !important;
+    align-self: start !important;
+  }
+
+  .ox-home-inventory-v3 > p {
+    grid-row: 2 !important;
+    transform: none !important;
+    align-self: start !important;
+  }
+
   .ox-home-map-v3,
   .ox-home-stats-v3,
   .ox-home-locations-v3 {
@@ -1320,8 +1335,13 @@
     grid-row: auto;
   }
 
-  .ox-home-stats-v3,
+  .ox-home-stats-v3 {
+    grid-row: 3 !important;
+    margin-left: 0;
+  }
+
   .ox-home-locations-v3 {
+    grid-row: 4 !important;
     margin-left: 0;
   }
 

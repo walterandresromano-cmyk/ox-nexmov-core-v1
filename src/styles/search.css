@@ -718,7 +718,8 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
+  /* Show accordion toggle whenever filters stack above results (1-col workspace) */
   .ox-search-mobile-filter-toggle {
     display: flex;
   }
