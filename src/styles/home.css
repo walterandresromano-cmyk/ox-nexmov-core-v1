@@ -1841,6 +1841,19 @@
   }
 }
 
+/* Tablet-ish widths: prevent inventory panel from growing excessively tall.
+   At 601-760px the mobile blocks force a 2-col stats grid + a 142px map,
+   stacking to ~680px. Override to 4-col stats and hide the map. */
+@media (min-width: 601px) and (max-width: 760px) {
+  .ox-home-map-v3 {
+    display: none !important;
+  }
+
+  .ox-home-stats-v3 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
 @media (max-width: 430px) {
   .ox-home-shell-v3,
   .ox-home-hero-v3,

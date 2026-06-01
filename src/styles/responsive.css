@@ -14649,6 +14649,27 @@ textarea:focus-visible,
   }
 }
 
+/* 481-760px: "web-browser at tablet widths" range.
+   Real phones are ≤430px CSS; anything wider is a windowed browser where
+   calc(100svh - 220px) can make the inventory panel enormous when the
+   window is tall. Override to a compact, vw-based min-height.
+   Stats get 3 columns (481-600px) or 4 columns (601-760px). */
+@media (min-width: 481px) and (max-width: 760px) {
+  .ox-home-inventory-v3 {
+    min-height: clamp(318px, 60vw, 420px) !important;
+  }
+
+  .ox-home-stats-v3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 760px) {
+  .ox-home-stats-v3 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
 /* oX NEXMOV - Remove obsolete vehicle card sweep accents */
 .ox-search-vehicle-grid .vehicle-card::before,
 .ox-search-vehicle-grid .vehicle-card::after,
