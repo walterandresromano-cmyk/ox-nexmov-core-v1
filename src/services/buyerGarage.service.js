@@ -743,6 +743,39 @@ export async function uploadBuyerGarageVehiclePhoto({ garageVehicleId, file }) {
   };
 }
 
+export async function deleteBuyerGarageVehicle({ userId, vehicleId }) {
+  const rawId = String(vehicleId || "").replace(/^own-/, "");
+  const numericId = Number(rawId);
+
+  if (isSupabaseConfigured && supabase && Number.isFinite(numericId)) {
+    const { error } = await supabase
+      .from("buyer_garage_owned_vehicles")
+      .delete()
+      .eq("id", numericId);
+
+    if (!error) {
+      // Also clean up the local override entry for this vehicle
+      const overrides = readLocalVehicleOverrides(userId);
+      delete overrides[vehicleId];
+      writeLocalVehicleOverrides(userId, overrides);
+      return { error: null };
+    }
+
+    return { error };
+  }
+
+  // Local-only vehicle
+  const current = readLocalVehicles(userId);
+  const next = current.filter((record) => {
+    const recordId = String(record.local_id || record.localId || record.id || "");
+    const ownedId = recordId.startsWith("own-") ? recordId : `own-${recordId}`;
+    return recordId !== rawId && ownedId !== vehicleId;
+  });
+  writeLocalVehicles(userId, next);
+
+  return { error: null };
+}
+
 export async function assignVehicleToBuyerGarage({ leadId, vehicleId, note = null }) {
   if (!isSupabaseConfigured || !supabase) {
     return {

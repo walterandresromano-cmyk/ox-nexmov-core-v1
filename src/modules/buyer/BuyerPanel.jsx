@@ -21,6 +21,7 @@ import { getObjectPositionXY, normalizeImagePositionXY } from "../../lib/imagePo
 import {
   createBuyerGarageVehicle,
   createBuyerGarageService,
+  deleteBuyerGarageVehicle,
   listBuyerGarageServices,
   listBuyerGarageVehicles,
   updateBuyerGarageVehicle,
@@ -313,6 +314,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const [garageVehicleSaved, setGarageVehicleSaved] = useState(false);
   const [showGarageVehicleForm, setShowGarageVehicleForm] = useState(false);
   const [editingGarageVehicleId, setEditingGarageVehicleId] = useState("");
+  const [deletingGarageVehicleId, setDeletingGarageVehicleId] = useState("");
   const [garageVehiclePhotoFile, setGarageVehiclePhotoFile] = useState(null);
   const [garageVehiclePhotoPreview, setGarageVehiclePhotoPreview] = useState("");
   const [garageVehiclePhotoUploading, setGarageVehiclePhotoUploading] = useState(false);
@@ -739,6 +741,24 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     setActiveGarageTab("summary");
     setGarageVehicleSaving(false);
     window.setTimeout(() => setGarageVehicleSaved(false), 2200);
+  }
+
+  async function handleDeleteGarageVehicle(vehicleId) {
+    if (!window.confirm("¿Confirmás que querés eliminar este vehículo del Garage? Esta acción no se puede deshacer.")) return;
+
+    setDeletingGarageVehicleId(vehicleId);
+
+    const { error } = await deleteBuyerGarageVehicle({
+      userId: authUser?.id || authProfile?.id || authProfile?.email,
+      vehicleId,
+    });
+
+    if (!error) {
+      setSelectedGarageVehicleId("");
+      await loadGarageVehicles();
+    }
+
+    setDeletingGarageVehicleId("");
   }
 
   const isLoading = loadingVehicleLeads || loadingZeroKmLeads || loadingSellVehicleLeads;
@@ -1454,7 +1474,19 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                           {selectedGarageVehicle.dealer} - {formatARS(selectedGarageVehicle.price)}
                         </p>
                       </div>
-                      <strong>{getGarageStatusLabel(selectedGarageVehicle.status)}</strong>
+                      <div className="buyer-garage-detail-actions">
+                        <strong>{getGarageStatusLabel(selectedGarageVehicle.status)}</strong>
+                        {isOwnedGarageVehicle(selectedGarageVehicle) && (
+                          <button
+                            type="button"
+                            className="buyer-garage-delete-btn"
+                            disabled={deletingGarageVehicleId === selectedGarageVehicle.id}
+                            onClick={() => handleDeleteGarageVehicle(selectedGarageVehicle.id)}
+                          >
+                            {deletingGarageVehicleId === selectedGarageVehicle.id ? "Eliminando…" : "Eliminar"}
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <div className="buyer-garage-passport-meta">
                       <span>
