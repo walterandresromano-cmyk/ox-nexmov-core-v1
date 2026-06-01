@@ -1328,49 +1328,96 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                   const latestService = services[0] || null;
 
                   return (
-                    <button
+                    <div
                       key={vehicle.id}
-                      type="button"
-                      className={`buyer-garage-vehicle-card buyer-garage-collector-card${isSelected ? " is-active" : ""}`}
+                      role="button"
+                      tabIndex={0}
+                      className={`vehicle-card buyer-garage-collector-card${isSelected ? " is-active" : ""}`}
                       onClick={() => {
                         setSelectedGarageVehicleId(vehicle.id);
                         setActiveGarageTab("summary");
                       }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setSelectedGarageVehicleId(vehicle.id);
+                          setActiveGarageTab("summary");
+                        }
+                      }}
                     >
-                      <div className="buyer-garage-card-media">
+                      <div className="vehicle-card__media">
+                        <div className="vehicle-card__topbar">
+                          <span className="vehicle-card__rank">
+                            {getGarageVehicleSourceLabel(vehicle)}
+                          </span>
+                          {vehicle.year && (
+                            <span className="vehicle-card__year">{vehicle.year}</span>
+                          )}
+                        </div>
                         {vehicle.photoUrl ? (
                           <img
+                            className="vehicle-card__image"
                             src={vehicle.photoUrl}
                             alt=""
                             loading="lazy"
                             style={{ objectPosition: getObjectPositionXY(vehicle.imagePositionX, vehicle.imagePositionY) }}
                           />
                         ) : (
-                          <span>oX</span>
+                          <div className="vehicle-card__placeholder">
+                            <span>Imagen no disponible</span>
+                          </div>
                         )}
                       </div>
-                      <div className="buyer-garage-card-main">
-                        <span>{getGarageVehicleSourceLabel(vehicle)}</span>
-                        <strong>{vehicle.title}</strong>
-                        <p>{vehicle.dealer} - {formatARS(vehicle.price)}</p>
+                      <div className="vehicle-card__body">
+                        <div className="vehicle-card__identity">
+                          <h3 className="vehicle-card__title">{vehicle.title}</h3>
+                          {(vehicle.brand || vehicle.version) && (
+                            <p className="vehicle-card__version">
+                              {[vehicle.brand, vehicle.version].filter(Boolean).join(" ")}
+                            </p>
+                          )}
+                        </div>
+                        <div className="vehicle-card__facts">
+                          <div className="vehicle-card__fact">
+                            <span>{getGarageStatusLabel(vehicle.status)}</span>
+                          </div>
+                          <div className="vehicle-card__fact">
+                            <span>{services.length} servicio{services.length !== 1 ? "s" : ""}</span>
+                          </div>
+                          {vehicle.vtvDueDate && (
+                            <div className="vehicle-card__fact">
+                              <span>VTV</span>
+                              <strong>{formatDateTime(vehicle.vtvDueDate).split(",")[0]}</strong>
+                            </div>
+                          )}
+                          {vehicle.insuranceDueDate && (
+                            <div className="vehicle-card__fact">
+                              <span>Seguro</span>
+                              <strong>{formatDateTime(vehicle.insuranceDueDate).split(",")[0]}</strong>
+                            </div>
+                          )}
+                        </div>
+                        <div className="vehicle-card__price-box">
+                          <div className="vehicle-card__price-copy">
+                            <span className="vehicle-card__price-label">Valor estimado</span>
+                            <strong className="vehicle-card__price">
+                              {formatARS(vehicle.expectedPrice || vehicle.price)}
+                            </strong>
+                          </div>
+                        </div>
+                        <div className="vehicle-card__actions">
+                          <button
+                            type="button"
+                            className="vehicle-card__btn vehicle-card__btn--primary"
+                            style={{ gridColumn: "1 / -1" }}
+                          >
+                            {latestService
+                              ? `Último: ${getServiceTypeLabel(latestService.serviceType)}`
+                              : "Explorar historial"}
+                          </button>
+                        </div>
                       </div>
-                      <div className="buyer-garage-card-meta">
-                        <span>{getGarageStatusLabel(vehicle.status)}</span>
-                        <span>{services.length} servicio{services.length !== 1 ? "s" : ""}</span>
-                        {vehicle.vtvDueDate && (
-                          <span>VTV {formatDateTime(vehicle.vtvDueDate).split(",")[0]}</span>
-                        )}
-                        {vehicle.insuranceDueDate && (
-                          <span>Seguro {formatDateTime(vehicle.insuranceDueDate).split(",")[0]}</span>
-                        )}
-                      </div>
-                      <small>
-                        {latestService
-                          ? `Ultimo registro: ${getServiceTypeLabel(latestService.serviceType)}`
-                          : getNextGarageHint(services)}
-                      </small>
-                      <em>Explorar card</em>
-                    </button>
+                    </div>
                   );
                 })}
               </div>

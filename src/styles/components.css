@@ -18531,11 +18531,18 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-.buyer-garage-collector-card:hover,
-.buyer-garage-collector-card.is-active {
+.buyer-garage-collector-card:hover {
   transform: translateY(-3px);
   border-color: rgba(56, 189, 248, 0.36);
   box-shadow: var(--ox-shadow-card-hover);
+}
+
+.buyer-garage-collector-card.is-active {
+  border-color: rgba(56, 189, 248, 0.52);
+  box-shadow:
+    0 0 0 3px rgba(56, 189, 248, 0.12),
+    var(--ox-shadow-card-hover);
+  cursor: default;
 }
 
 .buyer-garage-card-media {
