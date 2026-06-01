@@ -1807,20 +1807,19 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
           <div className="dealer-header-ops">
   <div className="dealer-switcher">
-
-        
-            <label>Dealer operativo</label>
             <div className="dealer-switcher-row">
-              <select
-                value={dealer.id}
-                onChange={(event) => setSelectedDealerId(event.target.value)}
-              >
-                {dealers.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.commercialName} · {item.plan}
-                  </option>
-                ))}
-              </select>
+              {dealers.length > 1 && (
+                <select
+                  value={dealer.id}
+                  onChange={(event) => setSelectedDealerId(event.target.value)}
+                >
+                  {dealers.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.commercialName} · {item.plan}
+                    </option>
+                  ))}
+                </select>
+              )}
 
               <button className="admin-refresh-btn" onClick={refreshDealerPanel}>
                 Actualizar panel
@@ -2103,6 +2102,8 @@ export default function DealerPanel({ authProfile, onNavigate }) {
         {activeDealerModule === "inventory" && (
           <DealerInventoryModule
             dealerVehicles={dealerVehicles}
+            dealerLeads={leads}
+            dealerName={dealer?.commercialName ?? ""}
             onRefresh={loadDealerVehicles}
             onBack={handleModuleBack}
           />

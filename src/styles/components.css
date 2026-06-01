@@ -11893,7 +11893,7 @@ body::-webkit-scrollbar {
 /* oX NEXMOV - Dealer header commercial identity */
 .dealer-panel > .dealer-header-control {
   display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(190px, 240px) minmax(320px, 0.95fr);
+  grid-template-columns: minmax(280px, 1fr) minmax(190px, 240px) minmax(260px, 320px);
   align-items: stretch;
   gap: 12px;
   padding: 16px;
@@ -12099,7 +12099,7 @@ body::-webkit-scrollbar {
 
 /* oX NEXMOV - Dealer header final compact balance */
 .dealer-panel > .dealer-header-control {
-  grid-template-columns: minmax(300px, 1fr) minmax(168px, 210px) minmax(340px, 0.88fr);
+  grid-template-columns: minmax(300px, 1fr) minmax(168px, 210px) minmax(260px, 320px);
   align-items: center;
   gap: 10px;
   padding: 14px;
@@ -15502,16 +15502,23 @@ body::-webkit-scrollbar {
 
 .inventory-filter-bar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: nowrap;
+  gap: 6px;
   align-items: center;
   padding: 12px 0;
   margin-bottom: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.inventory-filter-bar::-webkit-scrollbar {
+  display: none;
 }
 
 .inventory-filter-search {
-  flex: 1 1 180px;
-  min-width: 140px;
+  flex: 1 1 160px;
+  min-width: 120px;
+  max-width: 260px;
   padding: 7px 12px;
   border-radius: 8px;
   border: 1px solid rgba(148, 163, 184, 0.18);
@@ -15522,6 +15529,8 @@ body::-webkit-scrollbar {
 }
 
 .inventory-filter-bar select {
+  flex: 0 0 auto;
+  width: auto;
   padding: 7px 10px;
   border-radius: 8px;
   border: 1px solid rgba(148, 163, 184, 0.18);
@@ -15530,6 +15539,7 @@ body::-webkit-scrollbar {
   font-size: 0.82rem;
   cursor: pointer;
   outline: none;
+  white-space: nowrap;
 }
 
 .inventory-filter-clear {
@@ -15582,7 +15592,14 @@ body::-webkit-scrollbar {
 :root.light .inventory-filter-bar select {
   background: rgba(248, 250, 252, 0.9);
   border-color: rgba(148, 163, 184, 0.25);
-  color: var(--ox-text);
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .inventory-filter-search,
+:root[data-theme="light"] .inventory-filter-bar select {
+  background: rgba(248, 250, 252, 0.9);
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #0f172a;
 }
 
 :root.light .inventory-bulk-bar {
@@ -17442,6 +17459,8 @@ body::-webkit-scrollbar {
 .dealer-panel .dealer-module-head-actions .admin-refresh-btn {
   font-size: 0.74rem;
   white-space: nowrap;
+  margin-bottom: 0;
+  width: auto;
 }
 
 /* 26. Dealer Elite/Platinum accent refinement */
@@ -22059,6 +22078,989 @@ body::-webkit-scrollbar {
 :root.light .dealer-inventory-quality-hint--excellent,
 :root[data-theme="light"] .dealer-inventory-quality-hint--excellent {
   color: rgba(5, 150, 105, 0.75);
+}
+
+/* ─── Dealer Inventory Card Grid ─────────────────────────────── */
+
+.dealer-inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  padding: 4px 0 20px;
+}
+
+.dealer-inventory-card {
+  min-height: 0;
+  max-height: none;
+  cursor: default;
+}
+
+.dealer-inventory-card .vehicle-card__media {
+  height: 130px;
+  min-height: 130px;
+}
+
+.dealer-inventory-card .vehicle-card__body {
+  gap: 7px;
+  padding: 10px;
+  grid-template-rows: auto auto auto auto auto;
+}
+
+.dealer-inventory-card.is-selected {
+  border-color: rgba(56, 189, 248, 0.52);
+  box-shadow:
+    0 20px 58px rgba(0, 0, 0, 0.38),
+    0 0 0 2px rgba(56, 189, 248, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.dealer-inventory-card .vehicle-card__topbar {
+  pointer-events: auto;
+}
+
+.dealer-inventory-card .vehicle-card__rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  padding: 0 5px;
+}
+
+.dealer-inventory-card .vehicle-card__rank input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: rgb(56, 189, 248);
+}
+
+/* Chips row */
+.dealer-inv-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+
+.dealer-inv-card__views {
+  font-size: 0.6rem;
+  color: var(--ox-muted, rgba(148, 163, 184, 0.7));
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* Price row */
+.dealer-inv-card__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.dealer-inv-card__price-label {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(125, 211, 252, 0.8);
+}
+
+.dealer-inv-card__price {
+  font-size: 0.98rem;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+  color: rgba(248, 250, 252, 0.98);
+}
+
+/* Three-button action row */
+.dealer-inv-card__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+}
+
+/* DealerVehicleActions inside card */
+.dealer-inventory-card .vehicle-action-control {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5px;
+  align-items: center;
+}
+
+.dealer-inventory-card .vehicle-action-control select {
+  width: 100%;
+  min-width: 0;
+  font-size: 0.68rem;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: rgba(10, 20, 38, 0.9);
+  border: 1px solid rgba(58, 139, 255, 0.22);
+  color: rgba(226, 232, 240, 0.88);
+  cursor: pointer;
+}
+
+.dealer-inventory-card .vehicle-action-control button {
+  font-size: 0.68rem;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(37, 99, 235, 0.22);
+  border: 1px solid rgba(58, 139, 255, 0.28);
+  color: rgba(147, 197, 253, 0.95);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dealer-inventory-card .vehicle-action-control button:hover {
+  background: rgba(37, 99, 235, 0.36);
+}
+
+.dealer-inventory-card .vehicle-action-control small {
+  grid-column: 1 / -1;
+  font-size: 0.6rem;
+  color: rgba(148, 163, 184, 0.7);
+  line-height: 1.3;
+}
+
+.dealer-inventory-card .vehicle-action-control span {
+  grid-column: 1 / -1;
+  font-size: 0.6rem;
+  color: rgba(52, 211, 153, 0.85);
+}
+
+.dealer-inventory-card .vehicle-action-cancel {
+  grid-column: 1 / -1;
+  font-size: 0.62rem !important;
+  background: transparent !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+  color: rgba(148, 163, 184, 0.7) !important;
+}
+
+/* ─── Leads View Toggle (Pipeline / Agenda) ──────────────────── */
+
+.dealer-leads-view-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 10px;
+  background: rgba(10, 20, 38, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.dealer-leads-view-toggle button {
+  position: relative;
+  padding: 5px 14px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: rgba(148, 163, 184, 0.7);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dealer-leads-view-toggle button.is-active {
+  background: rgba(56, 189, 248, 0.14);
+  color: rgba(125, 211, 252, 0.95);
+}
+
+.dealer-leads-view-toggle__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.85);
+  color: #fff;
+  font-size: 0.52rem;
+  font-weight: 900;
+}
+
+:root.light .dealer-leads-view-toggle,
+:root[data-theme="light"] .dealer-leads-view-toggle {
+  background: rgba(241, 245, 249, 0.9);
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+:root.light .dealer-leads-view-toggle button,
+:root[data-theme="light"] .dealer-leads-view-toggle button {
+  color: #64748b;
+}
+
+:root.light .dealer-leads-view-toggle button.is-active,
+:root[data-theme="light"] .dealer-leads-view-toggle button.is-active {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0284c7;
+}
+
+/* ─── Agenda View ─────────────────────────────────────────────── */
+
+.dealer-agenda-view {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.agenda-group {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.agenda-group--overdue {
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.agenda-group--today {
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.agenda-group--week {
+  border-color: rgba(56, 189, 248, 0.18);
+}
+
+.agenda-group__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  background: rgba(10, 20, 38, 0.5);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.agenda-group--overdue .agenda-group__header { background: rgba(239, 68, 68, 0.08); }
+.agenda-group--today   .agenda-group__header { background: rgba(251, 191, 36, 0.07); }
+.agenda-group--week    .agenda-group__header { background: rgba(56, 189, 248, 0.06); }
+
+.agenda-group__header:hover { filter: brightness(1.15); }
+
+.agenda-group__label {
+  flex: 1;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.8);
+}
+
+.agenda-group--overdue .agenda-group__label { color: rgba(252, 165, 165, 0.9); }
+.agenda-group--today   .agenda-group__label { color: rgba(253, 224, 71, 0.9); }
+.agenda-group--week    .agenda-group__label { color: rgba(125, 211, 252, 0.85); }
+
+.agenda-group__count {
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: rgba(148, 163, 184, 0.65);
+  background: rgba(148, 163, 184, 0.1);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.agenda-group__chevron {
+  font-size: 0.58rem;
+  color: rgba(148, 163, 184, 0.4);
+}
+
+.agenda-group__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: rgba(148, 163, 184, 0.05);
+  padding: 4px;
+}
+
+/* Individual agenda row */
+.agenda-lead-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(8, 15, 30, 0.55);
+  transition: background 0.12s;
+}
+
+.agenda-lead-row:hover {
+  background: rgba(12, 22, 44, 0.7);
+}
+
+.agenda-lead-row__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.agenda-lead-row__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.agenda-lead-row__buyer {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: rgba(226, 232, 240, 0.95);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agenda-lead-row__vehicle {
+  font-size: 0.68rem;
+  color: rgba(148, 163, 184, 0.65);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agenda-lead-row__note {
+  margin: 0;
+  font-size: 0.66rem;
+  color: rgba(125, 211, 252, 0.7);
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agenda-lead-row__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.agenda-lead-row__date {
+  font-size: 0.62rem;
+  color: rgba(148, 163, 184, 0.55);
+  font-weight: 600;
+}
+
+.agenda-lead-row__actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Light mode agenda */
+:root.light .agenda-group,
+:root[data-theme="light"] .agenda-group {
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+:root.light .agenda-group__header,
+:root[data-theme="light"] .agenda-group__header {
+  background: rgba(241, 245, 249, 0.9);
+}
+
+:root.light .agenda-group__label,
+:root[data-theme="light"] .agenda-group__label {
+  color: #334155;
+}
+
+:root.light .agenda-lead-row,
+:root[data-theme="light"] .agenda-lead-row {
+  background: rgba(248, 250, 252, 0.9);
+}
+
+:root.light .agenda-lead-row__buyer,
+:root[data-theme="light"] .agenda-lead-row__buyer {
+  color: #0f172a;
+}
+
+/* ─── Stock Aging Banner ──────────────────────────────────────── */
+
+.inventory-aging-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 191, 36, 0.22);
+  background: rgba(251, 191, 36, 0.05);
+  margin-bottom: 4px;
+}
+
+.inventory-aging-banner__icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.inventory-aging-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inventory-aging-banner__text strong {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgba(253, 224, 71, 0.9);
+}
+
+.inventory-aging-banner__text span {
+  font-size: 0.68rem;
+  color: rgba(148, 163, 184, 0.65);
+}
+
+:root.light .inventory-aging-banner,
+:root[data-theme="light"] .inventory-aging-banner {
+  background: rgba(251, 191, 36, 0.06);
+  border-color: rgba(180, 120, 0, 0.2);
+}
+
+:root.light .inventory-aging-banner__text strong,
+:root[data-theme="light"] .inventory-aging-banner__text strong {
+  color: #92400e;
+}
+
+/* ─── Stock Aging Badge (per card) ───────────────────────────── */
+
+.inventory-age-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.inventory-age-badge--notice {
+  background: rgba(251, 191, 36, 0.12);
+  color: rgba(253, 224, 71, 0.85);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.inventory-age-badge--warning {
+  background: rgba(249, 115, 22, 0.12);
+  color: rgba(253, 186, 116, 0.9);
+  border: 1px solid rgba(249, 115, 22, 0.22);
+}
+
+.inventory-age-badge--critical {
+  background: rgba(239, 68, 68, 0.12);
+  color: rgba(252, 165, 165, 0.9);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+}
+
+/* ─── Dealer Maintenance Modal ───────────────────────────────── */
+
+.dealer-maintenance-modal {
+  width: min(100%, 640px);
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background:
+    linear-gradient(160deg, rgba(12, 22, 42, 0.98), rgba(5, 10, 20, 0.99));
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  animation: ox-modal-in 0.28s var(--ox-ease-soft, ease) both;
+}
+
+.dealer-maintenance-modal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dealer-maintenance-modal__eyebrow {
+  margin: 0;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(125, 211, 252, 0.7);
+}
+
+.dealer-maintenance-modal__title {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: rgba(248, 250, 252, 0.98);
+  letter-spacing: -0.025em;
+}
+
+.dealer-maintenance-modal__section-label {
+  margin: 0 0 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dealer-maintenance-modal__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.18);
+  color: rgba(125, 211, 252, 0.9);
+  font-size: 0.58rem;
+}
+
+.dealer-maintenance-modal__next {
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(56, 189, 248, 0.04);
+  border: 1px solid rgba(56, 189, 248, 0.12);
+}
+
+.dealer-maintenance-modal__next-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.dealer-maintenance-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dealer-maintenance-modal__field label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.75);
+}
+
+.dealer-maintenance-modal__field input {
+  width: auto;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(10, 20, 38, 0.7);
+  color: rgba(226, 232, 240, 0.9);
+  font-size: 0.82rem;
+}
+
+.dealer-maintenance-modal__history {}
+
+.dealer-maintenance-modal__history-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.dealer-maintenance-modal__history-head .dealer-maintenance-modal__section-label {
+  margin-bottom: 0;
+}
+
+.dealer-maintenance-modal__add-btn {
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  background: rgba(56, 189, 248, 0.08);
+  color: rgba(125, 211, 252, 0.9);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.dealer-maintenance-modal__add-btn:hover {
+  background: rgba(56, 189, 248, 0.16);
+}
+
+.dealer-maintenance-modal__empty {
+  font-size: 0.78rem;
+  color: rgba(148, 163, 184, 0.6);
+  text-align: center;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px dashed rgba(148, 163, 184, 0.18);
+}
+
+.dealer-maintenance-modal__entries {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dealer-maintenance-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(10, 20, 38, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.dealer-maintenance-entry__row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 0.8fr auto;
+  gap: 7px;
+  align-items: center;
+}
+
+.dealer-maintenance-entry__row select,
+.dealer-maintenance-entry__row input {
+  width: auto;
+  padding: 5px 8px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: rgba(8, 15, 30, 0.7);
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 0.75rem;
+}
+
+.dealer-maintenance-entry__remove {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: transparent;
+  color: rgba(148, 163, 184, 0.5);
+  font-size: 0.65rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dealer-maintenance-entry__remove:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: rgba(252, 165, 165, 0.9);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.dealer-maintenance-entry__notes {
+  width: auto;
+  padding: 5px 8px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: transparent;
+  color: rgba(148, 163, 184, 0.8);
+  font-size: 0.72rem;
+}
+
+.dealer-maintenance-modal__error {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(252, 165, 165, 0.9);
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.18);
+}
+
+.dealer-maintenance-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* Light mode */
+:root.light .dealer-maintenance-modal,
+:root[data-theme="light"] .dealer-maintenance-modal {
+  background: rgba(248, 250, 252, 0.98);
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+:root.light .dealer-maintenance-modal__title,
+:root[data-theme="light"] .dealer-maintenance-modal__title {
+  color: #0f172a;
+}
+
+:root.light .dealer-maintenance-entry,
+:root[data-theme="light"] .dealer-maintenance-entry {
+  background: rgba(241, 245, 249, 0.9);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+:root.light .dealer-maintenance-entry__row select,
+:root.light .dealer-maintenance-entry__row input,
+:root.light .dealer-maintenance-modal__field input,
+:root[data-theme="light"] .dealer-maintenance-entry__row select,
+:root[data-theme="light"] .dealer-maintenance-entry__row input,
+:root[data-theme="light"] .dealer-maintenance-modal__field input {
+  background: #fff;
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #0f172a;
+}
+
+/* ─── Dealer Transfer Garage Modal ───────────────────────────── */
+
+.dealer-transfer-modal {
+  width: min(100%, 580px);
+  max-height: 92vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.06), transparent 40%),
+    linear-gradient(160deg, rgba(10, 18, 38, 0.98), rgba(4, 8, 18, 0.99));
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(56, 189, 248, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  animation: ox-modal-in 0.28s var(--ox-ease-soft, ease) both;
+}
+
+.dealer-transfer-modal--done {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: 40px;
+}
+
+.dealer-transfer-modal__done-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.14);
+  border: 1.5px solid rgba(52, 211, 153, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: rgb(52, 211, 153);
+}
+
+.dealer-transfer-modal--done h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: rgba(248, 250, 252, 0.98);
+}
+
+.dealer-transfer-modal--done p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(148, 163, 184, 0.75);
+}
+
+.dealer-transfer-modal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dealer-transfer-modal__eyebrow {
+  margin: 0;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(125, 211, 252, 0.7);
+}
+
+.dealer-transfer-modal__title {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: rgba(248, 250, 252, 0.98);
+  letter-spacing: -0.025em;
+}
+
+/* Passport card */
+.dealer-transfer-passport {
+  border-radius: 14px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  background:
+    linear-gradient(145deg, rgba(8, 18, 36, 0.95), rgba(4, 8, 18, 0.98));
+  overflow: hidden;
+}
+
+.dealer-transfer-passport__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+}
+
+.dealer-transfer-passport__vehicle {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 900;
+  color: rgba(248, 250, 252, 0.98);
+  letter-spacing: -0.025em;
+}
+
+.dealer-transfer-passport__vehicle span {
+  font-weight: 500;
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.dealer-transfer-passport__meta {
+  margin: 4px 0 0;
+  display: flex;
+  gap: 8px;
+  font-size: 0.7rem;
+  color: rgba(148, 163, 184, 0.65);
+  font-weight: 600;
+}
+
+.dealer-transfer-passport__badge {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.52rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(125, 211, 252, 0.9);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.dealer-transfer-passport__rows {
+  padding: 4px 0;
+}
+
+.dealer-transfer-passport__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.06);
+  font-size: 0.75rem;
+}
+
+.dealer-transfer-passport__row:last-child {
+  border-bottom: none;
+}
+
+.dealer-transfer-passport__row span {
+  color: rgba(148, 163, 184, 0.6);
+}
+
+.dealer-transfer-passport__row strong {
+  color: rgba(226, 232, 240, 0.9);
+  font-weight: 700;
+}
+
+.dealer-transfer-passport__history {
+  padding: 12px 16px 14px;
+  border-top: 1px solid rgba(56, 189, 248, 0.1);
+}
+
+.dealer-transfer-passport__history-label {
+  margin: 0 0 8px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.55);
+}
+
+.dealer-transfer-passport__history ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dealer-transfer-passport__history li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.72rem;
+  color: rgba(226, 232, 240, 0.75);
+}
+
+.dealer-transfer-passport__service-type {
+  font-weight: 700;
+  color: rgba(125, 211, 252, 0.85);
+}
+
+.dealer-transfer-passport__service-notes {
+  color: rgba(148, 163, 184, 0.55);
+  font-style: italic;
+}
+
+/* Lead selector */
+.dealer-transfer-modal__lead-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dealer-transfer-modal__lead-section select,
+.dealer-transfer-modal__lead-section input {
+  width: auto;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(10, 20, 38, 0.7);
+  color: rgba(226, 232, 240, 0.9);
+  font-size: 0.82rem;
+}
+
+/* Light mode */
+:root.light .dealer-transfer-modal,
+:root[data-theme="light"] .dealer-transfer-modal {
+  background: rgba(248, 250, 252, 0.98);
+  border-color: rgba(14, 165, 233, 0.25);
+}
+
+:root.light .dealer-transfer-passport,
+:root[data-theme="light"] .dealer-transfer-passport {
+  background: #fff;
+  border-color: rgba(14, 165, 233, 0.2);
+}
+
+:root.light .dealer-transfer-passport__vehicle,
+:root.light .dealer-transfer-modal__title,
+:root[data-theme="light"] .dealer-transfer-passport__vehicle,
+:root[data-theme="light"] .dealer-transfer-modal__title {
+  color: #0f172a;
+}
+
+:root.light .dealer-transfer-passport__row strong,
+:root[data-theme="light"] .dealer-transfer-passport__row strong {
+  color: #1e293b;
+}
+
+:root.light .dealer-transfer-modal__lead-section select,
+:root.light .dealer-transfer-modal__lead-section input,
+:root[data-theme="light"] .dealer-transfer-modal__lead-section select,
+:root[data-theme="light"] .dealer-transfer-modal__lead-section input {
+  background: #fff;
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #0f172a;
 }
 
 /* ─── oX Assistant Panel ──────────────────────────────────────── */

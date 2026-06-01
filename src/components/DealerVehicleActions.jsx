@@ -32,7 +32,7 @@ const ACTIONS = [
   },
 ];
 
-export default function DealerVehicleActions({ vehicle, onUpdated }) {
+export default function DealerVehicleActions({ vehicle, onUpdated, onMarkSold }) {
   const [action, setAction] = useState("");
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -70,10 +70,16 @@ export default function DealerVehicleActions({ vehicle, onUpdated }) {
 
     setSaved(true);
     setLoading(false);
+
+    const wasMarkSold = action === "mark_sold";
     setAction("");
 
     if (onUpdated) {
       await onUpdated();
+    }
+
+    if (wasMarkSold && onMarkSold) {
+      onMarkSold(vehicle);
     }
 
     window.setTimeout(() => {

@@ -2,6 +2,8 @@ import { useState, useMemo } from "react";
 
 import DealerVehicleActions from "../../components/DealerVehicleActions.jsx";
 import DealerVehicleDetailModal from "../../components/DealerVehicleDetailModal.jsx";
+import DealerMaintenanceModal from "../../components/DealerMaintenanceModal.jsx";
+import DealerTransferGarageModal from "../../components/DealerTransferGarageModal.jsx";
 import EditVehicleModal from "../../components/EditVehicleModal.jsx";
 import EditVehicleImagesModal from "../../components/EditVehicleImagesModal.jsx";
 import { formatARS, formatKm } from "../../lib/formatters.js";
@@ -11,6 +13,21 @@ import {
   getScoreChipClass,
 } from "../../lib/publicationScore.js";
 import { updateCurrentDealerVehicleStatus } from "../../services/dealerVehicles.service.js";
+
+function getVehicleAgeDays(vehicle) {
+  const raw = vehicle.created_at ?? vehicle.createdAt ?? vehicle.published_at ?? null;
+  if (!raw) return null;
+  const ms = Date.now() - new Date(raw).getTime();
+  return Math.floor(ms / (1000 * 60 * 60 * 24));
+}
+
+function getAgingBand(days) {
+  if (days === null) return null;
+  if (days >= 90) return "critical";
+  if (days >= 60) return "warning";
+  if (days >= 30) return "notice";
+  return null;
+}
 
 function exportInventoryCSV(vehicles) {
   const headers = ["Marca", "Modelo", "Versión", "Año", "Km", "Precio", "Ciudad", "Provincia", "Estado", "Revisión", "Calidad", "Vistas"];
@@ -51,10 +68,12 @@ function matchesScoreFilter(score, filter) {
   return true;
 }
 
-export default function DealerInventoryModule({ dealerVehicles, onRefresh, onBack }) {
+export default function DealerInventoryModule({ dealerVehicles, dealerLeads = [], dealerName = "", onRefresh, onBack }) {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [editingVehicleImages, setEditingVehicleImages] = useState(null);
+  const [maintenanceVehicle, setMaintenanceVehicle] = useState(null);
+  const [transferVehicle, setTransferVehicle] = useState(null);
 
   // Filters
   const [search, setSearch] = useState("");
@@ -148,6 +167,14 @@ export default function DealerInventoryModule({ dealerVehicles, onRefresh, onBac
   }
 
   const hasFilters = search || filterStatus || filterReview || filterScore || sortBy !== "default";
+
+  const agingAlerts = useMemo(() => {
+    return dealerVehicles
+      .filter((v) => v.is_active)
+      .map((v) => ({ vehicle: v, days: getVehicleAgeDays(v) }))
+      .filter(({ days }) => days !== null && days >= 30)
+      .sort((a, b) => b.days - a.days);
+  }, [dealerVehicles]);
 
   return (
     <div className="dealer-leads-section">
@@ -258,6 +285,21 @@ export default function DealerInventoryModule({ dealerVehicles, onRefresh, onBac
         </div>
       )}
 
+      {/* Stock aging banner */}
+      {agingAlerts.length > 0 && (
+        <div className="inventory-aging-banner">
+          <div className="inventory-aging-banner__icon">⏱</div>
+          <div className="inventory-aging-banner__text">
+            <strong>
+              {agingAlerts.filter(({ days }) => days >= 60).length > 0
+                ? `${agingAlerts.filter(({ days }) => days >= 60).length} vehículo${agingAlerts.filter(({ days }) => days >= 60).length !== 1 ? "s" : ""} sin movimiento hace más de 60 días`
+                : `${agingAlerts.length} vehículo${agingAlerts.length !== 1 ? "s" : ""} publicado${agingAlerts.length !== 1 ? "s" : ""} hace más de 30 días`}
+            </strong>
+            <span>Revisá precio, fotos o calidad de publicación para mejorar la visibilidad.</span>
+          </div>
+        </div>
+      )}
+
       {dealerVehicles.length === 0 ? (
         <div className="empty-state">
           Todavía no hay vehículos reales para mostrar.
@@ -270,178 +312,123 @@ export default function DealerInventoryModule({ dealerVehicles, onRefresh, onBac
           </button>
         </div>
       ) : (
-        <div className="admin-table-wrap">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>
-                  <input
-                    type="checkbox"
-                    checked={allSelected}
-                    onChange={toggleSelectAll}
-                    title="Seleccionar todos"
-                  />
-                </th>
-                <th>Vehículo</th>
-                <th>Precio</th>
-                <th>Ubicación</th>
-                <th>Financiación</th>
-                <th>Publicación</th>
-                <th>Revisión</th>
-                <th>Calidad</th>
-                <th>Vistas</th>
-                <th>Acciones</th>
-                <th>Detalle</th>
-                <th>Editar</th>
-                <th>Imágenes</th>
-              </tr>
-            </thead>
+        <div className="dealer-inventory-grid">
+          {filtered.map((vehicle) => {
+            const { score, missing } = getPublicationScore(vehicle);
+            const isSelected = selected.has(vehicle.vehicle_id);
+            const imageUrl =
+              vehicle.main_image_url ||
+              vehicle.mainImageUrl ||
+              (Array.isArray(vehicle.images) && vehicle.images[0]?.url) ||
+              (Array.isArray(vehicle.images) && vehicle.images[0]?.publicUrl) ||
+              null;
+            const ageDays = getVehicleAgeDays(vehicle);
+            const ageBand = getAgingBand(ageDays);
 
-            <tbody>
-              {filtered.map((vehicle) => {
-                const { score, missing } = getPublicationScore(vehicle);
-                const isSelected = selected.has(vehicle.vehicle_id);
-
-                return (
-                  <tr
-                    key={vehicle.vehicle_id}
-                    className={isSelected ? "table-row--selected" : ""}
-                  >
-                    <td>
+            return (
+              <article
+                key={vehicle.vehicle_id}
+                className={`vehicle-card dealer-inventory-card${isSelected ? " is-selected" : ""}`}
+              >
+                {/* Image */}
+                <div className="vehicle-card__media">
+                  <div className="vehicle-card__topbar">
+                    <span className="vehicle-card__rank">
                       <input
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => toggleSelect(vehicle.vehicle_id)}
+                        onClick={(e) => e.stopPropagation()}
+                        title="Seleccionar"
                       />
-                    </td>
+                    </span>
+                    <span className="vehicle-card__year">{vehicle.year || "—"}</span>
+                  </div>
 
-                    <td>
-                      <strong>
-                        {vehicle.brand} {vehicle.model}
-                      </strong>
-                      <span>{vehicle.version || "Sin versión"}</span>
-                      <span>
-                        {vehicle.year} · {formatKm(vehicle.km)}
+                  {vehicle.reserved && (
+                    <div className="vehicle-card__reserved">Reservada</div>
+                  )}
+
+                  {imageUrl ? (
+                    <img className="vehicle-card__image" src={imageUrl} alt="" loading="lazy" />
+                  ) : (
+                    <div className="vehicle-card__placeholder">
+                      <span>Sin imagen</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Body */}
+                <div className="vehicle-card__body">
+                  <div className="vehicle-card__identity">
+                    <h3 className="vehicle-card__title">
+                      {vehicle.brand} {vehicle.model}
+                    </h3>
+                    <p className="vehicle-card__version">
+                      {vehicle.version || "Sin versión"} · {formatKm(vehicle.km)}
+                    </p>
+                  </div>
+
+                  {/* Stats row */}
+                  <div className="dealer-inv-card__chips">
+                    <span className={vehicle.is_active ? "admin-chip success" : "admin-chip warning"} style={{ fontSize: "0.58rem" }}>
+                      {vehicle.is_active ? "Activa" : "No visible"}
+                    </span>
+                    <span className={`admin-chip ${getScoreChipClass(score)}`} style={{ fontSize: "0.58rem" }} title={missing.length > 0 ? `Falta: ${missing.join(", ")}` : "Publicación completa"}>
+                      {score}% · {getScoreLabel(score)}
+                    </span>
+                    {vehicle.review_status === "needs_review" && (
+                      <span className="admin-chip danger" style={{ fontSize: "0.58rem" }}>Revisión</span>
+                    )}
+                    {ageBand && (
+                      <span className={`inventory-age-badge inventory-age-badge--${ageBand}`}>
+                        {ageDays}d
                       </span>
-                    </td>
+                    )}
+                    <span className="dealer-inv-card__views">{Number(vehicle.views ?? 0)} vistas</span>
+                  </div>
 
-                    <td>
-                      <strong>{formatARS(vehicle.price)}</strong>
-                      <span>Ref. {formatARS(vehicle.market_reference_price)}</span>
-                    </td>
+                  {/* Price */}
+                  <div className="dealer-inv-card__price-row">
+                    <span className="dealer-inv-card__price-label">Precio</span>
+                    <strong className="dealer-inv-card__price">{formatARS(vehicle.price)}</strong>
+                  </div>
 
-                    <td>
-                      <strong>{vehicle.city || "Sin ciudad"}</strong>
-                      <span>{vehicle.province || "Sin provincia"}</span>
-                    </td>
+                  {/* Actions */}
+                  <div className="dealer-inv-card__actions">
+                    <button
+                      type="button"
+                      className="vehicle-card__btn vehicle-card__btn--primary"
+                      onClick={() => setEditingVehicle(vehicle)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      className="vehicle-card__btn"
+                      onClick={() => setMaintenanceVehicle(vehicle)}
+                    >
+                      Mant.
+                    </button>
+                    <button
+                      type="button"
+                      className="vehicle-card__btn"
+                      onClick={() => setSelectedVehicle(vehicle)}
+                    >
+                      Detalle
+                    </button>
+                  </div>
 
-                    <td>
-                      <span>
-                        {vehicle.financing ? "Disponible" : "No informada"}
-                      </span>
-                      {vehicle.financing && (
-                        <span>Entrega {formatARS(vehicle.delivery)}</span>
-                      )}
-                    </td>
-
-                    <td>
-                      <span
-                        className={
-                          vehicle.is_active
-                            ? "admin-chip success"
-                            : "admin-chip warning"
-                        }
-                      >
-                        {vehicle.is_active ? "Activa" : "No visible"}
-                      </span>
-                      <span>{vehicle.publication_status}</span>
-                    </td>
-
-                    <td>
-                      <span
-                        className={
-                          vehicle.review_status === "needs_review"
-                            ? "admin-chip danger"
-                            : "admin-chip success"
-                        }
-                      >
-                        {vehicle.review_status === "needs_review"
-                          ? "Revisión"
-                          : "Aprobada"}
-                      </span>
-                      {vehicle.reserved && <span>Reservada</span>}
-                    </td>
-
-                    <td>
-                      <span
-                        className={`admin-chip ${getScoreChipClass(score)}`}
-                        title={
-                          missing.length > 0
-                            ? `Falta: ${missing.join(", ")}`
-                            : "Publicación completa"
-                        }
-                      >
-                        {score}% · {getScoreLabel(score)}
-                      </span>
-                      <span
-                        className={`dealer-inventory-quality-hint${
-                          score >= 90
-                            ? " dealer-inventory-quality-hint--excellent"
-                            : score >= 70
-                            ? " dealer-inventory-quality-hint--good"
-                            : " dealer-inventory-quality-hint--weak"
-                        }`}
-                      >
-                        {score >= 90
-                          ? "Excelente calidad"
-                          : score >= 70
-                          ? "Publicación sólida"
-                          : "Ver mejoras en detalle"}
-                      </span>
-                    </td>
-
-                    <td>
-                      <strong>{Number(vehicle.views ?? 0)}</strong>
-                    </td>
-
-                    <td>
-                      <DealerVehicleActions
-                        vehicle={vehicle}
-                        onUpdated={onRefresh}
-                      />
-                    </td>
-
-                    <td>
-                      <button
-                        className="table-action-btn"
-                        onClick={() => setSelectedVehicle(vehicle)}
-                      >
-                        Ver detalle
-                      </button>
-                    </td>
-
-                    <td>
-                      <button
-                        className="table-action-btn"
-                        onClick={() => setEditingVehicle(vehicle)}
-                      >
-                        Editar
-                      </button>
-                    </td>
-
-                    <td>
-                      <button
-                        className="table-action-btn"
-                        onClick={() => setEditingVehicleImages(vehicle)}
-                      >
-                        Imágenes
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  {/* Status action */}
+                  <DealerVehicleActions
+                    vehicle={vehicle}
+                    onUpdated={onRefresh}
+                    onMarkSold={(v) => setTransferVehicle(v)}
+                  />
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
 
@@ -468,6 +455,26 @@ export default function DealerInventoryModule({ dealerVehicles, onRefresh, onBac
           mode="dealer"
           onClose={() => setEditingVehicleImages(null)}
           onUpdated={onRefresh}
+        />
+      )}
+
+      {maintenanceVehicle && (
+        <DealerMaintenanceModal
+          vehicle={maintenanceVehicle}
+          onClose={() => setMaintenanceVehicle(null)}
+          onUpdated={async () => { await onRefresh(); }}
+        />
+      )}
+
+      {transferVehicle && (
+        <DealerTransferGarageModal
+          vehicle={transferVehicle}
+          vehicleLeads={dealerLeads.filter(
+            (l) => String(l.vehicle_id) === String(transferVehicle.vehicle_id)
+          )}
+          dealerName={dealerName}
+          onClose={() => setTransferVehicle(null)}
+          onTransferred={async () => { await onRefresh(); setTransferVehicle(null); }}
         />
       )}
     </div>

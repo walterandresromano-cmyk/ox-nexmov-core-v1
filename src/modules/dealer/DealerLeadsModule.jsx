@@ -334,10 +334,101 @@ function LeadCrmCard({ lead, onOpen, onUpdated }) {
   );
 }
 
+function AgendaLeadRow({ lead, onOpen }) {
+  const waLink = getWhatsAppLink(
+    lead.buyer_phone,
+    getBuyerName(lead),
+    getVehicleLabel(lead)
+  );
+
+  return (
+    <div className="agenda-lead-row">
+      <div className="agenda-lead-row__main">
+        <div className="agenda-lead-row__info">
+          <strong className="agenda-lead-row__buyer">{getBuyerName(lead)}</strong>
+          <span className="agenda-lead-row__vehicle">{getVehicleLabel(lead)}</span>
+          {lead.next_action_note && (
+            <p className="agenda-lead-row__note">{lead.next_action_note}</p>
+          )}
+        </div>
+        <div className="agenda-lead-row__meta">
+          <span className={`lead-crm-status lead-crm-status--${String(lead.crm_status || "new").toLowerCase()}`}>
+            {getLeadStatusLabel(lead.crm_status)}
+          </span>
+          {lead.next_action_date && (
+            <span className="agenda-lead-row__date">{formatFollowUpDate(lead.next_action_date)}</span>
+          )}
+        </div>
+      </div>
+      <div className="agenda-lead-row__actions">
+        {waLink && (
+          <a href={waLink} target="_blank" rel="noopener noreferrer" className="lead-whatsapp-btn">
+            WhatsApp
+          </a>
+        )}
+        <button type="button" className="table-action-btn" onClick={() => onOpen(lead)}>
+          Ver
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function AgendaGroup({ label, state, leads, onOpen, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
+  if (leads.length === 0) return null;
+
+  return (
+    <div className={`agenda-group agenda-group--${state}`}>
+      <button
+        type="button"
+        className="agenda-group__header"
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className="agenda-group__label">{label}</span>
+        <span className="agenda-group__count">{leads.length}</span>
+        <span className="agenda-group__chevron">{open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+        <div className="agenda-group__body">
+          {leads.map((lead) => (
+            <AgendaLeadRow key={lead.lead_id} lead={lead} onOpen={onOpen} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AgendaView({ groups, onOpen }) {
+  const total = Object.values(groups).reduce((s, g) => s + g.length, 0);
+
+  if (total === 0) {
+    return (
+      <div className="dealer-agenda-view">
+        <div className="empty-state">
+          Sin leads con fecha de seguimiento asignada. Abrí un lead y agregá una próxima acción.
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="dealer-agenda-view">
+      <AgendaGroup label="Vencidos" state="overdue" leads={groups.overdue} onOpen={onOpen} defaultOpen />
+      <AgendaGroup label="Hoy" state="today" leads={groups.today} onOpen={onOpen} defaultOpen />
+      <AgendaGroup label="Esta semana" state="week" leads={groups.week} onOpen={onOpen} defaultOpen />
+      <AgendaGroup label="Próximos" state="future" leads={groups.future} onOpen={onOpen} />
+      <AgendaGroup label="Sin fecha asignada" state="nodate" leads={groups.nodate} onOpen={onOpen} />
+    </div>
+  );
+}
+
 export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
   const [selectedLead, setSelectedLead] = useState(null);
   const [activeStage, setActiveStage] = useState("all");
   const [search, setSearch] = useState("");
+  const [viewMode, setViewMode] = useState("pipeline");
 
   const stageCounts = useMemo(() =>
     PIPELINE_STAGES.reduce((acc, stage) => {
@@ -385,6 +476,35 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
     ["overdue", "today"].includes(item.state)
   ).length;
 
+  const agendaGroups = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const weekEnd = new Date(today);
+    weekEnd.setDate(today.getDate() + 7);
+
+    const groups = { overdue: [], today: [], week: [], future: [], nodate: [] };
+
+    for (const lead of leads) {
+      if (!lead.next_action_date) {
+        if (!["sold", "closed", "lost", "cerrado", "perdido"].includes(String(lead.crm_status || "").toLowerCase())) {
+          groups.nodate.push(lead);
+        }
+        continue;
+      }
+      const d = new Date(lead.next_action_date + "T00:00:00");
+      if (d < today) groups.overdue.push(lead);
+      else if (d.getTime() === today.getTime()) groups.today.push(lead);
+      else if (d <= weekEnd) groups.week.push(lead);
+      else groups.future.push(lead);
+    }
+
+    for (const key of ["overdue", "today", "week", "future"]) {
+      groups[key].sort((a, b) => new Date(a.next_action_date) - new Date(b.next_action_date));
+    }
+
+    return groups;
+  }, [leads]);
+
   async function handleOpenLead(lead) {
     setSelectedLead(lead);
     if (lead.crm_status === "new") {
@@ -404,6 +524,25 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
           <p>Consultas generadas desde publicaciones asociadas a este dealer.</p>
         </div>
         <div className="dealer-module-head-actions">
+          <div className="dealer-leads-view-toggle">
+            <button
+              type="button"
+              className={viewMode === "pipeline" ? "is-active" : ""}
+              onClick={() => setViewMode("pipeline")}
+            >
+              Pipeline
+            </button>
+            <button
+              type="button"
+              className={viewMode === "agenda" ? "is-active" : ""}
+              onClick={() => setViewMode("agenda")}
+            >
+              Agenda
+              {urgentFollowUps > 0 && (
+                <span className="dealer-leads-view-toggle__badge">{urgentFollowUps}</span>
+              )}
+            </button>
+          </div>
           <button
             type="button"
             className="table-action-btn"
@@ -420,33 +559,34 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
 
       {leads.length === 0 ? (
         <div className="empty-state">Todavía no hay leads reales para mostrar.</div>
+      ) : viewMode === "agenda" ? (
+        <AgendaView
+          groups={agendaGroups}
+          onOpen={handleOpenLead}
+        />
       ) : (
         <>
-          <section className="dealer-followup-agenda">
-            <div className="dealer-followup-agenda-head">
-              <div>
-                <span>Agenda comercial</span>
-                <strong>Próximos seguimientos</strong>
-                <p>
-                  {urgentFollowUps > 0
-                    ? `${urgentFollowUps} acción${urgentFollowUps !== 1 ? "es" : ""} requieren atención hoy.`
-                    : "Sin seguimientos vencidos para hoy."}
-                </p>
+          {/* Compact follow-up widget in pipeline mode */}
+          {followUpAgenda.length > 0 && (
+            <section className="dealer-followup-agenda">
+              <div className="dealer-followup-agenda-head">
+                <div>
+                  <span>Agenda comercial</span>
+                  <strong>Próximos seguimientos</strong>
+                  <p>
+                    {urgentFollowUps > 0
+                      ? `${urgentFollowUps} acción${urgentFollowUps !== 1 ? "es" : ""} requieren atención hoy.`
+                      : "Sin seguimientos vencidos para hoy."}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="table-action-btn"
+                  onClick={() => setViewMode("agenda")}
+                >
+                  Ver agenda completa
+                </button>
               </div>
-              <button
-                type="button"
-                className="table-action-btn"
-                onClick={() => setActiveStage("all")}
-              >
-                Ver todos
-              </button>
-            </div>
-
-            {followUpAgenda.length === 0 ? (
-              <div className="dealer-followup-empty">
-                Agregá una próxima acción en cada lead para construir tu agenda comercial.
-              </div>
-            ) : (
               <div className="dealer-followup-list">
                 {followUpAgenda.map(({ lead, state }) => (
                   <button
@@ -462,8 +602,8 @@ export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
                   </button>
                 ))}
               </div>
-            )}
-          </section>
+            </section>
+          )}
 
           {/* Pipeline stage bar */}
           <div className="leads-pipeline-bar">
