@@ -277,6 +277,8 @@ function normalizeRecord(row) {
   return {
     id: row.id || row.local_id || crypto.randomUUID(),
     garageVehicleId: row.garage_vehicle_id || row.garageVehicleId,
+    vehicleType: row.vehicle_type || row.vehicleType || null,
+    vehicleRecordId: row.vehicle_record_id || row.vehicleRecordId || row.garage_vehicle_id || row.garageVehicleId || null,
     serviceDate: row.service_date || row.serviceDate,
     mileage: row.mileage ?? "",
     serviceType: row.service_type || row.serviceType || "",
@@ -309,6 +311,8 @@ function normalizeGarageVehicle(row) {
   return {
     id: String(row.id || row.garage_vehicle_id || row.vehicle_id || row.lead_id),
     garageAssignmentId: row.id,
+    vehicleType: row.vehicle_type || row.vehicleType || "assigned",
+    vehicleRecordId: row.vehicle_record_id || row.vehicleRecordId || row.id || row.garage_vehicle_id || null,
     vehicleId: row.vehicle_id || snapshot.vehicle_id,
     leadId: row.lead_id || snapshot.lead_id,
     title: title || snapshot.title || row.vehicle_title || "Vehículo asignado",
@@ -360,6 +364,10 @@ function normalizeOwnedGarageVehicle(row) {
     ...row,
     id: ownId,
     garage_vehicle_id: ownId,
+    vehicle_type: "owned",
+    vehicle_record_id: row.id || row.local_id || row.localId,
+    vehicleType: "owned",
+    vehicleRecordId: row.id || row.local_id || row.localId,
     vehicle_title: title || "Vehículo propio",
     image_position_x: row.image_position_x ?? row.imagePositionX,
     image_position_y: row.image_position_y ?? row.imagePositionY,
@@ -759,10 +767,7 @@ export async function assignVehicleToBuyerGarage({ leadId, vehicleId, note = nul
 
 export async function listBuyerGarageServices({ userId }) {
   if (isSupabaseConfigured && supabase) {
-    const { data, error } = await supabase
-      .from("buyer_garage_services")
-      .select("*")
-      .order("service_date", { ascending: false });
+    const { data, error } = await supabase.rpc("list_buyer_garage_services");
 
     if (!error) {
       return {
@@ -781,22 +786,48 @@ export async function listBuyerGarageServices({ userId }) {
 }
 
 export async function createBuyerGarageService({ userId, service }) {
-  const rawVehicleId = String(service.garageVehicleId || "").replace(/^own-/, "");
-  const payload = {
-    garage_vehicle_id: rawVehicleId,
-    service_date: service.serviceDate,
-    mileage: service.mileage ? Number(service.mileage) : null,
-    service_type: service.serviceType,
-    cost: service.cost ? Number(service.cost) : null,
-    notes: service.notes || null,
-  };
+  // Resolve vehicle type
+  const resolvedVehicleType =
+    service.vehicleType ||
+    (service.source === "owned" ? "owned" : null) ||
+    (String(service.garageVehicleId || "").startsWith("own-") ? "owned" : "assigned");
+
+  // Resolve and sanitize vehicle record id (strip "own-" prefix, then parse as number)
+  const rawRecordId = service.vehicleRecordId || service.garageVehicleId || null;
+  const resolvedVehicleRecordId = Number(
+    String(rawRecordId || "").replace(/^own-/, "")
+  );
+
+  // Guard: invalid vehicle type
+  if (resolvedVehicleType !== "owned" && resolvedVehicleType !== "assigned") {
+    return {
+      service: null,
+      error: new Error("Tipo de vehículo inválido para guardar el servicio."),
+      source: null,
+    };
+  }
+
+  // Guard: vehicle not yet synced to Supabase (UUID-based local fallback)
+  if (!Number.isFinite(resolvedVehicleRecordId) || resolvedVehicleRecordId <= 0) {
+    return {
+      service: null,
+      error: new Error(
+        "El vehículo todavía no está sincronizado con Garage oX. No se puede guardar el servicio."
+      ),
+      source: null,
+    };
+  }
 
   if (isSupabaseConfigured && supabase) {
-    const { data, error } = await supabase
-      .from("buyer_garage_services")
-      .insert(payload)
-      .select("*")
-      .single();
+    const { data, error } = await supabase.rpc("create_buyer_garage_service", {
+      p_vehicle_type:      resolvedVehicleType,
+      p_vehicle_record_id: resolvedVehicleRecordId,
+      p_service_date:      service.serviceDate,
+      p_mileage:           service.mileage ? Number(service.mileage) : null,
+      p_service_type:      service.serviceType,
+      p_cost:              service.cost ? Number(service.cost) : null,
+      p_notes:             service.notes || null,
+    });
 
     if (!error) {
       return {
@@ -806,10 +837,6 @@ export async function createBuyerGarageService({ userId, service }) {
       };
     }
 
-    // Surface the Supabase error to the caller instead of silently
-    // falling through to local — otherwise the caller shows "saved" while
-    // listBuyerGarageServices (which reads only from Supabase when configured)
-    // will never return the locally-written record, making it invisible.
     return {
       service: null,
       error,
@@ -817,9 +844,17 @@ export async function createBuyerGarageService({ userId, service }) {
     };
   }
 
+  // Fallback local: only reachable when Supabase is not configured at all.
   const localRecord = normalizeRecord({
-    ...payload,
     local_id: crypto.randomUUID(),
+    vehicle_type: resolvedVehicleType,
+    vehicle_record_id: resolvedVehicleRecordId,
+    garage_vehicle_id: resolvedVehicleType === "assigned" ? resolvedVehicleRecordId : null,
+    service_date: service.serviceDate,
+    mileage: service.mileage ? Number(service.mileage) : null,
+    service_type: service.serviceType,
+    cost: service.cost ? Number(service.cost) : null,
+    notes: service.notes || null,
     source: "local",
   });
   const next = [localRecord, ...readLocal(userId)];

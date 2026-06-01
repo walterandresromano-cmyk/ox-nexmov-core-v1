@@ -498,11 +498,24 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     setGarageSaved(false);
     setGarageServiceError("");
 
+    const garageVehicle = garageVehicles.find((v) => v.id === selectedGarageVehicleId) || null;
+    const resolvedVehicleType =
+      garageVehicle?.vehicleType ||
+      (garageVehicle?.source === "owned" ? "owned" : null) ||
+      (String(garageVehicle?.id || "").startsWith("own-") ? "owned" : "assigned");
+
     const { service, error: saveError } = await createBuyerGarageService({
       userId: authUser?.id || authProfile?.id || authProfile?.email,
       service: {
         ...garageForm,
         garageVehicleId: selectedGarageVehicleId,
+        vehicleType: resolvedVehicleType,
+        vehicleRecordId:
+          garageVehicle?.vehicleRecordId ||
+          garageVehicle?.garageAssignmentId ||
+          garageVehicle?.garageVehicleId ||
+          garageVehicle?.id ||
+          null,
       },
     });
 
@@ -732,9 +745,18 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const selectedGarageVehicle =
     garageVehicles.find((vehicle) => vehicle.id === selectedGarageVehicleId) || null;
   const stripOwn = (id) => String(id || "").replace(/^own-/, "");
+  const matchesGarageServiceVehicle = (service, vehicle) => {
+    if (service?.vehicleRecordId && vehicle?.vehicleRecordId) {
+      return (
+        String(service.vehicleRecordId) === String(vehicle.vehicleRecordId) &&
+        service.vehicleType === vehicle.vehicleType
+      );
+    }
+    return stripOwn(service?.garageVehicleId) === stripOwn(vehicle?.id);
+  };
   const selectedGarageServices = selectedGarageVehicle
-    ? garageServices.filter(
-        (service) => stripOwn(service.garageVehicleId) === stripOwn(selectedGarageVehicle.id)
+    ? garageServices.filter((service) =>
+        matchesGarageServiceVehicle(service, selectedGarageVehicle)
       )
     : [];
   const lastSelectedGarageService = selectedGarageServices[0] || null;
@@ -1299,8 +1321,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             <div className="buyer-garage-collection">
               <div className="buyer-garage-list buyer-garage-card-grid">
                 {garageVehicles.map((vehicle) => {
-                  const services = garageServices.filter(
-                    (service) => stripOwn(service.garageVehicleId) === stripOwn(vehicle.id)
+                  const services = garageServices.filter((service) =>
+                    matchesGarageServiceVehicle(service, vehicle)
                   );
                   const isSelected = selectedGarageVehicleId === vehicle.id;
                   const latestService = services[0] || null;
