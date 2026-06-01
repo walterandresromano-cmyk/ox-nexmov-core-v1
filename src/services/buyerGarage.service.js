@@ -781,8 +781,9 @@ export async function listBuyerGarageServices({ userId }) {
 }
 
 export async function createBuyerGarageService({ userId, service }) {
+  const rawVehicleId = String(service.garageVehicleId || "").replace(/^own-/, "");
   const payload = {
-    garage_vehicle_id: service.garageVehicleId,
+    garage_vehicle_id: rawVehicleId,
     service_date: service.serviceDate,
     mileage: service.mileage ? Number(service.mileage) : null,
     service_type: service.serviceType,

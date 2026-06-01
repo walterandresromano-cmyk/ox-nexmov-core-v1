@@ -731,9 +731,10 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const isLoading = loadingVehicleLeads || loadingZeroKmLeads || loadingSellVehicleLeads;
   const selectedGarageVehicle =
     garageVehicles.find((vehicle) => vehicle.id === selectedGarageVehicleId) || null;
+  const stripOwn = (id) => String(id || "").replace(/^own-/, "");
   const selectedGarageServices = selectedGarageVehicle
     ? garageServices.filter(
-        (service) => service.garageVehicleId === selectedGarageVehicle.id
+        (service) => stripOwn(service.garageVehicleId) === stripOwn(selectedGarageVehicle.id)
       )
     : [];
   const lastSelectedGarageService = selectedGarageServices[0] || null;
@@ -1299,7 +1300,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
               <div className="buyer-garage-list buyer-garage-card-grid">
                 {garageVehicles.map((vehicle) => {
                   const services = garageServices.filter(
-                    (service) => service.garageVehicleId === vehicle.id
+                    (service) => stripOwn(service.garageVehicleId) === stripOwn(vehicle.id)
                   );
                   const isSelected = selectedGarageVehicleId === vehicle.id;
                   const latestService = services[0] || null;
