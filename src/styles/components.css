@@ -16649,26 +16649,36 @@ body::-webkit-scrollbar {
 }
 
 /* --- Light mode — complete module card system --- */
-:root.light .dealer-panel .dealer-module-card {
+:root.light .dealer-panel .dealer-module-card,
+:root[data-theme="light"] .dealer-panel .dealer-module-card {
   background: #ffffff;
   border-color: rgba(226, 232, 240, 0.85);
   box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
 }
 
-:root.light .dealer-panel .clickable-module-card:hover {
+:root.light .dealer-panel .clickable-module-card:hover,
+:root[data-theme="light"] .dealer-panel .clickable-module-card:hover {
   border-color: rgba(14, 116, 144, 0.2);
   box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   transform: translateY(-2px);
 }
 
-:root.light .dealer-panel .dealer-mc-kpi > strong { color: #0f172a; }
-:root.light .dealer-panel .dealer-module-card[data-module="inventory"] .dealer-mc-kpi > strong { color: #0891b2; }
-:root.light .dealer-panel .dealer-module-card[data-module="publish"] .dealer-mc-kpi > strong   { color: #16a34a; }
-:root.light .dealer-panel .dealer-module-card[data-module="leads"] .dealer-mc-kpi > strong     { color: #2563eb; }
-:root.light .dealer-panel .dealer-module-card[data-module="metrics"] .dealer-mc-kpi > strong   { color: #7c3aed; }
-:root.light .dealer-panel .dealer-module-card[data-module="sellVehicle"] .dealer-mc-kpi > strong { color: #9333ea; }
-:root.light .dealer-panel .dealer-module-card[data-module="urgent"] .dealer-mc-kpi > strong    { color: #d97706; }
-:root.light .dealer-panel .dealer-module-card[data-module="support"] .dealer-mc-kpi > strong   { color: #334155; }
+:root.light .dealer-panel .dealer-mc-kpi > strong,
+:root[data-theme="light"] .dealer-panel .dealer-mc-kpi > strong { color: #0f172a; }
+:root.light .dealer-panel .dealer-module-card[data-module="inventory"] .dealer-mc-kpi > strong,
+:root[data-theme="light"] .dealer-panel .dealer-module-card[data-module="inventory"] .dealer-mc-kpi > strong { color: #0891b2; }
+:root.light .dealer-panel .dealer-module-card[data-module="publish"] .dealer-mc-kpi > strong,
+:root[data-theme="light"] .dealer-panel .dealer-module-card[data-module="publish"] .dealer-mc-kpi > strong   { color: #16a34a; }
+:root.light .dealer-panel .dealer-module-card[data-module="leads"] .dealer-mc-kpi > strong,
+:root[data-theme="light"] .dealer-panel .dealer-module-card[data-module="leads"] .dealer-mc-kpi > strong     { color: #2563eb; }
+:root.light .dealer-panel .dealer-module-card[data-module="metrics"] .dealer-mc-kpi > strong,
+:root[data-theme="light"] .dealer-panel .dealer-module-card[data-module="metrics"] .dealer-mc-kpi > strong   { color: #7c3aed; }
+:root.light .dealer-panel .dealer-module-card[data-module="sellVehicle"] .dealer-mc-kpi > strong,
+:root[data-theme="light"] .dealer-panel .dealer-module-card[data-module="sellVehicle"] .dealer-mc-kpi > strong { color: #9333ea; }
+:root.light .dealer-panel .dealer-module-card[data-module="urgent"] .dealer-mc-kpi > strong,
+:root[data-theme="light"] .dealer-panel .dealer-module-card[data-module="urgent"] .dealer-mc-kpi > strong    { color: #d97706; }
+:root.light .dealer-panel .dealer-module-card[data-module="support"] .dealer-mc-kpi > strong,
+:root[data-theme="light"] .dealer-panel .dealer-module-card[data-module="support"] .dealer-mc-kpi > strong   { color: #334155; }
 :root.light .dealer-panel .dealer-module-card[data-module="financing"] .dealer-mc-kpi > strong { color: #94a3b8; }
 
 :root.light .dealer-panel .dealer-mc-kpi > span { color: #64748b; }
