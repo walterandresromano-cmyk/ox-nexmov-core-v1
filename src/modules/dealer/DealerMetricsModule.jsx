@@ -87,7 +87,16 @@ export default function DealerMetricsModule({
   onOpenInventory,
   onOpenLeads,
   onOpenSupport,
+  onOpenPublish,
 }) {
+  function getNavCallback(action) {
+    if (action === "leads")     return onOpenLeads;
+    if (action === "inventory") return onOpenInventory;
+    if (action === "support")   return onOpenSupport;
+    if (action === "publish")   return onOpenPublish;
+    return null;
+  }
+
   const avgViewsPerVehicle =
     dealerVehicles.length > 0 ? totalDetailViews / dealerVehicles.length : 0;
 
@@ -456,15 +465,27 @@ export default function DealerMetricsModule({
             <div>
               <p className="dealer-commercial-report__section-title">Próximas acciones</p>
               <div className="dealer-commercial-report__actions">
-                {commercialReport.recommendations.map((rec, i) => (
-                  <div
-                    key={`${rec.level}-${i}`}
-                    className={`dealer-commercial-report__recommendation dealer-commercial-report__recommendation--${rec.level}`}
-                  >
-                    <span className="dealer-commercial-report__rec-dot" aria-hidden="true" />
-                    <span>{rec.text}</span>
-                  </div>
-                ))}
+                {commercialReport.recommendations.map((rec, i) => {
+                  const cb = getNavCallback(rec.action);
+                  return (
+                    <div
+                      key={`${rec.level}-${i}`}
+                      className={`dealer-commercial-report__recommendation dealer-commercial-report__recommendation--${rec.level}`}
+                    >
+                      <span className="dealer-commercial-report__rec-dot" aria-hidden="true" />
+                      <span>{rec.text}</span>
+                      {cb && (
+                        <button
+                          type="button"
+                          className="dealer-today-item__btn"
+                          onClick={cb}
+                        >
+                          Ver →
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -485,6 +506,9 @@ export default function DealerMetricsModule({
                       <span>Sin seguimiento</span>
                       <strong>{commercialReport.actionableLeads.withoutFollowUp}</strong>
                       <p>leads activos sin fecha de acción</p>
+                      <button type="button" className="dealer-today-item__btn" onClick={onOpenLeads}>
+                        Ver leads →
+                      </button>
                     </div>
                   )}
                   {commercialReport.inventory.withViewsNoLeads > 0 && (
@@ -492,6 +516,9 @@ export default function DealerMetricsModule({
                       <span>Vistas sin consulta</span>
                       <strong>{commercialReport.inventory.withViewsNoLeads}</strong>
                       <p>publicaciones con vistas pero sin leads</p>
+                      <button type="button" className="dealer-today-item__btn" onClick={onOpenInventory}>
+                        Ver inventario →
+                      </button>
                     </div>
                   )}
                   {commercialReport.inventory.zeroViews > 0 && (
@@ -499,6 +526,9 @@ export default function DealerMetricsModule({
                       <span>Sin vistas</span>
                       <strong>{commercialReport.inventory.zeroViews}</strong>
                       <p>publicaciones activas sin ninguna vista</p>
+                      <button type="button" className="dealer-today-item__btn" onClick={onOpenInventory}>
+                        Ver inventario →
+                      </button>
                     </div>
                   )}
                   {commercialReport.conversion.hasEnoughViewsForRate && (

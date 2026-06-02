@@ -290,6 +290,7 @@ export function buildDealerCommercialReport({
   if (funnel.new > 0) {
     allRecs.push({
       level: "urgent",
+      action: "leads",
       text: `Tenés ${funnel.new} ${p(funnel.new, "lead", "leads")} sin responder. Respondé rápido para no perder oportunidades.`,
     });
   }
@@ -298,6 +299,7 @@ export function buildDealerCommercialReport({
     const n = actionableLeads.overdue;
     allRecs.push({
       level: "urgent",
+      action: "leads",
       text: n === 1
         ? "Tenés 1 seguimiento vencido. Reagendá o cerrá ese contacto para mantener limpio el pipeline."
         : `Tenés ${n} seguimientos vencidos. Reagendá o cerrá esos contactos para mantener limpio el pipeline.`,
@@ -308,6 +310,7 @@ export function buildDealerCommercialReport({
     const n = inventory.withViewsNoLeads;
     allRecs.push({
       level: "attention",
+      action: "inventory",
       text: n === 1
         ? "1 publicación recibe vistas pero no genera consultas. Revisá fotos, precio y descripción."
         : `${n} publicaciones reciben vistas pero no generan consultas. Revisá fotos, precio y descripción.`,
@@ -318,6 +321,7 @@ export function buildDealerCommercialReport({
     const n = inventory.zeroViews;
     allRecs.push({
       level: "attention",
+      action: "inventory",
       text: n === 1
         ? "1 publicación activa no tiene vistas. Revisá si está completa y bien presentada."
         : `${n} publicaciones activas no tienen vistas. Revisá si están completas y bien presentadas.`,
@@ -327,6 +331,7 @@ export function buildDealerCommercialReport({
   if (actionableLeads.withoutFollowUp > 3) {
     allRecs.push({
       level: "attention",
+      action: "leads",
       text: `Tenés ${actionableLeads.withoutFollowUp} leads activos sin próxima acción. Asigná seguimiento para no perder oportunidades.`,
     });
   }
@@ -335,6 +340,7 @@ export function buildDealerCommercialReport({
     const n = inventory.lowScore;
     allRecs.push({
       level: "info",
+      action: "inventory",
       text: n === 1
         ? "1 publicación tiene score bajo. Completá fotos, descripción y datos clave."
         : `${n} publicaciones tienen score bajo. Completá fotos, descripción y datos clave.`,
@@ -344,6 +350,7 @@ export function buildDealerCommercialReport({
   if (plan.quotaFull) {
     allRecs.push({
       level: "urgent",
+      action: "support",
       text: "Alcanzaste el cupo del período. Revisá publicaciones vendidas o consultá por más capacidad.",
     });
   }
@@ -351,6 +358,7 @@ export function buildDealerCommercialReport({
   if (!plan.quotaFull && !isPlatinum && remaining >= 3) {
     allRecs.push({
       level: "info",
+      action: "publish",
       text: `Tenés ${remaining} ${p(remaining, "espacio disponible", "espacios disponibles")} para sumar unidades al catálogo.`,
     });
   }
@@ -358,13 +366,14 @@ export function buildDealerCommercialReport({
   if (mostLeads && mostLeads.score < 70) {
     allRecs.push({
       level: "info",
+      action: "inventory",
       text: "Tu publicación con más interés puede mejorar su score. Completala para aumentar la conversión.",
     });
   }
 
   const recommendations = allRecs.length > 0
     ? allRecs.slice(0, 4)
-    : [{ level: "ok", text: "Tu operación está ordenada. Mantené actualizados los leads y el inventario." }];
+    : [{ level: "ok", action: null, text: "Tu operación está ordenada. Mantené actualizados los leads y el inventario." }];
 
   // ── Copy text ─────────────────────────────────────────────────────
   const dealerName = dealer?.commercialName || dealer?.name || "Panel Dealer";

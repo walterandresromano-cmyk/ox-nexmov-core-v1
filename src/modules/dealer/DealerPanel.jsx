@@ -2332,6 +2332,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             onOpenInventory={() => openModule("inventory")}
             onOpenLeads={() => openModule("leads")}
             onOpenSupport={() => openModule("support")}
+            onOpenPublish={() => openModule("publish")}
           />
         )}
 
