@@ -108,6 +108,7 @@ const DEALER_MOBILE_SECTIONS = [
   { id: "leads", label: "Leads" },
   { id: "tickets", label: "Soporte" },
   { id: "publish", label: "Publicar" },
+  { id: "metrics", label: "Métricas" },
   { id: "plan", label: "Ajustes" },
 ];
 
@@ -529,7 +530,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
       sellVehicle: "leads",
       urgent: "vehicles",
       financing: "plan",
-      metrics: "plan",
+      metrics: "metrics",
       radar: "radar",
     }[moduleName];
 
@@ -563,6 +564,11 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
     if (sectionId === "tickets") {
       setActiveDealerModule("support");
+      return;
+    }
+
+    if (sectionId === "metrics") {
+      setActiveDealerModule("metrics");
       return;
     }
 
@@ -1950,7 +1956,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
           activeDealerModule === "summary" &&
           renderDealerMobileSettings()}
 
-        {activeDealerModule === "summary" && (
+        {activeDealerModule === "summary" && activeDealerMobileSection !== "plan" && (
           <>
           {renderDealerOnboarding()}
 
@@ -1985,7 +1991,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
           </>
         )}
 
-        {activeDealerModule === "summary" && (
+        {activeDealerModule === "summary" && activeDealerMobileSection !== "plan" && (
           <section className="dealer-today-block">
             <h3 className="dealer-today-block__title">Qué hacer hoy</h3>
             {todayActions.length === 0 ? (
@@ -2021,7 +2027,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
           </section>
         )}
 
-        {activeDealerModule === "summary" && notifications.length > 0 && (
+        {activeDealerModule === "summary" && activeDealerMobileSection !== "plan" && notifications.length > 0 && (
           <div className="dealer-notifications-section">
             <div className="dealer-notifications-head">
               <div>
@@ -2062,7 +2068,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
           </div>
         )}
 
-        {activeDealerModule === "summary" && (
+        {activeDealerModule === "summary" && activeDealerMobileSection !== "plan" && (
           <div className="dealer-modules-grid">
 
             <article
