@@ -424,11 +424,17 @@ function AgendaView({ groups, onOpen }) {
   );
 }
 
-export default function DealerLeadsModule({ leads, onRefresh, onBack }) {
+export default function DealerLeadsModule({
+  leads,
+  onRefresh,
+  onBack,
+  initialStage = "all",
+  initialViewMode = "pipeline",
+}) {
   const [selectedLead, setSelectedLead] = useState(null);
-  const [activeStage, setActiveStage] = useState("all");
+  const [activeStage, setActiveStage] = useState(initialStage);
   const [search, setSearch] = useState("");
-  const [viewMode, setViewMode] = useState("pipeline");
+  const [viewMode, setViewMode] = useState(initialViewMode);
 
   const stageCounts = useMemo(() =>
     PIPELINE_STAGES.reduce((acc, stage) => {

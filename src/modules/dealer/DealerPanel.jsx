@@ -363,6 +363,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
   const [markingRead, setMarkingRead] = useState(false);
 
   const [showVehicleModal, setShowVehicleModal] = useState(false);
+  const [leadsInitialContext, setLeadsInitialContext] = useState(null);
 
   const [whatsappForm, setWhatsappForm] = useState("");
   const [savingWhatsapp, setSavingWhatsapp] = useState(false);
@@ -539,6 +540,11 @@ export default function DealerPanel({ authProfile, onNavigate }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  function navigateToLeads(ctx = null) {
+    setLeadsInitialContext(ctx ?? null);
+    openModule("leads");
+  }
+
   function handleDealerMobileSectionChange(sectionId) {
     setActiveDealerMobileSection(sectionId);
 
@@ -558,7 +564,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
     }
 
     if (sectionId === "leads") {
-      setActiveDealerModule("leads");
+      navigateToLeads();
       return;
     }
 
@@ -661,18 +667,18 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
     const newLeads = leads.filter((l) => l.crm_status === "new").length;
     if (newLeads > 0) {
-      items.push({ level: "urgent", key: "new_leads", label: `Responder ${newLeads} lead${newLeads !== 1 ? "s" : ""} nuevo${newLeads !== 1 ? "s" : ""}`, sub: "Sin respuesta aún.", action: () => openModule("leads") });
+      items.push({ level: "urgent", key: "new_leads", label: `Responder ${newLeads} lead${newLeads !== 1 ? "s" : ""} nuevo${newLeads !== 1 ? "s" : ""}`, sub: "Sin respuesta aún.", action: () => navigateToLeads() });
     }
 
     const overdueLeads = leads.filter((l) => l.next_action_date && new Date(l.next_action_date + "T00:00:00") < today).length;
     if (overdueLeads > 0) {
-      items.push({ level: "urgent", key: "overdue", label: `${overdueLeads} seguimiento${overdueLeads !== 1 ? "s" : ""} vencido${overdueLeads !== 1 ? "s" : ""}`, sub: "Acción requerida.", action: () => openModule("leads") });
+      items.push({ level: "urgent", key: "overdue", label: `${overdueLeads} seguimiento${overdueLeads !== 1 ? "s" : ""} vencido${overdueLeads !== 1 ? "s" : ""}`, sub: "Acción requerida.", action: () => navigateToLeads() });
     }
 
     const todayStr = [today.getFullYear(), String(today.getMonth() + 1).padStart(2, "0"), String(today.getDate()).padStart(2, "0")].join("-");
     const todayLeads = leads.filter((l) => l.next_action_date === todayStr).length;
     if (todayLeads > 0) {
-      items.push({ level: "attention", key: "today_leads", label: `${todayLeads} seguimiento${todayLeads !== 1 ? "s" : ""} programado${todayLeads !== 1 ? "s" : ""} para hoy`, sub: "Revisá tu agenda.", action: () => openModule("leads") });
+      items.push({ level: "attention", key: "today_leads", label: `${todayLeads} seguimiento${todayLeads !== 1 ? "s" : ""} programado${todayLeads !== 1 ? "s" : ""} para hoy`, sub: "Revisá tu agenda.", action: () => navigateToLeads() });
     }
 
     const inReview = dealerVehicles.filter((v) => v.review_status === "needs_review").length;
@@ -2105,7 +2111,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             <article
               data-module="leads"
               className="dealer-module-card clickable-module-card"
-              onClick={() => openModule("leads")}
+              onClick={() => navigateToLeads()}
             >
               <div className="dealer-mc-kpi">
                 <strong>{newLeadsCount}</strong>
@@ -2270,6 +2276,8 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             leads={leads}
             onRefresh={loadLeads}
             onBack={handleModuleBack}
+            initialStage={leadsInitialContext?.stage ?? "all"}
+            initialViewMode={leadsInitialContext?.viewMode ?? "pipeline"}
           />
         )}
 
@@ -2330,7 +2338,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             onRefresh={loadDealerVehicles}
             onBack={handleModuleBack}
             onOpenInventory={() => openModule("inventory")}
-            onOpenLeads={() => openModule("leads")}
+            onOpenLeads={navigateToLeads}
             onOpenSupport={() => openModule("support")}
             onOpenPublish={() => openModule("publish")}
           />

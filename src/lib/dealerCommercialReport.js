@@ -291,6 +291,7 @@ export function buildDealerCommercialReport({
     allRecs.push({
       level: "urgent",
       action: "leads",
+      actionContext: { stage: "new", viewMode: "pipeline" },
       text: `Tenés ${funnel.new} ${p(funnel.new, "lead", "leads")} sin responder. Respondé rápido para no perder oportunidades.`,
     });
   }
@@ -300,6 +301,7 @@ export function buildDealerCommercialReport({
     allRecs.push({
       level: "urgent",
       action: "leads",
+      actionContext: { viewMode: "agenda" },
       text: n === 1
         ? "Tenés 1 seguimiento vencido. Reagendá o cerrá ese contacto para mantener limpio el pipeline."
         : `Tenés ${n} seguimientos vencidos. Reagendá o cerrá esos contactos para mantener limpio el pipeline.`,
@@ -332,6 +334,7 @@ export function buildDealerCommercialReport({
     allRecs.push({
       level: "attention",
       action: "leads",
+      actionContext: { viewMode: "agenda" },
       text: `Tenés ${actionableLeads.withoutFollowUp} leads activos sin próxima acción. Asigná seguimiento para no perder oportunidades.`,
     });
   }
@@ -373,7 +376,7 @@ export function buildDealerCommercialReport({
 
   const recommendations = allRecs.length > 0
     ? allRecs.slice(0, 4)
-    : [{ level: "ok", action: null, text: "Tu operación está ordenada. Mantené actualizados los leads y el inventario." }];
+    : [{ level: "ok", action: null, actionContext: null, text: "Tu operación está ordenada. Mantené actualizados los leads y el inventario." }];
 
   // ── Copy text ─────────────────────────────────────────────────────
   const dealerName = dealer?.commercialName || dealer?.name || "Panel Dealer";

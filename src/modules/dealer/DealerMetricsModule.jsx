@@ -478,7 +478,7 @@ export default function DealerMetricsModule({
                         <button
                           type="button"
                           className="dealer-today-item__btn"
-                          onClick={cb}
+                          onClick={() => cb(rec.actionContext ?? null)}
                         >
                           Ver →
                         </button>
