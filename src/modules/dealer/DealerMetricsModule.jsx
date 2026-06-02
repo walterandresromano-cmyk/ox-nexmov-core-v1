@@ -506,7 +506,7 @@ export default function DealerMetricsModule({
                       <span>Sin seguimiento</span>
                       <strong>{commercialReport.actionableLeads.withoutFollowUp}</strong>
                       <p>leads activos sin fecha de acción</p>
-                      <button type="button" className="dealer-today-item__btn" onClick={onOpenLeads}>
+                      <button type="button" className="dealer-today-item__btn" onClick={() => onOpenLeads({ viewMode: "agenda", agendaGroup: "nodate" })}>
                         Ver leads →
                       </button>
                     </div>
@@ -526,7 +526,7 @@ export default function DealerMetricsModule({
                       <span>Sin vistas</span>
                       <strong>{commercialReport.inventory.zeroViews}</strong>
                       <p>publicaciones activas sin ninguna vista</p>
-                      <button type="button" className="dealer-today-item__btn" onClick={onOpenInventory}>
+                      <button type="button" className="dealer-today-item__btn" onClick={() => onOpenInventory({ filterStatus: "active", sortBy: "views_asc" })}>
                         Ver inventario →
                       </button>
                     </div>
