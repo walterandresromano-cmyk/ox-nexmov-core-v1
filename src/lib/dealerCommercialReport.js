@@ -367,8 +367,10 @@ export function buildDealerCommercialReport({
     : [{ level: "ok", text: "Tu operación está ordenada. Mantené actualizados los leads y el inventario." }];
 
   // ── Copy text ─────────────────────────────────────────────────────
-  const dealerName = dealer?.commercialName || dealer?.name || "Dealer";
-  const dateLabel  = new Intl.DateTimeFormat("es-AR", { dateStyle: "short" }).format(new Date());
+  const dealerName = dealer?.commercialName || dealer?.name || "Panel Dealer";
+  const dateLabel  = new Intl.DateTimeFormat("es-AR", {
+    day: "numeric", month: "short", year: "numeric",
+  }).format(new Date());
 
   const topLine = mostLeads
     ? `• ${mostLeads.title} — ${mostLeads.leads} ${p(mostLeads.leads, "lead", "leads")}`
@@ -382,6 +384,7 @@ export function buildDealerCommercialReport({
     `• Nuevos: ${funnel.new}`,
     `• En gestión: ${funnel.negotiation}`,
     `• Cerrados: ${funnel.closed}`,
+    `• Perdidos: ${funnel.lost}`,
     "",
     "INVENTARIO",
     `• Activas: ${inventory.active}`,

@@ -314,6 +314,211 @@ export default function DealerMetricsModule({
         </div>
       </section>
 
+      {/* ── Reporte comercial ── */}
+      <section className="dealer-commercial-report">
+        <div className="dealer-commercial-report__head">
+          <div>
+            <h3>Reporte comercial</h3>
+            <p>Lectura rápida del movimiento de tus publicaciones y leads.</p>
+          </div>
+          <button
+            type="button"
+            className={`dealer-commercial-report__copy${
+              copyState === "copied" ? " is-copied" : copyState === "error" ? " is-error" : ""
+            }`}
+            onClick={handleCopy}
+            aria-label={
+              copyState === "copied"
+                ? "Informe copiado al portapapeles"
+                : copyState === "error"
+                ? "No se pudo copiar el informe"
+                : "Copiar informe al portapapeles"
+            }
+          >
+            {copyState === "copied"
+              ? "Copiado ✓"
+              : copyState === "error"
+              ? "No se pudo copiar"
+              : "Copiar informe"}
+          </button>
+        </div>
+
+        {dealerVehicles.length === 0 ? (
+          <p className="dealer-commercial-report__empty">
+            Cargá tus primeras publicaciones para generar un reporte comercial.
+          </p>
+        ) : leads.length === 0 ? (
+          <p className="dealer-commercial-report__empty">
+            Todavía no hay leads suficientes para analizar el rendimiento comercial.
+          </p>
+        ) : (
+          <>
+            {/* A — Resumen comercial (datos distintos a plan-perf) */}
+            <div>
+              <p className="dealer-commercial-report__section-title">Resumen comercial</p>
+              <div className="dealer-commercial-report__grid">
+                <div className={`dealer-commercial-report__metric${commercialReport.funnel.new > 0 ? " dealer-commercial-report__metric--alert" : ""}`}>
+                  <strong>{commercialReport.funnel.new}</strong>
+                  <span>Sin responder</span>
+                </div>
+                <div className="dealer-commercial-report__metric">
+                  <strong>{commercialReport.funnel.contacted}</strong>
+                  <span>Contactados</span>
+                </div>
+                <div className="dealer-commercial-report__metric">
+                  <strong>{commercialReport.funnel.negotiation}</strong>
+                  <span>En gestión</span>
+                </div>
+                <div className={`dealer-commercial-report__metric${commercialReport.funnel.lost > 0 ? " dealer-commercial-report__metric--alert" : ""}`}>
+                  <strong>{commercialReport.funnel.lost}</strong>
+                  <span>Perdidos</span>
+                </div>
+                {commercialReport.actionableLeads.withoutFollowUp > 0 && (
+                  <div className={`dealer-commercial-report__metric${commercialReport.actionableLeads.withoutFollowUp > 3 ? " dealer-commercial-report__metric--warning" : ""}`}>
+                    <strong>{commercialReport.actionableLeads.withoutFollowUp}</strong>
+                    <span>Sin seguimiento</span>
+                  </div>
+                )}
+                {commercialReport.inventory.lowScore > 0 && (
+                  <div className="dealer-commercial-report__metric dealer-commercial-report__metric--warning">
+                    <strong>{commercialReport.inventory.lowScore}</strong>
+                    <span>Score bajo</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* B — Top publicaciones */}
+            {(commercialReport.topVehicles.mostLeads ||
+              commercialReport.topVehicles.mostViews ||
+              commercialReport.topVehicles.bestScore ||
+              commercialReport.topVehicles.highViewsNoLeads) ? (
+              <div>
+                <p className="dealer-commercial-report__section-title">Top publicaciones</p>
+                <div className="dealer-commercial-report__tops">
+                  {commercialReport.topVehicles.mostLeads && (
+                    <div className="dealer-commercial-report__vehicle">
+                      <span className="dealer-commercial-report__vehicle-label">Más interés</span>
+                      <div className="dealer-commercial-report__vehicle-info">
+                        <strong>{commercialReport.topVehicles.mostLeads.title}</strong>
+                        <span>Score {commercialReport.topVehicles.mostLeads.score}%</span>
+                      </div>
+                      <div className="dealer-commercial-report__vehicle-stat">
+                        <strong>{commercialReport.topVehicles.mostLeads.leads}</strong>
+                        <span>{commercialReport.topVehicles.mostLeads.leads === 1 ? "lead" : "leads"}</span>
+                      </div>
+                    </div>
+                  )}
+                  {commercialReport.topVehicles.mostViews && (
+                    <div className="dealer-commercial-report__vehicle">
+                      <span className="dealer-commercial-report__vehicle-label">Más vistas</span>
+                      <div className="dealer-commercial-report__vehicle-info">
+                        <strong>{commercialReport.topVehicles.mostViews.title}</strong>
+                        <span>Score {commercialReport.topVehicles.mostViews.score}%</span>
+                      </div>
+                      <div className="dealer-commercial-report__vehicle-stat">
+                        <strong>{commercialReport.topVehicles.mostViews.views}</strong>
+                        <span>vistas</span>
+                      </div>
+                    </div>
+                  )}
+                  {commercialReport.topVehicles.bestScore && (
+                    <div className="dealer-commercial-report__vehicle">
+                      <span className="dealer-commercial-report__vehicle-label">Mejor score</span>
+                      <div className="dealer-commercial-report__vehicle-info">
+                        <strong>{commercialReport.topVehicles.bestScore.title}</strong>
+                        <span>{commercialReport.topVehicles.bestScore.views} vistas</span>
+                      </div>
+                      <div className="dealer-commercial-report__vehicle-stat">
+                        <strong>{commercialReport.topVehicles.bestScore.score}%</strong>
+                        <span>score</span>
+                      </div>
+                    </div>
+                  )}
+                  {commercialReport.topVehicles.highViewsNoLeads && (
+                    <div className="dealer-commercial-report__vehicle">
+                      <span className="dealer-commercial-report__vehicle-label">Sin consultas</span>
+                      <div className="dealer-commercial-report__vehicle-info">
+                        <strong>{commercialReport.topVehicles.highViewsNoLeads.title}</strong>
+                        <span>Score {commercialReport.topVehicles.highViewsNoLeads.score}%</span>
+                      </div>
+                      <div className="dealer-commercial-report__vehicle-stat">
+                        <strong>{commercialReport.topVehicles.highViewsNoLeads.views}</strong>
+                        <span>vistas · 0 leads</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null}
+
+            {/* C — Recomendaciones */}
+            <div>
+              <p className="dealer-commercial-report__section-title">Próximas acciones</p>
+              <div className="dealer-commercial-report__actions">
+                {commercialReport.recommendations.map((rec, i) => (
+                  <div
+                    key={`${rec.level}-${i}`}
+                    className={`dealer-commercial-report__recommendation dealer-commercial-report__recommendation--${rec.level}`}
+                  >
+                    <span className="dealer-commercial-report__rec-dot" aria-hidden="true" />
+                    <span>{rec.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* D — Alertas de conversión */}
+            {(commercialReport.actionableLeads.withoutFollowUp > 0 ||
+              commercialReport.inventory.withViewsNoLeads > 0 ||
+              commercialReport.inventory.zeroViews > 0 ||
+              commercialReport.conversion.hasEnoughViewsForRate) && (
+              <div>
+                <p className="dealer-commercial-report__section-title">Datos de conversión</p>
+                <div className="dealer-commercial-report__alerts">
+                  {commercialReport.actionableLeads.withoutFollowUp > 0 && (
+                    <div className={`dealer-commercial-report__alert-card${
+                      commercialReport.actionableLeads.withoutFollowUp > 3
+                        ? " dealer-commercial-report__alert-card--warn"
+                        : ""
+                    }`}>
+                      <span>Sin seguimiento</span>
+                      <strong>{commercialReport.actionableLeads.withoutFollowUp}</strong>
+                      <p>leads activos sin fecha de acción</p>
+                    </div>
+                  )}
+                  {commercialReport.inventory.withViewsNoLeads > 0 && (
+                    <div className="dealer-commercial-report__alert-card dealer-commercial-report__alert-card--warn">
+                      <span>Vistas sin consulta</span>
+                      <strong>{commercialReport.inventory.withViewsNoLeads}</strong>
+                      <p>publicaciones con vistas pero sin leads</p>
+                    </div>
+                  )}
+                  {commercialReport.inventory.zeroViews > 0 && (
+                    <div className="dealer-commercial-report__alert-card dealer-commercial-report__alert-card--danger">
+                      <span>Sin vistas</span>
+                      <strong>{commercialReport.inventory.zeroViews}</strong>
+                      <p>publicaciones activas sin ninguna vista</p>
+                    </div>
+                  )}
+                  {commercialReport.conversion.hasEnoughViewsForRate && (
+                    <div className={`dealer-commercial-report__alert-card${
+                      (commercialReport.conversion.viewToLeadRate ?? 0) >= 2
+                        ? " dealer-commercial-report__alert-card--good"
+                        : ""
+                    }`}>
+                      <span>Conversión vista/lead</span>
+                      <strong>{commercialReport.conversion.viewToLeadRate}%</strong>
+                      <p>de vistas se convierten en consulta</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </section>
+
       {/* Period status */}
       <div className={`dealer-metrics-period ${getPlanAlertClass(expiresInDays)}`}>
         <div className="dealer-metrics-period-item">
@@ -594,188 +799,6 @@ export default function DealerMetricsModule({
           </table>
         </div>
       )}
-
-      {/* ── Reporte comercial ── */}
-      <section className="dealer-commercial-report">
-        <div className="dealer-commercial-report__head">
-          <div>
-            <h3>Reporte comercial</h3>
-            <p>Lectura rápida del movimiento de tus publicaciones y leads.</p>
-          </div>
-          <button
-            type="button"
-            className={`dealer-commercial-report__copy${
-              copyState === "copied" ? " is-copied" : copyState === "error" ? " is-error" : ""
-            }`}
-            onClick={handleCopy}
-          >
-            {copyState === "copied"
-              ? "Copiado ✓"
-              : copyState === "error"
-              ? "No se pudo copiar"
-              : "Copiar informe"}
-          </button>
-        </div>
-
-        {dealerVehicles.length === 0 ? (
-          <p className="dealer-commercial-report__empty">
-            Cargá tus primeras publicaciones para generar un reporte comercial.
-          </p>
-        ) : leads.length === 0 ? (
-          <p className="dealer-commercial-report__empty">
-            Todavía no hay leads suficientes para analizar el rendimiento comercial.
-          </p>
-        ) : (
-          <>
-            {/* A — Resumen comercial */}
-            <div>
-              <p className="dealer-commercial-report__section-title">Resumen comercial</p>
-              <div className="dealer-commercial-report__grid">
-                <div className="dealer-commercial-report__metric">
-                  <strong>{commercialReport.funnel.total}</strong>
-                  <span>Leads totales</span>
-                </div>
-                <div className={`dealer-commercial-report__metric${commercialReport.funnel.new > 0 ? " dealer-commercial-report__metric--alert" : ""}`}>
-                  <strong>{commercialReport.funnel.new}</strong>
-                  <span>Sin responder</span>
-                </div>
-                <div className="dealer-commercial-report__metric">
-                  <strong>{commercialReport.funnel.negotiation}</strong>
-                  <span>En gestión</span>
-                </div>
-                <div className={`dealer-commercial-report__metric${commercialReport.funnel.closed > 0 ? " dealer-commercial-report__metric--success" : ""}`}>
-                  <strong>{commercialReport.funnel.closed}</strong>
-                  <span>Cerrados</span>
-                </div>
-                <div className="dealer-commercial-report__metric">
-                  <strong>{commercialReport.inventory.active}</strong>
-                  <span>Activas</span>
-                </div>
-                {commercialReport.inventory.lowScore > 0 && (
-                  <div className="dealer-commercial-report__metric dealer-commercial-report__metric--warning">
-                    <strong>{commercialReport.inventory.lowScore}</strong>
-                    <span>Score bajo</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* B — Top publicaciones */}
-            {(commercialReport.topVehicles.mostLeads ||
-              commercialReport.topVehicles.mostViews ||
-              commercialReport.topVehicles.bestScore) ? (
-              <div>
-                <p className="dealer-commercial-report__section-title">Top publicaciones</p>
-                <div className="dealer-commercial-report__tops">
-                  {commercialReport.topVehicles.mostLeads && (
-                    <div className="dealer-commercial-report__vehicle">
-                      <span className="dealer-commercial-report__vehicle-label">Más interés</span>
-                      <div className="dealer-commercial-report__vehicle-info">
-                        <strong>{commercialReport.topVehicles.mostLeads.title}</strong>
-                        <span>Score {commercialReport.topVehicles.mostLeads.score}%</span>
-                      </div>
-                      <div className="dealer-commercial-report__vehicle-stat">
-                        <strong>{commercialReport.topVehicles.mostLeads.leads}</strong>
-                        <span>{commercialReport.topVehicles.mostLeads.leads === 1 ? "lead" : "leads"}</span>
-                      </div>
-                    </div>
-                  )}
-                  {commercialReport.topVehicles.mostViews && (
-                    <div className="dealer-commercial-report__vehicle">
-                      <span className="dealer-commercial-report__vehicle-label">Más vistas</span>
-                      <div className="dealer-commercial-report__vehicle-info">
-                        <strong>{commercialReport.topVehicles.mostViews.title}</strong>
-                        <span>Score {commercialReport.topVehicles.mostViews.score}%</span>
-                      </div>
-                      <div className="dealer-commercial-report__vehicle-stat">
-                        <strong>{commercialReport.topVehicles.mostViews.views}</strong>
-                        <span>vistas</span>
-                      </div>
-                    </div>
-                  )}
-                  {commercialReport.topVehicles.bestScore && (
-                    <div className="dealer-commercial-report__vehicle">
-                      <span className="dealer-commercial-report__vehicle-label">Mejor score</span>
-                      <div className="dealer-commercial-report__vehicle-info">
-                        <strong>{commercialReport.topVehicles.bestScore.title}</strong>
-                        <span>{commercialReport.topVehicles.bestScore.views} vistas</span>
-                      </div>
-                      <div className="dealer-commercial-report__vehicle-stat">
-                        <strong>{commercialReport.topVehicles.bestScore.score}%</strong>
-                        <span>score</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : null}
-
-            {/* C — Recomendaciones */}
-            <div>
-              <p className="dealer-commercial-report__section-title">Próximas acciones</p>
-              <div className="dealer-commercial-report__actions">
-                {commercialReport.recommendations.map((rec, i) => (
-                  <div
-                    key={i}
-                    className={`dealer-commercial-report__recommendation dealer-commercial-report__recommendation--${rec.level}`}
-                  >
-                    <span className="dealer-commercial-report__rec-dot" />
-                    <span>{rec.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* D — Alertas de conversión (nuevas en Fase 2) */}
-            {(commercialReport.actionableLeads.withoutFollowUp > 0 ||
-              commercialReport.inventory.withViewsNoLeads > 0 ||
-              commercialReport.inventory.zeroViews > 0 ||
-              commercialReport.conversion.hasEnoughViewsForRate) && (
-              <div>
-                <p className="dealer-commercial-report__section-title">Datos de conversión</p>
-                <div className="dealer-commercial-report__alerts">
-                  {commercialReport.actionableLeads.withoutFollowUp > 0 && (
-                    <div className={`dealer-commercial-report__alert-card${
-                      commercialReport.actionableLeads.withoutFollowUp > 3
-                        ? " dealer-commercial-report__alert-card--warn"
-                        : ""
-                    }`}>
-                      <span>Sin seguimiento</span>
-                      <strong>{commercialReport.actionableLeads.withoutFollowUp}</strong>
-                      <p>leads activos sin fecha de acción</p>
-                    </div>
-                  )}
-                  {commercialReport.inventory.withViewsNoLeads > 0 && (
-                    <div className="dealer-commercial-report__alert-card dealer-commercial-report__alert-card--warn">
-                      <span>Vistas sin consulta</span>
-                      <strong>{commercialReport.inventory.withViewsNoLeads}</strong>
-                      <p>publicaciones con vistas pero sin leads</p>
-                    </div>
-                  )}
-                  {commercialReport.inventory.zeroViews > 0 && (
-                    <div className="dealer-commercial-report__alert-card dealer-commercial-report__alert-card--danger">
-                      <span>Sin vistas</span>
-                      <strong>{commercialReport.inventory.zeroViews}</strong>
-                      <p>publicaciones activas sin ninguna vista</p>
-                    </div>
-                  )}
-                  {commercialReport.conversion.hasEnoughViewsForRate && (
-                    <div className={`dealer-commercial-report__alert-card${
-                      (commercialReport.conversion.viewToLeadRate ?? 0) >= 2
-                        ? " dealer-commercial-report__alert-card--good"
-                        : ""
-                    }`}>
-                      <span>Conversión vista/lead</span>
-                      <strong>{commercialReport.conversion.viewToLeadRate}%</strong>
-                      <p>de vistas se convierten en consulta</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </section>
 
       {/* Plan upgrade CTA */}
       {nextPlanInfo.next && (
