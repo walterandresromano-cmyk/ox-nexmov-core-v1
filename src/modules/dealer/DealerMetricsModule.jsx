@@ -3,26 +3,7 @@ import {
   getScoreLabel,
   getScoreChipClass,
 } from "../../lib/publicationScore.js";
-
-function formatLimit(limit) {
-  return limit === Infinity ? "Ilimitado" : limit;
-}
-
-function getPlanAlertClass(days) {
-  if (days <= 0) return "plan-alert expired";
-  if (days <= 2) return "plan-alert critical";
-  if (days <= 6) return "plan-alert urgent";
-  if (days <= 14) return "plan-alert warning";
-  return "plan-alert healthy";
-}
-
-function getPlanAlertLabel(days) {
-  if (days <= 0) return "Período vencido";
-  if (days <= 2) return `Vence en ${days} días`;
-  if (days <= 6) return `Vencimiento cercano · ${days} días`;
-  if (days <= 14) return `Próximo a vencer · ${days} días`;
-  return `Activo · ${days} días restantes`;
-}
+import { formatLimit, getPlanAlertClass, getPlanAlertLabel } from "../../lib/dealerPlan.js";
 
 const RESPONDED_STATUSES = new Set([
   "seen", "contacted", "contactado", "in_progress", "en_gestion",

@@ -11,6 +11,8 @@ import {
   getPublicationScore,
   getScoreLabel,
   getScoreChipClass,
+  getScoreBand,
+  getScoreHealthLabel,
 } from "../../lib/publicationScore.js";
 import { updateCurrentDealerVehicleStatus } from "../../services/dealerVehicles.service.js";
 
@@ -83,19 +85,6 @@ const SUGGESTION_MAP = {
   "Ubicación (ciudad/provincia)":     { text: "Completá la ubicación",               action: "editar" },
 };
 
-function getHealthLabel(score) {
-  if (score >= 90) return "Excelente publicación";
-  if (score >= 70) return "Publicación sólida";
-  if (score >= 50) return "Puede mejorar";
-  return "Publicación débil";
-}
-
-function getHealthBand(score) {
-  if (score >= 90) return "excellent";
-  if (score >= 70) return "good";
-  if (score >= 50) return "fair";
-  return "weak";
-}
 
 export default function DealerInventoryModule({ dealerVehicles, dealerLeads = [], dealerName = "", onRefresh, onBack }) {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
@@ -422,13 +411,13 @@ export default function DealerInventoryModule({ dealerVehicles, dealerLeads = []
                   <div className="dealer-inv-card__health">
                     <div className="dealer-inv-card__health-bar">
                       <div
-                        className={`dealer-inv-card__health-fill dealer-inv-card__health-fill--${getHealthBand(score)}`}
+                        className={`dealer-inv-card__health-fill dealer-inv-card__health-fill--${getScoreBand(score)}`}
                         style={{ width: `${score}%` }}
                       />
                     </div>
                     <div className="dealer-inv-card__health-row">
-                      <span className={`dealer-inv-card__health-label dealer-inv-card__health-label--${getHealthBand(score)}`}>
-                        {getHealthLabel(score)}
+                      <span className={`dealer-inv-card__health-label dealer-inv-card__health-label--${getScoreBand(score)}`}>
+                        {getScoreHealthLabel(score)}
                       </span>
                       {missing.length > 0 && (
                         <button

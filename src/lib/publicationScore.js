@@ -101,3 +101,17 @@ export function getScoreChipClass(score) {
   if (score >= 50) return "warning";
   return "danger";
 }
+
+export function getScoreBand(score) {
+  if (score >= 90) return "excellent";
+  if (score >= 70) return "good";
+  if (score >= 50) return "fair";
+  return "weak";
+}
+
+export function getScoreHealthLabel(score) {
+  if (score >= 90) return "Excelente publicación";
+  if (score >= 70) return "Publicación sólida";
+  if (score >= 50) return "Puede mejorar";
+  return "Publicación débil";
+}

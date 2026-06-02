@@ -16,6 +16,7 @@ import {
 } from "../../lib/permissions.js";
 import { normalizeWhatsAppArgentina, formatRelativeTime } from "../../lib/formatters.js";
 import { getPublicationScore } from "../../lib/publicationScore.js";
+import { formatLimit, getPlanAlertClass, getPlanAlertLabel } from "../../lib/dealerPlan.js";
 
 import {
   listDealersForCurrentUser,
@@ -169,25 +170,6 @@ const DEALER_FEATURE_PREVIEWS = [
   },
 ];
 
-function formatLimit(limit) {
-  return limit === Infinity ? "Ilimitado" : limit;
-}
-
-function getPlanAlertClass(days) {
-  if (days <= 0) return "plan-alert expired";
-  if (days <= 2) return "plan-alert critical";
-  if (days <= 6) return "plan-alert urgent";
-  if (days <= 14) return "plan-alert warning";
-  return "plan-alert healthy";
-}
-
-function getPlanAlertLabel(days) {
-  if (days <= 0) return "Período vencido";
-  if (days <= 2) return `Vence en ${days} días`;
-  if (days <= 6) return `Vencimiento cercano · ${days} días`;
-  if (days <= 14) return `Próximo a vencer · ${days} días`;
-  return `Activo · ${days} días restantes`;
-}
 
 function getPlanStatusLabel(status) {
   const labels = {
@@ -348,15 +330,6 @@ function getPlanBenefitBadges(permissions, isPlatinum) {
   }
 
   return badges;
-}
-
-function formatDateTime(dateValue) {
-  if (!dateValue) return "Sin fecha";
-
-  return new Intl.DateTimeFormat("es-AR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(new Date(dateValue));
 }
 
 export default function DealerPanel({ authProfile, onNavigate }) {
