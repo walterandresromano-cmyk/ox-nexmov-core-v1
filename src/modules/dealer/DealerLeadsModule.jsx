@@ -400,7 +400,7 @@ function AgendaGroup({ label, state, leads, onOpen, defaultOpen = false }) {
   );
 }
 
-function AgendaView({ groups, onOpen }) {
+function AgendaView({ groups, onOpen, initialAgendaGroup = null }) {
   const total = Object.values(groups).reduce((s, g) => s + g.length, 0);
 
   if (total === 0) {
@@ -418,8 +418,8 @@ function AgendaView({ groups, onOpen }) {
       <AgendaGroup label="Vencidos" state="overdue" leads={groups.overdue} onOpen={onOpen} defaultOpen />
       <AgendaGroup label="Hoy" state="today" leads={groups.today} onOpen={onOpen} defaultOpen />
       <AgendaGroup label="Esta semana" state="week" leads={groups.week} onOpen={onOpen} defaultOpen />
-      <AgendaGroup label="Próximos" state="future" leads={groups.future} onOpen={onOpen} />
-      <AgendaGroup label="Sin fecha asignada" state="nodate" leads={groups.nodate} onOpen={onOpen} />
+      <AgendaGroup label="Próximos" state="future" leads={groups.future} onOpen={onOpen} defaultOpen={initialAgendaGroup === "future"} />
+      <AgendaGroup label="Sin fecha asignada" state="nodate" leads={groups.nodate} onOpen={onOpen} defaultOpen={initialAgendaGroup === "nodate"} />
     </div>
   );
 }
@@ -430,6 +430,7 @@ export default function DealerLeadsModule({
   onBack,
   initialStage = "all",
   initialViewMode = "pipeline",
+  initialAgendaGroup = null,
 }) {
   const [selectedLead, setSelectedLead] = useState(null);
   const [activeStage, setActiveStage] = useState(initialStage);
@@ -569,6 +570,7 @@ export default function DealerLeadsModule({
         <AgendaView
           groups={agendaGroups}
           onOpen={handleOpenLead}
+          initialAgendaGroup={initialAgendaGroup}
         />
       ) : (
         <>

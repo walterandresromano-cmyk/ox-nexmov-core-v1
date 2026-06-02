@@ -301,7 +301,7 @@ export function buildDealerCommercialReport({
     allRecs.push({
       level: "urgent",
       action: "leads",
-      actionContext: { viewMode: "agenda" },
+      actionContext: { viewMode: "agenda", agendaGroup: "overdue" },
       text: n === 1
         ? "Tenés 1 seguimiento vencido. Reagendá o cerrá ese contacto para mantener limpio el pipeline."
         : `Tenés ${n} seguimientos vencidos. Reagendá o cerrá esos contactos para mantener limpio el pipeline.`,
@@ -334,7 +334,7 @@ export function buildDealerCommercialReport({
     allRecs.push({
       level: "attention",
       action: "leads",
-      actionContext: { viewMode: "agenda" },
+      actionContext: { viewMode: "agenda", agendaGroup: "nodate" },
       text: `Tenés ${actionableLeads.withoutFollowUp} leads activos sin próxima acción. Asigná seguimiento para no perder oportunidades.`,
     });
   }

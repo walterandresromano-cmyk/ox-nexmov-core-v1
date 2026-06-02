@@ -2278,6 +2278,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             onBack={handleModuleBack}
             initialStage={leadsInitialContext?.stage ?? "all"}
             initialViewMode={leadsInitialContext?.viewMode ?? "pipeline"}
+            initialAgendaGroup={leadsInitialContext?.agendaGroup ?? null}
           />
         )}
 
