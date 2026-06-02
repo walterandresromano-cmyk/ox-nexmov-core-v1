@@ -68,12 +68,42 @@ function matchesScoreFilter(score, filter) {
   return true;
 }
 
+const SUGGESTION_MAP = {
+  "Foto principal":                   { text: "Cargá la foto principal",             action: "fotos" },
+  "3 o más fotos":                    { text: "Agregá al menos 3 fotos",             action: "fotos" },
+  "Descripción (50+ caracteres)":     { text: "Completá la descripción",             action: "editar" },
+  "Precio cargado":                   { text: "Revisá el precio",                    action: "editar" },
+  "Precio de referencia de mercado":  { text: "Cargá el precio de referencia",       action: "editar" },
+  "Año del vehículo":                 { text: "Completá el año",                     action: "editar" },
+  "Kilómetros":                       { text: "Completá los kilómetros",             action: "editar" },
+  "Tipo de carrocería":               { text: "Completá el tipo de carrocería",      action: "editar" },
+  "Transmisión":                      { text: "Completá la transmisión",             action: "editar" },
+  "Tipo de combustible":              { text: "Completá el tipo de combustible",     action: "editar" },
+  "Versión del modelo":               { text: "Completá la versión del modelo",      action: "editar" },
+  "Ubicación (ciudad/provincia)":     { text: "Completá la ubicación",               action: "editar" },
+};
+
+function getHealthLabel(score) {
+  if (score >= 90) return "Excelente publicación";
+  if (score >= 70) return "Publicación sólida";
+  if (score >= 50) return "Puede mejorar";
+  return "Publicación débil";
+}
+
+function getHealthBand(score) {
+  if (score >= 90) return "excellent";
+  if (score >= 70) return "good";
+  if (score >= 50) return "fair";
+  return "weak";
+}
+
 export default function DealerInventoryModule({ dealerVehicles, dealerLeads = [], dealerName = "", onRefresh, onBack }) {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [editingVehicleImages, setEditingVehicleImages] = useState(null);
   const [maintenanceVehicle, setMaintenanceVehicle] = useState(null);
   const [transferVehicle, setTransferVehicle] = useState(null);
+  const [healthExpanded, setHealthExpanded] = useState(null);
 
   // Filters
   const [search, setSearch] = useState("");
@@ -388,6 +418,65 @@ export default function DealerInventoryModule({ dealerVehicles, dealerLeads = []
                     <span className="dealer-inv-card__views">{Number(vehicle.views ?? 0)} vistas</span>
                   </div>
 
+                  {/* Publication health */}
+                  <div className="dealer-inv-card__health">
+                    <div className="dealer-inv-card__health-bar">
+                      <div
+                        className={`dealer-inv-card__health-fill dealer-inv-card__health-fill--${getHealthBand(score)}`}
+                        style={{ width: `${score}%` }}
+                      />
+                    </div>
+                    <div className="dealer-inv-card__health-row">
+                      <span className={`dealer-inv-card__health-label dealer-inv-card__health-label--${getHealthBand(score)}`}>
+                        {getHealthLabel(score)}
+                      </span>
+                      {missing.length > 0 && (
+                        <button
+                          type="button"
+                          className="dealer-inv-card__health-toggle"
+                          onClick={() => setHealthExpanded(
+                            healthExpanded === vehicle.vehicle_id ? null : vehicle.vehicle_id
+                          )}
+                        >
+                          {healthExpanded === vehicle.vehicle_id ? "Cerrar" : "Mejorar"}
+                        </button>
+                      )}
+                    </div>
+                    {healthExpanded === vehicle.vehicle_id && (
+                      <ul className="dealer-inv-card__suggestions">
+                        {missing.length === 0 ? (
+                          <li className="dealer-inv-card__suggestions-complete">
+                            Publicación completa y lista para competir mejor.
+                          </li>
+                        ) : (
+                          missing.slice(0, 3).map((label) => {
+                            const hint = SUGGESTION_MAP[label] ?? { text: label, action: "editar" };
+                            return (
+                              <li key={label} className="dealer-inv-card__suggestion-item">
+                                <span>{hint.text}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    hint.action === "fotos"
+                                      ? setEditingVehicleImages(vehicle)
+                                      : setEditingVehicle(vehicle)
+                                  }
+                                >
+                                  Corregir
+                                </button>
+                              </li>
+                            );
+                          })
+                        )}
+                        {missing.length > 3 && (
+                          <li className="dealer-inv-card__suggestions-more">
+                            +{missing.length - 3} mejora{missing.length - 3 !== 1 ? "s" : ""} adicional{missing.length - 3 !== 1 ? "es" : ""}
+                          </li>
+                        )}
+                      </ul>
+                    )}
+                  </div>
+
                   {/* Price */}
                   <div className="dealer-inv-card__price-row">
                     <span className="dealer-inv-card__price-label">Precio</span>
@@ -402,6 +491,13 @@ export default function DealerInventoryModule({ dealerVehicles, dealerLeads = []
                       onClick={() => setEditingVehicle(vehicle)}
                     >
                       Editar
+                    </button>
+                    <button
+                      type="button"
+                      className="vehicle-card__btn"
+                      onClick={() => setEditingVehicleImages(vehicle)}
+                    >
+                      Fotos
                     </button>
                     <button
                       type="button"

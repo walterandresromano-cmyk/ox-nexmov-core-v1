@@ -15,6 +15,7 @@ import {
   getEffectiveDealerPermissions,
 } from "../../lib/permissions.js";
 import { normalizeWhatsAppArgentina, formatRelativeTime } from "../../lib/formatters.js";
+import { getPublicationScore } from "../../lib/publicationScore.js";
 
 import {
   listDealersForCurrentUser,
@@ -358,24 +359,6 @@ function formatDateTime(dateValue) {
   }).format(new Date(dateValue));
 }
 
-function formatARS(value) {
-  const number = Number(value || 0);
-
-  if (!Number.isFinite(number) || number <= 0) {
-    return "Sin precio";
-  }
-
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS",
-    maximumFractionDigits: 0,
-  }).format(number);
-}
-
-function formatKm(value) {
-  return `${Number(value || 0).toLocaleString("es-AR")} km`;
-}
-
 export default function DealerPanel({ authProfile, onNavigate }) {
   const [activeDealerModule, setActiveDealerModule] = useState("summary");
   const [activeDealerMobileSection, setActiveDealerMobileSection] =
@@ -675,6 +658,65 @@ export default function DealerPanel({ authProfile, onNavigate }) {
     setProfileError("");
     setProfileSuccess("");
   }, [dealer?.id]);
+
+  // todayActions must be before any early return to satisfy Rules of Hooks.
+  // Uses raw state (dealer, leads, dealerVehicles, tickets) — not derived vars
+  // computed after the early return — to avoid TDZ errors.
+  const todayActions = useMemo(() => {
+    if (!dealer) return [];
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const items = [];
+
+    const planStatus = dealer.planStatus;
+    const days = dealer.currentPeriod?.expiresInDays ?? 0;
+
+    if (planStatus === "expired" || planStatus === "expired_grace") {
+      items.push({ level: "urgent", key: "plan_expired", label: "Tu plan comercial venció", sub: "Reactivá tu plan para seguir publicando.", action: null });
+    } else if (typeof days === "number" && days >= 0 && days <= 7) {
+      items.push({ level: "urgent", key: "plan_expiring", label: `Tu plan vence en ${days} día${days !== 1 ? "s" : ""}`, sub: "Contactá a administración para renovar.", action: null });
+    } else if (typeof days === "number" && days > 7 && days <= 14) {
+      items.push({ level: "info", key: "plan_soon", label: `Tu plan vence en ${days} días`, sub: "Planificá la renovación.", action: null });
+    }
+
+    const newLeads = leads.filter((l) => l.crm_status === "new").length;
+    if (newLeads > 0) {
+      items.push({ level: "urgent", key: "new_leads", label: `Responder ${newLeads} lead${newLeads !== 1 ? "s" : ""} nuevo${newLeads !== 1 ? "s" : ""}`, sub: "Sin respuesta aún.", action: () => openModule("leads") });
+    }
+
+    const overdueLeads = leads.filter((l) => l.next_action_date && new Date(l.next_action_date + "T00:00:00") < today).length;
+    if (overdueLeads > 0) {
+      items.push({ level: "urgent", key: "overdue", label: `${overdueLeads} seguimiento${overdueLeads !== 1 ? "s" : ""} vencido${overdueLeads !== 1 ? "s" : ""}`, sub: "Acción requerida.", action: () => openModule("leads") });
+    }
+
+    const todayStr = [today.getFullYear(), String(today.getMonth() + 1).padStart(2, "0"), String(today.getDate()).padStart(2, "0")].join("-");
+    const todayLeads = leads.filter((l) => l.next_action_date === todayStr).length;
+    if (todayLeads > 0) {
+      items.push({ level: "attention", key: "today_leads", label: `${todayLeads} seguimiento${todayLeads !== 1 ? "s" : ""} programado${todayLeads !== 1 ? "s" : ""} para hoy`, sub: "Revisá tu agenda.", action: () => openModule("leads") });
+    }
+
+    const inReview = dealerVehicles.filter((v) => v.review_status === "needs_review").length;
+    if (inReview > 0) {
+      items.push({ level: "attention", key: "review", label: `${inReview} publicación${inReview !== 1 ? "es" : ""} en revisión`, sub: "Requieren corrección.", action: () => openModule("inventory") });
+    }
+
+    const openTickets = tickets.filter((t) => ["new", "open", "in_progress", "waiting_dealer"].includes(t.status)).length;
+    if (openTickets > 0) {
+      items.push({ level: "attention", key: "tickets", label: `${openTickets} ticket${openTickets !== 1 ? "s" : ""} de soporte abierto${openTickets !== 1 ? "s" : ""}`, sub: "Pendiente de respuesta.", action: () => openModule("support") });
+    }
+
+    const lowScore = dealerVehicles.filter((v) => {
+      if (!v.is_active) return false;
+      const { score } = getPublicationScore(v);
+      return score < 50;
+    }).length;
+    if (lowScore > 0) {
+      items.push({ level: "info", key: "low_score", label: `Mejorar ${lowScore} publicación${lowScore !== 1 ? "es" : ""} con calidad baja`, sub: "Completá fotos, precio y descripción.", action: () => openModule("inventory") });
+    }
+
+    return items;
+  }, [dealer, leads, dealerVehicles, tickets]);
 
   if (!dealer) {
     return (
@@ -1101,51 +1143,98 @@ export default function DealerPanel({ authProfile, onNavigate }) {
   }
 
   function renderDealerProfileEditor() {
+    const locationPreview = [dealer.city, dealer.province].filter(Boolean).join(", ");
+
     return (
-      <div className="dealer-mobile-plan-card dealer-profile-edit-card">
-        <p className="eyebrow">Perfil comercial</p>
-        <h3>Datos del dealer</h3>
-        <p>Nombre, ciudad y provincia que aparecen en tu perfil público.</p>
-        <form className="dealer-contact-form" onSubmit={handleSaveDealerProfile}>
-          <label>
-            Nombre comercial
-            <input
-              value={profileForm.name}
-              onChange={(e) => setProfileForm((f) => ({ ...f, name: e.target.value }))}
-              placeholder="Ej: Automotores Rodríguez"
+      <div className="dealer-profile-editor">
+        {/* Preview strip */}
+        <div className="dealer-profile-editor__preview">
+          {dealerLogo ? (
+            <img
+              src={dealerLogo}
+              alt={dealer.commercialName}
+              className="dealer-profile-editor__logo"
             />
-          </label>
-          <label>
-            Ciudad
-            <input
-              value={profileForm.city}
-              onChange={(e) => setProfileForm((f) => ({ ...f, city: e.target.value }))}
-              placeholder="Ej: San Miguel"
-            />
-          </label>
-          <label>
-            Provincia
-            <input
-              value={profileForm.province}
-              onChange={(e) => setProfileForm((f) => ({ ...f, province: e.target.value }))}
-              placeholder="Ej: Buenos Aires"
-            />
-          </label>
-          {profileError && <div className="auth-warning">{profileError}</div>}
+          ) : (
+            <div className="dealer-profile-editor__logo-placeholder">
+              {dealer.commercialName?.[0] ?? "D"}
+            </div>
+          )}
+          <div className="dealer-profile-editor__preview-info">
+            <strong>{dealer.commercialName}</strong>
+            {locationPreview && <span>{locationPreview}</span>}
+            {dealer.phoneWhatsapp && (
+              <span>+{dealer.phoneWhatsapp}</span>
+            )}
+          </div>
+          {onNavigate && dealer?.id && (
+            <button
+              type="button"
+              className="dealer-profile-editor__preview-link"
+              onClick={() => onNavigate("dealerProfile", { dealerId: dealer.id })}
+            >
+              Ver perfil público →
+            </button>
+          )}
+        </div>
+
+        <form className="dealer-profile-editor__form" onSubmit={handleSaveDealerProfile}>
+          {/* A — Identidad comercial */}
+          <div className="dealer-settings-section">
+            <p className="dealer-settings-section__title">Identidad comercial</p>
+            <label className="dealer-settings-section__field">
+              <span>Nombre comercial</span>
+              <input
+                value={profileForm.name}
+                onChange={(e) => setProfileForm((f) => ({ ...f, name: e.target.value }))}
+                placeholder="Ej: Automotores Rodríguez"
+              />
+            </label>
+          </div>
+
+          {/* C — Ubicación */}
+          <div className="dealer-settings-section">
+            <p className="dealer-settings-section__title">Ubicación</p>
+            <div className="dealer-settings-section__grid">
+              <label className="dealer-settings-section__field">
+                <span>Ciudad</span>
+                <input
+                  value={profileForm.city}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, city: e.target.value }))}
+                  placeholder="Ej: San Miguel"
+                />
+              </label>
+              <label className="dealer-settings-section__field">
+                <span>Provincia</span>
+                <input
+                  value={profileForm.province}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, province: e.target.value }))}
+                  placeholder="Ej: Buenos Aires"
+                />
+              </label>
+            </div>
+          </div>
+
+          {profileError   && <div className="auth-warning">{profileError}</div>}
           {profileSuccess && <div className="auth-message">{profileSuccess}</div>}
-          <button type="submit" className="table-action-btn" disabled={savingProfile}>
-            {savingProfile ? "Guardando…" : "Guardar perfil"}
+
+          <button type="submit" className="primary-action" disabled={savingProfile}>
+            {savingProfile ? "Guardando…" : "Guardar cambios"}
           </button>
         </form>
-        {onNavigate && dealer?.id && (
-          <button
-            type="button"
-            className="dealer-profile-preview-btn"
-            onClick={() => onNavigate("dealerProfile", { dealerId: dealer.id })}
-          >
-            Ver mi perfil público →
-          </button>
-        )}
+
+        {/* Próximamente */}
+        <div className="dealer-settings-coming-soon">
+          <p className="dealer-settings-coming-soon__label">Próximamente en configuración</p>
+          <ul>
+            <li>Descripción de la agencia</li>
+            <li>Horario de atención</li>
+            <li>Sitio web</li>
+            <li>Instagram / redes sociales</li>
+            <li>Dirección comercial</li>
+            <li>Email de contacto</li>
+          </ul>
+        </div>
       </div>
     );
   }
@@ -1923,6 +2012,42 @@ export default function DealerPanel({ authProfile, onNavigate }) {
           </>
         )}
 
+        {activeDealerModule === "summary" && (
+          <section className="dealer-today-block">
+            <h3 className="dealer-today-block__title">Qué hacer hoy</h3>
+            {todayActions.length === 0 ? (
+              <div className="dealer-today-block__all-clear">
+                <span className="dealer-today-block__all-clear-icon">✓</span>
+                <div>
+                  <strong>Todo al día</strong>
+                  <p>Tu panel no tiene acciones urgentes por ahora.</p>
+                </div>
+              </div>
+            ) : (
+              <ul className="dealer-today-block__list">
+                {todayActions.map((item) => (
+                  <li key={item.key} className={`dealer-today-item dealer-today-item--${item.level}`}>
+                    <div className="dealer-today-item__dot" />
+                    <div className="dealer-today-item__content">
+                      <strong>{item.label}</strong>
+                      <span>{item.sub}</span>
+                    </div>
+                    {item.action && (
+                      <button
+                        type="button"
+                        className="dealer-today-item__btn"
+                        onClick={item.action}
+                      >
+                        Ver →
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+
         {activeDealerModule === "summary" && notifications.length > 0 && (
           <div className="dealer-notifications-section">
             <div className="dealer-notifications-head">
@@ -2215,9 +2340,14 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             expiresInDays={expiresInDays}
             used={used}
             limit={limit}
+            remaining={remaining}
+            extraQuota={extraQuota}
             isPlatinum={isPlatinum}
             rankLabel={permissions.rankLabel}
             planId={permissions.planId}
+            planStatus={dealer.planStatus}
+            permissions={permissions}
+            reviewVehiclesCount={reviewVehiclesCount}
             onRefresh={loadDealerVehicles}
             onBack={handleModuleBack}
             onOpenInventory={() => openModule("inventory")}
@@ -2229,7 +2359,6 @@ export default function DealerPanel({ authProfile, onNavigate }) {
         {activeDealerModule === "urgent" && (
           <DealerUrgentModule
             dealerVehicles={dealerVehicles}
-            reviewVehiclesCount={reviewVehiclesCount}
             onRefresh={loadDealerVehicles}
             onBack={handleModuleBack}
           />

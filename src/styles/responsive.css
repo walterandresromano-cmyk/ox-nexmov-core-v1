@@ -14921,3 +14921,203 @@ textarea:focus-visible,
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(241, 248, 251, 0.32)) !important;
 }
+
+/* ─── Dealer mobile — nuevos componentes (inventario, agenda, modales) ─── */
+
+@media (max-width: 900px) {
+  /* Filter bar: wrappeable en mobile */
+  .inventory-filter-bar {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    overflow-x: unset !important;
+  }
+
+  .inventory-filter-search {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .inventory-filter-bar select {
+    flex: 0 0 calc(50% - 3px) !important;
+    width: auto !important;
+    font-size: 0.76rem !important;
+  }
+
+  .inventory-filter-count {
+    margin-left: 0 !important;
+    align-self: center;
+  }
+
+  /* Today block: compacto */
+  .dealer-today-block {
+    padding: 14px 14px !important;
+  }
+
+  .dealer-today-item {
+    gap: 8px !important;
+    padding: 9px 10px !important;
+  }
+
+  .dealer-today-item__content strong {
+    font-size: 0.78rem !important;
+    white-space: normal !important;
+  }
+
+  .dealer-today-item__btn {
+    flex-shrink: 0;
+    padding: 4px 9px !important;
+    font-size: 0.65rem !important;
+  }
+
+  /* Inventory card grid: gap menor en mobile */
+  .dealer-inventory-grid {
+    gap: 10px !important;
+  }
+
+  /* Agenda view */
+  .agenda-lead-row {
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+
+  .agenda-lead-row__main {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 4px !important;
+  }
+
+  .agenda-lead-row__meta {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  .agenda-lead-row__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  /* Modales: ocupan ancho completo */
+  .dealer-maintenance-modal,
+  .dealer-transfer-modal {
+    width: 100% !important;
+    max-height: 88vh !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+  }
+
+  .dealer-transfer-modal--done {
+    padding: 24px 16px !important;
+  }
+
+  .dealer-maintenance-modal__next-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Maintenance entry: colapsa a 2 filas */
+  .dealer-maintenance-entry__row {
+    grid-template-columns: 1fr auto !important;
+    grid-template-rows: auto auto;
+  }
+
+  /* type select ocupa fila completa, date+km en fila 1, remove en fila 1 */
+  .dealer-maintenance-entry__row select {
+    grid-column: 1 / -1 !important;
+  }
+
+  .dealer-maintenance-modal__footer {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .dealer-maintenance-modal__footer button {
+    width: 100% !important;
+    min-height: 42px;
+  }
+
+  /* Transfer passport: padding reducido */
+  .dealer-transfer-passport__header {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .dealer-transfer-modal__lead-section select,
+  .dealer-transfer-modal__lead-section input {
+    width: 100% !important;
+  }
+
+  /* Bulk action bar: compacto */
+  .inventory-bulk-bar {
+    flex-wrap: wrap !important;
+    gap: 7px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Filter bar a una columna por selector */
+  .inventory-filter-bar select {
+    flex: 0 0 100% !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Card inventory: 1 columna forzada */
+  .dealer-inventory-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Actions del card: 2 columnas (ya implementado) */
+  .dealer-inv-card__actions {
+    gap: 6px !important;
+  }
+
+  /* Chips wrappeable en pantallas muy chicas */
+  .dealer-inv-card__chips {
+    flex-wrap: wrap !important;
+  }
+
+  /* Today block: items apilados */
+  .dealer-today-item {
+    flex-wrap: wrap !important;
+  }
+
+  .dealer-today-item__btn {
+    width: 100% !important;
+    margin-top: 4px !important;
+    text-align: center !important;
+  }
+
+  /* Inventory health toggle: tap target cómodo en mobile */
+  .dealer-inv-card__health-toggle {
+    padding: 6px 12px !important;
+    min-height: 32px !important;
+  }
+
+  /* Urgent card actions: wrap forzado + tap target */
+  .dealer-urgent-card__actions {
+    flex-wrap: wrap !important;
+  }
+
+  .dealer-urgent-card__actions .vehicle-card__btn {
+    min-height: 36px !important;
+  }
+
+  /* Plan perf kpis: 2 columnas forzadas en pantallas muy angostas */
+  .dealer-plan-perf__kpis {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Fix: dealer-mobile-home flex direction (display:flex !important at L14253 overrides grid) */
+@media (max-width: 900px) {
+  .dealer-panel .dealer-mobile-home,
+  .dealer-panel .dealer-mobile-plan {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  /* Ensure dealer-header-control (3-col desktop grid) is fully hidden on mobile */
+  .dealer-panel > .dealer-header-control {
+    display: none !important;
+  }
+}

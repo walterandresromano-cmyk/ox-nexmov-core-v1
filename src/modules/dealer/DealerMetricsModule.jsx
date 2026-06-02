@@ -91,9 +91,14 @@ export default function DealerMetricsModule({
   expiresInDays,
   used,
   limit,
+  remaining = 0,
+  extraQuota = 0,
   isPlatinum,
   rankLabel,
   planId,
+  planStatus,
+  permissions,
+  reviewVehiclesCount = 0,
   onRefresh,
   onBack,
   onOpenInventory,
@@ -135,6 +140,48 @@ export default function DealerMetricsModule({
   const currentPlanKey = String(planId || "inicio").toLowerCase();
   const nextPlanInfo = NEXT_PLAN[currentPlanKey] || NEXT_PLAN.inicio;
 
+  // Plan performance derived data
+  const quotaPct = isPlatinum ? 100 : limit > 0 ? Math.min(100, Math.round((used / limit) * 100)) : 0;
+  const quotaNearLimit = !isPlatinum && limit > 0 && remaining <= 2;
+  const quotaFull = !isPlatinum && remaining <= 0;
+
+  const lowScoreCount = dealerVehicles.filter((v) => {
+    if (!v.is_active) return false;
+    const { score } = getPublicationScore(v);
+    return score < 50;
+  }).length;
+
+  const closedLeads = leads.filter((l) =>
+    ["sold", "closed", "cerrado"].includes(String(l.crm_status || "").toLowerCase())
+  ).length;
+
+  const planExpired = planStatus === "expired" || planStatus === "expired_grace";
+  const planExpiringSoon = !planExpired && expiresInDays >= 0 && expiresInDays <= 7;
+
+  const planBenefits = [
+    isPlatinum
+      ? "Publicaciones ilimitadas"
+      : `Hasta ${limit} publicaciones por período`,
+    permissions?.marketIntelligence && "Inteligencia de mercado",
+    permissions?.sellVehicleLeads && "Compradores que buscan vender su auto",
+    permissions?.fullFinancingTools && "Herramientas de financiación",
+    !isPlatinum && permissions?.badgeVisibility !== "limited"
+      && `Badge ${rankLabel} visible en publicaciones`,
+  ].filter(Boolean).slice(0, 4);
+
+  // Smart recommendation
+  const recommendation = (() => {
+    if (planExpired) return { text: "Tu plan venció. Contactá a administración para reactivar.", level: "urgent" };
+    if (planExpiringSoon) return { text: `Tu plan vence en ${expiresInDays} día${expiresInDays !== 1 ? "s" : ""}. Planificá la renovación.`, level: "urgent" };
+    if (quotaFull) return { text: "Alcanzaste el cupo de publicaciones. Marcá vendidas las unidades cerradas para liberar cupo.", level: "attention" };
+    if (quotaNearLimit) return { text: `Quedan ${remaining} publicación${remaining !== 1 ? "es" : ""} disponible${remaining !== 1 ? "s" : ""} en tu plan.`, level: "attention" };
+    if (newLeadsCount > 0) return { text: `Tenés ${newLeadsCount} lead${newLeadsCount !== 1 ? "s" : ""} nuevo${newLeadsCount !== 1 ? "s" : ""} sin responder. Respondé rápido para no perder la oportunidad.`, level: "attention" };
+    if (reviewVehiclesCount > 0) return { text: `${reviewVehiclesCount} publicación${reviewVehiclesCount !== 1 ? "es" : ""} en revisión. Corregí los datos para que vuelvan a ser visibles.`, level: "attention" };
+    if (lowScoreCount > 0) return { text: `${lowScoreCount} publicación${lowScoreCount !== 1 ? "es" : ""} con score bajo. Mejorá fotos y descripción para aumentar consultas.`, level: "info" };
+    if (!isPlatinum && remaining >= 3) return { text: "Tenés cupo disponible para sumar más unidades a tu inventario.", level: "info" };
+    return { text: "Tu plan está activo y tu inventario no tiene bloqueos críticos.", level: "ok" };
+  })();
+
   return (
     <div className="dealer-leads-section">
       <div className="buyer-section-head dealer-module-open-head">
@@ -152,6 +199,99 @@ export default function DealerMetricsModule({
           Actualizar
         </button>
       </div>
+
+      {/* ── Rendimiento de mi plan ── */}
+      <section className="dealer-plan-perf">
+        <h3 className="dealer-plan-perf__title">Rendimiento de mi plan</h3>
+
+        {/* A — Plan state */}
+        <div className="dealer-plan-perf__plan-row">
+          <div className="dealer-plan-perf__plan-name">
+            <span className="dealer-plan-perf__plan-label">Plan activo</span>
+            <strong>{rankLabel}</strong>
+          </div>
+          <span className={`dealer-plan-perf__plan-status ${planExpired ? "is-expired" : planExpiringSoon ? "is-expiring" : "is-ok"}`}>
+            {planExpired
+              ? "Vencido"
+              : planExpiringSoon
+                ? `Vence en ${expiresInDays}d`
+                : `Activo · ${expiresInDays}d`}
+          </span>
+        </div>
+
+        {/* B — Quota bar */}
+        <div className="dealer-plan-perf__quota">
+          <div className="dealer-plan-perf__quota-row">
+            <span>
+              {isPlatinum
+                ? `${used} publicaciones creadas · sin límite`
+                : `${used} de ${limit} publicaciones usadas`}
+            </span>
+            {extraQuota > 0 && (
+              <span className="dealer-plan-perf__extra">+{extraQuota} extra</span>
+            )}
+            {!isPlatinum && <span className="dealer-plan-perf__pct">{quotaPct}%</span>}
+          </div>
+          {!isPlatinum && (
+            <div className="dealer-plan-perf__bar">
+              <div
+                className={`dealer-plan-perf__bar-fill${quotaFull ? " is-full" : quotaNearLimit ? " is-near" : ""}`}
+                style={{ width: `${quotaPct}%` }}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* C — Inventory health + commercial */}
+        <div className="dealer-plan-perf__kpis">
+          <div className="dealer-plan-perf__kpi">
+            <strong>{activeVehiclesCount}</strong>
+            <span>Publicaciones activas</span>
+          </div>
+          <div className="dealer-plan-perf__kpi">
+            <strong>{leads.length}</strong>
+            <span>Leads totales</span>
+          </div>
+          <div className="dealer-plan-perf__kpi">
+            <strong>{newLeadsCount}</strong>
+            <span>Sin responder</span>
+          </div>
+          <div className="dealer-plan-perf__kpi">
+            <strong>{closedLeads}</strong>
+            <span>Vendidos / cerrados</span>
+          </div>
+          {reviewVehiclesCount > 0 && (
+            <div className="dealer-plan-perf__kpi dealer-plan-perf__kpi--alert">
+              <strong>{reviewVehiclesCount}</strong>
+              <span>En revisión</span>
+            </div>
+          )}
+          {lowScoreCount > 0 && (
+            <div className="dealer-plan-perf__kpi dealer-plan-perf__kpi--warning">
+              <strong>{lowScoreCount}</strong>
+              <span>Score bajo</span>
+            </div>
+          )}
+        </div>
+
+        {/* D — Plan benefits */}
+        {planBenefits.length > 0 && (
+          <div className="dealer-plan-perf__benefits">
+            <span className="dealer-plan-perf__benefits-label">Incluido en tu plan</span>
+            <ul>
+              {planBenefits.map((b, i) => (
+                <li key={i}>{b}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* E — Smart recommendation */}
+        <div className={`dealer-plan-perf__rec dealer-plan-perf__rec--${recommendation.level}`}>
+          <span className="dealer-plan-perf__rec-dot" />
+          <p>{recommendation.text}</p>
+        </div>
+      </section>
 
       {/* Period status */}
       <div className={`dealer-metrics-period ${getPlanAlertClass(expiresInDays)}`}>
