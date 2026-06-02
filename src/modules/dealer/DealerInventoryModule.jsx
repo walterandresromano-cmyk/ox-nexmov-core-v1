@@ -86,7 +86,16 @@ const SUGGESTION_MAP = {
 };
 
 
-export default function DealerInventoryModule({ dealerVehicles, dealerLeads = [], dealerName = "", onRefresh, onBack }) {
+export default function DealerInventoryModule({
+  dealerVehicles,
+  dealerLeads = [],
+  dealerName = "",
+  onRefresh,
+  onBack,
+  initialFilterScore = "",
+  initialFilterStatus = "",
+  initialSortBy = "default",
+}) {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [editingVehicleImages, setEditingVehicleImages] = useState(null);
@@ -96,10 +105,10 @@ export default function DealerInventoryModule({ dealerVehicles, dealerLeads = []
 
   // Filters
   const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+  const [filterStatus, setFilterStatus] = useState(initialFilterStatus);
   const [filterReview, setFilterReview] = useState("");
-  const [filterScore, setFilterScore] = useState("");
-  const [sortBy, setSortBy] = useState("default");
+  const [filterScore, setFilterScore] = useState(initialFilterScore);
+  const [sortBy, setSortBy] = useState(initialSortBy);
 
   // Bulk
   const [selected, setSelected] = useState(new Set());

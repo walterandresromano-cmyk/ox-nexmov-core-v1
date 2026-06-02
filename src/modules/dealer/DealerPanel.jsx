@@ -364,6 +364,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
   const [showVehicleModal, setShowVehicleModal] = useState(false);
   const [leadsInitialContext, setLeadsInitialContext] = useState(null);
+  const [inventoryInitialContext, setInventoryInitialContext] = useState(null);
 
   const [whatsappForm, setWhatsappForm] = useState("");
   const [savingWhatsapp, setSavingWhatsapp] = useState(false);
@@ -545,6 +546,11 @@ export default function DealerPanel({ authProfile, onNavigate }) {
     openModule("leads");
   }
 
+  function navigateToInventory(ctx = null) {
+    setInventoryInitialContext(ctx ?? null);
+    openModule("inventory");
+  }
+
   function handleDealerMobileSectionChange(sectionId) {
     setActiveDealerMobileSection(sectionId);
 
@@ -559,7 +565,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
     }
 
     if (sectionId === "vehicles") {
-      setActiveDealerModule("inventory");
+      navigateToInventory();
       return;
     }
 
@@ -683,7 +689,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
     const inReview = dealerVehicles.filter((v) => v.review_status === "needs_review").length;
     if (inReview > 0) {
-      items.push({ level: "attention", key: "review", label: `${inReview} publicación${inReview !== 1 ? "es" : ""} en revisión`, sub: "Requieren corrección.", action: () => openModule("inventory") });
+      items.push({ level: "attention", key: "review", label: `${inReview} publicación${inReview !== 1 ? "es" : ""} en revisión`, sub: "Requieren corrección.", action: () => navigateToInventory() });
     }
 
     const openTickets = tickets.filter((t) => ["new", "open", "in_progress", "waiting_dealer"].includes(t.status)).length;
@@ -697,7 +703,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
       return score < 50;
     }).length;
     if (lowScore > 0) {
-      items.push({ level: "info", key: "low_score", label: `Mejorar ${lowScore} publicación${lowScore !== 1 ? "es" : ""} con calidad baja`, sub: "Completá fotos, precio y descripción.", action: () => openModule("inventory") });
+      items.push({ level: "info", key: "low_score", label: `Mejorar ${lowScore} publicación${lowScore !== 1 ? "es" : ""} con calidad baja`, sub: "Completá fotos, precio y descripción.", action: () => navigateToInventory() });
     }
 
     return items;
@@ -2080,7 +2086,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             <article
               data-module="inventory"
               className="dealer-module-card clickable-module-card"
-              onClick={() => openModule("inventory")}
+              onClick={() => navigateToInventory()}
             >
               <div className="dealer-mc-kpi">
                 <strong>{activeVehiclesCount}</strong>
@@ -2216,6 +2222,9 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             dealerName={dealer?.commercialName ?? ""}
             onRefresh={loadDealerVehicles}
             onBack={handleModuleBack}
+            initialFilterScore={inventoryInitialContext?.filterScore ?? ""}
+            initialFilterStatus={inventoryInitialContext?.filterStatus ?? ""}
+            initialSortBy={inventoryInitialContext?.sortBy ?? "default"}
           />
         )}
 
@@ -2338,7 +2347,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             reviewVehiclesCount={reviewVehiclesCount}
             onRefresh={loadDealerVehicles}
             onBack={handleModuleBack}
-            onOpenInventory={() => openModule("inventory")}
+            onOpenInventory={navigateToInventory}
             onOpenLeads={navigateToLeads}
             onOpenSupport={() => openModule("support")}
             onOpenPublish={() => openModule("publish")}

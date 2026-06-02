@@ -324,6 +324,7 @@ export function buildDealerCommercialReport({
     allRecs.push({
       level: "attention",
       action: "inventory",
+      actionContext: { filterStatus: "active", sortBy: "views_asc" },
       text: n === 1
         ? "1 publicación activa no tiene vistas. Revisá si está completa y bien presentada."
         : `${n} publicaciones activas no tienen vistas. Revisá si están completas y bien presentadas.`,
@@ -344,6 +345,7 @@ export function buildDealerCommercialReport({
     allRecs.push({
       level: "info",
       action: "inventory",
+      actionContext: { filterScore: "incomplete" },
       text: n === 1
         ? "1 publicación tiene score bajo. Completá fotos, descripción y datos clave."
         : `${n} publicaciones tienen score bajo. Completá fotos, descripción y datos clave.`,
