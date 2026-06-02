@@ -95,6 +95,7 @@ export default function DealerInventoryModule({
   initialFilterScore = "",
   initialFilterStatus = "",
   initialSortBy = "default",
+  initialInventoryInsight = "",
 }) {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [editingVehicle, setEditingVehicle] = useState(null);
@@ -109,6 +110,7 @@ export default function DealerInventoryModule({
   const [filterReview, setFilterReview] = useState("");
   const [filterScore, setFilterScore] = useState(initialFilterScore);
   const [sortBy, setSortBy] = useState(initialSortBy);
+  const [filterInsight, setFilterInsight] = useState(initialInventoryInsight);
 
   // Bulk
   const [selected, setSelected] = useState(new Set());
@@ -139,12 +141,25 @@ export default function DealerInventoryModule({
       });
     }
 
+    if (filterInsight === "viewsNoLeads") {
+      const leadsByVehicleId = dealerLeads.reduce((acc, l) => {
+        const vid = String(l.vehicle_id || "");
+        if (vid) acc[vid] = (acc[vid] || 0) + 1;
+        return acc;
+      }, {});
+      list = list.filter((v) => {
+        const views = Number(v.views ?? 0);
+        const vLeads = leadsByVehicleId[String(v.vehicle_id || "")] || 0;
+        return v.is_active && views > 0 && vLeads === 0;
+      });
+    }
+
     if (sortBy === "views_desc") list.sort((a, b) => Number(b.views ?? 0) - Number(a.views ?? 0));
     if (sortBy === "views_asc") list.sort((a, b) => Number(a.views ?? 0) - Number(b.views ?? 0));
     if (sortBy === "score_desc") list.sort((a, b) => getPublicationScore(b).score - getPublicationScore(a).score);
 
     return list;
-  }, [dealerVehicles, search, filterStatus, filterReview, filterScore, sortBy]);
+  }, [dealerVehicles, dealerLeads, search, filterStatus, filterReview, filterScore, filterInsight, sortBy]);
 
   const allSelected = filtered.length > 0 && filtered.every((v) => selected.has(v.vehicle_id));
 
@@ -192,9 +207,10 @@ export default function DealerInventoryModule({
     setFilterReview("");
     setFilterScore("");
     setSortBy("default");
+    setFilterInsight("");
   }
 
-  const hasFilters = search || filterStatus || filterReview || filterScore || sortBy !== "default";
+  const hasFilters = search || filterStatus || filterReview || filterScore || sortBy !== "default" || filterInsight;
 
   const agingAlerts = useMemo(() => {
     return dealerVehicles
@@ -242,6 +258,12 @@ export default function DealerInventoryModule({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+
+          {filterInsight === "viewsNoLeads" && (
+            <span className="dealer-inv-context-chip">
+              Filtro: vistas sin consulta
+            </span>
+          )}
 
           <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
             <option value="">Estado: todos</option>

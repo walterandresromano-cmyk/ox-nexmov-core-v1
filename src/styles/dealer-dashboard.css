@@ -2833,3 +2833,24 @@
 
 :root.light .dealer-commercial-report__alert-card--good strong,
 :root[data-theme="light"] .dealer-commercial-report__alert-card--good strong { color: #059669; }
+
+/* ── Contextual insight chip in inventory filter bar ── */
+.dealer-inv-context-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.28);
+  color: rgba(253, 224, 71, 0.9);
+}
+
+:root.light .dealer-inv-context-chip,
+:root[data-theme="light"] .dealer-inv-context-chip {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.28);
+  color: #92400e;
+}

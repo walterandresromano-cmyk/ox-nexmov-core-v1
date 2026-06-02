@@ -2225,6 +2225,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             initialFilterScore={inventoryInitialContext?.filterScore ?? ""}
             initialFilterStatus={inventoryInitialContext?.filterStatus ?? ""}
             initialSortBy={inventoryInitialContext?.sortBy ?? "default"}
+            initialInventoryInsight={inventoryInitialContext?.insight ?? ""}
           />
         )}
 

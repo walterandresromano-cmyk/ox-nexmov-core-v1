@@ -516,7 +516,7 @@ export default function DealerMetricsModule({
                       <span>Vistas sin consulta</span>
                       <strong>{commercialReport.inventory.withViewsNoLeads}</strong>
                       <p>publicaciones con vistas pero sin leads</p>
-                      <button type="button" className="dealer-today-item__btn" onClick={onOpenInventory}>
+                      <button type="button" className="dealer-today-item__btn" onClick={() => onOpenInventory({ insight: "viewsNoLeads" })}>
                         Ver inventario →
                       </button>
                     </div>

@@ -313,6 +313,7 @@ export function buildDealerCommercialReport({
     allRecs.push({
       level: "attention",
       action: "inventory",
+      actionContext: { insight: "viewsNoLeads" },
       text: n === 1
         ? "1 publicación recibe vistas pero no genera consultas. Revisá fotos, precio y descripción."
         : `${n} publicaciones reciben vistas pero no generan consultas. Revisá fotos, precio y descripción.`,
