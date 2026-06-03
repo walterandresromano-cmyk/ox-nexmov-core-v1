@@ -1972,20 +1972,16 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           )}
         </div>
 
-        <div className="buyer-activity-disclosure">
-          <div className="buyer-activity-disclosure-head">
+        <section className="garage-ox-movement buyer-activity-disclosure">
+          <div className="garage-ox-movement__head buyer-activity-disclosure-head">
             <div>
-              <span className="eyebrow">Actividad del comprador</span>
-              <h2>Consultas, favoritos y movimientos comerciales</h2>
-              <p>
-                Información secundaria disponible cuando quieras revisar tu recorrido.
-              </p>
+              <p className="garage-ox-movement__eyebrow">Mi movimiento</p>
+              <h2>Tus consultas, comparaciones y solicitudes dentro de oX.</h2>
             </div>
-            <div className="buyer-activity-disclosure-summary" aria-hidden="true">
-              <span>{favorites.length} favoritos</span>
-              <span>{vehicleLeads.length} consultas</span>
-              <span>{zeroKmLeads.length} 0km</span>
-              <span>{sellVehicleLeads.length} ventas</span>
+            <div className="garage-ox-movement__chips">
+              {vehicleLeads.length > 0 && <span>{vehicleLeads.length} consulta{vehicleLeads.length !== 1 ? "s" : ""}</span>}
+              {zeroKmLeads.length > 0 && <span>{zeroKmLeads.length} 0km</span>}
+              {sellVehicleLeads.length > 0 && <span>{sellVehicleLeads.length} venta{sellVehicleLeads.length !== 1 ? "s" : ""}</span>}
             </div>
             <button
               type="button"
@@ -1993,8 +1989,58 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
               onClick={() => setShowBuyerActivityDetails((current) => !current)}
               aria-expanded={showBuyerActivityDetails}
             >
-              {showBuyerActivityDetails ? "Ocultar actividad" : "Ver actividad"}
+              {showBuyerActivityDetails ? "Ocultar detalle" : "Ver detalle completo"}
             </button>
+          </div>
+
+          {/* Summary — últimas 3 consultas, siempre visible */}
+          <div className="garage-ox-movement__summary">
+            {vehicleLeads.length === 0 ? (
+              <div className="garage-ox-movement__empty">
+                <strong>Sin consultas activas</strong>
+                <p>Cuando consultés un vehículo, va a aparecer acá para hacer seguimiento.</p>
+                <button
+                  type="button"
+                  className="buyer-stat-cta-btn"
+                  onClick={() => onNavigate?.("search")}
+                >
+                  Buscar vehículos →
+                </button>
+              </div>
+            ) : (
+              <>
+                {vehicleLeads.slice(0, 3).map((lead, index) => (
+                  <div key={`movement-${index}`} className="garage-ox-movement-card">
+                    <div className="garage-ox-movement-card__body">
+                      <strong className="garage-ox-movement-card__vehicle">
+                        {[lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ") || "Vehículo"}
+                      </strong>
+                      <span className="garage-ox-movement-card__dealer">
+                        {lead.dealer_name || "Dealer"}
+                      </span>
+                      <time className="garage-ox-movement-card__date">
+                        {formatDateTime(lead.created_at)}
+                      </time>
+                    </div>
+                    <span className={`admin-chip ${getVehicleLeadChipClass(lead.crm_status)}`}>
+                      {getVehicleLeadStatusLabel(lead.crm_status)}
+                    </span>
+                  </div>
+                ))}
+                {vehicleLeads.length > 3 && (
+                  <p className="garage-ox-movement__more">
+                    +{vehicleLeads.length - 3} consulta{vehicleLeads.length - 3 !== 1 ? "s" : ""} más.{" "}
+                    <button
+                      type="button"
+                      className="buyer-stat-cta-btn"
+                      onClick={() => setShowBuyerActivityDetails(true)}
+                    >
+                      Ver todas →
+                    </button>
+                  </p>
+                )}
+              </>
+            )}
           </div>
 
           {showBuyerActivityDetails && (
@@ -2357,7 +2403,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
         </div>
             </div>
           )}
-        </div>
+        </section>
       </div>
     </section>
   );

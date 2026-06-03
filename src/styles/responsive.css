@@ -15156,6 +15156,28 @@ textarea:focus-visible,
   }
 }
 
+/* ── Garage oX V1.3 — Mi movimiento mobile ──────────────────── */
+@media (max-width: 760px) {
+  .garage-ox-movement {
+    padding: 14px;
+    border-radius: 16px;
+    gap: 12px;
+  }
+
+  .garage-ox-movement__head {
+    gap: 8px;
+  }
+
+  .garage-ox-movement-card {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .garage-ox-movement-card .admin-chip {
+    align-self: flex-start;
+  }
+}
+
 /* ── Garage oX V1.2 — Mi búsqueda mobile ────────────────────── */
 @media (max-width: 760px) {
   .garage-ox-search {
