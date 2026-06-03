@@ -2131,6 +2131,241 @@
   max-width: 480px;
 }
 
+/* ── Buyer V2.2 — Shortlist visual ──────────────────────────── */
+
+.buyer-shortlist {
+  display: grid;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    linear-gradient(145deg, rgba(10, 20, 40, 0.68), rgba(5, 10, 22, 0.72));
+  margin-bottom: 4px;
+}
+
+.buyer-shortlist__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.buyer-shortlist__head > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.buyer-shortlist__head h2 {
+  margin: 2px 0 0;
+  font-size: 1.0rem;
+  font-weight: 800;
+  color: rgba(226, 232, 240, 0.96);
+}
+
+.buyer-shortlist__head > div > p {
+  margin: 2px 0 0;
+  font-size: 0.76rem;
+  color: rgba(148, 163, 184, 0.65);
+}
+
+.buyer-shortlist__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px dashed rgba(148, 163, 184, 0.16);
+  background: rgba(148, 163, 184, 0.03);
+}
+
+.buyer-shortlist__empty strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.buyer-shortlist__empty p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(148, 163, 184, 0.65);
+  line-height: 1.45;
+}
+
+.buyer-shortlist__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.buyer-shortlist-card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.42);
+  overflow: hidden;
+  transition: border-color 0.14s, background 0.14s;
+}
+
+.buyer-shortlist-card:hover {
+  border-color: rgba(56, 189, 248, 0.22);
+  background: rgba(15, 23, 42, 0.62);
+}
+
+.buyer-shortlist-card__image {
+  height: 120px;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.buyer-shortlist-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.buyer-shortlist-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.buyer-shortlist-card__placeholder span {
+  font-size: 2rem;
+  font-weight: 900;
+  color: rgba(56, 189, 248, 0.25);
+}
+
+.buyer-shortlist-card__body {
+  padding: 10px 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.buyer-shortlist-card__title {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: rgba(226, 232, 240, 0.96);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.buyer-shortlist-card__price {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(125, 211, 252, 0.9);
+}
+
+.buyer-shortlist-card__meta {
+  font-size: 0.68rem;
+  color: rgba(148, 163, 184, 0.62);
+}
+
+.buyer-shortlist-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px 10px;
+}
+
+.buyer-shortlist-card__actions .table-action-btn {
+  flex: 1;
+  min-height: 34px;
+  font-size: 0.72rem;
+  text-align: center;
+  justify-content: center;
+}
+
+.buyer-shortlist-card__remove {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: transparent;
+  color: rgba(148, 163, 184, 0.55);
+  font-size: 1rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.12s, color 0.12s;
+}
+
+.buyer-shortlist-card__remove:hover {
+  background: rgba(239, 68, 68, 0.10);
+  color: rgba(252, 165, 165, 0.9);
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+/* Light mode */
+:root[data-theme="light"] .buyer-shortlist {
+  background: rgba(248, 250, 252, 0.92);
+  border-color: rgba(148, 163, 184, 0.20);
+}
+
+:root[data-theme="light"] .buyer-shortlist__head h2 {
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .buyer-shortlist__head > div > p {
+  color: #94a3b8;
+}
+
+:root[data-theme="light"] .buyer-shortlist__empty {
+  background: rgba(241, 245, 249, 0.7);
+  border-color: rgba(148, 163, 184, 0.22);
+}
+
+:root[data-theme="light"] .buyer-shortlist__empty strong {
+  color: #1e293b;
+}
+
+:root[data-theme="light"] .buyer-shortlist__empty p {
+  color: #64748b;
+}
+
+:root[data-theme="light"] .buyer-shortlist-card {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(148, 163, 184, 0.20);
+}
+
+:root[data-theme="light"] .buyer-shortlist-card:hover {
+  border-color: rgba(14, 165, 233, 0.30);
+  background: rgba(255, 255, 255, 0.98);
+}
+
+:root[data-theme="light"] .buyer-shortlist-card__image {
+  background: rgba(241, 245, 249, 0.8);
+}
+
+:root[data-theme="light"] .buyer-shortlist-card__title {
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .buyer-shortlist-card__price {
+  color: #0284c7;
+}
+
+:root[data-theme="light"] .buyer-shortlist-card__meta {
+  color: #94a3b8;
+}
+
+:root[data-theme="light"] .buyer-shortlist-card__remove:hover {
+  background: rgba(220, 38, 38, 0.07);
+  color: #dc2626;
+  border-color: rgba(220, 38, 38, 0.20);
+}
+
 /* Light mode */
 :root[data-theme="light"] .buyer-hero {
   background:

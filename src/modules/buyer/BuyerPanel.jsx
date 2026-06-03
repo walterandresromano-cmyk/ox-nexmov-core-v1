@@ -1037,6 +1037,96 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           </article>
         </div>
 
+        {/* Shortlist — favoritos */}
+        <div className="buyer-shortlist">
+          <div className="buyer-shortlist__head">
+            <div>
+              <p className="eyebrow">Tu shortlist</p>
+              <h2>Vehículos guardados</h2>
+              <p>Unidades que guardaste para revisar o comparar.</p>
+            </div>
+            {favorites.length > 0 && (
+              <button
+                type="button"
+                className="admin-refresh-btn"
+                onClick={() => setShowBuyerActivityDetails(true)}
+              >
+                Ver todos ({favorites.length})
+              </button>
+            )}
+          </div>
+
+          {favorites.length === 0 ? (
+            <div className="buyer-shortlist__empty">
+              <strong>Todavía no guardaste vehículos</strong>
+              <p>
+                Cuando encuentres una unidad que te interese, guardala para volver rápido.
+              </p>
+              <button
+                type="button"
+                className="primary-action"
+                onClick={() => onNavigate?.("search")}
+              >
+                Buscar vehículos
+              </button>
+            </div>
+          ) : (
+            <div className="buyer-shortlist__grid">
+              {favorites.slice(0, 4).map((vehicle) => {
+                const imgUrl = vehicle.main_image_url || vehicle.mainImageUrl
+                  || vehicle.imageUrl || vehicle.image_url || "";
+                const title   = [vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(" ");
+                const location = [vehicle.city, vehicle.province].filter(Boolean).join(", ");
+                const price    = Number(vehicle.price || 0);
+
+                return (
+                  <article key={vehicle.id} className="buyer-shortlist-card">
+                    <div className="buyer-shortlist-card__image">
+                      {imgUrl ? (
+                        <img src={imgUrl} alt={title} loading="lazy" />
+                      ) : (
+                        <div className="buyer-shortlist-card__placeholder">
+                          <span>{String(vehicle.brand || "?")[0].toUpperCase()}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="buyer-shortlist-card__body">
+                      <strong className="buyer-shortlist-card__title">
+                        {title || "Vehículo"}
+                      </strong>
+                      {price > 0 && (
+                        <span className="buyer-shortlist-card__price">
+                          {formatARS(price)}
+                        </span>
+                      )}
+                      {location && (
+                        <span className="buyer-shortlist-card__meta">{location}</span>
+                      )}
+                    </div>
+                    <div className="buyer-shortlist-card__actions">
+                      <button
+                        type="button"
+                        className="table-action-btn"
+                        onClick={() => onNavigate?.("vehicleDetail", { vehicleId: vehicle.id })}
+                      >
+                        Ver →
+                      </button>
+                      <button
+                        type="button"
+                        className="buyer-shortlist-card__remove"
+                        onClick={() => appActions?.removeFavorite?.(vehicle.id)}
+                        aria-label="Quitar de favoritos"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
         <div className="dealer-leads-section buyer-radar-section" ref={radarSectionRef}>
           <div className="buyer-section-head">
             <div>
