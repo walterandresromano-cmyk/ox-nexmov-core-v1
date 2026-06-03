@@ -4129,3 +4129,72 @@
     text-align: center;
   }
 }
+
+/* ── V2.3.1 — Stock signal badge ─────────────────────────────── */
+
+.dealer-stock-signal {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  cursor: default;
+  margin-bottom: 2px;
+}
+
+.dealer-stock-signal--good {
+  background: rgba(52, 211, 153, 0.10);
+  border-color: rgba(52, 211, 153, 0.22);
+  color: rgba(52, 211, 153, 0.95);
+}
+
+.dealer-stock-signal--info {
+  background: rgba(56, 189, 248, 0.09);
+  border-color: rgba(56, 189, 248, 0.22);
+  color: rgba(125, 211, 252, 0.95);
+}
+
+.dealer-stock-signal--attention {
+  background: rgba(251, 191, 36, 0.10);
+  border-color: rgba(251, 191, 36, 0.24);
+  color: rgba(253, 224, 71, 0.92);
+}
+
+.dealer-stock-signal--urgent {
+  background: rgba(239, 68, 68, 0.10);
+  border-color: rgba(239, 68, 68, 0.24);
+  color: rgba(252, 165, 165, 0.95);
+}
+
+/* Light mode */
+:root.light .dealer-stock-signal--good,
+:root[data-theme="light"] .dealer-stock-signal--good {
+  background: rgba(5, 150, 105, 0.08);
+  border-color: rgba(5, 150, 105, 0.22);
+  color: #047857;
+}
+
+:root.light .dealer-stock-signal--info,
+:root[data-theme="light"] .dealer-stock-signal--info {
+  background: rgba(14, 165, 233, 0.08);
+  border-color: rgba(14, 165, 233, 0.22);
+  color: #0284c7;
+}
+
+:root.light .dealer-stock-signal--attention,
+:root[data-theme="light"] .dealer-stock-signal--attention {
+  background: rgba(180, 120, 0, 0.08);
+  border-color: rgba(180, 120, 0, 0.20);
+  color: #92400e;
+}
+
+:root.light .dealer-stock-signal--urgent,
+:root[data-theme="light"] .dealer-stock-signal--urgent {
+  background: rgba(220, 38, 38, 0.07);
+  border-color: rgba(220, 38, 38, 0.20);
+  color: #b91c1c;
+}

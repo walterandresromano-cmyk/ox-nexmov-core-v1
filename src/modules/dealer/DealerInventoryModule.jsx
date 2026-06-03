@@ -15,6 +15,7 @@ import {
   getScoreHealthLabel,
 } from "../../lib/publicationScore.js";
 import { updateCurrentDealerVehicleStatus } from "../../services/dealerVehicles.service.js";
+import { getVehicleStockSignal } from "../../lib/vehicleRanking.js";
 
 function getVehicleAgeDays(vehicle) {
   const raw = vehicle.created_at ?? vehicle.createdAt ?? vehicle.published_at ?? null;
@@ -117,6 +118,14 @@ export default function DealerInventoryModule({
   const [bulkLoading, setBulkLoading] = useState(false);
   const [bulkResult, setBulkResult] = useState("");
 
+  const leadsByVehicleId = useMemo(() =>
+    dealerLeads.reduce((acc, l) => {
+      const vid = String(l.vehicle_id || "");
+      if (vid) acc[vid] = (acc[vid] || 0) + 1;
+      return acc;
+    }, {}),
+  [dealerLeads]);
+
   const filtered = useMemo(() => {
     let list = [...dealerVehicles];
 
@@ -142,13 +151,8 @@ export default function DealerInventoryModule({
     }
 
     if (filterInsight === "viewsNoLeads") {
-      const leadsByVehicleId = dealerLeads.reduce((acc, l) => {
-        const vid = String(l.vehicle_id || "");
-        if (vid) acc[vid] = (acc[vid] || 0) + 1;
-        return acc;
-      }, {});
       list = list.filter((v) => {
-        const views = Number(v.views ?? 0);
+        const views  = Number(v.views ?? 0);
         const vLeads = leadsByVehicleId[String(v.vehicle_id || "")] || 0;
         return v.is_active && views > 0 && vLeads === 0;
       });
@@ -159,7 +163,7 @@ export default function DealerInventoryModule({
     if (sortBy === "score_desc") list.sort((a, b) => getPublicationScore(b).score - getPublicationScore(a).score);
 
     return list;
-  }, [dealerVehicles, dealerLeads, search, filterStatus, filterReview, filterScore, filterInsight, sortBy]);
+  }, [dealerVehicles, leadsByVehicleId, search, filterStatus, filterReview, filterScore, filterInsight, sortBy]);
 
   const allSelected = filtered.length > 0 && filtered.every((v) => selected.has(v.vehicle_id));
 
@@ -372,8 +376,10 @@ export default function DealerInventoryModule({
               (Array.isArray(vehicle.images) && vehicle.images[0]?.url) ||
               (Array.isArray(vehicle.images) && vehicle.images[0]?.publicUrl) ||
               null;
-            const ageDays = getVehicleAgeDays(vehicle);
-            const ageBand = getAgingBand(ageDays);
+            const ageDays    = getVehicleAgeDays(vehicle);
+            const ageBand    = getAgingBand(ageDays);
+            const leadCount  = leadsByVehicleId[String(vehicle.vehicle_id || "")] || 0;
+            const stockSignal = getVehicleStockSignal(vehicle, { leads: leadCount, score, ageDays });
 
             return (
               <article
@@ -437,6 +443,16 @@ export default function DealerInventoryModule({
                     )}
                     <span className="dealer-inv-card__views">{Number(vehicle.views ?? 0)} vistas</span>
                   </div>
+
+                  {/* Stock signal badge — only when non-neutral */}
+                  {stockSignal.level !== "neutral" && (
+                    <div
+                      className={`dealer-stock-signal dealer-stock-signal--${stockSignal.level}`}
+                      title={`${stockSignal.reason} · ${stockSignal.action}`}
+                    >
+                      {stockSignal.label}
+                    </div>
+                  )}
 
                   {/* Publication health */}
                   <div className="dealer-inv-card__health">
