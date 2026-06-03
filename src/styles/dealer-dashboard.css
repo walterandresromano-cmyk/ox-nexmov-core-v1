@@ -4047,3 +4047,81 @@
   border-color: rgba(239, 68, 68, 0.25);
   color: #dc2626;
 }
+
+/* Card button — violeta suave, diferenciado de copiar (cyan) y compartir (verde) */
+.dealer-social-kit__card-btn {
+  padding: 9px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.07);
+  color: rgba(196, 181, 253, 0.9);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.dealer-social-kit__card-btn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.14);
+  border-color: rgba(139, 92, 246, 0.48);
+}
+
+.dealer-social-kit__card-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.dealer-social-kit__card-btn--generating {
+  border-color: rgba(139, 92, 246, 0.22);
+  color: rgba(196, 181, 253, 0.65);
+}
+
+.dealer-social-kit__card-btn--done {
+  background: rgba(52, 211, 153, 0.1);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: rgba(52, 211, 153, 0.95);
+}
+
+.dealer-social-kit__card-btn--error {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.28);
+  color: rgba(252, 165, 165, 0.9);
+}
+
+/* Light mode */
+:root.light .dealer-social-kit__card-btn,
+:root[data-theme="light"] .dealer-social-kit__card-btn {
+  background: rgba(124, 58, 237, 0.07);
+  border-color: rgba(124, 58, 237, 0.28);
+  color: #7c3aed;
+}
+
+:root.light .dealer-social-kit__card-btn:hover:not(:disabled),
+:root[data-theme="light"] .dealer-social-kit__card-btn:hover:not(:disabled) {
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(124, 58, 237, 0.45);
+}
+
+:root.light .dealer-social-kit__card-btn--done,
+:root[data-theme="light"] .dealer-social-kit__card-btn--done {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #059669;
+}
+
+:root.light .dealer-social-kit__card-btn--error,
+:root[data-theme="light"] .dealer-social-kit__card-btn--error {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #dc2626;
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .dealer-social-kit__card-btn {
+    width: 100% !important;
+    min-height: 44px !important;
+    text-align: center;
+  }
+}

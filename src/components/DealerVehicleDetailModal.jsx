@@ -4,6 +4,7 @@ import DealerVehicleActions from "./DealerVehicleActions.jsx";
 import OxAssistantPanel from "./OxAssistantPanel.jsx";
 import { getVehicleAssistantInsights } from "../services/oxAssistant.service.js";
 import { buildVehicleSocialCopy, buildVehicleShortSocialCopy } from "../lib/vehicleMarketingCopy.js";
+import { generateVehiclePromoCard } from "../lib/vehicleCard.js";
 
 function formatDateTime(dateValue) {
   if (!dateValue) return "Sin fecha";
@@ -133,6 +134,7 @@ export default function DealerVehicleDetailModal({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [copyKitState, setCopyKitState] = useState("idle");
   const [shareKitState, setShareKitState] = useState("idle");
+  const [cardState, setCardState] = useState("idle");
   const [copyVariant, setCopyVariant] = useState("full");
   const selectedImage = images[selectedImageIndex];
   const assistantInsights = getVehicleAssistantInsights(vehicle);
@@ -207,6 +209,43 @@ export default function DealerVehicleDetailModal({
       setShareKitState("error");
     }
     setTimeout(() => setShareKitState("idle"), 2500);
+  }
+
+  async function handleDownloadCard() {
+    if (cardState === "generating") return;
+    setCardState("generating");
+
+    const imageUrl =
+      images[0]?.url ||
+      vehicle.main_image_url ||
+      vehicle.image_url ||
+      "";
+
+    try {
+      const { dataUrl, filename } = await generateVehiclePromoCard(vehicle, {
+        dealerName,
+        imageUrl,
+        publicUrl,
+      });
+
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.open(dataUrl, "_blank", "noopener,noreferrer");
+      } else {
+        const a = document.createElement("a");
+        a.href     = dataUrl;
+        a.download = filename;
+        a.style.cssText = "position:fixed;opacity:0;pointer-events:none";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+
+      setCardState("done");
+    } catch {
+      setCardState("error");
+    }
+    setTimeout(() => setCardState("idle"), 2500);
   }
 
   return (
@@ -452,6 +491,29 @@ export default function DealerVehicleDetailModal({
                  : "Compartir publicación"}
               </button>
             )}
+
+            <button
+              type="button"
+              className={`dealer-social-kit__card-btn${
+                cardState === "done"  ? " dealer-social-kit__card-btn--done"
+                : cardState === "error" ? " dealer-social-kit__card-btn--error"
+                : cardState === "generating" ? " dealer-social-kit__card-btn--generating"
+                : ""
+              }`}
+              onClick={handleDownloadCard}
+              disabled={cardState === "generating"}
+              aria-label={
+                cardState === "done"       ? "Card generada y descargada"
+                : cardState === "error"    ? "No se pudo generar la card"
+                : cardState === "generating" ? "Generando card..."
+                : "Descargar card para redes"
+              }
+            >
+              {cardState === "done"        ? "Card lista ✓"
+               : cardState === "error"     ? "No se pudo generar"
+               : cardState === "generating" ? "Generando…"
+               : "Descargar card"}
+            </button>
 
             <p className="dealer-social-kit__note">
               El texto incluye los datos actuales de la publicación. Revisá antes de compartir.
