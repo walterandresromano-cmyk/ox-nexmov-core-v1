@@ -551,6 +551,7 @@ export default function DealerInventoryModule({
       {selectedVehicle && (
         <DealerVehicleDetailModal
           vehicle={selectedVehicle}
+          dealerName={dealerName}
           onClose={() => setSelectedVehicle(null)}
           onUpdated={onRefresh}
         />

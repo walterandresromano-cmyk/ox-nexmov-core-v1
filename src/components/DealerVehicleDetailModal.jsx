@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import DealerVehicleActions from "./DealerVehicleActions.jsx";
 import OxAssistantPanel from "./OxAssistantPanel.jsx";
 import { getVehicleAssistantInsights } from "../services/oxAssistant.service.js";
+import { buildVehicleSocialCopy } from "../lib/vehicleMarketingCopy.js";
 
 function formatDateTime(dateValue) {
   if (!dateValue) return "Sin fecha";
@@ -124,15 +125,44 @@ function getVehicleImages(vehicle) {
 
 export default function DealerVehicleDetailModal({
   vehicle,
+  dealerName = "",
   onClose,
   onUpdated,
 }) {
   const images = useMemo(() => getVehicleImages(vehicle), [vehicle]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [copyKitState, setCopyKitState] = useState("idle");
   const selectedImage = images[selectedImageIndex];
   const assistantInsights = getVehicleAssistantInsights(vehicle);
 
   if (!vehicle) return null;
+
+  const publicUrl =
+    typeof window !== "undefined" && vehicle?.vehicle_id
+      ? `${window.location.origin}/vehiculo/${encodeURIComponent(vehicle.vehicle_id)}`
+      : "";
+
+  const socialCopy = buildVehicleSocialCopy(vehicle, { dealerName, publicUrl });
+
+  async function handleCopyKit() {
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(socialCopy);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = socialCopy;
+        ta.style.cssText = "position:fixed;opacity:0;pointer-events:none";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      setCopyKitState("copied");
+    } catch {
+      setCopyKitState("error");
+    }
+    setTimeout(() => setCopyKitState("idle"), 2500);
+  }
 
   return (
     <div className="modal-backdrop">
@@ -302,6 +332,43 @@ export default function DealerVehicleDetailModal({
               <span>Acciones operativas</span>
               <DealerVehicleActions vehicle={vehicle} onUpdated={onUpdated} />
             </article>
+          </div>
+        </div>
+
+        {/* Social kit */}
+        <div className="dealer-social-kit">
+          <div className="dealer-social-kit__head">
+            <strong className="dealer-social-kit__title">Kit de redes</strong>
+            <span className="dealer-social-kit__subtitle">
+              Copiá un texto listo para compartir esta unidad en WhatsApp, redes o grupos de venta.
+            </span>
+          </div>
+
+          <pre className="dealer-social-kit__preview">{socialCopy}</pre>
+
+          <div className="dealer-social-kit__actions">
+            <button
+              type="button"
+              className={`dealer-social-kit__copy-btn${
+                copyKitState === "copied" ? " dealer-social-kit__copy-btn--copied"
+                : copyKitState === "error"  ? " dealer-social-kit__copy-btn--error"
+                : ""
+              }`}
+              onClick={handleCopyKit}
+              aria-label={
+                copyKitState === "copied" ? "Texto copiado al portapapeles"
+                : copyKitState === "error"  ? "No se pudo copiar"
+                : "Copiar texto para compartir"
+              }
+            >
+              {copyKitState === "copied" ? "Copiado ✓"
+               : copyKitState === "error"  ? "No se pudo copiar"
+               : "Copiar texto"}
+            </button>
+
+            <p className="dealer-social-kit__note">
+              El texto incluye los datos actuales de la publicación. Revisá antes de compartir.
+            </p>
           </div>
         </div>
       </section>
