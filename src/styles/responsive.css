@@ -994,7 +994,8 @@
   .contact-modal,
   .vehicle-detail-modal,
   .dealer-vehicle-detail-modal,
-  .edit-images-modal {
+  .edit-images-modal,
+  .dealer-maintenance-modal {
     width: 100% !important;
     max-width: 100% !important;
     max-height: calc(100vh - 88px) !important;
@@ -1146,7 +1147,8 @@
   .contact-modal,
   .vehicle-detail-modal,
   .dealer-vehicle-detail-modal,
-  .edit-images-modal {
+  .edit-images-modal,
+  .dealer-maintenance-modal {
     padding: 14px !important;
     border-radius: 18px !important;
   }
@@ -1198,7 +1200,8 @@
   .contact-modal,
   .vehicle-detail-modal,
   .dealer-vehicle-detail-modal,
-  .edit-images-modal {
+  .edit-images-modal,
+  .dealer-maintenance-modal {
     width: min(100%, calc(100vw - 20px)) !important;
     max-width: calc(100vw - 20px) !important;
     height: auto !important;
@@ -1217,7 +1220,8 @@
   .contact-modal::-webkit-scrollbar,
   .vehicle-detail-modal::-webkit-scrollbar,
   .dealer-vehicle-detail-modal::-webkit-scrollbar,
-  .edit-images-modal::-webkit-scrollbar {
+  .edit-images-modal::-webkit-scrollbar,
+  .dealer-maintenance-modal::-webkit-scrollbar {
     width: 0 !important;
     height: 0 !important;
     display: none !important;
@@ -1228,7 +1232,8 @@
   .contact-modal *,
   .vehicle-detail-modal *,
   .dealer-vehicle-detail-modal *,
-  .edit-images-modal * {
+  .edit-images-modal *,
+  .dealer-maintenance-modal * {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
   }
@@ -1237,7 +1242,8 @@
   .contact-modal *::-webkit-scrollbar,
   .vehicle-detail-modal *::-webkit-scrollbar,
   .dealer-vehicle-detail-modal *::-webkit-scrollbar,
-  .edit-images-modal *::-webkit-scrollbar {
+  .edit-images-modal *::-webkit-scrollbar,
+  .dealer-maintenance-modal *::-webkit-scrollbar {
     width: 0 !important;
     height: 0 !important;
     display: none !important;
@@ -15119,5 +15125,31 @@ textarea:focus-visible,
   /* Ensure dealer-header-control (3-col desktop grid) is fully hidden on mobile */
   .dealer-panel > .dealer-header-control {
     display: none !important;
+  }
+}
+
+/* ── V2.2 Mobile QA fixes ──────────────────────────────────── */
+
+/* Module head action buttons: keep auto-width, don't stretch 100% on mobile */
+@media (max-width: 900px) {
+  .dealer-panel .dealer-module-head-actions {
+    align-self: flex-start !important;
+  }
+
+  .dealer-panel .dealer-module-head-actions .table-action-btn,
+  .dealer-panel .dealer-module-head-actions .admin-refresh-btn {
+    width: auto !important;
+    flex: 0 0 auto !important;
+    min-height: 38px !important;
+    padding: 7px 12px !important;
+    font-size: 0.72rem !important;
+  }
+}
+
+/* Create vehicle prefill select: adequate tap target on mobile */
+@media (max-width: 760px) {
+  .create-vehicle-prefill select {
+    min-height: 44px !important;
+    font-size: 0.9rem !important;
   }
 }

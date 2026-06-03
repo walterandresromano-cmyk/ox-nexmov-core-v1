@@ -3464,6 +3464,10 @@
 @media (max-width: 540px) {
   .vehicle-create-quality__grid { grid-template-columns: 1fr; }
   .vehicle-create-quality__summary { flex-direction: column; gap: 6px; }
+  .vehicle-create-quality__toggle {
+    min-height: 40px;
+    padding: 8px 14px;
+  }
 }
 
 /* Light mode */
