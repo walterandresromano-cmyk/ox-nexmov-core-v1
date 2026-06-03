@@ -23162,3 +23162,236 @@ body::-webkit-scrollbar {
   margin-left: auto;
 }
 
+/* ==========================================================
+   Garage oX V1.4 — Mi Garage premium visual upgrade
+   ========================================================== */
+
+/* ── Section wrapper ── */
+.garage-ox-garage {
+  position: relative;
+  overflow: hidden;
+}
+
+.garage-ox-garage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 4% 0%, rgba(56, 189, 248, 0.055), transparent 40%);
+  pointer-events: none;
+}
+
+/* ── Section header ── */
+.garage-ox-garage__head {
+  padding: 22px 22px 16px;
+  gap: 16px;
+}
+
+.garage-ox-garage__eyebrow {
+  display: block;
+  margin: 0 0 5px;
+  font-size: 0.64rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ox-primary);
+}
+
+.garage-ox-garage__title {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.8vw, 1.7rem);
+  font-weight: 950;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--ox-text);
+}
+
+.garage-ox-garage__subtitle {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  color: var(--ox-muted);
+  line-height: 1.5;
+}
+
+/* ── Empty state ── */
+.garage-ox-garage__empty {
+  display: grid;
+  gap: 14px;
+  padding: 48px 22px 44px;
+  text-align: center;
+  place-items: center;
+}
+
+.garage-ox-garage__empty::before {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--ox-border);
+  background:
+    radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.14), transparent 68%),
+    var(--ox-card-2);
+}
+
+.garage-ox-garage__empty strong {
+  font-size: 1.04rem;
+  font-weight: 950;
+  letter-spacing: -0.025em;
+  color: var(--ox-text);
+}
+
+.garage-ox-garage__empty > p {
+  max-width: 460px;
+  margin: 0;
+  font-size: 0.87rem;
+  color: var(--ox-muted);
+  line-height: 1.55;
+}
+
+.garage-ox-garage__empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+/* ── Card enhancements ── */
+.garage-ox-garage-card .vehicle-card__media {
+  min-height: 185px;
+}
+
+.garage-ox-garage-card__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* ── Tabs ── */
+/* .garage-ox-garage-tabs inherits .buyer-garage-tabs base styles */
+/* scroll behaviour added in mobile query below */
+
+/* ── Light mode ── */
+:root.light .garage-ox-garage,
+:root[data-theme="light"] .garage-ox-garage {
+  box-shadow:
+    0 2px 18px rgba(14, 116, 144, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+:root.light .garage-ox-garage::after,
+:root[data-theme="light"] .garage-ox-garage::after {
+  background: radial-gradient(circle at 4% 0%, rgba(14, 165, 233, 0.05), transparent 40%);
+}
+
+:root.light .garage-ox-garage__eyebrow,
+:root[data-theme="light"] .garage-ox-garage__eyebrow {
+  color: #0369a1;
+}
+
+:root.light .garage-ox-garage__title,
+:root[data-theme="light"] .garage-ox-garage__title {
+  color: #0f172a;
+}
+
+:root.light .garage-ox-garage__subtitle,
+:root[data-theme="light"] .garage-ox-garage__subtitle {
+  color: #64748b;
+}
+
+:root.light .garage-ox-garage__empty::before,
+:root[data-theme="light"] .garage-ox-garage__empty::before {
+  background:
+    radial-gradient(circle at 50% 10%, rgba(14, 165, 233, 0.12), transparent 68%),
+    rgba(224, 242, 254, 0.54);
+  border-color: rgba(14, 165, 233, 0.16);
+}
+
+:root.light .garage-ox-garage__empty strong,
+:root[data-theme="light"] .garage-ox-garage__empty strong {
+  color: #0f172a;
+}
+
+:root.light .garage-ox-garage__empty > p,
+:root[data-theme="light"] .garage-ox-garage__empty > p {
+  color: #64748b;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .garage-ox-garage__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .garage-ox-garage__head > .primary-action {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .garage-ox-garage-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .garage-ox-garage-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .garage-ox-garage-tabs button {
+    flex-shrink: 0;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+
+  .garage-ox-garage-card__actions {
+    grid-template-columns: 1fr;
+  }
+
+  .garage-ox-garage-card .vehicle-card__media {
+    min-height: 210px;
+  }
+
+  .garage-ox-garage__empty {
+    padding: 36px 18px 32px;
+  }
+
+  .garage-ox-garage__empty-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .garage-ox-garage__empty-actions > button {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
+/* ==========================================================
+   Garage oX V1.4.1 — microfixes
+   ========================================================== */
+
+/* Microfix 4 — Radar alignment inside subgrid */
+.garage-ox-search__subgrid .buyer-radar-section {
+  margin-top: 0;
+}
+
+/* Microfix 6 — buyer-stat-cta-btn light mode legibility */
+:root.light .buyer-stat-cta-btn,
+:root[data-theme="light"] .buyer-stat-cta-btn {
+  color: #0369a1;
+  border-color: rgba(3, 105, 161, 0.28);
+  background: rgba(224, 242, 254, 0.60);
+}
+
+:root.light .buyer-stat-cta-btn:hover,
+:root[data-theme="light"] .buyer-stat-cta-btn:hover {
+  background: rgba(14, 165, 233, 0.14);
+  border-color: #0284c7;
+}
+

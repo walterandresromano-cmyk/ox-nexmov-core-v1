@@ -938,11 +938,6 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
 
         {isLoading && (
           <div className="buyer-panel-skeleton">
-            <div className="buyer-skeleton-stats">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="dealer-status-card buyer-skeleton-card ox-shimmer" />
-              ))}
-            </div>
             <div className="buyer-skeleton-rows">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="buyer-skeleton-row ox-shimmer" />
@@ -950,87 +945,6 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             </div>
           </div>
         )}
-
-        <div className="dealer-status-grid" style={isLoading ? { display: "none" } : undefined}>
-          <article className="dealer-status-card buyer-stat--leads">
-            <span>Consultas activas</span>
-            <strong>{vehicleLeads.length}</strong>
-            <p>
-              {vehicleLeads.length === 0
-                ? "Todavía no realizaste consultas."
-                : "Contactos con dealers registrados."}
-            </p>
-            <button
-              type="button"
-              className="buyer-stat-cta-btn"
-              onClick={() => { setShowBuyerActivityDetails(true); }}
-            >
-              {vehicleLeads.length === 0 ? "Empezar →" : "Ver consultas →"}
-            </button>
-          </article>
-
-          <article className="dealer-status-card buyer-stat--compare">
-            <span>Comparaciones</span>
-            <strong>{compareItems.length} / 4</strong>
-            <p>
-              {compareItems.length === 0
-                ? "Seleccioná vehículos para comparar."
-                : "Vehículos seleccionados para comparar."}
-            </p>
-            {compareItems.length === 0 && (
-              <button
-                type="button"
-                className="buyer-stat-cta-btn"
-                onClick={() => onNavigate?.("search")}
-              >
-                Ir a buscar →
-              </button>
-            )}
-            {compareItems.length >= 2 && (
-              <button
-                type="button"
-                className="buyer-stat-cta-btn"
-                onClick={() => appActions?.openCompare?.()}
-              >
-                Ver comparación →
-              </button>
-            )}
-          </article>
-
-          <article className="dealer-status-card buyer-stat--favorites">
-            <span>Favoritos</span>
-            <strong>{favorites.length}</strong>
-            <p>
-              {favorites.length === 0
-                ? "Todavía no guardaste vehículos."
-                : "Vehículos guardados para revisar."}
-            </p>
-            <button
-              type="button"
-              className="buyer-stat-cta-btn"
-              onClick={() => { setShowBuyerActivityDetails(true); }}
-            >
-              {favorites.length === 0 ? "Buscar vehículos →" : "Ver favoritos →"}
-            </button>
-          </article>
-
-          <article className="dealer-status-card buyer-stat--financing">
-            <span>Financiación 0km</span>
-            <strong>{zeroKmLeads.length}</strong>
-            <p>
-              {zeroKmLeads.length === 0
-                ? "Todavía no enviaste consultas."
-                : "Consultas de financiación enviadas."}
-            </p>
-            <button
-              type="button"
-              className="buyer-stat-cta-btn"
-              onClick={() => { zeroKmLeads.length === 0 ? onNavigate?.("search") : setShowBuyerActivityDetails(true); }}
-            >
-              {zeroKmLeads.length === 0 ? "Ver 0km →" : "Ver detalle →"}
-            </button>
-          </article>
-        </div>
 
         {/* ── Mi búsqueda ─────────────────────────────────────── */}
         <section className="garage-ox-search">
@@ -1259,12 +1173,14 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           </div>
         </section>
 
-        <div className="dealer-leads-section buyer-garage-section">
-          <div className="buyer-section-head">
+        <div className="dealer-leads-section buyer-garage-section garage-ox-garage">
+          <div className="buyer-section-head garage-ox-garage__head">
             <div>
-              <p className="eyebrow">Garage oX</p>
-              <h2>Garage oX</h2>
-              <p>Tu colección privada de vehículos, servicios y próximos pasos.</p>
+              <p className="eyebrow garage-ox-garage__eyebrow">Garage oX</p>
+              <h2 className="garage-ox-garage__title">Mi Garage</h2>
+              <p className="garage-ox-garage__subtitle">
+                Tus vehículos, servicios, vencimientos e historial dentro de oX.
+              </p>
             </div>
             <button
               type="button"
@@ -1284,18 +1200,20 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             </button>
           </div>
 
-          <div className="buyer-garage-hero">
-            <div>
-              <span>Historial premium</span>
-              <strong>Tu flota, con identidad propia.</strong>
-              <p>Cards vivas para conservar valor, memoria y recorrido.</p>
+          {garageVehicles.length > 0 && (
+            <div className="buyer-garage-hero">
+              <div>
+                <span>Tu espacio personal</span>
+                <strong>Tu vehículo, su historia.</strong>
+                <p>Este es el espacio donde tu vehículo deja de ser una publicación y empieza a tener historial.</p>
+              </div>
+              <div className="buyer-garage-hero-metrics">
+                <span>Garage</span>
+                <strong>{garageVehicles.length}</strong>
+                <small>unidad{garageVehicles.length !== 1 ? "es" : ""} registrada{garageVehicles.length !== 1 ? "s" : ""}</small>
+              </div>
             </div>
-            <div className="buyer-garage-hero-metrics">
-              <span>Garage</span>
-              <strong>{garageVehicles.length}</strong>
-              <small>unidad{garageVehicles.length !== 1 ? "es" : ""} cargada{garageVehicles.length !== 1 ? "s" : ""}</small>
-            </div>
-          </div>
+          )}
 
           {showGarageVehicleForm && (
           <form className="buyer-garage-owned-form" onSubmit={handleSaveGarageVehicle}>
@@ -1513,15 +1431,28 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           )}
 
           {garageVehicles.length === 0 ? (
-            <div className="buyer-garage-empty">
-              <strong>Tu Garage está listo para recibir su primera card.</strong>
+            <div className="buyer-garage-empty garage-ox-garage__empty">
+              <strong>Todavía no tenés vehículos en tu Garage.</strong>
               <p>
-                Cuando compres o cargues un vehículo, va a aparecer acá como
-                parte de tu colección oX.
+                Cuando compres, asignes o registres un vehículo, vas a poder seguir
+                su historial, servicios y futura reventa desde acá.
               </p>
-              <button className="primary-action" onClick={() => onNavigate?.("search")}>
-                Buscar vehículos
-              </button>
+              <div className="garage-ox-garage__empty-actions">
+                <button
+                  type="button"
+                  className="primary-action"
+                  onClick={() => onNavigate?.("search")}
+                >
+                  Buscar vehículos
+                </button>
+                <button
+                  type="button"
+                  className="table-action-btn"
+                  onClick={() => { resetGarageVehicleForm(); setShowGarageVehicleForm(true); }}
+                >
+                  Registrar vehículo propio
+                </button>
+              </div>
             </div>
           ) : (
             <div className="buyer-garage-collection">
@@ -1538,7 +1469,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                       key={vehicle.id}
                       role="button"
                       tabIndex={0}
-                      className={`vehicle-card buyer-garage-collector-card${isSelected ? " is-active" : ""}`}
+                      className={`vehicle-card buyer-garage-collector-card garage-ox-garage-card${isSelected ? " is-active" : ""}`}
                       onClick={() => {
                         setSelectedGarageVehicleId(vehicle.id);
                         setActiveGarageTab("summary");
@@ -1576,7 +1507,11 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                       </div>
                       <div className="vehicle-card__body">
                         <div className="vehicle-card__identity">
-                          <h3 className="vehicle-card__title">{vehicle.title}</h3>
+                          <h3 className="vehicle-card__title">
+                            {vehicle.title ||
+                              [vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(" ") ||
+                              "Vehículo"}
+                          </h3>
                           {(vehicle.brand || vehicle.version) && (
                             <p className="vehicle-card__version">
                               {[vehicle.brand, vehicle.version].filter(Boolean).join(" ")}
@@ -1587,6 +1522,11 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                           <div className="vehicle-card__fact">
                             <span>{getGarageStatusLabel(vehicle.status)}</span>
                           </div>
+                          {vehicle.km && (
+                            <div className="vehicle-card__fact">
+                              <span>{Number(vehicle.km).toLocaleString("es-AR")} km</span>
+                            </div>
+                          )}
                           <div className="vehicle-card__fact">
                             <span>{services.length} servicio{services.length !== 1 ? "s" : ""}</span>
                           </div>
@@ -1611,15 +1551,28 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                             </strong>
                           </div>
                         </div>
-                        <div className="vehicle-card__actions">
+                        <div className="vehicle-card__actions garage-ox-garage-card__actions">
                           <button
                             type="button"
                             className="vehicle-card__btn vehicle-card__btn--primary"
-                            style={{ gridColumn: "1 / -1" }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedGarageVehicleId(vehicle.id);
+                              setActiveGarageTab("summary");
+                            }}
                           >
-                            {latestService
-                              ? `Último: ${getServiceTypeLabel(latestService.serviceType)}`
-                              : "Explorar historial"}
+                            Ver garage
+                          </button>
+                          <button
+                            type="button"
+                            className="vehicle-card__btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedGarageVehicleId(vehicle.id);
+                              setActiveGarageTab("services");
+                            }}
+                          >
+                            Agregar servicio
                           </button>
                         </div>
                       </div>
@@ -1676,7 +1629,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     </div>
                   </div>
 
-                  <div className="buyer-garage-tabs" role="tablist" aria-label="Secciones de Garage oX">
+                  <div className="buyer-garage-tabs garage-ox-garage-tabs" role="tablist" aria-label="Secciones de Garage oX">
                     {[
                       ["summary", "Resumen"],
                       ["services", "Servicios"],
