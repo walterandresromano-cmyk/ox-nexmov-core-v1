@@ -324,6 +324,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const [radarRequests, setRadarRequests] = useState([]);
   const [radarDeletingId, setRadarDeletingId] = useState(null);
 
+  const radarSectionRef = useRef(null);
+
   const favorites = appActions?.favoriteItems || [];
   const compareItems = appActions?.compareItems || [];
 
@@ -785,57 +787,72 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     <section className="page-section">
       <div className="container panel buyer-panel">
 
-        <div className="panel-head-row">
-          <div>
-            <p className="eyebrow">Panel comprador</p>
-            <h1>Mi actividad</h1>
-            <p>
-              Seguí tus consultas, comparaciones y vehículos guardados desde un
-              solo lugar.
+        <div className="buyer-hero">
+          <div className="buyer-hero__content">
+            <p className="buyer-hero__eyebrow">Panel comprador</p>
+            <h1 className="buyer-hero__title">
+              {authProfile?.full_name
+                ? `Hola, ${authProfile.full_name.trim().split(/\s+/)[0]}`
+                : "Tu panel"}
+            </h1>
+            <p className="buyer-hero__subtitle">
+              {(totalActivity === 0 && favorites.length === 0 && compareItems.length === 0)
+                ? "Empezá tu búsqueda y guardá las unidades que más te interesan."
+                : [
+                    favorites.length > 0 && `${favorites.length} favorito${favorites.length !== 1 ? "s" : ""}`,
+                    vehicleLeads.length > 0 && `${vehicleLeads.length} consulta${vehicleLeads.length !== 1 ? "s" : ""} activa${vehicleLeads.length !== 1 ? "s" : ""}`,
+                    compareItems.length > 0 && `${compareItems.length} en comparación`,
+                  ].filter(Boolean).join(" · ")
+              }
             </p>
+            <div className="buyer-hero__actions">
+              <button className="primary-action" onClick={() => onNavigate?.("search")}>
+                {(totalActivity === 0 && favorites.length === 0) ? "Buscar vehículos" : "Retomar búsqueda"}
+              </button>
+              <button
+                type="button"
+                className="buyer-hero__secondary-btn"
+                onClick={() => radarSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              >
+                Radar oX
+              </button>
+            </div>
+          </div>
 
-            {(authProfile || authUser) && (
-              <div className="buyer-profile-summary">
-                <p className="admin-session-note">
-                  {authProfile?.full_name
-                    ? <><strong>{authProfile.full_name}</strong> · {authProfile?.email || authUser?.email}</>
-                    : authProfile?.email || authUser?.email}
-                </p>
-                {authProfile?.phone_visible && (
-                  <p className="buyer-profile-phone">{authProfile.phone_visible}</p>
-                )}
+          <div className="buyer-hero__pulse">
+            {[
+              { value: favorites.length,       label: "Favoritos"   },
+              { value: vehicleLeads.length,     label: "Consultas"   },
+              { value: compareItems.length,     label: "Comparando"  },
+              { value: garageVehicles.length,   label: "Garage"      },
+            ].map(({ value, label }) => (
+              <div key={label} className="buyer-hero__pulse-item">
+                <strong>{value}</strong>
+                <span>{label}</span>
+              </div>
+            ))}
+          </div>
+
+          {(authProfile || authUser) && (
+            <div className="buyer-hero__profile-row">
+              <p className="admin-session-note">
+                {authProfile?.full_name
+                  ? <><strong>{authProfile.full_name}</strong> · {authProfile?.email || authUser?.email}</>
+                  : authProfile?.email || authUser?.email}
+              </p>
+              <div className="buyer-hero__profile-actions">
+                <button className="admin-refresh-btn" onClick={refreshBuyerPanel}>Actualizar</button>
                 <button
                   type="button"
                   className="buyer-edit-profile-btn"
-                  onClick={() => {
-                    setEditingProfile((prev) => !prev);
-                    setProfileError("");
-                  }}
+                  onClick={() => { setEditingProfile((prev) => !prev); setProfileError(""); }}
                 >
                   {editingProfile ? "Cancelar edición" : "Editar perfil"}
                 </button>
                 {profileSaved && <span className="buyer-profile-saved">Guardado</span>}
               </div>
-            )}
-          </div>
-
-          <div className="buyer-panel-head-actions">
-            <button className="admin-refresh-btn" onClick={refreshBuyerPanel}>
-              Actualizar
-            </button>
-            <button className="primary-action" onClick={() => onNavigate?.("search")}>
-              Buscar vehículos
-            </button>
-          </div>
-
-          <img
-            className="panel-head-brand-watermark"
-            src="/logo.svg"
-            alt=""
-            aria-hidden="true"
-            width="140"
-            height="26"
-          />
+            </div>
+          )}
         </div>
 
         {editingProfile && (
@@ -948,6 +965,13 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 ? "Todavía no realizaste consultas."
                 : "Contactos con dealers registrados."}
             </p>
+            <button
+              type="button"
+              className="buyer-stat-cta-btn"
+              onClick={() => { setShowBuyerActivityDetails(true); }}
+            >
+              {vehicleLeads.length === 0 ? "Empezar →" : "Ver consultas →"}
+            </button>
           </article>
 
           <article className="dealer-status-card buyer-stat--compare">
@@ -986,6 +1010,13 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 ? "Todavía no guardaste vehículos."
                 : "Vehículos guardados para revisar."}
             </p>
+            <button
+              type="button"
+              className="buyer-stat-cta-btn"
+              onClick={() => { setShowBuyerActivityDetails(true); }}
+            >
+              {favorites.length === 0 ? "Buscar vehículos →" : "Ver favoritos →"}
+            </button>
           </article>
 
           <article className="dealer-status-card buyer-stat--financing">
@@ -996,52 +1027,45 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 ? "Todavía no enviaste consultas."
                 : "Consultas de financiación enviadas."}
             </p>
+            <button
+              type="button"
+              className="buyer-stat-cta-btn"
+              onClick={() => { zeroKmLeads.length === 0 ? onNavigate?.("search") : setShowBuyerActivityDetails(true); }}
+            >
+              {zeroKmLeads.length === 0 ? "Ver 0km →" : "Ver detalle →"}
+            </button>
           </article>
         </div>
 
-        <div className="buyer-activity-strip" style={isLoading ? { display: "none" } : undefined}>
-          <div>
-            {totalActivity === 0 ? (
-              <>
-                <strong>Empezá buscando vehículos</strong>
-                <span>
-                  Guardá favoritos, compará hasta 4 unidades y consultá dealers verificados.
-                </span>
-              </>
-            ) : (
-              <>
-                <strong>Retomá tu actividad</strong>
-                <span>
-                  {vehicleLeads.length} consulta{vehicleLeads.length !== 1 ? "s" : ""} activa{vehicleLeads.length !== 1 ? "s" : ""} con dealers
-                  {favorites.length > 0 ? ` · ${favorites.length} favorito${favorites.length !== 1 ? "s" : ""}` : ""}.
-                </span>
-              </>
-            )}
-          </div>
-          <button
-            className="primary-action"
-            onClick={() => onNavigate?.("search")}
-          >
-            {totalActivity === 0 ? "Buscar vehículos" : "Ver más vehículos"}
-          </button>
-        </div>
-
-        {radarRequests.length > 0 && (
-          <div className="dealer-leads-section buyer-radar-section">
-            <div className="buyer-section-head">
-              <div>
-                <p className="eyebrow">Radar oX</p>
-                <h2>Búsquedas activas</h2>
-                <p>Búsquedas registradas. Revisá si aparecieron coincidencias.</p>
-              </div>
-              <button
-                type="button"
-                className="primary-action"
-                onClick={() => onNavigate?.("search")}
-              >
-                Volver a buscar
-              </button>
+        <div className="dealer-leads-section buyer-radar-section" ref={radarSectionRef}>
+          <div className="buyer-section-head">
+            <div>
+              <p className="eyebrow">Radar oX</p>
+              <h2>Búsquedas activas</h2>
+              <p>
+                {radarRequests.length > 0
+                  ? "Búsquedas registradas. Revisá si aparecieron coincidencias."
+                  : "Guardá criterios de búsqueda para no perder oportunidades."}
+              </p>
             </div>
+            <button
+              type="button"
+              className="primary-action"
+              onClick={() => onNavigate?.("search")}
+            >
+              {radarRequests.length > 0 ? "Volver a buscar" : "Activar Radar"}
+            </button>
+          </div>
+
+          {radarRequests.length === 0 ? (
+            <div className="buyer-radar-empty">
+              <strong>Sin búsquedas activas</strong>
+              <p>
+                Cuando activés Radar desde la búsqueda, tus criterios van a aparecer acá
+                para que oX rastree oportunidades por vos.
+              </p>
+            </div>
+          ) : (
             <ul className="buyer-radar-list">
               {radarRequests.map((req) => {
                 const parts = buildRadarCriteriaSummary(
@@ -1079,8 +1103,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 );
               })}
             </ul>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="dealer-leads-section buyer-garage-section">
           <div className="buyer-section-head">

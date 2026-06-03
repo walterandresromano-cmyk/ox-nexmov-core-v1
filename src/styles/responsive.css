@@ -15155,3 +15155,44 @@ textarea:focus-visible,
     font-size: 0.9rem !important;
   }
 }
+
+/* ── Buyer V2.1 — hero mobile ────────────────────────────────── */
+@media (max-width: 760px) {
+  .buyer-hero {
+    padding: 16px;
+    border-radius: 18px;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .buyer-hero__title {
+    font-size: 1.62rem;
+  }
+
+  .buyer-hero__actions {
+    flex-direction: column;
+  }
+
+  .buyer-hero__actions .primary-action,
+  .buyer-hero__secondary-btn {
+    width: 100%;
+    text-align: center;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .buyer-hero__pulse {
+    gap: 5px;
+  }
+
+  .buyer-hero__pulse-item {
+    min-width: 58px;
+    padding: 7px 10px;
+  }
+
+  .buyer-hero__profile-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
