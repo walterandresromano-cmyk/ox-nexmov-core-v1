@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import DealerVehicleActions from "./DealerVehicleActions.jsx";
 import OxAssistantPanel from "./OxAssistantPanel.jsx";
 import { getVehicleAssistantInsights } from "../services/oxAssistant.service.js";
-import { buildVehicleSocialCopy } from "../lib/vehicleMarketingCopy.js";
+import { buildVehicleSocialCopy, buildVehicleShortSocialCopy } from "../lib/vehicleMarketingCopy.js";
 
 function formatDateTime(dateValue) {
   if (!dateValue) return "Sin fecha";
@@ -133,6 +133,7 @@ export default function DealerVehicleDetailModal({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [copyKitState, setCopyKitState] = useState("idle");
   const [shareKitState, setShareKitState] = useState("idle");
+  const [copyVariant, setCopyVariant] = useState("full");
   const selectedImage = images[selectedImageIndex];
   const assistantInsights = getVehicleAssistantInsights(vehicle);
 
@@ -143,7 +144,9 @@ export default function DealerVehicleDetailModal({
       ? `${window.location.origin}/vehiculo/${encodeURIComponent(vehicle.vehicle_id)}`
       : "";
 
-  const socialCopy = buildVehicleSocialCopy(vehicle, { dealerName, publicUrl });
+  const socialCopy = copyVariant === "short"
+    ? buildVehicleShortSocialCopy(vehicle, { dealerName, publicUrl })
+    : buildVehicleSocialCopy(vehicle, { dealerName, publicUrl });
 
   async function handleCopyKit() {
     try {
@@ -384,6 +387,27 @@ export default function DealerVehicleDetailModal({
             <span className="dealer-social-kit__subtitle">
               Copiá un texto listo para compartir esta unidad en WhatsApp, redes o grupos de venta.
             </span>
+          </div>
+
+          <div className="dealer-social-kit__variant-toggle" role="group" aria-label="Variante del texto">
+            <button
+              type="button"
+              className={`dealer-social-kit__variant-btn${copyVariant === "full" ? " dealer-social-kit__variant-btn--active" : ""}`}
+              onClick={() => setCopyVariant("full")}
+              aria-pressed={copyVariant === "full"}
+              aria-label="Ver texto completo"
+            >
+              Completo
+            </button>
+            <button
+              type="button"
+              className={`dealer-social-kit__variant-btn${copyVariant === "short" ? " dealer-social-kit__variant-btn--active" : ""}`}
+              onClick={() => setCopyVariant("short")}
+              aria-pressed={copyVariant === "short"}
+              aria-label="Ver texto corto"
+            >
+              Corto
+            </button>
           </div>
 
           <pre className="dealer-social-kit__preview">{socialCopy}</pre>

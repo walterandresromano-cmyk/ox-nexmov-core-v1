@@ -3939,6 +3939,55 @@
   }
 }
 
+/* Variant selector */
+.dealer-social-kit__variant-toggle {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.dealer-social-kit__variant-btn {
+  padding: 5px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: transparent;
+  color: var(--ox-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.dealer-social-kit__variant-btn:hover {
+  background: rgba(148, 163, 184, 0.08);
+  color: var(--ox-text);
+}
+
+.dealer-social-kit__variant-btn--active {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: rgba(125, 211, 252, 0.95);
+}
+
+:root.light .dealer-social-kit__variant-btn,
+:root[data-theme="light"] .dealer-social-kit__variant-btn {
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #64748b;
+}
+
+:root.light .dealer-social-kit__variant-btn:hover,
+:root[data-theme="light"] .dealer-social-kit__variant-btn:hover {
+  background: rgba(148, 163, 184, 0.1);
+  color: #0f172a;
+}
+
+:root.light .dealer-social-kit__variant-btn--active,
+:root[data-theme="light"] .dealer-social-kit__variant-btn--active {
+  background: rgba(14, 165, 233, 0.08);
+  border-color: rgba(14, 165, 233, 0.35);
+  color: #0284c7;
+}
+
 /* Share button — verde suave, diferenciado del azul de copiar */
 .dealer-social-kit__share-btn {
   padding: 9px 20px;
