@@ -16,6 +16,11 @@ const PUBLIC_SELECT = [
   "version",
   "year",
   "price",
+  "km",
+  "city",
+  "province",
+  "fuel_type",
+  "transmission",
   "main_image_url",
   "image_url",
   "images_json",
@@ -202,8 +207,23 @@ export default async function handler(req, res) {
       .filter(Boolean)
       .join(" ");
     const title = `${vehicleName} - ${formatARS(vehicle.price)} | oX NEXMOV`;
-    const description =
-      "Conoce esta unidad publicada en oX NEXMOV. Precio, datos del vehiculo y contacto del dealer.";
+
+    const km =
+      vehicle.km !== null &&
+      vehicle.km !== undefined &&
+      !Number.isNaN(Number(vehicle.km))
+        ? `${Number(vehicle.km).toLocaleString("es-AR")} km`
+        : "";
+    const location = [vehicle.city, vehicle.province].filter(Boolean).join(", ");
+    const details = [vehicle.version, km, location].filter(Boolean).join(" · ");
+    const description = [
+      vehicleName,
+      details,
+      vehicle.price > 0 ? formatARS(vehicle.price) : "",
+      "Publicado en oX NEXMOV.",
+    ]
+      .filter(Boolean)
+      .join(" — ");
 
     return sendHtml(
       res,
