@@ -7,6 +7,7 @@ import {
   buildCatalogTree,
   listVehicleCatalog,
 } from "../services/catalog.service.js";
+import { getVehicleQualityChecklist } from "../lib/vehicleQuality.js";
 
 function getInitialForm(vehicle) {
   const mi =
@@ -211,6 +212,50 @@ function buildMaintenanceInfo(form) {
   return Object.values(info).some((v) => v !== null) ? info : null;
 }
 
+const BAND_CHIP = { excellent: "success", good: "info", fair: "warning", weak: "danger" };
+
+const DESC_MIN   = 50;
+const DESC_IDEAL = 150;
+
+const DESC_TIPS = [
+  {
+    id: "state",
+    label: "Estado general",
+    tips: [
+      "Motor, caja, suspensión y frenos.",
+      "Interior, tapizados, tablero y comandos.",
+      "Pintura, estética y marcas visibles.",
+    ],
+  },
+  {
+    id: "history",
+    label: "Uso e historial",
+    tips: [
+      "Uso principal: familiar, trabajo, ruta, ciudad.",
+      "Mantenimientos recientes realizados.",
+      "Observaciones sobre el kilometraje declarado.",
+    ],
+  },
+  {
+    id: "delivery",
+    label: "Entrega y condiciones",
+    tips: [
+      "Si acepta financiación, permuta o entrega.",
+      "Condiciones particulares de venta.",
+      "Accesorios incluidos: segunda llave, manuales, cubiertas.",
+    ],
+  },
+  {
+    id: "transparency",
+    label: "Transparencia",
+    tips: [
+      "Aclará detalles o imperfecciones visibles.",
+      "Evitá promesas que no puedas sostener.",
+      "No incluyas datos personales sensibles.",
+    ],
+  },
+];
+
 export default function EditVehicleModal({
   vehicle,
   mode = "dealer",
@@ -226,6 +271,13 @@ export default function EditVehicleModal({
   const [catalogTree, setCatalogTree] = useState([]);
   const [loadingCatalog, setLoadingCatalog] = useState(true);
   const [catalogError, setCatalogError] = useState("");
+  const [qualityOpen, setQualityOpen] = useState(true);
+  const [descGuideOpen, setDescGuideOpen] = useState(false);
+
+  const qualityChecklist = useMemo(
+    () => getVehicleQualityChecklist({ ...vehicle, ...form }),
+    [vehicle, form]
+  );
 
   useEffect(() => {
     async function loadCatalog() {
@@ -397,6 +449,14 @@ export default function EditVehicleModal({
 
   if (!vehicle) return null;
 
+  const descLen       = String(form.details || "").length;
+  const descMeterBand = descLen < DESC_MIN ? "weak" : descLen < DESC_IDEAL ? "ok" : "good";
+  const descMeterMsg  = descLen < DESC_MIN
+    ? "La descripción es muy breve. Sumá información sobre estado, uso y detalles visibles."
+    : descLen < DESC_IDEAL
+    ? "Descripción mínima completa. Podés mejorarla agregando más detalles útiles."
+    : "Buena descripción comercial.";
+
   return (
     <div className="modal-backdrop">
       <section className="ticket-detail-modal">
@@ -434,6 +494,75 @@ export default function EditVehicleModal({
           </div>
         ) : (
           <form className="zero-km-form" onSubmit={handleSubmit}>
+            {/* Quality checklist panel */}
+            <div className="vehicle-quality-panel">
+              <div className="vehicle-quality-panel__head">
+                <div className="vehicle-quality-panel__title-row">
+                  <strong>Calidad de la publicación</strong>
+                  <span className={`vehicle-quality-panel__score admin-chip ${BAND_CHIP[qualityChecklist.band] || "warning"}`}>
+                    {qualityChecklist.score}% · {qualityChecklist.label}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  className="vehicle-quality-panel__toggle"
+                  onClick={() => setQualityOpen((v) => !v)}
+                  aria-expanded={qualityOpen}
+                >
+                  {qualityOpen ? "Ocultar" : "Ver calidad"}
+                </button>
+              </div>
+
+              {qualityOpen && (
+                <>
+                  <p className="vehicle-quality-panel__summary">
+                    <span className="vqp-ok">{qualityChecklist.summary.ok} completos</span>
+                    {qualityChecklist.summary.missing > 0 && (
+                      <> · <span className="vqp-missing">{qualityChecklist.summary.missing} faltantes</span></>
+                    )}
+                    {qualityChecklist.summary.suggested > 0 && (
+                      <> · <span className="vqp-suggested">{qualityChecklist.summary.suggested} recomendados</span></>
+                    )}
+                  </p>
+
+                  {qualityChecklist.summary.missing === 0 && qualityChecklist.summary.suggested === 0 ? (
+                    <p className="vehicle-quality-panel__all-clear">
+                      Publicación bien presentada. Todos los datos clave están completos.
+                    </p>
+                  ) : (
+                    <div className="vehicle-quality-panel__categories">
+                      {qualityChecklist.categories
+                        .filter((cat) => cat.items.some((item) => item.status !== "ok"))
+                        .map((cat) => (
+                          <div key={cat.id} className="vehicle-quality-panel__category">
+                            <span className="vehicle-quality-panel__category-title">{cat.title}</span>
+                            <ul>
+                              {cat.items
+                                .filter((item) => item.status !== "ok")
+                                .map((item) => (
+                                  <li
+                                    key={item.id}
+                                    className={`vehicle-quality-panel__item vehicle-quality-panel__item--${item.status}`}
+                                  >
+                                    <span className="vehicle-quality-panel__item-label">{item.label}</span>
+                                    {item.tip && (
+                                      <span className="vehicle-quality-panel__item-tip">{item.tip}</span>
+                                    )}
+                                  </li>
+                                ))}
+                            </ul>
+                          </div>
+                        ))}
+                    </div>
+                  )}
+
+                  <p className="vehicle-quality-panel__note">
+                    Esta guía mejora la presentación de la publicación. La información es declarada por el vendedor.
+                  </p>
+                </>
+              )}
+            </div>
+
             {catalogError && <div className="auth-warning">{catalogError}</div>}
 
             {loadingCatalog && (
@@ -691,6 +820,47 @@ export default function EditVehicleModal({
               />
             </label>
 
+            {/* Description quality guide */}
+            <div className="vehicle-description-guide">
+              <div className={`vehicle-description-guide__meter vehicle-description-guide__meter--${descMeterBand}`}>
+                <span>{descLen} caracteres · recomendado: 150+</span>
+                <span>{descMeterMsg}</span>
+              </div>
+
+              <div className="vehicle-description-guide__head">
+                <span>Guía para una buena descripción</span>
+                <button
+                  type="button"
+                  className="vehicle-description-guide__toggle"
+                  onClick={() => setDescGuideOpen((v) => !v)}
+                  aria-expanded={descGuideOpen}
+                >
+                  {descGuideOpen ? "Ocultar guía" : "Mostrar guía"}
+                </button>
+              </div>
+
+              {descGuideOpen && (
+                <div className="vehicle-description-guide__body">
+                  <p>Una descripción clara ayuda al comprador a entender mejor el estado declarado del vehículo.</p>
+                  <div className="vehicle-description-guide__list">
+                    {DESC_TIPS.map((section) => (
+                      <div key={section.id}>
+                        <strong>{section.label}</strong>
+                        <ul>
+                          {section.tips.map((tip) => (
+                            <li key={tip}>{tip}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="vehicle-description-guide__note">
+                    La información cargada es declarada por el vendedor y debe corresponder al estado real del vehículo.
+                  </p>
+                </div>
+              )}
+            </div>
+
             <div style={{ borderTop: "1px solid var(--ox-border)", paddingTop: "18px", marginTop: "8px" }}>
               <p className="eyebrow" style={{ marginBottom: "6px" }}>Mantenimiento orientativo</p>
               <p className="form-hint" style={{ marginBottom: "10px" }}>
@@ -698,14 +868,21 @@ export default function EditVehicleModal({
                 oX NEXMOV no calcula ni garantiza estos importes.
               </p>
 
-              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "14px" }}>
-                <input
-                  type="checkbox"
-                  checked={form.show_maintenance_info}
-                  onChange={(event) => updateField("show_maintenance_info", event.target.checked)}
-                />
-                Mostrar mantenimiento orientativo en el detalle del vehículo
-              </label>
+              <div className="dealer-toggle-row">
+                <div className="dealer-toggle-row__content">
+                  <strong>Mostrar mantenimiento orientativo en el detalle del vehículo</strong>
+                  <span>Estos datos son informativos y declarados por el vendedor.</span>
+                </div>
+                <label className="dealer-toggle">
+                  <input
+                    type="checkbox"
+                    checked={form.show_maintenance_info}
+                    onChange={(event) => updateField("show_maintenance_info", event.target.checked)}
+                    aria-label="Mostrar mantenimiento orientativo en el detalle del vehículo"
+                  />
+                  <span className="dealer-toggle__track" aria-hidden="true" />
+                </label>
+              </div>
 
               <div className="form-grid-two">
                 <label>

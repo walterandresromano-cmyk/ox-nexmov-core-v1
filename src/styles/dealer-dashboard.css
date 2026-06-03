@@ -2854,3 +2854,928 @@
   border-color: rgba(245, 158, 11, 0.28);
   color: #92400e;
 }
+
+/* ── Photo quality guide (EditVehicleImagesModal) ── */
+.vehicle-photo-guide {
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  background: rgba(56, 189, 248, 0.04);
+}
+
+.vehicle-photo-guide__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vehicle-photo-guide__head > div > strong {
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.vehicle-photo-guide__head > div > p {
+  font-size: 0.8rem;
+  color: var(--ox-muted);
+  margin: 0;
+}
+
+.vehicle-photo-guide__toggle {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  color: var(--ox-muted);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.vehicle-photo-guide__toggle:hover {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.vehicle-photo-guide__summary {
+  font-size: 0.82rem;
+  color: var(--ox-muted);
+  margin: 12px 0 10px;
+}
+
+.vehicle-photo-guide__summary strong {
+  color: var(--ox-text);
+}
+
+.vehicle-photo-guide__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.vehicle-photo-guide__group {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.vehicle-photo-guide__group-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ox-muted);
+  margin: 0 0 6px;
+}
+
+.vehicle-photo-guide__group ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vehicle-photo-guide__group li {
+  font-size: 0.79rem;
+  color: var(--ox-text-secondary, var(--ox-text));
+}
+
+.vehicle-photo-guide__group li::before {
+  content: "· ";
+  color: var(--ox-muted);
+}
+
+.vehicle-photo-guide__status {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.vehicle-photo-guide__status--ok {
+  background: rgba(52, 211, 153, 0.12);
+  color: rgba(52, 211, 153, 0.95);
+}
+
+.vehicle-photo-guide__status--suggest {
+  background: rgba(251, 191, 36, 0.12);
+  color: rgba(253, 224, 71, 0.9);
+}
+
+.vehicle-photo-guide__note {
+  font-size: 0.77rem;
+  color: var(--ox-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Responsive: stack columns on narrow screens */
+@media (max-width: 540px) {
+  .vehicle-photo-guide__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Light mode */
+:root.light .vehicle-photo-guide,
+:root[data-theme="light"] .vehicle-photo-guide {
+  background: rgba(248, 250, 252, 0.8);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+:root.light .vehicle-photo-guide__group,
+:root[data-theme="light"] .vehicle-photo-guide__group {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(148, 163, 184, 0.15);
+}
+
+:root.light .vehicle-photo-guide__toggle,
+:root[data-theme="light"] .vehicle-photo-guide__toggle {
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #475569;
+}
+
+:root.light .vehicle-photo-guide__status--ok,
+:root[data-theme="light"] .vehicle-photo-guide__status--ok {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+:root.light .vehicle-photo-guide__status--suggest,
+:root[data-theme="light"] .vehicle-photo-guide__status--suggest {
+  background: rgba(245, 158, 11, 0.1);
+  color: #92400e;
+}
+
+/* ── Vehicle quality panel (EditVehicleModal) ── */
+.vehicle-quality-panel {
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  background: rgba(56, 189, 248, 0.04);
+}
+
+.vehicle-quality-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vehicle-quality-panel__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.vehicle-quality-panel__title-row > strong {
+  font-size: 0.9rem;
+}
+
+.vehicle-quality-panel__score {
+  font-size: 0.75rem !important;
+}
+
+.vehicle-quality-panel__toggle {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: var(--ox-muted);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.vehicle-quality-panel__toggle:hover {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.vehicle-quality-panel__summary {
+  font-size: 0.82rem;
+  color: var(--ox-muted);
+  margin: 10px 0 10px;
+}
+
+.vqp-ok       { color: var(--ox-muted); }
+.vqp-missing  { color: rgba(252, 165, 165, 0.9); }
+.vqp-suggested { color: rgba(253, 224, 71, 0.85); }
+
+.vehicle-quality-panel__all-clear {
+  font-size: 0.82rem;
+  color: rgba(52, 211, 153, 0.9);
+  margin: 6px 0 8px;
+}
+
+.vehicle-quality-panel__categories {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 6px 0 10px;
+}
+
+.vehicle-quality-panel__category {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vehicle-quality-panel__category-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ox-muted);
+}
+
+.vehicle-quality-panel__category ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vehicle-quality-panel__item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.vehicle-quality-panel__item::before {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.vehicle-quality-panel__item--missing {
+  background: rgba(239, 68, 68, 0.07);
+  border-left: 2px solid rgba(239, 68, 68, 0.5);
+}
+
+.vehicle-quality-panel__item--missing .vehicle-quality-panel__item-label::before {
+  content: "✗ ";
+  color: rgba(252, 165, 165, 0.9);
+}
+
+.vehicle-quality-panel__item--suggested {
+  background: rgba(251, 191, 36, 0.07);
+  border-left: 2px solid rgba(251, 191, 36, 0.4);
+}
+
+.vehicle-quality-panel__item--suggested .vehicle-quality-panel__item-label::before {
+  content: "→ ";
+  color: rgba(253, 224, 71, 0.8);
+}
+
+.vehicle-quality-panel__item-label {
+  font-size: 0.8rem;
+  color: var(--ox-text);
+}
+
+.vehicle-quality-panel__item-tip {
+  font-size: 0.74rem;
+  color: var(--ox-muted);
+  padding-left: 16px;
+}
+
+.vehicle-quality-panel__note {
+  font-size: 0.76rem;
+  color: var(--ox-muted);
+  font-style: italic;
+  margin: 4px 0 0;
+}
+
+/* Light mode */
+:root.light .vehicle-quality-panel,
+:root[data-theme="light"] .vehicle-quality-panel {
+  background: rgba(248, 250, 252, 0.8);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+:root.light .vehicle-quality-panel__toggle,
+:root[data-theme="light"] .vehicle-quality-panel__toggle {
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #475569;
+}
+
+:root.light .vqp-missing,
+:root[data-theme="light"] .vqp-missing { color: #dc2626; }
+
+:root.light .vqp-suggested,
+:root[data-theme="light"] .vqp-suggested { color: #92400e; }
+
+:root.light .vehicle-quality-panel__all-clear,
+:root[data-theme="light"] .vehicle-quality-panel__all-clear { color: #059669; }
+
+:root.light .vehicle-quality-panel__item--missing,
+:root[data-theme="light"] .vehicle-quality-panel__item--missing {
+  background: rgba(239, 68, 68, 0.06);
+  border-left-color: rgba(239, 68, 68, 0.4);
+}
+
+:root.light .vehicle-quality-panel__item--missing .vehicle-quality-panel__item-label::before,
+:root[data-theme="light"] .vehicle-quality-panel__item--missing .vehicle-quality-panel__item-label::before {
+  color: #dc2626;
+}
+
+:root.light .vehicle-quality-panel__item--suggested,
+:root[data-theme="light"] .vehicle-quality-panel__item--suggested {
+  background: rgba(245, 158, 11, 0.07);
+  border-left-color: rgba(245, 158, 11, 0.4);
+}
+
+:root.light .vehicle-quality-panel__item--suggested .vehicle-quality-panel__item-label::before,
+:root[data-theme="light"] .vehicle-quality-panel__item--suggested .vehicle-quality-panel__item-label::before {
+  color: #d97706;
+}
+
+/* ── Description quality guide (EditVehicleModal) ── */
+.vehicle-description-guide {
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.vehicle-description-guide__meter {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.vehicle-description-guide__meter > span:first-child {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.vehicle-description-guide__meter > span:last-child {
+  color: var(--ox-muted);
+  font-size: 0.78rem;
+}
+
+.vehicle-description-guide__meter--weak {
+  background: rgba(239, 68, 68, 0.07);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.15);
+}
+.vehicle-description-guide__meter--weak > span:first-child { color: rgba(252, 165, 165, 0.95); }
+
+.vehicle-description-guide__meter--ok {
+  background: rgba(251, 191, 36, 0.07);
+  border-bottom: 1px solid rgba(251, 191, 36, 0.15);
+}
+.vehicle-description-guide__meter--ok > span:first-child { color: rgba(253, 224, 71, 0.95); }
+
+.vehicle-description-guide__meter--good {
+  background: rgba(52, 211, 153, 0.07);
+  border-bottom: 1px solid rgba(52, 211, 153, 0.15);
+}
+.vehicle-description-guide__meter--good > span:first-child { color: rgba(52, 211, 153, 0.95); }
+
+.vehicle-description-guide__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  gap: 8px;
+}
+
+.vehicle-description-guide__head > span {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.vehicle-description-guide__toggle {
+  background: transparent;
+  border: none;
+  font-size: 0.78rem;
+  color: var(--ox-muted);
+  cursor: pointer;
+  padding: 2px 0;
+  transition: color 0.1s;
+}
+
+.vehicle-description-guide__toggle:hover { color: var(--ox-text); }
+
+.vehicle-description-guide__body {
+  padding: 2px 12px 14px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.vehicle-description-guide__body > p {
+  font-size: 0.79rem;
+  color: var(--ox-muted);
+  margin: 10px 0 10px;
+}
+
+.vehicle-description-guide__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.vehicle-description-guide__list > div > strong {
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+  color: var(--ox-text);
+}
+
+.vehicle-description-guide__list > div > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vehicle-description-guide__list > div > ul > li {
+  font-size: 0.77rem;
+  color: var(--ox-muted);
+}
+
+.vehicle-description-guide__list > div > ul > li::before {
+  content: "· ";
+}
+
+.vehicle-description-guide__note {
+  font-size: 0.75rem;
+  color: var(--ox-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+@media (max-width: 540px) {
+  .vehicle-description-guide__list { grid-template-columns: 1fr; }
+}
+
+/* Light mode */
+:root.light .vehicle-description-guide,
+:root[data-theme="light"] .vehicle-description-guide {
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+:root.light .vehicle-description-guide__meter--weak,
+:root[data-theme="light"] .vehicle-description-guide__meter--weak {
+  background: rgba(239, 68, 68, 0.05);
+  border-bottom-color: rgba(239, 68, 68, 0.18);
+}
+:root.light .vehicle-description-guide__meter--weak > span:first-child,
+:root[data-theme="light"] .vehicle-description-guide__meter--weak > span:first-child { color: #dc2626; }
+
+:root.light .vehicle-description-guide__meter--ok,
+:root[data-theme="light"] .vehicle-description-guide__meter--ok {
+  background: rgba(245, 158, 11, 0.06);
+  border-bottom-color: rgba(245, 158, 11, 0.18);
+}
+:root.light .vehicle-description-guide__meter--ok > span:first-child,
+:root[data-theme="light"] .vehicle-description-guide__meter--ok > span:first-child { color: #d97706; }
+
+:root.light .vehicle-description-guide__meter--good,
+:root[data-theme="light"] .vehicle-description-guide__meter--good {
+  background: rgba(16, 185, 129, 0.05);
+  border-bottom-color: rgba(16, 185, 129, 0.18);
+}
+:root.light .vehicle-description-guide__meter--good > span:first-child,
+:root[data-theme="light"] .vehicle-description-guide__meter--good > span:first-child { color: #059669; }
+
+/* ── Create vehicle quality guide (CreateVehicleModal) ── */
+.vehicle-create-quality {
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  background: rgba(56, 189, 248, 0.04);
+}
+
+.vehicle-create-quality__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vehicle-create-quality__head > div > strong {
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.vehicle-create-quality__head > div > p {
+  font-size: 0.8rem;
+  color: var(--ox-muted);
+  margin: 0;
+}
+
+.vehicle-create-quality__toggle {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: var(--ox-muted);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.vehicle-create-quality__toggle:hover { background: rgba(148, 163, 184, 0.1); }
+
+.vehicle-create-quality__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 14px 0 12px;
+}
+
+.vehicle-create-quality__card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.vehicle-create-quality__card > strong {
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.vehicle-create-quality__card > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vehicle-create-quality__card > ul > li {
+  font-size: 0.77rem;
+  color: var(--ox-muted);
+}
+
+.vehicle-create-quality__card > ul > li::before { content: "· "; }
+
+.vehicle-create-quality__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.8rem;
+  color: var(--ox-muted);
+  margin-bottom: 10px;
+}
+
+.vehicle-create-quality__meter { font-weight: 600; }
+.vehicle-create-quality__meter--weak    { color: rgba(252, 165, 165, 0.95); }
+.vehicle-create-quality__meter--ok      { color: rgba(253, 224, 71, 0.95); }
+.vehicle-create-quality__meter--good    { color: rgba(52, 211, 153, 0.95); }
+
+.vehicle-create-quality__desc-meter { color: var(--ox-muted); }
+
+.vehicle-create-quality__note {
+  font-size: 0.75rem;
+  color: var(--ox-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+@media (max-width: 540px) {
+  .vehicle-create-quality__grid { grid-template-columns: 1fr; }
+  .vehicle-create-quality__summary { flex-direction: column; gap: 6px; }
+}
+
+/* Light mode */
+:root.light .vehicle-create-quality,
+:root[data-theme="light"] .vehicle-create-quality {
+  background: rgba(248, 250, 252, 0.8);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+:root.light .vehicle-create-quality__card,
+:root[data-theme="light"] .vehicle-create-quality__card {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(148, 163, 184, 0.15);
+}
+
+:root.light .vehicle-create-quality__toggle,
+:root[data-theme="light"] .vehicle-create-quality__toggle {
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #475569;
+}
+
+:root.light .vehicle-create-quality__meter--weak,
+:root[data-theme="light"] .vehicle-create-quality__meter--weak { color: #dc2626; }
+
+:root.light .vehicle-create-quality__meter--ok,
+:root[data-theme="light"] .vehicle-create-quality__meter--ok { color: #d97706; }
+
+:root.light .vehicle-create-quality__meter--good,
+:root[data-theme="light"] .vehicle-create-quality__meter--good { color: #059669; }
+
+/* ── Microfix C: file input premium ── */
+
+/* Ocultar el input nativo — la label lo activa igualmente al hacer click */
+.dealer-file-input {
+  display: none !important;
+}
+
+/* Zona de upload */
+.dealer-file-zone {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed rgba(148, 163, 184, 0.22);
+  border-radius: 12px;
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: rgba(255, 255, 255, 0.02);
+  user-select: none;
+  min-height: 80px;
+}
+
+.dealer-file-zone:hover {
+  border-color: rgba(56, 189, 248, 0.38);
+  background: rgba(56, 189, 248, 0.04);
+}
+
+/* Cuando se usa directamente sobre .edit-images-upload */
+.edit-images-upload.dealer-file-zone {
+  margin-top: 16px;
+}
+
+.dealer-file-zone__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  text-align: center;
+}
+
+.dealer-file-zone__icon {
+  font-size: 1.4rem;
+  color: var(--ox-muted);
+  line-height: 1;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.dealer-file-zone__inner > strong {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ox-text);
+}
+
+.dealer-file-zone__inner > span {
+  font-size: 0.76rem;
+  color: var(--ox-muted);
+}
+
+/* Light mode */
+:root.light .dealer-file-zone,
+:root[data-theme="light"] .dealer-file-zone {
+  border-color: rgba(148, 163, 184, 0.3);
+  background: rgba(248, 250, 252, 0.5);
+}
+
+:root.light .dealer-file-zone:hover,
+:root[data-theme="light"] .dealer-file-zone:hover {
+  border-color: rgba(14, 165, 233, 0.4);
+  background: rgba(14, 165, 233, 0.04);
+}
+
+/* ── Microfix B: cancelar estilos globales de input aplicados a checkboxes ── */
+/* .zero-km-form input aplica width/border/bg/padding a todos los inputs,    */
+/* incluyendo checkboxes nativos. Esta regla cancela ese efecto.             */
+.zero-km-form input[type="checkbox"] {
+  width: auto !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Input oculto dentro del toggle — resiste las !important de responsive.css */
+.dealer-toggle input[type="checkbox"] {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  pointer-events: none;
+}
+
+/* Toggle row */
+.dealer-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.dealer-toggle-row__content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dealer-toggle-row__content > strong {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--ox-text);
+  line-height: 1.35;
+}
+
+.dealer-toggle-row__content > span {
+  font-size: 0.75rem;
+  color: var(--ox-muted);
+}
+
+/* Toggle switch */
+.dealer-toggle {
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.dealer-toggle__track {
+  display: block;
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  transition: background 0.18s, border-color 0.18s;
+  position: relative;
+}
+
+.dealer-toggle__track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.55);
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.18s;
+}
+
+.dealer-toggle input:checked + .dealer-toggle__track {
+  background: rgba(56, 189, 248, 0.28);
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.dealer-toggle input:checked + .dealer-toggle__track::after {
+  transform: translateX(18px);
+  background: rgba(56, 189, 248, 0.95);
+}
+
+.dealer-toggle input:focus-visible + .dealer-toggle__track {
+  outline: 2px solid rgba(56, 189, 248, 0.5);
+  outline-offset: 2px;
+}
+
+/* Light mode — toggle */
+:root.light .dealer-toggle-row,
+:root[data-theme="light"] .dealer-toggle-row {
+  background: rgba(248, 250, 252, 0.8);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+:root.light .dealer-toggle__track,
+:root[data-theme="light"] .dealer-toggle__track {
+  background: rgba(148, 163, 184, 0.18);
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+:root.light .dealer-toggle__track::after,
+:root[data-theme="light"] .dealer-toggle__track::after {
+  background: rgba(100, 116, 139, 0.6);
+}
+
+:root.light .dealer-toggle input:checked + .dealer-toggle__track,
+:root[data-theme="light"] .dealer-toggle input:checked + .dealer-toggle__track {
+  background: rgba(14, 165, 233, 0.18);
+  border-color: rgba(14, 165, 233, 0.45);
+}
+
+:root.light .dealer-toggle input:checked + .dealer-toggle__track::after,
+:root[data-theme="light"] .dealer-toggle input:checked + .dealer-toggle__track::after {
+  background: #0ea5e9;
+}
+
+/* ── Microfix A: scrollbars premium en modales dealer ── */
+.ticket-detail-modal,
+.edit-images-modal {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(125, 211, 252, 0.22) transparent;
+}
+
+.ticket-detail-modal::-webkit-scrollbar,
+.edit-images-modal::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ticket-detail-modal::-webkit-scrollbar-thumb,
+.edit-images-modal::-webkit-scrollbar-thumb {
+  background: rgba(125, 211, 252, 0.25);
+  border-radius: 999px;
+}
+
+.ticket-detail-modal::-webkit-scrollbar-track,
+.edit-images-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:root.light .ticket-detail-modal,
+:root.light .edit-images-modal,
+:root[data-theme="light"] .ticket-detail-modal,
+:root[data-theme="light"] .edit-images-modal {
+  scrollbar-color: rgba(100, 116, 139, 0.3) transparent;
+}
+
+:root.light .ticket-detail-modal::-webkit-scrollbar-thumb,
+:root.light .edit-images-modal::-webkit-scrollbar-thumb,
+:root[data-theme="light"] .ticket-detail-modal::-webkit-scrollbar-thumb,
+:root[data-theme="light"] .edit-images-modal::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.28);
+}
+
+/* ── Microfix D: mobile app adjustments ── */
+@media (max-width: 760px) {
+
+  /* 1. Scroll chaining fix
+        El modal es el único contenedor con overflow-y: auto.
+        overscroll-behavior: contain evita que al llegar al final
+        del scroll del modal se active el scroll del backdrop. */
+  .ticket-detail-modal,
+  .edit-images-modal {
+    overscroll-behavior-y: contain;
+  }
+
+  /* 2. Card anidada: zero-km-form dentro del modal pierde su
+        borde y fondo propios. El modal ya provee el contenedor visual. */
+  .ticket-detail-modal .zero-km-form {
+    border: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 4px 0 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* 3. Zona de upload: área táctil más cómoda */
+  .dealer-file-zone {
+    min-height: 88px !important;
+    padding: 20px 16px !important;
+  }
+
+  /* 4. Toggle row: texto largo puede necesitar wrap en pantallas chicas */
+  .dealer-toggle-row {
+    align-items: flex-start !important;
+  }
+
+  /* 5. Paneles de calidad: radio levemente menor para coherencia mobile */
+  .vehicle-quality-panel,
+  .vehicle-create-quality,
+  .vehicle-description-guide,
+  .vehicle-photo-guide {
+    border-radius: 10px !important;
+  }
+}

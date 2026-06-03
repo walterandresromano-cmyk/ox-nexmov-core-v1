@@ -61,6 +61,38 @@ function getInitialImages(vehicle) {
   return images.slice(0, 12);
 }
 
+const IDEAL_PHOTOS = 8;
+
+const PHOTO_GUIDE_GROUPS = [
+  {
+    label: "Exterior",
+    items: [
+      "Frente completo",
+      "Lateral derecho",
+      "Lateral izquierdo",
+      "Parte trasera",
+    ],
+  },
+  {
+    label: "Interior",
+    items: [
+      "Tablero y kilometraje",
+      "Butacas delanteras",
+      "Asientos traseros",
+      "Baúl",
+    ],
+  },
+  {
+    label: "Confianza",
+    items: [
+      "Motor",
+      "Cubiertas",
+      "Detalles o imperfecciones visibles",
+      "Documentación o accesorios (sin datos sensibles)",
+    ],
+  },
+];
+
 export default function EditVehicleImagesModal({
   vehicle,
   mode = "dealer",
@@ -81,10 +113,13 @@ export default function EditVehicleImagesModal({
   const [submitting, setSubmitting] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [guideOpen, setGuideOpen] = useState(true);
 
   if (!vehicle) return null;
 
   const vehicleId = vehicle.vehicle_id || vehicle.id;
+  const totalPhotos = Math.min(images.length + newFiles.length, MAX_VEHICLE_IMAGES);
+  const hasIdealPhotos = totalPhotos >= IDEAL_PHOTOS;
 
   function handleFilesChange(event) {
     const files = Array.from(event.target.files || []);
@@ -207,6 +242,56 @@ export default function EditVehicleImagesModal({
           </button>
         </div>
 
+        {/* Photo quality guide */}
+        <div className="vehicle-photo-guide">
+          <div className="vehicle-photo-guide__head">
+            <div>
+              <strong>Guía de fotos recomendadas</strong>
+              <p>Mejorá la confianza de la publicación mostrando el vehículo de forma clara y completa.</p>
+            </div>
+            <button
+              type="button"
+              className="vehicle-photo-guide__toggle"
+              onClick={() => setGuideOpen((v) => !v)}
+              aria-expanded={guideOpen}
+            >
+              {guideOpen ? "Ocultar guía" : "Mostrar guía"}
+            </button>
+          </div>
+
+          {guideOpen && (
+            <>
+              <p className="vehicle-photo-guide__summary">
+                Fotos cargadas: <strong>{totalPhotos}/{MAX_VEHICLE_IMAGES}</strong>
+                {" · "}Ideal recomendado: 8 o más
+              </p>
+
+              <div className="vehicle-photo-guide__grid">
+                {PHOTO_GUIDE_GROUPS.map((group) => (
+                  <div key={group.label} className="vehicle-photo-guide__group">
+                    <p className="vehicle-photo-guide__group-title">{group.label}</p>
+                    <ul>
+                      {group.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
+              <span className={`vehicle-photo-guide__status vehicle-photo-guide__status--${hasIdealPhotos ? "ok" : "suggest"}`}>
+                {hasIdealPhotos
+                  ? "Buen nivel visual para la publicación."
+                  : "Sumar más fotos puede mejorar la confianza y la cantidad de consultas."}
+              </span>
+
+              <p className="vehicle-photo-guide__note">
+                Estas fotos ayudan al comprador a entender mejor el estado declarado del vehículo. No reemplazan una inspección técnica.
+              </p>
+            </>
+          )}
+        </div>
+
         <div className="edit-images-current">
           {images.length === 0 ? (
             <div className="empty-state">Esta publicación todavía no tiene imágenes.</div>
@@ -242,17 +327,24 @@ export default function EditVehicleImagesModal({
           )}
         </div>
 
-        <label className="edit-images-upload">
-          Agregar imágenes
+        <label className="edit-images-upload dealer-file-zone">
           <input
             type="file"
             accept="image/png,image/jpeg,image/webp"
             multiple
             onChange={handleFilesChange}
+            className="dealer-file-input"
           />
-          <span className="form-hint">
-            Disponibles: {Math.max(MAX_VEHICLE_IMAGES - images.length, 0)} imágenes.
-            Para publicar activa necesitás al menos {MIN_VEHICLE_IMAGES}.
+          <span className="dealer-file-zone__inner">
+            <span className="dealer-file-zone__icon" aria-hidden="true">↑</span>
+            <strong>
+              {newFiles.length > 0
+                ? `${newFiles.length} imagen${newFiles.length !== 1 ? "es" : ""} nueva${newFiles.length !== 1 ? "s" : ""} seleccionada${newFiles.length !== 1 ? "s" : ""}`
+                : "Seleccionar imágenes"}
+            </strong>
+            <span>
+              PNG, JPG o WEBP · {Math.max(MAX_VEHICLE_IMAGES - images.length, 0)} disponibles · mín. {MIN_VEHICLE_IMAGES}
+            </span>
           </span>
         </label>
 

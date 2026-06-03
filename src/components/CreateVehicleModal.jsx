@@ -253,6 +253,7 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
   const [catalogTree, setCatalogTree] = useState([]);
   const [loadingCatalog, setLoadingCatalog] = useState(true);
   const [catalogError, setCatalogError] = useState("");
+  const [createGuideOpen, setCreateGuideOpen] = useState(true);
 
   const publishCheck = canDealerPublish(dealer || {});
   const planStatus = String(dealer?.planStatus || "").toLowerCase();
@@ -493,6 +494,17 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
     }
   }
 
+  const createDescLen   = String(form.details || "").length;
+  const photoCount      = imageFiles.length;
+  const photoStatusBand = photoCount < MIN_VEHICLE_IMAGES ? "weak"
+    : photoCount < 8 ? "ok"
+    : "good";
+  const photoStatusMsg  = photoCount < MIN_VEHICLE_IMAGES
+    ? `Faltan fotos obligatorias (mín. ${MIN_VEHICLE_IMAGES}).`
+    : photoCount < 8
+    ? "Mínimo completo. Podés sumar más fotos para mejorar la publicación."
+    : "Buen nivel visual para la publicación.";
+
   return (
     <div className="modal-backdrop">
       <section className="ticket-detail-modal">
@@ -558,6 +570,70 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
           </div>
         ) : (
           <form className="zero-km-form" onSubmit={handleSubmit}>
+            {/* Quality guide panel */}
+            <div className="vehicle-create-quality">
+              <div className="vehicle-create-quality__head">
+                <div>
+                  <strong>Publicación de calidad</strong>
+                  <p>Completá fotos, datos y descripción para que el comprador entienda mejor el vehículo.</p>
+                </div>
+                <button
+                  type="button"
+                  className="vehicle-create-quality__toggle"
+                  onClick={() => setCreateGuideOpen((v) => !v)}
+                  aria-expanded={createGuideOpen}
+                >
+                  {createGuideOpen ? "Ocultar" : "Ver guía"}
+                </button>
+              </div>
+
+              {createGuideOpen && (
+                <>
+                  <div className="vehicle-create-quality__grid">
+                    <div className="vehicle-create-quality__card">
+                      <strong>Fotos</strong>
+                      <ul>
+                        <li>Mínimo {MIN_VEHICLE_IMAGES} para publicar</li>
+                        <li>Recomendado: 8 o más</li>
+                        <li>Exterior, interior, tablero/km</li>
+                        <li>Detalles y zonas visibles</li>
+                      </ul>
+                    </div>
+                    <div className="vehicle-create-quality__card">
+                      <strong>Datos clave</strong>
+                      <ul>
+                        <li>Marca, modelo, versión, año, km</li>
+                        <li>Precio y referencia de mercado</li>
+                        <li>Ubicación y datos técnicos</li>
+                      </ul>
+                    </div>
+                    <div className="vehicle-create-quality__card">
+                      <strong>Descripción útil</strong>
+                      <ul>
+                        <li>Estado general visible</li>
+                        <li>Detalles e imperfecciones</li>
+                        <li>Condiciones de entrega</li>
+                        <li>Aclaraciones importantes</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="vehicle-create-quality__summary">
+                    <span className={`vehicle-create-quality__meter vehicle-create-quality__meter--${photoStatusBand}`}>
+                      Fotos: {photoCount}/{MAX_VEHICLE_IMAGES} · {photoStatusMsg}
+                    </span>
+                    <span className="vehicle-create-quality__desc-meter">
+                      Descripción: {createDescLen} caracteres · recomendado: 150+
+                    </span>
+                  </div>
+
+                  <p className="vehicle-create-quality__note">
+                    La información cargada es declarada por el vendedor y debe corresponder al estado real del vehículo.
+                  </p>
+                </>
+              )}
+            </div>
+
             {dealerVehicles.length > 0 && (
               <div className="create-vehicle-prefill">
                 <label>
@@ -825,15 +901,23 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
 
             <label>
               Imágenes del vehículo
-              <input
-                type="file"
-                accept="image/png,image/jpeg,image/webp"
-                multiple
-                onChange={handleImagesChange}
-              />
-              <span className="form-hint">
-                Mínimo {MIN_VEHICLE_IMAGES} fotos para publicar. Máximo{" "}
-                {MAX_VEHICLE_IMAGES}. La primera imagen será la portada.
+              <span className="dealer-file-zone">
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  multiple
+                  onChange={handleImagesChange}
+                  className="dealer-file-input"
+                />
+                <span className="dealer-file-zone__inner">
+                  <span className="dealer-file-zone__icon" aria-hidden="true">↑</span>
+                  <strong>
+                    {imageFiles.length > 0
+                      ? `${imageFiles.length} imagen${imageFiles.length !== 1 ? "es" : ""} seleccionada${imageFiles.length !== 1 ? "s" : ""}`
+                      : "Seleccionar imágenes"}
+                  </strong>
+                  <span>PNG, JPG o WEBP · mín. {MIN_VEHICLE_IMAGES} · La primera imagen será la portada.</span>
+                </span>
               </span>
             </label>
 
@@ -866,14 +950,21 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
                 oX NEXMOV no calcula ni garantiza estos importes.
               </p>
 
-              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "14px" }}>
-                <input
-                  type="checkbox"
-                  checked={form.show_maintenance_info}
-                  onChange={(event) => updateField("show_maintenance_info", event.target.checked)}
-                />
-                Mostrar mantenimiento orientativo en el detalle del vehículo
-              </label>
+              <div className="dealer-toggle-row">
+                <div className="dealer-toggle-row__content">
+                  <strong>Mostrar mantenimiento orientativo en el detalle del vehículo</strong>
+                  <span>Estos datos son informativos y declarados por el vendedor.</span>
+                </div>
+                <label className="dealer-toggle">
+                  <input
+                    type="checkbox"
+                    checked={form.show_maintenance_info}
+                    onChange={(event) => updateField("show_maintenance_info", event.target.checked)}
+                    aria-label="Mostrar mantenimiento orientativo en el detalle del vehículo"
+                  />
+                  <span className="dealer-toggle__track" aria-hidden="true" />
+                </label>
+              </div>
 
               <div className="form-grid-two">
                 <label>
