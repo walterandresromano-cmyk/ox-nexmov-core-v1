@@ -14,8 +14,10 @@ export function buildVehicleSocialCopy(vehicle, { dealerName = "", publicUrl = "
 
   // 2. Main specs
   const specs = [];
-  const km = Number(vehicle.km ?? vehicle.kilometers ?? null);
-  if (!isNaN(km) && km >= 0) specs.push(formatKm(km));
+  const kmRaw = vehicle.km ?? vehicle.kilometers;
+  if (kmRaw !== null && kmRaw !== undefined && !isNaN(Number(kmRaw))) {
+    specs.push(formatKm(Number(kmRaw)));
+  }
   if (vehicle.fuel_type)    specs.push(vehicle.fuel_type);
   if (vehicle.transmission) specs.push(vehicle.transmission);
   if (vehicle.body_type)    specs.push(vehicle.body_type);
