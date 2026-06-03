@@ -97,8 +97,11 @@ export function buildVehicleShortSocialCopy(vehicle, { dealerName = "", publicUr
   const km = _getKm(vehicle);
   if (km !== null) compactParts.push(formatKm(km));
   // prefer transmission; fall back to fuel_type if only one is available
-  if (vehicle.transmission)   compactParts.push(vehicle.transmission);
-  else if (vehicle.fuel_type) compactParts.push(vehicle.fuel_type);
+  if (vehicle.transmission) compactParts.push(vehicle.transmission);
+  // GNC always shown — key differentiator in Argentina; other fuel types shown only without transmission
+  if (vehicle.fuel_type && (vehicle.fuel_type === "GNC" || !vehicle.transmission)) {
+    compactParts.push(vehicle.fuel_type);
+  }
   const locationParts = [vehicle.city, vehicle.province].filter(Boolean);
   if (locationParts.length > 0) compactParts.push(locationParts.join(", "));
   if (compactParts.length > 0) lines.push(compactParts.join(" · "));
