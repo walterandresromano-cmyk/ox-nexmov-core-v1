@@ -943,9 +943,9 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
               />
             </label>
 
-            <div style={{ borderTop: "1px solid var(--ox-border)", paddingTop: "18px", marginTop: "8px" }}>
-              <p className="eyebrow" style={{ marginBottom: "6px" }}>Mantenimiento orientativo</p>
-              <p className="form-hint" style={{ marginBottom: "10px" }}>
+            <div className="modal-form-section">
+              <p className="eyebrow">Mantenimiento orientativo</p>
+              <p className="form-hint">
                 Estos datos son opcionales y serán mostrados como información orientativa declarada por el vendedor.
                 oX NEXMOV no calcula ni garantiza estos importes.
               </p>
@@ -1084,13 +1084,23 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
               y bajo mi responsabilidad comercial.
             </p>
 
-            <button
-              className="primary-action"
-              type="submit"
-              disabled={submitting || !canCreateVehicle}
-            >
-              {submitting ? "Publicando..." : "Publicar vehículo"}
-            </button>
+            <div className="dealer-modal-footer">
+              <button
+                type="button"
+                className="table-action-btn"
+                onClick={onClose}
+                disabled={submitting}
+              >
+                Cancelar
+              </button>
+              <button
+                className="primary-action"
+                type="submit"
+                disabled={submitting || !canCreateVehicle}
+              >
+                {submitting ? "Publicando..." : "Publicar vehículo"}
+              </button>
+            </div>
           </form>
         )}
       </section>

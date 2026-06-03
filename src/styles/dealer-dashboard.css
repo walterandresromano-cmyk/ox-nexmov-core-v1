@@ -4389,3 +4389,52 @@
     padding: 5px 10px;
   }
 }
+
+/* ── V2.4.2 — Shared inline styles extracted ──────────────── */
+
+.modal-form-section {
+  border-top: 1px solid var(--ox-border);
+  padding-top: 18px;
+  margin-top: 8px;
+}
+
+.modal-form-section .eyebrow {
+  margin-bottom: 6px;
+}
+
+.modal-form-section .form-hint {
+  margin-bottom: 10px;
+}
+
+.modal-form-section__list {
+  margin: 6px 0 8px;
+  padding-left: 18px;
+  font-size: 0.82rem;
+  color: var(--ox-text-secondary, var(--ox-muted));
+}
+
+.dealer-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding-top: 16px;
+  margin-top: 8px;
+  border-top: 1px solid var(--ox-border);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+  .dealer-modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dealer-modal-footer .table-action-btn,
+  .dealer-modal-footer .primary-action {
+    width: 100%;
+    min-height: 44px;
+    text-align: center;
+    justify-content: center;
+  }
+}

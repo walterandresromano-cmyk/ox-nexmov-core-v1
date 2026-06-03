@@ -1007,7 +1007,8 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .contact-modal-head {
+  .contact-modal-head,
+  .dealer-maintenance-modal__head {
     position: sticky;
     top: 0;
     z-index: 8;
@@ -1153,7 +1154,8 @@
     border-radius: 18px !important;
   }
 
-  .contact-modal-head {
+  .contact-modal-head,
+  .dealer-maintenance-modal__head {
     margin: -14px -14px 12px;
     padding: 14px;
   }

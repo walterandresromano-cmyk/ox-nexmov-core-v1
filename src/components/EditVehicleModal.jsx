@@ -861,9 +861,9 @@ export default function EditVehicleModal({
               )}
             </div>
 
-            <div style={{ borderTop: "1px solid var(--ox-border)", paddingTop: "18px", marginTop: "8px" }}>
-              <p className="eyebrow" style={{ marginBottom: "6px" }}>Mantenimiento orientativo</p>
-              <p className="form-hint" style={{ marginBottom: "10px" }}>
+            <div className="modal-form-section">
+              <p className="eyebrow">Mantenimiento orientativo</p>
+              <p className="form-hint">
                 Estos datos son opcionales y serán mostrados como información orientativa declarada por el vendedor.
                 oX NEXMOV no calcula ni garantiza estos importes.
               </p>
@@ -1003,7 +1003,7 @@ export default function EditVehicleModal({
                   Si la aprobás, quedará visible para compradores. Revisá
                   antes de confirmar:
                 </p>
-                <ul style={{ margin: "6px 0 8px", paddingLeft: "18px", fontSize: "0.82rem", color: "var(--ox-text-secondary)" }}>
+                <ul className="modal-form-section__list">
                   {forceApproveWarnings.map((w, i) => <li key={i}>{w}</li>)}
                 </ul>
                 <div className="admin-confirm-inline-actions">
@@ -1035,13 +1035,23 @@ export default function EditVehicleModal({
               encuentra bajo mi responsabilidad comercial.
             </p>
 
-            <button
-              className="primary-action"
-              type="submit"
-              disabled={submitting}
-            >
-              {submitting ? "Guardando cambios..." : "Guardar cambios"}
-            </button>
+            <div className="dealer-modal-footer">
+              <button
+                type="button"
+                className="table-action-btn"
+                onClick={onClose}
+                disabled={submitting}
+              >
+                Cancelar
+              </button>
+              <button
+                className="primary-action"
+                type="submit"
+                disabled={submitting}
+              >
+                {submitting ? "Guardando cambios..." : "Guardar cambios"}
+              </button>
+            </div>
           </form>
         )}
       </section>

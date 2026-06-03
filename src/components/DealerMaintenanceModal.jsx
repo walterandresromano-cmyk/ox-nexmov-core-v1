@@ -101,7 +101,7 @@ export default function DealerMaintenanceModal({ vehicle, onClose, onUpdated }) 
             <p className="dealer-maintenance-modal__eyebrow">Historial de mantenimiento</p>
             <h3 className="dealer-maintenance-modal__title">{title}</h3>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}>×</button>
         </div>
 
         {/* Next service */}

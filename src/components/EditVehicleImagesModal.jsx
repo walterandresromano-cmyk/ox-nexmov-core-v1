@@ -376,14 +376,24 @@ export default function EditVehicleImagesModal({
           </div>
         )}
 
-        <button
-          className="primary-action"
-          type="button"
-          onClick={handleSave}
-          disabled={submitting}
-        >
-          {submitting ? "Guardando imágenes..." : "Guardar imágenes"}
-        </button>
+        <div className="dealer-modal-footer">
+          <button
+            type="button"
+            className="table-action-btn"
+            onClick={onClose}
+            disabled={submitting}
+          >
+            Cancelar
+          </button>
+          <button
+            className="primary-action"
+            type="button"
+            onClick={handleSave}
+            disabled={submitting}
+          >
+            {submitting ? "Guardando imágenes..." : "Guardar imágenes"}
+          </button>
+        </div>
       </section>
     </div>
   );

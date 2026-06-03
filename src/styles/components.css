@@ -2614,7 +2614,8 @@
 
 .ticket-detail-modal .contact-modal-head,
 .dealer-vehicle-detail-modal .contact-modal-head,
-.contact-modal .contact-modal-head {
+.contact-modal .contact-modal-head,
+.dealer-maintenance-modal .dealer-maintenance-modal__head {
   border-bottom: 1px solid var(--ox-border);
 }
 
@@ -2670,7 +2671,8 @@
 
 :root[data-theme="light"] .ticket-detail-modal .contact-modal-head,
 :root[data-theme="light"] .dealer-vehicle-detail-modal .contact-modal-head,
-:root[data-theme="light"] .contact-modal .contact-modal-head {
+:root[data-theme="light"] .contact-modal .contact-modal-head,
+:root[data-theme="light"] .dealer-maintenance-modal .dealer-maintenance-modal__head {
   border-bottom-color: rgba(14, 116, 144, 0.14);
 }
 
