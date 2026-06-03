@@ -16,6 +16,7 @@ import {
 } from "../../lib/permissions.js";
 import { normalizeWhatsAppArgentina, formatRelativeTime } from "../../lib/formatters.js";
 import { getPublicationScore } from "../../lib/publicationScore.js";
+import { getVehicleStockSignal } from "../../lib/vehicleRanking.js";
 import { formatLimit, getPlanAlertClass, getPlanAlertLabel } from "../../lib/dealerPlan.js";
 
 import {
@@ -708,6 +709,41 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
     return items;
   }, [dealer, leads, dealerVehicles, tickets]);
+
+  const stockAttention = useMemo(() => {
+    if (!dealerVehicles.length) return [];
+
+    const LEVEL_ORDER = { urgent: 0, attention: 1, info: 2, good: 3 };
+    const KEY_ORDER   = {
+      needs_review:    0,
+      views_no_leads:  1,
+      cold:            2,
+      ready_to_promote: 3,
+      high_opportunity: 4,
+      good_performance: 5,
+    };
+
+    const leadCountById = leads.reduce((acc, l) => {
+      const vid = String(l.vehicle_id || "");
+      if (vid) acc[vid] = (acc[vid] || 0) + 1;
+      return acc;
+    }, {});
+
+    return dealerVehicles
+      .map((vehicle) => {
+        const { score } = getPublicationScore(vehicle);
+        const leadCount = leadCountById[String(vehicle.vehicle_id || "")] || 0;
+        const signal    = getVehicleStockSignal(vehicle, { leads: leadCount, score });
+        return { vehicle, signal };
+      })
+      .filter(({ signal }) => signal.level !== "neutral")
+      .sort((a, b) => {
+        const lvDiff = (LEVEL_ORDER[a.signal.level] ?? 9) - (LEVEL_ORDER[b.signal.level] ?? 9);
+        if (lvDiff !== 0) return lvDiff;
+        return (KEY_ORDER[a.signal.key] ?? 9) - (KEY_ORDER[b.signal.key] ?? 9);
+      })
+      .slice(0, 5);
+  }, [dealerVehicles, leads]);
 
   if (!dealer) {
     return (
@@ -2034,6 +2070,46 @@ export default function DealerPanel({ authProfile, onNavigate }) {
                 ))}
               </ul>
             )}
+          </section>
+        )}
+
+        {activeDealerModule === "summary" && activeDealerMobileSection !== "plan" && stockAttention.length > 0 && (
+          <section className="dealer-stock-attention">
+            <div className="dealer-stock-attention__head">
+              <h3 className="dealer-stock-attention__title">Stock a atender</h3>
+              <p className="dealer-stock-attention__sub">
+                Unidades que merecen una acción comercial o de mejora.
+              </p>
+            </div>
+            <ul className="dealer-stock-attention__list">
+              {stockAttention.map(({ vehicle, signal }) => (
+                <li key={vehicle.vehicle_id} className="dealer-stock-attention__item">
+                  <span className={`dealer-stock-signal dealer-stock-signal--${signal.level} dealer-stock-attention__badge`}>
+                    {signal.label}
+                  </span>
+                  <div className="dealer-stock-attention__body">
+                    <strong className="dealer-stock-attention__vehicle">
+                      {[vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(" ")}
+                    </strong>
+                    <span className="dealer-stock-attention__reason">{signal.reason}</span>
+                    {signal.action && (
+                      <span className="dealer-stock-attention__action">{signal.action}</span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    className="dealer-stock-attention__btn"
+                    onClick={() =>
+                      signal.key === "views_no_leads"
+                        ? navigateToInventory({ insight: "viewsNoLeads" })
+                        : navigateToInventory()
+                    }
+                  >
+                    Ver →
+                  </button>
+                </li>
+              ))}
+            </ul>
           </section>
         )}
 
