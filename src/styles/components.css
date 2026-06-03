@@ -11902,15 +11902,21 @@ body::-webkit-scrollbar {
 /* oX NEXMOV - Dealer header commercial identity */
 .dealer-panel > .dealer-header-control {
   display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(190px, 240px) minmax(260px, 320px);
+  grid-template-columns: minmax(280px, 1fr) minmax(200px, 260px) minmax(260px, 320px);
   align-items: stretch;
-  gap: 12px;
-  padding: 16px;
+  gap: 14px;
+  padding: 22px;
   overflow: hidden;
+  border: 1px solid rgba(56, 189, 248, 0.13);
+  border-radius: 26px;
   background:
-    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
-    linear-gradient(135deg, rgba(15, 23, 42, 0.82), rgba(8, 15, 28, 0.70)),
-    var(--ox-card);
+    radial-gradient(ellipse at 2% 0%, rgba(56, 189, 248, 0.11), transparent 42%),
+    radial-gradient(ellipse at 94% 104%, rgba(99, 102, 241, 0.07), transparent 38%),
+    linear-gradient(148deg, rgba(11, 19, 36, 0.96), rgba(5, 10, 22, 0.92));
+  box-shadow:
+    0 22px 64px rgba(0, 0, 0, 0.30),
+    0 4px 14px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
 }
 
 .dealer-header-intro,
@@ -11988,13 +11994,14 @@ body::-webkit-scrollbar {
 }
 
 .dealer-header-identity .dealer-institutional-media {
-  min-height: 118px;
-  border-radius: 14px;
-  border-color: rgba(148, 163, 184, 0.20);
+  min-height: 150px;
+  border-radius: 16px;
+  border-color: rgba(56, 189, 248, 0.18);
+  background: rgba(8, 15, 30, 0.55);
 }
 
 .dealer-header-identity .dealer-institutional-media img {
-  height: 122px;
+  height: 154px;
 }
 
 .dealer-header-identity .dealer-institutional-actions {
@@ -12084,9 +12091,14 @@ body::-webkit-scrollbar {
 
 :root[data-theme="light"] .dealer-panel > .dealer-header-control {
   background:
-    radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.07), transparent 34%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(235, 247, 253, 0.88)),
-    #ffffff;
+    radial-gradient(ellipse at 2% 0%, rgba(14, 165, 233, 0.08), transparent 40%),
+    radial-gradient(ellipse at 94% 104%, rgba(99, 102, 241, 0.04), transparent 36%),
+    linear-gradient(148deg, rgba(255, 255, 255, 0.99), rgba(235, 248, 255, 0.95));
+  border-color: rgba(14, 165, 233, 0.16);
+  box-shadow:
+    0 12px 40px rgba(14, 116, 144, 0.10),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 :root[data-theme="light"] .dealer-header-intro > p:not(.eyebrow):not(.admin-session-note) {
@@ -12108,10 +12120,20 @@ body::-webkit-scrollbar {
 
 /* oX NEXMOV - Dealer header final compact balance */
 .dealer-panel > .dealer-header-control {
-  grid-template-columns: minmax(300px, 1fr) minmax(168px, 210px) minmax(260px, 320px);
+  grid-template-columns: minmax(300px, 1fr) minmax(180px, 224px) minmax(260px, 320px);
   align-items: center;
-  gap: 10px;
-  padding: 14px;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid rgba(56, 189, 248, 0.13);
+  border-radius: 26px;
+  background:
+    radial-gradient(ellipse at 2% 0%, rgba(56, 189, 248, 0.11), transparent 42%),
+    radial-gradient(ellipse at 94% 104%, rgba(99, 102, 241, 0.07), transparent 38%),
+    linear-gradient(148deg, rgba(11, 19, 36, 0.96), rgba(5, 10, 22, 0.92));
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.30),
+    0 4px 14px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
 }
 
 .dealer-header-intro {
@@ -12159,11 +12181,14 @@ body::-webkit-scrollbar {
 .dealer-header-identity .dealer-institutional-media {
   min-height: 0;
   aspect-ratio: 16 / 10;
-  border-radius: 13px;
+  border-radius: 14px;
+  border-color: rgba(56, 189, 248, 0.18);
+  background: rgba(8, 15, 30, 0.55);
 }
 
 .dealer-header-identity .dealer-institutional-media img {
   height: 100%;
+  object-position: center;
 }
 
 .dealer-header-identity .dealer-institutional-empty {
@@ -12190,12 +12215,13 @@ body::-webkit-scrollbar {
 }
 
 .dealer-header-ops {
-  align-self: center;
+  align-self: stretch;
   gap: 8px;
-  padding: 9px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 16px;
-  background: rgba(15, 23, 42, 0.24);
+  padding: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.42), rgba(8, 14, 28, 0.30));
 }
 
 .dealer-header-ops .dealer-switcher,
@@ -12241,7 +12267,7 @@ body::-webkit-scrollbar {
 .dealer-header-ops .dealer-contact-card--compact {
   gap: 6px;
   padding-top: 8px;
-  border-top: 1px solid rgba(148, 163, 184, 0.14) !important;
+  border-top: 1px solid rgba(56, 189, 248, 0.10) !important;
 }
 
 .dealer-header-ops .dealer-contact-card--compact .dealer-profile-contact-head {
@@ -12269,8 +12295,8 @@ body::-webkit-scrollbar {
 }
 
 :root[data-theme="light"] .dealer-header-ops {
-  border-color: rgba(14, 116, 144, 0.13);
-  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(14, 165, 233, 0.16);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 :root[data-theme="light"] .dealer-header-identity .dealer-institutional-card {
@@ -12280,6 +12306,137 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .dealer-header-ops .dealer-switcher,
 :root[data-theme="light"] .dealer-header-ops .dealer-contact-card--compact {
   background: transparent;
+}
+
+/* ── V2 Dealer home — eyebrow accent + chips + publish button ── */
+
+.dealer-header-intro .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dealer-header-intro .eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 13px;
+  border-radius: 2px;
+  background: rgba(56, 189, 248, 0.82);
+  flex-shrink: 0;
+}
+
+/* Chip 1: rank (e.g. Dealer Elite) — cyan */
+.dealer-header-chips span:first-child {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.24);
+  color: rgba(186, 230, 253, 0.96);
+}
+
+/* Chip 2: plan status (e.g. Período de gracia) — amber */
+.dealer-header-chips span:nth-child(2) {
+  background: rgba(251, 191, 36, 0.10);
+  border-color: rgba(251, 191, 36, 0.22);
+  color: rgba(253, 224, 71, 0.92);
+}
+
+/* Chip 3: quota (e.g. 10/50) — neutral */
+.dealer-header-chips span:nth-child(3) {
+  background: rgba(148, 163, 184, 0.08);
+  border-color: rgba(148, 163, 184, 0.18);
+  color: rgba(203, 213, 225, 0.88);
+}
+
+/* Publish button — primary green CTA */
+.dealer-header-publish-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(52, 211, 153, 0.30);
+  background:
+    linear-gradient(148deg, rgba(16, 185, 129, 0.16), rgba(5, 150, 105, 0.08));
+  color: rgba(52, 211, 153, 0.96);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background 0.13s, border-color 0.13s, box-shadow 0.13s;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.10);
+}
+
+.dealer-header-publish-btn:hover:not(:disabled) {
+  background:
+    linear-gradient(148deg, rgba(16, 185, 129, 0.24), rgba(5, 150, 105, 0.14));
+  border-color: rgba(52, 211, 153, 0.48);
+  box-shadow: 0 6px 26px rgba(16, 185, 129, 0.20);
+}
+
+.dealer-header-publish-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Refresh button — minimal, de-emphasized at bottom */
+.dealer-header-ops .dealer-switcher .admin-refresh-btn {
+  opacity: 0.70;
+  font-size: 0.66rem !important;
+  min-height: 30px !important;
+}
+
+.dealer-header-ops .dealer-switcher .admin-refresh-btn:hover {
+  opacity: 1;
+}
+
+/* Light mode overrides */
+:root[data-theme="light"] .dealer-panel > .dealer-header-control {
+  background:
+    radial-gradient(ellipse at 2% 0%, rgba(14, 165, 233, 0.08), transparent 40%),
+    radial-gradient(ellipse at 94% 104%, rgba(99, 102, 241, 0.04), transparent 36%),
+    linear-gradient(148deg, rgba(255, 255, 255, 0.99), rgba(235, 248, 255, 0.95));
+  border-color: rgba(14, 165, 233, 0.16);
+  box-shadow:
+    0 12px 40px rgba(14, 116, 144, 0.10),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+:root[data-theme="light"] .dealer-header-intro .eyebrow::before {
+  background: rgba(14, 165, 233, 0.80);
+}
+
+:root[data-theme="light"] .dealer-header-chips span:first-child {
+  background: rgba(14, 116, 144, 0.10);
+  border-color: rgba(14, 116, 144, 0.20);
+  color: #0e4f68;
+}
+
+:root[data-theme="light"] .dealer-header-chips span:nth-child(2) {
+  background: rgba(180, 120, 0, 0.09);
+  border-color: rgba(180, 120, 0, 0.18);
+  color: #7c4e00;
+}
+
+:root[data-theme="light"] .dealer-header-chips span:nth-child(3) {
+  background: rgba(148, 163, 184, 0.10);
+  border-color: rgba(148, 163, 184, 0.22);
+  color: #475569;
+}
+
+:root[data-theme="light"] .dealer-header-publish-btn {
+  background: linear-gradient(148deg, rgba(5, 150, 105, 0.12), rgba(4, 120, 87, 0.06));
+  border-color: rgba(5, 150, 105, 0.28);
+  color: #047857;
+}
+
+:root[data-theme="light"] .dealer-header-publish-btn:hover:not(:disabled) {
+  background: linear-gradient(148deg, rgba(5, 150, 105, 0.20), rgba(4, 120, 87, 0.11));
+  border-color: rgba(5, 150, 105, 0.40);
+  box-shadow: 0 6px 22px rgba(5, 150, 105, 0.14);
 }
 
 /* oX NEXMOV - Compare premium decision board */

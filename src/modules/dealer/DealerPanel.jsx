@@ -1886,38 +1886,9 @@ export default function DealerPanel({ authProfile, onNavigate }) {
           </div>
 
           <div className="dealer-header-ops">
-  <div className="dealer-switcher">
-            <div className="dealer-switcher-row">
-              {dealers.length > 1 && (
-                <select
-                  value={dealer.id}
-                  onChange={(event) => setSelectedDealerId(event.target.value)}
-                >
-                  {dealers.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.commercialName} · {item.plan}
-                    </option>
-                  ))}
-                </select>
-              )}
-
-              <button className="admin-refresh-btn" onClick={refreshDealerPanel}>
-                Actualizar panel
-              </button>
-            </div>
-
-            {unreadNotificationsCount > 0 && (
-              <span className="dealer-notifications-header-chip">
-                {unreadNotificationsCount} aviso{unreadNotificationsCount !== 1 ? "s" : ""} sin leer
-              </span>
-            )}
-          </div>
-
-            {renderDealerWhatsappContactCard({ compact: true })}
-
             <button
               type="button"
-              className="table-action-btn dealer-header-mobile-primary"
+              className="dealer-header-publish-btn"
               disabled={!publishCheck.allowed}
               title={
                 !publishCheck.allowed
@@ -1933,6 +1904,33 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             >
               Publicar vehículo
             </button>
+
+            {renderDealerWhatsappContactCard({ compact: true })}
+
+            <div className="dealer-switcher">
+              <div className="dealer-switcher-row">
+                {dealers.length > 1 && (
+                  <select
+                    value={dealer.id}
+                    onChange={(event) => setSelectedDealerId(event.target.value)}
+                  >
+                    {dealers.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.commercialName} · {item.plan}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                <button className="admin-refresh-btn" onClick={refreshDealerPanel}>
+                  Actualizar panel
+                </button>
+              </div>
+              {unreadNotificationsCount > 0 && (
+                <span className="dealer-notifications-header-chip">
+                  {unreadNotificationsCount} aviso{unreadNotificationsCount !== 1 ? "s" : ""} sin leer
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
