@@ -1049,7 +1049,16 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
 
             {/* Compare card */}
             <div className="garage-ox-compare-card">
-              <p className="garage-ox-search__eyebrow">Comparaciones</p>
+              <div className="garage-ox-compare-card__head">
+                <p className="garage-ox-search__eyebrow">Comparaciones</p>
+                <strong>
+                  {compareItems.length === 0
+                    ? "Cockpit vacio"
+                    : compareItems.length === 1
+                    ? "Falta una unidad"
+                    : "Listo para comparar"}
+                </strong>
+              </div>
               {compareItems.length === 0 ? (
                 <div className="garage-ox-compare-card__empty">
                   <strong>Sin vehículos en comparación</strong>
@@ -1101,15 +1110,15 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
             </div>
 
             {/* Radar oX */}
-            <div className="dealer-leads-section buyer-radar-section" ref={radarSectionRef}>
-              <div className="buyer-section-head">
+            <div className="buyer-radar-section" ref={radarSectionRef}>
+              <div className="buyer-radar-section__head">
                 <div>
-                  <p className="eyebrow">Radar oX</p>
-                  <h2>Búsquedas activas</h2>
+                  <p className="garage-ox-search__eyebrow">Radar oX</p>
+                  <h2>oX está buscando oportunidades para vos</h2>
                   <p>
                     {radarRequests.length > 0
-                      ? "Búsquedas registradas. Revisá si aparecieron coincidencias."
-                      : "Guardá criterios de búsqueda para no perder oportunidades."}
+                      ? "Tus criterios activos quedan vivos para volver a buscar cuando aparezca una mejor oportunidad."
+                      : "Guardá criterios de búsqueda y dejá que Radar oX los mantenga presentes."}
                   </p>
                 </div>
                 <button
@@ -1998,6 +2007,179 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
 
           {showBuyerActivityDetails && (
             <div className="buyer-activity-disclosure-body">
+              <div className="garage-ox-activity-toolbar">
+                <span>Detalle de actividad</span>
+                <button
+                  type="button"
+                  className="admin-refresh-btn"
+                  onClick={refreshBuyerPanel}
+                >
+                  Actualizar todo
+                </button>
+              </div>
+
+              <div className="garage-ox-activity-section">
+                <div className="garage-ox-activity-section__head">
+                  <div>
+                    <span>Consultas</span>
+                    <h2>Contactos a dealers</h2>
+                    <p>Seguimiento de los vehiculos que consultaste.</p>
+                  </div>
+                  <strong>{vehicleLeads.length}</strong>
+                </div>
+
+                {vehicleLeads.length === 0 ? (
+                  <div className="empty-state">
+                    <strong>Todavia no realizaste consultas.</strong>
+                    <p>Abri un vehiculo desde Buscar y usa el boton Contactar.</p>
+                  </div>
+                ) : (
+                  <div className="garage-ox-activity-list">
+                    {vehicleLeads.map((lead, index) => (
+                      <article
+                        key={`${lead.created_at}-${index}`}
+                        className="garage-ox-activity-card"
+                      >
+                        <div className="garage-ox-activity-card__main">
+                          <span className="garage-ox-activity-card__eyebrow">
+                            Consulta a dealer
+                          </span>
+                          <strong>
+                            {[lead.vehicle_brand, lead.vehicle_model]
+                              .filter(Boolean)
+                              .join(" ") || "Vehiculo consultado"}
+                          </strong>
+                          <p>{lead.vehicle_version || lead.vehicle_title || "Sin version informada"}</p>
+                        </div>
+                        <div className="garage-ox-activity-card__meta">
+                          <span>{formatDateTime(lead.created_at)}</span>
+                          <span>{formatARS(lead.price_snapshot)}</span>
+                          <span>{lead.dealer_name || "Dealer"}</span>
+                          <small>{lead.dealer_phone || "Contacto registrado"}</small>
+                        </div>
+                        <span className={`admin-chip ${getVehicleLeadChipClass(lead.crm_status)}`.trim()}>
+                          {getVehicleLeadStatusLabel(lead.crm_status)}
+                        </span>
+                      </article>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="garage-ox-activity-section">
+                <div className="garage-ox-activity-section__head">
+                  <div>
+                    <span>0km</span>
+                    <h2>Financiacion 0km</h2>
+                    <p>Consultas enviadas desde la seccion de financiacion.</p>
+                  </div>
+                  <strong>{zeroKmLeads.length}</strong>
+                </div>
+
+                {zeroKmLeads.length === 0 ? (
+                  <div className="empty-state">
+                    <strong>Todavia no enviaste consultas de financiacion 0km.</strong>
+                    <p>Explora las opciones disponibles en la seccion de financiacion.</p>
+                  </div>
+                ) : (
+                  <div className="garage-ox-activity-list">
+                    {zeroKmLeads.map((lead, index) => (
+                      <article
+                        key={`${lead.created_at}-${index}`}
+                        className="garage-ox-activity-card"
+                      >
+                        <div className="garage-ox-activity-card__main">
+                          <span className="garage-ox-activity-card__eyebrow">
+                            Financiacion 0km
+                          </span>
+                          <strong>
+                            {lead.brand_interest || "Marca abierta"}{" "}
+                            {lead.model_interest || ""}
+                          </strong>
+                          <p>{lead.budget_range || "Sin rango declarado"}</p>
+                        </div>
+                        <div className="garage-ox-activity-card__meta">
+                          <span>{formatDateTime(lead.created_at)}</span>
+                          <span>
+                            {lead.city || "Sin ciudad"}
+                            {lead.province ? `, ${lead.province}` : ""}
+                          </span>
+                          <span>{formatARS(lead.down_payment)}</span>
+                          <small>
+                            {lead.preferred_term_months
+                              ? `${lead.preferred_term_months} meses`
+                              : "Sin plazo"}
+                          </small>
+                        </div>
+                        <span className={`admin-chip ${getZeroKmChipClass(lead.status)}`.trim()}>
+                          {getZeroKmStatusLabel(lead.status)}
+                        </span>
+                      </article>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="garage-ox-activity-section">
+                <div className="garage-ox-activity-section__head">
+                  <div>
+                    <span>Venta</span>
+                    <h2>Solicitudes de venta</h2>
+                    <p>Vehiculos que preparaste desde Garage oX para evaluacion comercial.</p>
+                  </div>
+                  <strong>{sellVehicleLeads.length}</strong>
+                </div>
+
+                {sellVehicleLeads.length === 0 ? (
+                  <div className="empty-state">
+                    <strong>Todavia no preparaste una solicitud de venta.</strong>
+                    <p>
+                      Carga un vehiculo propio en Garage oX y marca la opcion de
+                      preparacion para futura venta.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="garage-ox-activity-list">
+                    {sellVehicleLeads.map((lead, index) => (
+                      <article
+                        key={`${lead.created_at}-${index}`}
+                        className="garage-ox-activity-card"
+                      >
+                        <div className="garage-ox-activity-card__main">
+                          <span className="garage-ox-activity-card__eyebrow">
+                            Solicitud de venta
+                          </span>
+                          <strong>
+                            {lead.brand} {lead.model}
+                          </strong>
+                          <p>
+                            {[lead.version, lead.year, `${Number(lead.km || 0).toLocaleString("es-AR")} km`]
+                              .filter(Boolean)
+                              .join(" · ")}
+                          </p>
+                        </div>
+                        <div className="garage-ox-activity-card__meta">
+                          <span>{formatDateTime(lead.created_at)}</span>
+                          <span>
+                            {lead.city || "Sin ciudad"}
+                            {lead.province ? `, ${lead.province}` : ""}
+                          </span>
+                          <span>{formatARS(lead.expected_price)}</span>
+                          {lead.has_debt && <small>Con deuda/prenda declarada</small>}
+                        </div>
+                        <span className={`admin-chip ${getSellLeadChipClass(lead.status)}`.trim()}>
+                          {getSellLeadStatusLabel(lead.status)}
+                        </span>
+                      </article>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="buyer-privacy-note buyer-privacy-note--garage">
+                <strong>Tu actividad es tuya</strong>
+                <span>Solo vos podes ver este espacio de seguimiento.</span>
+              </div>
         <div className="dealer-leads-section">
           <div className="buyer-section-head">
             <div>

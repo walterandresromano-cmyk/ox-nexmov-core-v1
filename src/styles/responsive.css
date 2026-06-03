@@ -15182,8 +15182,7 @@ textarea:focus-visible,
 @media (max-width: 760px) {
   .garage-ox-search {
     padding: 14px;
-    border-radius: 16px;
-    gap: 12px;
+    gap: 14px;
   }
 
   .garage-ox-search__subgrid {
@@ -15194,25 +15193,47 @@ textarea:focus-visible,
   .garage-ox-compare-card {
     height: auto;
   }
+
+  .buyer-radar-section__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .buyer-radar-section__head .primary-action,
+  .garage-ox-compare-card__actions .primary-action,
+  .garage-ox-search .buyer-stat-cta-btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .garage-ox-search__subgrid .buyer-radar-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .garage-ox-search__subgrid .buyer-radar-item-delete {
+    width: 100%;
+    min-height: 44px;
+  }
 }
 
 /* ── Buyer V2.2 — shortlist mobile ──────────────────────────── */
 @media (max-width: 760px) {
   .buyer-shortlist {
     padding: 14px;
-    border-radius: 14px;
   }
 
   .buyer-shortlist__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .buyer-shortlist-card__image {
-    height: 90px;
+    height: 170px;
   }
 
-  .buyer-shortlist-card__actions .table-action-btn {
+  .buyer-shortlist-card__actions .table-action-btn,
+  .buyer-shortlist-card__remove {
     min-height: 44px;
     font-size: 0.7rem;
   }
@@ -15224,8 +15245,8 @@ textarea:focus-visible,
 }
 
 @media (max-width: 420px) {
-  .buyer-shortlist__grid {
-    grid-template-columns: 1fr;
+  .buyer-shortlist-card__image {
+    height: 150px;
   }
 }
 
@@ -15267,5 +15288,70 @@ textarea:focus-visible,
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+  }
+}
+
+/* Garage oX V1.5.1 - unified panel mobile polish */
+@media (max-width: 760px) {
+  .buyer-panel.garage-ox-panel {
+    gap: 12px;
+  }
+
+  .buyer-panel.garage-ox-panel :where(
+    .buyer-hero,
+    .garage-ox-search,
+    .buyer-garage-section.garage-ox-garage,
+    .garage-ox-movement
+  ) {
+    border-radius: 8px;
+  }
+
+  .buyer-panel .buyer-hero,
+  .buyer-panel .garage-ox-search,
+  .buyer-panel .garage-ox-movement {
+    padding: 14px;
+  }
+
+  .buyer-panel :where(
+    .buyer-shortlist,
+    .garage-ox-compare-card,
+    .garage-ox-search__subgrid .buyer-radar-section,
+    .garage-ox-movement__summary,
+    .buyer-activity-disclosure-body,
+    .garage-ox-activity-section
+  ) {
+    border-radius: 8px;
+  }
+
+  .buyer-panel .garage-ox-search__subgrid,
+  .buyer-panel .buyer-shortlist__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .buyer-panel .garage-ox-compare-card__thumbs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .buyer-panel :where(
+    .primary-action,
+    .admin-refresh-btn,
+    .buyer-stat-cta-btn,
+    .buyer-hero__secondary-btn,
+    .buyer-shortlist-card__actions .table-action-btn,
+    .buyer-shortlist-card__remove,
+    .garage-ox-search__subgrid .buyer-radar-item-delete
+  ) {
+    min-height: 44px;
+  }
+
+  .buyer-panel .garage-ox-movement__head,
+  .buyer-panel .buyer-radar-section__head,
+  .buyer-panel .buyer-shortlist__head,
+  .buyer-panel .garage-ox-compare-card__head {
+    align-items: stretch;
+  }
+
+  .buyer-panel .buyer-shortlist-card__actions {
+    grid-template-columns: minmax(0, 1fr) 44px;
   }
 }

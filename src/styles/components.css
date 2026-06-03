@@ -2135,12 +2135,13 @@
 
 .buyer-shortlist {
   display: grid;
-  gap: 14px;
-  padding: 18px 20px;
-  border-radius: 18px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
+  gap: 16px;
+  padding: 18px;
+  border-radius: 0;
+  border: 1px solid rgba(148, 163, 184, 0.16);
   background:
-    linear-gradient(145deg, rgba(10, 20, 40, 0.68), rgba(5, 10, 22, 0.72));
+    radial-gradient(ellipse at 0% 0%, rgba(14, 165, 233, 0.08), transparent 44%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.58), rgba(2, 6, 23, 0.44));
   margin-bottom: 4px;
 }
 
@@ -2172,14 +2173,13 @@
 }
 
 .buyer-shortlist__empty {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   align-items: flex-start;
   gap: 10px;
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px dashed rgba(148, 163, 184, 0.16);
-  background: rgba(148, 163, 184, 0.03);
+  padding: 24px;
+  border-radius: 0;
+  border: 1px dashed rgba(125, 211, 252, 0.24);
+  background: rgba(14, 165, 233, 0.05);
 }
 
 .buyer-shortlist__empty strong {
@@ -2197,27 +2197,28 @@
 
 .buyer-shortlist__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px;
 }
 
 .buyer-shortlist-card {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  background: rgba(15, 23, 42, 0.42);
+  border-radius: 0;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.48);
   overflow: hidden;
-  transition: border-color 0.14s, background 0.14s;
+  transition: border-color 0.14s, background 0.14s, transform 0.14s;
 }
 
 .buyer-shortlist-card:hover {
   border-color: rgba(56, 189, 248, 0.22);
   background: rgba(15, 23, 42, 0.62);
+  transform: translateY(-1px);
 }
 
 .buyer-shortlist-card__image {
-  height: 120px;
+  height: 150px;
   overflow: hidden;
   background: rgba(15, 23, 42, 0.6);
 }
@@ -2234,17 +2235,25 @@
   height: 100%;
   display: grid;
   place-items: center;
-  background: rgba(56, 189, 248, 0.05);
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.10), rgba(15, 23, 42, 0.38));
 }
 
 .buyer-shortlist-card__placeholder span {
-  font-size: 2rem;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(125, 211, 252, 0.24);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.08);
+  font-size: 1.8rem;
   font-weight: 900;
-  color: rgba(56, 189, 248, 0.25);
+  color: rgba(125, 211, 252, 0.52);
 }
 
 .buyer-shortlist-card__body {
-  padding: 10px 12px 8px;
+  padding: 12px 13px 10px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -2275,12 +2284,12 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 0 10px 10px;
+  padding: 0 12px 12px;
 }
 
 .buyer-shortlist-card__actions .table-action-btn {
   flex: 1;
-  min-height: 34px;
+  min-height: 40px;
   font-size: 0.72rem;
   text-align: center;
   justify-content: center;
@@ -2288,9 +2297,9 @@
 
 .buyer-shortlist-card__remove {
   flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 0;
   border: 1px solid rgba(148, 163, 184, 0.18);
   background: transparent;
   color: rgba(148, 163, 184, 0.55);
@@ -2630,21 +2639,24 @@
 
 .garage-ox-search {
   display: grid;
-  gap: 14px;
-  padding: 20px 22px;
-  border-radius: 20px;
-  border: 1px solid rgba(56, 189, 248, 0.10);
+  gap: 18px;
+  padding: 22px;
+  border-radius: 0;
+  border: 1px solid rgba(148, 163, 184, 0.14);
   background:
-    radial-gradient(ellipse at 2% 0%, rgba(56, 189, 248, 0.06), transparent 44%),
-    linear-gradient(148deg, rgba(10, 18, 36, 0.80), rgba(5, 10, 22, 0.72));
+    radial-gradient(ellipse at 2% 0%, rgba(14, 165, 233, 0.10), transparent 42%),
+    linear-gradient(145deg, rgba(10, 18, 36, 0.76), rgba(5, 10, 22, 0.68));
   margin-bottom: 4px;
+  box-shadow:
+    0 16px 42px rgba(2, 6, 23, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .garage-ox-search__head {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 2px;
+  display: grid;
+  gap: 5px;
+  max-width: 720px;
+  margin-bottom: 0;
 }
 
 .garage-ox-search__eyebrow {
@@ -2658,53 +2670,73 @@
 
 .garage-ox-search__head h2 {
   margin: 0;
-  font-size: 1.02rem;
+  font-size: clamp(1.08rem, 1.7vw, 1.42rem);
   font-weight: 800;
   color: rgba(226, 232, 240, 0.96);
 }
 
 .garage-ox-search__head > p {
   margin: 0;
-  font-size: 0.76rem;
-  color: rgba(148, 163, 184, 0.62);
+  font-size: 0.84rem;
+  color: rgba(203, 213, 225, 0.70);
 }
 
 .garage-ox-search__subgrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  align-items: start;
+  gap: 16px;
+  align-items: stretch;
 }
 
 /* Compare card */
 .garage-ox-compare-card {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px 18px;
-  border-radius: 14px;
-  border: 1px solid rgba(167, 139, 250, 0.16);
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 0;
+  border: 1px solid rgba(167, 139, 250, 0.18);
   background:
-    linear-gradient(145deg, rgba(99, 102, 241, 0.06), rgba(15, 23, 42, 0.38));
+    radial-gradient(ellipse at 100% 0%, rgba(167, 139, 250, 0.10), transparent 48%),
+    linear-gradient(145deg, rgba(30, 27, 75, 0.30), rgba(15, 23, 42, 0.54));
   height: 100%;
   box-sizing: border-box;
 }
 
+.garage-ox-compare-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.garage-ox-compare-card__head strong {
+  padding: 5px 9px;
+  border: 1px solid rgba(196, 181, 253, 0.18);
+  border-radius: 999px;
+  background: rgba(167, 139, 250, 0.08);
+  color: rgba(221, 214, 254, 0.90);
+  font-size: 0.68rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
 .garage-ox-compare-card__count {
   margin: 0;
-  font-size: 0.8rem;
-  color: rgba(196, 181, 253, 0.85);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: rgba(237, 233, 254, 0.90);
 }
 
 .garage-ox-compare-card__thumbs {
-  display: flex;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .garage-ox-compare-card__thumb {
-  width: 52px;
-  height: 40px;
-  border-radius: 8px;
+  width: auto;
+  height: 76px;
+  border-radius: 0;
   overflow: hidden;
   border: 1px solid rgba(167, 139, 250, 0.20);
   background: rgba(99, 102, 241, 0.08);
@@ -2730,18 +2762,28 @@
   margin-top: auto;
 }
 
+.garage-ox-compare-card__actions .primary-action {
+  width: 100%;
+  min-height: 44px;
+}
+
 .garage-ox-compare-card__hint {
   margin: 0;
-  font-size: 0.72rem;
-  color: rgba(148, 163, 184, 0.55);
-  font-style: italic;
+  padding: 10px 12px;
+  border: 1px dashed rgba(196, 181, 253, 0.20);
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.78rem;
 }
 
 .garage-ox-compare-card__empty {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 8px;
   flex: 1;
+  min-height: 144px;
+  align-content: center;
+  padding: 14px;
+  border: 1px dashed rgba(196, 181, 253, 0.20);
+  background: rgba(167, 139, 250, 0.04);
 }
 
 .garage-ox-compare-card__empty strong {
@@ -20789,9 +20831,164 @@ body::-webkit-scrollbar {
   margin-top: 16px;
 }
 
+.buyer-activity-disclosure-body > .dealer-leads-section,
+.buyer-activity-disclosure-body > .buyer-privacy-note:not(.buyer-privacy-note--garage) {
+  display: none;
+}
+
+.garage-ox-activity-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.24);
+}
+
+.garage-ox-activity-toolbar span {
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.garage-ox-activity-section {
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.7)),
+    rgba(15, 23, 42, 0.5);
+}
+
+.garage-ox-activity-section__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.garage-ox-activity-section__head span,
+.garage-ox-activity-card__eyebrow {
+  color: rgba(125, 211, 252, 0.84);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.garage-ox-activity-section__head h2 {
+  margin: 4px 0;
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 1rem;
+}
+
+.garage-ox-activity-section__head p {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.68);
+  font-size: 0.82rem;
+}
+
+.garage-ox-activity-section__head > strong {
+  min-width: 38px;
+  padding: 7px 9px;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  background: rgba(14, 165, 233, 0.1);
+  color: rgba(248, 250, 252, 0.96);
+  text-align: center;
+}
+
+.garage-ox-activity-list {
+  display: grid;
+  gap: 10px;
+}
+
+.garage-ox-activity-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(170px, 0.9fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 13px;
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  background: rgba(2, 6, 23, 0.34);
+}
+
+.garage-ox-activity-card__main strong {
+  display: block;
+  margin-top: 4px;
+  color: rgba(248, 250, 252, 0.96);
+  font-size: 0.96rem;
+}
+
+.garage-ox-activity-card__main p,
+.garage-ox-activity-card__meta span,
+.garage-ox-activity-card__meta small {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.68);
+  font-size: 0.78rem;
+}
+
+.garage-ox-activity-card__meta {
+  display: grid;
+  gap: 4px;
+}
+
+.garage-ox-movement .admin-chip,
+.garage-ox-activity-section .admin-chip {
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  background: rgba(14, 165, 233, 0.1);
+  color: rgba(224, 242, 254, 0.94);
+}
+
+.garage-ox-activity-section .empty-state {
+  border: 1px dashed rgba(125, 211, 252, 0.24);
+  background: rgba(14, 165, 233, 0.06);
+}
+
+.buyer-panel .admin-refresh-btn {
+  border-color: rgba(125, 211, 252, 0.18);
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(224, 242, 254, 0.92);
+}
+
+.buyer-privacy-note--garage {
+  margin-top: 0;
+}
+
 :root.light .buyer-garage-section,
 :root[data-theme="light"] .buyer-garage-section {
   border-color: rgba(100, 116, 139, 0.18) !important;
+}
+
+:root.light .garage-ox-activity-toolbar,
+:root.light .garage-ox-activity-section,
+:root.light .garage-ox-activity-card,
+:root[data-theme="light"] .garage-ox-activity-toolbar,
+:root[data-theme="light"] .garage-ox-activity-section,
+:root[data-theme="light"] .garage-ox-activity-card {
+  border-color: rgba(15, 23, 42, 0.1);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+:root.light .garage-ox-activity-toolbar span,
+:root.light .garage-ox-activity-section__head h2,
+:root.light .garage-ox-activity-card__main strong,
+:root[data-theme="light"] .garage-ox-activity-toolbar span,
+:root[data-theme="light"] .garage-ox-activity-section__head h2,
+:root[data-theme="light"] .garage-ox-activity-card__main strong {
+  color: rgba(15, 23, 42, 0.94);
+}
+
+:root.light .garage-ox-activity-section__head p,
+:root.light .garage-ox-activity-card__main p,
+:root.light .garage-ox-activity-card__meta span,
+:root.light .garage-ox-activity-card__meta small,
+:root[data-theme="light"] .garage-ox-activity-section__head p,
+:root[data-theme="light"] .garage-ox-activity-card__main p,
+:root[data-theme="light"] .garage-ox-activity-card__meta span,
+:root[data-theme="light"] .garage-ox-activity-card__meta small {
+  color: rgba(71, 85, 105, 0.82);
 }
 
 /* buyer-activity-disclosure is now transparent — vars handle theming */
@@ -20815,6 +21012,17 @@ body::-webkit-scrollbar {
   .buyer-activity-toggle {
     width: 100%;
     justify-content: center;
+  }
+
+  .garage-ox-activity-toolbar,
+  .garage-ox-activity-section__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .garage-ox-activity-card {
+    grid-template-columns: 1fr;
+    align-items: stretch;
   }
 }
 
@@ -23379,6 +23587,117 @@ body::-webkit-scrollbar {
 /* Microfix 4 — Radar alignment inside subgrid */
 .garage-ox-search__subgrid .buyer-radar-section {
   margin-top: 0;
+  display: grid;
+  gap: 14px;
+  height: 100%;
+  padding: 18px;
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  border-radius: 0;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(45, 212, 191, 0.10), transparent 48%),
+    linear-gradient(145deg, rgba(6, 78, 59, 0.18), rgba(15, 23, 42, 0.54));
+  box-sizing: border-box;
+}
+
+.buyer-radar-section__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.buyer-radar-section__head h2 {
+  margin: 4px 0;
+  color: rgba(240, 253, 250, 0.96);
+  font-size: 1rem;
+}
+
+.buyer-radar-section__head p {
+  margin: 0;
+  max-width: 440px;
+  color: rgba(203, 213, 225, 0.70);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.buyer-radar-section__head .primary-action {
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.garage-ox-search__subgrid .buyer-radar-empty {
+  min-height: 144px;
+  justify-content: center;
+  padding: 18px;
+  border-radius: 0;
+  border-color: rgba(45, 212, 191, 0.24);
+  background: rgba(20, 184, 166, 0.05);
+}
+
+.garage-ox-search__subgrid .buyer-radar-empty strong {
+  color: rgba(204, 251, 241, 0.92);
+}
+
+.garage-ox-search__subgrid .buyer-radar-list {
+  gap: 10px;
+}
+
+.garage-ox-search__subgrid .buyer-radar-item {
+  align-items: flex-start;
+  padding: 12px;
+  border-color: rgba(45, 212, 191, 0.18);
+  border-radius: 0;
+  background: rgba(2, 6, 23, 0.30);
+}
+
+.garage-ox-search__subgrid .buyer-radar-item-criteria {
+  color: rgba(240, 253, 250, 0.92);
+  font-size: 0.82rem;
+}
+
+.garage-ox-search__subgrid .buyer-radar-item-notes,
+.garage-ox-search__subgrid .buyer-radar-item-date {
+  color: rgba(203, 213, 225, 0.64);
+}
+
+.garage-ox-search__subgrid .buyer-radar-item-delete {
+  min-height: 36px;
+  border-radius: 0;
+}
+
+:root.light .garage-ox-search__subgrid .buyer-radar-section,
+:root[data-theme="light"] .garage-ox-search__subgrid .buyer-radar-section {
+  border-color: rgba(13, 148, 136, 0.18);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+:root.light .buyer-radar-section__head h2,
+:root[data-theme="light"] .buyer-radar-section__head h2 {
+  color: rgba(15, 23, 42, 0.94);
+}
+
+:root.light .buyer-radar-section__head p,
+:root[data-theme="light"] .buyer-radar-section__head p {
+  color: rgba(71, 85, 105, 0.82);
+}
+
+:root.light .garage-ox-search__subgrid .buyer-radar-empty,
+:root[data-theme="light"] .garage-ox-search__subgrid .buyer-radar-empty {
+  border-color: rgba(13, 148, 136, 0.22);
+  background: rgba(240, 253, 250, 0.68);
+}
+
+:root.light .garage-ox-search__subgrid .buyer-radar-empty strong,
+:root[data-theme="light"] .garage-ox-search__subgrid .buyer-radar-empty strong,
+:root.light .garage-ox-search__subgrid .buyer-radar-item-criteria,
+:root[data-theme="light"] .garage-ox-search__subgrid .buyer-radar-item-criteria {
+  color: rgba(15, 23, 42, 0.92);
+}
+
+:root.light .garage-ox-search__subgrid .buyer-radar-item,
+:root[data-theme="light"] .garage-ox-search__subgrid .buyer-radar-item {
+  border-color: rgba(13, 148, 136, 0.16);
+  background: rgba(255, 255, 255, 0.74);
 }
 
 /* Microfix 6 — buyer-stat-cta-btn light mode legibility */
@@ -23393,5 +23712,398 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .buyer-stat-cta-btn:hover {
   background: rgba(14, 165, 233, 0.14);
   border-color: #0284c7;
+}
+
+/* ==========================================================
+   Garage oX V1.5.1 - unified Mi Garage visual shell
+   ========================================================== */
+
+.buyer-panel.garage-ox-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.buyer-panel.garage-ox-panel :where(
+  .buyer-hero,
+  .garage-ox-search,
+  .buyer-garage-section.garage-ox-garage,
+  .garage-ox-movement
+) {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid rgba(125, 211, 252, 0.24);
+  background:
+    linear-gradient(132deg, rgba(23, 42, 61, 0.84) 0%, rgba(13, 24, 41, 0.91) 44%, rgba(4, 10, 22, 0.96) 100%),
+    #07111f;
+  box-shadow:
+    0 22px 56px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.buyer-panel.garage-ox-panel :where(
+  .buyer-hero,
+  .garage-ox-search,
+  .buyer-garage-section.garage-ox-garage,
+  .garage-ox-movement
+)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 46%);
+}
+
+.buyer-panel .garage-ox-garage::after {
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.08), transparent 36%),
+    linear-gradient(180deg, rgba(148, 163, 184, 0.05), transparent 58%);
+}
+
+.buyer-panel.garage-ox-panel :where(
+  .buyer-hero > *,
+  .garage-ox-search > *,
+  .buyer-garage-section.garage-ox-garage > *,
+  .garage-ox-movement > *
+) {
+  position: relative;
+  z-index: 1;
+}
+
+.buyer-panel .buyer-hero,
+.buyer-panel .garage-ox-search,
+.buyer-panel .garage-ox-movement {
+  padding: 22px;
+  margin-bottom: 0;
+}
+
+.buyer-panel :where(
+  .garage-ox-search__head,
+  .garage-ox-garage__head,
+  .garage-ox-movement__head,
+  .buyer-hero__profile-row
+) {
+  border-color: rgba(125, 211, 252, 0.14);
+}
+
+.buyer-panel :where(
+  .buyer-hero__eyebrow,
+  .garage-ox-search__eyebrow,
+  .garage-ox-garage__eyebrow,
+  .garage-ox-movement__eyebrow,
+  .buyer-shortlist__head .eyebrow
+) {
+  color: rgba(125, 211, 252, 0.88);
+  letter-spacing: 0.12em;
+}
+
+.buyer-panel :where(
+  .buyer-hero__title,
+  .garage-ox-search__head h2,
+  .garage-ox-garage__title,
+  .garage-ox-movement__head h2,
+  .buyer-shortlist__head h2,
+  .buyer-radar-section__head h2
+) {
+  color: rgba(248, 250, 252, 0.98);
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.buyer-panel :where(
+  .buyer-hero__subtitle,
+  .garage-ox-search__head > p,
+  .garage-ox-garage__subtitle,
+  .garage-ox-movement-card__dealer,
+  .garage-ox-movement-card__date,
+  .buyer-shortlist__head > div > p,
+  .buyer-radar-section__head p,
+  .garage-ox-compare-card__hint
+) {
+  color: rgba(203, 213, 225, 0.74);
+}
+
+.buyer-panel :where(
+  .buyer-shortlist,
+  .garage-ox-compare-card,
+  .garage-ox-search__subgrid .buyer-radar-section,
+  .garage-ox-movement__summary,
+  .buyer-activity-disclosure-body,
+  .garage-ox-activity-section
+) {
+  border-radius: 8px;
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  background:
+    linear-gradient(146deg, rgba(15, 29, 48, 0.72), rgba(7, 13, 27, 0.64)),
+    rgba(2, 6, 23, 0.52);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.buyer-panel .buyer-shortlist {
+  padding: 18px;
+  gap: 18px;
+}
+
+.buyer-panel .buyer-shortlist__grid {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.buyer-panel .buyer-shortlist-card {
+  border-radius: 8px;
+  border-color: rgba(125, 211, 252, 0.14);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.70), rgba(5, 10, 22, 0.82)),
+    rgba(2, 6, 23, 0.58);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+}
+
+.buyer-panel .buyer-shortlist-card__image {
+  height: 160px;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(30, 64, 175, 0.18), rgba(14, 165, 233, 0.10)),
+    rgba(15, 23, 42, 0.72);
+}
+
+.buyer-panel .buyer-shortlist-card__placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(15, 23, 42, 0.70)),
+    rgba(2, 6, 23, 0.52);
+}
+
+.buyer-panel .buyer-shortlist-card__placeholder span {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  background: rgba(15, 23, 42, 0.62);
+}
+
+.buyer-panel :where(
+  .buyer-shortlist__empty,
+  .garage-ox-compare-card__empty,
+  .garage-ox-search__subgrid .buyer-radar-empty,
+  .garage-ox-movement__empty,
+  .garage-ox-garage__empty
+) {
+  border-radius: 8px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  background:
+    linear-gradient(145deg, rgba(15, 37, 58, 0.62), rgba(6, 12, 24, 0.70)),
+    rgba(2, 6, 23, 0.54);
+}
+
+.buyer-panel :where(
+  .buyer-shortlist__empty strong,
+  .garage-ox-compare-card__empty strong,
+  .garage-ox-search__subgrid .buyer-radar-empty strong,
+  .garage-ox-movement__empty strong,
+  .garage-ox-garage__empty strong
+) {
+  color: rgba(248, 250, 252, 0.96);
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.buyer-panel :where(
+  .buyer-shortlist__empty p,
+  .garage-ox-compare-card__empty p,
+  .garage-ox-search__subgrid .buyer-radar-empty p,
+  .garage-ox-movement__empty p,
+  .garage-ox-garage__empty > p
+) {
+  color: rgba(203, 213, 225, 0.72);
+}
+
+.buyer-panel .garage-ox-compare-card {
+  border-color: rgba(125, 211, 252, 0.16);
+}
+
+.buyer-panel .garage-ox-compare-card__head strong,
+.buyer-panel .garage-ox-movement__chips span,
+.buyer-panel .buyer-hero__pulse-item {
+  border-radius: 8px;
+  border-color: rgba(125, 211, 252, 0.16);
+  background: rgba(8, 22, 38, 0.58);
+  color: rgba(186, 230, 253, 0.92);
+}
+
+.buyer-panel .garage-ox-compare-card__thumb {
+  height: 82px;
+  border-radius: 8px;
+  border-color: rgba(125, 211, 252, 0.18);
+  background: rgba(8, 22, 38, 0.62);
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+  border-color: rgba(45, 212, 191, 0.18);
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-item,
+.buyer-panel .garage-ox-movement-card,
+.buyer-panel .garage-ox-activity-card {
+  border-radius: 8px;
+  border-color: rgba(125, 211, 252, 0.14);
+  background: rgba(3, 10, 22, 0.52);
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-item-delete,
+.buyer-panel .buyer-shortlist-card__remove,
+.buyer-panel .buyer-shortlist-card__actions .table-action-btn,
+.buyer-panel .buyer-stat-cta-btn,
+.buyer-panel .buyer-hero__secondary-btn,
+.buyer-panel .admin-refresh-btn {
+  min-height: 40px;
+  border-radius: 999px;
+  border-color: rgba(125, 211, 252, 0.24);
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(224, 242, 254, 0.94);
+}
+
+.buyer-panel .primary-action {
+  min-height: 44px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0ea5e9, #2563eb);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.24);
+}
+
+:root.light .buyer-panel.garage-ox-panel :where(
+  .buyer-hero,
+  .garage-ox-search,
+  .buyer-garage-section.garage-ox-garage,
+  .garage-ox-movement
+),
+:root[data-theme="light"] .buyer-panel.garage-ox-panel :where(
+  .buyer-hero,
+  .garage-ox-search,
+  .buyer-garage-section.garage-ox-garage,
+  .garage-ox-movement
+) {
+  border-color: rgba(14, 165, 233, 0.18);
+  background:
+    linear-gradient(132deg, rgba(255, 255, 255, 0.96), rgba(239, 248, 255, 0.94) 48%, rgba(226, 242, 255, 0.90)),
+    #ffffff;
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+:root.light .buyer-panel :where(
+  .buyer-hero__title,
+  .garage-ox-search__head h2,
+  .garage-ox-garage__title,
+  .garage-ox-movement__head h2,
+  .buyer-shortlist__head h2,
+  .buyer-radar-section__head h2
+),
+:root[data-theme="light"] .buyer-panel :where(
+  .buyer-hero__title,
+  .garage-ox-search__head h2,
+  .garage-ox-garage__title,
+  .garage-ox-movement__head h2,
+  .buyer-shortlist__head h2,
+  .buyer-radar-section__head h2
+) {
+  color: #0f172a;
+}
+
+:root.light .buyer-panel :where(
+  .buyer-hero__subtitle,
+  .garage-ox-search__head > p,
+  .garage-ox-garage__subtitle,
+  .garage-ox-movement-card__dealer,
+  .garage-ox-movement-card__date,
+  .buyer-shortlist__head > div > p,
+  .buyer-radar-section__head p,
+  .garage-ox-compare-card__hint
+),
+:root[data-theme="light"] .buyer-panel :where(
+  .buyer-hero__subtitle,
+  .garage-ox-search__head > p,
+  .garage-ox-garage__subtitle,
+  .garage-ox-movement-card__dealer,
+  .garage-ox-movement-card__date,
+  .buyer-shortlist__head > div > p,
+  .buyer-radar-section__head p,
+  .garage-ox-compare-card__hint
+) {
+  color: #475569;
+}
+
+:root.light .buyer-panel :where(
+  .buyer-shortlist,
+  .garage-ox-compare-card,
+  .garage-ox-search__subgrid .buyer-radar-section,
+  .garage-ox-movement__summary,
+  .buyer-activity-disclosure-body,
+  .garage-ox-activity-section
+),
+:root[data-theme="light"] .buyer-panel :where(
+  .buyer-shortlist,
+  .garage-ox-compare-card,
+  .garage-ox-search__subgrid .buyer-radar-section,
+  .garage-ox-movement__summary,
+  .buyer-activity-disclosure-body,
+  .garage-ox-activity-section
+) {
+  border-color: rgba(14, 165, 233, 0.14);
+  background: rgba(255, 255, 255, 0.76);
+}
+
+:root.light .buyer-panel :where(
+  .buyer-shortlist__empty,
+  .garage-ox-compare-card__empty,
+  .garage-ox-search__subgrid .buyer-radar-empty,
+  .garage-ox-movement__empty,
+  .garage-ox-garage__empty,
+  .buyer-shortlist-card,
+  .garage-ox-search__subgrid .buyer-radar-item,
+  .garage-ox-movement-card,
+  .garage-ox-activity-card
+),
+:root[data-theme="light"] .buyer-panel :where(
+  .buyer-shortlist__empty,
+  .garage-ox-compare-card__empty,
+  .garage-ox-search__subgrid .buyer-radar-empty,
+  .garage-ox-movement__empty,
+  .garage-ox-garage__empty,
+  .buyer-shortlist-card,
+  .garage-ox-search__subgrid .buyer-radar-item,
+  .garage-ox-movement-card,
+  .garage-ox-activity-card
+) {
+  border-color: rgba(14, 165, 233, 0.14);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+:root.light .buyer-panel :where(
+  .buyer-shortlist__empty strong,
+  .garage-ox-compare-card__empty strong,
+  .garage-ox-search__subgrid .buyer-radar-empty strong,
+  .garage-ox-movement__empty strong,
+  .garage-ox-garage__empty strong,
+  .buyer-shortlist-card__title,
+  .garage-ox-movement-card__vehicle,
+  .garage-ox-search__subgrid .buyer-radar-item-criteria
+),
+:root[data-theme="light"] .buyer-panel :where(
+  .buyer-shortlist__empty strong,
+  .garage-ox-compare-card__empty strong,
+  .garage-ox-search__subgrid .buyer-radar-empty strong,
+  .garage-ox-movement__empty strong,
+  .garage-ox-garage__empty strong,
+  .buyer-shortlist-card__title,
+  .garage-ox-movement-card__vehicle,
+  .garage-ox-search__subgrid .buyer-radar-item-criteria
+) {
+  color: #0f172a;
 }
 
