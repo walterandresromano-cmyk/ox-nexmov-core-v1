@@ -1032,164 +1032,232 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
           </article>
         </div>
 
-        {/* Shortlist — favoritos */}
-        <div className="buyer-shortlist">
-          <div className="buyer-shortlist__head">
-            <div>
-              <p className="eyebrow">Tu shortlist</p>
-              <h2>Vehículos guardados</h2>
-              <p>Unidades que guardaste para revisar o comparar.</p>
+        {/* ── Mi búsqueda ─────────────────────────────────────── */}
+        <section className="garage-ox-search">
+          <div className="garage-ox-search__head">
+            <p className="garage-ox-search__eyebrow">Mi búsqueda</p>
+            <h2>Lo que estás mirando ahora</h2>
+            <p>Favoritos, comparaciones y Radar oX en un solo lugar.</p>
+          </div>
+
+          {/* Shortlist — full width */}
+          <div className="buyer-shortlist">
+            <div className="buyer-shortlist__head">
+              <div>
+                <p className="eyebrow">Tu shortlist</p>
+                <h2>Vehículos guardados</h2>
+                <p>Unidades que guardaste para revisar o comparar.</p>
+              </div>
+              {favorites.length > 0 && (
+                <button
+                  type="button"
+                  className="admin-refresh-btn"
+                  onClick={() => setShowBuyerActivityDetails(true)}
+                >
+                  Ver todos ({favorites.length})
+                </button>
+              )}
             </div>
-            {favorites.length > 0 && (
-              <button
-                type="button"
-                className="admin-refresh-btn"
-                onClick={() => setShowBuyerActivityDetails(true)}
-              >
-                Ver todos ({favorites.length})
-              </button>
+
+            {favorites.length === 0 ? (
+              <div className="buyer-shortlist__empty">
+                <strong>Todavía no guardaste vehículos</strong>
+                <p>
+                  Cuando encuentres una unidad que te interese, guardala para volver rápido.
+                </p>
+                <button
+                  type="button"
+                  className="primary-action"
+                  onClick={() => onNavigate?.("search")}
+                >
+                  Buscar vehículos
+                </button>
+              </div>
+            ) : (
+              <div className="buyer-shortlist__grid">
+                {favorites.slice(0, 4).map((vehicle) => {
+                  const imgUrl = vehicle.main_image_url || vehicle.mainImageUrl
+                    || vehicle.imageUrl || vehicle.image_url || "";
+                  const title    = [vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(" ");
+                  const location = [vehicle.city, vehicle.province].filter(Boolean).join(", ");
+                  const price    = Number(vehicle.price || 0);
+
+                  return (
+                    <article key={vehicle.id} className="buyer-shortlist-card">
+                      <div className="buyer-shortlist-card__image">
+                        {imgUrl ? (
+                          <img src={imgUrl} alt={title} loading="lazy" />
+                        ) : (
+                          <div className="buyer-shortlist-card__placeholder">
+                            <span>{String(vehicle.brand || "?")[0].toUpperCase()}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="buyer-shortlist-card__body">
+                        <strong className="buyer-shortlist-card__title">
+                          {title || "Vehículo"}
+                        </strong>
+                        {price > 0 && (
+                          <span className="buyer-shortlist-card__price">
+                            {formatARS(price)}
+                          </span>
+                        )}
+                        {location && (
+                          <span className="buyer-shortlist-card__meta">{location}</span>
+                        )}
+                      </div>
+                      <div className="buyer-shortlist-card__actions">
+                        <button
+                          type="button"
+                          className="table-action-btn"
+                          onClick={() => onNavigate?.("vehicleDetail", { vehicleId: vehicle.id })}
+                        >
+                          Ver →
+                        </button>
+                        <button
+                          type="button"
+                          className="buyer-shortlist-card__remove"
+                          onClick={() => appActions?.removeFavorite?.(vehicle.id)}
+                          aria-label="Quitar de favoritos"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
             )}
           </div>
 
-          {favorites.length === 0 ? (
-            <div className="buyer-shortlist__empty">
-              <strong>Todavía no guardaste vehículos</strong>
-              <p>
-                Cuando encuentres una unidad que te interese, guardala para volver rápido.
-              </p>
-              <button
-                type="button"
-                className="primary-action"
-                onClick={() => onNavigate?.("search")}
-              >
-                Buscar vehículos
-              </button>
-            </div>
-          ) : (
-            <div className="buyer-shortlist__grid">
-              {favorites.slice(0, 4).map((vehicle) => {
-                const imgUrl = vehicle.main_image_url || vehicle.mainImageUrl
-                  || vehicle.imageUrl || vehicle.image_url || "";
-                const title   = [vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(" ");
-                const location = [vehicle.city, vehicle.province].filter(Boolean).join(", ");
-                const price    = Number(vehicle.price || 0);
+          {/* Compare card + Radar — side by side on desktop */}
+          <div className="garage-ox-search__subgrid">
 
-                return (
-                  <article key={vehicle.id} className="buyer-shortlist-card">
-                    <div className="buyer-shortlist-card__image">
-                      {imgUrl ? (
-                        <img src={imgUrl} alt={title} loading="lazy" />
-                      ) : (
-                        <div className="buyer-shortlist-card__placeholder">
-                          <span>{String(vehicle.brand || "?")[0].toUpperCase()}</span>
+            {/* Compare card */}
+            <div className="garage-ox-compare-card">
+              <p className="garage-ox-search__eyebrow">Comparaciones</p>
+              {compareItems.length === 0 ? (
+                <div className="garage-ox-compare-card__empty">
+                  <strong>Sin vehículos en comparación</strong>
+                  <p>Agregá vehículos desde la búsqueda para compararlos lado a lado.</p>
+                  <button
+                    type="button"
+                    className="buyer-stat-cta-btn"
+                    onClick={() => onNavigate?.("search")}
+                  >
+                    Buscar para comparar →
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <p className="garage-ox-compare-card__count">
+                    {compareItems.length} vehículo{compareItems.length !== 1 ? "s" : ""} seleccionado{compareItems.length !== 1 ? "s" : ""} para comparar.
+                  </p>
+                  <div className="garage-ox-compare-card__thumbs">
+                    {compareItems.slice(0, 3).map((v) => {
+                      const img = v.main_image_url || v.imageUrl || v.mainImageUrl || v.image_url || "";
+                      return (
+                        <div key={v.id} className="garage-ox-compare-card__thumb">
+                          {img
+                            ? <img src={img} alt={[v.brand, v.model].filter(Boolean).join(" ")} loading="lazy" />
+                            : <span>{String(v.brand || "?")[0].toUpperCase()}</span>
+                          }
                         </div>
-                      )}
-                    </div>
-                    <div className="buyer-shortlist-card__body">
-                      <strong className="buyer-shortlist-card__title">
-                        {title || "Vehículo"}
-                      </strong>
-                      {price > 0 && (
-                        <span className="buyer-shortlist-card__price">
-                          {formatARS(price)}
-                        </span>
-                      )}
-                      {location && (
-                        <span className="buyer-shortlist-card__meta">{location}</span>
-                      )}
-                    </div>
-                    <div className="buyer-shortlist-card__actions">
+                      );
+                    })}
+                  </div>
+                  <div className="garage-ox-compare-card__actions">
+                    {compareItems.length >= 2 && (
                       <button
                         type="button"
-                        className="table-action-btn"
-                        onClick={() => onNavigate?.("vehicleDetail", { vehicleId: vehicle.id })}
+                        className="primary-action"
+                        onClick={() => appActions?.openCompare?.()}
                       >
-                        Ver →
+                        Ver comparación
                       </button>
-                      <button
-                        type="button"
-                        className="buyer-shortlist-card__remove"
-                        onClick={() => appActions?.removeFavorite?.(vehicle.id)}
-                        aria-label="Quitar de favoritos"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  </article>
-                );
-              })}
+                    )}
+                    {compareItems.length === 1 && (
+                      <p className="garage-ox-compare-card__hint">
+                        Agregá al menos un vehículo más para comparar.
+                      </p>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
-          )}
-        </div>
 
-        <div className="dealer-leads-section buyer-radar-section" ref={radarSectionRef}>
-          <div className="buyer-section-head">
-            <div>
-              <p className="eyebrow">Radar oX</p>
-              <h2>Búsquedas activas</h2>
-              <p>
-                {radarRequests.length > 0
-                  ? "Búsquedas registradas. Revisá si aparecieron coincidencias."
-                  : "Guardá criterios de búsqueda para no perder oportunidades."}
-              </p>
+            {/* Radar oX */}
+            <div className="dealer-leads-section buyer-radar-section" ref={radarSectionRef}>
+              <div className="buyer-section-head">
+                <div>
+                  <p className="eyebrow">Radar oX</p>
+                  <h2>Búsquedas activas</h2>
+                  <p>
+                    {radarRequests.length > 0
+                      ? "Búsquedas registradas. Revisá si aparecieron coincidencias."
+                      : "Guardá criterios de búsqueda para no perder oportunidades."}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="primary-action"
+                  onClick={() => onNavigate?.("search")}
+                >
+                  {radarRequests.length > 0 ? "Volver a buscar" : "Activar Radar"}
+                </button>
+              </div>
+
+              {radarRequests.length === 0 ? (
+                <div className="buyer-radar-empty">
+                  <strong>Sin búsquedas activas</strong>
+                  <p>
+                    Cuando activés Radar desde la búsqueda, tus criterios van a aparecer acá
+                    para que oX rastree oportunidades por vos.
+                  </p>
+                </div>
+              ) : (
+                <ul className="buyer-radar-list">
+                  {radarRequests.map((req) => {
+                    const parts = buildRadarCriteriaSummary(
+                      req.search_text,
+                      req.filters,
+                      req.parsed_intent
+                    );
+                    return (
+                      <li key={req.id} className="buyer-radar-item">
+                        <div className="buyer-radar-item-body">
+                          <div className="buyer-radar-item-criteria">
+                            {parts.length > 0
+                              ? parts.join(" · ")
+                              : "Búsqueda sin criterios específicos"}
+                          </div>
+                          {req.notes && (
+                            <p className="buyer-radar-item-notes">{req.notes}</p>
+                          )}
+                          <time className="buyer-radar-item-date">
+                            {new Intl.DateTimeFormat("es-AR", {
+                              dateStyle: "short",
+                            }).format(new Date(req.created_at))}
+                          </time>
+                        </div>
+                        <button
+                          type="button"
+                          className="buyer-radar-item-delete"
+                          disabled={radarDeletingId === req.id}
+                          onClick={() => handleDeleteRadarRequest(req.id)}
+                          aria-label="Cancelar esta búsqueda activa"
+                        >
+                          {radarDeletingId === req.id ? "…" : "Cancelar"}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </div>
-            <button
-              type="button"
-              className="primary-action"
-              onClick={() => onNavigate?.("search")}
-            >
-              {radarRequests.length > 0 ? "Volver a buscar" : "Activar Radar"}
-            </button>
+
           </div>
-
-          {radarRequests.length === 0 ? (
-            <div className="buyer-radar-empty">
-              <strong>Sin búsquedas activas</strong>
-              <p>
-                Cuando activés Radar desde la búsqueda, tus criterios van a aparecer acá
-                para que oX rastree oportunidades por vos.
-              </p>
-            </div>
-          ) : (
-            <ul className="buyer-radar-list">
-              {radarRequests.map((req) => {
-                const parts = buildRadarCriteriaSummary(
-                  req.search_text,
-                  req.filters,
-                  req.parsed_intent
-                );
-                return (
-                  <li key={req.id} className="buyer-radar-item">
-                    <div className="buyer-radar-item-body">
-                      <div className="buyer-radar-item-criteria">
-                        {parts.length > 0
-                          ? parts.join(" · ")
-                          : "Búsqueda sin criterios específicos"}
-                      </div>
-                      {req.notes && (
-                        <p className="buyer-radar-item-notes">{req.notes}</p>
-                      )}
-                      <time className="buyer-radar-item-date">
-                        {new Intl.DateTimeFormat("es-AR", {
-                          dateStyle: "short",
-                        }).format(new Date(req.created_at))}
-                      </time>
-                    </div>
-                    <button
-                      type="button"
-                      className="buyer-radar-item-delete"
-                      disabled={radarDeletingId === req.id}
-                      onClick={() => handleDeleteRadarRequest(req.id)}
-                      aria-label="Cancelar esta búsqueda activa"
-                    >
-                      {radarDeletingId === req.id ? "…" : "Cancelar"}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
+        </section>
 
         <div className="dealer-leads-section buyer-garage-section">
           <div className="buyer-section-head">

@@ -15156,6 +15156,24 @@ textarea:focus-visible,
   }
 }
 
+/* ── Garage oX V1.2 — Mi búsqueda mobile ────────────────────── */
+@media (max-width: 760px) {
+  .garage-ox-search {
+    padding: 14px;
+    border-radius: 16px;
+    gap: 12px;
+  }
+
+  .garage-ox-search__subgrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .garage-ox-compare-card {
+    height: auto;
+  }
+}
+
 /* ── Buyer V2.2 — shortlist mobile ──────────────────────────── */
 @media (max-width: 760px) {
   .buyer-shortlist {
