@@ -132,6 +132,7 @@ export default function DealerVehicleDetailModal({
   const images = useMemo(() => getVehicleImages(vehicle), [vehicle]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [copyKitState, setCopyKitState] = useState("idle");
+  const [shareKitState, setShareKitState] = useState("idle");
   const selectedImage = images[selectedImageIndex];
   const assistantInsights = getVehicleAssistantInsights(vehicle);
 
@@ -162,6 +163,47 @@ export default function DealerVehicleDetailModal({
       setCopyKitState("error");
     }
     setTimeout(() => setCopyKitState("idle"), 2500);
+  }
+
+  async function handleShareKit() {
+    if (!publicUrl) return;
+
+    const shareTitle = [vehicle.brand, vehicle.model, vehicle.year]
+      .filter(Boolean)
+      .join(" ");
+    const shareText = `${shareTitle}${dealerName ? ` disponible en ${dealerName}` : " disponible"}. Consultá esta unidad en oX NEXMOV.`;
+
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: shareTitle, text: shareText, url: publicUrl });
+        // Share completed — the system handled it, no state change needed
+      } catch (err) {
+        if (err?.name !== "AbortError") {
+          setShareKitState("error");
+          setTimeout(() => setShareKitState("idle"), 2500);
+        }
+      }
+      return;
+    }
+
+    // Fallback: copy public link to clipboard
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(publicUrl);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = publicUrl;
+        ta.style.cssText = "position:fixed;opacity:0;pointer-events:none";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      setShareKitState("linked");
+    } catch {
+      setShareKitState("error");
+    }
+    setTimeout(() => setShareKitState("idle"), 2500);
   }
 
   return (
@@ -365,6 +407,27 @@ export default function DealerVehicleDetailModal({
                : copyKitState === "error"  ? "No se pudo copiar"
                : "Copiar texto"}
             </button>
+
+            {publicUrl && (
+              <button
+                type="button"
+                className={`dealer-social-kit__share-btn${
+                  shareKitState === "linked" ? " dealer-social-kit__share-btn--linked"
+                  : shareKitState === "error"  ? " dealer-social-kit__share-btn--error"
+                  : ""
+                }`}
+                onClick={handleShareKit}
+                aria-label={
+                  shareKitState === "linked" ? "Enlace copiado al portapapeles"
+                  : shareKitState === "error"  ? "No se pudo compartir la publicación"
+                  : "Compartir publicación"
+                }
+              >
+                {shareKitState === "linked" ? "Enlace copiado ✓"
+                 : shareKitState === "error"  ? "No se pudo compartir"
+                 : "Compartir publicación"}
+              </button>
+            )}
 
             <p className="dealer-social-kit__note">
               El texto incluye los datos actuales de la publicación. Revisá antes de compartir.
