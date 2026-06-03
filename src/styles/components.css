@@ -8781,7 +8781,8 @@ body::-webkit-scrollbar {
 .modal-backdrop:has(.vehicle-detail-modal),
 .modal-backdrop:has(.dealer-vehicle-detail-modal),
 .modal-backdrop:has(.ticket-detail-modal),
-.modal-backdrop:has(.edit-images-modal) {
+.modal-backdrop:has(.edit-images-modal),
+.modal-backdrop:has(.dealer-maintenance-modal) {
   position: fixed !important;
   inset: 0 !important;
   z-index: 9000 !important;
@@ -8800,7 +8801,8 @@ body::-webkit-scrollbar {
 .modal-backdrop:has(.vehicle-detail-modal)::before,
 .modal-backdrop:has(.dealer-vehicle-detail-modal)::before,
 .modal-backdrop:has(.ticket-detail-modal)::before,
-.modal-backdrop:has(.edit-images-modal)::before {
+.modal-backdrop:has(.edit-images-modal)::before,
+.modal-backdrop:has(.dealer-maintenance-modal)::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -8815,7 +8817,8 @@ body::-webkit-scrollbar {
 .modal-backdrop:has(.vehicle-detail-modal) .vehicle-detail-modal,
 .modal-backdrop:has(.dealer-vehicle-detail-modal) .dealer-vehicle-detail-modal,
 .modal-backdrop:has(.ticket-detail-modal) .ticket-detail-modal,
-.modal-backdrop:has(.edit-images-modal) .edit-images-modal {
+.modal-backdrop:has(.edit-images-modal) .edit-images-modal,
+.modal-backdrop:has(.dealer-maintenance-modal) .dealer-maintenance-modal {
   position: relative !important;
   z-index: 9010 !important;
 }
@@ -8824,7 +8827,8 @@ body::-webkit-scrollbar {
 .modal-backdrop:has(.vehicle-detail-modal) .modal-close-btn,
 .modal-backdrop:has(.dealer-vehicle-detail-modal) .modal-close-btn,
 .modal-backdrop:has(.ticket-detail-modal) .modal-close-btn,
-.modal-backdrop:has(.edit-images-modal) .modal-close-btn {
+.modal-backdrop:has(.edit-images-modal) .modal-close-btn,
+.modal-backdrop:has(.dealer-maintenance-modal) .modal-close-btn {
   position: relative;
   z-index: 9020 !important;
 }
@@ -8833,7 +8837,8 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .modal-backdrop:has(.vehicle-detail-modal),
 :root[data-theme="light"] .modal-backdrop:has(.dealer-vehicle-detail-modal),
 :root[data-theme="light"] .modal-backdrop:has(.ticket-detail-modal),
-:root[data-theme="light"] .modal-backdrop:has(.edit-images-modal) {
+:root[data-theme="light"] .modal-backdrop:has(.edit-images-modal),
+:root[data-theme="light"] .modal-backdrop:has(.dealer-maintenance-modal) {
   background:
     radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.16), transparent 28%),
     rgba(18, 35, 52, 0.72) !important;
@@ -9840,7 +9845,8 @@ body::-webkit-scrollbar {
 /* oX NEXMOV - P2C internal modals and forms refinement */
 .modal-backdrop:has(.ticket-detail-modal),
 .modal-backdrop:has(.dealer-vehicle-detail-modal),
-.modal-backdrop:has(.edit-images-modal) {
+.modal-backdrop:has(.edit-images-modal),
+.modal-backdrop:has(.dealer-maintenance-modal) {
   z-index: 12100 !important;
   background:
     radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.13), transparent 36%),
@@ -9851,13 +9857,15 @@ body::-webkit-scrollbar {
 
 .modal-backdrop:has(.ticket-detail-modal) .ticket-detail-modal,
 .modal-backdrop:has(.dealer-vehicle-detail-modal) .dealer-vehicle-detail-modal,
-.modal-backdrop:has(.edit-images-modal) .edit-images-modal {
+.modal-backdrop:has(.edit-images-modal) .edit-images-modal,
+.modal-backdrop:has(.dealer-maintenance-modal) .dealer-maintenance-modal {
   z-index: 12110 !important;
 }
 
 .modal-backdrop:has(.ticket-detail-modal) .modal-close-btn,
 .modal-backdrop:has(.dealer-vehicle-detail-modal) .modal-close-btn,
-.modal-backdrop:has(.edit-images-modal) .modal-close-btn {
+.modal-backdrop:has(.edit-images-modal) .modal-close-btn,
+.modal-backdrop:has(.dealer-maintenance-modal) .modal-close-btn {
   z-index: 12120 !important;
 }
 
@@ -9968,7 +9976,8 @@ body::-webkit-scrollbar {
 
 :root[data-theme="light"] .modal-backdrop:has(.ticket-detail-modal),
 :root[data-theme="light"] .modal-backdrop:has(.dealer-vehicle-detail-modal),
-:root[data-theme="light"] .modal-backdrop:has(.edit-images-modal) {
+:root[data-theme="light"] .modal-backdrop:has(.edit-images-modal),
+:root[data-theme="light"] .modal-backdrop:has(.dealer-maintenance-modal) {
   background:
     radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.15), transparent 38%),
     rgba(15, 23, 42, 0.50) !important;
