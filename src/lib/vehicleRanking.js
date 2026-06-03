@@ -79,18 +79,8 @@ export function getVehicleStockSignal(vehicle, {
     };
   }
 
-  // 5. Alta oportunidad
-  if (resolvedScore >= HIGH_SCORE && views > 0 && isPriceOk) {
-    return {
-      key:    "high_opportunity",
-      label:  "Alta oportunidad",
-      level:  "good",
-      reason: "Tiene buena calidad de publicación y señales de interés.",
-      action: "Promocionar",
-    };
-  }
-
-  // 6. Vistas sin consulta
+  // 5. Vistas sin consulta — evaluada antes de high_opportunity para evitar
+  // que publicaciones con buen score pero 0 leads reciban señal positiva
   if (views >= VIEW_THRESHOLD && leadCount === 0) {
     return {
       key:    "views_no_leads",
@@ -98,6 +88,17 @@ export function getVehicleStockSignal(vehicle, {
       level:  "attention",
       reason: "Recibe vistas pero no genera consultas.",
       action: "Revisar precio y fotos",
+    };
+  }
+
+  // 6. Alta oportunidad — solo alcanzable cuando no hay alerta de vistas sin consulta
+  if (resolvedScore >= HIGH_SCORE && views > 0 && isPriceOk) {
+    return {
+      key:    "high_opportunity",
+      label:  "Alta oportunidad",
+      level:  "good",
+      reason: "Tiene buena calidad de publicación y señales de interés.",
+      action: "Promocionar",
     };
   }
 
