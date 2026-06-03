@@ -2427,6 +2427,32 @@
   color: #64748b;
 }
 
+/* ── Garage oX V1.1 — identity aliases ──────────────────────── */
+
+/* Container alias — same as buyer-panel, just adds conceptual identity */
+.garage-ox-panel {
+  --garage-ox-accent: rgba(56, 189, 248, 0.9);
+}
+
+/* Hero alias — inherits buyer-hero, refines brand accent */
+.garage-ox-hero {
+  border-color: rgba(56, 189, 248, 0.16);
+}
+
+.garage-ox-hero__eyebrow {
+  color: var(--garage-ox-accent, rgba(56, 189, 248, 0.9));
+  letter-spacing: 0.14em;
+}
+
+/* Light mode */
+:root[data-theme="light"] .garage-ox-hero {
+  border-color: rgba(14, 165, 233, 0.20);
+}
+
+:root[data-theme="light"] .garage-ox-hero__eyebrow {
+  color: rgba(2, 132, 199, 0.90);
+}
+
 /* Activity strip — lighter than full dealer-leads-section */
 .buyer-activity-strip {
   display: flex;

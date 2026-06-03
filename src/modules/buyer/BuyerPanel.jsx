@@ -785,36 +785,31 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
 
   return (
     <section className="page-section">
-      <div className="container panel buyer-panel">
+      <div className="container panel buyer-panel garage-ox-panel">
 
-        <div className="buyer-hero">
+        <div className="buyer-hero garage-ox-hero">
           <div className="buyer-hero__content">
-            <p className="buyer-hero__eyebrow">Panel comprador</p>
-            <h1 className="buyer-hero__title">
+            <p className="buyer-hero__eyebrow garage-ox-hero__eyebrow">Garage oX</p>
+            <h1 className="buyer-hero__title garage-ox-hero__title">
               {authProfile?.full_name
                 ? `Hola, ${authProfile.full_name.trim().split(/\s+/)[0]}`
-                : "Tu panel"}
+                : "Tu Garage oX"}
             </h1>
-            <p className="buyer-hero__subtitle">
+            <p className="buyer-hero__subtitle garage-ox-hero__subtitle">
               {(totalActivity === 0 && favorites.length === 0 && compareItems.length === 0)
-                ? "Empezá tu búsqueda y guardá las unidades que más te interesan."
-                : [
-                    favorites.length > 0 && `${favorites.length} favorito${favorites.length !== 1 ? "s" : ""}`,
-                    vehicleLeads.length > 0 && `${vehicleLeads.length} consulta${vehicleLeads.length !== 1 ? "s" : ""} activa${vehicleLeads.length !== 1 ? "s" : ""}`,
-                    compareItems.length > 0 && `${compareItems.length} en comparación`,
-                  ].filter(Boolean).join(" · ")
-              }
+                ? "Empezá tu búsqueda, guardá unidades y construí tu Garage oX."
+                : "Tu búsqueda, tus favoritos, tus consultas y tus vehículos en un solo lugar."}
             </p>
             <div className="buyer-hero__actions">
               <button className="primary-action" onClick={() => onNavigate?.("search")}>
-                {(totalActivity === 0 && favorites.length === 0) ? "Buscar vehículos" : "Retomar búsqueda"}
+                {(totalActivity === 0 && favorites.length === 0) ? "Explorar vehículos" : "Retomar búsqueda"}
               </button>
               <button
                 type="button"
                 className="buyer-hero__secondary-btn"
                 onClick={() => radarSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
               >
-                Radar oX
+                Activar Radar oX
               </button>
             </div>
           </div>
