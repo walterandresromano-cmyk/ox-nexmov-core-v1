@@ -403,6 +403,148 @@
   --   'select process_buyer_radar_matches()');
 
   ────────────────────────────────────────────────────────────────
+  7. SPRINT 2 — buyer_profiles.user_id + trigger lead status
+  ────────────────────────────────────────────────────────────────
+
+  -- A) Agregar user_id a buyer_profiles y backfill desde auth.users
+  --    Ejecutar en orden: primero ALTER, luego UPDATE.
+
+  alter table public.buyer_profiles
+    add column if not exists user_id uuid references auth.users(id) on delete set null;
+
+  create index if not exists buyer_profiles_user_id_idx
+    on public.buyer_profiles (user_id)
+    where user_id is not null;
+
+  -- Backfill desde auth.users por coincidencia de email (case-insensitive)
+  -- Solo actualiza filas donde user_id todavía está vacío.
+  update public.buyer_profiles bp
+  set user_id = u.id
+  from auth.users u
+  where lower(bp.email) = lower(u.email)
+    and bp.user_id is null;
+
+  -- B) Función trigger para notificar al comprador cuando cambia crm_status
+
+  create or replace function public.notify_buyer_on_lead_status_change()
+  returns trigger
+  language plpgsql
+  security definer
+  set search_path = public
+  as $$
+  declare
+    v_user_id    uuid;
+    v_vehicle    text;
+    v_title      text;
+    v_body       text;
+    v_severity   text;
+    v_already    boolean;
+  begin
+    -- Solo procesar cuando el status realmente cambia
+    if old.crm_status is not distinct from new.crm_status then
+      return new;
+    end if;
+
+    -- Solo estados comerciales notificables al comprador
+    if new.crm_status not in (
+      'contacted', 'contactado',
+      'reserved',
+      'sold',
+      'closed',
+      'lost', 'no_response', 'cancelled', 'cancelado', 'perdido'
+    ) then
+      return new;
+    end if;
+
+    -- Resolver user_id del comprador desde buyer_profiles
+    select bp.user_id into v_user_id
+    from buyer_profiles bp
+    where bp.id = new.buyer_id
+      and bp.user_id is not null
+    limit 1;
+
+    -- Si no hay user_id (lead anónimo o perfil sin auth), salir sin notificar
+    if v_user_id is null then
+      return new;
+    end if;
+
+    -- Deduplicar: no volver a notificar mismo lead + mismo estado en 24h
+    select exists (
+      select 1 from buyer_notifications
+      where user_id = v_user_id
+        and type = 'lead_status_update'
+        and metadata->>'lead_id' = new.id::text
+        and metadata->>'new_status' = new.crm_status
+        and created_at > now() - interval '24 hours'
+    ) into v_already;
+
+    if v_already then
+      return new;
+    end if;
+
+    -- Construir etiqueta del vehículo (solo vehicle_title_snapshot disponible)
+    v_vehicle := coalesce(nullif(trim(new.vehicle_title_snapshot), ''), 'el vehículo');
+
+    -- Copy y severity según estado
+    case new.crm_status
+      when 'contacted', 'contactado' then
+        v_title    := 'Tu consulta fue recibida';
+        v_body     := 'El dealer ya tomó tu consulta sobre ' || v_vehicle || '.';
+        v_severity := 'info';
+      when 'reserved' then
+        v_title    := 'La unidad fue marcada como reservada';
+        v_body     := 'El dealer actualizó el estado de la unidad que consultaste: ' || v_vehicle || '.';
+        v_severity := 'attention';
+      when 'sold' then
+        v_title    := 'La operación fue cerrada';
+        v_body     := 'El estado de tu consulta sobre ' || v_vehicle || ' fue actualizado.';
+        v_severity := 'success';
+      when 'closed' then
+        v_title    := 'Tu consulta fue actualizada';
+        v_body     := 'El dealer cerró la gestión sobre ' || v_vehicle || '.';
+        v_severity := 'info';
+      else -- lost, no_response, cancelled y variantes
+        v_title    := 'La consulta cambió de estado';
+        v_body     := 'El dealer actualizó el estado de la consulta sobre ' || v_vehicle || '.';
+        v_severity := 'info';
+    end case;
+
+    insert into buyer_notifications (
+      user_id, type, title, body,
+      entity_type, entity_id, severity,
+      action_label, metadata
+    ) values (
+      v_user_id,
+      'lead_status_update',
+      v_title,
+      v_body,
+      'lead',
+      new.id::text,
+      v_severity,
+      'Ver consulta',
+      jsonb_build_object(
+        'lead_id',       new.id,
+        'vehicle_id',    new.vehicle_id,
+        'old_status',    old.crm_status,
+        'new_status',    new.crm_status,
+        'vehicle_label', v_vehicle
+      )
+    );
+
+    return new;
+  end;
+  $$;
+
+  -- C) Registrar el trigger sobre vehicle_action_leads
+
+  drop trigger if exists trg_notify_buyer_lead_status on public.vehicle_action_leads;
+
+  create trigger trg_notify_buyer_lead_status
+    after update of crm_status on public.vehicle_action_leads
+    for each row
+    execute function public.notify_buyer_on_lead_status_change();
+
+  ────────────────────────────────────────────────────────────────
   FIN SQL
   ────────────────────────────────────────────────────────────────
 */
