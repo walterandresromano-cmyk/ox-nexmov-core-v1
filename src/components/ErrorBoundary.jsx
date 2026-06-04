@@ -42,10 +42,8 @@ export default class ErrorBoundary extends Component {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  this.setState({ hasError: false, error: null });
-                  this.props.onNavigate?.("home");
-                }}
+                className="secondary-action"
+                onClick={() => { window.location.href = "/"; }}
               >
                 Volver al inicio
               </button>

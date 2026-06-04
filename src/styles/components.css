@@ -2108,13 +2108,15 @@
 }
 
 .buyer-radar-empty {
-  padding: 18px 20px;
+  padding: 32px 20px;
   border-radius: 12px;
   border: 1px dashed rgba(56, 189, 248, 0.14);
   background: rgba(56, 189, 248, 0.03);
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
 }
 
 .buyer-radar-empty strong {
@@ -2124,11 +2126,11 @@
 }
 
 .buyer-radar-empty p {
-  margin: 0;
-  font-size: 0.78rem;
-  color: rgba(148, 163, 184, 0.65);
-  line-height: 1.45;
-  max-width: 480px;
+  margin: 0 auto;
+  font-size: 0.82rem;
+  color: rgba(148, 163, 184, 0.72);
+  line-height: 1.5;
+  max-width: 360px;
 }
 
 /* ── Buyer V2.2 — Shortlist visual ──────────────────────────── */
@@ -2465,7 +2467,7 @@
 
 .garage-ox-movement__eyebrow {
   margin: 0;
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -19501,7 +19503,11 @@ body::-webkit-scrollbar {
 .buyer-garage-service-form h3,
 .buyer-garage-history h3,
 .buyer-garage-empty strong {
-  color: #f8fafc;
+  display: block;
+  font-size: 0.94rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: rgba(248, 250, 252, 0.96);
 }
 
 .buyer-garage-vehicle-card p,
@@ -19510,8 +19516,9 @@ body::-webkit-scrollbar {
 .buyer-garage-history-empty,
 .buyer-garage-empty p {
   margin: 0;
+  font-size: 0.86rem;
   color: rgba(203, 213, 225, 0.70);
-  line-height: 1.45;
+  line-height: 1.52;
 }
 
 .buyer-garage-card-meta {
@@ -19932,7 +19939,8 @@ body::-webkit-scrollbar {
   border: 1px solid transparent;
   color: rgba(203, 213, 225, 0.78);
   background: transparent;
-  font-weight: 900;
+  font-size: 0.8rem;
+  font-weight: 800;
   cursor: pointer;
 }
 
@@ -19952,7 +19960,7 @@ body::-webkit-scrollbar {
 
 .buyer-garage-summary-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -20872,9 +20880,9 @@ body::-webkit-scrollbar {
 .garage-ox-activity-section__head span,
 .garage-ox-activity-card__eyebrow {
   color: rgba(125, 211, 252, 0.84);
-  font-size: 0.68rem;
-  font-weight: 900;
-  letter-spacing: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -23398,19 +23406,19 @@ body::-webkit-scrollbar {
 .garage-ox-garage__eyebrow {
   display: block;
   margin: 0 0 5px;
-  font-size: 0.64rem;
-  font-weight: 950;
-  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ox-primary);
 }
 
 .garage-ox-garage__title {
   margin: 0;
-  font-size: clamp(1.3rem, 2.8vw, 1.7rem);
-  font-weight: 950;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
+  font-size: clamp(1.1rem, 1.8vw, 1.32rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--ox-text);
 }
 
@@ -23809,8 +23817,7 @@ body::-webkit-scrollbar {
   .buyer-radar-section__head h2
 ) {
   color: rgba(248, 250, 252, 0.98);
-  font-weight: 950;
-  letter-spacing: 0;
+  font-weight: 900;
 }
 
 .buyer-panel :where(
@@ -24107,3 +24114,2842 @@ body::-webkit-scrollbar {
   color: #0f172a;
 }
 
+/* ==========================================================
+   Garage oX V2 - Garage Visual 1: shell + hero
+   ========================================================== */
+
+.container.panel.buyer-panel.garage-ox-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(14px, 2.2vw, 24px);
+  border-radius: 20px;
+  border: 1px solid rgba(125, 211, 252, 0.14);
+  background:
+    radial-gradient(ellipse at 16% 0%, rgba(14, 165, 233, 0.16), transparent 36%),
+    radial-gradient(ellipse at 92% 6%, rgba(37, 99, 235, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(3, 10, 22, 0.96), rgba(2, 6, 23, 0.98));
+  box-shadow:
+    0 34px 90px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.container.panel.buyer-panel.garage-ox-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(180deg, rgba(14, 165, 233, 0.06), transparent 46%);
+}
+
+.buyer-panel .garage-ox-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  align-items: stretch;
+  gap: clamp(18px, 3vw, 34px);
+  min-height: clamp(360px, 42vw, 510px);
+  padding: clamp(24px, 4.2vw, 52px);
+  border-radius: 18px;
+  border-color: rgba(186, 230, 253, 0.20);
+  background:
+    radial-gradient(ellipse at 24% 12%, rgba(56, 189, 248, 0.20), transparent 38%),
+    radial-gradient(ellipse at 82% 16%, rgba(59, 130, 246, 0.16), transparent 36%),
+    linear-gradient(135deg, rgba(10, 25, 43, 0.96), rgba(3, 8, 20, 0.92) 58%, rgba(1, 5, 15, 0.98));
+  box-shadow:
+    0 28px 72px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.buyer-panel .garage-ox-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent, rgba(2, 6, 23, 0.62)),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.12), transparent 48%);
+}
+
+.garage-ox-hero__content {
+  align-content: center;
+  max-width: 690px;
+  gap: 16px;
+}
+
+.garage-ox-hero__eyebrow {
+  width: fit-content;
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  background: rgba(8, 22, 38, 0.48);
+  color: rgba(186, 230, 253, 0.94);
+}
+
+.garage-ox-hero__title {
+  display: grid;
+  gap: 8px;
+  max-width: 720px;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+}
+
+.garage-ox-hero__title > span:not(.garage-ox-hero__brand) {
+  font-size: clamp(1.35rem, 3.2vw, 2.75rem);
+  color: rgba(224, 242, 254, 0.92);
+}
+
+.garage-ox-hero__brand {
+  display: block;
+  color: #f8fafc;
+  text-shadow: 0 18px 46px rgba(14, 165, 233, 0.28);
+}
+
+.garage-ox-hero__subtitle {
+  max-width: 600px;
+  font-size: clamp(0.98rem, 1.25vw, 1.14rem);
+  line-height: 1.65;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+.garage-ox-hero__actions {
+  margin-top: 12px;
+  gap: 12px;
+}
+
+.garage-ox-hero__actions .primary-action {
+  min-height: 48px;
+  padding-inline: 24px;
+  font-size: 0.92rem;
+}
+
+.garage-ox-hero__tool-btn {
+  min-height: 44px;
+  border-radius: 999px;
+  border-color: rgba(186, 230, 253, 0.22);
+  background: rgba(8, 22, 38, 0.46);
+  color: rgba(224, 242, 254, 0.94);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.garage-ox-hero__tool-btn:hover {
+  border-color: rgba(125, 211, 252, 0.42);
+  background: rgba(14, 165, 233, 0.14);
+}
+
+.garage-ox-hero__visual {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  display: grid;
+  gap: 16px;
+  padding: clamp(16px, 2.2vw, 24px);
+  border-radius: 18px;
+  border: 1px solid rgba(186, 230, 253, 0.18);
+  background:
+    linear-gradient(150deg, rgba(15, 37, 58, 0.74), rgba(4, 10, 22, 0.66)),
+    rgba(2, 6, 23, 0.54);
+  box-shadow:
+    0 24px 58px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.garage-ox-hero__visual-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.14);
+}
+
+.garage-ox-hero__visual-head span {
+  color: rgba(186, 230, 253, 0.80);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.garage-ox-hero__visual-head strong {
+  color: #f8fafc;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 1000;
+  line-height: 0.86;
+}
+
+.garage-ox-hero__pulse {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.garage-ox-hero__pulse-item {
+  align-items: flex-start;
+  min-width: 0;
+  min-height: 94px;
+  padding: 14px;
+  border-radius: 16px;
+  border-color: rgba(125, 211, 252, 0.15);
+  background: rgba(3, 10, 22, 0.46);
+}
+
+.garage-ox-hero__pulse-item strong {
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-weight: 1000;
+}
+
+.garage-ox-hero__pulse-item span {
+  margin-top: auto;
+  font-size: 0.66rem;
+  color: rgba(203, 213, 225, 0.72);
+}
+
+.garage-ox-hero__profile-row {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  padding: 12px 14px;
+  border: 1px solid rgba(125, 211, 252, 0.12);
+  border-radius: 16px;
+  background: rgba(3, 10, 22, 0.30);
+}
+
+.garage-ox-hero__profile-row .admin-session-note {
+  font-size: 0.78rem;
+  color: rgba(203, 213, 225, 0.70);
+}
+
+.garage-ox-hero__profile-row .admin-session-note strong {
+  color: rgba(248, 250, 252, 0.92);
+}
+
+.garage-ox-hero__profile-tools {
+  gap: 8px;
+}
+
+.garage-ox-hero__profile-tools .garage-ox-hero__tool-btn {
+  min-height: 38px;
+  padding: 8px 13px;
+  font-size: 0.76rem;
+}
+
+:root.light .container.panel.buyer-panel.garage-ox-panel,
+:root[data-theme="light"] .container.panel.buyer-panel.garage-ox-panel {
+  border-color: rgba(14, 165, 233, 0.14);
+  background:
+    radial-gradient(ellipse at 16% 0%, rgba(14, 165, 233, 0.10), transparent 38%),
+    radial-gradient(ellipse at 92% 6%, rgba(37, 99, 235, 0.07), transparent 36%),
+    linear-gradient(180deg, #f8fbff, #eef7ff);
+  box-shadow:
+    0 34px 80px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+:root.light .buyer-panel .garage-ox-hero,
+:root[data-theme="light"] .buyer-panel .garage-ox-hero {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: #030812;
+  box-shadow:
+    0 26px 64px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+:root.light .buyer-panel .garage-ox-hero .garage-ox-hero__brand,
+:root[data-theme="light"] .buyer-panel .garage-ox-hero .garage-ox-hero__brand {
+  color: #f8fafc;
+  text-shadow: 0 24px 70px rgba(14, 165, 233, 0.32);
+}
+
+:root.light .buyer-panel .garage-ox-hero .garage-ox-hero__subtitle,
+:root[data-theme="light"] .buyer-panel .garage-ox-hero .garage-ox-hero__subtitle {
+  color: rgba(226, 232, 240, 0.86);
+}
+
+:root.light .buyer-panel .garage-ox-hero .garage-ox-hero__user-id,
+:root[data-theme="light"] .buyer-panel .garage-ox-hero .garage-ox-hero__user-id {
+  color: rgba(203, 213, 225, 0.72);
+}
+
+:root.light .buyer-panel .garage-ox-hero .garage-ox-hero__user-id strong,
+:root[data-theme="light"] .buyer-panel .garage-ox-hero .garage-ox-hero__user-id strong {
+  color: rgba(248, 250, 252, 0.94);
+}
+
+.buyer-panel .garage-ox-hero .garage-ox-hero__visual,
+.buyer-panel .garage-ox-hero .garage-ox-hero__profile-row {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+:root.light .garage-ox-hero__pulse-item,
+:root[data-theme="light"] .garage-ox-hero__pulse-item {
+  border-color: rgba(14, 165, 233, 0.14);
+  background: rgba(240, 249, 255, 0.72);
+}
+
+/* ==========================================================
+   Garage oX V2 - Garage Visual 2: Mi busqueda app-like
+   ========================================================== */
+
+.buyer-panel .garage-ox-search {
+  gap: 22px;
+  padding: clamp(20px, 3.2vw, 34px);
+  border-radius: 18px;
+  border-color: rgba(125, 211, 252, 0.16);
+  background:
+    radial-gradient(ellipse at 18% 0%, rgba(14, 165, 233, 0.14), transparent 38%),
+    radial-gradient(ellipse at 92% 18%, rgba(45, 212, 191, 0.10), transparent 34%),
+    linear-gradient(145deg, rgba(10, 25, 43, 0.88), rgba(3, 9, 22, 0.86));
+  box-shadow:
+    0 26px 72px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+.buyer-panel .garage-ox-search__head {
+  max-width: 860px;
+  gap: 8px;
+}
+
+.buyer-panel .garage-ox-search__head h2 {
+  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  line-height: 1.02;
+}
+
+.buyer-panel .garage-ox-search__head > p {
+  max-width: 660px;
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.buyer-panel .buyer-shortlist,
+.buyer-panel .garage-ox-compare-card,
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+  border-radius: 16px;
+  border-color: rgba(186, 230, 253, 0.14);
+  background:
+    linear-gradient(150deg, rgba(15, 37, 58, 0.62), rgba(4, 10, 22, 0.58)),
+    rgba(2, 6, 23, 0.44);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.buyer-panel .buyer-shortlist {
+  padding: clamp(16px, 2.3vw, 24px);
+}
+
+.buyer-panel .buyer-shortlist__head h2 {
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+}
+
+.buyer-panel .buyer-shortlist__head > div > p {
+  font-size: 0.86rem;
+}
+
+.buyer-panel .buyer-shortlist__empty {
+  min-height: 190px;
+  align-content: center;
+  padding: clamp(22px, 4vw, 38px);
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  border-radius: 16px;
+  background:
+    linear-gradient(145deg, rgba(14, 165, 233, 0.10), rgba(3, 10, 22, 0.50)),
+    rgba(2, 6, 23, 0.38);
+}
+
+.buyer-panel .buyer-shortlist__empty strong {
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+}
+
+.buyer-panel .buyer-shortlist__empty p {
+  max-width: 440px;
+  font-size: 0.9rem;
+}
+
+.buyer-panel .buyer-shortlist__grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.buyer-panel .buyer-shortlist-card {
+  min-height: 330px;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.24), rgba(2, 6, 23, 0.78)),
+    rgba(2, 6, 23, 0.54);
+}
+
+.buyer-panel .buyer-shortlist-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(125, 211, 252, 0.30);
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.26);
+}
+
+.buyer-panel .buyer-shortlist-card__image {
+  height: 190px;
+  border-radius: 0;
+}
+
+.buyer-panel .buyer-shortlist-card__body {
+  padding: 14px 15px 10px;
+  gap: 7px;
+}
+
+.buyer-panel .buyer-shortlist-card__title {
+  white-space: normal;
+  font-size: 0.98rem;
+  line-height: 1.18;
+}
+
+.buyer-panel .buyer-shortlist-card__price {
+  font-size: 1.02rem;
+  font-weight: 950;
+}
+
+.buyer-panel .buyer-shortlist-card__meta {
+  font-size: 0.78rem;
+  color: rgba(203, 213, 225, 0.66);
+}
+
+.buyer-panel .buyer-shortlist-card__actions {
+  padding: 0 15px 15px;
+}
+
+.buyer-panel .buyer-shortlist-card__actions .table-action-btn {
+  min-height: 44px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+}
+
+.buyer-panel .buyer-shortlist-card__remove {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(3, 10, 22, 0.24);
+}
+
+.buyer-panel .garage-ox-search__subgrid {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 16px;
+}
+
+.buyer-panel .garage-ox-compare-card {
+  gap: 16px;
+  padding: 20px;
+  border-color: rgba(196, 181, 253, 0.16);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(167, 139, 250, 0.14), transparent 46%),
+    linear-gradient(150deg, rgba(39, 32, 86, 0.52), rgba(4, 10, 22, 0.62));
+}
+
+.garage-ox-compare-card__slots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.garage-ox-compare-card__slot {
+  min-height: 86px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(196, 181, 253, 0.20);
+  background:
+    linear-gradient(145deg, rgba(167, 139, 250, 0.10), rgba(15, 23, 42, 0.34)),
+    rgba(2, 6, 23, 0.32);
+  color: rgba(221, 214, 254, 0.48);
+  font-size: 1.25rem;
+  font-weight: 950;
+}
+
+.garage-ox-compare-card__slot.is-filled {
+  border-color: rgba(221, 214, 254, 0.28);
+  color: rgba(237, 233, 254, 0.86);
+}
+
+.buyer-panel .garage-ox-compare-card__thumb {
+  height: auto;
+  min-height: 86px;
+  border-radius: 14px;
+}
+
+.buyer-panel .garage-ox-compare-card__empty {
+  min-height: 230px;
+  gap: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.buyer-panel .garage-ox-compare-card__empty strong {
+  font-size: 1.02rem;
+  line-height: 1.25;
+}
+
+.buyer-panel .garage-ox-compare-card__empty p,
+.buyer-panel .garage-ox-compare-card__hint {
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.buyer-panel .garage-ox-compare-card__hint {
+  border-radius: 14px;
+  border-style: solid;
+  background: rgba(167, 139, 250, 0.06);
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+  position: relative;
+  border-color: rgba(45, 212, 191, 0.18);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(45, 212, 191, 0.14), transparent 42%),
+    linear-gradient(150deg, rgba(6, 78, 59, 0.34), rgba(4, 10, 22, 0.62));
+}
+
+.buyer-radar-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  gap: 7px;
+  margin: 2px 0 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(45, 212, 191, 0.20);
+  background: rgba(20, 184, 166, 0.08);
+  color: rgba(204, 251, 241, 0.78);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.buyer-radar-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(45, 212, 191, 0.60);
+  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.10);
+}
+
+.buyer-radar-status.is-active::before {
+  background: #5eead4;
+  box-shadow:
+    0 0 0 4px rgba(45, 212, 191, 0.13),
+    0 0 18px rgba(45, 212, 191, 0.40);
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-empty {
+  min-height: 230px;
+  gap: 12px;
+  padding: 24px;
+  border-style: solid;
+  border-radius: 16px;
+  background:
+    linear-gradient(145deg, rgba(20, 184, 166, 0.10), rgba(3, 10, 22, 0.48)),
+    rgba(2, 6, 23, 0.36);
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-empty strong {
+  font-size: 1.02rem;
+  line-height: 1.3;
+}
+
+.buyer-radar-criteria-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.buyer-radar-criteria-chips span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(94, 234, 212, 0.16);
+  background: rgba(20, 184, 166, 0.08);
+  color: rgba(204, 251, 241, 0.90);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-item {
+  border-radius: 14px;
+  background: rgba(3, 10, 22, 0.42);
+}
+
+:root.light .buyer-panel .garage-ox-search,
+:root[data-theme="light"] .buyer-panel .garage-ox-search {
+  border-color: rgba(14, 165, 233, 0.14);
+  background:
+    radial-gradient(ellipse at 18% 0%, rgba(14, 165, 233, 0.10), transparent 38%),
+    radial-gradient(ellipse at 92% 18%, rgba(13, 148, 136, 0.07), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(236, 248, 255, 0.90));
+}
+
+:root.light .buyer-panel .buyer-shortlist,
+:root.light .buyer-panel .garage-ox-compare-card,
+:root.light .buyer-panel .garage-ox-search__subgrid .buyer-radar-section,
+:root[data-theme="light"] .buyer-panel .buyer-shortlist,
+:root[data-theme="light"] .buyer-panel .garage-ox-compare-card,
+:root[data-theme="light"] .buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+  border-color: rgba(14, 165, 233, 0.12);
+  background: rgba(255, 255, 255, 0.76);
+}
+
+:root.light .buyer-panel .buyer-shortlist-card,
+:root[data-theme="light"] .buyer-panel .buyer-shortlist-card {
+  background: rgba(255, 255, 255, 0.86);
+}
+
+:root.light .garage-ox-compare-card__slot,
+:root[data-theme="light"] .garage-ox-compare-card__slot {
+  border-color: rgba(124, 58, 237, 0.16);
+  background: rgba(245, 243, 255, 0.72);
+  color: rgba(109, 40, 217, 0.42);
+}
+
+:root.light .buyer-radar-status,
+:root.light .buyer-radar-criteria-chips span,
+:root[data-theme="light"] .buyer-radar-status,
+:root[data-theme="light"] .buyer-radar-criteria-chips span {
+  border-color: rgba(13, 148, 136, 0.18);
+  background: rgba(240, 253, 250, 0.72);
+  color: #0f766e;
+}
+
+/* Garage oX V2.1 - contemporary visual lift for Mi busqueda */
+.buyer-panel .garage-ox-search {
+  border: 0;
+  border-radius: 24px;
+  background:
+    linear-gradient(125deg, rgba(15, 42, 63, 0.74), rgba(3, 10, 22, 0.88) 54%, rgba(7, 18, 34, 0.82)),
+    #020617;
+  box-shadow:
+    0 36px 92px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.buyer-panel .garage-ox-search::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  mask-image: linear-gradient(145deg, #000, transparent 58%);
+}
+
+.buyer-panel .garage-ox-search__head {
+  position: relative;
+  padding-left: 18px;
+}
+
+.buyer-panel .garage-ox-search__head::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #38bdf8, #5eead4);
+}
+
+.buyer-panel .garage-ox-search__eyebrow {
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  background: rgba(2, 6, 23, 0.24);
+  color: rgba(186, 230, 253, 0.88);
+}
+
+.buyer-panel .buyer-shortlist,
+.buyer-panel .garage-ox-compare-card,
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+  border: 0;
+  border-radius: 22px;
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    rgba(2, 6, 23, 0.42);
+  box-shadow:
+    0 22px 54px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.buyer-panel .buyer-shortlist-card {
+  position: relative;
+  min-height: 360px;
+  border: 0;
+  border-radius: 22px;
+  background: rgba(2, 6, 23, 0.50);
+  box-shadow:
+    0 20px 46px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.buyer-panel .buyer-shortlist-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(180deg, transparent 36%, rgba(2, 6, 23, 0.26));
+}
+
+.buyer-panel .buyer-shortlist-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.buyer-panel .buyer-shortlist-card__image {
+  height: 220px;
+  border-radius: 22px 22px 0 0;
+}
+
+.buyer-panel .buyer-shortlist-card__image img {
+  transition: transform 0.24s ease;
+}
+
+.buyer-panel .buyer-shortlist-card:hover .buyer-shortlist-card__image img {
+  transform: scale(1.035);
+}
+
+.buyer-panel .buyer-shortlist-card__body {
+  padding: 16px 16px 12px;
+}
+
+.buyer-panel .buyer-shortlist-card__title {
+  font-size: 1.05rem;
+}
+
+.buyer-panel .buyer-shortlist-card__price {
+  color: #e0f2fe;
+  font-size: 1.12rem;
+}
+
+.buyer-panel .buyer-shortlist-card__actions .table-action-btn {
+  background: rgba(224, 242, 254, 0.10);
+}
+
+.buyer-panel .buyer-shortlist-card__remove {
+  opacity: 0.74;
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+.buyer-panel .garage-ox-search__subgrid {
+  align-items: stretch;
+}
+
+.buyer-panel .garage-ox-compare-card,
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+  min-height: 330px;
+}
+
+.garage-ox-compare-card__slot {
+  border: 0;
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.026)),
+    rgba(15, 23, 42, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.garage-ox-compare-card__slot.is-filled {
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+  overflow: hidden;
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-section::after {
+  content: "";
+  position: absolute;
+  right: -20%;
+  top: 0;
+  width: 52%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.08));
+  transform: skewX(-12deg);
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-empty,
+.buyer-panel .garage-ox-compare-card__empty {
+  position: relative;
+  z-index: 1;
+}
+
+.buyer-radar-status {
+  border: 0;
+  background: rgba(204, 251, 241, 0.10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.buyer-radar-criteria-chips span {
+  border: 0;
+  background: rgba(204, 251, 241, 0.10);
+}
+
+:root.light .buyer-panel .garage-ox-search,
+:root[data-theme="light"] .buyer-panel .garage-ox-search {
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.96), rgba(236, 248, 255, 0.90) 54%, rgba(225, 245, 254, 0.86)),
+    #f8fbff;
+  box-shadow:
+    0 30px 78px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+:root.light .buyer-panel .buyer-shortlist,
+:root.light .buyer-panel .garage-ox-compare-card,
+:root.light .buyer-panel .garage-ox-search__subgrid .buyer-radar-section,
+:root[data-theme="light"] .buyer-panel .buyer-shortlist,
+:root[data-theme="light"] .buyer-panel .garage-ox-compare-card,
+:root[data-theme="light"] .buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 18px 44px rgba(15, 23, 42, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+:root.light .buyer-panel .buyer-shortlist-card,
+:root[data-theme="light"] .buyer-panel .buyer-shortlist-card {
+  background: rgba(255, 255, 255, 0.88);
+}
+
+:root.light .buyer-panel .buyer-shortlist-card__price,
+:root[data-theme="light"] .buyer-panel .buyer-shortlist-card__price {
+  color: #0369a1;
+}
+
+/* Garage oX V2.2 - comparison lives inside saved vehicles */
+.buyer-panel .buyer-shortlist-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.55fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(14, 165, 233, 0.06)),
+    rgba(2, 6, 23, 0.36);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.buyer-shortlist-compare__copy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.buyer-shortlist-compare__copy span {
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(224, 242, 254, 0.08);
+  color: rgba(186, 230, 253, 0.86);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.buyer-shortlist-compare__copy strong {
+  color: rgba(248, 250, 252, 0.94);
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
+.buyer-shortlist-compare__slots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.buyer-shortlist-compare__slot {
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 14px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    rgba(15, 23, 42, 0.42);
+  color: rgba(221, 214, 254, 0.48);
+  font-size: 1rem;
+  font-weight: 950;
+}
+
+.buyer-shortlist-compare__slot.is-filled {
+  color: rgba(248, 250, 252, 0.92);
+}
+
+.buyer-shortlist-compare__slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.buyer-shortlist-compare__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.buyer-shortlist-compare__actions :where(.primary-action, .buyer-stat-cta-btn) {
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.buyer-shortlist-compare__hint {
+  max-width: 180px;
+  color: rgba(203, 213, 225, 0.66);
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.3;
+  text-align: right;
+}
+
+.buyer-shortlist-compare__more {
+  background: rgba(224, 242, 254, 0.07);
+}
+
+.buyer-panel .garage-ox-search__subgrid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+  min-height: 0;
+}
+
+:root.light .buyer-panel .buyer-shortlist-compare,
+:root[data-theme="light"] .buyer-panel .buyer-shortlist-compare {
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(14, 165, 233, 0.06)),
+    rgba(255, 255, 255, 0.70);
+}
+
+:root.light .buyer-shortlist-compare__copy span,
+:root[data-theme="light"] .buyer-shortlist-compare__copy span {
+  background: rgba(14, 165, 233, 0.08);
+  color: #0369a1;
+}
+
+:root.light .buyer-shortlist-compare__copy strong,
+:root[data-theme="light"] .buyer-shortlist-compare__copy strong {
+  color: #0f172a;
+}
+
+:root.light .buyer-shortlist-compare__hint,
+:root[data-theme="light"] .buyer-shortlist-compare__hint {
+  color: #64748b;
+}
+
+:root.light .buyer-shortlist-compare__slot,
+:root[data-theme="light"] .buyer-shortlist-compare__slot {
+  background: rgba(248, 250, 252, 0.86);
+  color: rgba(99, 102, 241, 0.42);
+}
+
+/* Garage oX V2.3 - compare selection directly from saved vehicles */
+.buyer-panel .buyer-shortlist-card.is-comparing {
+  box-shadow:
+    0 24px 56px rgba(14, 165, 233, 0.16),
+    0 0 0 2px rgba(56, 189, 248, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.buyer-panel .buyer-shortlist-card.is-comparing::before {
+  content: "En comparación";
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.88);
+  color: #f8fafc;
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 24px rgba(14, 165, 233, 0.24);
+}
+
+.buyer-panel .buyer-shortlist-card__actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(94px, 0.65fr) 44px;
+  align-items: center;
+}
+
+.buyer-panel .buyer-shortlist__head-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.buyer-panel .buyer-shortlist__head-actions :where(.primary-action, .buyer-stat-cta-btn, .admin-refresh-btn) {
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.buyer-panel .buyer-shortlist-card__compare {
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(224, 242, 254, 0.94);
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.buyer-panel .buyer-shortlist-card__compare[aria-pressed="true"] {
+  border-color: rgba(45, 212, 191, 0.28);
+  background: rgba(20, 184, 166, 0.14);
+  color: rgba(204, 251, 241, 0.96);
+}
+
+button.buyer-shortlist-compare__slot {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+button.buyer-shortlist-compare__slot:hover {
+  transform: translateY(-1px);
+}
+
+:root.light .buyer-panel .buyer-shortlist-card.is-comparing,
+:root[data-theme="light"] .buyer-panel .buyer-shortlist-card.is-comparing {
+  box-shadow:
+    0 20px 46px rgba(14, 165, 233, 0.12),
+    0 0 0 2px rgba(14, 165, 233, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+:root.light .buyer-panel .buyer-shortlist-card__compare,
+:root[data-theme="light"] .buyer-panel .buyer-shortlist-card__compare {
+  border-color: rgba(14, 165, 233, 0.18);
+  background: rgba(224, 242, 254, 0.62);
+  color: #0369a1;
+}
+
+:root.light .buyer-panel .buyer-shortlist-card__compare[aria-pressed="true"],
+:root[data-theme="light"] .buyer-panel .buyer-shortlist-card__compare[aria-pressed="true"] {
+  border-color: rgba(13, 148, 136, 0.24);
+  background: rgba(240, 253, 250, 0.86);
+  color: #0f766e;
+}
+
+/* ==========================================================
+   Garage oX V3 - cinematic product direction
+   ========================================================== */
+
+.container.panel.buyer-panel.garage-ox-panel {
+  padding: clamp(18px, 2.6vw, 34px);
+  border-radius: 0;
+  border: 0;
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(14, 165, 233, 0.13), transparent 30%),
+    radial-gradient(ellipse at 88% 12%, rgba(37, 99, 235, 0.10), transparent 32%),
+    linear-gradient(180deg, #030814 0%, #050b17 38%, #020611 100%);
+  box-shadow: none;
+}
+
+.container.panel.buyer-panel.garage-ox-panel::before {
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.06) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+  background-size: 86px 86px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.78), transparent 72%);
+}
+
+.buyer-panel .garage-ox-hero {
+  position: relative;
+  min-height: clamp(310px, 33vw, 430px);
+  display: grid;
+  grid-template-columns: minmax(320px, 0.45fr) minmax(0, 1fr);
+  align-items: stretch;
+  overflow: hidden;
+  padding: clamp(28px, 4vw, 54px);
+  border-radius: 28px;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  background: #030812;
+  box-shadow:
+    0 34px 90px rgba(0, 0, 0, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.buyer-panel .garage-ox-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: rgba(2, 6, 18, 0.18);
+}
+
+.buyer-panel .garage-ox-hero::after {
+  inset: auto 0 0;
+  height: 54%;
+  background:
+    linear-gradient(180deg, transparent, rgba(2, 6, 23, 0.88)),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.10), transparent 42%, rgba(56, 189, 248, 0.04));
+}
+
+.garage-ox-hero__content {
+  position: relative;
+  z-index: 2;
+  justify-content: center;
+  align-content: center;
+  max-width: 560px;
+  min-height: 250px;
+}
+
+.garage-ox-hero__eyebrow,
+.garage-ox-passport__badge {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(56, 189, 248, 0.36);
+  background: rgba(14, 165, 233, 0.12);
+  color: rgba(224, 242, 254, 0.95);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.garage-ox-hero__eyebrow::before,
+.garage-ox-passport__badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #38bdf8;
+  box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.12);
+}
+
+.garage-ox-hero__title {
+  display: block;
+  margin-top: 4px;
+}
+
+.garage-ox-hero__brand {
+  color: #f8fafc;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.12),
+    0 24px 70px rgba(14, 165, 233, 0.32);
+}
+
+.garage-ox-hero__subtitle {
+  max-width: 680px;
+  margin-top: 6px;
+  color: rgba(226, 232, 240, 0.84);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.52;
+}
+
+.garage-ox-hero__actions {
+  margin-top: 20px;
+}
+
+.garage-ox-hero__actions .primary-action,
+.buyer-panel .buyer-shortlist__head-actions .primary-action,
+.garage-ox-garage__head .primary-action {
+  min-height: 50px;
+  padding-inline: 25px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #22c4f8, #2563eb);
+  box-shadow:
+    0 18px 36px rgba(37, 99, 235, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.garage-ox-hero__tool-btn,
+.buyer-panel .buyer-shortlist__head-actions :where(.buyer-stat-cta-btn, .admin-refresh-btn),
+.garage-ox-movement .buyer-activity-toggle {
+  min-height: 48px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 999px;
+  background: rgba(2, 6, 23, 0.38);
+  color: rgba(241, 245, 249, 0.92);
+}
+
+.garage-ox-hero__visual {
+  position: relative;
+  z-index: 1;
+  display: block;
+  min-height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.garage-ox-hero__scene {
+  position: absolute;
+  inset: 0;
+}
+
+.garage-ox-hero__watermark {
+  position: absolute;
+  top: 24%;
+  right: 27%;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(148, 163, 184, 0.18);
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 1000;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  filter: drop-shadow(0 0 28px rgba(148, 163, 184, 0.20));
+}
+
+.garage-ox-hero__car-line {
+  position: absolute;
+  left: 16%;
+  right: 8%;
+  bottom: 17%;
+  height: 38%;
+  border-bottom: 2px solid rgba(125, 211, 252, 0.16);
+}
+
+.garage-ox-hero__car-line::before,
+.garage-ox-hero__car-line::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  width: 76px;
+  height: 76px;
+  border-radius: 999px;
+  border: 2px solid rgba(125, 211, 252, 0.16);
+  box-shadow: inset 0 0 0 18px rgba(2, 6, 23, 0.56);
+}
+
+.garage-ox-hero__car-line::before {
+  left: 21%;
+}
+
+.garage-ox-hero__car-line::after {
+  right: 24%;
+}
+
+.garage-ox-hero__garage-lines {
+  position: absolute;
+  right: 8%;
+  top: 19%;
+  width: 112px;
+  height: 142px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 4px;
+  background:
+    linear-gradient(rgba(148, 163, 184, 0.14), rgba(148, 163, 184, 0.14)) 16px 26px / 72px 2px no-repeat,
+    linear-gradient(rgba(148, 163, 184, 0.14), rgba(148, 163, 184, 0.14)) 16px 66px / 72px 2px no-repeat,
+    linear-gradient(rgba(148, 163, 184, 0.14), rgba(148, 163, 184, 0.14)) 16px 106px / 72px 2px no-repeat,
+    rgba(15, 23, 42, 0.16);
+}
+
+.garage-ox-hero__signature {
+  position: absolute;
+  right: 7%;
+  bottom: 12%;
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  color: rgba(241, 245, 249, 0.92);
+  font-size: clamp(1rem, 1.4vw, 1.35rem);
+  font-weight: 1000;
+  letter-spacing: 0.20em;
+}
+
+.garage-ox-hero__signature strong {
+  letter-spacing: 0;
+}
+
+.garage-ox-hero__profile-row {
+  position: relative;
+  z-index: 2;
+  grid-column: 1 / -1;
+  margin-top: 0;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 0;
+  background: transparent;
+}
+
+.garage-ox-passport {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 24px);
+  padding: clamp(20px, 2.6vw, 34px) 0;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+}
+
+.garage-ox-passport__item {
+  position: relative;
+  min-height: 154px;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.garage-ox-passport__item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 16%;
+  bottom: 0;
+  height: 1px;
+  background: rgba(56, 189, 248, 0.18);
+  transform-origin: left;
+  transform: scaleX(0.35);
+  transition: transform 0.22s ease, background 0.22s ease;
+}
+
+.garage-ox-passport__item:hover::after,
+.garage-ox-passport__item:focus-visible::after {
+  background: rgba(56, 189, 248, 0.52);
+  transform: scaleX(1);
+}
+
+.garage-ox-passport__item strong {
+  color: #f8fafc;
+  font-size: clamp(1.02rem, 1.3vw, 1.22rem);
+  font-weight: 1000;
+}
+
+.garage-ox-passport__item small {
+  max-width: 280px;
+  color: rgba(203, 213, 225, 0.78);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.garage-ox-passport__item em {
+  margin-top: auto;
+  color: rgba(125, 211, 252, 0.88);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.garage-ox-disclaimer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 54px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.78rem;
+}
+
+.garage-ox-disclaimer strong {
+  color: rgba(248, 250, 252, 0.92);
+}
+
+.buyer-panel .garage-ox-search,
+.buyer-panel .buyer-garage-section.garage-ox-garage,
+.buyer-panel .garage-ox-movement {
+  margin-top: clamp(28px, 4vw, 54px);
+  border-radius: 28px;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(14, 165, 233, 0.10), transparent 32%),
+    linear-gradient(180deg, rgba(8, 18, 33, 0.78), rgba(4, 10, 22, 0.86));
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.buyer-panel .garage-ox-search__head,
+.buyer-panel .garage-ox-garage__head,
+.buyer-panel .garage-ox-movement__head {
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.14);
+}
+
+.buyer-panel .garage-ox-search__head::before {
+  display: none;
+}
+
+.buyer-panel .garage-ox-search__head h2,
+.buyer-panel .garage-ox-garage__title,
+.buyer-panel .garage-ox-movement__head h2 {
+  max-width: 820px;
+  font-size: clamp(1.1rem, 1.8vw, 1.32rem);
+  line-height: 1.1;
+}
+
+.buyer-panel .buyer-shortlist,
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-section,
+.buyer-panel .garage-ox-movement__summary,
+.buyer-panel .buyer-garage-hero,
+.buyer-panel .buyer-garage-owned-form,
+.buyer-panel .buyer-garage-shell {
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+    rgba(2, 6, 23, 0.36);
+}
+
+.buyer-panel .buyer-shortlist__grid {
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+}
+
+.buyer-panel .buyer-shortlist-card,
+.buyer-panel .garage-ox-movement-card,
+.buyer-panel .garage-ox-search__subgrid .buyer-radar-item {
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  background:
+    linear-gradient(180deg, rgba(10, 34, 58, 0.78), rgba(2, 6, 23, 0.92));
+}
+
+.buyer-panel .buyer-shortlist-card__image {
+  height: clamp(210px, 18vw, 275px);
+}
+
+.buyer-panel .buyer-shortlist-card__compare,
+.buyer-panel .buyer-shortlist-card__actions .table-action-btn,
+.buyer-panel .buyer-shortlist-card__remove {
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.buyer-panel .buyer-shortlist-card__compare:hover,
+.buyer-panel .buyer-shortlist-card__actions .table-action-btn:hover,
+.buyer-panel .buyer-shortlist-card__remove:hover {
+  transform: translateY(-1px);
+}
+
+.buyer-radar-status.is-active::before {
+  animation: garageOxPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes garageOxPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.34);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(45, 212, 191, 0);
+  }
+}
+
+:root.light .container.panel.buyer-panel.garage-ox-panel,
+:root[data-theme="light"] .container.panel.buyer-panel.garage-ox-panel {
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(14, 165, 233, 0.10), transparent 32%),
+    linear-gradient(180deg, #f8fbff 0%, #eef7ff 48%, #f8fbff 100%);
+}
+
+:root.light .buyer-panel .garage-ox-hero,
+:root[data-theme="light"] .buyer-panel .garage-ox-hero {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(235, 247, 255, 0.90) 44%, rgba(226, 241, 252, 0.64) 100%),
+    radial-gradient(ellipse at 74% 48%, rgba(14, 165, 233, 0.16), transparent 34%);
+}
+
+:root.light .garage-ox-passport__item strong,
+:root.light .garage-ox-disclaimer strong,
+:root[data-theme="light"] .garage-ox-passport__item strong,
+:root[data-theme="light"] .garage-ox-disclaimer strong {
+  color: #0f172a;
+}
+
+:root.light .garage-ox-passport__item small,
+:root.light .garage-ox-disclaimer,
+:root[data-theme="light"] .garage-ox-passport__item small,
+:root[data-theme="light"] .garage-ox-disclaimer {
+  color: #475569;
+}
+
+:root.light .buyer-panel .garage-ox-search,
+:root.light .buyer-panel .buyer-garage-section.garage-ox-garage,
+:root.light .buyer-panel .garage-ox-movement,
+:root[data-theme="light"] .buyer-panel .garage-ox-search,
+:root[data-theme="light"] .buyer-panel .buyer-garage-section.garage-ox-garage,
+:root[data-theme="light"] .buyer-panel .garage-ox-movement {
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(14, 165, 233, 0.08), transparent 34%),
+    rgba(255, 255, 255, 0.76);
+}
+
+
+/* ── Garage oX Hero V1.5 — premium visual layer ─────────────────────── */
+
+.garage-ox-hero__greeting {
+  display: block;
+  margin-bottom: 4px;
+  color: rgba(148, 163, 184, 0.72);
+  font-size: 0.22em;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.garage-ox-hero__user-id {
+  font-size: 0.78rem;
+  color: rgba(203, 213, 225, 0.70);
+}
+
+.garage-ox-hero__user-id strong {
+  color: rgba(248, 250, 252, 0.92);
+}
+
+/* Contain the visual column so absolute children clip correctly */
+.garage-ox-hero__visual {
+  overflow: hidden;
+}
+
+/* Scan line across the visual panel */
+.garage-ox-hero__scene::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(56, 189, 248, 0.52) 36%,
+    rgba(125, 211, 252, 0.72) 50%,
+    rgba(56, 189, 248, 0.52) 64%,
+    transparent
+  );
+  animation: ox-scan 14s linear infinite;
+  animation-delay: 1.2s;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@keyframes ox-scan {
+  0%   { top: 2%;  opacity: 0; }
+  6%   { opacity: 1; }
+  94%  { opacity: 1; }
+  100% { top: 96%; opacity: 0; }
+}
+
+/* Wheel pulse — gives the car a heartbeat */
+.garage-ox-hero__car-line::before {
+  animation: wheel-pulse 2.8s ease-in-out infinite;
+}
+
+.garage-ox-hero__car-line::after {
+  animation: wheel-pulse 2.8s ease-in-out infinite 0.44s;
+}
+
+@keyframes wheel-pulse {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 0 18px rgba(2, 6, 23, 0.56),
+      0 0 0 2px rgba(125, 211, 252, 0.08);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 18px rgba(2, 6, 23, 0.56),
+      0 0 0 8px rgba(56, 189, 248, 0.20),
+      0 0 18px rgba(56, 189, 248, 0.14);
+  }
+}
+
+/* ── oX ID Card ──────────────────────────────────────────────────────── */
+
+.garage-ox-id-card {
+  position: absolute;
+  top: 50%;
+  left: 46%;
+  transform: translate(-50%, -52%);
+  z-index: 2;
+  width: min(268px, 80%);
+  padding: 18px 20px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  background:
+    linear-gradient(150deg, rgba(4, 12, 28, 0.92), rgba(2, 7, 18, 0.88));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.46),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 32px 80px rgba(14, 165, 233, 0.10);
+  animation: id-card-in 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.2s;
+}
+
+@keyframes id-card-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -43%);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -52%);
+    filter: blur(0);
+  }
+}
+
+.garage-ox-id-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.14);
+}
+
+.garage-ox-id-card__label {
+  color: rgba(186, 230, 253, 0.96);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.garage-ox-id-card__radar {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(100, 116, 139, 0.28);
+  color: rgba(148, 163, 184, 0.60);
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: border-color 0.24s, color 0.24s;
+}
+
+.garage-ox-id-card__radar::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(100, 116, 139, 0.48);
+  flex-shrink: 0;
+  transition: background 0.24s, box-shadow 0.24s;
+}
+
+.garage-ox-id-card__radar.is-live {
+  border-color: rgba(34, 197, 94, 0.40);
+  color: rgba(134, 239, 172, 0.95);
+}
+
+.garage-ox-id-card__radar.is-live::before {
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22);
+  animation: radar-live 1.9s ease-in-out infinite;
+}
+
+@keyframes radar-live {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.16); }
+  50%       { box-shadow: 0 0 0 7px rgba(34, 197, 94, 0.06); }
+}
+
+.garage-ox-id-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.garage-ox-id-card__stat {
+  display: grid;
+  gap: 3px;
+  padding: 12px 12px 11px;
+  border-radius: 13px;
+  border: 1px solid rgba(125, 211, 252, 0.08);
+  background: rgba(14, 165, 233, 0.05);
+  cursor: default;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.garage-ox-id-card__stat:hover {
+  border-color: rgba(56, 189, 248, 0.30);
+  background: rgba(14, 165, 233, 0.13);
+  transform: translateY(-2px);
+}
+
+.garage-ox-id-card__stat strong {
+  display: block;
+  color: #f8fafc;
+  font-size: 1.55rem;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  transition: color 0.18s;
+}
+
+.garage-ox-id-card__stat:hover strong {
+  color: rgba(186, 230, 253, 1);
+}
+
+.garage-ox-id-card__stat span {
+  color: rgba(148, 163, 184, 0.62);
+  font-size: 0.61rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+/* ── Light mode ─────────────────────────────────────────────────────── */
+
+:root[data-theme="light"] .garage-ox-hero__greeting,
+:root.light .garage-ox-hero__greeting {
+  color: rgba(51, 65, 85, 0.68);
+}
+
+:root[data-theme="light"] .garage-ox-hero__user-id,
+:root.light .garage-ox-hero__user-id {
+  color: rgba(51, 65, 85, 0.70);
+}
+
+:root[data-theme="light"] .garage-ox-hero__user-id strong,
+:root.light .garage-ox-hero__user-id strong {
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .garage-ox-id-card,
+:root.light .garage-ox-id-card {
+  border-color: rgba(14, 165, 233, 0.24);
+  background:
+    linear-gradient(150deg, rgba(248, 252, 255, 0.96), rgba(235, 247, 255, 0.92));
+  box-shadow:
+    0 18px 48px rgba(15, 23, 42, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.92);
+}
+
+:root[data-theme="light"] .garage-ox-id-card__top,
+:root.light .garage-ox-id-card__top {
+  border-bottom-color: rgba(14, 165, 233, 0.18);
+}
+
+:root[data-theme="light"] .garage-ox-id-card__label,
+:root.light .garage-ox-id-card__label {
+  color: rgba(2, 82, 140, 0.92);
+}
+
+:root[data-theme="light"] .garage-ox-id-card__radar,
+:root.light .garage-ox-id-card__radar {
+  border-color: rgba(100, 116, 139, 0.24);
+  color: rgba(71, 85, 105, 0.72);
+}
+
+:root[data-theme="light"] .garage-ox-id-card__radar::before,
+:root.light .garage-ox-id-card__radar::before {
+  background: rgba(100, 116, 139, 0.46);
+}
+
+:root[data-theme="light"] .garage-ox-id-card__stat,
+:root.light .garage-ox-id-card__stat {
+  border-color: rgba(14, 165, 233, 0.14);
+  background: rgba(14, 165, 233, 0.07);
+}
+
+:root[data-theme="light"] .garage-ox-id-card__stat:hover,
+:root.light .garage-ox-id-card__stat:hover {
+  border-color: rgba(14, 165, 233, 0.32);
+  background: rgba(14, 165, 233, 0.14);
+}
+
+:root[data-theme="light"] .garage-ox-id-card__stat strong,
+:root.light .garage-ox-id-card__stat strong {
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .garage-ox-id-card__stat:hover strong,
+:root.light .garage-ox-id-card__stat:hover strong {
+  color: #0369a1;
+}
+
+:root[data-theme="light"] .garage-ox-id-card__stat span,
+:root.light .garage-ox-id-card__stat span {
+  color: rgba(71, 85, 105, 0.68);
+}
+
+/* ── Garage oX Hero — photo background + overlay ────────── */
+
+.garage-ox-hero__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.garage-ox-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      105deg,
+      rgba(2, 7, 18, 0.96) 0%,
+      rgba(3, 10, 24, 0.90) 28%,
+      rgba(3, 9, 22, 0.66) 50%,
+      rgba(4, 8, 18, 0.32) 70%,
+      rgba(3, 7, 16, 0.16) 100%
+    );
+}
+
+/* ── Garage oX — sección nav ─────────────────────────────── */
+
+.garage-ox-nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.garage-ox-nav__btn {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.38);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.16s ease;
+}
+
+.garage-ox-nav__btn:hover {
+  border-color: rgba(56, 189, 248, 0.30);
+  background: rgba(14, 165, 233, 0.08);
+  transform: translateY(-1px);
+}
+
+.garage-ox-nav__btn.is-active {
+  border-color: rgba(56, 189, 248, 0.46);
+  background: rgba(14, 165, 233, 0.13);
+}
+
+.garage-ox-nav__label {
+  display: block;
+  color: rgba(248, 250, 252, 0.94);
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.garage-ox-nav__meta {
+  display: block;
+  color: rgba(148, 163, 184, 0.62);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.garage-ox-nav__btn.is-active .garage-ox-nav__label {
+  color: rgba(186, 230, 253, 1);
+}
+
+.garage-ox-nav__btn.is-active .garage-ox-nav__meta {
+  color: rgba(125, 211, 252, 0.72);
+}
+
+/* Panel de sección que se abre */
+.garage-ox-section-body {
+  animation: section-open 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes section-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Light mode */
+:root[data-theme="light"] .garage-ox-nav__btn,
+:root.light .garage-ox-nav__btn {
+  border-color: rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+:root[data-theme="light"] .garage-ox-nav__btn:hover,
+:root.light .garage-ox-nav__btn:hover {
+  border-color: rgba(14, 165, 233, 0.30);
+  background: rgba(14, 165, 233, 0.06);
+}
+
+:root[data-theme="light"] .garage-ox-nav__btn.is-active,
+:root.light .garage-ox-nav__btn.is-active {
+  border-color: rgba(14, 165, 233, 0.38);
+  background: rgba(14, 165, 233, 0.09);
+}
+
+:root[data-theme="light"] .garage-ox-nav__label,
+:root.light .garage-ox-nav__label {
+  color: rgba(15, 23, 42, 0.88);
+}
+
+:root[data-theme="light"] .garage-ox-nav__meta,
+:root.light .garage-ox-nav__meta {
+  color: rgba(71, 85, 105, 0.68);
+}
+
+:root[data-theme="light"] .garage-ox-nav__btn.is-active .garage-ox-nav__label,
+:root.light .garage-ox-nav__btn.is-active .garage-ox-nav__label {
+  color: #0369a1;
+}
+
+/* Mobile — columna única en pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .garage-ox-nav {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Garage oX tabs — light mode fixes ──────────────────── */
+
+/* Radar: container base en nuevo contexto */
+.garage-ox-section-body .buyer-radar-section {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(45, 212, 191, 0.10), transparent 48%),
+    linear-gradient(145deg, rgba(6, 78, 59, 0.18), rgba(15, 23, 42, 0.54));
+}
+
+/* Radar: texto claro en dark mode — no cambia */
+
+/* Radar: light mode — fondo blanco, texto oscuro */
+:root[data-theme="light"] .garage-ox-section-body .buyer-radar-section,
+:root.light .garage-ox-section-body .buyer-radar-section {
+  border-color: rgba(13, 148, 136, 0.20);
+  background: rgba(255, 255, 255, 0.90);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="light"] .buyer-radar-section__head h2,
+:root.light .buyer-radar-section__head h2 {
+  color: rgba(15, 23, 42, 0.92);
+}
+
+:root[data-theme="light"] .buyer-radar-section__head p,
+:root.light .buyer-radar-section__head p {
+  color: rgba(71, 85, 105, 0.80);
+}
+
+:root[data-theme="light"] .buyer-radar-status,
+:root.light .buyer-radar-status {
+  color: rgba(71, 85, 105, 0.72);
+}
+
+:root[data-theme="light"] .buyer-radar-status.is-active,
+:root.light .buyer-radar-status.is-active {
+  color: rgba(4, 120, 87, 0.90);
+}
+
+:root[data-theme="light"] .garage-ox-section-body .buyer-radar-empty,
+:root.light .garage-ox-section-body .buyer-radar-empty {
+  border-color: rgba(13, 148, 136, 0.22);
+  background: rgba(240, 253, 250, 0.68);
+}
+
+:root[data-theme="light"] .garage-ox-section-body .buyer-radar-empty strong,
+:root.light .garage-ox-section-body .buyer-radar-empty strong {
+  color: rgba(15, 23, 42, 0.90);
+}
+
+:root[data-theme="light"] .garage-ox-section-body .buyer-radar-empty p,
+:root.light .garage-ox-section-body .buyer-radar-empty p {
+  color: rgba(71, 85, 105, 0.80);
+}
+
+:root[data-theme="light"] .garage-ox-section-body .buyer-radar-item,
+:root.light .garage-ox-section-body .buyer-radar-item {
+  border-color: rgba(13, 148, 136, 0.16);
+  background: rgba(240, 253, 250, 0.50);
+}
+
+:root[data-theme="light"] .garage-ox-section-body .buyer-radar-item-criteria,
+:root.light .garage-ox-section-body .buyer-radar-item-criteria {
+  color: rgba(15, 23, 42, 0.88);
+}
+
+:root[data-theme="light"] .buyer-radar-item-date,
+:root.light .buyer-radar-item-date {
+  color: rgba(100, 116, 139, 0.72);
+}
+
+:root[data-theme="light"] .buyer-radar-criteria-chips span,
+:root.light .buyer-radar-criteria-chips span {
+  background: rgba(204, 251, 241, 0.60);
+  color: rgba(6, 78, 59, 0.90);
+  border-color: rgba(13, 148, 136, 0.22);
+}
+
+/* Garage section — light mode panel vars ya lo cubren */
+/* Movimiento — ya tiene light mode en sus propias reglas */
+
+/* Nav section-body — separación visual en light mode */
+:root[data-theme="light"] .garage-ox-section-body,
+:root.light .garage-ox-section-body {
+  background: transparent;
+}
+
+/* ── Garage oX hero overlay — tema adaptable ────────────── */
+
+/* Dark mode: overlay sutil, imagen vívida */
+:root {
+  --garage-ox-hero-overlay:
+    linear-gradient(
+      105deg,
+      rgba(2, 7, 18, 0.82) 0%,
+      rgba(3, 10, 24, 0.68) 26%,
+      rgba(3, 9, 22, 0.40) 50%,
+      rgba(4, 8, 18, 0.12) 70%,
+      rgba(3, 7, 16, 0.03) 100%
+    );
+}
+
+/* Light mode: overlay blanco suave — deja la imagen visible, texto legible */
+:root[data-theme="light"],
+:root.light {
+  --garage-ox-hero-overlay:
+    linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(248, 250, 252, 0.52) 28%,
+      rgba(241, 245, 249, 0.22) 52%,
+      rgba(255, 255, 255, 0.06) 72%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+}
+
+/* ── Garage oX hero — tratamiento de foto por tema ──────── */
+
+/* Dark mode: imagen vívida */
+.garage-ox-hero__photo {
+  filter: brightness(1.12) saturate(1.04);
+}
+
+/* Light mode: foto más brillante y desaturada → aspecto aéreo, coherente */
+:root[data-theme="light"] .garage-ox-hero__photo,
+:root.light .garage-ox-hero__photo {
+  filter: brightness(1.55) saturate(0.58) contrast(0.82);
+}
+
+/* Light mode hero: fondo claro para cuando la imagen no carga */
+:root[data-theme="light"] .buyer-panel .garage-ox-hero,
+:root.light .buyer-panel .garage-ox-hero {
+  border-color: rgba(14, 116, 144, 0.18);
+  background: #eef6ff;
+  box-shadow:
+    0 24px 70px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
+}
+
+/* Textos oscuros sobre fondo claro */
+:root[data-theme="light"] .buyer-panel .garage-ox-hero .garage-ox-hero__brand,
+:root.light .buyer-panel .garage-ox-hero .garage-ox-hero__brand {
+  color: #0d1726;
+  text-shadow: none;
+}
+
+:root[data-theme="light"] .buyer-panel .garage-ox-hero .garage-ox-hero__subtitle,
+:root.light .buyer-panel .garage-ox-hero .garage-ox-hero__subtitle {
+  color: rgba(51, 65, 85, 0.82);
+}
+
+:root[data-theme="light"] .buyer-panel .garage-ox-hero .garage-ox-hero__user-id,
+:root.light .buyer-panel .garage-ox-hero .garage-ox-hero__user-id {
+  color: rgba(71, 85, 105, 0.72);
+}
+
+:root[data-theme="light"] .buyer-panel .garage-ox-hero .garage-ox-hero__user-id strong,
+:root.light .buyer-panel .garage-ox-hero .garage-ox-hero__user-id strong {
+  color: #0d1726;
+}
+
+:root[data-theme="light"] .buyer-panel .garage-ox-hero .buyer-profile-saved,
+:root.light .buyer-panel .garage-ox-hero .buyer-profile-saved {
+  color: #0369a1;
+}
+
+/* ── Mi movimiento tab — sin tarjeta dentro de tarjeta ───── */
+
+/* Shortlist: plana, sin fondo ni borde propio */
+.garage-ox-section-body .buyer-shortlist {
+  border: none;
+  background: transparent;
+  padding: 0 0 20px;
+  margin-bottom: 0;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+/* Shortlist heading: sub-sección, no sección principal */
+.garage-ox-section-body .buyer-shortlist__head h2 {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Shortlist empty: sutil, sin card propia */
+.garage-ox-section-body .buyer-shortlist__empty {
+  min-height: auto;
+  padding: 18px 20px;
+  border: 1px dashed rgba(148, 163, 184, 0.16);
+  background: rgba(148, 163, 184, 0.03);
+  border-radius: 10px;
+}
+
+.garage-ox-section-body .buyer-shortlist__empty strong {
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.garage-ox-section-body .buyer-shortlist__empty p {
+  font-size: 0.82rem;
+}
+
+/* Botón vacío: no full-width (el contenedor es display:grid → justify-self corta el stretch) */
+.garage-ox-section-body .buyer-shortlist__empty .primary-action {
+  justify-self: start;
+  width: auto;
+  padding-inline: 20px;
+  min-height: 40px;
+  font-size: 0.82rem;
+}
+
+/* Movement: plano, continuación de la sección — sin tarjeta propia */
+.garage-ox-section-body .garage-ox-movement {
+  margin-top: 0;
+  padding: 16px 0 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Movement head: separador sutil en lugar de borde de tarjeta */
+.garage-ox-section-body .garage-ox-movement .garage-ox-movement__head {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+/* Movement head h2: consistente con sub-sección */
+.garage-ox-section-body .garage-ox-movement .garage-ox-movement__head h2 {
+  font-size: 0.94rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Light mode */
+:root[data-theme="light"] .garage-ox-section-body .buyer-shortlist,
+:root.light .garage-ox-section-body .buyer-shortlist {
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme="light"] .garage-ox-section-body .buyer-shortlist__empty,
+:root.light .garage-ox-section-body .buyer-shortlist__empty {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: rgba(15, 23, 42, 0.03);
+}
+
+:root[data-theme="light"] .garage-ox-section-body .garage-ox-movement .garage-ox-movement__head,
+:root.light .garage-ox-section-body .garage-ox-movement .garage-ox-movement__head {
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+
+/* ── Garage oX — nuevos componentes v2 ──────────────────────── */
+
+/* Sub-navegación de Mi movimiento */
+.movimiento-subnav {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+  margin-bottom: 20px;
+}
+
+.movimiento-subnav__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: transparent;
+  color: rgba(203, 213, 225, 0.65);
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.movimiento-subnav__btn:hover {
+  border-color: rgba(148, 163, 184, 0.32);
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.movimiento-subnav__btn.is-active {
+  border-color: rgba(56, 189, 248, 0.42);
+  background: rgba(14, 165, 233, 0.10);
+  color: #7dd3fc;
+}
+
+.movimiento-subnav__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: rgba(56, 189, 248, 0.22);
+  color: #7dd3fc;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+/* Inline delete confirmation */
+.buyer-garage-delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.buyer-garage-delete-confirm > span {
+  font-size: 0.82rem;
+  color: rgba(248, 113, 113, 0.85);
+  font-weight: 700;
+}
+
+.buyer-garage-delete-confirm__yes {
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(248, 113, 113, 0.44);
+  background: rgba(248, 113, 113, 0.10);
+  color: #f87171;
+  font-size: 0.80rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.buyer-garage-delete-confirm__yes:hover {
+  background: rgba(248, 113, 113, 0.20);
+}
+
+.buyer-garage-delete-confirm__no {
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: transparent;
+  color: rgba(148, 163, 184, 0.70);
+  font-size: 0.80rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.buyer-garage-delete-confirm__no:hover {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+/* VTV/seguro expiry badges en vehicle-card__fact */
+.vehicle-card__fact.is-due-soon span {
+  color: #fbbf24;
+}
+
+.vehicle-card__fact.is-due-soon strong {
+  color: #fbbf24;
+}
+
+.vehicle-card__fact.is-expired span {
+  color: #f87171;
+}
+
+.vehicle-card__fact.is-expired strong {
+  color: #f87171;
+}
+
+/* Placeholder de imagen mejorado */
+.vehicle-card__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: rgba(148, 163, 184, 0.35);
+}
+
+.vehicle-card__placeholder svg {
+  opacity: 0.5;
+}
+
+.vehicle-card__placeholder span {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Summary grid con estados */
+.buyer-garage-summary-grid article.is-pending strong {
+  color: rgba(148, 163, 184, 0.45);
+}
+
+.buyer-garage-summary-grid article.is-pending span {
+  color: rgba(148, 163, 184, 0.45);
+}
+
+.buyer-garage-summary-grid article.is-due-soon {
+  border-color: rgba(251, 191, 36, 0.30);
+  background: rgba(251, 191, 36, 0.05);
+}
+
+.buyer-garage-summary-grid article.is-due-soon strong {
+  color: #fbbf24;
+}
+
+.buyer-garage-summary-grid article.is-expired {
+  border-color: rgba(248, 113, 113, 0.30);
+  background: rgba(248, 113, 113, 0.05);
+}
+
+.buyer-garage-summary-grid article.is-expired strong {
+  color: #f87171;
+}
+
+.buyer-garage-summary-grid article small {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+  grid-column: 1 / -1;
+}
+
+.buyer-garage-summary-grid article.is-due-soon small {
+  color: #fbbf24;
+}
+
+.buyer-garage-summary-grid article.is-expired small {
+  color: #f87171;
+}
+
+.buyer-garage-summary-grid article.buyer-garage-summary-hint {
+  background: rgba(56, 189, 248, 0.04);
+  border-color: rgba(56, 189, 248, 0.12);
+}
+
+/* Summary: servicios count + último */
+.buyer-garage-summary-grid article:has(> small) {
+  display: grid;
+  grid-template-rows: auto auto auto;
+}
+
+/* Sale readiness — nuevo diseño con items */
+.buyer-garage-sale-readiness {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.buyer-garage-sale-readiness__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.10);
+  background: rgba(148, 163, 184, 0.03);
+}
+
+.buyer-garage-sale-readiness__item.is-ready {
+  border-color: rgba(52, 211, 153, 0.24);
+  background: rgba(52, 211, 153, 0.05);
+}
+
+.buyer-garage-sale-readiness__icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 800;
+  border: 1.5px solid rgba(148, 163, 184, 0.24);
+  color: rgba(148, 163, 184, 0.45);
+  margin-top: 1px;
+}
+
+.buyer-garage-sale-readiness__item.is-ready .buyer-garage-sale-readiness__icon {
+  border-color: rgba(52, 211, 153, 0.50);
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+}
+
+.buyer-garage-sale-readiness__item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.buyer-garage-sale-readiness__item > div > strong {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: rgba(226, 232, 240, 0.80);
+}
+
+.buyer-garage-sale-readiness__item > div > span {
+  font-size: 0.78rem;
+  color: rgba(148, 163, 184, 0.60);
+}
+
+.buyer-garage-sale-readiness__item.is-ready > div > strong {
+  color: rgba(52, 211, 153, 0.90);
+}
+
+.buyer-garage-sale-readiness__item.is-ready > div > span {
+  color: rgba(52, 211, 153, 0.65);
+}
+
+/* ── Sprint 4 — nuevos estilos ──────────────────────────────── */
+
+/* Error contextual dentro de sección */
+.garage-ox-section-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(248, 113, 113, 0.24);
+  background: rgba(248, 113, 113, 0.06);
+  margin-bottom: 16px;
+}
+
+.garage-ox-section-error > span {
+  font-size: 0.84rem;
+  color: rgba(248, 113, 113, 0.85);
+}
+
+/* Profile form inline en el hero */
+.garage-ox-hero__profile-form {
+  position: relative;
+  z-index: 4;
+  margin-top: 14px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(56, 189, 248, 0.20);
+  background: rgba(2, 6, 23, 0.70);
+  backdrop-filter: blur(12px);
+  display: grid;
+  gap: 14px;
+}
+
+.garage-ox-hero__profile-form .buyer-profile-form-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.garage-ox-hero__profile-form .buyer-profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.garage-ox-hero__profile-form .buyer-profile-field label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(148, 163, 184, 0.65);
+}
+
+.garage-ox-hero__profile-form .buyer-profile-field input {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(226, 232, 240, 0.90);
+  font-size: 0.88rem;
+}
+
+.garage-ox-hero__profile-form .buyer-profile-field input:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.50);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.garage-ox-hero__profile-form .buyer-profile-form-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Countdown en Vencimientos */
+.buyer-garage-deadline-countdown {
+  font-size: 0.80rem;
+  font-weight: 700;
+  opacity: 0.80;
+}
+
+.buyer-garage-summary-grid article.is-expired .buyer-garage-deadline-countdown,
+.buyer-garage-summary-grid article.is-due-soon .buyer-garage-deadline-countdown {
+  opacity: 1;
+}
+
+/* Hint debajo de Vencimientos cuando faltan datos */
+.buyer-garage-deadline-hint {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px dashed rgba(56, 189, 248, 0.14);
+  font-size: 0.80rem;
+  color: rgba(148, 163, 184, 0.65);
+  line-height: 1.5;
+}
+
+/* ── I1 — Radar empty state icon + pulse ───────────────────── */
+
+.buyer-radar-empty__icon {
+  width: 48px;
+  height: 48px;
+  color: rgba(56, 189, 248, 0.65);
+  flex-shrink: 0;
+}
+
+.buyer-radar-pulse-icon {
+  width: 48px;
+  height: 48px;
+  overflow: visible;
+}
+
+@keyframes radar-ring-pulse {
+  0%   { opacity: 0.55; transform: scale(1); }
+  50%  { opacity: 0.20; transform: scale(1.06); }
+  100% { opacity: 0.55; transform: scale(1); }
+}
+
+.buyer-radar-ring {
+  transform-origin: 24px 24px;
+  animation: radar-ring-pulse 2.6s ease-in-out infinite;
+}
+
+.buyer-radar-ring--2 {
+  animation-delay: 0.7s;
+}
+
+/* ── I2 — Profile form mount animation ─────────────────────── */
+
+@keyframes profile-form-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.garage-ox-hero__profile-form {
+  animation: profile-form-enter 0.20s ease forwards;
+}
+
+/* ── E estético — Venta futura progress ────────────────────── */
+
+.buyer-garage-sale-readiness-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.buyer-garage-sale-progress {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(74, 222, 128, 0.22);
+  background: rgba(22, 163, 74, 0.08);
+  color: rgba(134, 239, 172, 0.85);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* ── E estético — Historial empty state ────────────────────── */
+
+.buyer-garage-history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 28px 16px;
+  color: rgba(148, 163, 184, 0.55);
+}
+
+.buyer-garage-history-empty__icon {
+  width: 40px;
+  height: 40px;
+  color: rgba(148, 163, 184, 0.30);
+  flex-shrink: 0;
+}
+
+.buyer-garage-history-empty strong {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: rgba(203, 213, 225, 0.65);
+}
+
+.buyer-garage-history-empty p {
+  margin: 0;
+  font-size: 0.80rem;
+  color: rgba(148, 163, 184, 0.50);
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+/* ── A3 — focus-visible rings — Garage oX ──────────────────── */
+
+.garage-ox-nav__btn:focus-visible,
+.movimiento-subnav__btn:focus-visible,
+.buyer-garage-tabs button:focus-visible,
+.buyer-radar-item-delete:focus-visible,
+.garage-ox-hero__tool-btn:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.85);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.16);
+}
+
+/* ── Sprint 1B — garage-ox-notifications ───────────────────── */
+
+.garage-ox-notifications {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(14, 165, 233, 0.07), transparent 52%),
+    rgba(8, 15, 28, 0.32);
+}
+
+.garage-ox-notifications__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.garage-ox-notifications__title {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1.25;
+}
+
+.garage-ox-notifications__summary {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: rgba(148, 163, 184, 0.68);
+  line-height: 1.4;
+}
+
+.garage-ox-notifications__mark-all {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.garage-ox-notifications__list {
+  display: grid;
+  gap: 8px;
+}
+
+.garage-ox-notifications__empty {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 0 2px;
+}
+
+.garage-ox-notifications__empty p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(148, 163, 184, 0.50);
+  line-height: 1.5;
+}
+
+/* ── Notification card ───────────────────────────────────── */
+
+.garage-ox-notification-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(125, 211, 252, 0.12);
+  background: rgba(15, 23, 42, 0.36);
+  transition: opacity 0.18s ease;
+}
+
+.garage-ox-notification-card.is-read {
+  opacity: 0.55;
+}
+
+.garage-ox-notification-card--urgent {
+  border-color: rgba(248, 113, 113, 0.30);
+  background: rgba(248, 113, 113, 0.05);
+}
+
+.garage-ox-notification-card--attention {
+  border-color: rgba(251, 191, 36, 0.26);
+  background: rgba(251, 191, 36, 0.04);
+}
+
+.garage-ox-notification-card--success {
+  border-color: rgba(74, 222, 128, 0.24);
+  background: rgba(22, 163, 74, 0.05);
+}
+
+.garage-ox-notification-card--info {
+  border-color: rgba(56, 189, 248, 0.18);
+  background: rgba(14, 165, 233, 0.04);
+}
+
+/* Unread dot */
+.garage-ox-notification-card__dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.garage-ox-notification-card--urgent .garage-ox-notification-card__dot   { background: #f87171; }
+.garage-ox-notification-card--attention .garage-ox-notification-card__dot { background: #fbbf24; }
+.garage-ox-notification-card--success .garage-ox-notification-card__dot   { background: #4ade80; }
+
+/* Body */
+.garage-ox-notification-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.garage-ox-notification-card__title {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.3;
+}
+
+.garage-ox-notification-card--urgent .garage-ox-notification-card__title    { color: #fca5a5; }
+.garage-ox-notification-card--attention .garage-ox-notification-card__title { color: #fde68a; }
+.garage-ox-notification-card--success .garage-ox-notification-card__title   { color: #bbf7d0; }
+
+.garage-ox-notification-card__text {
+  margin: 0;
+  font-size: 0.80rem;
+  color: rgba(203, 213, 225, 0.68);
+  line-height: 1.45;
+}
+
+.garage-ox-notification-card__time {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: rgba(148, 163, 184, 0.45);
+}
+
+/* Actions */
+.garage-ox-notification-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Touch targets */
+.garage-ox-notification-card__actions .buyer-stat-cta-btn,
+.garage-ox-notification-card__actions .admin-refresh-btn {
+  min-height: 36px;
+  white-space: nowrap;
+}
+
+/* Mobile — acciones en fila bajo el body */
+@media (max-width: 520px) {
+  .garage-ox-notification-card {
+    flex-wrap: wrap;
+  }
+  .garage-ox-notification-card__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 4px;
+  }
+  .garage-ox-notifications__head {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

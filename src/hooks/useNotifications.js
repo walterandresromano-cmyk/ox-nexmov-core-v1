@@ -5,6 +5,10 @@ import {
   markDealerNotificationsRead,
 } from "../services/dealerNotifications.service.js";
 import { listVehicleLeadsForCurrentBuyer } from "../services/buyer.service.js";
+import {
+  listBuyerNotifications,
+  markAllBuyerNotificationsRead,
+} from "../services/buyerNotifications.service.js";
 import { normalizeRole } from "../lib/auth.js";
 
 const POLL_MS = 30000;
@@ -103,24 +107,53 @@ export function useNotifications({ authUser, authProfile }) {
   }, [pushToast]);
 
   // ── Buyer ─────────────────────────────────────────────────────
-  // Solo transiciones comerciales son visibles. Estados internos del CRM dealer
-  // (seen, in_progress, negotiation, lost, etc.) se trackean silenciosamente
-  // sin generar toast, sin aparecer en la campana y sin exponer el valor crudo.
-  // La lectura se persiste en localStorage por usuario — sobrevive polling y reload.
+  // Fuente primaria: buyer_notifications (tabla persistente).
+  // Fuente legada: vehicle_action_leads (solo transiciones comerciales).
+  // Ambas fuentes se ejecutan en paralelo y se fusionan.
+  // La fuente legada se mantiene como fallback mientras no esté en DB.
   const fetchBuyer = useCallback(async () => {
-    const { leads } = await listVehicleLeadsForCurrentBuyer();
-    if (!leads?.length) return;
+    const [{ notifications: dbNotifs }, { leads }] = await Promise.all([
+      listBuyerNotifications(),
+      listVehicleLeadsForCurrentBuyer(),
+    ]);
 
     const readKeys = getReadBuyerNotificationKeys(userId);
     const items = [];
 
-    for (const lead of leads) {
+    // ── Notificaciones de la tabla buyer_notifications (nueva fuente) ──
+    for (const n of (dbNotifs || [])) {
+      const toastKey = `db:${n.id}`;
+      if (!n.is_read && !toastedKeysRef.current.has(toastKey)) {
+        pushToast(n.title || n.body, "buyer");
+        toastedKeysRef.current.add(toastKey);
+      }
+      items.push({
+        id: `db:${n.id}`,
+        db_id: n.id,
+        type: n.type,
+        title: n.title,
+        message: n.body,
+        severity: n.severity,
+        action_label: n.action_label,
+        action_route: n.action_route,
+        entity_type: n.entity_type,
+        entity_id: n.entity_id,
+        metadata: n.metadata,
+        created_at: n.created_at,
+        is_read: n.is_read,
+        source: "db",
+      });
+    }
+
+    // ── Notificaciones legadas desde vehicle_action_leads ──────────────
+    // Solo transiciones comerciales visibles. Estados internos del CRM dealer
+    // (seen, in_progress, negotiation, lost, etc.) se trackean silenciosamente.
+    for (const lead of (leads || [])) {
       const leadId = lead.lead_id || lead.id;
       const title = `${lead.vehicle_brand || ""} ${lead.vehicle_model || ""}`.trim() || "el vehículo";
       const curStatus = lead.crm_status;
       const isCommercial = BUYER_COMMERCIAL_TRANSITIONS.has(curStatus);
 
-      // Siempre trackear — necesario para detectar cambios futuros
       prevLeadStatuses.current[leadId] = curStatus;
 
       if (!isCommercial) continue;
@@ -128,18 +161,19 @@ export function useNotifications({ authUser, authProfile }) {
       const notificationKey = getBuyerNotificationKey(leadId, curStatus);
       const alreadyRead = readKeys.has(notificationKey);
 
-      // Toast una sola vez por sesión por clave no leída
       if (!alreadyRead && !toastedKeysRef.current.has(notificationKey)) {
         pushToast(BUYER_TRANSITION_MESSAGES[curStatus](title), "buyer");
         toastedKeysRef.current.add(notificationKey);
       }
 
       items.push({
-        id: leadId,
+        id: notificationKey,
         notification_key: notificationKey,
+        type: "lead_status",
         message: BUYER_TRANSITION_MESSAGES[curStatus](title),
         created_at: lead.created_at,
         is_read: alreadyRead,
+        source: "legacy",
       });
     }
 
@@ -208,6 +242,9 @@ export function useNotifications({ authUser, authProfile }) {
       return;
     }
     if (role === "buyer") {
+      // Marcar en BD (buyer_notifications) — falla silenciosamente si RPC no existe
+      await markAllBuyerNotificationsRead();
+      // Marcar legado (localStorage para lead status)
       setNotifications((prev) => {
         const keys = getReadBuyerNotificationKeys(userId);
         prev.forEach((n) => { if (n.notification_key) keys.add(n.notification_key); });
@@ -237,10 +274,13 @@ export function useNotifications({ authUser, authProfile }) {
         .subscribe();
     }
 
-    // Realtime supplement for buyers (lead updates)
+    // Realtime supplement for buyers:
+    // — INSERT en buyer_notifications (alertas VTV, Radar, etc.)
+    // — UPDATE en vehicle_action_leads (transiciones legadas de CRM)
     if (supabase && role === "buyer") {
       channelRef.current = supabase
-        .channel(`ox-buyer-leads-${userId}`)
+        .channel(`ox-buyer-notif-${userId}`)
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "buyer_notifications" }, fetch)
         .on("postgres_changes", { event: "UPDATE", schema: "public", table: "vehicle_action_leads" }, fetch)
         .subscribe();
     }

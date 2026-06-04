@@ -15355,3 +15355,795 @@ textarea:focus-visible,
     grid-template-columns: minmax(0, 1fr) 44px;
   }
 }
+
+/* Garage oX V2 - Garage Visual 1 mobile */
+@media (max-width: 760px) {
+  .container.panel.buyer-panel.garage-ox-panel {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .buyer-panel .garage-ox-hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    padding: 20px;
+    gap: 18px;
+    border-radius: 16px;
+  }
+
+  .garage-ox-hero__content {
+    gap: 12px;
+  }
+
+  .garage-ox-hero__title {
+    font-size: clamp(2.2rem, 13vw, 3.35rem);
+    line-height: 0.94;
+  }
+
+  .garage-ox-hero__title > span:not(.garage-ox-hero__brand) {
+    font-size: clamp(1.25rem, 6.2vw, 1.8rem);
+  }
+
+  .garage-ox-hero__subtitle {
+    font-size: 0.96rem;
+    line-height: 1.55;
+  }
+
+  .garage-ox-hero__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .garage-ox-hero__actions .primary-action,
+  .garage-ox-hero__actions .garage-ox-hero__tool-btn {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .garage-ox-hero__visual {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .garage-ox-hero__visual-head {
+    align-items: center;
+  }
+
+  .garage-ox-hero__visual-head strong {
+    font-size: 2.5rem;
+  }
+
+  .garage-ox-hero__pulse {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .garage-ox-hero__pulse::-webkit-scrollbar {
+    display: none;
+  }
+
+  .garage-ox-hero__pulse-item {
+    flex: 0 0 132px;
+    min-height: 88px;
+    scroll-snap-align: start;
+  }
+
+  .garage-ox-hero__profile-row {
+    margin-top: 0;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .garage-ox-hero__profile-tools {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .garage-ox-hero__profile-tools .garage-ox-hero__tool-btn {
+    min-height: 44px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .garage-ox-hero__profile-tools {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Garage oX V2 - Garage Visual 2 mobile */
+@media (max-width: 760px) {
+  .buyer-panel .garage-ox-search {
+    padding: 16px;
+    gap: 16px;
+    border-radius: 16px;
+  }
+
+  .buyer-panel .garage-ox-search__head h2 {
+    font-size: clamp(1.45rem, 8vw, 2rem);
+  }
+
+  .buyer-panel .garage-ox-search__head > p {
+    font-size: 0.92rem;
+  }
+
+  .buyer-panel .buyer-shortlist,
+  .buyer-panel .garage-ox-compare-card,
+  .buyer-panel .garage-ox-search__subgrid .buyer-radar-section {
+    border-radius: 16px;
+  }
+
+  .buyer-panel .buyer-shortlist__grid {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .buyer-panel .buyer-shortlist__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .buyer-panel .buyer-shortlist-card {
+    flex: 0 0 min(82vw, 310px);
+    scroll-snap-align: start;
+  }
+
+  .buyer-panel .buyer-shortlist-card__image {
+    height: 185px;
+  }
+
+  .buyer-panel .garage-ox-search__subgrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .garage-ox-compare-card__slots {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .garage-ox-compare-card__slot {
+    min-height: 72px;
+    border-radius: 12px;
+  }
+
+  .buyer-panel .garage-ox-compare-card__thumb {
+    min-height: 72px;
+  }
+
+  .buyer-panel .garage-ox-search__subgrid .buyer-radar-empty,
+  .buyer-panel .garage-ox-compare-card__empty {
+    min-height: 190px;
+  }
+
+  .buyer-radar-status {
+    min-height: 32px;
+  }
+
+  .buyer-radar-criteria-chips span {
+    min-height: 30px;
+  }
+
+  .buyer-panel .buyer-shortlist-card__actions .table-action-btn,
+  .buyer-panel .buyer-shortlist-card__remove,
+  .buyer-panel .garage-ox-compare-card .buyer-stat-cta-btn,
+  .buyer-panel .garage-ox-search__subgrid .buyer-radar-empty .buyer-stat-cta-btn,
+  .buyer-panel .garage-ox-search__subgrid .buyer-radar-section .primary-action {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 420px) {
+  .garage-ox-compare-card__slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .garage-ox-compare-card__slot,
+  .buyer-panel .garage-ox-compare-card__thumb {
+    min-height: 86px;
+  }
+}
+
+/* Garage oX V2.2 - integrated comparison mobile */
+@media (max-width: 760px) {
+  .buyer-panel .buyer-shortlist-compare {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .buyer-shortlist-compare__slots {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .buyer-shortlist-compare__slot {
+    min-height: 64px;
+  }
+
+  .buyer-shortlist-compare__actions,
+  .buyer-shortlist-compare__actions :where(.primary-action, .buyer-stat-cta-btn) {
+    width: 100%;
+  }
+
+  .buyer-shortlist-compare__hint {
+    max-width: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .buyer-shortlist-compare__actions :where(.primary-action, .buyer-stat-cta-btn) {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .buyer-shortlist-compare__slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .buyer-shortlist-compare__slot {
+    min-height: 78px;
+  }
+}
+
+/* Garage oX V2.3 - compare selection mobile */
+@media (max-width: 760px) {
+  .buyer-panel .buyer-shortlist-card__actions {
+    grid-template-columns: minmax(0, 1fr) minmax(92px, 0.7fr) 44px;
+  }
+
+  .buyer-panel .buyer-shortlist__head-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .buyer-panel .buyer-shortlist__head-actions :where(.primary-action, .buyer-stat-cta-btn, .admin-refresh-btn) {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .buyer-panel .buyer-shortlist-card__compare {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 420px) {
+  .buyer-panel .buyer-shortlist-card__actions {
+    grid-template-columns: minmax(0, 1fr) 44px;
+  }
+
+  .buyer-panel .buyer-shortlist-card__compare {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+}
+
+/* Garage oX V3 - cinematic product direction mobile */
+@media (max-width: 920px) {
+  .buyer-panel .garage-ox-hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 520px;
+  }
+
+  .garage-ox-hero__content {
+    min-height: 230px;
+    justify-content: start;
+  }
+
+  .garage-ox-hero__visual {
+    min-height: 210px;
+  }
+
+  .garage-ox-passport {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .garage-ox-disclaimer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 760px) {
+  .container.panel.buyer-panel.garage-ox-panel {
+    padding: 12px;
+    border-radius: 0;
+  }
+
+  .buyer-panel .garage-ox-hero {
+    min-height: 560px;
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .garage-ox-hero__title {
+    font-size: clamp(2.55rem, 13vw, 4rem);
+    line-height: 0.96;
+  }
+
+  .garage-ox-hero__subtitle {
+    max-width: 100%;
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .garage-ox-hero__actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .garage-ox-hero__visual {
+    min-height: 240px;
+  }
+
+  .garage-ox-hero__watermark {
+    top: 16%;
+    right: 16%;
+    font-size: clamp(4.2rem, 22vw, 6.4rem);
+  }
+
+  .garage-ox-hero__car-line {
+    left: 2%;
+    right: 0;
+    bottom: 24%;
+  }
+
+  .garage-ox-hero__car-line::before,
+  .garage-ox-hero__car-line::after {
+    width: 54px;
+    height: 54px;
+    bottom: -16px;
+  }
+
+  .garage-ox-hero__garage-lines {
+    right: 0;
+    top: 8%;
+    width: 88px;
+    height: 116px;
+  }
+
+  .garage-ox-hero__signature {
+    right: 0;
+    bottom: 6%;
+    gap: 14px;
+    font-size: 0.95rem;
+  }
+
+  .garage-ox-hero__profile-row {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .garage-ox-passport {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 18px 0;
+  }
+
+  .garage-ox-passport__item {
+    min-height: 136px;
+  }
+
+  .buyer-panel .garage-ox-search,
+  .buyer-panel .buyer-garage-section.garage-ox-garage,
+  .buyer-panel .garage-ox-movement {
+    margin-top: 26px;
+    border-radius: 22px;
+  }
+
+  .buyer-panel .garage-ox-search__head h2,
+  .buyer-panel .garage-ox-garage__title,
+  .buyer-panel .garage-ox-movement__head h2 {
+    font-size: clamp(1.72rem, 8vw, 2.35rem);
+  }
+
+  .buyer-panel .buyer-shortlist__grid {
+    display: flex;
+    grid-template-columns: none;
+  }
+
+  .buyer-panel .buyer-shortlist-card {
+    flex-basis: min(86vw, 340px);
+  }
+
+  .buyer-panel .buyer-shortlist-card__image {
+    height: 210px;
+  }
+}
+
+@media (max-width: 420px) {
+  .buyer-panel .garage-ox-hero {
+    min-height: 590px;
+    padding: 18px;
+  }
+
+  .garage-ox-hero__actions :where(.primary-action, .garage-ox-hero__tool-btn) {
+    min-height: 48px;
+  }
+
+  .garage-ox-passport__item {
+    min-height: 128px;
+  }
+}
+
+/* ── Garage oX ID Card — responsive ──────────────────────── */
+@media (max-width: 820px) {
+  .garage-ox-id-card {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .garage-ox-hero__greeting {
+    font-size: 0.28em;
+    letter-spacing: 0.10em;
+  }
+}
+
+/* ── Mi movimiento tab — overrides finales (responsive.css es last-in-cascade) ── */
+
+/* Shortlist: plana, separada del movement con margen — sin border-bottom de borde a borde */
+.garage-ox-section-body .buyer-shortlist {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0 0 24px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Separador inset: no corta en los bordes del panel */
+.garage-ox-section-body .buyer-shortlist::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  right: 8px;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.12);
+}
+
+/* Shortlist head: título + acción pegados a la izquierda, sin hueco central */
+.garage-ox-section-body .buyer-shortlist__head {
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+
+/* Descripción redundante en contexto de tab — se oculta */
+.garage-ox-section-body .buyer-shortlist__head > div > p:not(.eyebrow) {
+  display: none;
+}
+
+.garage-ox-section-body .buyer-shortlist__head h2 {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Shortlist empty: sutil */
+.garage-ox-section-body .buyer-shortlist__empty {
+  min-height: auto;
+  padding: 18px 20px;
+  border: 1px dashed rgba(148, 163, 184, 0.16);
+  background: rgba(148, 163, 184, 0.03);
+  border-radius: 10px;
+}
+
+.garage-ox-section-body .buyer-shortlist__empty .primary-action {
+  justify-self: start;
+  width: auto;
+  padding-inline: 20px;
+  min-height: 40px;
+  font-size: 0.82rem;
+}
+
+/* Movement: plana, sin tarjeta propia */
+.garage-ox-section-body .garage-ox-movement {
+  margin-top: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Movement head: separador inset */
+.garage-ox-section-body .garage-ox-movement .garage-ox-movement__head {
+  padding-bottom: 12px;
+  border-bottom: none;
+  position: relative;
+}
+
+.garage-ox-section-body .garage-ox-movement .garage-ox-movement__head::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  right: 8px;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.garage-ox-section-body .garage-ox-movement .garage-ox-movement__head h2 {
+  font-size: 0.94rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  max-width: none;
+}
+
+/* Light mode */
+:root[data-theme="light"] .garage-ox-section-body .buyer-shortlist::after,
+:root.light .garage-ox-section-body .buyer-shortlist::after {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme="light"] .garage-ox-section-body .buyer-shortlist__empty,
+:root.light .garage-ox-section-body .buyer-shortlist__empty {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: rgba(15, 23, 42, 0.03);
+}
+
+:root[data-theme="light"] .garage-ox-section-body .garage-ox-movement .garage-ox-movement__head::after,
+:root.light .garage-ox-section-body .garage-ox-movement .garage-ox-movement__head::after {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+/* Movement summary: sin tarjeta propia */
+.garage-ox-section-body .garage-ox-movement__summary {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 4px 0 0;
+}
+
+/* También cubrir el :where() de light mode que agrega background:white */
+:root[data-theme="light"] .garage-ox-section-body .garage-ox-movement__summary,
+:root.light .garage-ox-section-body .garage-ox-movement__summary {
+  background: transparent;
+  border: none;
+}
+
+/* ── Garage oX v2 — light mode overrides ──────────────────── */
+
+:root[data-theme="light"] .movimiento-subnav,
+:root.light .movimiento-subnav {
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme="light"] .movimiento-subnav__btn,
+:root.light .movimiento-subnav__btn {
+  border-color: rgba(15, 23, 42, 0.12);
+  color: rgba(71, 85, 105, 0.70);
+}
+
+:root[data-theme="light"] .movimiento-subnav__btn.is-active,
+:root.light .movimiento-subnav__btn.is-active {
+  border-color: rgba(14, 165, 233, 0.38);
+  background: rgba(14, 165, 233, 0.07);
+  color: #0369a1;
+}
+
+:root[data-theme="light"] .movimiento-subnav__badge,
+:root.light .movimiento-subnav__badge {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0369a1;
+}
+
+:root[data-theme="light"] .buyer-garage-sale-readiness__item,
+:root.light .buyer-garage-sale-readiness__item {
+  border-color: rgba(15, 23, 42, 0.08);
+  background: rgba(15, 23, 42, 0.02);
+}
+
+:root[data-theme="light"] .buyer-garage-sale-readiness__item > div > strong,
+:root.light .buyer-garage-sale-readiness__item > div > strong {
+  color: rgba(15, 23, 42, 0.80);
+}
+
+:root[data-theme="light"] .buyer-garage-sale-readiness__item > div > span,
+:root.light .buyer-garage-sale-readiness__item > div > span {
+  color: rgba(71, 85, 105, 0.65);
+}
+
+:root[data-theme="light"] .buyer-garage-delete-confirm > span,
+:root.light .buyer-garage-delete-confirm > span {
+  color: #dc2626;
+}
+
+:root[data-theme="light"] .vehicle-card__placeholder,
+:root.light .vehicle-card__placeholder {
+  color: rgba(71, 85, 105, 0.30);
+}
+
+:root[data-theme="light"] .buyer-garage-summary-grid article.is-pending strong,
+:root[data-theme="light"] .buyer-garage-summary-grid article.is-pending span,
+:root.light .buyer-garage-summary-grid article.is-pending strong,
+:root.light .buyer-garage-summary-grid article.is-pending span {
+  color: rgba(71, 85, 105, 0.40);
+}
+
+/* ── Sprint 4 — light mode ──────────────────────────────────── */
+
+:root[data-theme="light"] .garage-ox-section-error,
+:root.light .garage-ox-section-error {
+  border-color: rgba(220, 38, 38, 0.20);
+  background: rgba(220, 38, 38, 0.05);
+}
+
+:root[data-theme="light"] .garage-ox-section-error > span,
+:root.light .garage-ox-section-error > span {
+  color: #dc2626;
+}
+
+:root[data-theme="light"] .garage-ox-hero__profile-form,
+:root.light .garage-ox-hero__profile-form {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(14, 165, 233, 0.22);
+}
+
+:root[data-theme="light"] .garage-ox-hero__profile-form .buyer-profile-field label,
+:root.light .garage-ox-hero__profile-form .buyer-profile-field label {
+  color: rgba(71, 85, 105, 0.70);
+}
+
+:root[data-theme="light"] .garage-ox-hero__profile-form .buyer-profile-field input,
+:root.light .garage-ox-hero__profile-form .buyer-profile-field input {
+  border-color: rgba(14, 165, 233, 0.25);
+  background: rgba(255, 255, 255, 0.80);
+  color: rgba(15, 23, 42, 0.90);
+}
+
+:root[data-theme="light"] .buyer-garage-deadline-hint,
+:root.light .buyer-garage-deadline-hint {
+  background: rgba(14, 165, 233, 0.04);
+  border-color: rgba(14, 165, 233, 0.16);
+  color: rgba(71, 85, 105, 0.70);
+}
+
+/* B4 — profile form inputs: placeholder + focus legibles en light mode */
+:root[data-theme="light"] .garage-ox-hero__profile-form .buyer-profile-field input::placeholder,
+:root.light .garage-ox-hero__profile-form .buyer-profile-field input::placeholder {
+  color: rgba(71, 85, 105, 0.45);
+}
+
+:root[data-theme="light"] .garage-ox-hero__profile-form .buyer-profile-field input:focus,
+:root.light .garage-ox-hero__profile-form .buyer-profile-field input:focus {
+  background: rgba(14, 165, 233, 0.06);
+  border-color: rgba(14, 165, 233, 0.45);
+}
+
+/* I1 — Radar icon tint en light mode */
+:root[data-theme="light"] .buyer-radar-empty__icon,
+:root.light .buyer-radar-empty__icon {
+  color: rgba(14, 165, 233, 0.55);
+}
+
+/* I1 — Radar empty text en light mode */
+:root[data-theme="light"] .buyer-radar-empty p,
+:root.light .buyer-radar-empty p {
+  color: rgba(71, 85, 105, 0.70);
+}
+
+/* E — Venta futura progress en light mode */
+:root[data-theme="light"] .buyer-garage-sale-progress,
+:root.light .buyer-garage-sale-progress {
+  border-color: rgba(22, 163, 74, 0.25);
+  background: rgba(22, 163, 74, 0.06);
+  color: rgba(21, 128, 61, 0.90);
+}
+
+/* E — Historial empty state en light mode */
+:root[data-theme="light"] .buyer-garage-history-empty strong,
+:root.light .buyer-garage-history-empty strong {
+  color: rgba(71, 85, 105, 0.70);
+}
+
+:root[data-theme="light"] .buyer-garage-history-empty p,
+:root.light .buyer-garage-history-empty p {
+  color: rgba(71, 85, 105, 0.55);
+}
+
+:root[data-theme="light"] .buyer-garage-history-empty__icon,
+:root.light .buyer-garage-history-empty__icon {
+  color: rgba(71, 85, 105, 0.25);
+}
+
+/* A3 — focus-visible en light mode: ring más oscuro para contraste */
+:root[data-theme="light"] .garage-ox-nav__btn:focus-visible,
+:root.light .garage-ox-nav__btn:focus-visible,
+:root[data-theme="light"] .movimiento-subnav__btn:focus-visible,
+:root.light .movimiento-subnav__btn:focus-visible,
+:root[data-theme="light"] .buyer-garage-tabs button:focus-visible,
+:root.light .buyer-garage-tabs button:focus-visible,
+:root[data-theme="light"] .buyer-radar-item-delete:focus-visible,
+:root.light .buyer-radar-item-delete:focus-visible,
+:root[data-theme="light"] .garage-ox-hero__tool-btn:focus-visible,
+:root.light .garage-ox-hero__tool-btn:focus-visible {
+  outline-color: rgba(3, 105, 161, 0.80);
+  box-shadow: 0 0 0 4px rgba(3, 105, 161, 0.14);
+}
+
+/* Sprint 1B — garage-ox-notifications light mode */
+:root[data-theme="light"] .garage-ox-notifications,
+:root.light .garage-ox-notifications {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(14, 165, 233, 0.20);
+}
+
+:root[data-theme="light"] .garage-ox-notifications__title,
+:root.light .garage-ox-notifications__title {
+  color: rgba(15, 23, 42, 0.92);
+}
+
+:root[data-theme="light"] .garage-ox-notifications__summary,
+:root.light .garage-ox-notifications__summary {
+  color: rgba(71, 85, 105, 0.72);
+}
+
+:root[data-theme="light"] .garage-ox-notifications__empty p,
+:root.light .garage-ox-notifications__empty p {
+  color: rgba(71, 85, 105, 0.55);
+}
+
+:root[data-theme="light"] .garage-ox-notification-card,
+:root.light .garage-ox-notification-card {
+  background: rgba(248, 250, 252, 0.92);
+  border-color: rgba(14, 165, 233, 0.14);
+}
+
+:root[data-theme="light"] .garage-ox-notification-card--urgent,
+:root.light .garage-ox-notification-card--urgent {
+  background: rgba(254, 242, 242, 0.90);
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+:root[data-theme="light"] .garage-ox-notification-card--attention,
+:root.light .garage-ox-notification-card--attention {
+  background: rgba(255, 251, 235, 0.90);
+  border-color: rgba(217, 119, 6, 0.22);
+}
+
+:root[data-theme="light"] .garage-ox-notification-card--success,
+:root.light .garage-ox-notification-card--success {
+  background: rgba(240, 253, 244, 0.90);
+  border-color: rgba(22, 163, 74, 0.20);
+}
+
+:root[data-theme="light"] .garage-ox-notification-card__title,
+:root.light .garage-ox-notification-card__title {
+  color: rgba(15, 23, 42, 0.90);
+}
+
+:root[data-theme="light"] .garage-ox-notification-card--urgent .garage-ox-notification-card__title,
+:root.light .garage-ox-notification-card--urgent .garage-ox-notification-card__title {
+  color: #dc2626;
+}
+
+:root[data-theme="light"] .garage-ox-notification-card--attention .garage-ox-notification-card__title,
+:root.light .garage-ox-notification-card--attention .garage-ox-notification-card__title {
+  color: #b45309;
+}
+
+:root[data-theme="light"] .garage-ox-notification-card--success .garage-ox-notification-card__title,
+:root.light .garage-ox-notification-card--success .garage-ox-notification-card__title {
+  color: #15803d;
+}
+
+:root[data-theme="light"] .garage-ox-notification-card__text,
+:root.light .garage-ox-notification-card__text {
+  color: rgba(71, 85, 105, 0.78);
+}
+
+:root[data-theme="light"] .garage-ox-notification-card__time,
+:root.light .garage-ox-notification-card__time {
+  color: rgba(71, 85, 105, 0.45);
+}
