@@ -391,16 +391,80 @@
   $$;
 
   ────────────────────────────────────────────────────────────────
-  6. pg_cron (opcional — ejecutar si el plan Supabase lo soporta)
+  6. pg_cron — programación automática (Sprint 3, Camino A)
   ────────────────────────────────────────────────────────────────
 
-  -- Alertas diarias a las 8:00 UTC
-  -- select cron.schedule('buyer-due-alerts', '0 8 * * *',
-  --   'select process_buyer_garage_due_alerts()');
+  DIAGNÓSTICO DE INFRAESTRUCTURA
+  ─────────────────────────────
+  - Sin supabase/migrations ni supabase/functions en el proyecto.
+  - Sin Supabase CLI en package.json.
+  - .env.local tiene solo VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY.
+    Sin service role key → Edge Functions requieren setup adicional.
+  - pg_cron está disponible en Supabase Free y Pro desde 2023.
+  - RECOMENDADO: Camino A (pg_cron). Camino B documentado al final.
 
-  -- Radar matching cada 6 horas (0,6,12,18 UTC)
-  -- select cron.schedule('buyer-radar-matches', '0 0,6,12,18 * * *',
-  --   'select process_buyer_radar_matches()');
+  CAMINO A — pg_cron en Supabase SQL Editor
+  ──────────────────────────────────────────
+  Ejecutar en orden en el SQL Editor de Supabase.
+
+  Nota: se usan dollar-quoting ($$...$$) para evitar conflictos de
+  escape en strings SQL. No usar cron expression con "x/y" en este
+  archivo JS ya que rompe el bloque de comentario.
+
+  -- 1. Habilitar la extensión (si no está activa)
+  create extension if not exists pg_cron;
+
+  -- 2. Programar alertas diarias de VTV / seguro a las 08:00 UTC
+  select cron.schedule(
+    'buyer-due-alerts',
+    '0 8 * * *',
+    $$select public.process_buyer_garage_due_alerts();$$
+  );
+
+  -- 3. Programar Radar matching a las 0:00, 6:00, 12:00 y 18:00 UTC
+  select cron.schedule(
+    'buyer-radar-matches',
+    '0 0,6,12,18 * * *',
+    $$select public.process_buyer_radar_matches();$$
+  );
+
+  -- 4. Verificar jobs registrados
+  select jobid, jobname, schedule, command, active
+  from cron.job
+  order by jobname;
+
+  -- 5. Para desactivar (si hace falta)
+  -- select cron.unschedule('buyer-due-alerts');
+  -- select cron.unschedule('buyer-radar-matches');
+
+  -- 6. Para ver historial de ejecuciones
+  -- select jobid, status, start_time, end_time, return_message
+  -- from cron.job_run_details
+  -- order by start_time desc limit 20;
+
+  CAMINO B — Edge Function (si pg_cron no estuviera disponible)
+  ─────────────────────────────────────────────────────────────
+  Requiere: Supabase CLI + service role key en secrets.
+  No implementado todavía — documentado para referencia.
+
+  Pasos:
+  1. npm install -g supabase
+  2. supabase login
+  3. supabase init (si no existe el directorio)
+  4. supabase functions new garage-ox-jobs
+  5. Escribir handler en supabase/functions/garage-ox-jobs/index.ts
+     que llame process_buyer_garage_due_alerts() y process_buyer_radar_matches()
+     via supabaseAdmin (service role).
+  6. supabase functions deploy garage-ox-jobs --no-verify-jwt
+  7. Configurar cron en Supabase Dashboard → Edge Functions → Schedule.
+
+  CAMINO C — frontend-trigger (activo, se mantiene como fallback)
+  ───────────────────────────────────────────────────────────────
+  BuyerPanel.jsx dispara processBuyerGarageDueAlerts() y
+  processBuyerRadarMatches() en useEffect([authUser.id]).
+  Las funciones tienen dedup incorporado → no generan duplicados
+  aunque se llamen desde cron Y desde frontend en el mismo día.
+  No eliminar este camino aunque pg_cron esté activo.
 
   ────────────────────────────────────────────────────────────────
   7. SPRINT 2 — buyer_profiles.user_id + trigger lead status
