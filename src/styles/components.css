@@ -17721,6 +17721,7 @@ body::-webkit-scrollbar {
   .dealer-panel .dealer-modules-grid { gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dealer-panel .dealer-module-card { padding: 12px 13px 10px; min-height: 130px; }
   .dealer-panel .dealer-mc-kpi > strong { font-size: 1.35rem; }
+  .dealer-panel .dealer-module-card button { min-height: 44px; }
 }
 
 /* --- Light mode — complete module card system --- */
@@ -26952,4 +26953,205 @@ button.buyer-shortlist-compare__slot:hover {
     flex-direction: column;
     gap: 8px;
   }
+}
+
+/* ── Sprint Pre-Piloto ───────────────────────────────────────── */
+
+/* Legal update date */
+.legal-update-date {
+  margin: 8px 0 0;
+  font-size: 0.76rem;
+  color: rgba(148, 163, 184, 0.50);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Garage oX — price note disclaimer */
+.vehicle-card__price-note {
+  margin: 4px 0 0;
+  font-size: 0.68rem;
+  color: rgba(148, 163, 184, 0.48);
+  line-height: 1.4;
+}
+
+/* Dealer Radar locked screen */
+.dealer-module-locked-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px 24px;
+  border-radius: 16px;
+  border: 1px dashed rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.24);
+}
+
+.dealer-module-locked-screen h2 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: rgba(226, 232, 240, 0.80);
+  margin: 0;
+}
+
+.dealer-module-locked-screen p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: rgba(148, 163, 184, 0.65);
+  line-height: 1.5;
+  max-width: 480px;
+}
+
+/* Inline locked section inside metrics module */
+.dealer-metrics-section-locked {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 20px;
+  border-radius: 12px;
+  border: 1px dashed rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.18);
+  margin-bottom: 8px;
+}
+
+.dealer-metrics-section-locked__label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.50);
+}
+
+.dealer-metrics-section-locked__note {
+  margin: 0;
+  font-size: 0.86rem;
+  color: rgba(148, 163, 184, 0.60);
+  line-height: 1.5;
+}
+
+/* Extra quota CTA */
+.dealer-extra-quota-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(99, 102, 241, 0.07);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.dealer-extra-quota-cta__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dealer-extra-quota-cta__text strong {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: rgba(226, 232, 240, 0.90);
+}
+
+.dealer-extra-quota-cta__text span {
+  font-size: 0.80rem;
+  color: rgba(148, 163, 184, 0.65);
+  line-height: 1.4;
+}
+
+.dealer-extra-quota-cta__btn {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  background: rgba(99, 102, 241, 0.12);
+  color: rgba(165, 180, 252, 0.95);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.dealer-extra-quota-cta__btn:hover {
+  background: rgba(99, 102, 241, 0.20);
+  border-color: rgba(99, 102, 241, 0.50);
+}
+
+/* Kit de redes locked state in modal */
+.dealer-social-kit--locked .dealer-module-locked-screen {
+  margin: 0;
+  border-radius: 12px;
+}
+
+@media (max-width: 600px) {
+  .dealer-extra-quota-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dealer-extra-quota-cta__btn {
+    width: 100%;
+  }
+}
+
+/* Light mode overrides */
+:root.light .dealer-module-locked-screen,
+:root[data-theme="light"] .dealer-module-locked-screen {
+  background: rgba(241, 245, 249, 0.85);
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+:root.light .dealer-module-locked-screen h2,
+:root[data-theme="light"] .dealer-module-locked-screen h2 {
+  color: #1e293b;
+}
+
+:root.light .dealer-module-locked-screen p,
+:root[data-theme="light"] .dealer-module-locked-screen p {
+  color: #64748b;
+}
+
+:root.light .dealer-metrics-section-locked,
+:root[data-theme="light"] .dealer-metrics-section-locked {
+  background: rgba(241, 245, 249, 0.7);
+  border-color: rgba(148, 163, 184, 0.22);
+}
+
+:root.light .dealer-metrics-section-locked__label,
+:root[data-theme="light"] .dealer-metrics-section-locked__label {
+  color: #94a3b8;
+}
+
+:root.light .dealer-metrics-section-locked__note,
+:root[data-theme="light"] .dealer-metrics-section-locked__note {
+  color: #64748b;
+}
+
+:root.light .dealer-extra-quota-cta,
+:root[data-theme="light"] .dealer-extra-quota-cta {
+  background: rgba(99, 102, 241, 0.05);
+  border-color: rgba(99, 102, 241, 0.18);
+}
+
+:root.light .dealer-extra-quota-cta__text strong,
+:root[data-theme="light"] .dealer-extra-quota-cta__text strong {
+  color: #1e293b;
+}
+
+:root.light .dealer-extra-quota-cta__text span,
+:root[data-theme="light"] .dealer-extra-quota-cta__text span {
+  color: #64748b;
+}
+
+:root.light .dealer-extra-quota-cta__btn,
+:root[data-theme="light"] .dealer-extra-quota-cta__btn {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.28);
+  color: #4f46e5;
+}
+
+:root.light .dealer-extra-quota-cta__btn:hover,
+:root[data-theme="light"] .dealer-extra-quota-cta__btn:hover {
+  background: rgba(99, 102, 241, 0.13);
+  border-color: rgba(99, 102, 241, 0.40);
 }

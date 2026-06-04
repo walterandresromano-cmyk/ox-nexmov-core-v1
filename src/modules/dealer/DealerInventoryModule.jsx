@@ -91,6 +91,7 @@ export default function DealerInventoryModule({
   dealerVehicles,
   dealerLeads = [],
   dealerName = "",
+  permissions,
   onRefresh,
   onBack,
   initialFilterScore = "",
@@ -568,6 +569,7 @@ export default function DealerInventoryModule({
         <DealerVehicleDetailModal
           vehicle={selectedVehicle}
           dealerName={dealerName}
+          permissions={permissions}
           onClose={() => setSelectedVehicle(null)}
           onUpdated={onRefresh}
         />

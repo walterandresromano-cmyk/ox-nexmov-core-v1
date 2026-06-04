@@ -2501,6 +2501,7 @@
   cursor: pointer;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
   white-space: nowrap;
+  min-height: 36px;
 }
 
 .dealer-commercial-report__copy:hover {
@@ -2833,6 +2834,20 @@
 
 :root.light .dealer-commercial-report__alert-card--good strong,
 :root[data-theme="light"] .dealer-commercial-report__alert-card--good strong { color: #059669; }
+
+/* Mobile: stack commercial report header */
+@media (max-width: 600px) {
+  .dealer-commercial-report__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dealer-commercial-report__copy {
+    width: 100%;
+    min-height: 44px;
+    text-align: center;
+  }
+}
 
 /* ── Contextual insight chip in inventory filter bar ── */
 .dealer-inv-context-chip {
@@ -3960,6 +3975,15 @@
   font-weight: 500;
   cursor: pointer;
   transition: background 0.12s, border-color 0.12s, color 0.12s;
+  min-height: 36px;
+}
+
+@media (max-width: 760px) {
+  .dealer-social-kit__variant-btn {
+    flex: 1;
+    min-height: 44px;
+    text-align: center;
+  }
 }
 
 .dealer-social-kit__variant-btn:hover {

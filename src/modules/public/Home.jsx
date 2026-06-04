@@ -25,7 +25,7 @@ const quickSearches = [
 ];
 
 const trustItems = [
-  { title: "Dealers verificados", text: "Habilitados por administración", icon: ShieldCheckIcon },
+  { title: "Dealers verificados", text: "Datos comerciales validados por oX antes de operar", icon: ShieldCheckIcon },
   { title: "Comparador real", text: "Lado a lado con datos reales", icon: ArrowsSwapIcon },
   { title: "Contactos trazables", text: "Registrados antes del chat", icon: TargetIcon },
   { title: "Financiación visible", text: "Entrega, cuotas y tasa siempre claros", icon: DollarSignIcon },

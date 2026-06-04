@@ -4,6 +4,7 @@ const LEGAL_CONTENT = {
     title: "Términos y condiciones",
     sections: [
       "oX NEXMOV es una plataforma digital de búsqueda, comparación y contacto comercial entre compradores y dealers verificados.",
+      "\"Dealer verificado\" indica que oX NEXMOV validó manualmente los datos comerciales básicos del vendedor antes de habilitar su operación dentro de la plataforma. No implica certificación mecánica del vehículo ni garantía sobre la operación comercial.",
       "La información publicada sobre vehículos, precios, disponibilidad, financiación, documentación y condiciones comerciales es declarada por cada dealer, concesionaria o anunciante correspondiente.",
       "oX NEXMOV no es titular de los vehículos publicados y no interviene como parte vendedora en las operaciones comerciales entre compradores y dealers.",
       "Antes de avanzar con una operación, el comprador deberá confirmar con el dealer la disponibilidad del vehículo, precio final, documentación, condiciones de financiación y cualquier otro dato relevante.",
@@ -148,6 +149,8 @@ export default function LegalPage({ currentRoute = "terms", onNavigate }) {
             </a>
             .
           </p>
+
+          <p className="legal-update-date">Última actualización: junio 2026</p>
 
           <button
             className="legal-back-button"

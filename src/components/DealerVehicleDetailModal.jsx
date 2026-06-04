@@ -127,9 +127,13 @@ function getVehicleImages(vehicle) {
 export default function DealerVehicleDetailModal({
   vehicle,
   dealerName = "",
+  permissions,
   onClose,
   onUpdated,
 }) {
+  const hasKitRedes =
+    permissions?.metricsLevel === "advanced" ||
+    permissions?.metricsLevel === "full";
   const images = useMemo(() => getVehicleImages(vehicle), [vehicle]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [copyKitState, setCopyKitState] = useState("idle");
@@ -420,6 +424,21 @@ export default function DealerVehicleDetailModal({
         </div>
 
         {/* Social kit */}
+        {!hasKitRedes ? (
+          <div className="dealer-social-kit dealer-social-kit--locked">
+            <div className="dealer-social-kit__head">
+              <strong className="dealer-social-kit__title">Kit de redes</strong>
+            </div>
+            <div className="dealer-module-locked-screen">
+              <p className="eyebrow">Kit de redes</p>
+              <h2>Disponible desde plan Elite</h2>
+              <p>
+                Incluye textos comerciales listos para compartir, enlace de
+                publicación y card promocional para redes sociales.
+              </p>
+            </div>
+          </div>
+        ) : (
         <div className="dealer-social-kit">
           <div className="dealer-social-kit__head">
             <strong className="dealer-social-kit__title">Kit de redes</strong>
@@ -520,6 +539,7 @@ export default function DealerVehicleDetailModal({
             </p>
           </div>
         </div>
+        )}
       </section>
     </div>
   );

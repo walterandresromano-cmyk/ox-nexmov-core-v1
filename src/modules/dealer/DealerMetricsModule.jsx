@@ -188,13 +188,16 @@ export default function DealerMetricsModule({
   const planExpired = planStatus === "expired" || planStatus === "expired_grace";
   const planExpiringSoon = !planExpired && expiresInDays >= 0 && expiresInDays <= 7;
 
+  const isAdvancedMetrics =
+    permissions?.metricsLevel === "advanced" ||
+    permissions?.metricsLevel === "full";
+
   const planBenefits = [
     isPlatinum
       ? "Publicaciones ilimitadas"
       : `Hasta ${limit} publicaciones por período`,
     permissions?.marketIntelligence && "Inteligencia de mercado",
     permissions?.sellVehicleLeads && "Compradores que buscan vender su auto",
-    permissions?.fullFinancingTools && "Herramientas de financiación",
     !isPlatinum && permissions?.badgeVisibility !== "limited"
       && `Badge ${rankLabel} visible en publicaciones`,
   ].filter(Boolean).slice(0, 4);
@@ -272,6 +275,23 @@ export default function DealerMetricsModule({
           )}
         </div>
 
+        {/* B2 — Cupo extra CTA */}
+        {!isPlatinum && (
+          <div className="dealer-extra-quota-cta">
+            <div className="dealer-extra-quota-cta__text">
+              <strong>¿Necesitás más cupo?</strong>
+              <span>El cupo extra puede tener costo adicional y queda sujeto a aprobación de oX.</span>
+            </div>
+            <button
+              type="button"
+              className="dealer-extra-quota-cta__btn"
+              onClick={onOpenSupport}
+            >
+              Solicitar cupo adicional
+            </button>
+          </div>
+        )}
+
         {/* C — Inventory health + commercial */}
         <div className="dealer-plan-perf__kpis">
           <div className="dealer-plan-perf__kpi">
@@ -324,6 +344,15 @@ export default function DealerMetricsModule({
       </section>
 
       {/* ── Reporte comercial ── */}
+      {!isAdvancedMetrics && (
+        <div className="dealer-metrics-section-locked">
+          <p className="dealer-metrics-section-locked__label">Reporte comercial</p>
+          <p className="dealer-metrics-section-locked__note">
+            Reporte avanzado disponible desde Elite. Tu plan incluye métricas esenciales para operar tus publicaciones.
+          </p>
+        </div>
+      )}
+      {isAdvancedMetrics && (
       <section className="dealer-commercial-report">
         <div className="dealer-commercial-report__head">
           <div>
@@ -548,6 +577,7 @@ export default function DealerMetricsModule({
           </>
         )}
       </section>
+      )}
 
       {/* Period status */}
       <div className={`dealer-metrics-period ${getPlanAlertClass(expiresInDays)}`}>
@@ -702,8 +732,16 @@ export default function DealerMetricsModule({
         </div>
       )}
 
-      {/* Per-vehicle performance table */}
-      {dealerVehicles.length > 0 && (
+      {/* Per-vehicle performance table — Elite/Platinum only */}
+      {!isAdvancedMetrics && dealerVehicles.length > 0 && (
+        <div className="dealer-metrics-section-locked">
+          <p className="dealer-metrics-section-locked__label">Rendimiento por publicación</p>
+          <p className="dealer-metrics-section-locked__note">
+            Ranking detallado por publicación disponible desde Elite.
+          </p>
+        </div>
+      )}
+      {isAdvancedMetrics && dealerVehicles.length > 0 && (
         <div className="admin-table-wrap dealer-metrics-table">
           <h3 className="dealer-metrics-section-title">
             Rendimiento por publicación

@@ -116,15 +116,15 @@ const DEALER_MOBILE_SECTIONS = [
 const DEALER_FEATURE_PREVIEWS = [
   {
     id: "financing",
-    title: "Financiación avanzada",
-    requiredPlan: "Pro",
+    title: "Financiación",
+    requiredPlan: "Admin",
     description:
-      "Mejora la lectura comercial de publicaciones con condiciones de financiación más claras.",
+      "En definición. No disponible durante el piloto.",
   },
   {
     id: "metrics",
     title: "Métricas comerciales",
-    requiredPlan: "Elite",
+    requiredPlan: "Inicio",
     description:
       "Entendé rendimiento, consultas y oportunidades para priorizar mejor tu stock.",
   },
@@ -141,6 +141,13 @@ const DEALER_FEATURE_PREVIEWS = [
     requiredPlan: "Elite",
     description:
       "Recibí oportunidades comerciales asignadas por administración para evaluar unidades.",
+  },
+  {
+    id: "kitRedes",
+    title: "Kit de redes",
+    requiredPlan: "Elite",
+    description:
+      "Textos comerciales listos para compartir, enlace de publicación y card promocional.",
   },
   {
     id: "visibility",
@@ -311,7 +318,7 @@ function getPlanBenefitBadges(permissions, isPlatinum) {
       "Publicaciones ilimitadas",
       "Señales completas",
       "Métricas completas incluidas",
-      "Financiación completa",
+      "Kit de redes incluido",
       "Oportunidades comerciales",
       "Soporte prioritario",
     ];
@@ -322,10 +329,6 @@ function getPlanBenefitBadges(permissions, isPlatinum) {
     `Señales ${permissions.badgeVisibility}`,
     `Métricas ${permissions.metricsLevel}`,
   ];
-
-  if (permissions.fullFinancingTools) {
-    badges.push("Financiación completa");
-  }
 
   if (permissions.sellVehicleLeads) {
     badges.push("Oportunidades comerciales");
@@ -960,14 +963,13 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
   function getDealerFeatureState(featureId) {
     if (featureId === "financing") {
-      const available = permissions.fullFinancingTools;
-
       return {
-        available,
-        tone: available ? "available" : "locked",
-        module: available ? "inventory" : "support",
-        status: available ? "Disponible" : "Disponible en Pro",
-        ctaLabel: available ? "Gestionar publicaciones" : "Solicitar upgrade",
+        available: false,
+        tone: "locked",
+        module: "financing",
+        status: "En definición",
+        ctaLabel: "Próximamente",
+        disabled: true,
       };
     }
 
@@ -986,13 +988,29 @@ export default function DealerPanel({ authProfile, onNavigate }) {
     }
 
     if (featureId === "metrics") {
+      const isAdvanced =
+        permissions.metricsLevel === "advanced" ||
+        permissions.metricsLevel === "full";
       return {
         available: true,
         tone: "active",
         module: "metrics",
-        status: "Activo",
+        status: isAdvanced ? "Avanzado" : "Básico",
         ctaLabel: "Ver métricas",
         disabled: false,
+      };
+    }
+
+    if (featureId === "kitRedes") {
+      const available =
+        permissions.metricsLevel === "advanced" ||
+        permissions.metricsLevel === "full";
+      return {
+        available,
+        tone: available ? "available" : "locked",
+        module: available ? "inventory" : "support",
+        status: available ? "Disponible" : "Disponible desde Elite",
+        ctaLabel: available ? "Ver inventario" : "Solicitar upgrade",
       };
     }
 
@@ -2218,8 +2236,8 @@ export default function DealerPanel({ authProfile, onNavigate }) {
 
             <article
               data-module="radar"
-              className="dealer-module-card clickable-module-card"
-              onClick={() => openModule("radar")}
+              className={`dealer-module-card${permissions.marketIntelligence ? " clickable-module-card" : " dealer-module-card--locked"}`}
+              onClick={() => { if (permissions.marketIntelligence) openModule("radar"); }}
             >
               <div className="dealer-mc-kpi">
                 <strong>Radar</strong>
@@ -2227,7 +2245,9 @@ export default function DealerPanel({ authProfile, onNavigate }) {
               </div>
               <h3>Radar oX</h3>
               <p>Señales de búsquedas activas sin vehículo disponible.</p>
-              <button type="button">Ver señales</button>
+              <button type="button" disabled={!permissions.marketIntelligence}>
+                {permissions.marketIntelligence ? "Ver señales" : "Disponible en Elite"}
+              </button>
             </article>
 
             <article
@@ -2282,8 +2302,8 @@ export default function DealerPanel({ authProfile, onNavigate }) {
                 <span>próximamente</span>
               </div>
               <h3>Financiación</h3>
-              <p>{permissions.fullFinancingTools ? "Herramientas de financiación disponibles en tu plan." : "Disponible en planes Pro y superiores."}</p>
-              <button type="button" disabled>{isPlatinum ? "Incluido en Platinum" : "Disponible en plan Pro"}</button>
+              <p>{permissions.fullFinancingTools ? "Incluido en tu plan — módulo en configuración para la próxima fase." : "Disponible en planes Pro y superiores."}</p>
+              <button type="button" disabled>{permissions.fullFinancingTools ? "Próximamente" : "Disponible en plan Pro"}</button>
             </article>
 
           </div>
@@ -2294,6 +2314,7 @@ export default function DealerPanel({ authProfile, onNavigate }) {
             dealerVehicles={dealerVehicles}
             dealerLeads={leads}
             dealerName={dealer?.commercialName ?? ""}
+            permissions={permissions}
             onRefresh={loadDealerVehicles}
             onBack={handleModuleBack}
             initialFilterScore={inventoryInitialContext?.filterScore ?? ""}
@@ -2390,13 +2411,19 @@ export default function DealerPanel({ authProfile, onNavigate }) {
           <div className="dealer-leads-section">
             <ModuleBackButton
               title="Financiación"
-              description="Módulo de financiación propia, bancaria y simulador visible para el comprador."
+              description="Herramienta de financiación para publicaciones."
             />
-
-            <div className="empty-state">
-              El módulo de configuración avanzada de financiación queda
-              preparado para la siguiente fase. Las condiciones actuales se
-              cargan desde cada publicación.
+            <div className="dealer-module-locked-screen">
+              <p className="eyebrow">Financiación</p>
+              <h2>Financiación en definición</h2>
+              <p>
+                Estamos definiendo el modelo de financiación y su operatoria
+                comercial. Esta herramienta no está disponible durante el
+                piloto.
+              </p>
+              <button type="button" className="admin-refresh-btn" onClick={handleModuleBack}>
+                Volver
+              </button>
             </div>
           </div>
         )}
@@ -2438,9 +2465,16 @@ export default function DealerPanel({ authProfile, onNavigate }) {
         )}
 
         {activeDealerModule === "radar" && (
-          <DealerRadarModule
-            onBack={handleModuleBack}
-          />
+          permissions.marketIntelligence
+            ? <DealerRadarModule onBack={handleModuleBack} />
+            : (
+              <div className="dealer-module-locked-screen">
+                <p className="eyebrow">Radar oX</p>
+                <h2>Disponible desde plan Elite</h2>
+                <p>Las señales Radar muestran búsquedas activas de compradores que no encontraron el vehículo que buscan. Disponible en planes Elite y Platinum.</p>
+                <button type="button" className="admin-refresh-btn" onClick={handleModuleBack}>Volver</button>
+              </div>
+            )
         )}
 
         {showVehicleModal && (

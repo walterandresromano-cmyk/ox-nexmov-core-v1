@@ -92,6 +92,20 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
 
   return (
     <>
+      {!isLoggedIn && (
+        <button
+          type="button"
+          className="mobile-access-float-btn"
+          onClick={() => onNavigate("login")}
+          aria-label="Acceso"
+        >
+          <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </button>
+      )}
+
       <button
         type="button"
         className="mobile-theme-float-btn"
@@ -135,19 +149,6 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
                 </button>
               ))}
 
-              {!isLoggedIn && (
-                <button
-                  type="button"
-                  className={
-                    currentRoute === "login"
-                      ? "mobile-dock-more-btn mobile-dock-more-btn--access active"
-                      : "mobile-dock-more-btn mobile-dock-more-btn--access"
-                  }
-                  onClick={() => handleNavigate("login")}
-                >
-                  Acceso operativo
-                </button>
-              )}
             </div>
           </nav>
         </>

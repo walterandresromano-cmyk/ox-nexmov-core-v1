@@ -1043,6 +1043,9 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                                   {formatARS(vehicle.expectedPrice || vehicle.price)}
                                 </strong>
                               </div>
+                              <p className="vehicle-card__price-note">
+                                Dato orientativo. oX NEXMOV no calcula ni garantiza este valor.
+                              </p>
                             </div>
                             <div className="vehicle-card__actions garage-ox-garage-card__actions">
                               <button
