@@ -148,6 +148,18 @@ export function useNotifications({ authUser, authProfile }) {
     // ── Notificaciones legadas desde vehicle_action_leads ──────────────
     // Solo transiciones comerciales visibles. Estados internos del CRM dealer
     // (seen, in_progress, negotiation, lost, etc.) se trackean silenciosamente.
+    // Sprint 2: si el trigger ya creó una buyer_notification para este
+    // lead+status, no duplicar — la fuente DB es preferida.
+    const dbLeadStatusCovered = new Set(
+      (dbNotifs || [])
+        .filter((n) =>
+          n.type === "lead_status_update" &&
+          n.metadata?.lead_id != null &&
+          n.metadata?.new_status != null
+        )
+        .map((n) => `${n.metadata.lead_id}:${n.metadata.new_status}`)
+    );
+
     for (const lead of (leads || [])) {
       const leadId = lead.lead_id || lead.id;
       const title = `${lead.vehicle_brand || ""} ${lead.vehicle_model || ""}`.trim() || "el vehículo";
@@ -157,6 +169,9 @@ export function useNotifications({ authUser, authProfile }) {
       prevLeadStatuses.current[leadId] = curStatus;
 
       if (!isCommercial) continue;
+
+      // Si ya hay una DB notification para este lead+status, no agregar el legado.
+      if (dbLeadStatusCovered.has(`${leadId}:${curStatus}`)) continue;
 
       const notificationKey = getBuyerNotificationKey(leadId, curStatus);
       const alreadyRead = readKeys.has(notificationKey);

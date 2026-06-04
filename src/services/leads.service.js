@@ -217,6 +217,16 @@ async function getOrCreateBuyerProfile({ authUser, authProfile }) {
   const existingByEmail = existingProfiles?.[0] || null;
 
   if (existingByEmail) {
+    // Sprint 2: si el perfil existe pero no tiene user_id, intentar asociarlo.
+    // Fire-and-forget — no bloquea el flujo si falla por RLS u otro motivo.
+    if (!existingByEmail.user_id && authUser?.id) {
+      supabase
+        .from("buyer_profiles")
+        .update({ user_id: authUser.id })
+        .eq("id", existingByEmail.id)
+        .then(() => {})
+        .catch(() => {});
+    }
     return {
       buyerProfile: existingByEmail,
       error: null,
@@ -231,6 +241,11 @@ async function getOrCreateBuyerProfile({ authUser, authProfile }) {
     city,
     province,
   };
+
+  // Sprint 2: vincular user_id al crear un perfil nuevo con usuario autenticado.
+  if (authUser?.id) {
+    payload.user_id = authUser.id;
+  }
 
   const { data, error } = await supabase
     .from("buyer_profiles")
