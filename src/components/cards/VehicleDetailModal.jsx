@@ -656,6 +656,13 @@ export default function VehicleDetailModal({
               </div>
             )}
 
+            {currentVehicle.details && (
+              <div className="detail-vehicle-description">
+                <span>Descripción del vehículo</span>
+                <p>{currentVehicle.details}</p>
+              </div>
+            )}
+
             <div className="detail-published-by">
               {(currentDealer.logo || currentDealer.raw?.logo_url) && (
                 <img
@@ -740,13 +747,6 @@ export default function VehicleDetailModal({
                     ? `${delta.percent.toFixed(1)}% debajo de la referencia cargada`
                     : `${Math.abs(delta.percent).toFixed(1)}% por encima de la referencia cargada`}
                 </p>
-              </div>
-            )}
-
-            {currentVehicle.details && (
-              <div className="detail-vehicle-description">
-                <span>Descripción del vehículo</span>
-                <p>{currentVehicle.details}</p>
               </div>
             )}
 
