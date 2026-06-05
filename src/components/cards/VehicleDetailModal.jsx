@@ -538,64 +538,52 @@ export default function VehicleDetailModal({
                   </div>
                 )}
 
-                {/* Centered toolbar: prev · counter · next · zoom+ · zoom− */}
+                {/* Side arrows */}
+                {images.length > 1 && !isZoomed && (
+                  <>
+                    <button
+                      className="detail-image-arrow detail-image-arrow--prev"
+                      type="button"
+                      disabled={selectedImageIndex === 0}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onClick={(e) => { e.stopPropagation(); navigateImage(-1); }}
+                      aria-label="Imagen anterior"
+                    >‹</button>
+                    <button
+                      className="detail-image-arrow detail-image-arrow--next"
+                      type="button"
+                      disabled={selectedImageIndex === images.length - 1}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onClick={(e) => { e.stopPropagation(); navigateImage(1); }}
+                      aria-label="Siguiente imagen"
+                    >›</button>
+                  </>
+                )}
+
+                {/* Bottom-right: counter + zoom */}
                 <div className="detail-image-toolbar">
                   {images.length > 1 && (
-                    <>
-                      <button
-                        className="detail-image-arrow"
-                        type="button"
-                        disabled={selectedImageIndex === 0}
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onClick={(e) => { e.stopPropagation(); navigateImage(-1); }}
-                        aria-label="Imagen anterior"
-                      >
-                        ‹
-                      </button>
-                      <span className="detail-image-counter">
-                        {selectedImageIndex + 1} / {images.length}
-                      </span>
-                      <button
-                        className="detail-image-arrow"
-                        type="button"
-                        disabled={selectedImageIndex === images.length - 1}
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onClick={(e) => { e.stopPropagation(); navigateImage(1); }}
-                        aria-label="Siguiente imagen"
-                      >
-                        ›
-                      </button>
-                    </>
+                    <span className="detail-image-counter">
+                      {selectedImageIndex + 1} / {images.length}
+                    </span>
                   )}
                   {selectedImage?.url && (
                     <>
                       <button
                         className={`vehicle-detail-zoom-button ${isZoomed ? "is-active" : ""}`}
                         type="button"
-                        onPointerDown={(event) => event.stopPropagation()}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          zoomToPoint(0, 0, Math.min(4, zoomScale * 1.5));
-                        }}
-                        aria-label="Ampliar imagen"
-                      >
-                        +
-                      </button>
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => { e.stopPropagation(); zoomToPoint(0, 0, Math.min(4, zoomScale * 1.5)); }}
+                        aria-label="Ampliar"
+                      >+</button>
                       <button
                         className="vehicle-detail-zoom-button"
                         type="button"
                         disabled={!isZoomed}
-                        onPointerDown={(event) => event.stopPropagation()}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          const newScale = zoomScale / 1.5;
-                          if (newScale <= 1) { resetImageZoom(); return; }
-                          zoomToPoint(0, 0, newScale);
-                        }}
-                        aria-label="Reducir imagen"
-                      >
-                        −
-                      </button>
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => { e.stopPropagation(); const s = zoomScale / 1.5; if (s <= 1) { resetImageZoom(); return; } zoomToPoint(0, 0, s); }}
+                        aria-label="Reducir"
+                      >−</button>
                     </>
                   )}
                 </div>
