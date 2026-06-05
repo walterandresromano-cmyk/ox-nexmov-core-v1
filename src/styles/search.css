@@ -388,9 +388,16 @@
 }
 
 .ox-search-advanced-filters {
-  max-height: calc(100vh - 96px);
-  overflow: auto;
-  scrollbar-width: none;
+  max-height: none;
+  overflow: visible;
+}
+
+@media (max-width: 1180px) {
+  .ox-search-advanced-filters {
+    max-height: calc(100vh - 96px);
+    overflow: auto;
+    scrollbar-width: none;
+  }
 }
 
 @media (max-width: 900px) {
