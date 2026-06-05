@@ -6397,6 +6397,7 @@ body::-webkit-scrollbar {
   min-height: 230px;
   padding: 0;
   overflow: hidden;
+  border-radius: 24px 24px 0 0;
   display: grid;
   align-items: end;
   background:

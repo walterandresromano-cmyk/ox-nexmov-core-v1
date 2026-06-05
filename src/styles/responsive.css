@@ -10080,6 +10080,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   height: 230px !important;
   min-height: 230px !important;
   padding: 0 !important;
+  border-radius: 24px 24px 0 0 !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__image,
@@ -11528,7 +11529,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   margin: 0 !important;
   padding: 0 !important;
   border: 1px solid rgba(125, 211, 252, 0.16) !important;
-  border-radius: 0 !important;
+  border-radius: 24px 24px 0 0 !important;
   box-shadow: none !important;
 }
 
