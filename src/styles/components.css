@@ -6393,8 +6393,8 @@ body::-webkit-scrollbar {
 .vehicle-card__media {
   position: relative;
   flex: 0 0 auto;
-  height: 162px;
-  min-height: 162px;
+  height: 230px;
+  min-height: 230px;
   padding: 0;
   overflow: hidden;
   display: grid;
@@ -6826,14 +6826,8 @@ body::-webkit-scrollbar {
   }
 
   .vehicle-card__media {
-    height: 170px;
-    min-height: 170px;
-  }
-
-  .vehicle-card__image,
-  .vehicle-card__placeholder {
-    height: 132px;
-    min-height: 132px;
+    height: 210px;
+    min-height: 210px;
   }
 
   .vehicle-card__body {
@@ -6864,10 +6858,10 @@ body::-webkit-scrollbar {
    ========================================================= */
 
 .vehicle-card__media {
-  height: 190px;
-  min-height: 190px;
+  height: 230px;
+  min-height: 230px;
   align-items: end;
-  padding: 12px;
+  padding: 0;
 }
 
 .vehicle-card__media-title {
@@ -6928,14 +6922,8 @@ body::-webkit-scrollbar {
 
 @media (max-width: 760px) {
   .vehicle-card__media {
-    height: 190px;
-    min-height: 190px;
-  }
-
-  .vehicle-card__image,
-  .vehicle-card__placeholder {
-    height: 104px;
-    min-height: 104px;
+    height: 200px;
+    min-height: 200px;
   }
 
   .vehicle-card__media-title .vehicle-card__title {
