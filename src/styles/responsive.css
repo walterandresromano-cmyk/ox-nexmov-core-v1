@@ -11523,28 +11523,31 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
 .ox-search-vehicle-grid .vehicle-card__media,
 .ox-home-vehicles-carousel-v3 .vehicle-card__media {
-  height: 214px !important;
-  min-height: 214px !important;
-  margin: 1px 1px 0 !important;
-  padding: 13px !important;
+  height: 230px !important;
+  min-height: 230px !important;
+  margin: 0 !important;
+  padding: 0 !important;
   border: 1px solid rgba(125, 211, 252, 0.16) !important;
-  border-radius: 24px !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 14px 32px rgba(0, 0, 0, 0.20) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__media::before,
 .ox-home-vehicles-carousel-v3 .vehicle-card__media::before {
-  inset: 14px !important;
-  border-radius: 20px !important;
+  inset: 0 0 auto 0 !important;
+  height: 80px !important;
+  border-radius: 0 !important;
+  background: linear-gradient(180deg, rgba(2, 6, 23, 0.62), transparent) !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__image,
 .ox-search-vehicle-grid .vehicle-card__placeholder,
 .ox-home-vehicles-carousel-v3 .vehicle-card__image,
 .ox-home-vehicles-carousel-v3 .vehicle-card__placeholder {
-  border-radius: 19px !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__body,
