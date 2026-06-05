@@ -6,6 +6,7 @@ export default function VehicleImage({
   className,
   style,
   draggable,
+  loading = "lazy",
   ...props
 }) {
   const [loaded, setLoaded] = useState(false);
@@ -24,7 +25,7 @@ export default function VehicleImage({
       src={src}
       alt={alt}
       className={`vehicle-img${loaded ? " vehicle-img--loaded" : " vehicle-img--loading"}${className ? ` ${className}` : ""}`}
-      loading="lazy"
+      loading={loading}
       decoding="async"
       draggable={draggable ?? "false"}
       onLoad={() => setLoaded(true)}

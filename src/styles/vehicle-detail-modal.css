@@ -276,6 +276,22 @@
   cursor: not-allowed;
 }
 
+.vehicle-detail-zoom-level {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(248, 250, 252, 0.82);
+  background: rgba(2, 6, 23, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.20);
+  border-radius: var(--ox-radius-pill);
+  padding: 2px 7px;
+  line-height: 22px;
+  backdrop-filter: blur(12px);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  min-width: 36px;
+  text-align: center;
+}
+
 .detail-thumbs {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));

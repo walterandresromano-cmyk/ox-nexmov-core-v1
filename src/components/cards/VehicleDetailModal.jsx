@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import "../../styles/vehicle-detail-modal.css";
@@ -183,6 +183,8 @@ export default function VehicleDetailModal({
   const mainImageRef = useRef(null);
   const dragOriginRef = useRef({ x: 0, y: 0, position: { x: 0, y: 0 } });
   const imageWasDraggedRef = useRef(false);
+  // Ref to expose current zoom state to the non-passive wheel handler without stale closures
+  const zoomStateRef = useRef({ scale: 1, pos: { x: 0, y: 0 } });
   const selectedImage = images[selectedImageIndex];
   const reserved = isVehicleReserved(currentVehicle);
   const currentFavoriteActive = appActions
@@ -245,7 +247,13 @@ export default function VehicleDetailModal({
     setZoomPosition({ x: 0, y: 0 });
     setIsDraggingImage(false);
     imageWasDraggedRef.current = false;
+    zoomStateRef.current = { scale: 1, pos: { x: 0, y: 0 } };
   }
+
+  // Keep ref in sync so the non-passive wheel handler never sees stale values
+  useEffect(() => {
+    zoomStateRef.current = { scale: zoomScale, pos: zoomPosition };
+  }, [zoomScale, zoomPosition]);
 
   useEffect(() => {
     if (!termDropdownOpen) return;
@@ -275,40 +283,48 @@ export default function VehicleDetailModal({
     return () => window.removeEventListener("keydown", handleKey);
   }, [currentIndex, hasPrev, hasNext]);
 
-  function toggleImageZoom() {
-    if (!selectedImage?.url) return;
-
-    setIsZoomed(true);
-    setZoomScale(2.2);
-    setZoomPosition({ x: 0, y: 0 });
-    setIsDraggingImage(false);
+  // Zoom to the point the user clicked. Formula: newTx = cx - (cx - tx) * (newScale / s)
+  // where (cx, cy) is the cursor position relative to the container center.
+  function zoomToPoint(cx, cy, newScale) {
+    const { scale, pos } = zoomStateRef.current;
+    const ratio = newScale / scale;
+    const newX = cx - (cx - pos.x) * ratio;
+    const newY = cy - (cy - pos.y) * ratio;
+    const clamped = clampZoomPosition({ x: newX, y: newY }, newScale);
+    setIsZoomed(newScale > 1);
+    setZoomScale(newScale);
+    setZoomPosition(clamped);
+    zoomStateRef.current = { scale: newScale, pos: clamped };
   }
 
-  function handleZoomStageClick() {
+  function handleZoomStageClick(event) {
     if (!selectedImage?.url) return;
-
     if (imageWasDraggedRef.current) {
       imageWasDraggedRef.current = false;
       return;
     }
-
-    toggleImageZoom();
+    // Second click while zoomed → reset
+    if (isZoomed) {
+      resetImageZoom();
+      return;
+    }
+    // Zoom into the clicked point
+    const frame = mainImageRef.current;
+    if (!frame) return;
+    const rect = frame.getBoundingClientRect();
+    const cx = event.clientX - rect.left - rect.width / 2;
+    const cy = event.clientY - rect.top - rect.height / 2;
+    zoomToPoint(cx, cy, 2.5);
   }
 
   function handleZoomPointerDown(event) {
     if (!isZoomed || !selectedImage?.url) return;
-
     event.preventDefault();
     event.currentTarget.setPointerCapture?.(event.pointerId);
     imageWasDraggedRef.current = false;
-
-    const nextDragStart = {
+    dragOriginRef.current = {
       x: event.clientX,
       y: event.clientY,
-    };
-
-    dragOriginRef.current = {
-      ...nextDragStart,
       position: zoomPosition,
     };
     setIsDraggingImage(true);
@@ -316,16 +332,12 @@ export default function VehicleDetailModal({
 
   function handleZoomPointerMove(event) {
     if (!isZoomed || !isDraggingImage) return;
-
     event.preventDefault();
-
     const deltaX = event.clientX - dragOriginRef.current.x;
     const deltaY = event.clientY - dragOriginRef.current.y;
-
     if (Math.abs(deltaX) > 2 || Math.abs(deltaY) > 2) {
       imageWasDraggedRef.current = true;
     }
-
     setZoomPosition(
       clampZoomPosition(
         {
@@ -341,6 +353,35 @@ export default function VehicleDetailModal({
     event?.currentTarget?.releasePointerCapture?.(event.pointerId);
     setIsDraggingImage(false);
   }
+
+  // Non-passive wheel handler: zoom in/out at cursor position
+  const handleWheel = useCallback((event) => {
+    if (!mainImageRef.current) return;
+    event.preventDefault();
+    const { scale, pos } = zoomStateRef.current;
+    const frame = mainImageRef.current;
+    const rect = frame.getBoundingClientRect();
+    const cx = event.clientX - rect.left - rect.width / 2;
+    const cy = event.clientY - rect.top - rect.height / 2;
+    const factor = event.deltaY < 0 ? 1.2 : 1 / 1.2;
+    const newScale = Math.max(1, Math.min(4, scale * factor));
+    if (newScale === scale) return;
+    const ratio = newScale / scale;
+    const newX = cx - (cx - pos.x) * ratio;
+    const newY = cy - (cy - pos.y) * ratio;
+    const clamped = clampZoomPosition({ x: newX, y: newY }, newScale);
+    setIsZoomed(newScale > 1);
+    setZoomScale(newScale);
+    setZoomPosition(clamped);
+    zoomStateRef.current = { scale: newScale, pos: clamped };
+  }, []);
+
+  useEffect(() => {
+    const frame = mainImageRef.current;
+    if (!frame) return;
+    frame.addEventListener("wheel", handleWheel, { passive: false });
+    return () => frame.removeEventListener("wheel", handleWheel);
+  }, [handleWheel]);
 
   function handleClose() {
     resetImageZoom();
@@ -451,6 +492,7 @@ export default function VehicleDetailModal({
                     src={selectedImage.url}
                     alt={`${currentVehicle.brand} ${currentVehicle.model}`}
                     draggable={false}
+                    loading="eager"
                     style={{
                       transform: `translate3d(${zoomPosition.x}px, ${zoomPosition.y}px, 0) scale(${zoomScale})`,
                     }}
@@ -470,19 +512,24 @@ export default function VehicleDetailModal({
                 {selectedImage?.url && (
                   <div className="vehicle-detail-zoom-controls">
                     <button
-                      className={`vehicle-detail-zoom-button ${
-                        isZoomed ? "is-active" : ""
-                      }`}
+                      className={`vehicle-detail-zoom-button ${isZoomed ? "is-active" : ""}`}
                       type="button"
                       onPointerDown={(event) => event.stopPropagation()}
                       onClick={(event) => {
                         event.stopPropagation();
-                        toggleImageZoom();
+                        // Zoom in at center of container
+                        zoomToPoint(0, 0, Math.min(4, zoomScale * 1.5));
                       }}
                       aria-label="Ampliar imagen"
                     >
                       +
                     </button>
+
+                    {isZoomed && (
+                      <span className="vehicle-detail-zoom-level" aria-hidden="true">
+                        {zoomScale.toFixed(1)}×
+                      </span>
+                    )}
 
                     <button
                       className="vehicle-detail-zoom-button"
@@ -491,7 +538,9 @@ export default function VehicleDetailModal({
                       onPointerDown={(event) => event.stopPropagation()}
                       onClick={(event) => {
                         event.stopPropagation();
-                        resetImageZoom();
+                        const newScale = zoomScale / 1.5;
+                        if (newScale <= 1) { resetImageZoom(); return; }
+                        zoomToPoint(0, 0, newScale);
                       }}
                       aria-label="Reducir imagen"
                     >
