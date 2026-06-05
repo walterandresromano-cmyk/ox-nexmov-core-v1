@@ -191,9 +191,16 @@ export default function AuthPanel({
     const { data, error } = await signUpDealer(registerForm);
 
     if (error) {
+      const raw = String(error.message || "");
+      const isDealerNotFound =
+        raw.toLowerCase().includes("pendiente") ||
+        raw.toLowerCase().includes("no exist") ||
+        raw.toLowerCase().includes("not found") ||
+        raw.toLowerCase().includes("dealer");
       setMessage(
-        error.message ||
-          "No se pudo registrar el dealer. Verificá que el email coincida con el email autorizado por administración."
+        isDealerNotFound
+          ? "No encontramos un dealer autorizado asociado a este email. Si todavía no solicitaste el alta, completá primero la solicitud comercial desde Sumate a la red."
+          : raw || "No se pudo registrar el dealer. Verificá que el email coincida con el autorizado por administración."
       );
       return;
     }
@@ -403,7 +410,7 @@ export default function AuthPanel({
                 className={mode === "registerDealer" ? "active" : ""}
                 onClick={() => switchMode("registerDealer")}
               >
-                Registro dealer
+                Registro dealer autorizado
               </button>
 
               <button
@@ -529,9 +536,24 @@ export default function AuthPanel({
             {mode === "registerDealer" && (
               <form className="auth-form" onSubmit={handleRegisterDealer}>
                 <div className="auth-warning">
+                  <strong>Registro dealer autorizado</strong>
+                  <br />
                   Este registro es solo para dealers previamente dados de alta
-                  por administración. El email debe coincidir con el email de
-                  acceso autorizado.
+                  por administración. El email debe coincidir con el email
+                  autorizado.
+                  {onNavigate && (
+                    <>
+                      {" "}Si todavía no solicitaste un plan,{" "}
+                      <button
+                        type="button"
+                        className="auth-inline-link"
+                        onClick={() => onNavigate("joinNetwork")}
+                      >
+                        completá primero la solicitud comercial
+                      </button>
+                      .
+                    </>
+                  )}
                 </div>
 
                 <label>

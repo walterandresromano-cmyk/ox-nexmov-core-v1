@@ -52,56 +52,81 @@ const proposalCards = [
   },
 ];
 
-const planPositioning = {
+const planCommercial = {
   inicio: {
-    cup: "Hasta 10 publicaciones por período",
-    audience: "Para agencias que quieren empezar con presencia profesional.",
-    visibility: "Presencia inicial con señales básicas y operación trazable.",
+    badge: "Entrada",
+    badgeVariant: "entry",
+    headline: "Presencia básica para empezar.",
+    cup: "10 publicaciones",
+    price: "$70.000",
+    promoPrice: "$56.000",
     features: [
+      "10 publicaciones por período.",
       "Panel dealer operativo.",
-      "Publicaciones comparables.",
       "Leads trazables.",
-      "Señales básicas.",
-      "Soporte interno.",
+      "Métricas esenciales.",
+      "Soporte por ticket.",
     ],
+    decoyNote: null,
+    ctaLabel: "Solicitar Inicio",
+    recommended: false,
   },
   pro: {
-    cup: "Hasta 30 publicaciones por período",
-    audience:
-      "Para dealers con actividad constante que necesitan más capacidad y mejor presencia comercial.",
-    visibility: "Más capacidad de publicación y mejor presencia visual.",
+    badge: "Más cupo",
+    badgeVariant: "capacity",
+    headline: "Más cupo, sin herramientas avanzadas.",
+    cup: "30 publicaciones",
+    price: "$210.000",
+    promoPrice: "$168.000",
     features: [
-      "Más capacidad de publicación.",
-      "Mejor presencia visual.",
-      "Métricas estándar.",
-      "Herramientas habilitadas según configuración.",
-      "Beneficios adicionales si admin lo habilita.",
+      "30 publicaciones por período.",
+      "CRM de leads.",
+      "Métricas esenciales.",
+      "Mayor presencia visual.",
+      "Cupo adicional con costo.",
     ],
+    decoyNote: "Por poca diferencia, Elite suma 20 publicaciones más, Radar oX, Kit de redes y métricas avanzadas.",
+    ctaLabel: "Solicitar Pro",
+    recommended: false,
   },
   elite: {
-    cup: "Hasta 50 publicaciones por período",
-    audience: "Para operaciones con mayor volumen y seguimiento comercial.",
-    visibility: "Mayor diferenciación visual, sin publicación ilimitada.",
+    badge: "Recomendado",
+    badgeVariant: "recommended",
+    headline: "El plan más conveniente para aprovechar oX.",
+    cup: "50 publicaciones",
+    price: "$250.000",
+    promoPrice: "$200.000",
     features: [
-      "Mayor diferenciación visual.",
-      "Señales premium.",
+      "50 publicaciones por período.",
+      "Radar oX Dealer.",
       "Métricas avanzadas.",
-      "Oportunidades comerciales si corresponde.",
-      "Herramientas comerciales avanzadas.",
+      "Kit de redes.",
+      "Card promocional.",
+      "Señales premium.",
+      "Ranking inteligente de stock.",
+      "Cupo adicional con costo.",
     ],
+    decoyNote: null,
+    ctaLabel: "Solicitar Elite",
+    recommended: true,
   },
   platinum: {
+    badge: "Alto volumen",
+    badgeVariant: "premium",
+    headline: "Para dealers grandes con operación intensiva.",
     cup: "Publicaciones ilimitadas",
-    audience:
-      "Para equipos de alto volumen que necesitan máxima capacidad dentro de la red.",
-    visibility: "Nivel superior de presencia, señales y herramientas.",
+    price: "$390.000",
+    promoPrice: "$312.000",
     features: [
-      "Máxima diferenciación visual dentro de la red.",
-      "Señales completas.",
-      "Métricas completas.",
-      "Herramientas completas.",
-      "Presencia superior dentro del ecosistema.",
+      "Publicaciones ilimitadas.",
+      "Todo lo de Elite incluido.",
+      "Soporte prioritario.",
+      "Máxima presencia en la red.",
+      "Prioridad en nuevas herramientas.",
     ],
+    decoyNote: null,
+    ctaLabel: "Solicitar Platinum",
+    recommended: false,
   },
 };
 
@@ -160,18 +185,77 @@ function mapPublicDealerCard(dealer) {
   };
 }
 
+const PROVINCES = [
+  "Buenos Aires", "CABA", "Catamarca", "Chaco", "Chubut", "Córdoba",
+  "Corrientes", "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja",
+  "Mendoza", "Misiones", "Neuquén", "Río Negro", "Salta", "San Juan",
+  "San Luis", "Santa Cruz", "Santa Fe", "Santiago del Estero",
+  "Tierra del Fuego", "Tucumán",
+];
+
+const initialRequestForm = {
+  commercialName: "",
+  contactName: "",
+  email: "",
+  whatsapp: "",
+  province: "",
+  city: "",
+  plan: "",
+  vehicleCount: "",
+  message: "",
+};
+
 export default function JoinNetwork({ onNavigate }) {
   const [networkDealers, setNetworkDealers] = useState([]);
   const [isLoadingNetworkDealers, setIsLoadingNetworkDealers] = useState(true);
+  const [requestPlan, setRequestPlan] = useState(null);
+  const [requestForm, setRequestForm] = useState(initialRequestForm);
+  const [requestSent, setRequestSent] = useState(false);
 
   const plans = planOrder
     .map((planId) => {
       const plan = DEALER_PLANS[planId];
-      const positioning = planPositioning[planId];
-
-      return plan && positioning ? { ...plan, ...positioning } : null;
+      const commercial = planCommercial[planId];
+      return plan && commercial ? { ...plan, ...commercial } : null;
     })
     .filter(Boolean);
+
+  function openRequestForm(planId) {
+    setRequestForm({ ...initialRequestForm, plan: planId });
+    setRequestSent(false);
+    setRequestPlan(planId);
+    setTimeout(() => {
+      document.getElementById("dealer-request-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+  }
+
+  function updateRequest(field, value) {
+    setRequestForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function handleRequestSubmit(event) {
+    event.preventDefault();
+    const pid = requestForm.plan;
+    const planName = pid ? `${pid.charAt(0).toUpperCase()}${pid.slice(1)}` : pid;
+    const planInfo = planCommercial[pid];
+    const planLine = planInfo
+      ? `Dealer ${planName} — ${planInfo.cup} — Promo ${planInfo.promoPrice} / mes — Lista ${planInfo.price} / mes`
+      : planName;
+    const subject = `Solicitud de alta dealer — Plan ${planName} — ${requestForm.commercialName}`;
+    const body = [
+      `Nombre comercial: ${requestForm.commercialName}`,
+      `Responsable: ${requestForm.contactName}`,
+      `Email: ${requestForm.email}`,
+      `WhatsApp: ${requestForm.whatsapp}`,
+      `Provincia: ${requestForm.province}`,
+      `Ciudad: ${requestForm.city}`,
+      `Plan solicitado: ${planLine}`,
+      `Vehículos aprox.: ${requestForm.vehicleCount || "No especificado"}`,
+      `Mensaje: ${requestForm.message || "-"}`,
+    ].join("\n");
+    window.location.href = `mailto:soporte@oxnexmov.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setRequestSent(true);
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -309,45 +393,269 @@ export default function JoinNetwork({ onNavigate }) {
         <section className="join-network-section join-network-plan-section">
           <div className="join-network-section-head">
             <p className="eyebrow">Planes dealer</p>
-            <h2>Elegí una escala comercial acorde a tu operación.</h2>
+            <h2>Elegí cómo querés vender dentro de oX.</h2>
             <p>
-              Sin precios publicados: cada plan define cupos, señales,
-              visibilidad y herramientas según el nivel de participación dentro
-              de la red.
+              Planes pensados para publicar, gestionar leads y acceder a
+              herramientas comerciales según el nivel de operación de tu dealer.
+            </p>
+            <p className="jnp-pilot-note">
+              Durante la etapa piloto, la activación se realiza con validación
+              administrativa previa.
             </p>
           </div>
 
-          <div className="join-network-plans">
+          <div className="join-network-plans jnp-grid">
             {plans.map((plan) => (
               <article
                 key={plan.id}
-                className={`join-network-plan-card join-network-plan-${plan.rankTheme}`}
+                className={`join-network-plan-card join-network-plan-${plan.rankTheme}${plan.recommended ? " jnp-card--recommended" : ""}`}
               >
-                <span>{plan.rankLabel}</span>
-                <strong>{plan.cup}</strong>
-                <p>{plan.audience}</p>
-
-                <div className="join-network-plan-meta">
-                  <small>{plan.visibility}</small>
+                {/* Badge */}
+                <div className={`jnp-badge jnp-badge--${plan.badgeVariant}`}>
+                  {plan.badge}
                 </div>
 
-                <ul>
+                {/* Plan name + headline */}
+                <div className="jnp-head">
+                  <strong className="jnp-plan-name">{plan.rankLabel}</strong>
+                  <p className="jnp-headline">{plan.headline}</p>
+                </div>
+
+                {/* Price block */}
+                <div className="jnp-price">
+                  <div className="jnp-price-top">
+                    <span className="jnp-price-list">{plan.price}</span>
+                    <span className="jnp-price-promo-badge">20% OFF piloto</span>
+                  </div>
+                  <div className="jnp-price-main">
+                    <span className="jnp-price-amount">{plan.promoPrice}</span>
+                    <span className="jnp-price-period">/ mes</span>
+                  </div>
+                  <span className="jnp-price-promo-note">Promoción válida durante la etapa piloto.</span>
+                </div>
+
+                {/* Cup summary */}
+                <div className="jnp-cup">
+                  <span>{plan.cup}</span>
+                </div>
+
+                {/* Feature list */}
+                <ul className="jnp-features">
                   {plan.features.map((feature) => (
                     <li key={feature}>{feature}</li>
                   ))}
                 </ul>
 
-                <button type="button" onClick={() => onNavigate?.("login")}>
-                  Solicitar este plan
+                {/* Decoy nudge (Pro only) */}
+                {plan.decoyNote && (
+                  <p className="jnp-decoy-note">{plan.decoyNote}</p>
+                )}
+
+                {/* CTA */}
+                <button
+                  type="button"
+                  className={plan.recommended ? "jnp-cta jnp-cta--primary" : "jnp-cta"}
+                  onClick={() => openRequestForm(plan.id)}
+                >
+                  {plan.ctaLabel}
                 </button>
               </article>
             ))}
           </div>
 
+          {/* ── Cupos adicionales ── */}
+          <div className="jnp-extras">
+            <div className="jnp-extras-head">
+              <strong>Cupos adicionales</strong>
+              <p>
+                Inicio, Pro y Elite pueden solicitar cupo extra con costo. La
+                aprobación queda sujeta a validación administrativa de oX.
+              </p>
+            </div>
+            <div className="jnp-extras-grid">
+              <div className="jnp-extras-item">
+                <span>Publicación suelta</span>
+                <strong>$10.000</strong>
+              </div>
+              <div className="jnp-extras-item">
+                <span>Pack +5 publicaciones</span>
+                <strong>$45.000</strong>
+              </div>
+              <div className="jnp-extras-item">
+                <span>Pack +10 publicaciones</span>
+                <strong>$80.000</strong>
+              </div>
+            </div>
+            <p className="jnp-extras-note">
+              Los cupos adicionales aplican al período comercial vigente y no se
+              acumulan automáticamente.
+            </p>
+          </div>
+
+          {/* ── Formulario de solicitud ── */}
+          {requestPlan && (
+            <div id="dealer-request-form" className="jnp-request-wrap">
+              {requestSent ? (
+                <div className="jnp-request-sent">
+                  <strong>Solicitud recibida</strong>
+                  <p>
+                    El equipo de oX revisará los datos comerciales y se
+                    comunicará para avanzar con la activación del plan.
+                  </p>
+                  <button
+                    type="button"
+                    className="jnp-cta"
+                    onClick={() => { setRequestPlan(null); setRequestSent(false); }}
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              ) : (
+                <form className="jnp-request-form" onSubmit={handleRequestSubmit}>
+                  <div className="jnp-request-head">
+                    <div>
+                      <strong>Solicitud de alta dealer</strong>
+                      <p>
+                        Completá los datos y te contactamos para avanzar con
+                        la activación.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      className="jnp-request-close"
+                      aria-label="Cerrar formulario"
+                      onClick={() => setRequestPlan(null)}
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  <div className="jnp-request-grid">
+                    <label className="jnp-request-label">
+                      Nombre comercial *
+                      <input
+                        required
+                        value={requestForm.commercialName}
+                        onChange={(e) => updateRequest("commercialName", e.target.value)}
+                        placeholder="Nombre de la agencia"
+                      />
+                    </label>
+
+                    <label className="jnp-request-label">
+                      Responsable *
+                      <input
+                        required
+                        value={requestForm.contactName}
+                        onChange={(e) => updateRequest("contactName", e.target.value)}
+                        placeholder="Tu nombre"
+                      />
+                    </label>
+
+                    <label className="jnp-request-label">
+                      Email *
+                      <input
+                        required
+                        type="email"
+                        value={requestForm.email}
+                        onChange={(e) => updateRequest("email", e.target.value)}
+                        placeholder="contacto@agencia.com"
+                      />
+                    </label>
+
+                    <label className="jnp-request-label">
+                      WhatsApp *
+                      <input
+                        required
+                        value={requestForm.whatsapp}
+                        onChange={(e) => updateRequest("whatsapp", e.target.value)}
+                        placeholder="11 3806 2294"
+                      />
+                    </label>
+
+                    <label className="jnp-request-label">
+                      Provincia *
+                      <select
+                        required
+                        value={requestForm.province}
+                        onChange={(e) => updateRequest("province", e.target.value)}
+                      >
+                        <option value="">Seleccioná</option>
+                        {PROVINCES.map((p) => (
+                          <option key={p} value={p}>{p}</option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label className="jnp-request-label">
+                      Ciudad *
+                      <input
+                        required
+                        value={requestForm.city}
+                        onChange={(e) => updateRequest("city", e.target.value)}
+                        placeholder="Tu ciudad"
+                      />
+                    </label>
+
+                    <label className="jnp-request-label">
+                      Plan de interés *
+                      <select
+                        required
+                        value={requestForm.plan}
+                        onChange={(e) => updateRequest("plan", e.target.value)}
+                      >
+                        <option value="">Seleccioná</option>
+                        {planOrder.map((id) => (
+                          <option key={id} value={id}>
+                            {planCommercial[id]
+                              ? `Dealer ${id.charAt(0).toUpperCase()}${id.slice(1)} — ${planCommercial[id].cup} — ${planCommercial[id].promoPrice}/mes (promo 20%)`
+                              : id}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label className="jnp-request-label">
+                      Vehículos aprox.
+                      <input
+                        value={requestForm.vehicleCount}
+                        onChange={(e) => updateRequest("vehicleCount", e.target.value)}
+                        placeholder="Ej: 15"
+                        type="number"
+                        min="1"
+                      />
+                    </label>
+                  </div>
+
+                  <label className="jnp-request-label jnp-request-label--full">
+                    Mensaje (opcional)
+                    <textarea
+                      value={requestForm.message}
+                      onChange={(e) => updateRequest("message", e.target.value)}
+                      placeholder="Algo que quieras contarnos sobre tu operación"
+                      rows={3}
+                    />
+                  </label>
+
+                  <p className="jnp-request-note">
+                    Tu solicitud se enviará a soporte@oxnexmov.com.ar. El equipo
+                    de oX te contactará para validar los datos y activar el plan
+                    de forma manual.
+                  </p>
+
+                  <button type="submit" className="jnp-cta jnp-cta--primary jnp-request-submit">
+                    Enviar solicitud
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
+
           <p className="join-network-commercial-note">
-            Los planes definen cupos, visibilidad y herramientas de trabajo. La
-            contratación de un plan no implica resultados comerciales
-            garantizados.
+            Los valores promocionales corresponden a la etapa piloto y pueden
+            actualizarse al finalizar el período comercial acordado. Los planes
+            definen cupos, visibilidad y herramientas de trabajo. La contratación
+            no garantiza resultados comerciales, leads ni ventas. La activación
+            queda sujeta a validación administrativa de oX.
           </p>
         </section>
 

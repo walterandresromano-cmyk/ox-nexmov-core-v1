@@ -389,6 +389,33 @@ export async function createVehicleContactLead({
     .select("*")
     .single();
 
+  // Fire-and-forget: notify dealer via email + push
+  if (data && typeof window !== "undefined") {
+    const dealerEmail =
+      dealer?.raw?.email ||
+      dealer?.raw?.contact_email ||
+      dealer?.raw?.auth_email ||
+      null;
+
+    fetch("/api/notify-lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        dealerEmail,
+        dealerName: dealerSnapshot.dealerName,
+        dealerId: dealer?.raw?.id ? Number(dealer.raw.id) : (dealer?.id ? Number(dealer.id) : null),
+        vehicleTitle,
+        vehiclePrice: vehicle?.price || null,
+        buyerName:
+          `${buyerProfile.first_name || ""} ${buyerProfile.last_name || ""}`.trim() ||
+          null,
+        buyerEmail: buyerProfile.email || authUser?.email || null,
+        buyerPhone: buyerProfile.phone || null,
+        message: message || null,
+      }),
+    }).catch(() => {});
+  }
+
   return {
     lead: data || null,
     error,
@@ -449,7 +476,7 @@ export async function listVehicleLeadsForCurrentUser() {
 //     updated_at         = now()
 //   where lead_id = p_lead_id
 //     and (
-//       dealer_id in (select id from dealers where user_id = auth.uid())
+//       dealer_id in (select id from dealers where profile_id = auth.uid())
 //       or exists (select 1 from profiles where id = auth.uid() and role = 'admin')
 //     )
 //   returning *;

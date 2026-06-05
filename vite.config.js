@@ -6,6 +6,9 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      strategies: "injectManifest",
+      srcDir: "src",
+      filename: "sw.js",
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "favicon.svg", "logo.svg"],
       manifest: {
@@ -33,18 +36,8 @@ export default defineConfig({
         ],
         categories: ["shopping", "automotive"],
       },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico}"],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "supabase-cache",
-              expiration: { maxEntries: 50, maxAgeSeconds: 300 },
-            },
-          },
-        ],
+      injectManifest: {
+        globPatterns: ["**/*.{js,css,html,ico,svg,png,webp}"],
       },
     }),
   ],

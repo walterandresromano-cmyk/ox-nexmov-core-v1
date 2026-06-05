@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePushNotifications } from "../../hooks/usePushNotifications.js";
 
 import CreateVehicleModal from "../../components/CreateVehicleModal.jsx";
 
@@ -337,7 +338,14 @@ function getPlanBenefitBadges(permissions, isPlatinum) {
   return badges;
 }
 
-export default function DealerPanel({ authProfile, onNavigate }) {
+export default function DealerPanel({ authProfile, authUser, onNavigate }) {
+  const {
+    supported: pushSupported,
+    permission: pushPermission,
+    isSubscribed: pushSubscribed,
+    isLoading: pushLoading,
+    requestAndSubscribe: activatePush,
+  } = usePushNotifications({ authUser });
   const [activeDealerModule, setActiveDealerModule] = useState("summary");
   const [activeDealerMobileSection, setActiveDealerMobileSection] =
     useState("home");
@@ -1978,6 +1986,50 @@ export default function DealerPanel({ authProfile, onNavigate }) {
                 <button className="admin-refresh-btn" onClick={refreshDealerPanel}>
                   Actualizar panel
                 </button>
+
+                {(() => {
+                  const hasPush =
+                    permissions.metricsLevel === "advanced" ||
+                    permissions.metricsLevel === "full";
+
+                  if (!hasPush) {
+                    return (
+                      <span
+                        className="dealer-push-locked"
+                        title="Alertas Comerciales oX disponibles desde Elite."
+                      >
+                        Alertas oX — Elite+
+                      </span>
+                    );
+                  }
+
+                  if (pushSubscribed) {
+                    return (
+                      <span
+                        className="dealer-push-active-badge"
+                        title="Las alertas dependen de los permisos del navegador y del dispositivo."
+                      >
+                        Alertas activas
+                      </span>
+                    );
+                  }
+
+                  if (!pushSupported || pushPermission === "denied") {
+                    return null;
+                  }
+
+                  return (
+                    <button
+                      type="button"
+                      className="dealer-push-activate-btn"
+                      onClick={activatePush}
+                      disabled={pushLoading}
+                      title="Recibí avisos en tu celular cuando entra una consulta nueva. Las alertas dependen de los permisos del navegador y del dispositivo."
+                    >
+                      {pushLoading ? "…" : "Activar alertas"}
+                    </button>
+                  );
+                })()}
               </div>
               {unreadNotificationsCount > 0 && (
                 <span className="dealer-notifications-header-chip">

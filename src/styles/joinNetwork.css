@@ -1496,3 +1496,790 @@
     border-top-color: rgba(14, 116, 144, 0.12) !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   JNP — Planes comerciales rediseñados (señuelo / anclaje)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Grid — todas las cards igual altura, tops alineados */
+.jnp-grid {
+  align-items: stretch !important;
+}
+
+/* Nota piloto bajo el header */
+.jnp-pilot-note {
+  margin-top: 6px;
+  font-size: 0.68rem !important;
+  color: rgba(186, 230, 253, 0.65) !important;
+  font-style: italic;
+}
+
+:root[data-theme="light"] .jnp-pilot-note {
+  color: rgba(3, 80, 120, 0.55) !important;
+}
+
+/* ── Card estructura general ── */
+.jnp-grid .join-network-plan-card {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding: 18px 16px 16px;
+  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  position: relative;
+}
+
+/* ── Card Elite destacada ── */
+.jnp-card--recommended {
+  border-color: rgba(250, 204, 21, 0.48) !important;
+  box-shadow:
+    0 0 0 1px rgba(250, 204, 21, 0.18),
+    0 20px 50px rgba(0, 0, 0, 0.32),
+    0 0 32px rgba(250, 204, 21, 0.12) !important;
+  z-index: 1;
+}
+
+:root[data-theme="light"] .jnp-card--recommended {
+  border-color: rgba(202, 138, 4, 0.38) !important;
+  box-shadow:
+    0 0 0 1px rgba(202, 138, 4, 0.14),
+    0 18px 44px rgba(15, 76, 117, 0.14),
+    0 0 24px rgba(202, 138, 4, 0.08) !important;
+}
+
+/* ── Badge ── */
+.jnp-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.56rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.jnp-badge--entry {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.26);
+  color: #fbbf24;
+}
+
+.jnp-badge--capacity {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.24);
+  color: #7dd3fc;
+}
+
+.jnp-badge--recommended {
+  background: rgba(250, 204, 21, 0.16);
+  border-color: rgba(250, 204, 21, 0.36);
+  color: #fde047;
+}
+
+.jnp-badge--premium {
+  background: rgba(226, 232, 240, 0.12);
+  border-color: rgba(226, 232, 240, 0.22);
+  color: #f8fafc;
+}
+
+:root[data-theme="light"] .jnp-badge--entry {
+  background: rgba(180, 83, 9, 0.08);
+  border-color: rgba(180, 83, 9, 0.18);
+  color: #92400e;
+}
+
+:root[data-theme="light"] .jnp-badge--capacity {
+  background: rgba(14, 116, 144, 0.08);
+  border-color: rgba(14, 116, 144, 0.2);
+  color: #0284c7;
+}
+
+:root[data-theme="light"] .jnp-badge--recommended {
+  background: rgba(161, 98, 7, 0.08);
+  border-color: rgba(161, 98, 7, 0.22);
+  color: #92400e;
+}
+
+:root[data-theme="light"] .jnp-badge--premium {
+  background: rgba(71, 85, 105, 0.08);
+  border-color: rgba(71, 85, 105, 0.18);
+  color: #334155;
+}
+
+/* ── Head: nombre + headline ── */
+.jnp-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.jnp-plan-name {
+  font-size: 1.06rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: rgba(248, 250, 252, 0.98);
+  line-height: 1.1;
+}
+
+:root[data-theme="light"] .jnp-plan-name {
+  color: #0f172a;
+}
+
+.jnp-headline {
+  font-size: 0.68rem !important;
+  color: rgba(148, 163, 184, 0.7) !important;
+  line-height: 1.4 !important;
+}
+
+:root[data-theme="light"] .jnp-headline {
+  color: #64748b !important;
+}
+
+/* ── Precio ── */
+.jnp-price {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+:root[data-theme="light"] .jnp-price {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+/* Fila superior: precio lista tachado + badge promo */
+.jnp-price-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jnp-price-list {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.52);
+  text-decoration: line-through;
+  text-decoration-color: rgba(239, 68, 68, 0.55);
+}
+
+:root[data-theme="light"] .jnp-price-list {
+  color: #94a3b8;
+  text-decoration-color: rgba(220, 38, 38, 0.45);
+}
+
+.jnp-price-promo-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.54rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  color: rgba(252, 165, 165, 0.95);
+}
+
+:root[data-theme="light"] .jnp-price-promo-badge {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.22);
+  color: #b91c1c;
+}
+
+/* Fila principal: precio promo destacado */
+.jnp-price-main {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.jnp-price-amount {
+  font-size: 1.55rem;
+  font-weight: 950;
+  letter-spacing: -0.04em;
+  color: rgba(248, 250, 252, 0.98);
+  line-height: 1;
+}
+
+:root[data-theme="light"] .jnp-price-amount {
+  color: #0f172a;
+}
+
+.jnp-card--recommended .jnp-price-amount {
+  color: #fde047;
+}
+
+:root[data-theme="light"] .jnp-card--recommended .jnp-price-amount {
+  color: #92400e;
+}
+
+.jnp-price-period {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.7);
+  padding-bottom: 2px;
+}
+
+:root[data-theme="light"] .jnp-price-period {
+  color: #64748b;
+}
+
+/* Nota promo */
+.jnp-price-promo-note {
+  font-size: 0.58rem;
+  color: rgba(148, 163, 184, 0.45);
+  font-style: italic;
+}
+
+:root[data-theme="light"] .jnp-price-promo-note {
+  color: #94a3b8;
+}
+
+
+/* ── Cupo ── */
+.jnp-cup {
+  display: flex;
+}
+
+.jnp-cup span {
+  font-size: 0.64rem;
+  font-weight: 800;
+  color: rgba(186, 230, 253, 0.75);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-radius: 8px;
+  padding: 3px 9px;
+}
+
+:root[data-theme="light"] .jnp-cup span {
+  color: #0284c7;
+  background: rgba(14, 165, 233, 0.07);
+  border-color: rgba(14, 165, 233, 0.18);
+}
+
+/* ── Feature list ── */
+.jnp-features {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex: 1;
+}
+
+.jnp-features li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 0.63rem;
+  font-weight: 700;
+  color: rgba(203, 213, 225, 0.78);
+  line-height: 1.35;
+}
+
+.jnp-features li::before {
+  content: "";
+  position: absolute;
+  top: 0.4em;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.6);
+}
+
+:root[data-theme="light"] .jnp-features li {
+  color: #334155;
+}
+
+:root[data-theme="light"] .jnp-features li::before {
+  background: rgba(14, 165, 233, 0.55);
+}
+
+.jnp-card--recommended .jnp-features li::before {
+  background: rgba(250, 204, 21, 0.65);
+}
+
+:root[data-theme="light"] .jnp-card--recommended .jnp-features li::before {
+  background: rgba(202, 138, 4, 0.55);
+}
+
+/* ── Decoy nudge (Pro) ── */
+.jnp-decoy-note {
+  font-size: 0.61rem !important;
+  font-style: italic;
+  color: rgba(125, 211, 252, 0.6) !important;
+  line-height: 1.4 !important;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.12);
+}
+
+:root[data-theme="light"] .jnp-decoy-note {
+  color: #0284c7 !important;
+  background: rgba(14, 165, 233, 0.05);
+  border-color: rgba(14, 165, 233, 0.14);
+}
+
+/* ── CTAs ── */
+.jnp-cta {
+  align-self: stretch;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  background: rgba(56, 189, 248, 0.08);
+  color: rgba(186, 230, 253, 0.9);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 42px;
+  transition: background 0.14s, border-color 0.14s;
+}
+
+.jnp-cta:hover {
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(125, 211, 252, 0.45);
+}
+
+.jnp-cta--primary {
+  border-color: rgba(250, 204, 21, 0.42);
+  background:
+    radial-gradient(circle at 28% 0%, rgba(255, 255, 255, 0.14), transparent 36%),
+    linear-gradient(135deg, rgba(234, 179, 8, 0.72), rgba(161, 98, 7, 0.68));
+  color: #fff;
+  font-weight: 950;
+  box-shadow:
+    0 6px 18px rgba(234, 179, 8, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.jnp-cta--primary:hover {
+  background:
+    radial-gradient(circle at 28% 0%, rgba(255, 255, 255, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(234, 179, 8, 0.88), rgba(161, 98, 7, 0.82));
+  box-shadow:
+    0 8px 24px rgba(234, 179, 8, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+:root[data-theme="light"] .jnp-cta {
+  border-color: rgba(14, 116, 144, 0.22);
+  background: rgba(14, 165, 233, 0.07);
+  color: #0284c7;
+}
+
+:root[data-theme="light"] .jnp-cta:hover {
+  background: rgba(14, 165, 233, 0.12);
+}
+
+:root[data-theme="light"] .jnp-cta--primary {
+  background: linear-gradient(135deg, #ca8a04, #92400e);
+  color: #fff;
+  border-color: rgba(202, 138, 4, 0.38);
+  box-shadow: 0 6px 16px rgba(202, 138, 4, 0.18);
+}
+
+:root[data-theme="light"] .jnp-cta--primary:hover {
+  background: linear-gradient(135deg, #b45309, #7c2d12);
+  box-shadow: 0 8px 22px rgba(202, 138, 4, 0.25);
+}
+
+/* ── Mobile ── */
+@media (max-width: 900px) {
+  .jnp-grid {
+    align-items: stretch !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .jnp-grid .join-network-plan-card {
+    padding: 16px 14px;
+  }
+
+  .jnp-price-amount {
+    font-size: 1.35rem;
+  }
+
+  .jnp-cta,
+  .jnp-cta--primary {
+    min-height: 44px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   JNP — Formulario de solicitud de alta dealer
+   ═══════════════════════════════════════════════════════════ */
+
+.jnp-request-wrap {
+  margin-top: 24px;
+  scroll-margin-top: 80px;
+}
+
+/* Confirmación enviada */
+.jnp-request-sent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 24px 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(52, 211, 153, 0.07), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(2, 6, 23, 0.90));
+}
+
+.jnp-request-sent strong {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: rgba(52, 211, 153, 0.96);
+}
+
+.jnp-request-sent p {
+  font-size: 0.82rem;
+  color: rgba(203, 213, 225, 0.78);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Formulario */
+.jnp-request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px 20px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.06), transparent 30%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.92));
+}
+
+/* Cabecera del form */
+.jnp-request-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.jnp-request-head strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 900;
+  color: rgba(248, 250, 252, 0.98);
+  margin-bottom: 3px;
+}
+
+.jnp-request-head p {
+  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.65);
+  margin: 0;
+}
+
+.jnp-request-close {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: transparent;
+  color: rgba(148, 163, 184, 0.6);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.jnp-request-close:hover {
+  background: rgba(148, 163, 184, 0.1);
+  color: rgba(226, 232, 240, 0.9);
+}
+
+/* Grid de campos */
+.jnp-request-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* Labels y campos */
+.jnp-request-label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.72);
+  letter-spacing: 0.03em;
+}
+
+.jnp-request-label--full {
+  grid-column: 1 / -1;
+}
+
+.jnp-request-label input,
+.jnp-request-label select,
+.jnp-request-label textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.42);
+  color: rgba(226, 232, 240, 0.94);
+  font-size: 0.84rem;
+  font-family: inherit;
+  min-height: 40px;
+  transition: border-color 0.12s;
+  appearance: auto;
+}
+
+.jnp-request-label input:focus,
+.jnp-request-label select:focus,
+.jnp-request-label textarea:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.jnp-request-label input::placeholder,
+.jnp-request-label textarea::placeholder {
+  color: rgba(148, 163, 184, 0.38);
+}
+
+.jnp-request-label textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+/* Nota informativa */
+.jnp-request-note {
+  font-size: 0.66rem;
+  color: rgba(148, 163, 184, 0.52);
+  line-height: 1.45;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Botón enviar */
+.jnp-request-submit {
+  align-self: stretch;
+  font-size: 0.86rem !important;
+}
+
+/* CSS del link inline en AuthPanel */
+.auth-inline-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(125, 211, 252, 0.9);
+  font-size: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.auth-inline-link:hover {
+  color: rgba(186, 230, 253, 1);
+}
+
+/* Light mode */
+:root[data-theme="light"] .jnp-request-form {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+:root[data-theme="light"] .jnp-request-head strong {
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .jnp-request-head p {
+  color: #64748b;
+}
+
+:root[data-theme="light"] .jnp-request-label {
+  color: #475569;
+}
+
+:root[data-theme="light"] .jnp-request-label input,
+:root[data-theme="light"] .jnp-request-label select,
+:root[data-theme="light"] .jnp-request-label textarea {
+  background: #fff;
+  border-color: rgba(148, 163, 184, 0.28);
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .jnp-request-label input:focus,
+:root[data-theme="light"] .jnp-request-label select:focus,
+:root[data-theme="light"] .jnp-request-label textarea:focus {
+  border-color: rgba(14, 116, 144, 0.45);
+}
+
+:root[data-theme="light"] .jnp-request-note {
+  color: #94a3b8;
+}
+
+:root[data-theme="light"] .jnp-request-sent {
+  background: rgba(240, 253, 244, 0.95);
+  border-color: rgba(5, 150, 105, 0.28);
+}
+
+:root[data-theme="light"] .jnp-request-sent strong {
+  color: #059669;
+}
+
+:root[data-theme="light"] .jnp-request-sent p {
+  color: #475569;
+}
+
+:root[data-theme="light"] .auth-inline-link {
+  color: #0284c7;
+}
+
+:root[data-theme="light"] .auth-inline-link:hover {
+  color: #0369a1;
+}
+
+/* Mobile 375px */
+@media (max-width: 600px) {
+  .jnp-request-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jnp-request-form {
+    padding: 16px 14px;
+  }
+
+  .jnp-request-label input,
+  .jnp-request-label select,
+  .jnp-request-label textarea {
+    min-height: 44px;
+    font-size: 0.88rem;
+  }
+
+  .jnp-request-submit {
+    min-height: 48px;
+  }
+}
+
+/* ── Cupos adicionales ── */
+.jnp-extras {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.05), transparent 36%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.68), rgba(2, 6, 23, 0.80));
+  margin-top: 8px;
+}
+
+.jnp-extras-head strong {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 900;
+  color: rgba(248, 250, 252, 0.96);
+  margin-bottom: 4px;
+}
+
+.jnp-extras-head p {
+  font-size: 0.68rem;
+  color: rgba(148, 163, 184, 0.65);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.jnp-extras-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.jnp-extras-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.05);
+  border: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+.jnp-extras-item span {
+  font-size: 0.60rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.55);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.jnp-extras-item strong {
+  font-size: 1.05rem;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+  color: rgba(226, 232, 240, 0.94);
+  line-height: 1;
+}
+
+.jnp-extras-note {
+  font-size: 0.63rem;
+  color: rgba(148, 163, 184, 0.48);
+  line-height: 1.45;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Light mode */
+:root[data-theme="light"] .jnp-extras {
+  background: rgba(248, 250, 252, 0.88);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+:root[data-theme="light"] .jnp-extras-head strong {
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .jnp-extras-head p {
+  color: #64748b;
+}
+
+:root[data-theme="light"] .jnp-extras-item {
+  background: #fff;
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+:root[data-theme="light"] .jnp-extras-item span {
+  color: #94a3b8;
+}
+
+:root[data-theme="light"] .jnp-extras-item strong {
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .jnp-extras-note {
+  color: #94a3b8;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .jnp-extras-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jnp-extras {
+    padding: 14px 14px;
+  }
+}

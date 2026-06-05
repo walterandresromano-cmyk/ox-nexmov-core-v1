@@ -1359,6 +1359,30 @@
 }
 
 /* =========================================================
+   INTERMEDIATE — dock visible, hero colapsa a 1 col
+   ========================================================= */
+
+@media (max-width: 980px) {
+  .ox-home-hero-v3 {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "copy"
+      "stage";
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .ox-home-hero-copy-v3 {
+    grid-area: copy;
+  }
+
+  .ox-home-hero-stage-v3 {
+    grid-area: stage;
+    min-height: 220px;
+  }
+}
+
+/* =========================================================
    MOBILE
    ========================================================= */
 

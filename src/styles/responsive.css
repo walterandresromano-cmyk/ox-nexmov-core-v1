@@ -24,7 +24,10 @@
     display: grid !important;
     grid-template-rows: auto minmax(0, 1fr) !important;
   }
+}
 
+/* 3-column confidence layout — only on genuinely wide screens */
+@media (min-width: 1100px) {
   .ox-home-confidence-v3 {
     display: grid !important;
     grid-template-columns: minmax(220px, 0.26fr) minmax(0, 1fr) minmax(240px, 0.28fr) !important;

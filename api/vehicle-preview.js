@@ -112,12 +112,45 @@ function getVehicleImage(row) {
   );
 }
 
-function buildHtml({ title, description, image, url, vehicleId }) {
+function buildJsonLd({ vehicle, title, description, image, url }) {
+  if (!vehicle) return "";
+  const item = {
+    "@context": "https://schema.org",
+    "@type": "Car",
+    name: title,
+    description,
+    image,
+    url,
+    brand: vehicle.brand ? { "@type": "Brand", name: vehicle.brand } : undefined,
+    model: vehicle.model || undefined,
+    vehicleModelDate: vehicle.year ? String(vehicle.year) : undefined,
+    mileageFromOdometer: vehicle.km
+      ? { "@type": "QuantitativeValue", value: Number(vehicle.km), unitCode: "KMT" }
+      : undefined,
+    fuelType: vehicle.fuel_type || undefined,
+    vehicleTransmission: vehicle.transmission || undefined,
+    offers: vehicle.price > 0
+      ? {
+          "@type": "Offer",
+          priceCurrency: "ARS",
+          price: String(vehicle.price),
+          availability: "https://schema.org/InStock",
+          seller: { "@type": "AutoDealer", name: "oX NEXMOV" },
+        }
+      : undefined,
+    itemCondition: "https://schema.org/UsedCondition",
+  };
+  Object.keys(item).forEach((k) => item[k] === undefined && delete item[k]);
+  return `<script type="application/ld+json">${JSON.stringify(item)}<\/script>`;
+}
+
+function buildHtml({ title, description, image, url, vehicleId, vehicle }) {
   const safeTitle = escapeHtml(title);
   const safeDescription = escapeHtml(description);
   const safeImage = escapeHtml(image);
   const safeUrl = escapeHtml(url);
   const appUrl = `/vehiculo/${encodeURIComponent(vehicleId)}?app=1`;
+  const jsonLd = buildJsonLd({ vehicle, title, description, image, url });
 
   return `<!doctype html>
 <html lang="es">
@@ -126,22 +159,26 @@ function buildHtml({ title, description, image, url, vehicleId }) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${safeTitle}</title>
     <meta name="description" content="${safeDescription}">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="product">
     <meta property="og:title" content="${safeTitle}">
     <meta property="og:description" content="${safeDescription}">
     <meta property="og:image" content="${safeImage}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="${safeTitle}">
     <meta property="og:url" content="${safeUrl}">
     <meta property="og:site_name" content="oX NEXMOV">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${safeTitle}">
     <meta name="twitter:description" content="${safeDescription}">
     <meta name="twitter:image" content="${safeImage}">
+    ${jsonLd}
   </head>
   <body>
     <p><a href="${appUrl}">Abrir publicaci&oacute;n</a></p>
     <script>
       window.location.replace("${appUrl}");
-    </script>
+    <\/script>
   </body>
 </html>`;
 }
@@ -234,6 +271,7 @@ export default async function handler(req, res) {
         image: getVehicleImage(vehicle),
         url: vehicleUrl,
         vehicleId,
+        vehicle,
       })
     );
   } catch {

@@ -5664,6 +5664,13 @@ body::-webkit-scrollbar {
    Header, footer y dock para mobile.
    ========================================================= */
 
+/* Hide desktop nav when mobile dock takes over */
+@media (max-width: 980px) {
+  .desktop-nav {
+    display: none;
+  }
+}
+
 @media (max-width: 760px) {
   .site-header {
     position: sticky;
@@ -5690,7 +5697,6 @@ body::-webkit-scrollbar {
     max-width: 170px;
   }
 
-  .desktop-nav,
   .header-role-actions {
     display: none;
   }
@@ -24313,9 +24319,11 @@ body::-webkit-scrollbar {
   grid-column: 1 / -1;
   margin-top: 4px;
   padding: 12px 14px;
-  border: 1px solid rgba(125, 211, 252, 0.12);
+  border: 1px solid rgba(125, 211, 252, 0.18);
   border-radius: 16px;
-  background: rgba(3, 10, 22, 0.30);
+  background: rgba(3, 10, 22, 0.64);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .garage-ox-hero__profile-row .admin-session-note {
@@ -24328,6 +24336,9 @@ body::-webkit-scrollbar {
 }
 
 .garage-ox-hero__profile-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -24335,6 +24346,24 @@ body::-webkit-scrollbar {
   min-height: 38px;
   padding: 8px 13px;
   font-size: 0.76rem;
+  white-space: nowrap;
+}
+
+/* Editar perfil inside hero — reset grid-area that bleeds from other contexts */
+.garage-ox-hero__profile-tools .buyer-edit-profile-btn {
+  grid-area: unset !important;
+  align-self: auto !important;
+  position: static !important;
+  min-height: 38px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.22) !important;
+  background: rgba(8, 22, 38, 0.46) !important;
+  color: rgba(224, 242, 254, 0.94) !important;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
 }
 
 :root.light .container.panel.buyer-panel.garage-ox-panel,
@@ -26166,6 +26195,34 @@ button.buyer-shortlist-compare__slot:hover {
     );
 }
 
+/* Mobile: hero en 1 col → gradiente vertical para proteger el texto en el top */
+@media (max-width: 980px) {
+  :root {
+    --garage-ox-hero-overlay:
+      linear-gradient(
+        180deg,
+        rgba(2, 7, 18, 0.94) 0%,
+        rgba(3, 10, 24, 0.86) 30%,
+        rgba(3, 9, 22, 0.72) 58%,
+        rgba(4, 8, 18, 0.52) 80%,
+        rgba(3, 7, 16, 0.36) 100%
+      );
+  }
+
+  :root[data-theme="light"],
+  :root.light {
+    --garage-ox-hero-overlay:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.88) 0%,
+        rgba(248, 250, 252, 0.74) 32%,
+        rgba(241, 245, 249, 0.52) 60%,
+        rgba(255, 255, 255, 0.28) 82%,
+        rgba(255, 255, 255, 0.12) 100%
+      );
+  }
+}
+
 /* ── Garage oX hero — tratamiento de foto por tema ──────── */
 
 /* Dark mode: imagen vívida */
@@ -26632,7 +26689,19 @@ button.buyer-shortlist-compare__slot:hover {
 .garage-ox-hero__profile-form .buyer-profile-form-actions {
   display: flex;
   gap: 10px;
-  align-items: center;
+  align-items: stretch;
+}
+
+.garage-ox-hero__profile-form .buyer-profile-form-actions .primary-action {
+  flex: 1;
+  min-height: 44px;
+}
+
+.garage-ox-hero__profile-form .buyer-profile-form-actions .admin-refresh-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+  min-height: 44px;
+  padding: 0 18px;
 }
 
 /* Countdown en Vencimientos */
@@ -27154,4 +27223,69 @@ button.buyer-shortlist-compare__slot:hover {
 :root[data-theme="light"] .dealer-extra-quota-cta__btn:hover {
   background: rgba(99, 102, 241, 0.13);
   border-color: rgba(99, 102, 241, 0.40);
+}
+
+/* Push notification — locked state (Inicio / Pro) */
+.dealer-push-locked {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.50);
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  white-space: nowrap;
+  cursor: default;
+}
+
+:root.light .dealer-push-locked {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.06);
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+/* Push notification activation button */
+.dealer-push-activate-btn {
+  padding: 6px 13px;
+  border-radius: 8px;
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  background: rgba(52, 211, 153, 0.07);
+  color: rgba(52, 211, 153, 0.9);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+
+.dealer-push-activate-btn:hover:not(:disabled) {
+  background: rgba(52, 211, 153, 0.14);
+  border-color: rgba(52, 211, 153, 0.45);
+}
+
+.dealer-push-activate-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.dealer-push-active-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(52, 211, 153, 0.7);
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(52, 211, 153, 0.06);
+  border: 1px solid rgba(52, 211, 153, 0.16);
+}
+
+:root.light .dealer-push-activate-btn {
+  border-color: rgba(5, 150, 105, 0.25);
+  background: rgba(5, 150, 105, 0.06);
+  color: #059669;
+}
+
+:root.light .dealer-push-active-badge {
+  color: #059669;
+  background: rgba(5, 150, 105, 0.05);
+  border-color: rgba(5, 150, 105, 0.18);
 }
