@@ -538,38 +538,34 @@ export default function VehicleDetailModal({
                   </div>
                 )}
 
-                {/* Prev / next image arrows */}
-                {images.length > 1 && !isZoomed && (
-                  <>
-                    <button
-                      className="detail-image-arrow detail-image-arrow--prev"
-                      type="button"
-                      disabled={selectedImageIndex === 0}
-                      onPointerDown={(e) => e.stopPropagation()}
-                      onClick={(e) => { e.stopPropagation(); navigateImage(-1); }}
-                      aria-label="Imagen anterior"
-                    >
-                      ‹
-                    </button>
-                    <button
-                      className="detail-image-arrow detail-image-arrow--next"
-                      type="button"
-                      disabled={selectedImageIndex === images.length - 1}
-                      onPointerDown={(e) => e.stopPropagation()}
-                      onClick={(e) => { e.stopPropagation(); navigateImage(1); }}
-                      aria-label="Siguiente imagen"
-                    >
-                      ›
-                    </button>
-                  </>
-                )}
-
-                {/* Image counter + zoom controls */}
+                {/* Centered toolbar: prev · counter · next · zoom+ · zoom− */}
                 <div className="detail-image-toolbar">
                   {images.length > 1 && (
-                    <span className="detail-image-counter">
-                      {selectedImageIndex + 1} / {images.length}
-                    </span>
+                    <>
+                      <button
+                        className="detail-image-arrow"
+                        type="button"
+                        disabled={selectedImageIndex === 0}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => { e.stopPropagation(); navigateImage(-1); }}
+                        aria-label="Imagen anterior"
+                      >
+                        ‹
+                      </button>
+                      <span className="detail-image-counter">
+                        {selectedImageIndex + 1} / {images.length}
+                      </span>
+                      <button
+                        className="detail-image-arrow"
+                        type="button"
+                        disabled={selectedImageIndex === images.length - 1}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => { e.stopPropagation(); navigateImage(1); }}
+                        aria-label="Siguiente imagen"
+                      >
+                        ›
+                      </button>
+                    </>
                   )}
                   {selectedImage?.url && (
                     <>
