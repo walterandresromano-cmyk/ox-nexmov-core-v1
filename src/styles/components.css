@@ -7005,19 +7005,17 @@ body::-webkit-scrollbar {
   min-height: 166px;
 }
 
-/* oscurece suavemente la zona del texto para lectura */
+/* oscurece la zona superior para lectura de chips */
 .vehicle-card__media::before {
   content: "";
   position: absolute;
-  left: 12px;
-  right: 12px;
-  top: 12px;
-  height: 92px;
+  inset: 0 0 auto 0;
+  height: 80px;
   z-index: 3;
   pointer-events: none;
-  border-radius: 20px 20px 0 0;
+  border-radius: 0;
   background:
-    linear-gradient(180deg, rgba(2, 6, 23, 0.72), rgba(2, 6, 23, 0.28) 62%, transparent);
+    linear-gradient(180deg, rgba(2, 6, 23, 0.62), transparent);
 }
 
 .vehicle-card__topbar {
@@ -7084,21 +7082,13 @@ body::-webkit-scrollbar {
 .vehicle-card__media::before {
   content: "";
   position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 10px;
-  height: 94px;
+  inset: 0 0 auto 0;
+  height: 80px;
   z-index: 2;
   pointer-events: none;
-  border-radius: 18px 18px 0 0;
+  border-radius: 0;
   background:
-    linear-gradient(
-      180deg,
-      rgba(2, 6, 23, 0.72) 0%,
-      rgba(2, 6, 23, 0.42) 48%,
-      rgba(2, 6, 23, 0.08) 82%,
-      transparent 100%
-    );
+    linear-gradient(180deg, rgba(2, 6, 23, 0.62), transparent);
 }
 
 /* badge + año */
