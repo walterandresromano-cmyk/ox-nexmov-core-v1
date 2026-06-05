@@ -397,13 +397,18 @@ export async function createVehicleContactLead({
       dealer?.raw?.auth_email ||
       null;
 
+    const resolvedDealerId = dealer?.raw?.id ? Number(dealer.raw.id) : (dealer?.id ? Number(dealer.id) : null);
+    if (!resolvedDealerId || !Number.isFinite(resolvedDealerId)) {
+      console.warn("[leads.service] notify-lead skipped: dealerId resolved to", resolvedDealerId, "— dealer:", dealer);
+    }
+
     fetch("/api/notify-lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         dealerEmail,
         dealerName: dealerSnapshot.dealerName,
-        dealerId: dealer?.raw?.id ? Number(dealer.raw.id) : (dealer?.id ? Number(dealer.id) : null),
+        dealerId: resolvedDealerId,
         vehicleTitle,
         vehiclePrice: vehicle?.price || null,
         buyerName:

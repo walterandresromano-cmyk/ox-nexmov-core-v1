@@ -59,6 +59,30 @@ export default async function handler(req, res) {
 
           const sent = pushResults.filter((r) => r.status === "fulfilled").length;
           results.push = `sent:${sent}/${subs.length}`;
+
+          // Remove stale subscriptions that the push server rejected as gone
+          const staleEndpoints = pushResults
+            .map((r, i) => ({ result: r, sub: subs[i] }))
+            .filter(({ result }) => {
+              if (result.status !== "rejected") return false;
+              const status = result.reason?.statusCode;
+              return status === 410 || status === 404;
+            })
+            .map(({ sub }) => sub.endpoint);
+
+          if (staleEndpoints.length > 0) {
+            await fetch(
+              `${SUPABASE_URL}/rest/v1/push_subscriptions?dealer_id=eq.${encodeURIComponent(dealerId)}&endpoint=in.(${staleEndpoints.map((e) => `"${e}"`).join(",")})`,
+              {
+                method: "DELETE",
+                headers: {
+                  apikey: SERVICE_ROLE_KEY,
+                  Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+                },
+              }
+            ).catch(() => {});
+            results.staleCleaned = staleEndpoints.length;
+          }
         }
       }
     } catch (err) {

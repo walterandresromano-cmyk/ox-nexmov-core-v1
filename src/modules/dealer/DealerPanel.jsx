@@ -344,6 +344,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
     permission: pushPermission,
     isSubscribed: pushSubscribed,
     isLoading: pushLoading,
+    error: pushError,
     requestAndSubscribe: activatePush,
   } = usePushNotifications({ authUser });
   const [activeDealerModule, setActiveDealerModule] = useState("summary");
@@ -2014,20 +2015,36 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
                     );
                   }
 
-                  if (!pushSupported || pushPermission === "denied") {
-                    return null;
+                  if (!pushSupported) return null;
+
+                  if (pushPermission === "denied") {
+                    return (
+                      <span
+                        className="dealer-push-denied"
+                        title="Las notificaciones están bloqueadas en este navegador. Habilitá los permisos desde la configuración del sitio."
+                      >
+                        Alertas bloqueadas — habilitá permisos en el navegador
+                      </span>
+                    );
                   }
 
                   return (
-                    <button
-                      type="button"
-                      className="dealer-push-activate-btn"
-                      onClick={activatePush}
-                      disabled={pushLoading}
-                      title="Recibí avisos en tu celular cuando entra una consulta nueva. Las alertas dependen de los permisos del navegador y del dispositivo."
-                    >
-                      {pushLoading ? "…" : "Activar alertas"}
-                    </button>
+                    <>
+                      <button
+                        type="button"
+                        className="dealer-push-activate-btn"
+                        onClick={activatePush}
+                        disabled={pushLoading}
+                        title="Recibí avisos en tu celular cuando entra una consulta nueva. Las alertas dependen de los permisos del navegador y del dispositivo."
+                      >
+                        {pushLoading ? "…" : "Activar alertas"}
+                      </button>
+                      {pushError && (
+                        <span className="dealer-push-error" title={pushError}>
+                          {pushError}
+                        </span>
+                      )}
+                    </>
                   );
                 })()}
               </div>
