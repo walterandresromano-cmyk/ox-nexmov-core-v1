@@ -525,12 +525,6 @@ export default function VehicleDetailModal({
                       +
                     </button>
 
-                    {isZoomed && (
-                      <span className="vehicle-detail-zoom-level" aria-hidden="true">
-                        {zoomScale.toFixed(1)}×
-                      </span>
-                    )}
-
                     <button
                       className="vehicle-detail-zoom-button"
                       type="button"
