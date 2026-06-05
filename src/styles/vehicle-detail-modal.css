@@ -2482,6 +2482,177 @@
   color: #075985 !important;
 }
 
+/* ── Fullscreen gallery overlay ─────────────────────────────── */
+
+.vd-fs-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99990;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+
+/* UI elements fade in/out */
+.vd-fs-overlay .vd-fs-close,
+.vd-fs-overlay .vd-fs-counter,
+.vd-fs-overlay .vd-fs-arrow,
+.vd-fs-overlay .vd-fs-dots {
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  pointer-events: none;
+}
+
+.vd-fs-overlay.ui-visible .vd-fs-close,
+.vd-fs-overlay.ui-visible .vd-fs-counter,
+.vd-fs-overlay.ui-visible .vd-fs-arrow:not(:disabled),
+.vd-fs-overlay.ui-visible .vd-fs-dots {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Close button */
+.vd-fs-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.52);
+  color: rgba(255, 255, 255, 0.88);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.14s ease, opacity 0.22s ease;
+}
+
+.vd-fs-close:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Counter */
+.vd-fs-counter {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+}
+
+/* Image stage */
+.vd-fs-stage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: zoom-out;
+}
+
+.vd-fs-stage.is-zoomed {
+  cursor: grab;
+}
+
+.vd-fs-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.vd-fs-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  transform-origin: center center;
+  transition: transform 0.12s ease;
+}
+
+.vd-fs-stage.is-dragging .vd-fs-img {
+  transition: none;
+}
+
+/* Side arrows */
+.vd-fs-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.48);
+  color: rgba(255, 255, 255, 0.88);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.14s ease, opacity 0.22s ease;
+}
+
+.vd-fs-arrow--prev { left: 20px; }
+.vd-fs-arrow--next { right: 20px; }
+
+.vd-fs-arrow:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.vd-fs-arrow:disabled {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* Dots */
+.vd-fs-dots {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.vd-fs-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.vd-fs-dot.is-active {
+  background: rgba(255, 255, 255, 0.92);
+  transform: scale(1.4);
+}
+
+@media (max-width: 600px) {
+  .vd-fs-arrow { width: 36px; height: 36px; }
+  .vd-fs-arrow--prev { left: 10px; }
+  .vd-fs-arrow--next { right: 10px; }
+}
+
 :root[data-theme="light"] .vehicle-detail-legal-note,
 :root[data-theme="light"] .finance-legal-note {
   border-color: rgba(14, 116, 144, 0.10) !important;

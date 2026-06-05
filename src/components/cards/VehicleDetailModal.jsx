@@ -186,6 +186,17 @@ export default function VehicleDetailModal({
   // Ref to expose current zoom state to the non-passive wheel handler without stale closures
   const zoomStateRef = useRef({ scale: 1, pos: { x: 0, y: 0 } });
   const touchStartXRef = useRef(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fsZoomScale, setFsZoomScale] = useState(1);
+  const [fsZoomPos, setFsZoomPos] = useState({ x: 0, y: 0 });
+  const [fsUiVisible, setFsUiVisible] = useState(true);
+  const [fsDragging, setFsDragging] = useState(false);
+  const fsUiTimerRef = useRef(null);
+  const fsImageRef = useRef(null);
+  const fsDragOriginRef = useRef({ x: 0, y: 0, pos: { x: 0, y: 0 } });
+  const fsDraggedRef = useRef(false);
+  const fsTouchStartRef = useRef(null);
+  const fsZoomStateRef = useRef({ scale: 1, pos: { x: 0, y: 0 } });
   const selectedImage = images[selectedImageIndex];
   const reserved = isVehicleReserved(currentVehicle);
   const currentFavoriteActive = appActions
@@ -381,6 +392,128 @@ export default function VehicleDetailModal({
     resetImageZoom();
   }
 
+  // ── Fullscreen gallery ──────────────────────────────────────────
+  function openFullscreen() {
+    if (!selectedImage?.url) return;
+    setIsFullscreen(true);
+    setFsZoomScale(1);
+    setFsZoomPos({ x: 0, y: 0 });
+    fsZoomStateRef.current = { scale: 1, pos: { x: 0, y: 0 } };
+    setFsUiVisible(true);
+    scheduleFsUiHide();
+  }
+
+  function closeFullscreen() {
+    setIsFullscreen(false);
+    setFsZoomScale(1);
+    setFsZoomPos({ x: 0, y: 0 });
+    clearTimeout(fsUiTimerRef.current);
+  }
+
+  function scheduleFsUiHide() {
+    clearTimeout(fsUiTimerRef.current);
+    fsUiTimerRef.current = setTimeout(() => setFsUiVisible(false), 2500);
+  }
+
+  function showFsUi() {
+    setFsUiVisible(true);
+    scheduleFsUiHide();
+  }
+
+  function fsClamped(pos, scale) {
+    const frame = fsImageRef.current;
+    if (!frame) return pos;
+    const { width, height } = frame.getBoundingClientRect();
+    const maxX = Math.max(0, (width * scale - width) / 2);
+    const maxY = Math.max(0, (height * scale - height) / 2);
+    return {
+      x: Math.max(-maxX, Math.min(maxX, pos.x)),
+      y: Math.max(-maxY, Math.min(maxY, pos.y)),
+    };
+  }
+
+  // Non-passive wheel zoom for fullscreen
+  const handleFsWheel = useCallback((event) => {
+    event.preventDefault();
+    showFsUi();
+    const { scale, pos } = fsZoomStateRef.current;
+    const frame = fsImageRef.current;
+    if (!frame) return;
+    const rect = frame.getBoundingClientRect();
+    const cx = event.clientX - rect.left - rect.width / 2;
+    const cy = event.clientY - rect.top - rect.height / 2;
+    const factor = event.deltaY < 0 ? 1.2 : 1 / 1.2;
+    const newScale = Math.max(1, Math.min(5, scale * factor));
+    if (newScale === scale) return;
+    const ratio = newScale / scale;
+    const clamped = fsClamped({ x: cx - (cx - pos.x) * ratio, y: cy - (cy - pos.y) * ratio }, newScale);
+    setFsZoomScale(newScale);
+    setFsZoomPos(clamped);
+    fsZoomStateRef.current = { scale: newScale, pos: clamped };
+  }, []);
+
+  useEffect(() => {
+    const frame = fsImageRef.current;
+    if (!isFullscreen || !frame) return;
+    frame.addEventListener("wheel", handleFsWheel, { passive: false });
+    return () => frame.removeEventListener("wheel", handleFsWheel);
+  }, [isFullscreen, handleFsWheel]);
+
+  useEffect(() => {
+    if (!isFullscreen) return;
+    function onKey(e) {
+      if (e.key === "Escape") { closeFullscreen(); return; }
+      if (e.key === "ArrowLeft") { navigateImage(-1); fsZoomStateRef.current = { scale: 1, pos: { x: 0, y: 0 } }; setFsZoomScale(1); setFsZoomPos({ x: 0, y: 0 }); }
+      if (e.key === "ArrowRight") { navigateImage(1); fsZoomStateRef.current = { scale: 1, pos: { x: 0, y: 0 } }; setFsZoomScale(1); setFsZoomPos({ x: 0, y: 0 }); }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isFullscreen, selectedImageIndex, images.length]);
+
+  useEffect(() => {
+    fsZoomStateRef.current = { scale: fsZoomScale, pos: fsZoomPos };
+  }, [fsZoomScale, fsZoomPos]);
+
+  function handleFsPointerDown(e) {
+    if (fsZoomScale <= 1) return;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    fsDraggedRef.current = false;
+    fsDragOriginRef.current = { x: e.clientX, y: e.clientY, pos: fsZoomPos };
+    setFsDragging(true);
+  }
+
+  function handleFsPointerMove(e) {
+    if (!fsDragging || fsZoomScale <= 1) return;
+    const dx = e.clientX - fsDragOriginRef.current.x;
+    const dy = e.clientY - fsDragOriginRef.current.y;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) fsDraggedRef.current = true;
+    const clamped = fsClamped({ x: fsDragOriginRef.current.pos.x + dx, y: fsDragOriginRef.current.pos.y + dy }, fsZoomScale);
+    setFsZoomPos(clamped);
+  }
+
+  function handleFsPointerUp(e) {
+    e.currentTarget?.releasePointerCapture?.(e.pointerId);
+    setFsDragging(false);
+  }
+
+  function handleFsTouchStart(e) {
+    if (fsZoomScale > 1) return;
+    fsTouchStartRef.current = e.touches[0].clientX;
+  }
+
+  function handleFsTouchEnd(e) {
+    if (fsZoomScale > 1 || fsTouchStartRef.current === null) return;
+    const delta = e.changedTouches[0].clientX - fsTouchStartRef.current;
+    fsTouchStartRef.current = null;
+    if (Math.abs(delta) < 50) return;
+    const dir = delta < 0 ? 1 : -1;
+    const next = selectedImageIndex + dir;
+    if (next < 0 || next >= images.length) return;
+    setSelectedImageIndex(next);
+    setFsZoomScale(1); setFsZoomPos({ x: 0, y: 0 });
+    fsZoomStateRef.current = { scale: 1, pos: { x: 0, y: 0 } };
+  }
+
   // Non-passive wheel handler: zoom in/out at cursor position
   const handleWheel = useCallback((event) => {
     if (!mainImageRef.current) return;
@@ -507,7 +640,7 @@ export default function VehicleDetailModal({
                 className={`vehicle-detail-main-image detail-main-image dealer-rank-${permissions.rankTheme} ${
                   isZoomed ? "is-zoomed" : ""
                 } ${isDraggingImage ? "is-dragging" : ""}`}
-                onClick={handleZoomStageClick}
+                onClick={(e) => { if (!imageWasDraggedRef.current) openFullscreen(); imageWasDraggedRef.current = false; }}
                 onPointerDown={handleZoomPointerDown}
                 onPointerMove={handleZoomPointerMove}
                 onPointerUp={stopZoomDrag}
@@ -960,9 +1093,85 @@ export default function VehicleDetailModal({
     </div>
   );
 
+  const fsOverlay = isFullscreen && createPortal(
+    <div
+      className={`vd-fs-overlay${fsUiVisible ? " ui-visible" : ""}`}
+      onMouseMove={showFsUi}
+      onPointerMove={(e) => { showFsUi(); handleFsPointerMove(e); }}
+    >
+      {/* Close */}
+      <button className="vd-fs-close" onClick={closeFullscreen} aria-label="Cerrar">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+      </button>
+
+      {/* Counter */}
+      {images.length > 1 && (
+        <span className="vd-fs-counter">{selectedImageIndex + 1} / {images.length}</span>
+      )}
+
+      {/* Image stage */}
+      <div
+        ref={fsImageRef}
+        className={`vd-fs-stage${fsDragging ? " is-dragging" : ""}${fsZoomScale > 1 ? " is-zoomed" : ""}`}
+        onPointerDown={handleFsPointerDown}
+        onPointerUp={handleFsPointerUp}
+        onPointerCancel={handleFsPointerUp}
+        onTouchStart={handleFsTouchStart}
+        onTouchEnd={handleFsTouchEnd}
+        onClick={(e) => { if (!fsDraggedRef.current && fsZoomScale <= 1) closeFullscreen(); fsDraggedRef.current = false; }}
+      >
+        <img
+          src={images[selectedImageIndex]?.url}
+          alt={`${currentVehicle.brand} ${currentVehicle.model}`}
+          className="vd-fs-img"
+          draggable={false}
+          style={{ transform: `translate3d(${fsZoomPos.x}px, ${fsZoomPos.y}px, 0) scale(${fsZoomScale})` }}
+        />
+      </div>
+
+      {/* Side arrows */}
+      {images.length > 1 && fsZoomScale <= 1 && (
+        <>
+          <button
+            className="vd-fs-arrow vd-fs-arrow--prev"
+            disabled={selectedImageIndex === 0}
+            onClick={(e) => { e.stopPropagation(); setSelectedImageIndex(i => i - 1); setFsZoomScale(1); setFsZoomPos({ x: 0, y: 0 }); fsZoomStateRef.current = { scale: 1, pos: { x: 0, y: 0 } }; }}
+            aria-label="Anterior"
+          >
+            <svg width="9" height="16" viewBox="0 0 9 16" fill="none"><path d="M8 1L1 8l7 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+          <button
+            className="vd-fs-arrow vd-fs-arrow--next"
+            disabled={selectedImageIndex === images.length - 1}
+            onClick={(e) => { e.stopPropagation(); setSelectedImageIndex(i => i + 1); setFsZoomScale(1); setFsZoomPos({ x: 0, y: 0 }); fsZoomStateRef.current = { scale: 1, pos: { x: 0, y: 0 } }; }}
+            aria-label="Siguiente"
+          >
+            <svg width="9" height="16" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+        </>
+      )}
+
+      {/* Dots */}
+      {images.length > 1 && images.length <= 12 && (
+        <div className="vd-fs-dots">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              className={`vd-fs-dot${i === selectedImageIndex ? " is-active" : ""}`}
+              onClick={(e) => { e.stopPropagation(); setSelectedImageIndex(i); setFsZoomScale(1); setFsZoomPos({ x: 0, y: 0 }); fsZoomStateRef.current = { scale: 1, pos: { x: 0, y: 0 } }; }}
+              aria-label={`Imagen ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>,
+    document.body
+  );
+
   return (
     <>
       {createPortal(modal, document.body)}
+      {fsOverlay}
       {showContactGate && appActions && !reserved && createPortal(
         <ContactGate
           vehicle={currentVehicle}
