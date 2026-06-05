@@ -185,6 +185,7 @@ export default function VehicleDetailModal({
   const imageWasDraggedRef = useRef(false);
   // Ref to expose current zoom state to the non-passive wheel handler without stale closures
   const zoomStateRef = useRef({ scale: 1, pos: { x: 0, y: 0 } });
+  const touchStartXRef = useRef(null);
   const selectedImage = images[selectedImageIndex];
   const reserved = isVehicleReserved(currentVehicle);
   const currentFavoriteActive = appActions
@@ -354,6 +355,32 @@ export default function VehicleDetailModal({
     setIsDraggingImage(false);
   }
 
+  function handleTouchStart(event) {
+    if (isZoomed) return;
+    touchStartXRef.current = event.touches[0].clientX;
+  }
+
+  function handleTouchEnd(event) {
+    if (isZoomed || touchStartXRef.current === null) return;
+    const delta = event.changedTouches[0].clientX - touchStartXRef.current;
+    touchStartXRef.current = null;
+    if (Math.abs(delta) < 50) return;
+    if (delta < 0 && selectedImageIndex < images.length - 1) {
+      setSelectedImageIndex((i) => i + 1);
+      resetImageZoom();
+    } else if (delta > 0 && selectedImageIndex > 0) {
+      setSelectedImageIndex((i) => i - 1);
+      resetImageZoom();
+    }
+  }
+
+  function navigateImage(dir) {
+    const next = selectedImageIndex + dir;
+    if (next < 0 || next >= images.length) return;
+    setSelectedImageIndex(next);
+    resetImageZoom();
+  }
+
   // Non-passive wheel handler: zoom in/out at cursor position
   const handleWheel = useCallback((event) => {
     if (!mainImageRef.current) return;
@@ -486,6 +513,8 @@ export default function VehicleDetailModal({
                 onPointerUp={stopZoomDrag}
                 onPointerCancel={stopZoomDrag}
                 onPointerLeave={stopZoomDrag}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
               >
                 {selectedImage?.url ? (
                   <VehicleImage
@@ -509,73 +538,72 @@ export default function VehicleDetailModal({
                   </div>
                 )}
 
-                {selectedImage?.url && (
-                  <div className="vehicle-detail-zoom-controls">
+                {/* Prev / next image arrows */}
+                {images.length > 1 && !isZoomed && (
+                  <>
                     <button
-                      className={`vehicle-detail-zoom-button ${isZoomed ? "is-active" : ""}`}
+                      className="detail-image-arrow detail-image-arrow--prev"
                       type="button"
-                      onPointerDown={(event) => event.stopPropagation()}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        // Zoom in at center of container
-                        zoomToPoint(0, 0, Math.min(4, zoomScale * 1.5));
-                      }}
-                      aria-label="Ampliar imagen"
+                      disabled={selectedImageIndex === 0}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onClick={(e) => { e.stopPropagation(); navigateImage(-1); }}
+                      aria-label="Imagen anterior"
                     >
-                      +
+                      ‹
                     </button>
-
                     <button
-                      className="vehicle-detail-zoom-button"
+                      className="detail-image-arrow detail-image-arrow--next"
                       type="button"
-                      disabled={!isZoomed}
-                      onPointerDown={(event) => event.stopPropagation()}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        const newScale = zoomScale / 1.5;
-                        if (newScale <= 1) { resetImageZoom(); return; }
-                        zoomToPoint(0, 0, newScale);
-                      }}
-                      aria-label="Reducir imagen"
+                      disabled={selectedImageIndex === images.length - 1}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onClick={(e) => { e.stopPropagation(); navigateImage(1); }}
+                      aria-label="Siguiente imagen"
                     >
-                      −
+                      ›
                     </button>
-                  </div>
+                  </>
                 )}
-              </div>
-            </div>
 
-            <div className="vehicle-detail-thumbs detail-thumbs">
-              {images.map((image, index) => (
-                <button
-                  key={`${image.url}-${index}`}
-                  className={
-                    index === selectedImageIndex
-                      ? "vehicle-detail-thumb is-active active"
-                      : "vehicle-detail-thumb"
-                  }
-                  type="button"
-                  onClick={() => {
-                    setSelectedImageIndex(index);
-                    resetImageZoom();
-                  }}
-                  aria-label={`Ver imagen ${index + 1}`}
-                >
-                  <img
-                    src={image.url}
-                    alt={image.name || `Imagen ${index + 1}`}
-                  />
-                </button>
-              ))}
-              {Array.from({ length: Math.max(0, 12 - images.length) }).map(
-                (_, i) => (
-                  <div
-                    key={`thumb-placeholder-${i}`}
-                    className="vehicle-detail-thumb-placeholder"
-                    aria-hidden="true"
-                  />
-                )
-              )}
+                {/* Image counter + zoom controls */}
+                <div className="detail-image-toolbar">
+                  {images.length > 1 && (
+                    <span className="detail-image-counter">
+                      {selectedImageIndex + 1} / {images.length}
+                    </span>
+                  )}
+                  {selectedImage?.url && (
+                    <>
+                      <button
+                        className={`vehicle-detail-zoom-button ${isZoomed ? "is-active" : ""}`}
+                        type="button"
+                        onPointerDown={(event) => event.stopPropagation()}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          zoomToPoint(0, 0, Math.min(4, zoomScale * 1.5));
+                        }}
+                        aria-label="Ampliar imagen"
+                      >
+                        +
+                      </button>
+                      <button
+                        className="vehicle-detail-zoom-button"
+                        type="button"
+                        disabled={!isZoomed}
+                        onPointerDown={(event) => event.stopPropagation()}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          const newScale = zoomScale / 1.5;
+                          if (newScale <= 1) { resetImageZoom(); return; }
+                          zoomToPoint(0, 0, newScale);
+                        }}
+                        aria-label="Reducir imagen"
+                      >
+                        −
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
 
             <div className="vehicle-detail-quick-specs">
