@@ -10077,17 +10077,17 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 .ox-search-vehicle-grid .vehicle-card__media {
-  height: 178px !important;
-  min-height: 178px !important;
-  padding: 10px !important;
+  height: 230px !important;
+  min-height: 230px !important;
+  padding: 0 !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__image,
 .ox-search-vehicle-grid .vehicle-card__placeholder {
-  inset: 10px !important;
-  width: calc(100% - 20px) !important;
-  height: calc(100% - 20px) !important;
-  border-radius: 15px !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__media::after {
@@ -10361,9 +10361,9 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 .ox-search-vehicle-grid .vehicle-card__media {
-  height: 198px !important;
-  min-height: 198px !important;
-  padding: 12px !important;
+  height: 230px !important;
+  min-height: 230px !important;
+  padding: 0 !important;
   border-bottom-color: rgba(125, 211, 252, 0.12) !important;
   background:
     radial-gradient(circle at 50% 72%, rgba(14, 165, 233, 0.16), transparent 42%),
@@ -10371,31 +10371,26 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 .ox-search-vehicle-grid .vehicle-card__media::before {
-  inset: 12px !important;
-  height: auto !important;
-  border-radius: 17px !important;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 45%),
-    rgba(15, 23, 42, 0.18) !important;
+  inset: 0 0 auto 0 !important;
+  height: 80px !important;
+  border-radius: 0 !important;
+  background: linear-gradient(180deg, rgba(2, 6, 23, 0.62), transparent) !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__image,
 .ox-search-vehicle-grid .vehicle-card__placeholder {
   position: absolute !important;
-  inset: 12px !important;
-  width: calc(100% - 24px) !important;
-  height: calc(100% - 24px) !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   min-height: 0 !important;
-  border-radius: 17px !important;
+  border-radius: 0 !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__image {
   object-fit: cover !important;
   object-position: center center !important;
-  filter:
-    saturate(1.04)
-    contrast(1.03)
-    drop-shadow(0 14px 18px rgba(0, 0, 0, 0.32)) !important;
+  filter: saturate(1.04) contrast(1.03) !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__placeholder {
