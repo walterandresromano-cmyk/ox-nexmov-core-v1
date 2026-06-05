@@ -7804,11 +7804,20 @@ body::-webkit-scrollbar {
 }
 
 :root[data-theme="light"] .vehicle-card {
-  border-color: var(--ox-border);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.06), transparent 34%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(237, 245, 252, 0.98));
-  box-shadow: var(--ox-shadow-card);
+  border-color: rgba(37, 54, 78, 0.16);
+  background: #ffffff;
+  box-shadow:
+    0 2px 6px rgba(33, 48, 71, 0.07),
+    0 8px 28px rgba(33, 48, 71, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+:root[data-theme="light"] .vehicle-card:hover {
+  border-color: rgba(2, 132, 199, 0.28);
+  box-shadow:
+    0 4px 12px rgba(33, 48, 71, 0.10),
+    0 16px 44px rgba(33, 48, 71, 0.14),
+    0 0 0 1px rgba(2, 132, 199, 0.16);
 }
 
 :root[data-theme="light"] .vehicle-card__media,
@@ -7816,29 +7825,38 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .detail-main-image,
 :root[data-theme="light"] .vehicle-card__placeholder {
   background:
-    radial-gradient(circle at 50% 76%, rgba(37, 99, 235, 0.08), transparent 42%),
-    linear-gradient(180deg, rgba(239, 246, 252, 0.98), rgba(218, 231, 242, 0.96));
+    radial-gradient(circle at 50% 60%, rgba(14, 165, 233, 0.10), transparent 50%),
+    linear-gradient(180deg, #d6eaf8, #c3dff2);
 }
 
 :root[data-theme="light"] .vehicle-card__media::before {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(10, 22, 38, 0.50) 0%,
-      rgba(10, 22, 38, 0.22) 52%,
-      rgba(10, 22, 38, 0.02) 100%
-    );
+  background: linear-gradient(180deg, rgba(8, 18, 34, 0.48), rgba(8, 18, 34, 0.12) 60%, transparent);
 }
 
 :root[data-theme="light"] .vehicle-card__media-title .vehicle-card__title,
 :root[data-theme="light"] .vehicle-card__media-title .vehicle-card__version {
-  text-shadow:
-    0 2px 12px rgba(0, 0, 0, 0.36),
-    0 0 18px rgba(15, 23, 42, 0.26);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.40);
 }
 
+/* Stats chips — más visibles en claro */
 :root[data-theme="light"] .vehicle-card__fact,
-:root[data-theme="light"] .vehicle-card__price-box,
+:root[data-theme="light"] .vehicle-card__stat {
+  border-color: rgba(37, 54, 78, 0.16) !important;
+  background: rgba(14, 165, 233, 0.06) !important;
+  color: #1e3a52 !important;
+}
+
+/* Price box — peso visual */
+:root[data-theme="light"] .vehicle-card__price-box {
+  border-color: rgba(37, 54, 78, 0.14);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.07), rgba(255, 255, 255, 0.96));
+}
+
+:root[data-theme="light"] .vehicle-card__price {
+  color: #0d1726;
+}
+
+/* Componentes internos */
 :root[data-theme="light"] .detail-market-box,
 :root[data-theme="light"] .detail-dealer-box,
 :root[data-theme="light"] .detail-notes-box,
@@ -7851,8 +7869,8 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .admin-kpi-card,
 :root[data-theme="light"] .buyer-stat-card,
 :root[data-theme="light"] .support-stat-card {
-  border-color: var(--ox-border);
-  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(37, 54, 78, 0.16);
+  background: rgba(255, 255, 255, 0.88);
   color: var(--ox-text);
 }
 
@@ -21971,20 +21989,29 @@ body::-webkit-scrollbar {
 }
 
 :root.light .vehicle-card__stat,
-:root[data-theme="light"] .vehicle-card__stat,
+:root[data-theme="light"] .vehicle-card__stat {
+  border-color: rgba(14, 116, 144, 0.20);
+  background: rgba(14, 165, 233, 0.08);
+  color: #0f2537;
+}
+
 :root.light .vehicle-card__price-box,
 :root[data-theme="light"] .vehicle-card__price-box {
-  border-color: rgba(14, 116, 144, 0.12);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(232, 244, 250, 0.72));
-  color: rgba(15, 23, 42, 0.88);
+  border-color: rgba(14, 116, 144, 0.18);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(255, 255, 255, 0.94));
+  color: #0d1726;
 }
 
 :root.light .vehicle-card__stat-label,
 :root[data-theme="light"] .vehicle-card__stat-label,
 :root.light .vehicle-card__price-label,
 :root[data-theme="light"] .vehicle-card__price-label {
-  color: rgba(14, 116, 144, 0.90);
+  color: rgba(3, 105, 161, 0.88);
+}
+
+:root[data-theme="light"] .vehicle-card__price {
+  color: #0d1726;
+  font-weight: 850;
 }
 
 :root.light .vehicle-card__price,

@@ -2518,3 +2518,32 @@
   }
 }
 
+/* ── Light mode search — mobile refinement ───────────────────── */
+@media (max-width: 760px) {
+  :root[data-theme="light"] .ox-search-page {
+    background: #e8f4fb;
+  }
+
+  :root[data-theme="light"] .ox-search-results {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
+
+  :root[data-theme="light"] .ox-search-vehicle-grid .vehicle-card {
+    box-shadow:
+      0 1px 4px rgba(33, 48, 71, 0.08),
+      0 6px 20px rgba(33, 48, 71, 0.10);
+    border-color: rgba(37, 54, 78, 0.14);
+  }
+
+  :root[data-theme="light"] .ox-search-mobile-filter-toggle {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(14, 116, 144, 0.22) !important;
+    color: #082f49 !important;
+    box-shadow:
+      0 2px 8px rgba(33, 48, 71, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+  }
+}
+

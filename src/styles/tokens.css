@@ -234,8 +234,8 @@
   --ox-muted: #5d6d81;
   --ox-muted-2: #8795a7;
 
-  --ox-border: rgba(37, 54, 78, 0.14);
-  --ox-border-strong: rgba(37, 54, 78, 0.22);
+  --ox-border: rgba(37, 54, 78, 0.18);
+  --ox-border-strong: rgba(37, 54, 78, 0.28);
   --ox-border-accent: rgba(2, 132, 199, 0.34);
 
   --ox-blue: #2563eb;
@@ -244,15 +244,17 @@
   --ox-cyan-soft: #0369a1;
 
   --ox-shadow-card:
-    0 18px 50px rgba(33, 48, 71, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 2px 6px rgba(33, 48, 71, 0.07),
+    0 8px 28px rgba(33, 48, 71, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
   --ox-shadow-card-hover:
-    0 22px 64px rgba(33, 48, 71, 0.16),
-    0 0 0 1px rgba(2, 132, 199, 0.18),
-    0 6px 20px rgba(2, 132, 199, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+    0 4px 12px rgba(33, 48, 71, 0.10),
+    0 16px 44px rgba(33, 48, 71, 0.14),
+    0 0 0 1px rgba(2, 132, 199, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
   --ox-shadow-panel:
-    0 24px 70px rgba(33, 48, 71, 0.14),
+    0 4px 16px rgba(33, 48, 71, 0.09),
+    0 20px 56px rgba(33, 48, 71, 0.13),
     inset 0 1px 0 rgba(255, 255, 255, 0.86);
   --ox-shadow-modal:
     0 32px 92px rgba(33, 48, 71, 0.28),
