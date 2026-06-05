@@ -8,6 +8,7 @@ import {
   scoreVehicleMatch,
 } from "../../lib/searchEngine.js";
 import { listPublicVehicles, isPublicVehicleVisible } from "../../services/vehicles.service.js";
+import { getVehicleImages } from "../../lib/vehicle.js";
 
 function normalizeText(value) {
   return normalizeSearchText(value);
@@ -590,7 +591,15 @@ function matchesAdvancedFilters(vehicle, dealer, filters) {
   if (filters.priceMin && price < Number(filters.priceMin)) return false;
   if (filters.priceMax && price > Number(filters.priceMax)) return false;
 
+  if (filters.kmMin && km < Number(filters.kmMin)) return false;
   if (filters.kmMax && km > Number(filters.kmMax)) return false;
+
+  if (filters.hasImages === "yes" && getVehicleImages(vehicle).length === 0) return false;
+
+  if (filters.dealer) {
+    const dealerName = normalizeText(dealer?.commercialName || "");
+    if (dealerName !== normalizeText(filters.dealer)) return false;
+  }
 
   if (filters.province && province !== normalizeText(filters.province)) {
     return false;
@@ -636,6 +645,7 @@ const FILTER_CHIP_LABELS = {
   yearTo: "Año hasta",
   priceMin: "Precio mín.",
   priceMax: "Precio máx.",
+  kmMin: "Km mín.",
   kmMax: "Km máx.",
   province: "Provincia",
   city: "Ciudad",
@@ -645,11 +655,14 @@ const FILTER_CHIP_LABELS = {
   financing: "Financiación",
   status: "Estado",
   dealerRank: "Dealer",
+  dealer: "Concesionaria",
+  hasImages: "Con fotos",
 };
 
 const FILTER_CHIP_VALUE_LABELS = {
   financing: { yes: "Con financiación", no: "Sin financiación" },
   status: { reserved: "Reservados", available: "Disponibles" },
+  hasImages: { yes: "Solo con fotos" },
 };
 
 const EMPTY_ADVANCED_FILTERS = {
@@ -660,6 +673,7 @@ const EMPTY_ADVANCED_FILTERS = {
   yearTo: "",
   priceMin: "",
   priceMax: "",
+  kmMin: "",
   kmMax: "",
   province: "",
   city: "",
@@ -669,6 +683,8 @@ const EMPTY_ADVANCED_FILTERS = {
   financing: "",
   status: "",
   dealerRank: "",
+  dealer: "",
+  hasImages: "",
 };
 
 const SEARCH_STORAGE_KEY = "ox-nexmov-search";
@@ -1110,6 +1126,9 @@ export default function Search({
       transmissions: getUniqueOptions(publicSearchVehicles, (vehicle) =>
         getVehicleField(vehicle, "transmission")
       ),
+      dealers: getUniqueOptions(publicSearchVehicles, (vehicle) =>
+        getDealer(vehicle)?.commercialName || ""
+      ),
     };
   }, [publicSearchVehicles, filters.brand, filters.model, filters.province]);
 
@@ -1494,18 +1513,28 @@ export default function Search({
                   </label>
                 </div>
 
-                <label>
-                  Kilometraje máximo
-                  <input
-                    type="number"
-                    min="0"
-                    value={filters.kmMax}
-                    onChange={(event) =>
-                      updateFilter("kmMax", event.target.value)
-                    }
-                    placeholder="100000"
-                  />
-                </label>
+                <div className="ox-filter-two">
+                  <label>
+                    Km mínimo
+                    <input
+                      type="number"
+                      min="0"
+                      value={filters.kmMin}
+                      onChange={(event) => updateFilter("kmMin", event.target.value)}
+                      placeholder="0"
+                    />
+                  </label>
+                  <label>
+                    Km máximo
+                    <input
+                      type="number"
+                      min="0"
+                      value={filters.kmMax}
+                      onChange={(event) => updateFilter("kmMax", event.target.value)}
+                      placeholder="100000"
+                    />
+                  </label>
+                </div>
               </div>
 
               <div className="ox-filter-section">
@@ -1610,6 +1639,22 @@ export default function Search({
                     { value: "platinum", label: "Platinum" },
                   ]}
                   onChange={(value) => updateFilter("dealerRank", value)}
+                />
+
+                <FilterDropdown
+                  label="Concesionaria"
+                  value={filters.dealer}
+                  placeholder="Todas"
+                  options={filterOptions.dealers.map((d) => ({ value: d, label: d }))}
+                  onChange={(value) => updateFilter("dealer", value)}
+                />
+
+                <FilterDropdown
+                  label="Fotos"
+                  value={filters.hasImages}
+                  placeholder="Todas"
+                  options={[{ value: "yes", label: "Solo con fotos" }]}
+                  onChange={(value) => updateFilter("hasImages", value)}
                 />
               </div>
 
