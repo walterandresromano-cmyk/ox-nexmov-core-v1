@@ -548,7 +548,9 @@ export default function VehicleDetailModal({
                       onPointerDown={(e) => e.stopPropagation()}
                       onClick={(e) => { e.stopPropagation(); navigateImage(-1); }}
                       aria-label="Imagen anterior"
-                    >‹</button>
+                    >
+                      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true"><path d="M6 1L1 6l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
                     <button
                       className="detail-image-arrow detail-image-arrow--next"
                       type="button"
@@ -556,7 +558,9 @@ export default function VehicleDetailModal({
                       onPointerDown={(e) => e.stopPropagation()}
                       onClick={(e) => { e.stopPropagation(); navigateImage(1); }}
                       aria-label="Siguiente imagen"
-                    >›</button>
+                    >
+                      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true"><path d="M1 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
                   </>
                 )}
 
@@ -575,7 +579,9 @@ export default function VehicleDetailModal({
                         onPointerDown={(e) => e.stopPropagation()}
                         onClick={(e) => { e.stopPropagation(); zoomToPoint(0, 0, Math.min(4, zoomScale * 1.5)); }}
                         aria-label="Ampliar"
-                      >+</button>
+                      >
+                        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M4.5 1v7M1 4.5h7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                      </button>
                       <button
                         className="vehicle-detail-zoom-button"
                         type="button"
@@ -583,7 +589,9 @@ export default function VehicleDetailModal({
                         onPointerDown={(e) => e.stopPropagation()}
                         onClick={(e) => { e.stopPropagation(); const s = zoomScale / 1.5; if (s <= 1) { resetImageZoom(); return; } zoomToPoint(0, 0, s); }}
                         aria-label="Reducir"
-                      >−</button>
+                      >
+                        <svg width="9" height="2" viewBox="0 0 9 2" fill="none" aria-hidden="true"><path d="M1 1h7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                      </button>
                     </>
                   )}
                 </div>
