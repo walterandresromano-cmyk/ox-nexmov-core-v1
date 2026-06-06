@@ -9700,13 +9700,8 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     linear-gradient(180deg, #eef9ff, #dceff8 72%, #eaf6fb) !important;
 }
 
-:root[data-theme="light"] .ox-home-hero-v3,
-:root[data-theme="light"] .ox-search-hero,
-:root[data-theme="light"] .zero-km-panel.ox-public-hero,
-:root[data-theme="light"] .sell-vehicle-panel,
-:root[data-theme="light"] .join-network-panel,
-:root[data-theme="light"] .about-panel,
-:root[data-theme="light"] .faq-panel {
+/* Home hero — tratamiento saturado */
+:root[data-theme="light"] .ox-home-hero-v3 {
   border-color: rgba(14, 116, 144, 0.18) !important;
   background:
     radial-gradient(circle at 8% 0%, rgba(14, 165, 233, 0.28), transparent 38%),
@@ -9717,6 +9712,23 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     0 8px 32px rgba(14, 116, 144, 0.14),
     0 24px 66px rgba(33, 48, 71, 0.10),
     inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+}
+
+/* Resto de heroes públicos — tratamiento sutil */
+:root[data-theme="light"] .ox-search-hero,
+:root[data-theme="light"] .zero-km-panel.ox-public-hero,
+:root[data-theme="light"] .sell-vehicle-panel,
+:root[data-theme="light"] .join-network-panel,
+:root[data-theme="light"] .about-panel,
+:root[data-theme="light"] .faq-panel {
+  border-color: rgba(14, 116, 144, 0.15) !important;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(14, 165, 233, 0.13), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(245, 184, 75, 0.12), transparent 24%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(225, 242, 250, 0.95)) !important;
+  box-shadow:
+    0 24px 66px rgba(33, 48, 71, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
 }
 
 :root[data-theme="light"] .ox-search-results,
