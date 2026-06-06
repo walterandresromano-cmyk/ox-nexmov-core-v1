@@ -1269,6 +1269,8 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
             <label className="dealer-settings-section__field">
               <span>Nombre comercial</span>
               <input
+                type="text"
+                autoComplete="organization"
                 value={profileForm.name}
                 onChange={(e) => setProfileForm((f) => ({ ...f, name: e.target.value }))}
                 placeholder="Ej: Automotores Rodríguez"
@@ -1283,6 +1285,8 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
               <label className="dealer-settings-section__field">
                 <span>Ciudad</span>
                 <input
+                  type="text"
+                  autoComplete="address-level2"
                   value={profileForm.city}
                   onChange={(e) => setProfileForm((f) => ({ ...f, city: e.target.value }))}
                   placeholder="Ej: San Miguel"
@@ -1291,6 +1295,8 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
               <label className="dealer-settings-section__field">
                 <span>Provincia</span>
                 <input
+                  type="text"
+                  autoComplete="address-level1"
                   value={profileForm.province}
                   onChange={(e) => setProfileForm((f) => ({ ...f, province: e.target.value }))}
                   placeholder="Ej: Buenos Aires"

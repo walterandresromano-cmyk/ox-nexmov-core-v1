@@ -644,6 +644,9 @@ export default function EditVehicleModal({
                 Año
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="1900"
+                  max="2035"
                   value={form.year}
                   onChange={(event) => updateField("year", event.target.value)}
                 />
@@ -653,6 +656,8 @@ export default function EditVehicleModal({
                 Precio publicado
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.price}
                   onChange={(event) => updateField("price", event.target.value)}
                 />
@@ -662,6 +667,8 @@ export default function EditVehicleModal({
                 Referencia mercado
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.marketReferencePrice}
                   onChange={(event) =>
                     updateField("marketReferencePrice", event.target.value)
@@ -673,6 +680,8 @@ export default function EditVehicleModal({
                 Kilómetros
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.km}
                   onChange={(event) => updateField("km", event.target.value)}
                 />
@@ -764,6 +773,8 @@ export default function EditVehicleModal({
                 Entrada / anticipo
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.delivery}
                   onChange={(event) =>
                     updateField("delivery", event.target.value)
@@ -775,6 +786,8 @@ export default function EditVehicleModal({
                 Cantidad de cuotas
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.months}
                   onChange={(event) => updateField("months", event.target.value)}
                 />
@@ -784,6 +797,8 @@ export default function EditVehicleModal({
                 Tasa anual
                 <input
                   type="number"
+                  inputMode="decimal"
+                  min="0"
                   value={form.rate}
                   onChange={(event) => updateField("rate", event.target.value)}
                 />

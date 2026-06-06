@@ -873,6 +873,8 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
                 Entrada / anticipo
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.delivery}
                   onChange={(event) =>
                     updateField("delivery", event.target.value)
@@ -885,6 +887,8 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
                 Cantidad de cuotas
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.months}
                   onChange={(event) => updateField("months", event.target.value)}
                   placeholder="Ej: 36"
@@ -895,6 +899,8 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
                 Tasa anual
                 <input
                   type="number"
+                  inputMode="decimal"
+                  min="0"
                   value={form.rate}
                   onChange={(event) => updateField("rate", event.target.value)}
                   placeholder="Ej: 42"
