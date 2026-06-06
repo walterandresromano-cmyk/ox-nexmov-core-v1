@@ -11,8 +11,30 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    if (import.meta.env.DEV) {
-      console.error("[ErrorBoundary]", error, info.componentStack);
+    // Log always — in prod this goes to the browser console and any external
+    // monitoring tool that instruments console.error (e.g. Sentry auto-instrumentation)
+    console.error("[ErrorBoundary]", error.message, {
+      stack: error.stack,
+      componentStack: info.componentStack,
+    });
+
+    // Best-effort beacon to a future monitoring endpoint
+    if (typeof navigator !== "undefined" && navigator.sendBeacon) {
+      try {
+        navigator.sendBeacon(
+          "/api/client-error",
+          JSON.stringify({
+            type: "react-boundary",
+            message: error.message,
+            stack: error.stack?.slice(0, 800),
+            componentStack: info.componentStack?.slice(0, 400),
+            url: window.location.href,
+            ts: new Date().toISOString(),
+          })
+        );
+      } catch {
+        // non-fatal
+      }
     }
   }
 

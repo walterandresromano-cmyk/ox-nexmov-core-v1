@@ -211,6 +211,8 @@ export default function JoinNetwork({ onNavigate }) {
   const [requestPlan, setRequestPlan] = useState(null);
   const [requestForm, setRequestForm] = useState(initialRequestForm);
   const [requestSent, setRequestSent] = useState(false);
+  const [requestLoading, setRequestLoading] = useState(false);
+  const [requestError, setRequestError] = useState("");
 
   const plans = planOrder
     .map((planId) => {
@@ -233,28 +235,46 @@ export default function JoinNetwork({ onNavigate }) {
     setRequestForm((prev) => ({ ...prev, [field]: value }));
   }
 
-  function handleRequestSubmit(event) {
+  async function handleRequestSubmit(event) {
     event.preventDefault();
+    setRequestError("");
+    setRequestLoading(true);
+
     const pid = requestForm.plan;
     const planName = pid ? `${pid.charAt(0).toUpperCase()}${pid.slice(1)}` : pid;
     const planInfo = planCommercial[pid];
     const planLine = planInfo
       ? `Dealer ${planName} — ${planInfo.cup} — Promo ${planInfo.promoPrice} / mes — Lista ${planInfo.price} / mes`
       : planName;
-    const subject = `Solicitud de alta dealer — Plan ${planName} — ${requestForm.commercialName}`;
-    const body = [
-      `Nombre comercial: ${requestForm.commercialName}`,
-      `Responsable: ${requestForm.contactName}`,
-      `Email: ${requestForm.email}`,
-      `WhatsApp: ${requestForm.whatsapp}`,
-      `Provincia: ${requestForm.province}`,
-      `Ciudad: ${requestForm.city}`,
-      `Plan solicitado: ${planLine}`,
-      `Vehículos aprox.: ${requestForm.vehicleCount || "No especificado"}`,
-      `Mensaje: ${requestForm.message || "-"}`,
-    ].join("\n");
-    window.location.href = `mailto:soporte@oxnexmov.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setRequestSent(true);
+
+    try {
+      const res = await fetch("/api/dealer-application", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          commercialName: requestForm.commercialName,
+          contactName: requestForm.contactName,
+          email: requestForm.email,
+          whatsapp: requestForm.whatsapp,
+          province: requestForm.province,
+          city: requestForm.city,
+          plan: planLine,
+          vehicleCount: requestForm.vehicleCount || "No especificado",
+          message: requestForm.message || "",
+        }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || `Error ${res.status}`);
+      }
+
+      setRequestSent(true);
+    } catch (err) {
+      setRequestError(err.message || "No se pudo enviar la solicitud. Intentá nuevamente.");
+    } finally {
+      setRequestLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -637,13 +657,20 @@ export default function JoinNetwork({ onNavigate }) {
                   </label>
 
                   <p className="jnp-request-note">
-                    Tu solicitud se enviará a soporte@oxnexmov.com.ar. El equipo
-                    de oX te contactará para validar los datos y activar el plan
-                    de forma manual.
+                    Tu solicitud llegará al equipo de oX NEXMOV. Te contactaremos
+                    para validar los datos y activar el plan.
                   </p>
 
-                  <button type="submit" className="jnp-cta jnp-cta--primary jnp-request-submit">
-                    Enviar solicitud
+                  {requestError && (
+                    <div className="auth-warning">{requestError}</div>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="jnp-cta jnp-cta--primary jnp-request-submit"
+                    disabled={requestLoading}
+                  >
+                    {requestLoading ? "Enviando..." : "Enviar solicitud"}
                   </button>
                 </form>
               )}

@@ -418,7 +418,15 @@ export async function createVehicleContactLead({
         buyerPhone: buyerProfile.phone || null,
         message: message || null,
       }),
-    }).catch(() => {});
+    })
+      .then((res) => {
+        if (!res.ok) {
+          console.error("[leads.service] notify-lead HTTP error:", res.status);
+        }
+      })
+      .catch((err) => {
+        console.error("[leads.service] notify-lead fetch failed:", err?.message);
+      });
   }
 
   return {

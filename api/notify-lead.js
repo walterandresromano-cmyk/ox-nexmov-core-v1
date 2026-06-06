@@ -1,4 +1,5 @@
 import webpush from "web-push";
+import nodemailer from "nodemailer";
 
 const SUPABASE_URL =
   process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || "";
@@ -8,8 +9,33 @@ const VAPID_PRIVATE = process.env.VAPID_PRIVATE_KEY || "";
 const VAPID_EMAIL =
   process.env.VAPID_EMAIL || "mailto:soporte@oxnexmov.com.ar";
 
+// SMTP — configure via env vars: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
+const SMTP_HOST = process.env.SMTP_HOST || "";
+const SMTP_PORT = Number(process.env.SMTP_PORT || "587");
+const SMTP_USER = process.env.SMTP_USER || "";
+const SMTP_PASS = process.env.SMTP_PASS || "";
+const SMTP_FROM = process.env.SMTP_FROM || "oX NEXMOV <soporte@oxnexmov.com.ar>";
+
 if (VAPID_PUBLIC && VAPID_PRIVATE) {
   webpush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC, VAPID_PRIVATE);
+}
+
+function buildEmailHtml({ dealerName, vehicleTitle, buyerName, buyerEmail, buyerPhone, message, vehiclePrice }) {
+  const lines = [
+    `<p>Hola <strong>${dealerName || "Dealer"}</strong>,</p>`,
+    `<p>Recibiste una nueva consulta en <strong>oX NEXMOV</strong>.</p>`,
+    `<table style="border-collapse:collapse;width:100%;font-family:sans-serif;font-size:14px">`,
+    `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Vehículo</strong></td><td style="padding:8px;border:1px solid #ddd">${vehicleTitle || "—"}</td></tr>`,
+    vehiclePrice ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Precio publicado</strong></td><td style="padding:8px;border:1px solid #ddd">$${Number(vehiclePrice).toLocaleString("es-AR")}</td></tr>` : "",
+    `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Comprador</strong></td><td style="padding:8px;border:1px solid #ddd">${buyerName || "—"}</td></tr>`,
+    buyerEmail ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Email</strong></td><td style="padding:8px;border:1px solid #ddd">${buyerEmail}</td></tr>` : "",
+    buyerPhone ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Teléfono</strong></td><td style="padding:8px;border:1px solid #ddd">${buyerPhone}</td></tr>` : "",
+    message ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Mensaje</strong></td><td style="padding:8px;border:1px solid #ddd">${message}</td></tr>` : "",
+    `</table>`,
+    `<p style="margin-top:16px"><a href="https://www.oxnexmov.com.ar/dealer" style="background:#2563eb;color:#fff;padding:10px 20px;text-decoration:none;border-radius:6px;font-weight:bold">Ver en mi panel</a></p>`,
+    `<p style="margin-top:24px;font-size:12px;color:#888">oX NEXMOV — Marketplace de vehículos verificados</p>`,
+  ].filter(Boolean).join("\n");
+  return `<!DOCTYPE html><html><body style="font-family:sans-serif;max-width:600px;margin:0 auto">${lines}</body></html>`;
 }
 
 export default async function handler(req, res) {
@@ -17,13 +43,47 @@ export default async function handler(req, res) {
 
   const {
     dealerId,
+    dealerEmail,
+    dealerName,
     vehicleTitle,
+    vehiclePrice,
     buyerName,
+    buyerEmail,
+    buyerPhone,
+    message,
   } = req.body || {};
 
-  const results = { push: "skipped" };
+  const results = { push: "skipped", email: "skipped" };
 
-  // ── Push notification only (email via SMTP no activado aún) ────────
+  // ── Email via SMTP ──────────────────────────────────────────────
+  if (dealerEmail && SMTP_HOST && SMTP_USER && SMTP_PASS) {
+    try {
+      const transporter = nodemailer.createTransport({
+        host: SMTP_HOST,
+        port: SMTP_PORT,
+        secure: SMTP_PORT === 465,
+        auth: { user: SMTP_USER, pass: SMTP_PASS },
+      });
+
+      await transporter.sendMail({
+        from: SMTP_FROM,
+        to: dealerEmail,
+        subject: `Nueva consulta: ${vehicleTitle || "tu vehículo"} — oX NEXMOV`,
+        html: buildEmailHtml({ dealerName, vehicleTitle, buyerName, buyerEmail, buyerPhone, message, vehiclePrice }),
+      });
+
+      results.email = "sent";
+    } catch (err) {
+      results.email = `error: ${err.message}`;
+      console.error("[notify-lead] SMTP error:", err.message);
+    }
+  } else if (!dealerEmail) {
+    results.email = "no-dealer-email";
+  } else {
+    results.email = "smtp-not-configured";
+  }
+
+  // ── Web push ────────────────────────────────────────────────────
   if (dealerId && SERVICE_ROLE_KEY && VAPID_PUBLIC && VAPID_PRIVATE) {
     try {
       const subRes = await fetch(
@@ -60,7 +120,6 @@ export default async function handler(req, res) {
           const sent = pushResults.filter((r) => r.status === "fulfilled").length;
           results.push = `sent:${sent}/${subs.length}`;
 
-          // Remove stale subscriptions that the push server rejected as gone
           const staleEndpoints = pushResults
             .map((r, i) => ({ result: r, sub: subs[i] }))
             .filter(({ result }) => {
@@ -87,6 +146,7 @@ export default async function handler(req, res) {
       }
     } catch (err) {
       results.push = `error: ${err.message}`;
+      console.error("[notify-lead] push error:", err.message);
     }
   }
 

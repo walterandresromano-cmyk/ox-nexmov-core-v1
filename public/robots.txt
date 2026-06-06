@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.oxnexmov.com/sitemap.xml
+Sitemap: https://www.oxnexmov.com.ar/sitemap.xml
+
