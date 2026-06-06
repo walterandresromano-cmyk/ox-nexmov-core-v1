@@ -6,11 +6,12 @@ const BASE_URL = "https://www.oxnexmov.com.ar";
 const STATIC_PAGES = [
   { path: "/", priority: "1.0", changefreq: "daily" },
   { path: "/buscar", priority: "0.9", changefreq: "hourly" },
+  { path: "/financiacion", priority: "0.7", changefreq: "weekly" },
   { path: "/sumate", priority: "0.7", changefreq: "weekly" },
   { path: "/quienes-somos", priority: "0.5", changefreq: "monthly" },
-  { path: "/preguntas-frecuentes", priority: "0.5", changefreq: "monthly" },
-  { path: "/seguridad", priority: "0.4", changefreq: "monthly" },
-  { path: "/0km", priority: "0.6", changefreq: "weekly" },
+  { path: "/faq", priority: "0.5", changefreq: "monthly" },
+  { path: "/legal/terminos", priority: "0.3", changefreq: "monthly" },
+  { path: "/legal/privacidad", priority: "0.3", changefreq: "monthly" },
 ];
 
 function escapeXml(str) {
@@ -55,7 +56,7 @@ export default async function handler(req, res) {
   if (SUPABASE_URL && SERVICE_ROLE_KEY) {
     try {
       const vehicleRes = await fetch(
-        `${SUPABASE_URL}/rest/v1/vehicles?is_active=eq.true&publication_status=eq.published&select=id,updated_at&limit=5000`,
+        `${SUPABASE_URL}/rest/v1/vehicles?is_active=eq.true&publication_status=eq.active&select=id,updated_at&limit=5000`,
         {
           headers: {
             apikey: SERVICE_ROLE_KEY,
