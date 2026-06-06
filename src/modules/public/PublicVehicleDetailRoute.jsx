@@ -31,6 +31,17 @@ function setMetaContent(attr, attrValue, content) {
   element.setAttribute("content", content);
 }
 
+function setCanonical(url) {
+  if (typeof document === "undefined") return;
+  let link = document.querySelector("link[rel='canonical']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "canonical";
+    document.head.appendChild(link);
+  }
+  link.href = url;
+}
+
 export default function PublicVehicleDetailRoute({
   appActions,
   onNavigate,
@@ -95,13 +106,22 @@ export default function PublicVehicleDetailRoute({
       .join(" ");
     const shareUrl = getVehicleShareUrl(vehicle.id);
 
+    const previousCanonical = document.querySelector("link[rel='canonical']")?.href || "";
+    const vehicleImage = vehicle.mainImageUrl || vehicle.imageUrl || "";
+
     document.title = title;
     setMetaContent("name", "description", description);
+    setMetaContent("property", "og:type", "product");
     setMetaContent("property", "og:title", title);
     setMetaContent("property", "og:description", description);
     setMetaContent("property", "og:url", shareUrl);
+    if (vehicleImage) {
+      setMetaContent("property", "og:image", vehicleImage);
+      setMetaContent("name", "twitter:image", vehicleImage);
+    }
     setMetaContent("name", "twitter:title", title);
     setMetaContent("name", "twitter:description", description);
+    setCanonical(shareUrl);
 
     // JSON-LD structured data for Google Shopping / rich results
     const jsonLd = {
@@ -143,6 +163,12 @@ export default function PublicVehicleDetailRoute({
 
     return () => {
       document.title = previousTitle;
+      setMetaContent("property", "og:type", "website");
+      setMetaContent("property", "og:title", "oX NEXMOV — Marketplace de vehículos verificados");
+      setMetaContent("property", "og:description", "Encontrá tu próximo vehículo en oX NEXMOV. Publicaciones de dealers verificados con datos reales, comparador y consultas trazables.");
+      setMetaContent("property", "og:image", "https://www.oxnexmov.com.ar/1hero-car.png");
+      setMetaContent("name", "twitter:image", "https://www.oxnexmov.com.ar/1hero-car.png");
+      if (previousCanonical) setCanonical(previousCanonical);
       document.getElementById("ox-vehicle-jsonld")?.remove();
     };
   }, [vehicle]);
