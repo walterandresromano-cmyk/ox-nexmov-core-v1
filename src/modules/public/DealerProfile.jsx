@@ -21,6 +21,37 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (!dealer) return;
+
+    const previousTitle = document.title;
+    const name = dealer.commercialName || dealer.name || "Dealer";
+    const title = `${name} — oX NEXMOV`;
+    const city = [dealer.city, dealer.province].filter(Boolean).join(", ");
+    const description = `Visitá el perfil de ${name} en oX NEXMOV.${city ? ` Ubicado en ${city}.` : ""} Dealer verificado con vehículos reales.`;
+    const shareUrl = window.location.href;
+
+    document.title = title;
+
+    function setMeta(attr, val, content) {
+      let el = document.querySelector(`meta[${attr}="${val}"]`);
+      if (!el) { el = document.createElement("meta"); el.setAttribute(attr, val); document.head.appendChild(el); }
+      el.setAttribute("content", content);
+    }
+
+    setMeta("name", "description", description);
+    setMeta("property", "og:title", title);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:url", shareUrl);
+    if (dealer.logo) setMeta("property", "og:image", dealer.logo);
+
+    return () => {
+      document.title = previousTitle;
+      setMeta("property", "og:title", "oX NEXMOV — Marketplace de vehículos verificados");
+      setMeta("property", "og:description", "Encontrá tu próximo vehículo en oX NEXMOV.");
+    };
+  }, [dealer]);
+
+  useEffect(() => {
     if (!dealerId) {
       setError("No se especificó el dealer.");
       setLoading(false);
