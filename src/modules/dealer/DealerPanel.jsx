@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePushNotifications } from "../../hooks/usePushNotifications.js";
+import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient.js";
 
 import CreateVehicleModal from "../../components/CreateVehicleModal.jsx";
 
@@ -367,6 +368,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
   const [leads, setLeads] = useState([]);
   const [loadingLeads, setLoadingLeads] = useState(true);
   const [leadsError, setLeadsError] = useState("");
+  const [newLeadAlert, setNewLeadAlert] = useState(false);
 
   const [tickets, setTickets] = useState([]);
   const [loadingTickets, setLoadingTickets] = useState(true);
@@ -662,6 +664,31 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
     setProfileError("");
     setProfileSuccess("");
   }, [dealer?.id]);
+
+  // Supabase Realtime: auto-refresh leads on new INSERT without manual reload
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase || !dealer?.id) return;
+
+    const channel = supabase
+      .channel(`dealer-leads-${dealer.id}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "vehicle_action_leads" },
+        () => {
+          loadLeads();
+          setNewLeadAlert(true);
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [dealer?.id]);
+
+  useEffect(() => {
+    if (!newLeadAlert) return;
+    const t = setTimeout(() => setNewLeadAlert(false), 30_000);
+    return () => clearTimeout(t);
+  }, [newLeadAlert]);
 
   // todayActions must be before any early return to satisfy Rules of Hooks.
   // Uses raw state (dealer, leads, dealerVehicles, tickets) — not derived vars
@@ -2277,12 +2304,15 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
 
             <article
               data-module="leads"
-              className="dealer-module-card clickable-module-card"
-              onClick={() => navigateToLeads()}
+              className={`dealer-module-card clickable-module-card${newLeadAlert ? " dealer-module-card--realtime-alert" : ""}`}
+              onClick={() => { setNewLeadAlert(false); navigateToLeads(); }}
             >
               <div className="dealer-mc-kpi">
                 <strong>{newLeadsCount}</strong>
                 <span>nuevos · {leads.length} total</span>
+                {newLeadAlert && (
+                  <span className="dealer-mc-realtime-badge">Nuevo ahora</span>
+                )}
               </div>
               <h3>Leads recibidos</h3>
               <p>Consultas de compradores sobre tus publicaciones.</p>

@@ -17629,6 +17629,60 @@ body::-webkit-scrollbar {
 .dealer-panel .dealer-module-card[data-module="sellVehicle"] .dealer-mc-kpi > strong { color: #d8b4fe; }
 .dealer-panel .dealer-module-card[data-module="urgent"] .dealer-mc-kpi > strong     { color: #fcd34d; }
 
+/* --- Realtime alert badge --- */
+.dealer-panel .dealer-module-card--realtime-alert {
+  border-color: rgba(34, 197, 94, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(34, 197, 94, 0.18),
+    0 8px 28px rgba(34, 197, 94, 0.10);
+}
+
+.dealer-panel .dealer-mc-realtime-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 197, 94, 0.30);
+  background: rgba(34, 197, 94, 0.12);
+  color: rgba(187, 247, 208, 0.96);
+  font-size: 0.60rem;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  animation: ox-realtime-pulse 1.6s ease-in-out infinite;
+}
+
+.dealer-panel .dealer-mc-realtime-badge::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: ox-realtime-dot 1.6s ease-in-out infinite;
+}
+
+@keyframes ox-realtime-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.72; }
+}
+
+@keyframes ox-realtime-dot {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+}
+
+:root[data-theme="light"] .dealer-panel .dealer-module-card--realtime-alert {
+  border-color: rgba(22, 163, 74, 0.40);
+  box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.14), 0 8px 28px rgba(22, 163, 74, 0.08);
+}
+
+:root[data-theme="light"] .dealer-panel .dealer-mc-realtime-badge {
+  border-color: rgba(22, 163, 74, 0.30);
+  background: rgba(22, 163, 74, 0.10);
+  color: rgba(21, 128, 61, 0.96);
+}
+
 /* --- Title --- */
 .dealer-panel .dealer-module-card h3 {
   font-size: 0.86rem;
