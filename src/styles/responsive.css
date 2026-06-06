@@ -9700,18 +9700,17 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     linear-gradient(180deg, #eef9ff, #dceff8 72%, #eaf6fb) !important;
 }
 
-/* Home hero — tratamiento saturado */
+/* Home hero — tratamiento con profundidad, sin saturar */
 :root[data-theme="light"] .ox-home-hero-v3 {
-  border-color: rgba(14, 116, 144, 0.18) !important;
+  border-color: rgba(14, 116, 144, 0.14) !important;
   background:
-    radial-gradient(circle at 8% 0%, rgba(14, 165, 233, 0.28), transparent 38%),
-    radial-gradient(circle at 90% 10%, rgba(56, 189, 248, 0.18), transparent 30%),
-    radial-gradient(circle at 50% 90%, rgba(245, 184, 75, 0.10), transparent 40%),
-    linear-gradient(145deg, #daf2ff, #bde4f5 60%, #ccedf8) !important;
+    radial-gradient(circle at 8% 0%, rgba(14, 165, 233, 0.12), transparent 36%),
+    radial-gradient(circle at 88% 12%, rgba(56, 189, 248, 0.08), transparent 28%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.97), rgba(232, 246, 252, 0.96)) !important;
   box-shadow:
-    0 8px 32px rgba(14, 116, 144, 0.14),
-    0 24px 66px rgba(33, 48, 71, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+    0 8px 32px rgba(14, 116, 144, 0.10),
+    0 24px 66px rgba(33, 48, 71, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
 }
 
 /* Resto de heroes públicos — tratamiento sutil */
