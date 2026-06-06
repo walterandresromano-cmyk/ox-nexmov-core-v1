@@ -1824,6 +1824,8 @@ export default function AdminPanel({ authProfile }) {
           <div className="admin-search">
             <label>Nombre comercial</label>
             <input
+              type="text"
+              autoComplete="organization"
               value={newDealerForm.name}
               onChange={(event) =>
                 setNewDealerForm({
@@ -1853,6 +1855,8 @@ export default function AdminPanel({ authProfile }) {
           <div className="admin-search">
             <label>Provincia</label>
             <input
+              type="text"
+              autoComplete="address-level1"
               value={newDealerForm.province}
               onChange={(event) =>
                 setNewDealerForm({
@@ -1867,6 +1871,8 @@ export default function AdminPanel({ authProfile }) {
           <div className="admin-search">
             <label>Ciudad</label>
             <input
+              type="text"
+              autoComplete="address-level2"
               value={newDealerForm.city}
               onChange={(event) =>
                 setNewDealerForm({
@@ -1881,6 +1887,9 @@ export default function AdminPanel({ authProfile }) {
           <div className="admin-search">
             <label>Teléfono / WhatsApp</label>
             <input
+              type="tel"
+              autoComplete="tel"
+              inputMode="tel"
               value={newDealerForm.phone}
               onChange={(event) =>
                 setNewDealerForm({

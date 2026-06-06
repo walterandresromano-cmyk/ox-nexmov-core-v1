@@ -107,6 +107,7 @@ export default function GrantExtraSlotsModal({ dealer, onClose, onGranted }) {
               Cupos extra a otorgar
               <input
                 type="number"
+                inputMode="numeric"
                 min="1"
                 max="100"
                 value={form.extraSlots}

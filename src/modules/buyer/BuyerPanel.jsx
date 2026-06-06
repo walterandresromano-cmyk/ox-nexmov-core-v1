@@ -475,6 +475,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     <input
                       id="bp-fullname"
                       type="text"
+                      autoComplete="name"
                       value={profileForm.fullName}
                       onChange={(e) => updateProfileField("fullName", e.target.value)}
                       placeholder="Tu nombre"
@@ -488,6 +489,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     <input
                       id="bp-phone"
                       type="tel"
+                      autoComplete="tel"
+                      inputMode="tel"
                       value={profileForm.phoneVisible}
                       onChange={(e) => updateProfileField("phoneVisible", e.target.value)}
                       placeholder="Ej. +54 9 11 1234-5678"
@@ -500,6 +503,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     <input
                       id="bp-whatsapp"
                       type="tel"
+                      autoComplete="tel"
+                      inputMode="tel"
                       value={profileForm.phoneWhatsapp}
                       onChange={(e) => updateProfileField("phoneWhatsapp", e.target.value)}
                       placeholder="Ej. +54 9 11 1234-5678"
