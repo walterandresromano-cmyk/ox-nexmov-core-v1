@@ -966,6 +966,9 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
           <label>
             Número de contacto
             <input
+              type="tel"
+              autoComplete="tel"
+              inputMode="tel"
               value={whatsappForm}
               onChange={(event) => {
                 setWhatsappForm(event.target.value);

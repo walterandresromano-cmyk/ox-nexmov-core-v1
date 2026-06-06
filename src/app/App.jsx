@@ -563,7 +563,7 @@ export default function App() {
   useEffect(() => {
     const title = ROUTE_TITLES[safeCurrentRoute] || "oX NEXMOV";
     const description = ROUTE_DESCRIPTIONS[safeCurrentRoute] || "Encontrá tu próximo vehículo en oX NEXMOV. Publicaciones de dealers verificados con datos reales.";
-    const url = window.location.origin;
+    const url = window.location.href;
 
     document.title = title;
 
