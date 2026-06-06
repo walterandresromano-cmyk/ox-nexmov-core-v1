@@ -1,7 +1,5 @@
 /* =========================================================
    oX NEXMOV — Dealer Presentation Landing
-   Usa los tokens y clases globales de la app.
-   Solo layout propio de esta página aquí.
    ========================================================= */
 
 .dp-page {
@@ -9,19 +7,17 @@
   font-family: var(--ox-font-sans);
 }
 
-/* ── shell ── */
+/* ── shell: matches web's container width ── */
 .dp-shell {
-  width: min(100% - calc(var(--ox-page-gutter) * 2), 960px);
+  width: min(100% - calc(var(--ox-page-gutter) * 2), 1100px);
   margin: 0 auto;
 }
 
-/* ── section spacing ── */
+/* ── sections ── */
 .dp-section {
-  padding: 64px 0;
+  padding: 52px 0;
   border-top: 1px solid var(--ox-border);
 }
-
-.dp-section:first-child { border-top: none; }
 
 /* ── HERO ── */
 .dp-hero {
@@ -29,7 +25,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 88px var(--ox-page-gutter) 72px;
+  padding: 76px var(--ox-page-gutter) 64px;
   position: relative;
   overflow: hidden;
 }
@@ -43,12 +39,12 @@
 }
 
 .dp-eyebrow {
-  font-size: var(--ox-fs-subtitle);
-  font-weight: var(--ox-fw-bold);
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--ox-cyan);
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -65,12 +61,12 @@
 .dp-hero-title {
   font-family: var(--ox-font-display);
   font-size: clamp(2.1rem, 4.8vw, 3.4rem);
-  font-weight: var(--ox-fw-bold);
-  line-height: var(--ox-lh-tight);
+  font-weight: 700;
+  line-height: 1.0;
   color: var(--ox-text);
-  max-width: 620px;
-  margin-bottom: 22px;
-  letter-spacing: -0.01em;
+  max-width: 600px;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
 }
 
 .dp-hero-title em {
@@ -83,10 +79,10 @@
 
 .dp-hero-sub {
   font-size: 15px;
-  line-height: var(--ox-lh-body);
+  line-height: 1.65;
   color: var(--ox-muted);
   max-width: 420px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .dp-hero-badge {
@@ -95,12 +91,12 @@
   gap: 8px;
   background: rgba(56, 189, 248, 0.07);
   border: 1px solid rgba(56, 189, 248, 0.24);
-  border-radius: var(--ox-radius-pill);
+  border-radius: 999px;
   padding: 9px 18px;
-  font-size: var(--ox-fs-body-sm);
-  font-weight: var(--ox-fw-medium);
+  font-size: 12.5px;
+  font-weight: 600;
   color: var(--ox-cyan-soft);
-  margin-bottom: 36px;
+  margin-bottom: 32px;
 }
 
 .dp-badge-dot {
@@ -124,18 +120,18 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: var(--ox-button-h-page);
+  height: 42px;
   padding: 0 24px;
-  border-radius: var(--ox-radius-pill);
+  border-radius: 999px;
   background: var(--ox-surface-primary);
   color: #fff;
-  font-size: var(--ox-fs-body-sm);
-  font-weight: var(--ox-fw-bold);
+  font-size: 13px;
+  font-weight: 700;
   font-family: var(--ox-font-sans);
   cursor: pointer;
   border: none;
   box-shadow: var(--ox-shadow-glow-primary);
-  transition: box-shadow var(--ox-duration) var(--ox-ease), transform var(--ox-duration) var(--ox-ease);
+  transition: box-shadow 220ms ease, transform 220ms ease;
 }
 
 .dp-btn-primary:hover {
@@ -147,17 +143,17 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: var(--ox-button-h-page);
+  height: 42px;
   padding: 0 20px;
-  border-radius: var(--ox-radius-pill);
+  border-radius: 999px;
   background: transparent;
   border: 1px solid var(--ox-border-strong);
   color: var(--ox-text-soft);
-  font-size: var(--ox-fs-body-sm);
-  font-weight: var(--ox-fw-medium);
+  font-size: 13px;
+  font-weight: 600;
   font-family: var(--ox-font-sans);
   cursor: pointer;
-  transition: border-color var(--ox-duration), color var(--ox-duration);
+  transition: border-color 220ms, color 220ms;
 }
 
 .dp-btn-ghost:hover {
@@ -167,8 +163,8 @@
 
 /* ── section headings ── */
 .dp-section-label {
-  font-size: var(--ox-fs-subtitle);
-  font-weight: var(--ox-fw-bold);
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ox-cyan);
@@ -178,19 +174,19 @@
 .dp-section-title {
   font-family: var(--ox-font-display);
   font-size: clamp(1.5rem, 3vw, 2.1rem);
-  font-weight: var(--ox-fw-bold);
+  font-weight: 700;
   color: var(--ox-text);
   line-height: 1.1;
   margin-bottom: 12px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
 .dp-section-sub {
-  font-size: var(--ox-fs-body);
-  line-height: var(--ox-lh-body);
+  font-size: 14px;
+  line-height: 1.65;
   color: var(--ox-muted);
-  max-width: 500px;
-  margin-bottom: 32px;
+  max-width: 480px;
+  margin-bottom: 28px;
 }
 
 /* ── TWO COL ── */
@@ -201,42 +197,99 @@
   align-items: start;
 }
 
-.dp-two-col-left { display: flex; flex-direction: column; }
-
-/* ── VEHICLE CARD WRAPPER (uses real .vehicle-card classes) ── */
-.dp-card-showcase {
-  position: relative;
+/* sticky right column so it doesn't float when left is taller */
+.dp-col-sticky {
+  position: sticky;
+  top: 80px;
 }
 
+/* ── VEHICLE CARD SHOWCASE ── */
 .dp-card-showcase-label {
-  font-size: var(--ox-fs-subtitle);
-  font-weight: var(--ox-fw-bold);
+  font-size: 10px;
+  font-weight: 700;
   color: var(--ox-muted-2);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
-.dp-card-showcase-label::before {
+/* Override card body padding in showcase context */
+.dp-card-showcase .vehicle-card-body {
+  padding: 14px 16px 16px;
+}
+
+/* Vehicle media placeholder — no emoji, proper gradient fill */
+.dp-veh-media-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg,
+    rgba(17, 29, 49, 0.9) 0%,
+    rgba(11, 20, 36, 0.95) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dp-veh-media-placeholder svg {
+  opacity: 0.22;
+}
+
+/* ── FEATURE LIST (left column items) ── */
+.dp-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.dp-feature-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--ox-border);
+}
+
+.dp-feature-item:last-child { border-bottom: none; }
+
+.dp-feature-check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.dp-feature-check::after {
   content: '';
-  width: 3px; height: 3px;
+  width: 5px; height: 5px;
   border-radius: 50%;
   background: var(--ox-cyan);
 }
 
-/* Override card body padding for showcase */
-.dp-card-showcase .vehicle-card-body {
-  padding: 16px 18px 18px;
+.dp-feature-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ox-text);
+  line-height: 1.3;
+  margin-bottom: 2px;
 }
 
-/* ── PANEL MOCK (using .dealer-status-card) ── */
+.dp-feature-desc {
+  font-size: 12.5px;
+  color: var(--ox-muted);
+  line-height: 1.5;
+}
+
+/* ── PANEL MOCK ── */
 .dp-panel-mock {
   background: var(--ox-surface);
   border: 1px solid var(--ox-border);
-  border-radius: var(--ox-radius-xl);
+  border-radius: 18px;
   overflow: hidden;
   box-shadow: var(--ox-shadow-panel);
 }
@@ -256,7 +309,7 @@
   gap: 8px;
 }
 
-.dp-panel-mock-logo img { height: 15px; opacity: 0.7; }
+.dp-panel-mock-logo img { height: 15px; opacity: 0.65; }
 
 .dp-panel-mock-logo-sep {
   font-size: 11px;
@@ -273,7 +326,7 @@
   font-weight: 600;
   color: var(--ox-muted-2);
   padding: 4px 10px;
-  border-radius: var(--ox-radius-xs);
+  border-radius: 7px;
   border: 1px solid transparent;
 }
 
@@ -287,7 +340,7 @@
   font-size: 10.5px;
   font-weight: 700;
   padding: 5px 12px;
-  border-radius: var(--ox-radius-xs);
+  border-radius: 7px;
   background: var(--ox-surface-primary);
   color: #fff;
   border: none;
@@ -298,38 +351,34 @@
   padding: 14px 16px 16px;
 }
 
-/* Use real dealer-status-card sizing but in a 4-col layout */
+/* KPI grid — uses real .dealer-status-card, override sizing */
 .dp-panel-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 14px;
 }
 
 .dp-panel-mock-body .dealer-status-card {
   min-height: auto;
-  padding: 12px 14px;
+  padding: 11px 13px;
 }
 
 .dp-panel-mock-body .dealer-status-card span {
   font-size: 9px;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .dp-panel-mock-body .dealer-status-card strong {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 }
 
 .dp-panel-mock-body .dealer-status-card p {
   font-size: 10px;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 /* vehicle grid inside mock */
-.dp-panel-vehicle-row {
-  margin-top: 4px;
-}
-
 .dp-panel-vehicle-label {
   font-size: 9.5px;
   font-weight: 700;
@@ -343,32 +392,33 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
+  margin-bottom: 12px;
 }
 
 /* mini vehicle card inside mock */
 .dp-mini-veh {
   background: var(--ox-card);
   border: 1px solid var(--ox-border);
-  border-radius: var(--ox-radius-sm);
+  border-radius: 8px;
   overflow: hidden;
 }
 
 .dp-mini-veh-img {
-  height: 42px;
-  background: var(--ox-card-2);
+  height: 40px;
+  background: linear-gradient(145deg, var(--ox-surface), var(--ox-card-2));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 20px;
 }
 
-.dp-mini-veh-body { padding: 7px 8px; }
+.dp-mini-veh-body { padding: 6px 8px; }
 
 .dp-mini-veh-name {
   font-size: 9.5px;
   font-weight: 600;
   color: var(--ox-text-soft);
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -388,7 +438,7 @@
   font-size: 8px;
   font-weight: 600;
   color: var(--ox-green);
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 .dp-mini-veh-status::before {
@@ -399,19 +449,13 @@
 }
 
 /* leads mini */
-.dp-leads-mini {
-  margin-top: 12px;
-  border-top: 1px solid var(--ox-border);
-  padding-top: 10px;
-}
-
 .dp-leads-mini-title {
   font-size: 9.5px;
   font-weight: 700;
   color: var(--ox-muted-2);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 7px;
+  margin-bottom: 6px;
 }
 
 .dp-lead-row {
@@ -421,24 +465,24 @@
   padding: 6px 10px;
   background: var(--ox-card);
   border: 1px solid var(--ox-border);
-  border-radius: var(--ox-radius-xs);
+  border-radius: 7px;
   margin-bottom: 4px;
 }
 
-.dp-lead-name { font-size: 10.5px; font-weight: 600; color: var(--ox-text-soft); }
-.dp-lead-vehicle { font-size: 9px; color: var(--ox-muted-2); margin-top: 1px; }
+.dp-lead-name { font-size: 11px; font-weight: 600; color: var(--ox-text-soft); }
+.dp-lead-vehicle { font-size: 9.5px; color: var(--ox-muted-2); margin-top: 1px; }
 
 .dp-lead-chip {
-  font-size: 8.5px;
+  font-size: 9px;
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 5px;
   white-space: nowrap;
 }
 
-.dp-lead-chip.new   { background: rgba(56, 189, 248, 0.10); color: var(--ox-cyan); border: 1px solid rgba(56, 189, 248, 0.22); }
-.dp-lead-chip.hot   { background: rgba(245, 184, 75, 0.10); color: var(--ox-amber); border: 1px solid rgba(245, 184, 75, 0.22); }
-.dp-lead-chip.done  { background: rgba(34, 197, 94, 0.08); color: var(--ox-green); border: 1px solid rgba(34, 197, 94, 0.18); }
+.dp-lead-chip.new   { background: rgba(56,189,248,0.10); color: var(--ox-cyan); border: 1px solid rgba(56,189,248,0.22); }
+.dp-lead-chip.hot   { background: rgba(245,184,75,0.10); color: var(--ox-amber); border: 1px solid rgba(245,184,75,0.22); }
+.dp-lead-chip.done  { background: rgba(34,197,94,0.08); color: var(--ox-green); border: 1px solid rgba(34,197,94,0.18); }
 
 .dp-panel-mock-caption {
   font-size: 10px;
@@ -448,20 +492,22 @@
   font-style: italic;
 }
 
-/* ── BENEFITS GRID ── */
+/* ── BENEFITS — sin emojis, stat como hero ── */
 .dp-benefits {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  margin-top: 4px;
 }
 
 .dp-benefit-card {
   background: var(--ox-card);
   border: 1px solid var(--ox-border);
-  border-radius: var(--ox-radius-lg);
-  padding: 22px 20px;
-  transition: border-color var(--ox-duration), box-shadow var(--ox-duration);
+  border-radius: 16px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: border-color 220ms, box-shadow 220ms;
 }
 
 .dp-benefit-card:hover {
@@ -469,50 +515,54 @@
   box-shadow: var(--ox-shadow-card-hover);
 }
 
-.dp-benefit-icon {
-  font-size: 22px;
-  display: block;
-  margin-bottom: 12px;
+/* Stat grande arriba — es el anchor visual */
+.dp-benefit-stat {
+  font-family: var(--ox-font-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--ox-cyan);
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+
+.dp-benefit-stat-label {
+  font-size: 11px;
+  color: var(--ox-muted-2);
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+.dp-benefit-divider {
+  width: 28px; height: 2px;
+  background: linear-gradient(90deg, var(--ox-cyan), var(--ox-blue));
+  border-radius: 1px;
+  margin-bottom: 16px;
 }
 
 .dp-benefit-title {
   font-family: var(--ox-font-display);
-  font-size: var(--ox-fs-section-title);
-  font-weight: var(--ox-fw-bold);
+  font-size: 15px;
+  font-weight: 700;
   color: var(--ox-text);
   margin-bottom: 8px;
-  line-height: var(--ox-lh-compact);
+  line-height: 1.25;
 }
 
 .dp-benefit-text {
-  font-size: var(--ox-fs-body-sm);
-  line-height: var(--ox-lh-body);
+  font-size: 13px;
+  line-height: 1.65;
   color: var(--ox-muted);
 }
 
-.dp-benefit-stat {
-  margin-top: 14px;
-  font-family: var(--ox-font-display);
-  font-size: 1.5rem;
-  font-weight: var(--ox-fw-bold);
-  color: var(--ox-cyan);
-  line-height: 1;
-}
-
-.dp-benefit-stat-label {
-  font-size: var(--ox-fs-caption);
-  color: var(--ox-muted-2);
-  margin-top: 3px;
-}
-
-/* ── OFFER CARD ── */
+/* ── OFFER ── */
 .dp-offer {
   background: var(--ox-card);
-  border: 1px solid rgba(56, 189, 248, 0.22);
-  border-radius: var(--ox-radius-xl);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: 20px;
   padding: 48px 52px;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 180px 1fr;
   gap: 52px;
   align-items: center;
   box-shadow: var(--ox-shadow-panel);
@@ -522,8 +572,8 @@
 
 .dp-offer-num {
   font-family: var(--ox-font-display);
-  font-size: 88px;
-  font-weight: var(--ox-fw-bold);
+  font-size: 5.5rem;
+  font-weight: 700;
   background: linear-gradient(135deg, var(--ox-cyan), var(--ox-blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -534,7 +584,7 @@
 
 .dp-offer-unit {
   font-family: var(--ox-font-display);
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--ox-cyan-soft);
   display: block;
@@ -542,18 +592,18 @@
 }
 
 .dp-offer-caption {
-  font-size: var(--ox-fs-caption);
-  font-weight: var(--ox-fw-bold);
+  font-size: 9.5px;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ox-muted-2);
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .dp-offer-title {
   font-family: var(--ox-font-display);
-  font-size: 1.25rem;
-  font-weight: var(--ox-fw-bold);
+  font-size: 1.2rem;
+  font-weight: 700;
   color: var(--ox-text);
   margin-bottom: 18px;
   line-height: 1.3;
@@ -561,11 +611,11 @@
 
 .dp-offer-list {
   list-style: none;
-  padding: 0; margin: 0 0 22px;
+  padding: 0; margin: 0 0 20px;
 }
 
 .dp-offer-list li {
-  font-size: var(--ox-fs-body-sm);
+  font-size: 13.5px;
   color: var(--ox-text-soft);
   padding: 7px 0 7px 20px;
   position: relative;
@@ -580,17 +630,17 @@
   position: absolute; left: 0;
   color: var(--ox-cyan);
   font-weight: 700; font-size: 10px;
-  top: 9px;
+  top: 10px;
 }
 
 .dp-offer-list li strong { color: var(--ox-text); font-weight: 600; }
 
 .dp-offer-note {
-  background: rgba(245, 184, 75, 0.07);
-  border: 1px solid rgba(245, 184, 75, 0.18);
-  border-radius: var(--ox-radius-md);
+  background: rgba(245,184,75,0.06);
+  border: 1px solid rgba(245,184,75,0.18);
+  border-radius: 12px;
   padding: 12px 14px;
-  font-size: var(--ox-fs-body-sm);
+  font-size: 13px;
   color: var(--ox-muted);
   line-height: 1.5;
 }
@@ -600,7 +650,7 @@
 /* ── BOTTOM CTA ── */
 .dp-bottom-cta {
   text-align: center;
-  padding: 72px var(--ox-page-gutter) 80px;
+  padding: 68px var(--ox-page-gutter) 80px;
   position: relative;
   border-top: 1px solid var(--ox-border);
 }
@@ -615,49 +665,53 @@
 
 .dp-bottom-cta-title {
   font-family: var(--ox-font-display);
-  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
-  font-weight: var(--ox-fw-bold);
+  font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+  font-weight: 700;
   color: var(--ox-text);
-  margin-bottom: 14px;
-  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  letter-spacing: -0.015em;
   line-height: 1.1;
 }
 
 .dp-bottom-cta-sub {
   font-size: 14px;
   color: var(--ox-muted);
-  margin-bottom: 30px;
-  max-width: 380px;
+  margin-bottom: 28px;
+  max-width: 480px;
   margin-left: auto;
   margin-right: auto;
-  line-height: var(--ox-lh-body);
+  line-height: 1.65;
 }
 
 /* ── CALLOUT ── */
 .dp-callout {
-  background: rgba(56, 189, 248, 0.05);
-  border: 1px solid rgba(56, 189, 248, 0.16);
-  border-radius: var(--ox-radius-md);
-  padding: 16px 20px;
-  font-family: var(--ox-font-display);
-  font-size: var(--ox-fs-section-title);
-  font-weight: var(--ox-fw-bold);
+  background: rgba(56,189,248,0.05);
+  border: 1px solid rgba(56,189,248,0.16);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--ox-text);
-  line-height: 1.45;
-  margin-top: 14px;
+  line-height: 1.5;
+  margin-top: 12px;
+  font-family: var(--ox-font-display);
 }
 
 .dp-callout em { color: var(--ox-cyan); font-style: normal; }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 760px) {
-  .dp-hero { padding: 56px 0 44px; }
-  .dp-hero-title { font-size: clamp(1.9rem, 9vw, 2.8rem); }
-  .dp-two-col { grid-template-columns: 1fr; gap: 24px; }
+@media (max-width: 900px) {
+  .dp-two-col { grid-template-columns: 1fr; gap: 28px; }
+  .dp-col-sticky { position: static; }
   .dp-benefits { grid-template-columns: 1fr; }
-  .dp-offer { grid-template-columns: 1fr; gap: 28px; padding: 28px 24px; }
-  .dp-offer-num { font-size: 72px; }
+  .dp-offer { grid-template-columns: 1fr; gap: 28px; padding: 28px 24px; text-align: center; }
   .dp-panel-kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .dp-panel-vehicle-grid { grid-template-columns: 1fr; }
+  .dp-panel-vehicle-grid { grid-template-columns: 1fr 1fr; }
   .dp-panel-mock-tabs { display: none; }
+  .dp-hero { padding: 56px var(--ox-page-gutter) 48px; }
+}
+
+@media (max-width: 600px) {
+  .dp-hero-title { font-size: clamp(2rem, 9.5vw, 2.8rem); }
+  .dp-panel-vehicle-grid { grid-template-columns: 1fr; }
 }
