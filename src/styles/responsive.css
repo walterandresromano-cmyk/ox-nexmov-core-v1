@@ -9716,7 +9716,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
 /* Resto de heroes públicos — tratamiento sutil */
 :root[data-theme="light"] .ox-search-hero,
-:root[data-theme="light"] .zero-km-panel.ox-public-hero,
 :root[data-theme="light"] .sell-vehicle-panel,
 :root[data-theme="light"] .join-network-panel,
 :root[data-theme="light"] .about-panel,
