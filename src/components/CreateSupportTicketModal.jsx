@@ -108,6 +108,9 @@ export default function CreateSupportTicketModal({
             <label>
               Asunto
               <input
+                type="text"
+                required
+                maxLength={120}
                 value={form.subject}
                 onChange={(event) => updateField("subject", event.target.value)}
                 placeholder="Ej: No puedo cargar una publicación"

@@ -18,13 +18,17 @@ export default function Layout({
 
   return (
     <div className="app-shell">
+      <a href="#main-content" className="skip-to-main">
+        Saltar al contenido principal
+      </a>
+
       <Header
         currentRoute={currentRoute}
         onNavigate={onNavigate}
         appActions={appActions}
       />
 
-      <main className="app-main">{children}</main>
+      <main id="main-content" className="app-main">{children}</main>
 
       <Footer onNavigate={onNavigate} />
 

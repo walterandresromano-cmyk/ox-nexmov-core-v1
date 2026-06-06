@@ -67,6 +67,15 @@ export default function Footer({ onNavigate }) {
           <button type="button" onClick={() => onNavigate("terms")}>
             Términos y condiciones
           </button>
+          <button type="button" onClick={() => onNavigate("privacy")}>
+            Política de privacidad
+          </button>
+          <button type="button" onClick={() => onNavigate("cookies")}>
+            Política de cookies
+          </button>
+          <button type="button" onClick={() => onNavigate("consumerDefense")}>
+            Defensa del consumidor
+          </button>
           <button type="button" onClick={() => onNavigate("faq")}>
             Seguridad y publicaciones sospechosas
           </button>

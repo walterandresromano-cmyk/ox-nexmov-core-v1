@@ -39,6 +39,25 @@ button {
   background: transparent;
 }
 
+.skip-to-main {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: var(--ox-cyan, #38bdf8);
+  color: #020617;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  transition: top 0.15s;
+}
+
+.skip-to-main:focus {
+  top: 0;
+}
+
 input,
 select,
 textarea {
