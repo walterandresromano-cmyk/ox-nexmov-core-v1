@@ -13,6 +13,7 @@ const FAQ              = lazy(() => import("../modules/public/FAQ.jsx"));
 const LegalPage        = lazy(() => import("../modules/public/LegalPage.jsx"));
 const DealerProfile    = lazy(() => import("../modules/public/DealerProfile.jsx"));
 const PublicVehicleDetailRoute = lazy(() => import("../modules/public/PublicVehicleDetailRoute.jsx"));
+const ComparePage      = lazy(() => import("../modules/public/ComparePage.jsx"));
 const AuthPanel        = lazy(() => import("../modules/auth/AuthPanel.jsx"));
 const ResetPasswordPanel = lazy(() => import("../modules/auth/ResetPasswordPanel.jsx"));
 const BuyerPanel       = lazy(() => import("../modules/buyer/BuyerPanel.jsx"));
@@ -54,6 +55,7 @@ const ROUTES = {
   support: SupportPanel,
   dealerProfile: DealerProfile,
   vehicleDetail: PublicVehicleDetailRoute,
+  compare: ComparePage,
 };
 
 const PUBLIC_ROUTES = new Set([
@@ -74,6 +76,7 @@ const PUBLIC_ROUTES = new Set([
   "resetPassword",
   "dealerProfile",
   "vehicleDetail",
+  "compare",
 ]);
 
 const PATH_TO_ROUTE = {
@@ -91,6 +94,7 @@ const PATH_TO_ROUTE = {
   "/legal/defensa-consumidor": "consumerDefense",
   "/legal/arrepentimiento": "regret",
   "/legal/baja-servicio": "serviceCancel",
+  "/comparar": "compare",
 };
 
 const ROUTE_TO_PATH = Object.entries(PATH_TO_ROUTE).reduce(
@@ -124,6 +128,7 @@ const ROUTE_TITLES = {
   support: "Panel soporte — oX NEXMOV",
   dealerProfile: "Dealer — oX NEXMOV",
   vehicleDetail: "Detalle de vehiculo - oX NEXMOV",
+  compare: "Comparar vehículos — oX NEXMOV",
 };
 
 const ROUTE_DESCRIPTIONS = {
@@ -134,6 +139,7 @@ const ROUTE_DESCRIPTIONS = {
   joinNetwork: "Sumá tu agencia a oX NEXMOV. Publicaciones premium, leads trazables y herramientas comerciales para dealers verificados.",
   about: "Conocé quiénes somos y por qué construimos oX NEXMOV como un marketplace de vehículos verificados en Argentina.",
   faq: "Preguntas frecuentes sobre oX NEXMOV: cómo funciona, cómo publicar, cómo contactar dealers y cómo comparar vehículos.",
+  compare: "Compará hasta 4 vehículos lado a lado: precio, kilómetros, financiación y specs técnicas. Dealers verificados en oX NEXMOV.",
 };
 
 const THEME_STORAGE_KEY = "ox-nexmov-theme";
@@ -206,6 +212,10 @@ function getVehicleIdFromPath(pathname) {
 function getRouteUrl(route, payload = {}) {
   if (route === "vehicleDetail" && payload?.vehicleId) {
     return `/vehiculo/${encodeURIComponent(payload.vehicleId)}`;
+  }
+
+  if (route === "compare" && payload?.ids) {
+    return `/comparar?ids=${encodeURIComponent(payload.ids)}`;
   }
 
   return ROUTE_TO_PATH[route] || `/#/${route}`;

@@ -1255,6 +1255,69 @@
   transition: all 0.18s ease, transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.compare-tray-secondary {
+  width: 100%;
+  min-height: 30px;
+  margin-top: 6px;
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-pill);
+  background: transparent;
+  color: var(--ox-muted);
+  font-size: 0.67rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.compare-tray-secondary:hover {
+  color: var(--ox-cyan);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+/* ── Compare page (ruta /comparar) ── */
+.compare-page .container {
+  max-width: var(--ox-page-max);
+  padding: var(--ox-page-gutter);
+}
+
+.compare-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-bottom: 32px;
+}
+
+.compare-page-headerblock h1 {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 800;
+  margin: 6px 0 8px;
+  color: var(--ox-text);
+}
+
+.compare-page-headerblock p {
+  color: var(--ox-muted);
+  font-size: 0.875rem;
+  max-width: 480px;
+}
+
+.compare-page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.compare-page-grid {
+  padding-bottom: 60px;
+}
+
+.compare-page-hint {
+  text-align: center;
+  color: var(--ox-muted);
+  margin-top: 24px;
+  font-size: 0.875rem;
+}
+
 .compare-tray-primary:hover {
   transform: translateY(-1px);
   box-shadow: var(--ox-shadow-glow-primary);

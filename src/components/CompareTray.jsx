@@ -338,13 +338,25 @@ export default function CompareTray({ appActions, onNavigate }) {
           </div>
 
           {canOpenComparison ? (
-            <button
-              type="button"
-              className="compare-tray-primary"
-              onClick={() => setShowCompareModal(true)}
-            >
-              Comparar vehículos
-            </button>
+            <>
+              <button
+                type="button"
+                className="compare-tray-primary"
+                onClick={() => setShowCompareModal(true)}
+              >
+                Comparar vehículos
+              </button>
+              <button
+                type="button"
+                className="compare-tray-secondary"
+                onClick={() => {
+                  const ids = compareItems.map((v) => v.id).join(",");
+                  onNavigate?.("compare", { ids });
+                }}
+              >
+                Abrir página completa ↗
+              </button>
+            </>
           ) : (
             <button
               type="button"
