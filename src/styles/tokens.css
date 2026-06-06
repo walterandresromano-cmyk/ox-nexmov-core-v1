@@ -86,7 +86,7 @@
   --ox-font-display: "Space Grotesk", "Outfit", ui-sans-serif, sans-serif;
   --ox-fs-hero-title: clamp(2rem, 2.1vw, 2.75rem);
   --ox-fs-page-title: clamp(1.72rem, 1.82vw, 2.32rem);
-  --ox-fs-section-title: 0.94rem;
+  --ox-fs-section-title: 1.1rem;
   --ox-fs-card-title: 0.92rem;
   --ox-fs-panel-title: 0.86rem;
   --ox-fs-subtitle: 0.78rem;

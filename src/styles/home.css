@@ -330,6 +330,19 @@
     drop-shadow(0 0 20px rgba(37, 99, 235, 0.18));
 }
 
+.ox-home-hero-tagline {
+  font-family: var(--ox-font-display);
+  font-size: var(--ox-fs-caption);
+  font-weight: var(--ox-fw-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.60);
+}
+
+:root[data-theme="light"] .ox-home-hero-tagline {
+  color: rgba(30, 58, 95, 0.45);
+}
+
 .ox-home-hero-car-fallback-v3 {
   position: relative;
   z-index: 1;
@@ -1023,7 +1036,7 @@
   display: block;
   margin-top: 6px;
   color: rgba(203, 213, 225, 0.68);
-  font-size: 0.58rem;
+  font-size: 0.76rem;
   line-height: 1.22;
 }
 
@@ -2284,6 +2297,20 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
+:root[data-theme="light"] .ox-home-hero-copy-v3 h1 {
+  color: rgba(2, 15, 38, 0.96);
+}
+
+:root[data-theme="light"] .ox-home-hero-copy-v3 > p {
+  color: rgba(12, 36, 68, 0.80);
+}
+
+:root[data-theme="light"] .ox-home-eyebrow-v3 {
+  color: #075985;
+  border-color: rgba(14, 116, 144, 0.30);
+  background: rgba(14, 165, 233, 0.10);
+}
+
 :root[data-theme="light"] .ox-home-hero-v3 {
   border-color: rgba(14, 116, 144, 0.14);
   background:
@@ -2470,8 +2497,8 @@
 }
 
 :root[data-theme="light"] .ox-home-hero-road {
-  mix-blend-mode: luminosity;
-  opacity: 0.26;
+  mix-blend-mode: multiply;
+  opacity: 0.42;
 }
 
 @media (max-width: 900px) {

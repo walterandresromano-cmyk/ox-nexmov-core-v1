@@ -622,16 +622,8 @@ export default function Home({ onNavigate, appActions = {} }) {
 
           <div className="ox-home-hero-stage-v3" />
 
-          <div className="ox-home-hero-brand">
-            <img
-              className="ox-home-hero-car-v3"
-              src="/hero-car.svg"
-              alt="oX NEXMOV"
-              decoding="async"
-              onError={(event) => {
-                event.currentTarget.style.display = "none";
-              }}
-            />
+          <div className="ox-home-hero-brand" aria-hidden="true">
+            <span className="ox-home-hero-tagline">Argentina · Verificado</span>
           </div>
 
         </section>
@@ -763,11 +755,6 @@ export default function Home({ onNavigate, appActions = {} }) {
                   <div>
                     <strong>{item.title}</strong>
                     <p>{item.text}</p>
-                    <ul>
-                      {item.details.map((detail) => (
-                        <li key={detail}>{detail}</li>
-                      ))}
-                    </ul>
                   </div>
                 </article>
               ))}

@@ -45,20 +45,16 @@ function getMarketBadge(delta) {
   const percent = Number(delta.percent || 0);
   const absolutePercent = Math.abs(percent);
 
-  if (absolutePercent < 0.1) return null;
+  // Only show when meaningfully below market (3%+ difference)
+  if (absolutePercent < 3) return null;
   // Differences over 100% indicate stale reference data (common in AR inflation context)
   if (absolutePercent > 100) return null;
-
-  if (delta.isBelowMarket) {
-    return {
-      tone: "below",
-      text: `${absolutePercent.toFixed(1)}% debajo`,
-    };
-  }
+  // Don't show "above market" — it discourages buyers
+  if (!delta.isBelowMarket) return null;
 
   return {
-    tone: "above",
-    text: `${absolutePercent.toFixed(1)}% arriba`,
+    tone: "below",
+    text: `${Math.round(absolutePercent)}% bajo el mercado`,
   };
 }
 

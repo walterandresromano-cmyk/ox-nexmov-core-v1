@@ -61,8 +61,8 @@
 }
 
 .nav-btn {
-  min-height: 32px;
-  padding: 7px 10px;
+  min-height: 42px;
+  padding: 9px 10px;
   border: 1px solid rgba(148, 163, 184, 0.13);
   border-radius: 999px;
   background: rgba(15, 23, 42, 0.46);
@@ -6692,12 +6692,12 @@ body::-webkit-scrollbar {
 
 .vehicle-card__market {
   width: fit-content;
-  max-width: 92px;
+  max-width: 164px;
   border-radius: 999px;
-  padding: 4px 6px;
-  font-size: 0.46rem;
+  padding: 4px 8px;
+  font-size: 0.62rem;
   line-height: 1;
-  font-weight: 950;
+  font-weight: 800;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -21896,13 +21896,13 @@ body::-webkit-scrollbar {
 }
 
 .vehicle-card__market {
-  max-width: 104px;
+  max-width: 164px;
   min-height: 23px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0 8px;
-  font-size: 0.52rem;
+  font-size: 0.62rem;
 }
 
 .vehicle-card__price-icon {
@@ -22651,7 +22651,7 @@ body::-webkit-scrollbar {
 .nav-btn {
   position: relative;
   isolation: isolate;
-  min-height: 34px;
+  min-height: 42px;
   padding: 0 13px;
   border: 1px solid transparent;
   background: transparent;

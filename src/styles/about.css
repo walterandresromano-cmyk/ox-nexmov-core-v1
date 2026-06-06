@@ -678,9 +678,10 @@
 }
 
 :root[data-theme="light"] .about-hero-road {
-  mix-blend-mode: luminosity;
-  opacity: 0.22;
-  filter: grayscale(1) saturate(0.54) contrast(0.70) brightness(1.34);
+  z-index: 1;
+  mix-blend-mode: multiply;
+  opacity: 0.45;
+  filter: none;
   mask-image: linear-gradient(
     to left,
     rgba(0, 0, 0, 0.88) 0%,
@@ -749,7 +750,10 @@
   }
 
   :root[data-theme="light"] .about-hero-road {
-    opacity: 0.18;
+    z-index: 1;
+    mix-blend-mode: multiply;
+    opacity: 0.38;
+    filter: none;
     mask-image: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0.08) 0%,
