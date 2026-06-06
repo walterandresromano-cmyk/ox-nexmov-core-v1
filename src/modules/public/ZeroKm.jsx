@@ -142,6 +142,9 @@ export default function ZeroKm({ authUser, authProfile }) {
               <label>
                 Nombre completo
                 <input
+                  type="text"
+                  autoComplete="name"
+                  required
                   value={form.fullName}
                   onChange={(event) =>
                     updateField("fullName", event.target.value)
@@ -153,6 +156,9 @@ export default function ZeroKm({ authUser, authProfile }) {
               <label>
                 Email
                 <input
+                  type="email"
+                  autoComplete="email"
+                  required
                   value={form.email}
                   onChange={(event) => updateField("email", event.target.value)}
                   placeholder="tu@email.com"
@@ -162,6 +168,9 @@ export default function ZeroKm({ authUser, authProfile }) {
               <label>
                 Teléfono / WhatsApp
                 <input
+                  type="tel"
+                  autoComplete="tel"
+                  inputMode="tel"
                   value={form.phone}
                   onChange={(event) => updateField("phone", event.target.value)}
                   placeholder="Ej: 11 3806 2294"

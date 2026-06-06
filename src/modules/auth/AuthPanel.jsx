@@ -426,6 +426,8 @@ export default function AuthPanel({
                 <label>
                   Email
                   <input
+                    type="email"
+                    autoComplete="email"
                     value={loginForm.email}
                     onChange={(event) =>
                       updateLogin("email", event.target.value)
@@ -438,6 +440,7 @@ export default function AuthPanel({
                   Contraseña
                   <input
                     type="password"
+                    autoComplete="current-password"
                     value={loginForm.password}
                     onChange={(event) =>
                       updateLogin("password", event.target.value)
@@ -463,6 +466,8 @@ export default function AuthPanel({
                 <label>
                   Nombre
                   <input
+                    type="text"
+                    autoComplete="name"
                     value={registerForm.fullName}
                     onChange={(event) =>
                       updateRegister("fullName", event.target.value)
@@ -474,6 +479,8 @@ export default function AuthPanel({
                 <label>
                   Email
                   <input
+                    type="email"
+                    autoComplete="email"
                     value={registerForm.email}
                     onChange={(event) =>
                       updateRegister("email", event.target.value)
@@ -485,6 +492,9 @@ export default function AuthPanel({
                 <label>
                   Teléfono / WhatsApp
                   <input
+                    type="tel"
+                    autoComplete="tel"
+                    inputMode="tel"
                     value={registerForm.phone}
                     onChange={(event) =>
                       updateRegister("phone", event.target.value)
@@ -559,6 +569,8 @@ export default function AuthPanel({
                 <label>
                   Nombre del responsable
                   <input
+                    type="text"
+                    autoComplete="name"
                     value={registerForm.fullName}
                     onChange={(event) =>
                       updateRegister("fullName", event.target.value)
@@ -570,6 +582,8 @@ export default function AuthPanel({
                 <label>
                   Email autorizado
                   <input
+                    type="email"
+                    autoComplete="email"
                     value={registerForm.email}
                     onChange={(event) =>
                       updateRegister("email", event.target.value)
@@ -581,6 +595,9 @@ export default function AuthPanel({
                 <label>
                   Teléfono / WhatsApp
                   <input
+                    type="tel"
+                    autoComplete="tel"
+                    inputMode="tel"
                     value={registerForm.phone}
                     onChange={(event) =>
                       updateRegister("phone", event.target.value)
