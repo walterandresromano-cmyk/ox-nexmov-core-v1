@@ -9700,8 +9700,9 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     linear-gradient(180deg, #eef9ff, #dceff8 72%, #eaf6fb) !important;
 }
 
-/* Home hero — tratamiento con profundidad, sin saturar */
-:root[data-theme="light"] .ox-home-hero-v3 {
+/* Home hero + 0km hero — mismo tratamiento */
+:root[data-theme="light"] .ox-home-hero-v3,
+:root[data-theme="light"] .zero-km-panel.ox-public-hero {
   border-color: rgba(14, 116, 144, 0.14) !important;
   background:
     radial-gradient(circle at 8% 0%, rgba(14, 165, 233, 0.12), transparent 36%),
