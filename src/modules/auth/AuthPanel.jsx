@@ -345,6 +345,7 @@ export default function AuthPanel({
                   Nueva contraseña
                   <input
                     type="password"
+                    autoComplete="new-password"
                     value={newPasswordForm.password}
                     onChange={(event) =>
                       updateNewPassword("password", event.target.value)
@@ -362,6 +363,7 @@ export default function AuthPanel({
                   Repetir contraseña
                   <input
                     type="password"
+                    autoComplete="new-password"
                     value={newPasswordForm.confirmPassword}
                     onChange={(event) =>
                       updateNewPassword("confirmPassword", event.target.value)
@@ -507,6 +509,7 @@ export default function AuthPanel({
                   Contraseña
                   <input
                     type="password"
+                    autoComplete="new-password"
                     value={registerForm.password}
                     onChange={(event) =>
                       updateRegister("password", event.target.value)
@@ -610,6 +613,7 @@ export default function AuthPanel({
                   Crear contraseña
                   <input
                     type="password"
+                    autoComplete="new-password"
                     value={registerForm.password}
                     onChange={(event) =>
                       updateRegister("password", event.target.value)
