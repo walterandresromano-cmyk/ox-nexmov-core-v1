@@ -103,8 +103,47 @@ export default function PublicVehicleDetailRoute({
     setMetaContent("name", "twitter:title", title);
     setMetaContent("name", "twitter:description", description);
 
+    // JSON-LD structured data for Google Shopping / rich results
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Vehicle",
+      "name": title,
+      "brand": { "@type": "Brand", "name": vehicle.brand },
+      "model": vehicle.model,
+      "vehicleModelDate": vehicle.year ? String(vehicle.year) : undefined,
+      "mileageFromOdometer": vehicle.kilometers
+        ? { "@type": "QuantitativeValue", "value": vehicle.kilometers, "unitCode": "KMT" }
+        : undefined,
+      "fuelType": vehicle.fuelType || vehicle.raw?.fuel_type || undefined,
+      "vehicleTransmission": vehicle.transmission || vehicle.raw?.transmission || undefined,
+      "bodyType": vehicle.bodyType || vehicle.raw?.body_type || undefined,
+      "description": description,
+      "url": shareUrl,
+      "image": vehicle.mainImageUrl || vehicle.imageUrl || undefined,
+      "offers": {
+        "@type": "Offer",
+        "price": vehicle.price || undefined,
+        "priceCurrency": "ARS",
+        "availability": "https://schema.org/InStock",
+        "url": shareUrl,
+        "seller": vehicle.dealer?.commercialName
+          ? { "@type": "AutoDealer", "name": vehicle.dealer.commercialName }
+          : undefined,
+      },
+    };
+
+    // Remove undefined values to keep the schema clean
+    const cleanJsonLd = JSON.parse(JSON.stringify(jsonLd));
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "ox-vehicle-jsonld";
+    script.textContent = JSON.stringify(cleanJsonLd);
+    document.head.appendChild(script);
+
     return () => {
       document.title = previousTitle;
+      document.getElementById("ox-vehicle-jsonld")?.remove();
     };
   }, [vehicle]);
 
