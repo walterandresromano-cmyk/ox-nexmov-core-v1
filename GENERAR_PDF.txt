@@ -1,0 +1,214 @@
+# 📄 Presentación de Dealers - oX NEXMOV
+
+## Descripción
+
+Este paquete contiene una presentación profesional e institucional para ofrecer la plataforma oX NEXMOV a dealers con acceso gratuito por período limitado.
+
+### Archivos Incluidos
+
+1. **PRESENTACION_DEALERS.html** - Presentación completa de 12 páginas en HTML
+2. **PRESENTACION_DEALERS.md** - Contenido en markdown (referencia)
+3. **GENERAR_PDF.txt** - Instrucciones para convertir a PDF (este archivo)
+
+---
+
+## ✅ Cómo Generar el PDF
+
+### Opción 1: Navegador (Recomendado - Resultado Perfecto)
+
+**Pasos:**
+
+1. **Abrir el HTML en tu navegador:**
+   - Haz doble clic en `PRESENTACION_DEALERS.html`
+   - O arrastra el archivo a tu navegador favorito (Chrome, Firefox, Edge, Safari)
+
+2. **Generar PDF:**
+   - **Windows/Linux:** Presiona `Ctrl + P`
+   - **Mac:** Presiona `Cmd + P`
+
+3. **Configurar impresión:**
+   - En el diálogo de impresión:
+     - Destino: **"Guardar como PDF"**
+     - Márgenes: **Normal**
+     - Escala: **100%**
+     - Fondo: **Habilitar gráficos de fondo**
+     - Papel: **Carta (8.5" × 11")**
+
+4. **Guardar:**
+   - Nombre: `PRESENTACION_DEALERS.pdf`
+   - Ubicación: La carpeta actual del proyecto
+   - Presiona **Guardar**
+
+✨ **¡Listo!** Tendrás un PDF de 12 páginas perfectamente formateado.
+
+---
+
+### Opción 2: Línea de Comandos (Node.js)
+
+Si tienes Node.js instalado:
+
+```bash
+# Instalar html-pdf
+npm install html-pdf
+
+# Generar PDF
+node generate-pdf.js
+```
+
+**Requisitos:** Node.js v14+
+
+---
+
+### Opción 3: Python (WeasyPrint)
+
+Si tienes Python 3.6+:
+
+```bash
+# Instalar WeasyPrint
+pip install weasyprint
+
+# Generar PDF
+python generate-pdf.py
+```
+
+**Requisitos:** Python 3.6+, pip
+
+---
+
+## 📋 Contenido de la Presentación
+
+La presentación incluye:
+
+- **Portada institucional** con branding de oX NEXMOV
+- **Índice** con enlaces a todas las secciones
+- **¿Quiénes Somos?** - Visión y misión
+- **La Oportunidad** - Desafíos del mercado
+- **Nuestra Solución** - Funcionalidades integradas
+- **Ventajas Competitivas** - Diferenciadores clave
+- **Funcionalidades Principales** - Gestión integrada
+- **Beneficios para Dealers** - ROI y eficiencia
+- **Modelo de Operación Gratuito** - 90 días sin costo
+- **Plan de Implementación** - 3 fases de adopción
+- **Métricas de Éxito** - KPIs para medir resultado
+- **Próximos Pasos** - Cómo comenzar
+- **Contacto** - Información de soporte
+
+---
+
+## 🎨 Estilo y Branding
+
+La presentación aplica:
+
+✓ **Paleta de colores oX NEXMOV:**
+  - Azul principal: #0ea5e9, #2563eb
+  - Tonos institucionales grises y plateados
+  - Gradientes profesionales
+
+✓ **Tipografía:**
+  - Segoe UI para óptima legibilidad
+  - Jerarquía clara de títulos
+  - Espaciado profesional
+
+✓ **Diseño:**
+  - Márgenes de 1 pulgada
+  - Tamaño de página: Carta (8.5" × 11")
+  - Orientación: Vertical
+  - 12 páginas impresas
+
+✓ **Elementos visuales:**
+  - Cajas destacadas con información clave
+  - Iconos para secciones
+  - Tablas y grillas de beneficios
+  - Separadores visuales profesionales
+
+---
+
+## 📊 Especificaciones Técnicas
+
+| Propiedad | Valor |
+|-----------|-------|
+| Formato | HTML (converger a PDF) |
+| Páginas | 12 |
+| Tamaño | Carta (8.5" × 11") |
+| Márgenes | 1 pulgada |
+| Idioma | Español |
+| Tema | Modo claro (blanco y azul) |
+| Responsivo | Optimizado para impresión |
+
+---
+
+## 🚀 Cómo Usar la Presentación
+
+### Para Presentar a Dealers
+
+1. **Opción Digital:**
+   - Comparte el PDF por email
+   - O comparte el enlace al HTML si es un servidor web
+   - Abre en reuniones virtuales (Zoom, Teams, etc.)
+
+2. **Opción Impresa:**
+   - Imprime a color para mejor impacto
+   - Usa papel bond de buena calidad
+   - Encuaderna si deseas presentar físicamente
+
+3. **Personalización:**
+   - Edita el HTML para agregar logo o información específica
+   - Cambia contacto/teléfono en la última página
+   - Ajusta fechas según necesario
+
+---
+
+## 💡 Tips Profesionales
+
+✓ **Para mejor impresión:**
+- Abre en Chrome o Edge (mejor soporte CSS para impresión)
+- Habilita "Gráficos de fondo" en opciones de impresión
+- Usa escala al 100%
+- Revisa vista previa antes de guardar
+
+✓ **Para enviar por email:**
+- El PDF es de ~2-3 MB aprox.
+- Cabe en la mayoría de límites de email
+- Envía junto con email de presentación
+- Incluye call-to-action hacia próximo paso
+
+✓ **Para presentaciones en vivo:**
+- Abre el HTML en navegador
+- Usa pantalla completa (F11)
+- Está optimizado para lectura en pantalla
+- Fácil de navegar por secciones
+
+---
+
+## ✏️ Edición
+
+Si necesitas modificar la presentación:
+
+1. **Contenido:** Edita el archivo `PRESENTACION_DEALERS.md` primero
+2. **Estilos:** Modifica CSS en la sección `<style>` del HTML
+3. **Contacto:** Actualiza datos de contacto en última página
+4. **Colores:** Usa código HEX de oX NEXMOV (azules #0ea5e9, #2563eb)
+
+---
+
+## 📧 Soporte
+
+¿Preguntas o problemas?
+
+- **Email:** contacto@oxnexmov.com
+- **WhatsApp:** [Tu número]
+- **Horario:** Lun-Vie 9:00-18:00
+
+---
+
+## 📄 Licencia
+
+Este documento es confidencial y de uso exclusivo para partners y stakeholders autorizados de oX NEXMOV.
+
+Distribución limitada a fines de presentación comercial.
+
+---
+
+**Última actualización:** Junio 2026  
+**Versión:** 1.0  
+**Estado:** Listo para usar

@@ -9,7 +9,6 @@ const NAV_ITEMS = [
   { id: "home", label: "Inicio" },
   { id: "search", label: "Buscar" },
   { id: "zeroKm", label: "Financiación 0km" },
-  { id: "dealerPresentation", label: "Para Dealers" },
   { id: "joinNetwork", label: "Sumate a la red" },
   { id: "about", label: "Quiénes somos" },
   { id: "faq", label: "Preguntas frecuentes" },
@@ -19,7 +18,6 @@ const NAV_ITEMS = [
 const ROUTE_PREFETCH = {
   search: () => import("../modules/public/Search.jsx"),
   zeroKm: () => import("../modules/public/ZeroKm.jsx"),
-  dealerPresentation: () => import("../modules/public/DealerPresentation.jsx"),
   joinNetwork: () => import("../modules/public/JoinNetwork.jsx"),
   about: () => import("../modules/public/About.jsx"),
   faq: () => import("../modules/public/FAQ.jsx"),

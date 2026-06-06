@@ -8,7 +8,6 @@ const Search           = lazy(() => import("../modules/public/Search.jsx"));
 const ZeroKm           = lazy(() => import("../modules/public/ZeroKm.jsx"));
 const SellVehicle      = lazy(() => import("../modules/public/SellVehicle.jsx"));
 const JoinNetwork      = lazy(() => import("../modules/public/JoinNetwork.jsx"));
-const DealerPresentation = lazy(() => import("../modules/public/DealerPresentation.jsx"));
 const About            = lazy(() => import("../modules/public/About.jsx"));
 const FAQ              = lazy(() => import("../modules/public/FAQ.jsx"));
 const LegalPage        = lazy(() => import("../modules/public/LegalPage.jsx"));
@@ -38,7 +37,6 @@ const ROUTES = {
   zeroKm: ZeroKm,
   sellVehicle: SellVehicle,
   joinNetwork: JoinNetwork,
-  dealerPresentation: DealerPresentation,
   about: About,
   faq: FAQ,
   terms: LegalPage,
@@ -64,7 +62,6 @@ const PUBLIC_ROUTES = new Set([
   "zeroKm",
   "sellVehicle",
   "joinNetwork",
-  "dealerPresentation",
   "about",
   "faq",
   "terms",
@@ -84,7 +81,6 @@ const PATH_TO_ROUTE = {
   "/buscar": "search",
   "/financiacion": "zeroKm",
   "/sumate": "joinNetwork",
-  "/dealers": "dealerPresentation",
   "/quienes-somos": "about",
   "/faq": "faq",
   "/login": "login",
@@ -111,7 +107,6 @@ const ROUTE_TITLES = {
   zeroKm: "Financiación 0km — oX NEXMOV",
   sellVehicle: "Garage oX — oX NEXMOV",
   joinNetwork: "Sumate a la red de dealers — oX NEXMOV",
-  dealerPresentation: "Para Dealers — oX NEXMOV",
   about: "Quiénes somos — oX NEXMOV",
   faq: "Preguntas frecuentes — oX NEXMOV",
   terms: "Términos y condiciones — oX NEXMOV",
