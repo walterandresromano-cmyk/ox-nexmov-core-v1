@@ -751,6 +751,8 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
                 Precio publicado
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.price}
                   onChange={(event) => updateField("price", event.target.value)}
                   placeholder="Ej: 19300000"
@@ -761,6 +763,8 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
                 Referencia mercado
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.marketReferencePrice}
                   onChange={(event) =>
                     updateField("marketReferencePrice", event.target.value)
@@ -773,6 +777,8 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
                 Kilómetros
                 <input
                   type="number"
+                  inputMode="numeric"
+                  min="0"
                   value={form.km}
                   onChange={(event) => updateField("km", event.target.value)}
                   placeholder="Ej: 58000"

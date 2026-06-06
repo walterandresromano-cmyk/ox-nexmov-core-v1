@@ -346,6 +346,7 @@ export default function AuthPanel({
                   <input
                     type="password"
                     autoComplete="new-password"
+                    minLength={6}
                     value={newPasswordForm.password}
                     onChange={(event) =>
                       updateNewPassword("password", event.target.value)
@@ -510,6 +511,7 @@ export default function AuthPanel({
                   <input
                     type="password"
                     autoComplete="new-password"
+                    minLength={6}
                     value={registerForm.password}
                     onChange={(event) =>
                       updateRegister("password", event.target.value)
@@ -614,6 +616,7 @@ export default function AuthPanel({
                   <input
                     type="password"
                     autoComplete="new-password"
+                    minLength={6}
                     value={registerForm.password}
                     onChange={(event) =>
                       updateRegister("password", event.target.value)

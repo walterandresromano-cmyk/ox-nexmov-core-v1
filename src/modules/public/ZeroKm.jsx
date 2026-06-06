@@ -180,6 +180,8 @@ export default function ZeroKm({ authUser, authProfile }) {
               <label>
                 Provincia
                 <input
+                  type="text"
+                  autoComplete="address-level1"
                   value={form.province}
                   onChange={(event) =>
                     updateField("province", event.target.value)
@@ -191,6 +193,8 @@ export default function ZeroKm({ authUser, authProfile }) {
               <label>
                 Ciudad
                 <input
+                  type="text"
+                  autoComplete="address-level2"
                   value={form.city}
                   onChange={(event) => updateField("city", event.target.value)}
                   placeholder="Ej: Pilar"
