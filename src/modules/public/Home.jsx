@@ -573,6 +573,9 @@ export default function Home({ onNavigate, appActions = {} }) {
                 )}
 
                 <input
+                  type="search"
+                  autoComplete="off"
+                  aria-label="Buscar vehículos"
                   value={heroSearchText}
                   onChange={(event) => setHeroSearchText(event.target.value)}
                   onKeyDown={(event) => {

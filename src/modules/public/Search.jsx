@@ -1287,6 +1287,9 @@ export default function Search({
                 )}
 
                 <input
+                  type="search"
+                  autoComplete="off"
+                  aria-label="Buscar vehículos"
                   value={searchText}
                   onChange={(event) => setSearchText(event.target.value)}
                   onKeyDown={(event) => {
