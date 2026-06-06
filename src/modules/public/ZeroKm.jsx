@@ -291,6 +291,7 @@ export default function ZeroKm({ authUser, authProfile }) {
                 value={form.message}
                 onChange={(event) => updateField("message", event.target.value)}
                 rows={4}
+                maxLength={1500}
                 placeholder="Contanos qué modelo, entrega o condición comercial querés consultar."
               />
               </label>

@@ -175,6 +175,7 @@ export default function ContactGate({
                 onChange={(event) => updateField("message", event.target.value)}
                 placeholder="Ej: Hola, quiero consultar disponibilidad, financiación o coordinar una visita."
                 rows={4}
+                maxLength={1000}
               />
             </label>
 

@@ -153,6 +153,7 @@ export default function CreateSupportTicketModal({
                 onChange={(event) => updateField("message", event.target.value)}
                 placeholder="Describí el problema o la consulta con la mayor claridad posible."
                 rows={5}
+                maxLength={2000}
               />
             </label>
 
