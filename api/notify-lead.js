@@ -63,8 +63,11 @@ export default async function handler(req, res) {
 
   const results = { push: "skipped", email: "skipped" };
 
+  const isValidEmail = (v) => typeof v === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const isValidId = (v) => Number.isFinite(Number(v)) && Number(v) > 0;
+
   // ── Email via SMTP ──────────────────────────────────────────────
-  if (dealerEmail && SMTP_HOST && SMTP_USER && SMTP_PASS) {
+  if (dealerEmail && isValidEmail(dealerEmail) && SMTP_HOST && SMTP_USER && SMTP_PASS) {
     try {
       const transporter = nodemailer.createTransport({
         host: SMTP_HOST,
@@ -92,7 +95,7 @@ export default async function handler(req, res) {
   }
 
   // ── Web push ────────────────────────────────────────────────────
-  if (dealerId && SERVICE_ROLE_KEY && VAPID_PUBLIC && VAPID_PRIVATE) {
+  if (dealerId && isValidId(dealerId) && SERVICE_ROLE_KEY && VAPID_PUBLIC && VAPID_PRIVATE) {
     try {
       const subRes = await fetch(
         `${SUPABASE_URL}/rest/v1/push_subscriptions?dealer_id=eq.${encodeURIComponent(dealerId)}&select=endpoint,p256dh,auth`,
