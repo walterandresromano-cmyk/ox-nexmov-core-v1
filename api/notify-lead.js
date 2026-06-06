@@ -20,17 +20,25 @@ if (VAPID_PUBLIC && VAPID_PRIVATE) {
   webpush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC, VAPID_PRIVATE);
 }
 
+function escapeHtml(str) {
+  return String(str || "—")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function buildEmailHtml({ dealerName, vehicleTitle, buyerName, buyerEmail, buyerPhone, message, vehiclePrice }) {
   const lines = [
-    `<p>Hola <strong>${dealerName || "Dealer"}</strong>,</p>`,
+    `<p>Hola <strong>${escapeHtml(dealerName) || "Dealer"}</strong>,</p>`,
     `<p>Recibiste una nueva consulta en <strong>oX NEXMOV</strong>.</p>`,
     `<table style="border-collapse:collapse;width:100%;font-family:sans-serif;font-size:14px">`,
-    `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Vehículo</strong></td><td style="padding:8px;border:1px solid #ddd">${vehicleTitle || "—"}</td></tr>`,
+    `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Vehículo</strong></td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(vehicleTitle)}</td></tr>`,
     vehiclePrice ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Precio publicado</strong></td><td style="padding:8px;border:1px solid #ddd">$${Number(vehiclePrice).toLocaleString("es-AR")}</td></tr>` : "",
-    `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Comprador</strong></td><td style="padding:8px;border:1px solid #ddd">${buyerName || "—"}</td></tr>`,
-    buyerEmail ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Email</strong></td><td style="padding:8px;border:1px solid #ddd">${buyerEmail}</td></tr>` : "",
-    buyerPhone ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Teléfono</strong></td><td style="padding:8px;border:1px solid #ddd">${buyerPhone}</td></tr>` : "",
-    message ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Mensaje</strong></td><td style="padding:8px;border:1px solid #ddd">${message}</td></tr>` : "",
+    `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Comprador</strong></td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(buyerName)}</td></tr>`,
+    buyerEmail ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Email</strong></td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(buyerEmail)}</td></tr>` : "",
+    buyerPhone ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Teléfono</strong></td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(buyerPhone)}</td></tr>` : "",
+    message ? `<tr><td style="padding:8px;border:1px solid #ddd;background:#f9f9f9"><strong>Mensaje</strong></td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(message)}</td></tr>` : "",
     `</table>`,
     `<p style="margin-top:16px"><a href="https://www.oxnexmov.com.ar/dealer" style="background:#2563eb;color:#fff;padding:10px 20px;text-decoration:none;border-radius:6px;font-weight:bold">Ver en mi panel</a></p>`,
     `<p style="margin-top:24px;font-size:12px;color:#888">oX NEXMOV — Marketplace de vehículos verificados</p>`,
