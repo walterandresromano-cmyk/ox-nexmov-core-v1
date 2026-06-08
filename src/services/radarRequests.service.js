@@ -155,6 +155,55 @@ export async function listRadarRequestsForDealer() {
   }
 }
 
+// ── Admin: listar todas las solicitudes con datos del comprador ────────
+
+export async function listRadarRequestsForAdmin() {
+  if (!isSupabaseConfigured || !supabase) {
+    return { requests: [], error: { message: "Supabase no configurado." } };
+  }
+
+  try {
+    const { data: requests, error: reqError } = await supabase
+      .from("buyer_radar_requests")
+      .select(
+        "id, user_id, search_text, filters, parsed_intent, notes, trigger_reason, results_count, status, created_at"
+      )
+      .order("created_at", { ascending: false })
+      .limit(500);
+
+    if (reqError) return { requests: [], error: reqError };
+    if (!requests?.length) return { requests: [], error: null };
+
+    // Obtener datos de contacto de los usuarios
+    const userIds = [...new Set(requests.map((r) => r.user_id).filter(Boolean))];
+
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, full_name, email, phone_whatsapp, phone_visible")
+      .in("id", userIds);
+
+    const profileMap = {};
+    for (const p of profiles || []) {
+      profileMap[p.id] = p;
+    }
+
+    return {
+      requests: requests.map((r) => ({
+        ...r,
+        buyerName: profileMap[r.user_id]?.full_name || "Comprador",
+        buyerEmail: profileMap[r.user_id]?.email || "",
+        buyerPhone:
+          profileMap[r.user_id]?.phone_whatsapp ||
+          profileMap[r.user_id]?.phone_visible ||
+          "",
+      })),
+      error: null,
+    };
+  } catch (err) {
+    return { requests: [], error: err };
+  }
+}
+
 // ── Utilidad compartida ───────────────────────────────────────────────
 
 export function buildRadarCriteriaSummary(searchText, filters, parsedIntent) {

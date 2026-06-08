@@ -152,7 +152,7 @@ const faqSections = [
       {
         question: "¿Todas las herramientas están disponibles para todos los planes?",
         answer:
-          "No. Las herramientas disponibles dependen del plan contratado, beneficios habilitados y estado de la beta comercial.",
+          "No. Las herramientas disponibles dependen del plan contratado y los beneficios habilitados para cada nivel.",
       },
     ],
   },
@@ -217,12 +217,12 @@ const faqSections = [
       {
         question: "¿oX NEXMOV certifica el estado mecánico del vehículo?",
         answer:
-          "No. La plataforma no certifica mecánicamente los vehículos. Los datos publicados y datos orientativos de mantenimiento son declarados por el vendedor o dealer, salvo que se indique expresamente lo contrario en futuras etapas.",
+          "No. La plataforma no certifica mecánicamente los vehículos. Los datos publicados y datos orientativos de mantenimiento son declarados por el vendedor o dealer.",
       },
       {
         question: "¿Debo pagar una seña desde oX NEXMOV?",
         answer:
-          "No existe pago de seña dentro de oX NEXMOV en esta etapa. Cualquier operación económica debe ser acordada directamente entre las partes, verificando identidad, documentación y condiciones.",
+          "No existe pago de seña dentro de oX NEXMOV. Cualquier operación económica debe ser acordada directamente entre las partes, verificando identidad, documentación y condiciones.",
       },
     ],
   },

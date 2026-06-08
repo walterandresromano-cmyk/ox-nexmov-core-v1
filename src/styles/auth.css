@@ -10,8 +10,8 @@
 }
 
 .auth-panel {
-  width: min(100% - 28px, 1120px);
-  max-width: 1120px;
+  width: min(100% - 28px, 580px);
+  max-width: 580px;
   margin: 0 auto;
   padding: 24px 34px 28px;
   border-radius: 30px;

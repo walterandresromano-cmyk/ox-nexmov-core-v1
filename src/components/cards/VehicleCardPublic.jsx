@@ -152,6 +152,10 @@ export default function VehicleCardPublic({
               {permissions.rankLabel}
             </span>
 
+            {safeDealer.isFounder && (
+              <span className="founder-badge founder-badge--card">Fundadora</span>
+            )}
+
             <span className="vehicle-card__year">
               {vehicle.year || "Año a confirmar"}
             </span>

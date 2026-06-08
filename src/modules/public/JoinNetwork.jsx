@@ -1,8 +1,9 @@
 ﻿import "../../styles/joinNetwork.css";
 import { DEALER_PLANS } from "../../config/plans.js";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
+import { checkPromoCodeAvailable, claimPromoCode } from "../../services/promoCodes.service.js";
 
 const dealerSignals = [
   "Dealers verificados",
@@ -202,10 +203,11 @@ const initialRequestForm = {
   city: "",
   plan: "",
   vehicleCount: "",
+  activationCode: "",
   message: "",
 };
 
-export default function JoinNetwork({ onNavigate }) {
+export default function JoinNetwork({ onNavigate, routeParams }) {
   const [networkDealers, setNetworkDealers] = useState([]);
   const [isLoadingNetworkDealers, setIsLoadingNetworkDealers] = useState(true);
   const [requestPlan, setRequestPlan] = useState(null);
@@ -213,6 +215,14 @@ export default function JoinNetwork({ onNavigate }) {
   const [requestSent, setRequestSent] = useState(false);
   const [requestLoading, setRequestLoading] = useState(false);
   const [requestError, setRequestError] = useState("");
+  const [promoStatus, setPromoStatus] = useState(null); // null | "checking" | "valid" | "invalid" | "exhausted"
+  const promoDebounceRef = useRef(null);
+
+  useEffect(() => {
+    if (routeParams?.openForm) {
+      openRequestForm("inicio");
+    }
+  }, []);
 
   const plans = planOrder
     .map((planId) => {
@@ -233,6 +243,19 @@ export default function JoinNetwork({ onNavigate }) {
 
   function updateRequest(field, value) {
     setRequestForm((prev) => ({ ...prev, [field]: value }));
+
+    if (field === "activationCode") {
+      const code = String(value || "").trim().toUpperCase();
+      clearTimeout(promoDebounceRef.current);
+      if (!code) { setPromoStatus(null); return; }
+      setPromoStatus("checking");
+      promoDebounceRef.current = setTimeout(async () => {
+        const result = await checkPromoCodeAvailable(code);
+        if (!result.available && result.reason === "invalid") setPromoStatus("invalid");
+        else if (!result.available && result.reason === "exhausted") setPromoStatus("exhausted");
+        else if (result.available) setPromoStatus("valid");
+      }, 400);
+    }
   }
 
   async function handleRequestSubmit(event) {
@@ -260,6 +283,7 @@ export default function JoinNetwork({ onNavigate }) {
           city: requestForm.city,
           plan: planLine,
           vehicleCount: requestForm.vehicleCount || "No especificado",
+          activationCode: requestForm.activationCode || "",
           message: requestForm.message || "",
         }),
       });
@@ -267,6 +291,20 @@ export default function JoinNetwork({ onNavigate }) {
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body?.error || `Error ${res.status}`);
+      }
+
+      if (requestForm.activationCode) {
+        const claim = await claimPromoCode(requestForm.activationCode, requestForm.email);
+        if (!claim.ok) {
+          setRequestError(
+            claim.reason === "exhausted"
+              ? "Este código ya alcanzó su límite de activaciones. No se pudo aplicar el beneficio."
+              : "El código de activación no es válido."
+          );
+          setPromoStatus(claim.reason === "exhausted" ? "exhausted" : "invalid");
+          setRequestLoading(false);
+          return;
+        }
       }
 
       setRequestSent(true);
@@ -404,8 +442,8 @@ export default function JoinNetwork({ onNavigate }) {
 
           <p className="join-network-commercial-note">
             oX NEXMOV no garantiza volumen de consultas ni ventas. Las
-            herramientas disponibles dependen del plan contratado, beneficios
-            habilitados y estado de la beta comercial.
+            herramientas disponibles dependen del plan contratado y los
+            beneficios habilitados.
           </p>
         </section>
 
@@ -419,8 +457,7 @@ export default function JoinNetwork({ onNavigate }) {
               herramientas comerciales según el nivel de operación de tu dealer.
             </p>
             <p className="jnp-pilot-note">
-              Durante la etapa piloto, la activación se realiza con validación
-              administrativa previa.
+              La activación se realiza con validación administrativa previa.
             </p>
           </div>
 
@@ -445,13 +482,13 @@ export default function JoinNetwork({ onNavigate }) {
                 <div className="jnp-price">
                   <div className="jnp-price-top">
                     <span className="jnp-price-list">{plan.price}</span>
-                    <span className="jnp-price-promo-badge">20% OFF piloto</span>
+                    <span className="jnp-price-promo-badge">20% OFF</span>
                   </div>
                   <div className="jnp-price-main">
                     <span className="jnp-price-amount">{plan.promoPrice}</span>
                     <span className="jnp-price-period">/ mes</span>
                   </div>
-                  <span className="jnp-price-promo-note">Promoción válida durante la etapa piloto.</span>
+                  <span className="jnp-price-promo-note">Promoción por tiempo limitado.</span>
                 </div>
 
                 {/* Cup summary */}
@@ -650,6 +687,37 @@ export default function JoinNetwork({ onNavigate }) {
                   </div>
 
                   <label className="jnp-request-label jnp-request-label--full">
+                    Código de activación (opcional)
+                    <input
+                      value={requestForm.activationCode}
+                      onChange={(e) =>
+                        updateRequest("activationCode", e.target.value.toUpperCase())
+                      }
+                      placeholder="Ingresá tu código"
+                      autoComplete="off"
+                    />
+                  </label>
+
+                  {promoStatus === "checking" && (
+                    <div className="auth-message">Verificando código…</div>
+                  )}
+                  {promoStatus === "valid" && (
+                    <div className="auth-message">
+                      Código válido — 60 días de activación gratuita a partir del alta.
+                    </div>
+                  )}
+                  {promoStatus === "exhausted" && (
+                    <div className="auth-warning">
+                      Este código ya alcanzó su límite de activaciones disponibles.
+                    </div>
+                  )}
+                  {promoStatus === "invalid" && (
+                    <div className="auth-warning">
+                      Código no reconocido. Verificá que esté bien escrito.
+                    </div>
+                  )}
+
+                  <label className="jnp-request-label jnp-request-label--full">
                     Mensaje (opcional)
                     <textarea
                       value={requestForm.message}
@@ -681,11 +749,11 @@ export default function JoinNetwork({ onNavigate }) {
           )}
 
           <p className="join-network-commercial-note">
-            Los valores promocionales corresponden a la etapa piloto y pueden
-            actualizarse al finalizar el período comercial acordado. Los planes
-            definen cupos, visibilidad y herramientas de trabajo. La contratación
-            no garantiza resultados comerciales, leads ni ventas. La activación
-            queda sujeta a validación administrativa de oX.
+            Los valores promocionales pueden actualizarse al finalizar el
+            período comercial acordado. Los planes definen cupos, visibilidad
+            y herramientas de trabajo. La contratación no garantiza resultados
+            comerciales, leads ni ventas. La activación queda sujeta a
+            validación administrativa de oX.
           </p>
         </section>
 
@@ -717,7 +785,7 @@ export default function JoinNetwork({ onNavigate }) {
                   <p>
                     {index === 0
                       ? "La agencia inicia el alta desde el acceso operativo."
-                      : "Cada etapa suma contexto para trabajar mejor dentro de la red."}
+                      : "Cada paso suma herramientas para trabajar mejor dentro de la red."}
                   </p>
                 </div>
               </article>

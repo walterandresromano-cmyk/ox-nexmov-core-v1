@@ -152,6 +152,9 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
                 <span className={`admin-chip rank-${dealer.plan}`}>
                   Dealer {PLAN_LABELS[dealer.plan] || dealer.plan}
                 </span>
+                {dealer.isFounder && (
+                  <span className="founder-badge">Concesionaria Fundadora</span>
+                )}
               </div>
               <h1>{dealer.name}</h1>
               <p className="dealer-profile-location">

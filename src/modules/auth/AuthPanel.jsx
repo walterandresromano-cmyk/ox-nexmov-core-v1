@@ -1,5 +1,6 @@
 import "../../styles/auth.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { checkPromoCodeAvailable } from "../../services/promoCodes.service.js";
 import {
   signInWithEmail,
   signOut,
@@ -22,6 +23,7 @@ const initialRegister = {
   email: "",
   phone: "",
   password: "",
+  activationCode: "",
 };
 
 const initialResetPassword = {
@@ -79,6 +81,8 @@ export default function AuthPanel({
     useState(initialResetPassword);
   const [newPasswordForm, setNewPasswordForm] = useState(initialNewPassword);
   const [message, setMessage] = useState("");
+  const [promoStatus, setPromoStatus] = useState(null);
+  const promoDebounceRef = useRef(null);
 
   useEffect(() => {
     if (mode !== "login") return;
@@ -116,6 +120,19 @@ export default function AuthPanel({
       ...current,
       [field]: value,
     }));
+
+    if (field === "activationCode") {
+      const code = String(value || "").trim().toUpperCase();
+      clearTimeout(promoDebounceRef.current);
+      if (!code) { setPromoStatus(null); return; }
+      setPromoStatus("checking");
+      promoDebounceRef.current = setTimeout(async () => {
+        const result = await checkPromoCodeAvailable(code);
+        if (!result.available && result.reason === "invalid") setPromoStatus("invalid");
+        else if (!result.available && result.reason === "exhausted") setPromoStatus("exhausted");
+        else setPromoStatus("valid");
+      }, 400);
+    }
   }
 
   function updateResetPassword(field, value) {
@@ -562,7 +579,7 @@ export default function AuthPanel({
                       <button
                         type="button"
                         className="auth-inline-link"
-                        onClick={() => onNavigate("joinNetwork")}
+                        onClick={() => onNavigate("joinNetwork", { openForm: true })}
                       >
                         completá primero la solicitud comercial
                       </button>
@@ -610,6 +627,38 @@ export default function AuthPanel({
                     placeholder="Ej: 11 3806 2294"
                   />
                 </label>
+
+                <label>
+                  Código de activación
+                  <input
+                    type="text"
+                    autoComplete="off"
+                    value={registerForm.activationCode}
+                    onChange={(event) =>
+                      updateRegister("activationCode", event.target.value.toUpperCase())
+                    }
+                    placeholder="Opcional — ingresá tu código si tenés uno"
+                  />
+                </label>
+
+                {promoStatus === "checking" && (
+                  <div className="auth-message">Verificando código…</div>
+                )}
+                {promoStatus === "valid" && (
+                  <div className="auth-message">
+                    Código válido — 60 días de activación gratuita a partir del alta.
+                  </div>
+                )}
+                {promoStatus === "exhausted" && (
+                  <div className="auth-warning">
+                    Este código ya alcanzó su límite de activaciones disponibles.
+                  </div>
+                )}
+                {promoStatus === "invalid" && (
+                  <div className="auth-warning">
+                    Código no reconocido. Verificá que esté bien escrito.
+                  </div>
+                )}
 
                 <label>
                   Crear contraseña

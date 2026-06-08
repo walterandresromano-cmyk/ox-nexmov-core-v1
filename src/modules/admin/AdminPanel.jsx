@@ -21,9 +21,11 @@ import {
   updateDealerPlanFromAdmin,
   uploadDealerLogoFromAdmin,
   suspendDealerFromAdmin,
+  setDealerFounderStatus,
 } from "../../services/adminDealers.service.js";
 import { persistAdminAction, listAdminActionLogs } from "../../services/adminActionLog.service.js";
 import { getSiteAnalytics, aggregateAnalytics } from "../../services/siteAnalytics.service.js";
+import { listRadarRequestsForAdmin, buildRadarCriteriaSummary } from "../../services/radarRequests.service.js";
 import { formatRelativeTime } from "../../lib/formatters.js";
 
 const ADMIN_MODULES = {
@@ -34,6 +36,7 @@ const ADMIN_MODULES = {
   ZERO_KM: "zeroKm",
   TICKETS: "tickets",
   ACTION_LOG: "actionLog",
+  RADAR: "radar",
 };
 
 const ACTION_LABELS = {
@@ -226,6 +229,10 @@ export default function AdminPanel({ authProfile }) {
   const [siteAnalyticsRows, setSiteAnalyticsRows] = useState([]);
   const [loadingAnalytics, setLoadingAnalytics] = useState(true);
 
+  const [radarRequests, setRadarRequests] = useState([]);
+  const [loadingRadar, setLoadingRadar] = useState(true);
+  const [radarSearch, setRadarSearch] = useState("");
+
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [selectedDealerForSlots, setSelectedDealerForSlots] = useState(null);
   const [selectedDealer, setSelectedDealer] = useState(null);
@@ -391,6 +398,13 @@ export default function AdminPanel({ authProfile }) {
     setLoadingAnalytics(false);
   }
 
+  async function loadRadarRequestsAdmin() {
+    setLoadingRadar(true);
+    const { requests } = await listRadarRequestsForAdmin();
+    setRadarRequests(requests || []);
+    setLoadingRadar(false);
+  }
+
   async function refreshAdminPanel() {
     await Promise.all([
       loadDealers(),
@@ -400,6 +414,7 @@ export default function AdminPanel({ authProfile }) {
       loadSellVehicleLeadsSummary(),
       loadZeroKmLeadsSummary(),
       loadSiteAnalytics(),
+      loadRadarRequestsAdmin(),
     ]);
   }
 
@@ -841,6 +856,26 @@ export default function AdminPanel({ authProfile }) {
     .sort((a, b) => Number(b.views ?? 0) - Number(a.views ?? 0))
     .slice(0, 5);
 
+  const filteredRadarRequests = useMemo(() => {
+    const text = radarSearch.trim().toLowerCase();
+    if (!text) return radarRequests;
+    return radarRequests.filter((r) => {
+      const haystack = [
+        r.buyerName,
+        r.buyerEmail,
+        r.buyerPhone,
+        r.search_text,
+        r.filters?.brand,
+        r.filters?.model,
+        r.status,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(text);
+    });
+  }, [radarRequests, radarSearch]);
+
   const totalSellVehicleLeads = sellVehicleLeads.length;
   const newSellVehicleLeads = sellVehicleLeads.filter(
     (lead) => lead.status === "new"
@@ -1016,6 +1051,13 @@ export default function AdminPanel({ authProfile }) {
         text: `${newSellVehicleLeads} solicitudes nuevas.`,
         module: ADMIN_MODULES.SELL_VEHICLE,
         tone: newSellVehicleLeads > 0 ? "warning" : "neutral",
+      },
+      {
+        label: "Señales Radar",
+        value: radarRequests.filter((r) => r.status === "active").length,
+        text: `${radarRequests.length} señales totales registradas.`,
+        module: ADMIN_MODULES.RADAR,
+        tone: "info",
       },
     ];
 
@@ -1585,6 +1627,15 @@ export default function AdminPanel({ authProfile }) {
 
             <article
               className="dealer-module-card clickable-module-card"
+              onClick={() => openModule(ADMIN_MODULES.RADAR)}
+            >
+              <h3>Radar oX</h3>
+              <p>Señales de búsqueda activas con datos de contacto del comprador.</p>
+              <button type="button">Abrir radar</button>
+            </article>
+
+            <article
+              className="dealer-module-card clickable-module-card"
               onClick={() => openModule(ADMIN_MODULES.ACTION_LOG)}
             >
               <h3>Registro de acciones</h3>
@@ -1698,6 +1749,20 @@ export default function AdminPanel({ authProfile }) {
               )}
 
 
+
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={async () => {
+                await setDealerFounderStatus({
+                  dealerId: selectedDealer.id,
+                  isFounder: !selectedDealer.isFounder,
+                });
+                await refreshAdminPanel();
+              }}
+            >
+              {selectedDealer.isFounder ? "Quitar distintivo Fundadora" : "Marcar como Fundadora"}
+            </button>
 
             <button
               type="button"
@@ -2203,6 +2268,9 @@ export default function AdminPanel({ authProfile }) {
                         <span className="admin-dealer-platinum-badge">
                           PLATINUM
                         </span>
+                      )}
+                      {dealer.isFounder && (
+                        <span className="founder-badge founder-badge--sm">Fundadora</span>
                       )}
                     </td>
 
@@ -2754,6 +2822,108 @@ export default function AdminPanel({ authProfile }) {
     );
   }
 
+  function renderRadarModule() {
+    return (
+      <div className="admin-section-block">
+        <div className="buyer-section-head">
+          <div>
+            <h2>Radar oX</h2>
+            <p>Señales de búsqueda activas de compradores — con datos de contacto del solicitante.</p>
+          </div>
+          <div className="admin-action-row">
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={loadRadarRequestsAdmin}
+              disabled={loadingRadar}
+            >
+              {loadingRadar ? "Cargando…" : "Actualizar"}
+            </button>
+            {renderBackToSummaryButton()}
+          </div>
+        </div>
+
+        <div className="admin-toolbar">
+          <div className="admin-search">
+            <label>Buscar</label>
+            <input
+              value={radarSearch}
+              onChange={(e) => setRadarSearch(e.target.value)}
+              placeholder="Comprador, email, teléfono, marca, modelo..."
+            />
+          </div>
+        </div>
+
+        {loadingRadar ? (
+          <div className="auth-message">Cargando señales radar…</div>
+        ) : filteredRadarRequests.length === 0 ? (
+          <div className="empty-state">No hay señales radar que coincidan.</div>
+        ) : (
+          <div className="admin-table-wrap">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Comprador</th>
+                  <th>Criterios de búsqueda</th>
+                  <th>Resultados</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredRadarRequests.map((r) => {
+                  const criteria = buildRadarCriteriaSummary(
+                    r.search_text,
+                    r.filters,
+                    r.parsed_intent
+                  );
+                  return (
+                    <tr key={r.id}>
+                      <td>
+                        <strong>{formatDateTime(r.created_at)}</strong>
+                      </td>
+                      <td>
+                        <strong>{r.buyerName || "Comprador"}</strong>
+                        {r.buyerEmail && <span>{r.buyerEmail}</span>}
+                        {r.buyerPhone && <span>{r.buyerPhone}</span>}
+                      </td>
+                      <td>
+                        {criteria.length > 0 ? (
+                          <div className="admin-benefits-list">
+                            {criteria.map((c) => (
+                              <span key={c}>{c}</span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span>{r.search_text || "Sin criterios"}</span>
+                        )}
+                      </td>
+                      <td>
+                        <strong>{r.results_count ?? 0}</strong>
+                        <span>al activar</span>
+                      </td>
+                      <td>
+                        <span
+                          className={
+                            r.status === "active"
+                              ? "admin-chip success"
+                              : "admin-chip warning"
+                          }
+                        >
+                          {r.status === "active" ? "Activa" : r.status || "—"}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   function renderActiveModule() {
     if (!activeModule) return renderSummary();
 
@@ -2821,6 +2991,10 @@ export default function AdminPanel({ authProfile }) {
 
     if (activeModule === ADMIN_MODULES.TICKETS) {
       return renderTicketsModule();
+    }
+
+    if (activeModule === ADMIN_MODULES.RADAR) {
+      return renderRadarModule();
     }
 
     if (activeModule === ADMIN_MODULES.ACTION_LOG) {

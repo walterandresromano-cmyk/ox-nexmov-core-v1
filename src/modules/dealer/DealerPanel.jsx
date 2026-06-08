@@ -121,7 +121,7 @@ const DEALER_FEATURE_PREVIEWS = [
     title: "Financiación",
     requiredPlan: "Admin",
     description:
-      "En definición. No disponible durante el piloto.",
+      "Próximamente disponible.",
   },
   {
     id: "metrics",
@@ -1913,6 +1913,9 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
       <span>{permissions.rankLabel}</span>
       <span>{getPlanStatusLabel(dealer.planStatus)}</span>
       <span>{capacityLabel}</span>
+      {dealer.isFounder && (
+        <span className="founder-badge">Concesionaria Fundadora</span>
+      )}
     </div>
 
     {isPlatinum && (
@@ -2523,11 +2526,10 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
             />
             <div className="dealer-module-locked-screen">
               <p className="eyebrow">Financiación</p>
-              <h2>Financiación en definición</h2>
+              <h2>Financiación — próximamente</h2>
               <p>
                 Estamos definiendo el modelo de financiación y su operatoria
-                comercial. Esta herramienta no está disponible durante el
-                piloto.
+                comercial. Esta herramienta estará disponible próximamente.
               </p>
               <button type="button" className="admin-refresh-btn" onClick={handleModuleBack}>
                 Volver

@@ -290,3 +290,19 @@ export async function uploadDealerLogoFromAdmin({ dealerId, file }) {
     error,
   };
 }
+
+/* =========================
+   FOUNDER BADGE
+========================= */
+export async function setDealerFounderStatus({ dealerId, isFounder }) {
+  if (!isSupabaseConfigured || !supabase) {
+    return { error: { message: "Supabase no configurado." } };
+  }
+
+  const { error } = await supabase
+    .from("dealers")
+    .update({ is_founder: Boolean(isFounder) })
+    .eq("id", Number(dealerId));
+
+  return { error: error || null };
+}

@@ -1,5 +1,43 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 
+const LOGIN_ATTEMPTS_KEY = "ox_login_attempts";
+const LOGIN_LOCKOUT_KEY = "ox_login_lockout";
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS = 60_000;
+
+function getLoginThrottle() {
+  try {
+    const lockout = Number(localStorage.getItem(LOGIN_LOCKOUT_KEY) || 0);
+    if (lockout && Date.now() < lockout) {
+      return { locked: true, remainingMs: lockout - Date.now() };
+    }
+    if (lockout && Date.now() >= lockout) {
+      localStorage.removeItem(LOGIN_LOCKOUT_KEY);
+      localStorage.removeItem(LOGIN_ATTEMPTS_KEY);
+    }
+    return { locked: false, attempts: Number(localStorage.getItem(LOGIN_ATTEMPTS_KEY) || 0) };
+  } catch {
+    return { locked: false, attempts: 0 };
+  }
+}
+
+function recordLoginFailure() {
+  try {
+    const attempts = Number(localStorage.getItem(LOGIN_ATTEMPTS_KEY) || 0) + 1;
+    localStorage.setItem(LOGIN_ATTEMPTS_KEY, String(attempts));
+    if (attempts >= MAX_ATTEMPTS) {
+      localStorage.setItem(LOGIN_LOCKOUT_KEY, String(Date.now() + LOCKOUT_MS));
+    }
+  } catch { /* localStorage no disponible */ }
+}
+
+function clearLoginThrottle() {
+  try {
+    localStorage.removeItem(LOGIN_ATTEMPTS_KEY);
+    localStorage.removeItem(LOGIN_LOCKOUT_KEY);
+  } catch { /* noop */ }
+}
+
 export async function getCurrentSession() {
   if (!isSupabaseConfigured) {
     return {
@@ -20,16 +58,31 @@ export async function signInWithEmail({ email, password }) {
   if (!isSupabaseConfigured) {
     return {
       data: null,
-      error: {
-        message: "Supabase no está configurado. Revisá .env.local.",
-      },
+      error: { message: "Supabase no está configurado. Revisá .env.local." },
     };
   }
 
-  return supabase.auth.signInWithPassword({
+  const throttle = getLoginThrottle();
+  if (throttle.locked) {
+    const secs = Math.ceil(throttle.remainingMs / 1000);
+    return {
+      data: null,
+      error: { message: `Demasiados intentos fallidos. Esperá ${secs} segundos antes de reintentar.` },
+    };
+  }
+
+  const result = await supabase.auth.signInWithPassword({
     email: String(email || "").trim().toLowerCase(),
     password,
   });
+
+  if (result.error) {
+    recordLoginFailure();
+  } else {
+    clearLoginThrottle();
+  }
+
+  return result;
 }
 
 export async function signUpBuyer({ email, password, fullName, phone }) {
@@ -55,7 +108,7 @@ export async function signUpBuyer({ email, password, fullName, phone }) {
   });
 }
 
-export async function signUpDealer({ email, password, fullName, phone }) {
+export async function signUpDealer({ email, password, fullName, phone, activationCode }) {
   if (!isSupabaseConfigured || !supabase) {
     return {
       data: null,
@@ -99,10 +152,35 @@ export async function signUpDealer({ email, password, fullName, phone }) {
     };
   }
 
+  let founderResult = null;
+  if (activationCode) {
+    const { data: claimData, error: claimError } = await supabase.rpc(
+      "claim_and_set_founder",
+      {
+        p_code: String(activationCode).trim().toUpperCase(),
+        p_email: cleanEmail,
+      }
+    );
+
+    if (!claimError) {
+      founderResult = claimData;
+      // founderSet: false → código consumido pero dealer aún no existe en tabla.
+      // El admin puede asignarlo manualmente desde el panel después de activar el dealer.
+      if (claimData && !claimData.founderSet) {
+        console.warn(
+          "[claim_and_set_founder] Código consumido pero dealer no encontrado para",
+          cleanEmail,
+          "— asignar distintivo manualmente desde admin."
+        );
+      }
+    }
+  }
+
   return {
     data: {
       ...signUpResponse.data,
       dealerLink: Array.isArray(data) ? data[0] : null,
+      founderResult,
     },
     error: null,
   };
