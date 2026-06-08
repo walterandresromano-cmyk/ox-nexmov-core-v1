@@ -548,26 +548,26 @@ export default function Home({ onNavigate, appActions = {} }) {
             <span className="ox-road-beam ox-road-beam--c" />
           </div>
           <div className="ox-home-hero-copy-v3">
-            <p className="ox-home-eyebrow-v3">
+            <p className="ox-home-eyebrow-v3 ox-hero-reveal ox-hero-reveal--0">
               Red automotriz verificada · Argentina
             </p>
 
             <h1>
-              Comprá con datos reales.
+              <span className="ox-hero-reveal ox-hero-reveal--1">Comprá con datos reales.</span>
               <br />
-              Guardá tu Garage.
+              <span className="ox-hero-reveal ox-hero-reveal--2">Guardá tu Garage.</span>
               <br />
-              Decidí con <span>contexto completo.</span>
+              <span className="ox-hero-reveal ox-hero-reveal--3">Decidí con <span>contexto completo.</span></span>
             </h1>
 
-            <p>
+            <p className="ox-hero-reveal ox-hero-reveal--4">
               Publicaciones revisadas, dealers habilitados, financiación
               visible. Compará y contactá con todo el contexto antes de
               decidir.
             </p>
 
             <form
-              className="ox-home-search-v3 vehicle-autocomplete"
+              className="ox-home-search-v3 vehicle-autocomplete ox-hero-reveal ox-hero-reveal--5"
               onSubmit={handleHeroSearch}
             >
               <div className="vehicle-autocomplete-field">
@@ -601,7 +601,7 @@ export default function Home({ onNavigate, appActions = {} }) {
               <button type="submit">Buscar</button>
             </form>
 
-            <div className="ox-home-primary-actions-v3">
+            <div className="ox-home-primary-actions-v3 ox-hero-reveal ox-hero-reveal--6">
               <button type="button" onClick={() => goToSearch("")}>
                 Buscar vehículos
               </button>

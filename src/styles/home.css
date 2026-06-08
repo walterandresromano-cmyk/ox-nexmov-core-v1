@@ -81,6 +81,48 @@
   min-width: 0;
 }
 
+/* ── Hero reveal ──────────────────────────────────────────────── */
+@keyframes ox-hero-reveal {
+  from {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0% 0 0 0);
+    transform: translateY(0);
+  }
+}
+
+.ox-hero-reveal {
+  display: block;
+  opacity: 0;
+  animation: ox-hero-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Las líneas del h1 son spans inline — override a inline-block */
+h1 .ox-hero-reveal {
+  display: inline-block;
+}
+
+.ox-hero-reveal--0 { animation-delay: 0.05s; }
+.ox-hero-reveal--1 { animation-delay: 0.18s; }
+.ox-hero-reveal--2 { animation-delay: 0.34s; }
+.ox-hero-reveal--3 { animation-delay: 0.50s; }
+.ox-hero-reveal--4 { animation-delay: 0.68s; }
+.ox-hero-reveal--5 { animation-delay: 0.82s; }
+.ox-hero-reveal--6 { animation-delay: 0.96s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ox-hero-reveal {
+    animation: none;
+    opacity: 1;
+    clip-path: none;
+    transform: none;
+  }
+}
+
 .ox-home-eyebrow-v3 {
   width: fit-content;
   margin: 0;
