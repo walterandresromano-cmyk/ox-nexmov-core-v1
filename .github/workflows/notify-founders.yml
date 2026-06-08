@@ -1,0 +1,30 @@
+name: Notificar dealers fundadores
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  notify:
+    name: Enviar actualización al grupo fundador
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Esperar deploy de Vercel (~90s)
+        run: sleep 90
+
+      - name: Llamar endpoint de notificación
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST "${{ secrets.APP_URL }}/api/notify-founders" \
+            -H "x-notify-secret: ${{ secrets.FOUNDERS_NOTIFY_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"message\": \"Nuevas mejoras publicadas en la plataforma.\", \"version\": \"${{ github.sha }}\"}")
+
+          echo "HTTP status: $RESPONSE"
+          if [ "$RESPONSE" != "200" ]; then
+            echo "⚠️  El endpoint respondió $RESPONSE. Verificar logs."
+            exit 1
+          fi
+          echo "✅ Dealers fundadores notificados."
