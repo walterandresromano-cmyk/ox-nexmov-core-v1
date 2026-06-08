@@ -30,6 +30,7 @@ import {
   addBuyerFavorite,
   removeBuyerFavorite,
 } from "../services/buyerFavorites.service.js";
+import { trackPageView } from "../services/siteAnalytics.service.js";
 
 const ROUTES = {
   notFound: NotFound,
@@ -577,6 +578,9 @@ export default function App() {
 
     document.title = title;
 
+    // Analytics: track cada cambio de ruta pública
+    trackPageView(safeCurrentRoute, authProfile?.role ?? null);
+
     function setMetaContent(attr, attrValue, content) {
       let el = document.querySelector(`meta[${attr}="${attrValue}"]`);
       if (!el) {
@@ -593,7 +597,7 @@ export default function App() {
     setMetaContent("property", "og:url", url);
     setMetaContent("name", "twitter:title", title);
     setMetaContent("name", "twitter:description", description);
-  }, [safeCurrentRoute]);
+  }, [safeCurrentRoute, authProfile?.role]);
 
   const CurrentPage = ROUTES[safeCurrentRoute] || NotFound;
 

@@ -23,6 +23,7 @@ import {
   suspendDealerFromAdmin,
 } from "../../services/adminDealers.service.js";
 import { persistAdminAction, listAdminActionLogs } from "../../services/adminActionLog.service.js";
+import { getSiteAnalytics, aggregateAnalytics } from "../../services/siteAnalytics.service.js";
 import { formatRelativeTime } from "../../lib/formatters.js";
 
 const ADMIN_MODULES = {
@@ -222,6 +223,9 @@ export default function AdminPanel({ authProfile }) {
   const [zeroKmLeads, setZeroKmLeads] = useState([]);
   const [zeroKmLeadsError, setZeroKmLeadsError] = useState("");
 
+  const [siteAnalyticsRows, setSiteAnalyticsRows] = useState([]);
+  const [loadingAnalytics, setLoadingAnalytics] = useState(true);
+
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [selectedDealerForSlots, setSelectedDealerForSlots] = useState(null);
   const [selectedDealer, setSelectedDealer] = useState(null);
@@ -380,6 +384,13 @@ export default function AdminPanel({ authProfile }) {
     setZeroKmLeads(supabaseLeads || []);
   }
 
+  async function loadSiteAnalytics() {
+    setLoadingAnalytics(true);
+    const { data } = await getSiteAnalytics({ days: 30 });
+    setSiteAnalyticsRows(data || []);
+    setLoadingAnalytics(false);
+  }
+
   async function refreshAdminPanel() {
     await Promise.all([
       loadDealers(),
@@ -388,6 +399,7 @@ export default function AdminPanel({ authProfile }) {
       loadAdminVehiclesSummary(),
       loadSellVehicleLeadsSummary(),
       loadZeroKmLeadsSummary(),
+      loadSiteAnalytics(),
     ]);
   }
 
@@ -810,7 +822,13 @@ export default function AdminPanel({ authProfile }) {
       vehicle.publication_status === "review"
   ).length;
 
-  // ── Métricas de vistas ────────────────────────────────────────────────────
+  // ── Analytics de tráfico del sitio ───────────────────────────────────────
+  const siteStats = useMemo(
+    () => aggregateAnalytics(siteAnalyticsRows),
+    [siteAnalyticsRows]
+  );
+
+  // ── Métricas de vistas de publicaciones ──────────────────────────────────
   const totalViews = adminVehicles.reduce(
     (sum, v) => sum + Number(v.views ?? 0), 0
   );
@@ -1293,6 +1311,70 @@ export default function AdminPanel({ authProfile }) {
               </div>
             )}
           </section>
+        </section>
+
+        {/* ── Tráfico del sitio (site_page_views) ── */}
+        <section className="admin-section-block">
+          <div className="buyer-section-head">
+            <div>
+              <h2>Tráfico del sitio</h2>
+              <p>Visitas a páginas públicas — últimos 30 días. No incluye paneles privados.</p>
+            </div>
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={loadSiteAnalytics}
+              disabled={loadingAnalytics}
+            >
+              {loadingAnalytics ? "Cargando…" : "Actualizar"}
+            </button>
+          </div>
+
+          <div className="admin-views-kpi-grid">
+            <article className="admin-views-kpi-card">
+              <span>Visitas hoy</span>
+              <strong>{siteStats.todayVisits.toLocaleString("es-AR")}</strong>
+              <p>{siteStats.todayUniqueVisitors} visitantes únicos hoy.</p>
+            </article>
+
+            <article className="admin-views-kpi-card">
+              <span>Últimos 30 días</span>
+              <strong>{siteStats.totalVisits.toLocaleString("es-AR")}</strong>
+              <p>{siteStats.uniqueVisitors} visitantes únicos · {siteStats.uniqueSessions} sesiones.</p>
+            </article>
+
+            <article className="admin-views-kpi-card">
+              <span>Sesiones únicas</span>
+              <strong>{siteStats.uniqueSessions.toLocaleString("es-AR")}</strong>
+              <p>Cada sesión = tab de browser abierta.</p>
+            </article>
+          </div>
+
+          {siteStats.topPages.length > 0 && (
+            <div className="admin-top-viewed">
+              <p className="admin-top-viewed-label">Páginas más visitadas (30 días)</p>
+              <div className="admin-top-viewed-list">
+                {siteStats.topPages.map((item, i) => (
+                  <div key={item.page} className="admin-top-viewed-row">
+                    <span className="admin-top-viewed-rank">#{i + 1}</span>
+                    <div className="admin-top-viewed-info">
+                      <strong>{item.page}</strong>
+                      <span>{Math.round((item.count / siteStats.totalVisits) * 100)}% del tráfico</span>
+                    </div>
+                    <span className="admin-top-viewed-count">
+                      {item.count.toLocaleString("es-AR")} visitas
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!loadingAnalytics && siteStats.totalVisits === 0 && (
+            <div className="admin-ops-empty">
+              Aún no hay datos de tráfico registrados. Las visitas aparecerán acá en tiempo real.
+            </div>
+          )}
         </section>
 
         {/* ── Actividad de la plataforma — vistas ── */}
