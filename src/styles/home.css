@@ -2547,6 +2547,7 @@ h1 .ox-hero-reveal {
   position: absolute;
   inset: 0;
   z-index: -1;
+  will-change: transform;
   background-image: url('/hero-road.webp');
   background-size: cover;
   background-position: center 58%;

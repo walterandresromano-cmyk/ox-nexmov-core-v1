@@ -373,6 +373,10 @@ export default function Home({ onNavigate, appActions = {} }) {
   const [heroSearchText, setHeroSearchText] = useState("");
 
   const latestVehiclesCarouselRef = useRef(null);
+  const heroRef       = useRef(null);
+  const roadRef       = useRef(null);
+  const heroCopyRef   = useRef(null);
+  const parallaxRaf   = useRef(null);
 
   const [extraStats, setExtraStats] = useState({ brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0, activeDealers: 0 });
 
@@ -474,6 +478,29 @@ export default function Home({ onNavigate, appActions = {} }) {
     return () => clearInterval(id);
   }, [featuredCount]);
 
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    function onScroll() {
+      if (parallaxRaf.current) return;
+      parallaxRaf.current = requestAnimationFrame(() => {
+        parallaxRaf.current = null;
+        const { top, height } = hero.getBoundingClientRect();
+        if (top > height || top < -height) return;
+        const offset = -top;
+        if (roadRef.current)     roadRef.current.style.transform     = `translateY(${(offset * 0.30).toFixed(1)}px)`;
+        if (heroCopyRef.current) heroCopyRef.current.style.transform = `translateY(${(offset * 0.12).toFixed(1)}px)`;
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (parallaxRaf.current) cancelAnimationFrame(parallaxRaf.current);
+    };
+  }, []);
+
   const homeStats = useMemo(() => {
     const totalActiveVehicles = publicDealers.reduce(
       (sum, dealer) => sum + Number(dealer.activeVehiclesCount || 0),
@@ -540,14 +567,14 @@ export default function Home({ onNavigate, appActions = {} }) {
     <>
     <section className="page-section ox-home-page-v3">
       <div className="container ox-home-shell-v3">
-        <section className="ox-home-hero-v3">
-          <div className="ox-home-hero-road" aria-hidden="true" />
+        <section className="ox-home-hero-v3" ref={heroRef}>
+          <div className="ox-home-hero-road" aria-hidden="true" ref={roadRef} />
           <div className="ox-road-beams" aria-hidden="true">
             <span className="ox-road-beam ox-road-beam--a" />
             <span className="ox-road-beam ox-road-beam--b" />
             <span className="ox-road-beam ox-road-beam--c" />
           </div>
-          <div className="ox-home-hero-copy-v3">
+          <div className="ox-home-hero-copy-v3" ref={heroCopyRef}>
             <p className="ox-home-eyebrow-v3 ox-hero-reveal ox-hero-reveal--0">
               Red automotriz verificada · Argentina
             </p>
