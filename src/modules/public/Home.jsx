@@ -787,42 +787,60 @@ export default function Home({ onNavigate, appActions = {} }) {
             </div>
 
             <div className="ox-home-stats-v3">
-              <div>
-                <strong>{formatCount(extraStats.activeDealers || homeStats.visibleDealers)}</strong>
-                <span>Dealers activos</span>
-              </div>
-              <div>
-                <strong>{formatCount(homeStats.totalActiveVehicles)}</strong>
-                <span>Publicaciones activas</span>
-              </div>
-              <div>
-                <strong>{formatCount(homeStats.activeLocations.length)}</strong>
-                <span>Plazas con movimiento</span>
-              </div>
-              <div>
-                <strong>{formatCount(homeStats.vehiclesWithImages)}</strong>
-                <span>Imágenes cargadas hoy</span>
-              </div>
-              <div>
-                <strong>{formatCount(extraStats.brands)}</strong>
-                <span>Marcas disponibles</span>
-              </div>
-              <div>
-                <strong>{formatCount(homeStats.provinces)}</strong>
-                <span>Provincias cubiertas</span>
-              </div>
-              <div>
-                <strong>{formatCount(extraStats.reserved)}</strong>
-                <span>Vehículos reservados</span>
-              </div>
-              <div>
-                <strong>{formatCount(extraStats.sold)}</strong>
-                <span>Vehículos vendidos</span>
-              </div>
-              <div>
-                <strong>{formatCount(extraStats.withFinancing)}</strong>
-                <span>Con financiación</span>
-              </div>
+              {(extraStats.activeDealers || homeStats.visibleDealers) > 0 && (
+                <div>
+                  <strong>{formatCount(extraStats.activeDealers || homeStats.visibleDealers)}</strong>
+                  <span>Dealers activos</span>
+                </div>
+              )}
+              {homeStats.totalActiveVehicles > 0 && (
+                <div>
+                  <strong>{formatCount(homeStats.totalActiveVehicles)}</strong>
+                  <span>Publicaciones activas</span>
+                </div>
+              )}
+              {homeStats.activeLocations.length > 0 && (
+                <div>
+                  <strong>{formatCount(homeStats.activeLocations.length)}</strong>
+                  <span>Plazas con movimiento</span>
+                </div>
+              )}
+              {homeStats.vehiclesWithImages > 0 && (
+                <div>
+                  <strong>{formatCount(homeStats.vehiclesWithImages)}</strong>
+                  <span>Imágenes cargadas hoy</span>
+                </div>
+              )}
+              {extraStats.brands > 0 && (
+                <div>
+                  <strong>{formatCount(extraStats.brands)}</strong>
+                  <span>Marcas disponibles</span>
+                </div>
+              )}
+              {homeStats.provinces > 0 && (
+                <div>
+                  <strong>{formatCount(homeStats.provinces)}</strong>
+                  <span>Provincias cubiertas</span>
+                </div>
+              )}
+              {extraStats.reserved > 0 && (
+                <div>
+                  <strong>{formatCount(extraStats.reserved)}</strong>
+                  <span>Vehículos reservados</span>
+                </div>
+              )}
+              {extraStats.sold > 0 && (
+                <div>
+                  <strong>{formatCount(extraStats.sold)}</strong>
+                  <span>Vehículos vendidos</span>
+                </div>
+              )}
+              {extraStats.withFinancing > 0 && (
+                <div>
+                  <strong>{formatCount(extraStats.withFinancing)}</strong>
+                  <span>Con financiación</span>
+                </div>
+              )}
               {extraStats.contacts > 0 && (
                 <div>
                   <strong>{formatCount(extraStats.contacts)}</strong>
