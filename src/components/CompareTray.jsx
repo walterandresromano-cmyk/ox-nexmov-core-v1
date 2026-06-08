@@ -98,6 +98,7 @@ function CompareVehicleCard({
       <button
         type="button"
         className="compare-card-remove"
+        style={{ top: 12, right: 12, left: "auto" }}
         onClick={() => onRemove(vehicle.id)}
         title="Quitar vehículo de la comparación"
         aria-label="Quitar vehículo de la comparación"
