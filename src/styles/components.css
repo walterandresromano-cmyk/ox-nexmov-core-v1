@@ -27401,6 +27401,57 @@ button.buyer-shortlist-compare__slot:hover {
   border-color: rgba(5, 150, 105, 0.18);
 }
 
+/* ── compare-card-quit: botón rediseñado, clase nueva sin legacy overrides ── */
+.compare-card-quit {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  left: auto;
+  bottom: auto;
+  z-index: 6;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 50%;
+  background: rgba(8, 15, 28, 0.64);
+  color: rgba(203, 213, 225, 0.72);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.12s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .compare-card-quit:hover {
+    border-color: rgba(248, 113, 113, 0.32);
+    background: rgba(127, 29, 29, 0.32);
+    color: rgba(252, 165, 165, 0.90);
+    transform: scale(1.08);
+  }
+}
+
+.compare-card-quit:active {
+  transform: scale(0.93);
+}
+
+:root[data-theme="light"] .compare-card-quit {
+  border-color: rgba(100, 116, 139, 0.22);
+  background: rgba(255, 255, 255, 0.82);
+  color: rgba(71, 85, 105, 0.80);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="light"] .compare-card-quit:hover {
+    border-color: rgba(220, 38, 38, 0.28);
+    background: rgba(254, 242, 242, 0.92);
+    color: #dc2626;
+  }
+}
+
 /* ── compare-card-remove: rediseño para lenguaje visual del sitio ──────────── */
 .compare-card-remove {
   top: 12px !important;

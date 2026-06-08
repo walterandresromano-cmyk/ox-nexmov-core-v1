@@ -45,8 +45,7 @@ function CompareCard({ vehicle, onOpenDetail, onRemove }) {
     <article className={`compare-card dealer-rank-${rank.theme}`}>
       <button
         type="button"
-        className="compare-card-remove"
-        style={{ top: 12, right: 12, left: "auto" }}
+        className="compare-card-quit"
         onClick={() => onRemove(vehicle.id)}
         aria-label={`Quitar ${title}`}
         title="Quitar vehículo de la comparación"
