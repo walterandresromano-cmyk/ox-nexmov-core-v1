@@ -810,6 +810,19 @@ export default function AdminPanel({ authProfile }) {
       vehicle.publication_status === "review"
   ).length;
 
+  // ── Métricas de vistas ────────────────────────────────────────────────────
+  const totalViews = adminVehicles.reduce(
+    (sum, v) => sum + Number(v.views ?? 0), 0
+  );
+  const vehiclesWithViews = adminVehicles.filter((v) => Number(v.views ?? 0) > 0).length;
+  const avgViewsPerActive = activeVehicles > 0
+    ? Math.round(totalViews / activeVehicles)
+    : 0;
+  const topViewedVehicles = [...adminVehicles]
+    .filter((v) => Number(v.views ?? 0) > 0)
+    .sort((a, b) => Number(b.views ?? 0) - Number(a.views ?? 0))
+    .slice(0, 5);
+
   const totalSellVehicleLeads = sellVehicleLeads.length;
   const newSellVehicleLeads = sellVehicleLeads.filter(
     (lead) => lead.status === "new"
@@ -1280,6 +1293,63 @@ export default function AdminPanel({ authProfile }) {
               </div>
             )}
           </section>
+        </section>
+
+        {/* ── Actividad de la plataforma — vistas ── */}
+        <section className="admin-section-block">
+          <div className="buyer-section-head">
+            <div>
+              <h2>Actividad de la plataforma</h2>
+              <p>Contadores de vistas acumuladas sobre publicaciones activas.</p>
+            </div>
+            <button
+              type="button"
+              className="table-action-btn"
+              onClick={() => openModule(ADMIN_MODULES.VEHICLES)}
+            >
+              Ver publicaciones
+            </button>
+          </div>
+
+          <div className="admin-views-kpi-grid">
+            <article className="admin-views-kpi-card">
+              <span>Vistas totales</span>
+              <strong>{totalViews.toLocaleString("es-AR")}</strong>
+              <p>Interacciones acumuladas en todas las publicaciones.</p>
+            </article>
+
+            <article className="admin-views-kpi-card">
+              <span>Publicaciones vistas</span>
+              <strong>{vehiclesWithViews}</strong>
+              <p>De {activeVehicles} publicaciones activas recibieron al menos 1 visita.</p>
+            </article>
+
+            <article className="admin-views-kpi-card">
+              <span>Promedio por publicación</span>
+              <strong>{avgViewsPerActive}</strong>
+              <p>Vistas promedio entre publicaciones activas.</p>
+            </article>
+          </div>
+
+          {topViewedVehicles.length > 0 && (
+            <div className="admin-top-viewed">
+              <p className="admin-top-viewed-label">Top publicaciones por vistas</p>
+              <div className="admin-top-viewed-list">
+                {topViewedVehicles.map((v, i) => (
+                  <div key={v.id} className="admin-top-viewed-row">
+                    <span className="admin-top-viewed-rank">#{i + 1}</span>
+                    <div className="admin-top-viewed-info">
+                      <strong>{[v.brand, v.model, v.version].filter(Boolean).join(" ")}</strong>
+                      <span>{v.dealer_name || "Dealer"} · {v.city || v.province || ""}</span>
+                    </div>
+                    <span className="admin-top-viewed-count">
+                      {Number(v.views ?? 0).toLocaleString("es-AR")} vistas
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {false && (

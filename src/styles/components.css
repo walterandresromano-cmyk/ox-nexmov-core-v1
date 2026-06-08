@@ -3333,6 +3333,122 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
+/* ── Admin views metrics ── */
+.admin-views-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 760px) {
+  .admin-views-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-views-kpi-card {
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.07), transparent 50%),
+    rgba(11, 20, 36, 0.60);
+  padding: 16px 18px;
+}
+
+.admin-views-kpi-card span {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ox-muted);
+  margin-bottom: 6px;
+}
+
+.admin-views-kpi-card strong {
+  display: block;
+  font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--ox-cyan);
+  margin-bottom: 6px;
+}
+
+.admin-views-kpi-card p {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--ox-muted);
+  line-height: 1.4;
+}
+
+.admin-top-viewed {
+  border-top: 1px solid var(--ox-border);
+  padding-top: 16px;
+}
+
+.admin-top-viewed-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ox-muted);
+  margin: 0 0 12px;
+}
+
+.admin-top-viewed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-top-viewed-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--ox-border);
+  border-radius: 12px;
+  background: rgba(11, 20, 36, 0.40);
+}
+
+.admin-top-viewed-rank {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ox-muted);
+  min-width: 24px;
+}
+
+.admin-top-viewed-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-top-viewed-info strong {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ox-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-top-viewed-info span {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--ox-muted);
+  margin-top: 2px;
+}
+
+.admin-top-viewed-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ox-cyan);
+  white-space: nowrap;
+}
+
 .buyer-section-head,
 .admin-section-head,
 .dealer-section-head {
