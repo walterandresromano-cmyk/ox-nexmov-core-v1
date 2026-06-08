@@ -16237,3 +16237,22 @@ textarea:focus-visible,
 :root[data-theme="light"] .dealer-module-locked-screen p {
   color: rgba(71, 85, 105, 0.68);
 }
+
+/* ── color-scheme override en responsive — garantiza dropdown dark en mobile ─ */
+select {
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] select {
+  color-scheme: light;
+}
+
+select option {
+  background-color: #0b1424;
+  color: #f2f6fb;
+}
+
+:root[data-theme="light"] select option {
+  background-color: #ffffff;
+  color: #0f172a;
+}

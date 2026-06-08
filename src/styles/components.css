@@ -27622,3 +27622,59 @@ button.buyer-shortlist-compare__slot:hover {
     color: #dc2626 !important;
   }
 }
+
+/* ── Fix global: select + option — color-scheme para dropdown nativo ──────── *
+ * Sin color-scheme: dark los <option> heredan colores del sistema (blanco en  *
+ * Windows) ignorando el background del <select>. La fix aplica a todos los   *
+ * selects dentro de paneles oscuros.                                          *
+ * ─────────────────────────────────────────────────────────────────────────── */
+.admin-filter select,
+.lead-status-control select,
+.admin-panel select,
+.dealer-panel select,
+.zero-km-form select,
+.contact-form select,
+.dealer-settings-section select,
+.inventory-filter-bar select,
+.jnp-request-form select {
+  color-scheme: dark;
+}
+
+.admin-filter select option,
+.lead-status-control select option,
+.admin-panel select option,
+.dealer-panel select option,
+.zero-km-form select option,
+.contact-form select option,
+.dealer-settings-section select option,
+.inventory-filter-bar select option,
+.jnp-request-form select option {
+  background-color: #0b1424;
+  color: #f2f6fb;
+}
+
+/* Light mode: restaurar color-scheme nativo */
+:root[data-theme="light"] .admin-filter select,
+:root[data-theme="light"] .lead-status-control select,
+:root[data-theme="light"] .admin-panel select,
+:root[data-theme="light"] .dealer-panel select,
+:root[data-theme="light"] .zero-km-form select,
+:root[data-theme="light"] .contact-form select,
+:root[data-theme="light"] .dealer-settings-section select,
+:root[data-theme="light"] .inventory-filter-bar select,
+:root[data-theme="light"] .jnp-request-form select {
+  color-scheme: light;
+}
+
+:root[data-theme="light"] .admin-filter select option,
+:root[data-theme="light"] .lead-status-control select option,
+:root[data-theme="light"] .admin-panel select option,
+:root[data-theme="light"] .dealer-panel select option,
+:root[data-theme="light"] .zero-km-form select option,
+:root[data-theme="light"] .contact-form select option,
+:root[data-theme="light"] .dealer-settings-section select option,
+:root[data-theme="light"] .inventory-filter-bar select option,
+:root[data-theme="light"] .jnp-request-form select option {
+  background-color: #ffffff;
+  color: #0f172a;
+}
