@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import ScrambleStat from "../../components/ScrambleStat.jsx";
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
 import VehicleDetailModal from "../../components/cards/VehicleDetailModal.jsx";
 import ContactGate from "./ContactGate.jsx";
@@ -793,64 +794,34 @@ export default function Home({ onNavigate, appActions = {} }) {
 
             <div className="ox-home-stats-v3">
               {(extraStats.activeDealers || homeStats.visibleDealers) > 0 && (
-                <div>
-                  <strong>{formatCount(extraStats.activeDealers || homeStats.visibleDealers)}</strong>
-                  <span>Dealers activos</span>
-                </div>
+                <ScrambleStat value={extraStats.activeDealers || homeStats.visibleDealers} label="Dealers activos" />
               )}
               {homeStats.totalActiveVehicles > 0 && (
-                <div>
-                  <strong>{formatCount(homeStats.totalActiveVehicles)}</strong>
-                  <span>Publicaciones activas</span>
-                </div>
+                <ScrambleStat value={homeStats.totalActiveVehicles} label="Publicaciones activas" />
               )}
               {homeStats.activeLocations.length > 0 && (
-                <div>
-                  <strong>{formatCount(homeStats.activeLocations.length)}</strong>
-                  <span>Plazas con movimiento</span>
-                </div>
+                <ScrambleStat value={homeStats.activeLocations.length} label="Plazas con movimiento" />
               )}
               {homeStats.vehiclesWithImages > 0 && (
-                <div>
-                  <strong>{formatCount(homeStats.vehiclesWithImages)}</strong>
-                  <span>Imágenes cargadas hoy</span>
-                </div>
+                <ScrambleStat value={homeStats.vehiclesWithImages} label="Imágenes cargadas hoy" />
               )}
               {extraStats.brands > 0 && (
-                <div>
-                  <strong>{formatCount(extraStats.brands)}</strong>
-                  <span>Marcas disponibles</span>
-                </div>
+                <ScrambleStat value={extraStats.brands} label="Marcas disponibles" />
               )}
               {homeStats.provinces > 0 && (
-                <div>
-                  <strong>{formatCount(homeStats.provinces)}</strong>
-                  <span>Provincias cubiertas</span>
-                </div>
+                <ScrambleStat value={homeStats.provinces} label="Provincias cubiertas" />
               )}
               {extraStats.reserved > 0 && (
-                <div>
-                  <strong>{formatCount(extraStats.reserved)}</strong>
-                  <span>Vehículos reservados</span>
-                </div>
+                <ScrambleStat value={extraStats.reserved} label="Vehículos reservados" />
               )}
               {extraStats.sold > 0 && (
-                <div>
-                  <strong>{formatCount(extraStats.sold)}</strong>
-                  <span>Vehículos vendidos</span>
-                </div>
+                <ScrambleStat value={extraStats.sold} label="Vehículos vendidos" />
               )}
               {extraStats.withFinancing > 0 && (
-                <div>
-                  <strong>{formatCount(extraStats.withFinancing)}</strong>
-                  <span>Con financiación</span>
-                </div>
+                <ScrambleStat value={extraStats.withFinancing} label="Con financiación" />
               )}
               {extraStats.contacts > 0 && (
-                <div>
-                  <strong>{formatCount(extraStats.contacts)}</strong>
-                  <span>Contactos trazados</span>
-                </div>
+                <ScrambleStat value={extraStats.contacts} label="Contactos trazados" />
               )}
             </div>
 
