@@ -8708,7 +8708,7 @@ body::-webkit-scrollbar {
   gap: var(--ox-space-6);
   margin: calc(var(--ox-space-6) * -1) calc(var(--ox-space-6) * -1)
     var(--ox-space-6);
-  padding: var(--ox-space-6);
+  padding: 28px var(--ox-space-6) 20px;
   border-bottom: 1px solid var(--ox-border);
   background:
     linear-gradient(180deg, rgba(12, 22, 38, 0.98), rgba(12, 22, 38, 0.90));
@@ -8721,7 +8721,10 @@ body::-webkit-scrollbar {
 }
 
 .compare-modal-titleblock .eyebrow {
-  margin: 0 0 var(--ox-space-3);
+  margin: 0 0 var(--ox-space-2);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
 }
 
 .compare-modal-titleblock h2 {
@@ -27396,4 +27399,58 @@ button.buyer-shortlist-compare__slot:hover {
   color: #059669;
   background: rgba(5, 150, 105, 0.05);
   border-color: rgba(5, 150, 105, 0.18);
+}
+
+/* ── compare-card-remove: rediseño para lenguaje visual del sitio ──────────── */
+.compare-card-remove {
+  top: 12px !important;
+  right: 12px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 50% !important;
+  background: rgba(8, 15, 28, 0.64) !important;
+  color: rgba(203, 213, 225, 0.72) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  transition: border-color 0.15s, background 0.15s, color 0.15s !important;
+}
+
+.compare-card-remove::before {
+  content: "" !important;
+  display: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .compare-card-remove:hover {
+    border-color: rgba(248, 113, 113, 0.32) !important;
+    background: rgba(127, 29, 29, 0.32) !important;
+    color: rgba(252, 165, 165, 0.90) !important;
+    box-shadow: 0 4px 12px rgba(127, 29, 29, 0.22) !important;
+    transform: scale(1.06) !important;
+  }
+}
+
+.compare-card-remove:active {
+  transform: scale(0.94) !important;
+}
+
+:root[data-theme="light"] .compare-card-remove {
+  border-color: rgba(100, 116, 139, 0.22) !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  color: rgba(71, 85, 105, 0.80) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="light"] .compare-card-remove:hover {
+    border-color: rgba(220, 38, 38, 0.28) !important;
+    background: rgba(254, 242, 242, 0.92) !important;
+    color: #dc2626 !important;
+  }
 }

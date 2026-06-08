@@ -48,8 +48,11 @@ function CompareCard({ vehicle, onOpenDetail, onRemove }) {
         className="compare-card-remove"
         onClick={() => onRemove(vehicle.id)}
         aria-label={`Quitar ${title}`}
+        title="Quitar vehículo de la comparación"
       >
-        ×
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 1L9 9M9 1L1 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+        </svg>
       </button>
 
       <div className="compare-card-media">
