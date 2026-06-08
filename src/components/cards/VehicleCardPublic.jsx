@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
@@ -119,6 +119,36 @@ export default function VehicleCardPublic({
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [lastLead, setLastLead] = useState(null);
 
+  const cardRef = useRef(null);
+  const rafRef = useRef(null);
+
+  function handleCardMouseMove(e) {
+    const card = cardRef.current;
+    if (!card) return;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const { left, top, width, height } = card.getBoundingClientRect();
+      const x = (e.clientX - left) / width  - 0.5;  // -0.5 a 0.5
+      const y = (e.clientY - top)  / height - 0.5;
+      const rotX = -(y * 10).toFixed(2);
+      const rotY =  (x * 10).toFixed(2);
+      const glareX = (x * 100 + 50).toFixed(1);
+      const glareY = (y * 100 + 50).toFixed(1);
+      card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02,1.02,1.02)`;
+      card.style.setProperty("--glare-x", `${glareX}%`);
+      card.style.setProperty("--glare-y", `${glareY}%`);
+      card.style.setProperty("--glare-opacity", "1");
+    });
+  }
+
+  function handleCardMouseLeave() {
+    const card = cardRef.current;
+    if (!card) return;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    card.style.transform = "";
+    card.style.setProperty("--glare-opacity", "0");
+  }
+
   const safeDealer = dealer || fallbackDealer;
   const permissions = getEffectiveDealerPermissions(safeDealer);
   const rankClass = getRankClass(permissions.rankTheme);
@@ -142,10 +172,14 @@ export default function VehicleCardPublic({
   return (
     <>
       <article
+        ref={cardRef}
         className={`vehicle-card vehicle-card--${rankClass} dealer-rank-${permissions.rankTheme} ${
           reserved ? "vehicle-card-reserved" : ""
-        }`}
+        } vehicle-card--tilt`}
+        onMouseMove={handleCardMouseMove}
+        onMouseLeave={handleCardMouseLeave}
       >
+        <div className="vehicle-card__glare" aria-hidden="true" />
         <div className="vehicle-card__media">
           <div className="vehicle-card__topbar">
             <span className="vehicle-card__rank">
