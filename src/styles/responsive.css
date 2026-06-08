@@ -2435,10 +2435,11 @@
   }
 
   .compare-card-remove {
-    width: 34px;
-    height: 34px;
+    width: 28px;
+    height: 28px;
     top: 12px;
-    left: 12px;
+    right: 12px;
+    left: auto;
   }
 
   .compare-card-media {
@@ -6757,11 +6758,15 @@ html[data-theme="light"] .zero-km-page .zero-km-preview-grid strong,
     border-radius: 20px !important;
   }
 
-  .compare-card-remove,
   .modal-close-btn,
   .vehicle-detail-zoom-button {
     min-width: 32px !important;
     min-height: 32px !important;
+  }
+
+  .compare-card-remove {
+    min-width: 28px !important;
+    min-height: 28px !important;
   }
 
   .compare-modal-actions,
@@ -11035,11 +11040,11 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   }
 
   .compare-card-remove {
-    width: 34px !important;
-    height: 34px !important;
+    width: 28px !important;
+    height: 28px !important;
     top: 12px !important;
-    left: 12px !important;
-    right: auto !important;
+    right: 12px !important;
+    left: auto !important;
   }
 
   .compare-card-media {
