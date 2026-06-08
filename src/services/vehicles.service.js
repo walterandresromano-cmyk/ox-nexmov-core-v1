@@ -370,15 +370,19 @@ export async function getPublicVehicleById(id) {
 
 export async function getPublicInventoryStats() {
   if (!isSupabaseConfigured || !supabase) {
-    return { brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0 };
+    return { brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0, activeDealers: 0 };
   }
 
-  const [brandsRes, reservedRes, soldRes, financingRes, contactsRes] = await Promise.all([
+  const [brandsRes, reservedRes, soldRes, financingRes, contactsRes, activeDealersRes] = await Promise.all([
     supabase.from("vehicles").select("brand").eq("is_active", true).not("brand", "is", null),
     supabase.from("vehicles").select("*", { count: "exact", head: true }).eq("is_active", true).eq("reserved", true),
     supabase.from("vehicles").select("*", { count: "exact", head: true }).eq("publication_status", "sold"),
     supabase.from("vehicles").select("*", { count: "exact", head: true }).eq("is_active", true).not("financing", "is", null),
     supabase.from("vehicle_action_leads").select("*", { count: "exact", head: true }),
+    // Cuenta dealers con plan activo o por vencer, independientemente de si tienen vehículos
+    supabase.from("dealers").select("*", { count: "exact", head: true })
+      .eq("is_active", true)
+      .in("plan_status", ["active", "expiring"]),
   ]);
 
   const brands = new Set(
@@ -391,5 +395,6 @@ export async function getPublicInventoryStats() {
     sold: soldRes.count || 0,
     withFinancing: financingRes.count || 0,
     contacts: contactsRes.count || 0,
+    activeDealers: activeDealersRes.count || 0,
   };
 }

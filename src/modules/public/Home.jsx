@@ -373,7 +373,7 @@ export default function Home({ onNavigate, appActions = {} }) {
 
   const latestVehiclesCarouselRef = useRef(null);
 
-  const [extraStats, setExtraStats] = useState({ brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0 });
+  const [extraStats, setExtraStats] = useState({ brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0, activeDealers: 0 });
 
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [selectedFeaturedVehicle, setSelectedFeaturedVehicle] = useState(null);
@@ -788,7 +788,7 @@ export default function Home({ onNavigate, appActions = {} }) {
 
             <div className="ox-home-stats-v3">
               <div>
-                <strong>{formatCount(homeStats.visibleDealers)}</strong>
+                <strong>{formatCount(extraStats.activeDealers || homeStats.visibleDealers)}</strong>
                 <span>Dealers activos</span>
               </div>
               <div>
