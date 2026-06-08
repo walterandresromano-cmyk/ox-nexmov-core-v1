@@ -540,7 +540,8 @@ export default function Home({ onNavigate, appActions = {} }) {
     <section className="page-section ox-home-page-v3">
       <div className="container ox-home-shell-v3">
         <section className="ox-home-hero-v3">
-          <div className="ox-home-hero-road" aria-hidden="true">
+          <div className="ox-home-hero-road" aria-hidden="true" />
+          <div className="ox-road-beams" aria-hidden="true">
             <span className="ox-road-beam ox-road-beam--a" />
             <span className="ox-road-beam ox-road-beam--b" />
             <span className="ox-road-beam ox-road-beam--c" />
