@@ -2114,7 +2114,7 @@ export default function AdminPanel({ authProfile }) {
                   phone: event.target.value,
                 })
               }
-              placeholder="Ej: 11 3806 2294"
+              placeholder="Ej: 11 XXXX XXXX"
             />
           </div>
 

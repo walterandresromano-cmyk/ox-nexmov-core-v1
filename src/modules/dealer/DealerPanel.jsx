@@ -975,7 +975,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
                 setWhatsappError("");
                 setWhatsappSuccess("");
               }}
-              placeholder="Ej. 11 3806 2294"
+              placeholder="Ej. 11 XXXX XXXX"
             />
           </label>
 

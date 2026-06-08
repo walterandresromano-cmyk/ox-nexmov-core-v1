@@ -173,7 +173,7 @@ export default function ZeroKm({ authUser, authProfile }) {
                   inputMode="tel"
                   value={form.phone}
                   onChange={(event) => updateField("phone", event.target.value)}
-                  placeholder="Ej: 11 3806 2294"
+                  placeholder="Ej: 11 XXXX XXXX"
                 />
               </label>
 

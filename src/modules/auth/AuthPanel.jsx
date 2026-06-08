@@ -519,7 +519,7 @@ export default function AuthPanel({
                     onChange={(event) =>
                       updateRegister("phone", event.target.value)
                     }
-                    placeholder="Ej: 11 3806 2294"
+                    placeholder="Ej: 11 XXXX XXXX"
                   />
                 </label>
 
@@ -624,7 +624,7 @@ export default function AuthPanel({
                     onChange={(event) =>
                       updateRegister("phone", event.target.value)
                     }
-                    placeholder="Ej: 11 3806 2294"
+                    placeholder="Ej: 11 XXXX XXXX"
                   />
                 </label>
 

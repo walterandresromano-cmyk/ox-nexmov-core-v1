@@ -628,7 +628,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
                         inputMode="tel"
                         value={requestForm.whatsapp}
                         onChange={(e) => updateRequest("whatsapp", e.target.value)}
-                        placeholder="11 3806 2294"
+                        placeholder="11 XXXX XXXX"
                       />
                     </label>
 
