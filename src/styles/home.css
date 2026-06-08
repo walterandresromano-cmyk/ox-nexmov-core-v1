@@ -940,7 +940,37 @@
   mix-blend-mode: luminosity;
   opacity: 0.50;
   pointer-events: none;
+  overflow: hidden;
 }
+
+.ox-home-inventory-road::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(56, 189, 248, 0.0) 10%,
+    rgba(56, 189, 248, 0.45) 40%,
+    rgba(147, 197, 253, 0.6) 50%,
+    rgba(56, 189, 248, 0.45) 60%,
+    rgba(56, 189, 248, 0.0) 90%,
+    transparent 100%
+  );
+  filter: blur(1px);
+  animation: inventory-scan 5s ease-in-out infinite;
+}
+
+@keyframes inventory-scan {
+  0%   { top: -2px;   opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 0.7; }
+  100% { top: 100%;   opacity: 0; }
+}
+
+:root[data-theme="light"] .ox-home-inventory-road::after { display: none; }
 
 .ox-home-inventory-v3 > :not(.ox-home-inventory-road) {
   position: relative;
@@ -2500,6 +2530,50 @@
   mix-blend-mode: multiply;
   opacity: 0.42;
 }
+
+/* ── Luces en la ruta ─────────────────────────────────────────── */
+.ox-road-beam {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: 55%;
+  transform-origin: bottom center;
+  pointer-events: none;
+  border-radius: 999px;
+  opacity: 0;
+  filter: blur(3px);
+}
+
+.ox-road-beam--a {
+  left: 54%;
+  background: linear-gradient(to top, rgba(255, 240, 180, 0.55), transparent);
+  transform: rotate(-6deg) scaleX(8);
+  animation: road-beam 7s ease-in-out 0s infinite;
+}
+
+.ox-road-beam--b {
+  left: 58%;
+  background: linear-gradient(to top, rgba(255, 240, 180, 0.40), transparent);
+  transform: rotate(5deg) scaleX(6);
+  animation: road-beam 7s ease-in-out 3.5s infinite;
+}
+
+.ox-road-beam--c {
+  left: 51%;
+  background: linear-gradient(to top, rgba(200, 220, 255, 0.30), transparent);
+  transform: rotate(-2deg) scaleX(5);
+  animation: road-beam 9s ease-in-out 1.8s infinite;
+}
+
+@keyframes road-beam {
+  0%   { opacity: 0;    height: 10%; }
+  15%  { opacity: 1;    height: 55%; }
+  60%  { opacity: 0.85; height: 58%; }
+  90%  { opacity: 0;    height: 62%; }
+  100% { opacity: 0;    height: 10%; }
+}
+
+:root[data-theme="light"] .ox-road-beam { display: none; }
 
 @media (max-width: 900px) {
   .ox-home-hero-road {
