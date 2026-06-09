@@ -503,7 +503,8 @@ export default function Home({ onNavigate, appActions = {} }) {
         if (inv && invRoad) {
           const { top: invTop, height: invH } = inv.getBoundingClientRect();
           if (invTop <= window.innerHeight && invTop >= -invH) {
-            const offset = (window.innerHeight - invTop) * 0.07;
+            const progress = 1 - (invTop + invH) / (window.innerHeight + invH);
+            const offset = Math.max(0, Math.min(1, progress)) * 50;
             invRoad.style.transform = `translateY(${(-offset).toFixed(1)}px)`;
           }
         }
