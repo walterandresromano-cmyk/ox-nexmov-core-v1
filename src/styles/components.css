@@ -5564,51 +5564,43 @@ button.admin-kpi-card:focus-visible {
   --ox-rank-spark-soft: rgba(229, 231, 235, 0.05);
 }
 
-/* Borde luminoso base */
-.vehicle-card::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  z-index: 0;
-  pointer-events: none;
-  border-radius: calc(var(--ox-radius) + 1px);
-  background: conic-gradient(
-    from var(--ox-border-angle, 0deg),
-    transparent 0%,
-    transparent 40%,
-    var(--ox-rank-spark, transparent) 50%,
-    transparent 60%,
-    transparent 100%
-  );
-  opacity: 0;
-  transition: opacity 0.4s ease;
+/* Borde luminoso Elite / Platinum */
+@keyframes elite-border-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(245, 197, 66, 0.35),
+      0 0 14px rgba(245, 197, 66, 0.12),
+      var(--ox-shadow-card);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1.5px rgba(245, 197, 66, 0.7),
+      0 0 28px rgba(245, 197, 66, 0.22),
+      var(--ox-shadow-card);
+  }
 }
 
-@property --ox-border-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
+@keyframes platinum-border-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(226, 232, 240, 0.30),
+      0 0 14px rgba(226, 232, 240, 0.08),
+      var(--ox-shadow-card);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1.5px rgba(226, 232, 240, 0.65),
+      0 0 32px rgba(148, 163, 184, 0.20),
+      var(--ox-shadow-card);
+  }
 }
 
-@keyframes ox-border-spin {
-  to { --ox-border-angle: 360deg; }
+.vehicle-card.dealer-rank-elite {
+  animation: elite-border-pulse 3s ease-in-out infinite;
 }
 
-.vehicle-card.dealer-rank-elite::before,
-.vehicle-card.dealer-rank-platinum::before {
-  opacity: 1;
-  animation: ox-border-spin 4s linear infinite;
-}
-
-.vehicle-card.dealer-rank-platinum::before {
-  background: conic-gradient(
-    from var(--ox-border-angle, 0deg),
-    transparent 0%,
-    transparent 35%,
-    rgba(229, 231, 235, 0.55) 50%,
-    transparent 65%,
-    transparent 100%
-  );
+.vehicle-card.dealer-rank-platinum {
+  animation: platinum-border-pulse 3s ease-in-out infinite;
 }
 
 /* Punto/destello que recorre el perímetro — desactivado */
