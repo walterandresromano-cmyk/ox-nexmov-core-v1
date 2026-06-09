@@ -569,11 +569,6 @@ export default function Home({ onNavigate, appActions = {} }) {
       <div className="container ox-home-shell-v3">
         <section className="ox-home-hero-v3" ref={heroRef}>
           <div className="ox-home-hero-road" aria-hidden="true" ref={roadRef} />
-          <div className="ox-road-beams" aria-hidden="true">
-            <span className="ox-road-beam ox-road-beam--a" />
-            <span className="ox-road-beam ox-road-beam--b" />
-            <span className="ox-road-beam ox-road-beam--c" />
-          </div>
           <div className="ox-home-hero-copy-v3" ref={heroCopyRef}>
             <p className="ox-home-eyebrow-v3 ox-hero-reveal ox-hero-reveal--0">
               Red automotriz verificada · Argentina

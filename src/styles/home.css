@@ -2576,58 +2576,6 @@ h1 .ox-hero-reveal {
   opacity: 0.42;
 }
 
-/* ── Luces en la ruta ─────────────────────────────────────────── */
-.ox-road-beams {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  overflow: hidden;
-}
-
-.ox-road-beam {
-  position: absolute;
-  bottom: 0;
-  width: 2px;
-  height: 55%;
-  transform-origin: bottom center;
-  pointer-events: none;
-  border-radius: 999px;
-  opacity: 0;
-  filter: blur(3px);
-}
-
-.ox-road-beam--a {
-  left: 66%;
-  background: linear-gradient(to top, rgba(255, 240, 180, 0.7), transparent);
-  transform: rotate(-8deg) scaleX(10);
-  animation: road-beam 7s ease-in-out 0s infinite;
-}
-
-.ox-road-beam--b {
-  left: 72%;
-  background: linear-gradient(to top, rgba(255, 240, 180, 0.5), transparent);
-  transform: rotate(6deg) scaleX(8);
-  animation: road-beam 7s ease-in-out 3.5s infinite;
-}
-
-.ox-road-beam--c {
-  left: 69%;
-  background: linear-gradient(to top, rgba(200, 220, 255, 0.4), transparent);
-  transform: rotate(-1deg) scaleX(6);
-  animation: road-beam 9s ease-in-out 1.8s infinite;
-}
-
-@keyframes road-beam {
-  0%   { opacity: 0;    height: 10%; }
-  15%  { opacity: 1;    height: 55%; }
-  60%  { opacity: 0.85; height: 58%; }
-  90%  { opacity: 0;    height: 62%; }
-  100% { opacity: 0;    height: 10%; }
-}
-
-:root[data-theme="light"] .ox-road-beam { display: none; }
 
 @media (max-width: 900px) {
   .ox-home-hero-road {
