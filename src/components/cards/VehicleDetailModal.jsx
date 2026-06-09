@@ -7,6 +7,7 @@ import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import { getVehicleImages, isVehicleReserved } from "../../lib/vehicle.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleImage from "../VehicleImage.jsx";
+import { useScramble } from "../../hooks/useScramble.js";
 
 
 const MAINTENANCE_SOURCE_KEYS = [
@@ -137,6 +138,11 @@ function getVehicleMaintenanceInfo(vehicle) {
   };
 }
 
+function PriceReveal({ price }) {
+  const display = useScramble(Number(price || 0), { duration: 700, delay: 120 });
+  return <strong className="detail-price">$ {display}</strong>;
+}
+
 export default function VehicleDetailModal({
   vehicle,
   dealer,
@@ -176,6 +182,9 @@ export default function VehicleDetailModal({
   const delta = getMarketDelta(currentVehicle);
   const images = useMemo(() => getVehicleImages(currentVehicle), [currentVehicle]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [slideDir, setSlideDir] = useState(1); // 1 = right, -1 = left
+  const [stickyHeader, setStickyHeader] = useState(false);
+  const modalScrollRef = useRef(null);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomScale, setZoomScale] = useState(1);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
@@ -388,6 +397,7 @@ export default function VehicleDetailModal({
   function navigateImage(dir) {
     const next = selectedImageIndex + dir;
     if (next < 0 || next >= images.length) return;
+    setSlideDir(dir);
     setSelectedImageIndex(next);
     resetImageZoom();
   }
@@ -543,6 +553,14 @@ export default function VehicleDetailModal({
     return () => frame.removeEventListener("wheel", handleWheel);
   }, [handleWheel]);
 
+  useEffect(() => {
+    const el = modalScrollRef.current;
+    if (!el) return;
+    function onScroll() { setStickyHeader(el.scrollTop > 120); }
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
   function handleClose() {
     resetImageZoom();
     onClose();
@@ -596,7 +614,10 @@ export default function VehicleDetailModal({
 
   const modal = (
     <div className="modal-backdrop vehicle-detail-backdrop">
-      <section className={`vehicle-detail-modal vehicle-detail-modal--${permissions.rankTheme}`}>
+      <section
+        ref={modalScrollRef}
+        className={`vehicle-detail-modal vehicle-detail-modal--${permissions.rankTheme}`}
+      >
         <button
           type="button"
           className="modal-close-btn vehicle-detail-close"
@@ -605,6 +626,11 @@ export default function VehicleDetailModal({
         >
           ×
         </button>
+
+        <div className={`vd-sticky-header${stickyHeader ? " is-visible" : ""}`} aria-hidden={!stickyHeader}>
+          <strong>{currentVehicle.brand} {currentVehicle.model} {currentVehicle.year}</strong>
+          <span>{formatARS(currentVehicle.price)}</span>
+        </div>
 
         {vehicles && vehicles.length > 1 && (
           <div className="vehicle-detail-nav">
@@ -666,7 +692,7 @@ export default function VehicleDetailModal({
                     alt={`${currentVehicle.brand} ${currentVehicle.model}`}
                     draggable={false}
                     loading="eager"
-                    className="detail-main-image__photo"
+                    className={`detail-main-image__photo detail-img-slide${slideDir > 0 ? "--right" : "--left"}`}
                     style={{
                       transform: `translate3d(${zoomPosition.x}px, ${zoomPosition.y}px, 0) scale(${zoomScale})`,
                     }}
@@ -763,7 +789,7 @@ export default function VehicleDetailModal({
               </div>
             )}
 
-            <div className="vehicle-detail-quick-specs">
+            <div className="vehicle-detail-quick-specs vd-specs-enter">
               <div>
                 <span>Año</span>
                 <strong>{currentVehicle.year}</strong>
@@ -901,7 +927,7 @@ export default function VehicleDetailModal({
               </div>
             )}
 
-            <strong className="detail-price">{formatARS(currentVehicle.price)}</strong>
+            <PriceReveal price={currentVehicle.price} />
 
             {delta && (
               <div className="detail-market-box">
@@ -1043,7 +1069,7 @@ export default function VehicleDetailModal({
             <div className="detail-actions">
               <button
                 type="button"
-                className="primary-action"
+                className={`primary-action${!reserved ? " detail-cta-pulse" : ""}`}
                 onClick={() => {
                   if (reserved) return;
                   if (appActions) {
