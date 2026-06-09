@@ -373,12 +373,10 @@ export default function Home({ onNavigate, appActions = {} }) {
   const [heroSearchText, setHeroSearchText] = useState("");
 
   const latestVehiclesCarouselRef = useRef(null);
-  const heroRef         = useRef(null);
-  const roadRef         = useRef(null);
-  const heroCopyRef     = useRef(null);
-  const inventoryRef    = useRef(null);
-  const inventoryRoadRef = useRef(null);
-  const parallaxRaf     = useRef(null);
+  const heroRef       = useRef(null);
+  const roadRef       = useRef(null);
+  const heroCopyRef   = useRef(null);
+  const parallaxRaf   = useRef(null);
 
   const [extraStats, setExtraStats] = useState({ brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0, activeDealers: 0 });
 
@@ -497,17 +495,6 @@ export default function Home({ onNavigate, appActions = {} }) {
           if (heroCopyRef.current) heroCopyRef.current.style.transform = `translateY(${(offset * 0.12).toFixed(1)}px)`;
         }
 
-        // Inventory section parallax
-        const inv = inventoryRef.current;
-        const invRoad = inventoryRoadRef.current;
-        if (inv && invRoad) {
-          const { top: invTop, height: invH } = inv.getBoundingClientRect();
-          if (invTop <= window.innerHeight && invTop >= -invH) {
-            const progress = 1 - (invTop + invH) / (window.innerHeight + invH);
-            const offset = Math.max(0, Math.min(1, progress)) * 50;
-            invRoad.style.transform = `translateY(${(-offset).toFixed(1)}px)`;
-          }
-        }
       });
     }
 
@@ -819,8 +806,8 @@ export default function Home({ onNavigate, appActions = {} }) {
         </aside>
 
         <section className="ox-home-intelligence-grid-v3">
-          <article className="ox-home-inventory-v3" ref={inventoryRef}>
-            <div className="ox-home-inventory-road" aria-hidden="true" ref={inventoryRoadRef} />
+          <article className="ox-home-inventory-v3">
+            <div className="ox-home-inventory-road" aria-hidden="true" />
             <h2>Inventario en todo el país</h2>
             <p>La red más activa de Argentina.</p>
 
