@@ -973,7 +973,7 @@ h1 .ox-hero-reveal {
 
 .ox-home-inventory-road {
   position: absolute;
-  inset: 0;
+  inset: -15% 0;
   z-index: 0;
   border-radius: inherit;
   background-image: url("/hero-road.webp");
@@ -2546,7 +2546,7 @@ h1 .ox-hero-reveal {
 /* ── Hero road atmospheric background ──────────────────────── */
 .ox-home-hero-road {
   position: absolute;
-  inset: 0;
+  inset: -15% 0;
   z-index: -1;
   will-change: transform;
   background-image: url('/hero-road.webp');
