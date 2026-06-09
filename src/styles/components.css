@@ -5564,25 +5564,51 @@ button.admin-kpi-card:focus-visible {
   --ox-rank-spark-soft: rgba(229, 231, 235, 0.05);
 }
 
-/* Borde luminoso base — desactivado */
+/* Borde luminoso base */
 .vehicle-card::before {
-  display: none;
   content: "";
   position: absolute;
-  inset: 0;
-  z-index: 2;
+  inset: -1px;
+  z-index: 0;
   pointer-events: none;
-  border-radius: inherit;
-  padding: 1px;
+  border-radius: calc(var(--ox-radius) + 1px);
+  background: conic-gradient(
+    from var(--ox-border-angle, 0deg),
+    transparent 0%,
+    transparent 40%,
+    var(--ox-rank-spark, transparent) 50%,
+    transparent 60%,
+    transparent 100%
+  );
   opacity: 0;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: xor;
+  transition: opacity 0.4s ease;
+}
+
+@property --ox-border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes ox-border-spin {
+  to { --ox-border-angle: 360deg; }
+}
+
+.vehicle-card.dealer-rank-elite::before,
+.vehicle-card.dealer-rank-platinum::before {
+  opacity: 1;
+  animation: ox-border-spin 4s linear infinite;
+}
+
+.vehicle-card.dealer-rank-platinum::before {
+  background: conic-gradient(
+    from var(--ox-border-angle, 0deg),
+    transparent 0%,
+    transparent 35%,
+    rgba(229, 231, 235, 0.55) 50%,
+    transparent 65%,
+    transparent 100%
+  );
 }
 
 /* Punto/destello que recorre el perímetro — desactivado */
@@ -6723,15 +6749,33 @@ body::-webkit-scrollbar {
   object-position: center;
   display: block;
   border-radius: 0;
-  filter: saturate(1.04) contrast(1.03);
+  filter: saturate(1.04) contrast(1.03) brightness(1);
+  transform: scale(1);
   transition:
-    transform 0.3s ease,
-    filter 0.3s ease;
+    transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter 0.65s ease;
+  will-change: transform, filter;
 }
 
 .vehicle-card:hover .vehicle-card__image {
-  transform: scale(1.03);
-  filter: saturate(1.07) contrast(1.04);
+  transform: scale(1.08);
+  filter: saturate(0.85) contrast(1.08) brightness(0.92);
+}
+
+.vehicle-card__media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(2, 6, 23, 0.55) 100%);
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  border-radius: inherit;
+}
+
+.vehicle-card:hover .vehicle-card__media::before {
+  opacity: 1;
 }
 
 .vehicle-card__placeholder {
