@@ -2,6 +2,8 @@ import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 
 import Layout from "../components/Layout.jsx";
 import ErrorBoundary from "../components/ErrorBoundary.jsx";
+import PWAInstallBanner from "../components/PWAInstallBanner.jsx";
+import NotificationOptIn from "../components/NotificationOptIn.jsx";
 import NotFound from "../modules/public/NotFound.jsx";
 import Home from "../modules/public/Home.jsx";
 const Search           = lazy(() => import("../modules/public/Search.jsx"));
@@ -722,6 +724,9 @@ export default function App() {
           </div>
         </Suspense>
       </ErrorBoundary>
+
+      <PWAInstallBanner />
+      <NotificationOptIn authUser={authUser} />
     </Layout>
   );
 }

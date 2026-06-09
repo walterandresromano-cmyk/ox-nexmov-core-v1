@@ -9,6 +9,7 @@ import "./styles/components.css";
 import "./styles/dealer-dashboard.css";
 import "./styles/home.css";
 import "./styles/responsive.css";
+import "./styles/pwa.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

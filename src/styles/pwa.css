@@ -1,0 +1,264 @@
+/* ── PWA Install Banner ───────────────────────────────────────────────────────
+   Aparece en la parte inferior de la pantalla.
+   Chrome/Edge: botón "Instalar" que activa el prompt nativo.
+   iOS: instrucciones con el ícono de Share de Safari.
+────────────────────────────────────────────────────────────────────────────── */
+
+.pwa-install-banner {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  z-index: 1100;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  width: min(480px, calc(100vw - 32px));
+  padding: 14px 16px;
+  border-radius: 18px;
+
+  background: rgba(10, 15, 30, 0.92);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(56, 189, 248, 0.20);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+
+  animation: pwa-slide-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes pwa-slide-up {
+  from { transform: translateX(-50%) translateY(120%); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);   opacity: 1; }
+}
+
+.pwa-install-banner__icon img {
+  display: block;
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.pwa-install-banner__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.pwa-install-banner__title {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 2px;
+}
+
+.pwa-install-banner__desc {
+  font-size: 0.78rem;
+  color: rgba(241, 245, 249, 0.65);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.pwa-install-banner__desc svg {
+  display: inline;
+  vertical-align: middle;
+  margin: 0 2px;
+  color: #38bdf8;
+}
+
+.pwa-install-banner__hl {
+  color: #7dd3fc;
+  font-weight: 600;
+}
+
+.pwa-install-banner__cta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #0ea5e9;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.18s, transform 0.14s;
+}
+
+.pwa-install-banner__cta:hover {
+  background: #38bdf8;
+  transform: scale(1.04);
+}
+
+.pwa-install-banner__close {
+  padding: 6px 8px;
+  background: none;
+  border: none;
+  color: rgba(241, 245, 249, 0.40);
+  font-size: 0.75rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s;
+  align-self: flex-start;
+}
+
+.pwa-install-banner__close:hover {
+  color: rgba(241, 245, 249, 0.80);
+}
+
+/* Light mode */
+:root[data-theme="light"] .pwa-install-banner {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(14, 165, 233, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04) inset;
+}
+
+:root[data-theme="light"] .pwa-install-banner__title { color: #0f172a; }
+:root[data-theme="light"] .pwa-install-banner__desc  { color: rgba(15, 23, 42, 0.60); }
+:root[data-theme="light"] .pwa-install-banner__close { color: rgba(15, 23, 42, 0.35); }
+:root[data-theme="light"] .pwa-install-banner__close:hover { color: rgba(15, 23, 42, 0.70); }
+
+
+/* ── Notification Opt-In ──────────────────────────────────────────────────────
+   Banner inferior para usuarios autenticados que aún no activaron notificaciones.
+────────────────────────────────────────────────────────────────────────────── */
+
+.notif-optin {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); /* encima del pwa-install-banner */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1099;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  width: min(440px, calc(100vw - 32px));
+  padding: 16px;
+  border-radius: 18px;
+
+  background: rgba(10, 15, 30, 0.92);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.50),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+
+  animation: pwa-slide-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.notif-optin__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(139, 92, 246, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a78bfa;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.notif-optin__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-optin__title {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 4px;
+}
+
+.notif-optin__desc {
+  font-size: 0.78rem;
+  color: rgba(241, 245, 249, 0.60);
+  line-height: 1.45;
+  margin: 0 0 10px;
+}
+
+.notif-optin__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.notif-optin__btn {
+  padding: 7px 16px;
+  border-radius: 9px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: background 0.18s, opacity 0.15s, transform 0.14s;
+}
+
+.notif-optin__btn--primary {
+  background: #7c3aed;
+  color: #fff;
+}
+
+.notif-optin__btn--primary:hover:not(:disabled) {
+  background: #8b5cf6;
+  transform: scale(1.03);
+}
+
+.notif-optin__btn--primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.notif-optin__btn--ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(241, 245, 249, 0.60);
+}
+
+.notif-optin__btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(241, 245, 249, 0.85);
+}
+
+.notif-optin__close {
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  color: rgba(241, 245, 249, 0.35);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.notif-optin__close:hover { color: rgba(241, 245, 249, 0.75); }
+
+/* Light mode */
+:root[data-theme="light"] .notif-optin {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(124, 58, 237, 0.22);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04) inset;
+}
+
+:root[data-theme="light"] .notif-optin__title { color: #0f172a; }
+:root[data-theme="light"] .notif-optin__desc  { color: rgba(15, 23, 42, 0.55); }
+:root[data-theme="light"] .notif-optin__btn--ghost { color: rgba(15, 23, 42, 0.50); background: rgba(0,0,0,0.05); }
+:root[data-theme="light"] .notif-optin__close { color: rgba(15, 23, 42, 0.30); }
+
+
+/* ── Reduced motion ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .pwa-install-banner,
+  .notif-optin {
+    animation: none;
+  }
+}

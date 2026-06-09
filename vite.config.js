@@ -10,7 +10,7 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.js",
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "favicon.svg", "logo.svg"],
+      includeAssets: ["favicon.ico", "favicon.svg", "logo.svg", "apple-touch-icon.png", "icons/pwa-192x192.png", "icons/pwa-512x512.png"],
       manifest: {
         name: "oX NEXMOV",
         short_name: "oX NEXMOV",
@@ -18,23 +18,46 @@ export default defineConfig({
         theme_color: "#020617",
         background_color: "#020617",
         display: "standalone",
+        orientation: "portrait",
         start_url: "/",
         scope: "/",
         lang: "es",
         icons: [
+          {
+            src: "/icons/pwa-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/icons/pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/icons/pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
           {
             src: "/favicon.svg",
             sizes: "any",
             type: "image/svg+xml",
             purpose: "any",
           },
-          {
-            src: "/favicon.ico",
-            sizes: "48x48 32x32 16x16",
-            type: "image/x-icon",
-          },
         ],
         categories: ["shopping", "automotive"],
+        screenshots: [
+          {
+            src: "/1hero-car.png",
+            sizes: "1200x630",
+            type: "image/png",
+            form_factor: "wide",
+            label: "oX NEXMOV — Marketplace de vehículos",
+          },
+        ],
       },
       injectManifest: {
         globPatterns: ["**/*.{js,css,html,ico,svg,png,webp}"],
