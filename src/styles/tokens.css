@@ -93,9 +93,9 @@
   --ox-fs-body: 0.875rem;
   --ox-fs-body-sm: 0.8125rem;
   --ox-fs-caption: 0.75rem;
-  --ox-fs-chip: 0.6rem;
-  --ox-fs-micro: 0.52rem;
-  --ox-fs-nano: 0.46rem;
+  --ox-fs-chip: 0.7rem;
+  --ox-fs-micro: 0.625rem;
+  --ox-fs-nano: 0.52rem;
   --ox-fs-input: 0.76rem;
   --ox-fs-button: 0.72rem;
   --ox-fs-button-sm: 0.62rem;
@@ -127,12 +127,12 @@
   --ox-fw-black: 920;
 
   /* Component dimensions */
-  --ox-input-h: 36px;
-  --ox-input-h-page: 42px;
-  --ox-button-h: 36px;
-  --ox-button-h-page: 42px;
-  --ox-button-h-compact: 31px;
-  --ox-card-btn-h: 34px;
+  --ox-input-h: 44px;
+  --ox-input-h-page: 44px;
+  --ox-button-h: 44px;
+  --ox-button-h-page: 44px;
+  --ox-button-h-compact: 36px;
+  --ox-card-btn-h: 40px;
 
   /* Shadows and surfaces */
   --ox-shadow-card:

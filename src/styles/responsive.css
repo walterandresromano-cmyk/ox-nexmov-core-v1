@@ -4220,9 +4220,10 @@
   }
 
   .ox-home-vehicles-carousel-v3 .vehicle-card__btn {
+    min-height: 40px !important;
     min-height: 40px;
     padding-inline: 8px;
-    font-size: 0.58rem;
+    font-size: 0.72rem;
     overflow-wrap: normal;
   }
 }
@@ -4274,9 +4275,10 @@
   }
 
   .ox-home-vehicles-carousel-v3 .vehicle-card__btn {
-    min-height: 38px !important;
+    min-height: 40px !important;
+    min-height: 40px !important;
     padding-inline: 7px !important;
-    font-size: 0.55rem !important;
+    font-size: 0.72rem !important;
     line-height: 1.08;
   }
 }
@@ -7096,7 +7098,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 .ox-home-primary-actions-v3 button,
 .ox-home-section-actions-v3 button,
 .ox-home-chips-v3 button {
-  min-height: 34px !important;
+  min-height: 44px !important;
   border-radius: 999px !important;
   border-color: rgba(14, 116, 144, 0.18) !important;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(231, 246, 253, 0.78)) !important;
@@ -7105,7 +7107,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 .ox-home-chips-v3 button {
-  min-height: 30px !important;
+  min-height: 36px !important;
   padding: 0 12px !important;
 }
 
@@ -7343,7 +7345,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 .ox-home-primary-actions-v3 button,
 .ox-home-section-actions-v3 button,
 .ox-home-chips-v3 button {
-  min-height: 34px !important;
+  min-height: 44px !important;
   border-radius: 999px !important;
   border-color: rgba(14, 116, 144, 0.2) !important;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(231, 246, 253, 0.74)) !important;
@@ -7357,7 +7359,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 .ox-home-chips-v3 button {
-  min-height: 30px !important;
+  min-height: 36px !important;
   padding: 0 12px !important;
 }
 
@@ -8035,7 +8037,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   border-radius: 999px !important;
   background: rgba(14, 165, 233, 0.08) !important;
   color: rgba(125, 211, 252, 0.94) !important;
-  font-size: 0.54rem !important;
+  font-size: 0.68rem !important;
   font-weight: 950 !important;
   letter-spacing: 0.1em !important;
   line-height: 1 !important;
@@ -9895,7 +9897,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
 .ox-search-vehicle-grid .vehicle-card__rank,
 .ox-search-vehicle-grid .vehicle-card__year {
-  font-size: 0.5rem !important;
+  font-size: 0.68rem !important;
   letter-spacing: 0.055em !important;
   font-weight: 950 !important;
   max-width: 62% !important;
@@ -10025,7 +10027,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  min-height: 33px !important;
+  min-height: 40px !important;
   padding: 0 9px !important;
   line-height: 1 !important;
   color: rgba(241, 245, 249, 0.94) !important;
@@ -10074,7 +10076,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   }
 
   .ox-search-vehicle-grid .vehicle-card__btn {
-    min-height: 38px !important;
+    min-height: 40px !important;
   }
 }
 
@@ -10126,7 +10128,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   min-height: 22px !important;
   padding: 0 8px !important;
   border-radius: 999px !important;
-  font-size: 0.5rem !important;
+  font-size: 0.68rem !important;
   letter-spacing: 0.06em !important;
 }
 
@@ -10235,11 +10237,11 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 .ox-search-vehicle-grid .vehicle-card__btn {
-  min-height: 34px !important;
+  min-height: 40px !important;
   padding: 0 9px !important;
   border-radius: 999px !important;
   color: rgba(226, 232, 240, 0.94) !important;
-  font-size: 0.58rem !important;
+  font-size: 0.72rem !important;
   font-weight: 950 !important;
   background:
     linear-gradient(180deg, rgba(30, 41, 59, 0.74), rgba(15, 23, 42, 0.72)) !important;
@@ -10499,7 +10501,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 .ox-search-vehicle-grid .vehicle-card__btn {
-  min-height: 38px !important;
+  min-height: 40px !important;
   border-radius: 999px !important;
   font-size: 0.62rem !important;
 }
@@ -10735,7 +10737,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
 .ox-search-vehicle-grid .vehicle-card__rank,
 .ox-search-vehicle-grid .vehicle-card__year {
-  font-size: 0.54rem !important;
+  font-size: 0.68rem !important;
   max-width: 64% !important;
 }
 
@@ -11816,7 +11818,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 .footer-links button {
-  min-height: 36px !important;
+  min-height: 44px !important;
   font-size: 0.72rem !important;
   font-weight: 850 !important;
   line-height: 1 !important;

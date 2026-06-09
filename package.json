@@ -10,6 +10,7 @@
     "audit": "npm audit --audit-level=moderate"
   },
   "devDependencies": {
+    "playwright": "^1.60.0",
     "vite": "^8.0.10",
     "vite-plugin-pwa": "^1.3.0"
   },

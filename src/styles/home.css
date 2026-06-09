@@ -223,7 +223,7 @@ h1 .ox-hero-reveal {
 }
 
 .ox-home-search-v3 input {
-  min-height: 34px;
+  min-height: 44px;
   border: 0;
   background: transparent;
   color: rgba(248, 250, 252, 0.98);
@@ -268,7 +268,7 @@ h1 .ox-hero-reveal {
 }
 
 .ox-home-primary-actions-v3 button {
-  min-height: 34px;
+  min-height: 44px;
   border: 1px solid rgba(125, 211, 252, 0.28);
   border-radius: var(--ox-radius-pill);
   background: rgba(15, 23, 42, 0.68);
@@ -701,7 +701,7 @@ h1 .ox-hero-reveal {
 .ox-home-section-actions-v3 button {
   display: inline-grid;
   place-items: center;
-  min-height: 28px;
+  min-height: 44px;
   border: 1px solid rgba(56, 189, 248, 0.23);
   border-radius: 999px;
   background: rgba(15, 23, 42, 0.80);
@@ -781,9 +781,9 @@ h1 .ox-hero-reveal {
 
 .ox-home-vehicles-carousel-v3 .vehicle-card__rank,
 .ox-home-vehicles-carousel-v3 .vehicle-card__year {
-  min-height: 25px;
-  padding: 5px 8px;
-  font-size: 0.48rem;
+  min-height: 22px;
+  padding: 2px 8px;
+  font-size: 0.68rem;
 }
 
 .ox-home-vehicles-carousel-v3 .vehicle-card h3 {
@@ -1188,8 +1188,9 @@ h1 .ox-hero-reveal {
   border-radius: 12px;
   background: rgba(15, 23, 42, 0.64);
   color: rgba(248, 250, 252, 0.88);
-  padding: 6px 8px;
-  font-size: 0.58rem;
+  min-height: 44px;
+  padding: 8px 10px;
+  font-size: 0.64rem;
   font-weight: 850;
 }
 
@@ -1413,7 +1414,7 @@ h1 .ox-hero-reveal {
   }
 
   .ox-home-search-v3 input {
-    min-height: 40px;
+    min-height: 44px;
   }
 
   .ox-home-hero-stage-v3 {
@@ -1685,7 +1686,7 @@ h1 .ox-hero-reveal {
   }
 
   .ox-home-search-v3 input {
-    min-height: 38px;
+    min-height: 44px;
     padding: 0 12px;
     font-size: 0.76rem;
   }
@@ -1819,8 +1820,9 @@ h1 .ox-hero-reveal {
   }
 
   .ox-home-section-actions-v3 button {
-    padding: 7px 9px;
-    font-size: 0.62rem;
+    min-height: 44px;
+    padding: 0 12px;
+    font-size: 0.68rem;
   }
 
   /* CARDS DEL CARRUSEL MOBILE */
@@ -2056,6 +2058,7 @@ h1 .ox-hero-reveal {
   }
 
   .ox-home-primary-actions-v3 button {
+    min-height: 44px;
     padding-inline: 11px;
     font-size: 0.68rem;
   }
