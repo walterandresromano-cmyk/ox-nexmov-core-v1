@@ -1,4 +1,26 @@
 ﻿import "../../styles/faq.css";
+import { useState } from "react";
+
+function FaqItem({ question, answer }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`faq-item${open ? " faq-item--open" : ""}`}>
+      <button
+        type="button"
+        className="faq-item__summary"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+      >
+        <span>{question}</span>
+      </button>
+      <div className="faq-item__body" aria-hidden={!open}>
+        <div className="faq-item__inner">
+          <p>{answer}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const faqSections = [
   {
@@ -271,12 +293,7 @@ export default function FAQ({ onNavigate }) {
 
             <div className="faq-list">
               {section.items.map((item) => (
-                <details key={item.question} className="faq-item">
-                  <summary>
-                    <span>{item.question}</span>
-                  </summary>
-                  <p>{item.answer}</p>
-                </details>
+                <FaqItem key={item.question} question={item.question} answer={item.answer} />
               ))}
             </div>
           </section>

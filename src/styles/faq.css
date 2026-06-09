@@ -565,18 +565,20 @@
 }
 
 .faq-page .faq-item {
-  overflow: hidden;
   border: 1px solid rgba(125, 211, 252, 0.14);
   border-radius: 16px;
   background:
     linear-gradient(180deg, rgba(15, 23, 42, 0.54), rgba(2, 6, 23, 0.36));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  overflow: hidden;
 }
 
-.faq-page .faq-item summary {
+.faq-page .faq-item__summary {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
+  text-align: left;
   min-height: 48px;
   gap: 12px;
   padding: 13px 46px 13px 15px;
@@ -585,14 +587,11 @@
   line-height: 1.25;
   font-weight: 950;
   cursor: pointer;
-  list-style: none;
+  background: none;
+  border: none;
 }
 
-.faq-page .faq-item summary::-webkit-details-marker {
-  display: none;
-}
-
-.faq-page .faq-item summary::after {
+.faq-page .faq-item__summary::after {
   content: "+";
   position: absolute;
   right: 15px;
@@ -608,8 +607,22 @@
   transform: translateY(-50%);
 }
 
-.faq-page .faq-item[open] summary::after {
+.faq-page .faq-item--open .faq-item__summary::after {
   content: "–";
+}
+
+.faq-page .faq-item__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-page .faq-item--open .faq-item__body {
+  grid-template-rows: 1fr;
+}
+
+.faq-page .faq-item__inner {
+  overflow: hidden;
 }
 
 .faq-page .faq-item p {
@@ -633,7 +646,7 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(224, 243, 252, 0.70));
 }
 
-:root[data-theme="light"] .faq-page .faq-item summary {
+:root[data-theme="light"] .faq-page .faq-item__summary {
   color: #0d1726;
 }
 
@@ -651,7 +664,7 @@
     border-radius: 18px;
   }
 
-  .faq-page .faq-item summary {
+  .faq-page .faq-item__summary {
     min-height: 46px;
     padding: 12px 42px 12px 13px;
     font-size: 0.78rem;
@@ -892,15 +905,15 @@
   border-top-color: rgba(14, 116, 144, 0.13) !important;
 }
 
-:root[data-theme="light"] .faq-page .faq-item summary {
+:root[data-theme="light"] .faq-page .faq-item__summary {
   color: #0d1726 !important;
 }
 
 /* Keep summary hover feedback without card chrome */
-.faq-page .faq-item summary:hover {
+.faq-page .faq-item__summary:hover {
   color: rgba(125, 211, 252, 0.96);
 }
 
-:root[data-theme="light"] .faq-page .faq-item summary:hover {
+:root[data-theme="light"] .faq-page .faq-item__summary:hover {
   color: #0284c7;
 }
