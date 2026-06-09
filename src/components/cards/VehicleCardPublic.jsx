@@ -12,6 +12,7 @@ import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleDetailModal from "./VehicleDetailModal.jsx";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 import { SpeedometerIcon, PriceTagIcon } from "../icons/VehicleIcons.jsx";
+import VehicleImage from "../VehicleImage.jsx";
 
 const fallbackDealer = {
   id: "dealer-fallback",
@@ -200,10 +201,10 @@ export default function VehicleCardPublic({
           )}
 
           {imageUrl ? (
-            <img
-              className="vehicle-card__image"
+            <VehicleImage
               src={imageUrl}
               alt={vehicleTitle}
+              className="vehicle-card__image"
               loading="lazy"
             />
           ) : (

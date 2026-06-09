@@ -13335,15 +13335,29 @@ textarea:focus-visible,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: filter 0.28s ease, opacity 0.28s ease;
+  will-change: filter, opacity, transform;
+  transition:
+    opacity  0.55s ease,
+    filter   0.65s ease,
+    transform 0.65s ease;
 }
 .vehicle-img--loading {
-  filter: blur(6px);
-  opacity: 0.65;
+  opacity: 0;
+  filter: blur(18px) saturate(1.4);
+  transform: scale(1.06);
 }
 .vehicle-img--loaded {
-  filter: none;
   opacity: 1;
+  filter: blur(0px) saturate(1);
+  transform: scale(1);
+}
+
+/* Dentro de card el hover ya maneja el scale — no duplicar */
+.vehicle-card__image.vehicle-img--loaded {
+  transform: scale(1);
+}
+.vehicle-card:hover .vehicle-card__image.vehicle-img--loaded {
+  transform: scale(1.08);
 }
 .vehicle-img-placeholder {
   display: flex;
