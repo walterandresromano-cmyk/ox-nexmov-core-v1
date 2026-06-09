@@ -642,18 +642,20 @@ export default function App() {
     >
       <ErrorBoundary onNavigate={navigate}>
         <Suspense fallback={<div className="route-loading" />}>
-          <CurrentPage
-            onNavigate={navigate}
-            appActions={appActions}
-            authUser={authUser}
-            authProfile={authProfile}
-            authLoading={authLoading}
-            authError={authError}
-            onAuthChange={handleAuthChange}
-            initialSearchQuery={safeCurrentRoute === "search" ? searchQueryFromHome : ""}
-            currentRoute={safeCurrentRoute}
-            routeParams={routeParams}
-          />
+          <div key={safeCurrentRoute} className="route-transition">
+            <CurrentPage
+              onNavigate={navigate}
+              appActions={appActions}
+              authUser={authUser}
+              authProfile={authProfile}
+              authLoading={authLoading}
+              authError={authError}
+              onAuthChange={handleAuthChange}
+              initialSearchQuery={safeCurrentRoute === "search" ? searchQueryFromHome : ""}
+              currentRoute={safeCurrentRoute}
+              routeParams={routeParams}
+            />
+          </div>
         </Suspense>
       </ErrorBoundary>
     </Layout>

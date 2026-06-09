@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import ScrambleStat from "../../components/ScrambleStat.jsx";
+import { usePlaceholderCycle } from "../../hooks/usePlaceholderCycle.js";
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
 import VehicleDetailModal from "../../components/cards/VehicleDetailModal.jsx";
 import ContactGate from "./ContactGate.jsx";
@@ -371,6 +372,7 @@ export default function Home({ onNavigate, appActions = {} }) {
   const [loadingLatestVehicles, setLoadingLatestVehicles] = useState(true);
   const [latestVehiclesError, setLatestVehiclesError] = useState("");
   const [heroSearchText, setHeroSearchText] = useState("");
+  const cycledPlaceholder = usePlaceholderCycle(heroSearchText === "");
 
   const latestVehiclesCarouselRef = useRef(null);
   const heroRef       = useRef(null);
@@ -620,7 +622,7 @@ export default function Home({ onNavigate, appActions = {} }) {
                       setHeroSearchText(heroGhostCompletion.value);
                     }
                   }}
-                  placeholder="¿Qué vehículo estás buscando?"
+                  placeholder={cycledPlaceholder || "¿Qué vehículo estás buscando?"}
                 />
               </div>
 
