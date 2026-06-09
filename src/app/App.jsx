@@ -446,6 +446,70 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
+    function onRippleClick(e) {
+      const btn = e.target.closest("button, .primary-action, .admin-refresh-btn, .table-action-btn");
+      if (!btn || btn.disabled) return;
+
+      const { left, top, width, height } = btn.getBoundingClientRect();
+      const x = e.clientX - left;
+      const y = e.clientY - top;
+      const size = Math.max(width, height) * 2;
+
+      const ripple = document.createElement("span");
+      ripple.className = "ox-ripple";
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${x - size / 2}px;top:${y - size / 2}px`;
+
+      if (getComputedStyle(btn).position === "static") btn.style.position = "relative";
+      btn.style.overflow = "hidden";
+      btn.appendChild(ripple);
+      ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
+    }
+
+    document.addEventListener("click", onRippleClick);
+    return () => document.removeEventListener("click", onRippleClick);
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia("(hover: none)").matches) return;
+
+    let activeBtn = null;
+
+    function onMouseMove(e) {
+      const btn = e.target.closest(".primary-action");
+
+      if (!btn) {
+        if (activeBtn) {
+          activeBtn.style.transform = "";
+          activeBtn = null;
+        }
+        return;
+      }
+
+      activeBtn = btn;
+      const { left, top, width, height } = btn.getBoundingClientRect();
+      const cx = left + width / 2;
+      const cy = top + height / 2;
+      const dx = (e.clientX - cx) / width  * 10;
+      const dy = (e.clientY - cy) / height * 6;
+      btn.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) translateY(-1px)`;
+    }
+
+    function onMouseLeave(e) {
+      if (e.target.closest(".primary-action")) {
+        e.target.closest(".primary-action").style.transform = "";
+        activeBtn = null;
+      }
+    }
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseleave", onMouseLeave, true);
+    return () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseleave", onMouseLeave, true);
+    };
+  }, []);
+
+  useEffect(() => {
     function syncRouteFromLocation() {
       const target = getInitialRouteFromLocation();
       setRouteParams(getInitialRouteParamsFromLocation());
