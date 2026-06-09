@@ -982,6 +982,7 @@ h1 .ox-hero-reveal {
   mix-blend-mode: luminosity;
   opacity: 0.50;
   pointer-events: none;
+  will-change: transform;
 }
 
 .ox-home-inventory-v3::after {

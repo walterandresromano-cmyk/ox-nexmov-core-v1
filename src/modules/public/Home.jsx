@@ -373,10 +373,12 @@ export default function Home({ onNavigate, appActions = {} }) {
   const [heroSearchText, setHeroSearchText] = useState("");
 
   const latestVehiclesCarouselRef = useRef(null);
-  const heroRef       = useRef(null);
-  const roadRef       = useRef(null);
-  const heroCopyRef   = useRef(null);
-  const parallaxRaf   = useRef(null);
+  const heroRef         = useRef(null);
+  const roadRef         = useRef(null);
+  const heroCopyRef     = useRef(null);
+  const inventoryRef    = useRef(null);
+  const inventoryRoadRef = useRef(null);
+  const parallaxRaf     = useRef(null);
 
   const [extraStats, setExtraStats] = useState({ brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0, activeDealers: 0 });
 
@@ -486,11 +488,25 @@ export default function Home({ onNavigate, appActions = {} }) {
       if (parallaxRaf.current) return;
       parallaxRaf.current = requestAnimationFrame(() => {
         parallaxRaf.current = null;
-        const { top, height } = hero.getBoundingClientRect();
-        if (top > height || top < -height) return;
-        const offset = -top;
-        if (roadRef.current)     roadRef.current.style.transform     = `translateY(${(offset * 0.30).toFixed(1)}px)`;
-        if (heroCopyRef.current) heroCopyRef.current.style.transform = `translateY(${(offset * 0.12).toFixed(1)}px)`;
+
+        // Hero parallax
+        const { top: heroTop, height: heroH } = hero.getBoundingClientRect();
+        if (heroTop <= heroH && heroTop >= -heroH) {
+          const offset = -heroTop;
+          if (roadRef.current)     roadRef.current.style.transform     = `translateY(${(offset * 0.30).toFixed(1)}px)`;
+          if (heroCopyRef.current) heroCopyRef.current.style.transform = `translateY(${(offset * 0.12).toFixed(1)}px)`;
+        }
+
+        // Inventory section parallax
+        const inv = inventoryRef.current;
+        const invRoad = inventoryRoadRef.current;
+        if (inv && invRoad) {
+          const { top: invTop, height: invH } = inv.getBoundingClientRect();
+          if (invTop <= window.innerHeight && invTop >= -invH) {
+            const offset = (window.innerHeight - invTop) * 0.18;
+            invRoad.style.transform = `translateY(${(-offset).toFixed(1)}px)`;
+          }
+        }
       });
     }
 
@@ -802,8 +818,8 @@ export default function Home({ onNavigate, appActions = {} }) {
         </aside>
 
         <section className="ox-home-intelligence-grid-v3">
-          <article className="ox-home-inventory-v3">
-            <div className="ox-home-inventory-road" aria-hidden="true" />
+          <article className="ox-home-inventory-v3" ref={inventoryRef}>
+            <div className="ox-home-inventory-road" aria-hidden="true" ref={inventoryRoadRef} />
             <h2>Inventario en todo el país</h2>
             <p>La red más activa de Argentina.</p>
 
