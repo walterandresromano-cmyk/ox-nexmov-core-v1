@@ -6651,6 +6651,21 @@ body::-webkit-scrollbar {
   border-bottom: 1px solid rgba(148, 163, 184, 0.13);
 }
 
+/* Color ambiente extraído de la imagen */
+.vehicle-card__media {
+  --amb-r: 2;
+  --amb-g: 6;
+  --amb-b: 23;
+}
+
+.vehicle-card__media::after {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(var(--amb-r), var(--amb-g), var(--amb-b), 0.60)
+  );
+}
+
 /* Shimmer de fondo mientras la imagen no cargó */
 .vehicle-card__media:has(.vehicle-img--loading) {
   background:

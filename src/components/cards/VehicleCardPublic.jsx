@@ -13,6 +13,7 @@ import VehicleDetailModal from "./VehicleDetailModal.jsx";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 import { SpeedometerIcon, PriceTagIcon } from "../icons/VehicleIcons.jsx";
 import VehicleImage from "../VehicleImage.jsx";
+import { useDominantColor } from "../../hooks/useDominantColor.js";
 
 const fallbackDealer = {
   id: "dealer-fallback",
@@ -152,6 +153,7 @@ export default function VehicleCardPublic({
 
   const safeDealer = dealer || fallbackDealer;
   const permissions = getEffectiveDealerPermissions(safeDealer);
+  const dominantColor = useDominantColor(imageUrl);
   const rankClass = getRankClass(permissions.rankTheme);
   const delta = getMarketDelta(vehicle);
   const marketBadge = getMarketBadge(delta);
@@ -181,7 +183,14 @@ export default function VehicleCardPublic({
         onMouseLeave={handleCardMouseLeave}
       >
         <div className="vehicle-card__glare" aria-hidden="true" />
-        <div className="vehicle-card__media">
+        <div
+          className="vehicle-card__media"
+          style={dominantColor ? {
+            "--amb-r": dominantColor.r,
+            "--amb-g": dominantColor.g,
+            "--amb-b": dominantColor.b,
+          } : undefined}
+        >
           <div className="vehicle-card__topbar">
             <span className="vehicle-card__rank">
               {permissions.rankLabel}
