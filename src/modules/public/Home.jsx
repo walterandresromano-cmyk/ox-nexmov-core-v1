@@ -375,10 +375,12 @@ export default function Home({ onNavigate, appActions = {} }) {
   const cycledPlaceholder = usePlaceholderCycle(heroSearchText === "");
 
   const latestVehiclesCarouselRef = useRef(null);
-  const heroRef       = useRef(null);
-  const roadRef       = useRef(null);
-  const heroCopyRef   = useRef(null);
-  const parallaxRaf   = useRef(null);
+  const heroRef        = useRef(null);
+  const roadRef        = useRef(null);
+  const heroCopyRef    = useRef(null);
+  const spotlightRef   = useRef(null);
+  const parallaxRaf    = useRef(null);
+  const spotlightRaf   = useRef(null);
 
   const [extraStats, setExtraStats] = useState({ brands: 0, reserved: 0, sold: 0, withFinancing: 0, contacts: 0, activeDealers: 0 });
 
@@ -507,6 +509,37 @@ export default function Home({ onNavigate, appActions = {} }) {
     };
   }, []);
 
+  useEffect(() => {
+    const hero = heroRef.current;
+    const spot = spotlightRef.current;
+    if (!hero || !spot || window.matchMedia("(hover: none)").matches) return;
+
+    function onMouseMove(e) {
+      if (spotlightRaf.current) return;
+      spotlightRaf.current = requestAnimationFrame(() => {
+        spotlightRaf.current = null;
+        const { left, top, width, height } = hero.getBoundingClientRect();
+        const x = ((e.clientX - left) / width  * 100).toFixed(1);
+        const y = ((e.clientY - top)  / height * 100).toFixed(1);
+        spot.style.setProperty("--sx", `${x}%`);
+        spot.style.setProperty("--sy", `${y}%`);
+        spot.style.opacity = "1";
+      });
+    }
+
+    function onMouseLeave() {
+      if (spot) spot.style.opacity = "0";
+    }
+
+    hero.addEventListener("mousemove", onMouseMove);
+    hero.addEventListener("mouseleave", onMouseLeave);
+    return () => {
+      hero.removeEventListener("mousemove", onMouseMove);
+      hero.removeEventListener("mouseleave", onMouseLeave);
+      if (spotlightRaf.current) cancelAnimationFrame(spotlightRaf.current);
+    };
+  }, []);
+
   const homeStats = useMemo(() => {
     const totalActiveVehicles = publicDealers.reduce(
       (sum, dealer) => sum + Number(dealer.activeVehiclesCount || 0),
@@ -575,6 +608,7 @@ export default function Home({ onNavigate, appActions = {} }) {
       <div className="container ox-home-shell-v3">
         <section className="ox-home-hero-v3" ref={heroRef}>
           <div className="ox-home-hero-road" aria-hidden="true" ref={roadRef} />
+          <div className="ox-hero-spotlight" aria-hidden="true" ref={spotlightRef} />
           <div className="ox-home-hero-copy-v3" ref={heroCopyRef}>
             <p className="ox-home-eyebrow-v3 ox-hero-reveal ox-hero-reveal--0">
               Red automotriz verificada · Argentina

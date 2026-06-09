@@ -81,6 +81,27 @@
   min-width: 0;
 }
 
+/* ── Spotlight cursor ─────────────────────────────────────────── */
+.ox-hero-spotlight {
+  --sx: 50%;
+  --sy: 50%;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(
+    600px circle at var(--sx) var(--sy),
+    rgba(56, 189, 248, 0.07) 0%,
+    rgba(37, 99, 235, 0.04) 35%,
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+:root[data-theme="light"] .ox-hero-spotlight { display: none; }
+
 /* ── Hero reveal ──────────────────────────────────────────────── */
 @keyframes ox-hero-reveal {
   from {
