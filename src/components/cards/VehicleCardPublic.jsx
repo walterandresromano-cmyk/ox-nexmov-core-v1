@@ -153,13 +153,13 @@ export default function VehicleCardPublic({
 
   const safeDealer = dealer || fallbackDealer;
   const permissions = getEffectiveDealerPermissions(safeDealer);
-  const dominantColor = useDominantColor(imageUrl);
   const rankClass = getRankClass(permissions.rankTheme);
   const delta = getMarketDelta(vehicle);
   const marketBadge = getMarketBadge(delta);
   const favoriteActive = appActions?.isFavorite?.(vehicle.id);
   const reserved = isVehicleReserved(vehicle);
   const imageUrl = getVehicleImageUrl(vehicle);
+  const dominantColor = useDominantColor(imageUrl);
   const vehicleTitle = getVehicleTitle(vehicle);
   const locationLabel = getLocationLabel(vehicle);
   const vehicleStats = getVehicleStats(vehicle, locationLabel);
