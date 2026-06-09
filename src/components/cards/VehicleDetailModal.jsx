@@ -7,7 +7,6 @@ import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import { getVehicleImages, isVehicleReserved } from "../../lib/vehicle.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleImage from "../VehicleImage.jsx";
-import { useDominantColor } from "../../hooks/useDominantColor.js";
 
 
 const MAINTENANCE_SOURCE_KEYS = [
@@ -200,7 +199,6 @@ export default function VehicleDetailModal({
   const fsZoomStateRef = useRef({ scale: 1, pos: { x: 0, y: 0 } });
   const selectedImage = images[selectedImageIndex];
   const reserved = isVehicleReserved(currentVehicle);
-  const dominantColor = useDominantColor(images[0]?.url);
   const currentFavoriteActive = appActions
     ? appActions.isFavorite?.(currentVehicle.id)
     : favoriteActive;
@@ -636,14 +634,17 @@ export default function VehicleDetailModal({
 
         <div className="vehicle-detail-layout vd-layout-enter">
           <div className="vehicle-detail-gallery vd-col-enter vd-col-enter--left">
-            <div
-              className="detail-gallery-frame"
-              style={dominantColor ? {
-                "--amb-r": dominantColor.r,
-                "--amb-g": dominantColor.g,
-                "--amb-b": dominantColor.b,
-              } : undefined}
-            >
+            <div className="detail-gallery-frame">
+              {images[0]?.url && (
+                <img
+                  key={images[0].url}
+                  className="detail-gallery-ambient"
+                  src={images[0].url}
+                  alt=""
+                  aria-hidden="true"
+                  draggable="false"
+                />
+              )}
               <div
                 ref={mainImageRef}
                 className={`vehicle-detail-main-image detail-main-image dealer-rank-${permissions.rankTheme} ${
