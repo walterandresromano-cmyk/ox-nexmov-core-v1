@@ -651,10 +651,12 @@ export default function VehicleDetailModal({
               >
                 {selectedImage?.url ? (
                   <VehicleImage
+                    key={selectedImage.url}
                     src={selectedImage.url}
                     alt={`${currentVehicle.brand} ${currentVehicle.model}`}
                     draggable={false}
                     loading="eager"
+                    className="detail-main-image__photo"
                     style={{
                       transform: `translate3d(${zoomPosition.x}px, ${zoomPosition.y}px, 0) scale(${zoomScale})`,
                     }}
@@ -730,6 +732,26 @@ export default function VehicleDetailModal({
                 </div>
               </div>
             </div>
+
+            {images.length > 1 && (
+              <div className="detail-thumb-strip" ref={(el) => {
+                if (!el) return;
+                const active = el.children[selectedImageIndex];
+                active?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+              }}>
+                {images.map((img, i) => (
+                  <button
+                    key={img.url || i}
+                    type="button"
+                    className={`detail-thumb${i === selectedImageIndex ? " is-active" : ""}`}
+                    onClick={() => setSelectedImageIndex(i)}
+                    aria-label={`Ver imagen ${i + 1}`}
+                  >
+                    <img src={img.url} alt="" loading="lazy" draggable="false" />
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div className="vehicle-detail-quick-specs">
               <div>
