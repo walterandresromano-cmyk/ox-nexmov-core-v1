@@ -1,6 +1,7 @@
 import "../../styles/auth.css";
 import { useEffect, useRef, useState } from "react";
 import { checkPromoCodeAvailable } from "../../services/promoCodes.service.js";
+import FloatField from "../../components/FloatField.jsx";
 import {
   signInWithEmail,
   signOut,
@@ -443,32 +444,20 @@ export default function AuthPanel({
 
             {mode === "login" && (
               <form className="auth-form" onSubmit={handleLogin}>
-                <label>
-                  Email
-                  <input
-                    type="email"
-                    autoComplete="email"
-                    value={loginForm.email}
-                    onChange={(event) =>
-                      updateLogin("email", event.target.value)
-                    }
-                    placeholder="tu@email.com"
-                  />
-                </label>
-
-                <label>
-                  Contraseña
-                  <input
-                    type="password"
-                    autoComplete="current-password"
-                    value={loginForm.password}
-                    onChange={(event) =>
-                      updateLogin("password", event.target.value)
-                    }
-                    placeholder="Contraseña"
-                  />
-                </label>
-
+                <FloatField
+                  label="Email"
+                  type="email"
+                  autoComplete="email"
+                  value={loginForm.email}
+                  onChange={(e) => updateLogin("email", e.target.value)}
+                />
+                <FloatField
+                  label="Contraseña"
+                  type="password"
+                  autoComplete="current-password"
+                  value={loginForm.password}
+                  onChange={(e) => updateLogin("password", e.target.value)}
+                />
                 <button className="primary-action" type="submit">
                   Ingresar
                 </button>
@@ -483,59 +472,14 @@ export default function AuthPanel({
                   administración.
                 </div>
 
-                <label>
-                  Nombre
-                  <input
-                    type="text"
-                    autoComplete="name"
-                    value={registerForm.fullName}
-                    onChange={(event) =>
-                      updateRegister("fullName", event.target.value)
-                    }
-                    placeholder="Tu nombre"
-                  />
-                </label>
-
-                <label>
-                  Email
-                  <input
-                    type="email"
-                    autoComplete="email"
-                    value={registerForm.email}
-                    onChange={(event) =>
-                      updateRegister("email", event.target.value)
-                    }
-                    placeholder="tu@email.com"
-                  />
-                </label>
-
-                <label>
-                  Teléfono / WhatsApp
-                  <input
-                    type="tel"
-                    autoComplete="tel"
-                    inputMode="tel"
-                    value={registerForm.phone}
-                    onChange={(event) =>
-                      updateRegister("phone", event.target.value)
-                    }
-                    placeholder="Ej: 11 XXXX XXXX"
-                  />
-                </label>
-
-                <label>
-                  Contraseña
-                  <input
-                    type="password"
-                    autoComplete="new-password"
-                    minLength={6}
-                    value={registerForm.password}
-                    onChange={(event) =>
-                      updateRegister("password", event.target.value)
-                    }
-                    placeholder="Mínimo 6 caracteres"
-                  />
-                </label>
+                <FloatField label="Nombre" type="text" autoComplete="name"
+                  value={registerForm.fullName} onChange={(e) => updateRegister("fullName", e.target.value)} />
+                <FloatField label="Email" type="email" autoComplete="email"
+                  value={registerForm.email} onChange={(e) => updateRegister("email", e.target.value)} />
+                <FloatField label="Teléfono / WhatsApp" type="tel" autoComplete="tel" inputMode="tel"
+                  value={registerForm.phone} onChange={(e) => updateRegister("phone", e.target.value)} />
+                <FloatField label="Contraseña" type="password" autoComplete="new-password" minLength={6}
+                  value={registerForm.password} onChange={(e) => updateRegister("password", e.target.value)} />
                 {registerForm.password.length > 0 && registerForm.password.length < 6 && (
                   <small className="auth-field-hint auth-field-hint--warn">
                     Mínimo 6 caracteres ({registerForm.password.length}/6)
@@ -588,58 +532,15 @@ export default function AuthPanel({
                   )}
                 </div>
 
-                <label>
-                  Nombre del responsable
-                  <input
-                    type="text"
-                    autoComplete="name"
-                    value={registerForm.fullName}
-                    onChange={(event) =>
-                      updateRegister("fullName", event.target.value)
-                    }
-                    placeholder="Nombre del responsable"
-                  />
-                </label>
-
-                <label>
-                  Email autorizado
-                  <input
-                    type="email"
-                    autoComplete="email"
-                    value={registerForm.email}
-                    onChange={(event) =>
-                      updateRegister("email", event.target.value)
-                    }
-                    placeholder="dealer@agencia.com"
-                  />
-                </label>
-
-                <label>
-                  Teléfono / WhatsApp
-                  <input
-                    type="tel"
-                    autoComplete="tel"
-                    inputMode="tel"
-                    value={registerForm.phone}
-                    onChange={(event) =>
-                      updateRegister("phone", event.target.value)
-                    }
-                    placeholder="Ej: 11 XXXX XXXX"
-                  />
-                </label>
-
-                <label>
-                  Código de activación
-                  <input
-                    type="text"
-                    autoComplete="off"
-                    value={registerForm.activationCode}
-                    onChange={(event) =>
-                      updateRegister("activationCode", event.target.value.toUpperCase())
-                    }
-                    placeholder="Opcional — ingresá tu código si tenés uno"
-                  />
-                </label>
+                <FloatField label="Nombre del responsable" type="text" autoComplete="name"
+                  value={registerForm.fullName} onChange={(e) => updateRegister("fullName", e.target.value)} />
+                <FloatField label="Email autorizado" type="email" autoComplete="email"
+                  value={registerForm.email} onChange={(e) => updateRegister("email", e.target.value)} />
+                <FloatField label="Teléfono / WhatsApp" type="tel" autoComplete="tel" inputMode="tel"
+                  value={registerForm.phone} onChange={(e) => updateRegister("phone", e.target.value)} />
+                <FloatField label="Código de activación (opcional)" type="text" autoComplete="off"
+                  value={registerForm.activationCode}
+                  onChange={(e) => updateRegister("activationCode", e.target.value.toUpperCase())} />
 
                 {promoStatus === "checking" && (
                   <div className="auth-message">Verificando código…</div>
@@ -660,19 +561,8 @@ export default function AuthPanel({
                   </div>
                 )}
 
-                <label>
-                  Crear contraseña
-                  <input
-                    type="password"
-                    autoComplete="new-password"
-                    minLength={6}
-                    value={registerForm.password}
-                    onChange={(event) =>
-                      updateRegister("password", event.target.value)
-                    }
-                    placeholder="Mínimo 6 caracteres"
-                  />
-                </label>
+                <FloatField label="Crear contraseña" type="password" autoComplete="new-password" minLength={6}
+                  value={registerForm.password} onChange={(e) => updateRegister("password", e.target.value)} />
 
                 <p className="auth-legal-note">
                   Al registrarme acepto los{" "}
@@ -700,16 +590,8 @@ export default function AuthPanel({
                   cuenta.
                 </div>
 
-                <label>
-                  Email
-                  <input
-                    value={resetPasswordForm.email}
-                    onChange={(event) =>
-                      updateResetPassword("email", event.target.value)
-                    }
-                    placeholder="tu@email.com"
-                  />
-                </label>
+                <FloatField label="Email" type="email" autoComplete="email"
+                  value={resetPasswordForm.email} onChange={(e) => updateResetPassword("email", e.target.value)} />
 
                 <button className="primary-action" type="submit">
                   Enviar recuperación
