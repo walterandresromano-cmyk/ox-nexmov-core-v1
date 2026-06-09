@@ -1533,14 +1533,65 @@
   position: relative;
 }
 
+/* ── Tilt + hover glow ────────────────────────────────────────── */
+.jnp-plan-tilt {
+  transition: transform 0.06s linear, box-shadow 0.25s ease, border-color 0.25s ease;
+  will-change: transform;
+  cursor: default;
+}
+.jnp-plan-tilt:not(.jnp-card--recommended):hover {
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 28px rgba(56, 189, 248, 0.12);
+}
+.join-network-plan-elite.jnp-plan-tilt:hover {
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 32px rgba(250, 204, 21, 0.18) !important;
+}
+.join-network-plan-platinum.jnp-plan-tilt:hover {
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 32px rgba(226, 232, 240, 0.14) !important;
+}
+.jnp-plan-tilt:not(:hover) {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.25s ease;
+}
+
+/* ── Stagger entrance ─────────────────────────────────────────── */
+@keyframes jnp-card-enter {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.jnp-grid-enter .join-network-plan-card {
+  animation: jnp-card-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--jnp-enter-delay, 0ms);
+}
+
 /* ── Card Elite destacada ── */
 .jnp-card--recommended {
-  border-color: rgba(250, 204, 21, 0.48) !important;
+  border-color: rgba(250, 204, 21, 0.55) !important;
   box-shadow:
-    0 0 0 1px rgba(250, 204, 21, 0.18),
-    0 20px 50px rgba(0, 0, 0, 0.32),
-    0 0 32px rgba(250, 204, 21, 0.12) !important;
+    0 0 0 1px rgba(250, 204, 21, 0.20),
+    0 24px 56px rgba(0, 0, 0, 0.36),
+    0 0 40px rgba(250, 204, 21, 0.14) !important;
+  transform: scale(1.03);
   z-index: 1;
+}
+.jnp-card--recommended:hover {
+  transform: perspective(800px) scale(1.03) !important;
+}
+
+/* ── Ribbon "Más elegido" ─────────────────────────────────────── */
+.jnp-recommended-ribbon {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 14px;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(135deg, #f59e0b, #eab308);
+  color: #1c1400;
+  font-size: 0.54rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
 }
 
 :root[data-theme="light"] .jnp-card--recommended {

@@ -461,12 +461,27 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
             </p>
           </div>
 
-          <div className="join-network-plans jnp-grid">
-            {plans.map((plan) => (
+          <div className="join-network-plans jnp-grid jnp-grid-enter">
+            {plans.map((plan, idx) => (
               <article
                 key={plan.id}
-                className={`join-network-plan-card join-network-plan-${plan.rankTheme}${plan.recommended ? " jnp-card--recommended" : ""}`}
+                className={`join-network-plan-card join-network-plan-${plan.rankTheme}${plan.recommended ? " jnp-card--recommended" : ""} jnp-plan-tilt`}
+                style={{ "--jnp-enter-delay": `${idx * 80}ms` }}
+                onMouseMove={(e) => {
+                  const card = e.currentTarget;
+                  const { left, top, width, height } = card.getBoundingClientRect();
+                  const x = (e.clientX - left) / width  - 0.5;
+                  const y = (e.clientY - top)  / height - 0.5;
+                  card.style.transform = `perspective(800px) rotateX(${(-y * 8).toFixed(2)}deg) rotateY(${(x * 8).toFixed(2)}deg) scale3d(1.02,1.02,1.02)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "";
+                }}
               >
+                {plan.recommended && (
+                  <div className="jnp-recommended-ribbon">Más elegido</div>
+                )}
+
                 {/* Badge */}
                 <div className={`jnp-badge jnp-badge--${plan.badgeVariant}`}>
                   {plan.badge}
