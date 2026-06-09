@@ -712,8 +712,8 @@ h1 .ox-hero-reveal {
   grid-auto-columns: minmax(215px, 242px);
   gap: var(--ox-space-4);
   overflow-x: auto;
-  overflow-y: hidden;
-  padding: 4px 1px 9px;
+  overflow-y: clip;
+  padding: 4px 1px 18px;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
