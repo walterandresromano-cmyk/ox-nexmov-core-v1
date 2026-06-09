@@ -467,7 +467,7 @@ h1 .ox-hero-reveal {
   justify-self: end;
   width: min(100%, 220px);
   z-index: 5;
-  padding-bottom: 28px;
+  padding: 10px 0 28px;
 }
 
 .ox-home-featured-deck > * {
@@ -525,7 +525,7 @@ h1 .ox-hero-reveal {
 .ox-home-featured-card-top-img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 7;
   object-fit: cover;
   object-position: center;
 }
