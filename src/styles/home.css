@@ -643,7 +643,18 @@ h1 .ox-hero-reveal {
 
 .ox-home-featured-vehicles-v3 {
   min-width: 0;
-  overflow: hidden;
+  overflow: clip;
+}
+
+/* Sin tilt en las cards del panel de destacados */
+.ox-home-featured-vehicles-v3 .vehicle-card--tilt {
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+.ox-home-featured-vehicles-v3 .vehicle-card--tilt:hover {
+  transform: translateY(-3px) !important;
+}
+.ox-home-featured-vehicles-v3 .vehicle-card__glare {
+  display: none;
 }
 
 .ox-home-section-head-v3 {
