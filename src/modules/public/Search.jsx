@@ -1,5 +1,5 @@
 import "../../styles/search.css";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
 import RadarActivationModal from "../../components/RadarActivationModal.jsx";
@@ -914,6 +914,8 @@ export default function Search({
   const [searchText, setSearchText] = useState(getInitialSearchText);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filters, setFilters] = useState(getInitialFilters);
+  const gridKeyRef = useRef(0);
+  const prevFiltersSig = useRef("");
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState("default");
   const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
@@ -1162,6 +1164,15 @@ export default function Search({
       })
       .map((item) => item.vehicle);
   }, [publicSearchVehicles, searchText, filters]);
+
+  const gridKey = useMemo(() => {
+    const sig = JSON.stringify(filters) + searchText + sortOrder;
+    if (sig !== prevFiltersSig.current) {
+      prevFiltersSig.current = sig;
+      gridKeyRef.current += 1;
+    }
+    return gridKeyRef.current;
+  }, [filters, searchText, sortOrder]);
 
   const sortedVehicles = useMemo(() => {
     setVisibleCount(20);
@@ -1732,7 +1743,7 @@ export default function Search({
               </div>
             )}
 
-            <div className="vehicle-grid ox-search-vehicle-grid">
+            <div key={gridKey} className="vehicle-grid ox-search-vehicle-grid ox-search-grid-enter">
               {loadingVehicles
                 ? Array.from({ length: 6 }, (_, n) => (
                     <div key={n} className="vehicle-card-skeleton">
