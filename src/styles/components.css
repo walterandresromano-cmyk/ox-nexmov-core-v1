@@ -16328,6 +16328,72 @@ body::-webkit-scrollbar {
   color: var(--ox-text);
 }
 
+/* ── Dealer profile visual upgrades ──────────────────────────── */
+
+/* 1. Ambient background del logo */
+.dealer-profile-ambient {
+  position: absolute;
+  inset: -25%;
+  z-index: 0;
+  width: 150%;
+  height: 150%;
+  object-fit: cover;
+  filter: blur(50px) saturate(1.6) brightness(0.30);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* 2. Entrada con stagger */
+@keyframes dp-fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dp-fade-right {
+  from { opacity: 0; transform: translateX(-18px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes dp-fade-left {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.dp-header-enter  { animation: dp-fade-up    0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.dp-identity-enter { animation: dp-fade-right 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+.dp-wa-enter      { animation: dp-fade-left  0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
+
+/* 3. Vehicle grid stagger */
+@keyframes dp-card-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.dp-grid-enter > * {
+  animation: dp-card-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.dp-grid-enter > *:nth-child(1)  { animation-delay: 0.05s; }
+.dp-grid-enter > *:nth-child(2)  { animation-delay: 0.10s; }
+.dp-grid-enter > *:nth-child(3)  { animation-delay: 0.15s; }
+.dp-grid-enter > *:nth-child(4)  { animation-delay: 0.20s; }
+.dp-grid-enter > *:nth-child(5)  { animation-delay: 0.25s; }
+.dp-grid-enter > *:nth-child(6)  { animation-delay: 0.30s; }
+.dp-grid-enter > *:nth-child(n+7) { animation-delay: 0.35s; }
+
+/* 4. Logo glow por plan */
+.dealer-profile-logo--rank-elite {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.36), 0 0 20px rgba(245, 197, 66, 0.20);
+  border-color: rgba(245, 197, 66, 0.30);
+}
+.dealer-profile-logo--rank-platinum {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.36), 0 0 20px rgba(226, 232, 240, 0.18);
+  border-color: rgba(226, 232, 240, 0.28);
+}
+
+/* Elementos dentro del header sobre el ambient */
+.dealer-profile-identity,
+.dealer-profile-wa-btn {
+  position: relative;
+  z-index: 1;
+}
+
 .dealer-profile-header {
   position: relative;
   overflow: hidden;

@@ -133,13 +133,23 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
           ← Volver a la búsqueda
         </button>
 
-        <header className={`dealer-profile-header rank-${dealer.plan}`}>
-          <div className="dealer-profile-identity">
+        <header className={`dealer-profile-header rank-${dealer.plan} dp-header-enter`}>
+          {dealer.logo && (
+            <img
+              src={dealer.logo}
+              aria-hidden="true"
+              className="dealer-profile-ambient"
+              alt=""
+              draggable="false"
+            />
+          )}
+
+          <div className="dealer-profile-identity dp-identity-enter">
             {dealer.logo ? (
               <img
                 src={dealer.logo}
                 alt={`Imagen institucional de ${dealer.name}`}
-                className="dealer-profile-logo"
+                className={`dealer-profile-logo dealer-profile-logo--rank-${dealer.plan}`}
               />
             ) : (
               <div className="dealer-profile-logo-placeholder">
@@ -181,7 +191,7 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="dealer-profile-wa-btn"
+              className="dealer-profile-wa-btn dp-wa-enter"
             >
               Consultar por WhatsApp
             </a>
@@ -197,7 +207,7 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
             <p className="dealer-profile-section-label">
               Publicaciones activas
             </p>
-            <div className="dealer-profile-grid">
+            <div className="dealer-profile-grid dp-grid-enter">
               {vehicles.map((vehicle) => (
                 <VehicleCardPublic
                   key={vehicle.id}
