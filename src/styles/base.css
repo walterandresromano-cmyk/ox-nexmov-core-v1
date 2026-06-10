@@ -152,3 +152,28 @@ textarea:focus {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* =========================================================
+   Scroll reveal
+   ========================================================= */
+
+.ox-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.52s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 0.52s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+}
+
+.ox-reveal.ox-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ox-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

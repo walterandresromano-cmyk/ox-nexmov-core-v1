@@ -11,9 +11,10 @@ import {
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleDetailModal from "./VehicleDetailModal.jsx";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
-import { SpeedometerIcon, PriceTagIcon } from "../icons/VehicleIcons.jsx";
+import { SpeedometerIcon, PriceTagIcon, HeartIcon, CompareIcon } from "../icons/VehicleIcons.jsx";
 import VehicleImage from "../VehicleImage.jsx";
 import { useDominantColor } from "../../hooks/useDominantColor.js";
+import { useScrollReveal } from "../../hooks/useScrollReveal.js";
 
 const fallbackDealer = {
   id: "dealer-fallback",
@@ -123,6 +124,7 @@ export default function VehicleCardPublic({
 
   const cardRef = useRef(null);
   const rafRef = useRef(null);
+  const revealRef = useScrollReveal();
 
   function handleCardMouseMove(e) {
     const card = cardRef.current;
@@ -175,22 +177,20 @@ export default function VehicleCardPublic({
   return (
     <>
       <article
-        ref={cardRef}
+        ref={(el) => { cardRef.current = el; revealRef.current = el; }}
         className={`vehicle-card vehicle-card--${rankClass} dealer-rank-${permissions.rankTheme} ${
           reserved ? "vehicle-card-reserved" : ""
-        } vehicle-card--tilt`}
+        } vehicle-card--tilt ox-reveal`}
         onMouseMove={handleCardMouseMove}
         onMouseLeave={handleCardMouseLeave}
+        style={dominantColor ? {
+          "--amb-r": dominantColor.r,
+          "--amb-g": dominantColor.g,
+          "--amb-b": dominantColor.b,
+        } : undefined}
       >
         <div className="vehicle-card__glare" aria-hidden="true" />
-        <div
-          className="vehicle-card__media"
-          style={dominantColor ? {
-            "--amb-r": dominantColor.r,
-            "--amb-g": dominantColor.g,
-            "--amb-b": dominantColor.b,
-          } : undefined}
-        >
+        <div className="vehicle-card__media">
           <div className="vehicle-card__topbar">
             <span className="vehicle-card__rank">
               {permissions.rankLabel}
@@ -285,12 +285,9 @@ export default function VehicleCardPublic({
               className="vehicle-card__btn vehicle-card__btn--primary"
               onClick={() => {
                 if (onNavigate) {
-                  onNavigate("vehicleDetail", {
-                    vehicleId: vehicle.id,
-                  });
+                  onNavigate("vehicleDetail", { vehicleId: vehicle.id });
                   return;
                 }
-
                 registerVehicleDetailView(vehicle.id);
                 setShowDetailModal(true);
               }}
@@ -301,41 +298,39 @@ export default function VehicleCardPublic({
             <button
               type="button"
               className={
-                reserved
-                  ? "vehicle-card__btn vehicle-card__btn--disabled"
-                  : "vehicle-card__btn"
-              }
-              disabled={reserved}
-              onClick={() => setShowContactGate(true)}
-              title={
-                reserved
-                  ? "Esta unidad está reservada por el dealer."
-                  : "Contactar dealer"
-              }
-            >
-              Contactar
-            </button>
-
-            <button
-              type="button"
-              className="vehicle-card__btn"
-              onClick={() => appActions?.addToCompare?.(vehicle)}
-            >
-              Comparar
-            </button>
-
-            <button
-              type="button"
-              className={
                 favoriteActive
-                  ? "vehicle-card__btn vehicle-card__btn--favorite is-active"
-                  : "vehicle-card__btn vehicle-card__btn--favorite"
+                  ? "vehicle-card__btn vehicle-card__btn--icon vehicle-card__btn--favorite is-active"
+                  : "vehicle-card__btn vehicle-card__btn--icon vehicle-card__btn--favorite"
               }
               onClick={() => appActions?.toggleFavorite?.(vehicle)}
+              title={favoriteActive ? "Quitar de favoritos" : "Guardar en favoritos"}
             >
-              {favoriteActive ? "Guardado" : "Favorito"}
+              <HeartIcon size={15} filled={favoriteActive} />
+            </button>
+
+            <button
+              type="button"
+              className="vehicle-card__btn vehicle-card__btn--icon"
+              onClick={() => appActions?.addToCompare?.(vehicle)}
+              title="Comparar"
+            >
+              <CompareIcon size={15} />
             </button>
           </div>
+
+          <button
+            type="button"
+            className={
+              reserved
+                ? "vehicle-card__btn vehicle-card__btn--contact vehicle-card__btn--disabled"
+                : "vehicle-card__btn vehicle-card__btn--contact"
+            }
+            disabled={reserved}
+            onClick={() => setShowContactGate(true)}
+            title={reserved ? "Esta unidad está reservada por el dealer." : "Contactar dealer"}
+          >
+            {reserved ? "Reservado" : "Contactar dealer"}
+          </button>
         </div>
       </article>
 

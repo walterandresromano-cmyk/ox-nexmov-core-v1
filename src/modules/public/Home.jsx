@@ -20,7 +20,6 @@ import {
 const quickSearches = [
   "SUV financiada",
   "Primer auto",
-  "0km entrega inmediata",
   "Bajo consumo",
   "Pick up diesel",
   "Familiar 7 asientos",
@@ -663,7 +662,15 @@ export default function Home({ onNavigate, appActions = {} }) {
               <button type="submit">Buscar</button>
             </form>
 
-            <div className="ox-home-primary-actions-v3 ox-hero-reveal ox-hero-reveal--6">
+            <div className="ox-home-chips-v3 ox-hero-reveal ox-hero-reveal--6">
+              {quickSearches.map((q) => (
+                <button key={q} type="button" onClick={() => goToSearch(q)}>
+                  {q}
+                </button>
+              ))}
+            </div>
+
+            <div className="ox-home-primary-actions-v3 ox-hero-reveal ox-hero-reveal--7">
               <button type="button" onClick={() => goToSearch("")}>
                 Buscar vehículos
               </button>
@@ -895,6 +902,9 @@ export default function Home({ onNavigate, appActions = {} }) {
                     type="button"
                     onClick={() => goToSearch(location)}
                   >
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ opacity: 0.7, flexShrink: 0 }}>
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
                     {location}
                     <small>{count} activos</small>
                   </button>

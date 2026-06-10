@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 
 const CHARS = "0123456789";
 
-export function useScramble(targetValue, { duration = 900, delay = 0 } = {}) {
+export function useScramble(targetValue, { duration = 900, delay = 0, onComplete } = {}) {
   const [display, setDisplay] = useState("0");
   const frameRef = useRef(null);
   const startRef = useRef(null);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     const target = String(Number(targetValue || 0).toLocaleString("es-AR"));
@@ -18,7 +20,6 @@ export function useScramble(targetValue, { duration = 900, delay = 0 } = {}) {
         const elapsed = ts - startRef.current;
         const progress = Math.min(elapsed / duration, 1);
 
-        // Cuántos caracteres del target ya están "fijados" (de izquierda a derecha)
         const fixedCount = Math.floor(progress * target.length);
 
         const scrambled = target
@@ -36,6 +37,7 @@ export function useScramble(targetValue, { duration = 900, delay = 0 } = {}) {
           frameRef.current = requestAnimationFrame(tick);
         } else {
           setDisplay(target);
+          onCompleteRef.current?.();
         }
       }
 
