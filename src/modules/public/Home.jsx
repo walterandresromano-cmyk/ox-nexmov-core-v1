@@ -25,6 +25,29 @@ const quickSearches = [
   "Familiar 7 asientos",
 ];
 
+const QUICK_SEARCH_PRESETS = {
+  "SUV financiada": {
+    query: "",
+    filters: { vehicleType: "suv", financing: "yes" },
+  },
+  "Primer auto": {
+    query: "",
+    filters: { priceMax: "15000000", kmMax: "120000", status: "available" },
+  },
+  "Bajo consumo": {
+    query: "",
+    filters: { fuel: "nafta" },
+  },
+  "Pick up diesel": {
+    query: "",
+    filters: { vehicleType: "pickup", fuel: "diesel" },
+  },
+  "Familiar 7 asientos": {
+    query: "7 asientos",
+    filters: { vehicleType: "suv" },
+  },
+};
+
 const trustItems = [
   { title: "Dealers verificados", text: "Datos comerciales validados por oX antes de operar", icon: ShieldCheckIcon },
   { title: "Comparador real", text: "Lado a lado con datos reales", icon: ArrowsSwapIcon },
@@ -579,9 +602,10 @@ export default function Home({ onNavigate, appActions = {} }) {
     [heroSearchText, heroAutocompleteSuggestions]
   );
 
-  function goToSearch(query = "") {
+  function goToSearch(query = "", overrides = {}) {
     onNavigate("search", {
       query,
+      ...overrides,
     });
   }
 
@@ -614,11 +638,17 @@ export default function Home({ onNavigate, appActions = {} }) {
             </p>
 
             <h1>
-              <span className="ox-hero-reveal ox-hero-reveal--1">Comprá con datos reales.</span>
+              <span className="ox-hero-reveal ox-hero-reveal--1">
+                <span className="ox-hero-word-white">Comprá</span> con datos reales.
+              </span>
               <br />
-              <span className="ox-hero-reveal ox-hero-reveal--2">Guardá tu Garage.</span>
+              <span className="ox-hero-reveal ox-hero-reveal--2">
+                <span className="ox-hero-word-white">Guardá</span> tu Garage.
+              </span>
               <br />
-              <span className="ox-hero-reveal ox-hero-reveal--3">Decidí con <span>contexto completo.</span></span>
+              <span className="ox-hero-reveal ox-hero-reveal--3">
+                <span className="ox-hero-word-white">Decidí</span> con <span>contexto completo.</span>
+              </span>
             </h1>
 
             <p className="ox-hero-reveal ox-hero-reveal--4">
@@ -664,7 +694,16 @@ export default function Home({ onNavigate, appActions = {} }) {
 
             <div className="ox-home-chips-v3 ox-hero-reveal ox-hero-reveal--6">
               {quickSearches.map((q) => (
-                <button key={q} type="button" onClick={() => goToSearch(q)}>
+                <button
+                  key={q}
+                  type="button"
+                  onClick={() => {
+                    const preset = QUICK_SEARCH_PRESETS[q] || { query: q };
+                    goToSearch(preset.query ?? q, {
+                      filters: preset.filters || {},
+                    });
+                  }}
+                >
                   {q}
                 </button>
               ))}

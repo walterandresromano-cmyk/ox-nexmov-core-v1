@@ -732,9 +732,18 @@ const SEARCH_QUERY_PARAM_TO_FILTER = {
   ciudad: "city",
   precio_min: "priceMin",
   precio_max: "priceMax",
+  km_min: "kmMin",
   year_min: "yearFrom",
   year_max: "yearTo",
   km_max: "kmMax",
+  tipo: "vehicleType",
+  combustible: "fuel",
+  transmision: "transmission",
+  financiacion: "financing",
+  estado: "status",
+  dealer_rank: "dealerRank",
+  dealer: "dealer",
+  fotos: "hasImages",
 };
 
 const SEARCH_FILTER_TO_QUERY_PARAM = Object.entries(

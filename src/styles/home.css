@@ -177,6 +177,16 @@ h1 .ox-hero-reveal {
   background-clip: text;
 }
 
+.ox-home-hero-copy-v3 h1 .ox-hero-word-white {
+  display: inline !important;
+  color: #ffffff;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: #ffffff;
+  text-shadow: 0 2px 18px rgba(2, 6, 23, 0.22);
+}
+
 .ox-home-hero-copy-v3 > p {
   max-width: 470px;
   margin: 7px 0 0;

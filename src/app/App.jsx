@@ -217,6 +217,43 @@ function getRouteUrl(route, payload = {}) {
     return `/vehiculo/${encodeURIComponent(payload.vehicleId)}`;
   }
 
+  if (route === "search") {
+    const params = new URLSearchParams();
+    const query = String(payload?.query || "").trim();
+    const filters = payload?.filters || {};
+    const filterParams = {
+      brand: "marca",
+      model: "modelo",
+      version: "version",
+      province: "provincia",
+      city: "ciudad",
+      priceMin: "precio_min",
+      priceMax: "precio_max",
+      yearFrom: "year_min",
+      yearTo: "year_max",
+      kmMin: "km_min",
+      kmMax: "km_max",
+      vehicleType: "tipo",
+      fuel: "combustible",
+      transmission: "transmision",
+      financing: "financiacion",
+      status: "estado",
+      dealerRank: "dealer_rank",
+      dealer: "dealer",
+      hasImages: "fotos",
+    };
+
+    if (query) params.set("q", query);
+
+    Object.entries(filterParams).forEach(([key, param]) => {
+      const value = String(filters?.[key] || "").trim();
+      if (value) params.set(param, value);
+    });
+
+    const queryString = params.toString();
+    return queryString ? `/buscar?${queryString}` : "/buscar";
+  }
+
   if (route === "compare" && payload?.ids) {
     return `/comparar?ids=${encodeURIComponent(payload.ids)}`;
   }
