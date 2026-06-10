@@ -1948,33 +1948,57 @@ h1 .ox-hero-reveal {
   }
 
   /* CONFIANZA MOBILE */
+  .ox-home-confidence-v3 {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .ox-home-confidence-v3 h2 {
+    line-height: 1.15;
+  }
+
+  .ox-home-confidence-head-v3 p {
+    max-width: none;
+    font-size: 0.84rem;
+    line-height: 1.45;
+  }
+
   .ox-home-confidence-list-v3 {
-    gap: 7px;
+    gap: 8px;
   }
 
   .ox-home-confidence-list-v3 article {
-    min-height: auto;
-    padding: 9px 10px;
+    min-height: 52px;
+    padding: 10px 12px;
     border-radius: 15px;
   }
 
   .ox-home-confidence-list-v3 article > span {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
   }
 
   .ox-home-confidence-list-v3 strong {
-    font-size: 0.72rem;
+    font-size: 0.84rem;
   }
 
   .ox-home-confidence-list-v3 p {
-    font-size: 0.6rem;
-    line-height: 1.3;
+    font-size: 0.75rem;
+    line-height: 1.4;
   }
 
   .ox-home-confidence-cta-v3 {
-    min-height: 66px;
-    padding: 12px;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .ox-home-confidence-cta-v3 strong {
+    font-size: 0.9rem;
+  }
+
+  .ox-home-confidence-cta-v3 span {
+    font-size: 0.78rem;
+    line-height: 1.4;
   }
 
   /* INTELLIGENCE GRID MOBILE */
