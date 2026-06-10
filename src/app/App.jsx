@@ -534,8 +534,10 @@ export default function App() {
     }
 
     function onMouseLeave(e) {
-      if (e.target.closest(".primary-action")) {
-        e.target.closest(".primary-action").style.transform = "";
+      if (!(e.target instanceof Element)) return;
+      const btn = e.target.closest(".primary-action");
+      if (btn) {
+        btn.style.transform = "";
         activeBtn = null;
       }
     }

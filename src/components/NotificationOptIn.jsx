@@ -86,19 +86,18 @@ export default function NotificationOptIn({ authUser }) {
           Recibí avisos cuando el dealer responda tu consulta o publique un vehículo
           que buscás.
         </p>
-      </div>
-
-      <div className="notif-optin__actions">
-        <button
-          className="notif-optin__btn notif-optin__btn--primary"
-          onClick={handleEnable}
-          disabled={isLoading}
-        >
-          {isLoading ? "Activando…" : "Activar"}
-        </button>
-        <button className="notif-optin__btn notif-optin__btn--ghost" onClick={handleDismiss}>
-          Ahora no
-        </button>
+        <div className="notif-optin__actions">
+          <button
+            className="notif-optin__btn notif-optin__btn--primary"
+            onClick={handleEnable}
+            disabled={isLoading}
+          >
+            {isLoading ? "Activando…" : "Activar"}
+          </button>
+          <button className="notif-optin__btn notif-optin__btn--ghost" onClick={handleDismiss}>
+            Ahora no
+          </button>
+        </div>
       </div>
 
       <button
