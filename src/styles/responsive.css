@@ -16271,3 +16271,37 @@ select option {
   background-color: #ffffff;
   color: #0f172a;
 }
+
+/* ── Panel de confianza — correcciones mobile ─────────────────────────────── */
+@media (max-width: 760px) {
+  .ox-home-confidence-v3 {
+    padding: 16px !important;
+    gap: 12px !important;
+  }
+
+  .ox-home-confidence-v3 h2 {
+    font-size: 1.14rem !important;
+    line-height: 1.18 !important;
+  }
+
+  .ox-home-confidence-head-v3 p {
+    max-width: none !important;
+    font-size: 0.84rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .ox-home-confidence-list-v3 strong,
+  .ox-home-confidence-cta-v3 strong {
+    font-size: 0.88rem !important;
+  }
+
+  .ox-home-confidence-list-v3 p,
+  .ox-home-confidence-cta-v3 span {
+    font-size: 0.78rem !important;
+    line-height: 1.42 !important;
+  }
+
+  .ox-home-confidence-cta-v3 {
+    padding: 14px !important;
+  }
+}
