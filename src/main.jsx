@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { initSentry } from "./lib/sentry.js";
 import App from "./app/App.jsx";
+
+initSentry();
 
 import "./styles/tokens.css";
 import "./styles/base.css";

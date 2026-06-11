@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
+import { reportSupabaseError, setSentryUser } from "../lib/sentry.js";
 
 const LOGIN_ATTEMPTS_KEY = "ox_login_attempts";
 const LOGIN_LOCKOUT_KEY = "ox_login_lockout";
@@ -78,8 +79,10 @@ export async function signInWithEmail({ email, password }) {
 
   if (result.error) {
     recordLoginFailure();
+    reportSupabaseError(result.error, "auth.service / signInWithEmail");
   } else {
     clearLoginThrottle();
+    setSentryUser(result.data?.user ?? null);
   }
 
   return result;
@@ -220,10 +223,9 @@ export async function updateCurrentUserPassword({ password }) {
 
 export async function signOut() {
   if (!isSupabaseConfigured) {
-    return {
-      error: null,
-    };
+    return { error: null };
   }
 
+  setSentryUser(null);
   return supabase.auth.signOut();
 }

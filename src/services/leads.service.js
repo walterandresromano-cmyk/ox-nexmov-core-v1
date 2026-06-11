@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
+import { reportSupabaseError } from "../lib/sentry.js";
 
 function toNumericVehicleId(vehicleId) {
   const value = Number(vehicleId);
@@ -388,6 +389,8 @@ export async function createVehicleContactLead({
     .insert(payload)
     .select("*")
     .single();
+
+  if (error) reportSupabaseError(error, "leads.service / createVehicleContactLead");
 
   // Fire-and-forget: notify dealer via email + push
   if (data && typeof window !== "undefined") {
