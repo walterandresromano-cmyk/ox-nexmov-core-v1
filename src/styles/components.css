@@ -27911,3 +27911,66 @@ button.buyer-shortlist-compare__slot:hover {
     rgba(var(--amb-r), var(--amb-g), var(--amb-b), 0.55)
   );
 }
+
+/* =========================================================
+   FINANCIACIÓN INLINE — badge en tarjeta + selector de tasa
+   ========================================================= */
+
+.vehicle-card__monthly-hint {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: rgba(56, 189, 248, 0.82);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+:root[data-theme="light"] .vehicle-card__monthly-hint {
+  color: rgba(3, 105, 161, 0.80);
+}
+
+/* Selector de tasas en la calculadora del modal */
+.vehicle-detail-used-financing-rates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.financing-rate-btn {
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.20);
+  background: rgba(15, 23, 42, 0.50);
+  color: rgba(203, 213, 225, 0.70);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.financing-rate-btn:hover {
+  background: rgba(56, 189, 248, 0.10);
+  border-color: rgba(56, 189, 248, 0.30);
+  color: rgba(186, 230, 253, 0.90);
+}
+
+.financing-rate-btn.is-active {
+  background: rgba(56, 189, 248, 0.16);
+  border-color: rgba(56, 189, 248, 0.50);
+  color: rgba(186, 230, 253, 0.98);
+  font-weight: 600;
+}
+
+:root[data-theme="light"] .financing-rate-btn {
+  background: rgba(241, 245, 249, 0.80);
+  border-color: rgba(148, 163, 184, 0.30);
+  color: rgba(71, 85, 105, 0.80);
+}
+
+:root[data-theme="light"] .financing-rate-btn.is-active {
+  background: rgba(14, 165, 233, 0.12);
+  border-color: rgba(14, 165, 233, 0.40);
+  color: rgba(3, 105, 161, 0.95);
+}

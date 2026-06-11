@@ -1,6 +1,7 @@
 import { lazy, Suspense, useRef, useState } from "react";
 
 import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
+import { quickEstimate } from "../../lib/financing.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import {
   getVehicleImageUrl,
@@ -257,6 +258,14 @@ export default function VehicleCardPublic({
               <strong className="vehicle-card__price">
                 {formatARS(vehicle.price)}
               </strong>
+              {(() => {
+                const est = quickEstimate(vehicle.price);
+                return est ? (
+                  <span className="vehicle-card__monthly-hint">
+                    desde {formatARS(Math.round(est.monthly))}/mes
+                  </span>
+                ) : null;
+              })()}
             </div>
 
             <div className="vehicle-card__price-side">

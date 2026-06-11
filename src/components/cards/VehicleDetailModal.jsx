@@ -6,6 +6,13 @@ import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import { getVehicleImages, isVehicleReserved } from "../../lib/vehicle.js";
 import { getOptimizedUrl } from "../../lib/imageUrl.js";
+import {
+  calcMonthly,
+  FINANCING_RATES,
+  DEFAULT_RATE_INDEX,
+  DEFAULT_DOWN_PCT,
+  DEFAULT_TERM_MONTHS,
+} from "../../lib/financing.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleImage from "../VehicleImage.jsx";
 import { useScramble } from "../../hooks/useScramble.js";
@@ -54,24 +61,21 @@ function parseFinancingNumber(value) {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
 }
 
-function calculateUsedVehicleFinancing({ price, downPayment, termMonths, monthlyIncome }) {
-  const vehiclePrice = parseFinancingNumber(price);
-  const down = parseFinancingNumber(downPayment);
-  const term = Number(termMonths) || 36;
+function calculateUsedVehicleFinancing({ price, downPayment, termMonths, monthlyIncome, monthlyRate }) {
   const income = parseFinancingNumber(monthlyIncome);
-
-  if (!vehiclePrice || down >= vehiclePrice) return null;
-
-  const financed = vehiclePrice - down;
-  const monthlyRate = 0.035;
-  const monthlyPayment =
-    financed *
-    ((monthlyRate * Math.pow(1 + monthlyRate, term)) /
-      (Math.pow(1 + monthlyRate, term) - 1));
-  const totalPaid = monthlyPayment * term;
-  const incomePercent = income > 0 ? Math.round((monthlyPayment / income) * 100) : null;
-
-  return { financed, monthlyPayment, totalPaid, incomePercent };
+  const result = calcMonthly({
+    price:       parseFinancingNumber(price),
+    downPayment: parseFinancingNumber(downPayment),
+    termMonths:  Number(termMonths) || DEFAULT_TERM_MONTHS,
+    monthlyRate: monthlyRate ?? FINANCING_RATES[DEFAULT_RATE_INDEX].monthly,
+  });
+  if (!result) return null;
+  return {
+    financed:       result.financed,
+    monthlyPayment: result.monthly,
+    totalPaid:      result.totalPaid,
+    incomePercent:  income > 0 ? Math.round((result.monthly / income) * 100) : null,
+  };
 }
 
 function formatMaintenanceDate(value) {
@@ -162,8 +166,9 @@ export default function VehicleDetailModal({
   const [showContactGate, setShowContactGate] = useState(false);
   const [shareState, setShareState] = useState("idle");
   const [financingDownPayment, setFinancingDownPayment] = useState("");
-  const [financingTermMonths, setFinancingTermMonths] = useState("36");
-  const [financingIncome, setFinancingIncome] = useState("");
+  const [financingTermMonths, setFinancingTermMonths] = useState(String(DEFAULT_TERM_MONTHS));
+  const [financingIncome, setFinancingIncome]         = useState("");
+  const [financingRateIdx, setFinancingRateIdx]       = useState(DEFAULT_RATE_INDEX);
   const [termDropdownOpen, setTermDropdownOpen] = useState(false);
   const termDropdownRef = useRef(null);
 
@@ -219,10 +224,11 @@ export default function VehicleDetailModal({
   const usedFinancingResult = useMemo(
     () =>
       calculateUsedVehicleFinancing({
-        price: currentVehicle.price,
-        downPayment: financingDownPayment || currentVehicle.delivery || "",
-        termMonths: financingTermMonths || currentVehicle.months || "36",
+        price:        currentVehicle.price,
+        downPayment:  financingDownPayment || currentVehicle.delivery || "",
+        termMonths:   financingTermMonths  || currentVehicle.months   || String(DEFAULT_TERM_MONTHS),
         monthlyIncome: financingIncome,
+        monthlyRate:  FINANCING_RATES[financingRateIdx]?.monthly,
       }),
     [
       currentVehicle.price,
@@ -231,6 +237,7 @@ export default function VehicleDetailModal({
       financingDownPayment,
       financingTermMonths,
       financingIncome,
+      financingRateIdx,
     ]
   );
 
@@ -290,9 +297,15 @@ export default function VehicleDetailModal({
   useEffect(() => {
     setSelectedImageIndex(0);
     resetImageZoom();
-    setFinancingDownPayment(currentVehicle?.delivery ? String(currentVehicle.delivery) : "");
-    setFinancingTermMonths(currentVehicle?.months ? String(currentVehicle.months) : "36");
+    const defaultDown = currentVehicle?.delivery
+      ? String(currentVehicle.delivery)
+      : currentVehicle?.price
+        ? String(Math.round(Number(currentVehicle.price) * DEFAULT_DOWN_PCT))
+        : "";
+    setFinancingDownPayment(defaultDown);
+    setFinancingTermMonths(currentVehicle?.months ? String(currentVehicle.months) : String(DEFAULT_TERM_MONTHS));
     setFinancingIncome("");
+    setFinancingRateIdx(DEFAULT_RATE_INDEX);
   }, [currentVehicle?.id, currentVehicle?.vehicle_id, images[0]?.url]);
 
   useEffect(() => {
@@ -975,6 +988,19 @@ export default function VehicleDetailModal({
                   <strong>Cuota estimada para este usado</strong>
                 </div>
                 <p>{formatARS(currentVehicle.price)}</p>
+              </div>
+
+              <div className="vehicle-detail-used-financing-rates">
+                {FINANCING_RATES.map((r, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`financing-rate-btn${financingRateIdx === i ? " is-active" : ""}`}
+                    onClick={() => setFinancingRateIdx(i)}
+                  >
+                    {r.label}
+                  </button>
+                ))}
               </div>
 
               <div className="vehicle-detail-used-financing-inputs">
