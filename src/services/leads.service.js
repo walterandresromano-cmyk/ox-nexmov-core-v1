@@ -431,21 +431,17 @@ export async function createVehicleContactLead({
         console.error("[leads.service] notify-lead fetch failed:", err?.message);
       });
 
-    // Web Push: notify dealer device instantly
-    if (resolvedDealerId && isSupabaseConfigured && supabase) {
-      const buyerName =
-        `${buyerProfile.first_name || ""} ${buyerProfile.last_name || ""}`.trim() ||
-        "Un comprador";
+    // Web Push: only when the dealer's tab is not in the foreground.
+    // Calls notify-lead (not push-send directly) — the Edge Function derives
+    // the dealer server-side from the leadId so the client never controls dealerId.
+    if (
+      data?.id &&
+      isSupabaseConfigured &&
+      supabase &&
+      document.visibilityState !== "visible"
+    ) {
       supabase.functions
-        .invoke("push-send", {
-          body: {
-            dealerId: resolvedDealerId,
-            title: "Nueva consulta recibida",
-            body: `${buyerName} preguntó por ${vehicleTitle}`,
-            url: "/dealer",
-            tag: `lead-${data.id}`,
-          },
-        })
+        .invoke("notify-lead", { body: { leadId: data.id } })
         .catch(() => {});
     }
   }

@@ -16,6 +16,10 @@ create table if not exists public.push_subscriptions (
 create index if not exists push_subscriptions_user_id_idx
   on public.push_subscriptions (user_id);
 
+-- Used by the expired-subscription cleanup (DELETE WHERE endpoint IN (...))
+create index if not exists push_subscriptions_endpoint_idx
+  on public.push_subscriptions (endpoint);
+
 alter table public.push_subscriptions enable row level security;
 
 drop policy if exists push_subscriptions_own on public.push_subscriptions;
