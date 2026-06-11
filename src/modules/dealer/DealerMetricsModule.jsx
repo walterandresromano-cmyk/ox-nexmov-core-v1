@@ -6,6 +6,7 @@ import {
 } from "../../lib/publicationScore.js";
 import { formatLimit, getPlanAlertClass, getPlanAlertLabel } from "../../lib/dealerPlan.js";
 import { buildDealerCommercialReport } from "../../lib/dealerCommercialReport.js";
+import DealerWeeklyReport from "./DealerWeeklyReport.jsx";
 
 const RESPONDED_STATUSES = new Set([
   "seen", "contacted", "contactado", "in_progress", "en_gestion",
@@ -133,6 +134,7 @@ export default function DealerMetricsModule({
   const nextPlanInfo = NEXT_PLAN[currentPlanKey] || NEXT_PLAN.inicio;
 
   const [copyState, setCopyState] = useState("idle");
+  const [showWeekly, setShowWeekly] = useState(false);
 
   const commercialReport = useMemo(
     () =>
@@ -228,9 +230,18 @@ export default function DealerMetricsModule({
             activo.
           </p>
         </div>
-        <button className="admin-refresh-btn" onClick={onRefresh}>
-          Actualizar
-        </button>
+        <div className="dealer-metrics-head-actions">
+          <button
+            type="button"
+            className="table-action-btn"
+            onClick={() => setShowWeekly(true)}
+          >
+            Reporte semanal
+          </button>
+          <button className="admin-refresh-btn" onClick={onRefresh}>
+            Actualizar
+          </button>
+        </div>
       </div>
 
       {/* ── Rendimiento de mi plan ── */}
@@ -866,6 +877,19 @@ export default function DealerMetricsModule({
             </tbody>
           </table>
         </div>
+      )}
+
+      {/* Weekly report modal */}
+      {showWeekly && (
+        <DealerWeeklyReport
+          leads={leads}
+          vehicles={dealerVehicles}
+          recommendations={commercialReport.recommendations}
+          copyText={commercialReport.copyText}
+          copyState={copyState}
+          onCopy={handleCopy}
+          onClose={() => setShowWeekly(false)}
+        />
       )}
 
       {/* Plan upgrade CTA */}
