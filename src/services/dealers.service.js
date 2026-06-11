@@ -81,7 +81,6 @@ function mapDealerFromSupabase(row) {
     contactPhone: row.contact_phone || "",
 
     isActive: row.is_active !== false,
-    isFounder: Boolean(row.is_founder),
 
     benefits: {
       sellVehicleLeads: Boolean(row.can_receive_sell_vehicle_leads),
@@ -149,8 +148,7 @@ export async function listDealersForCurrentUser() {
       contact_phone,
       phone_whatsapp,
       can_receive_sell_vehicle_leads,
-      is_active,
-      is_founder
+      is_active
     `
     )
     .eq("profile_id", user.id)
@@ -420,8 +418,7 @@ export async function updateDealerWhatsappById(dealerId, normalizedWhatsapp) {
       contact_phone,
       phone_whatsapp,
       can_receive_sell_vehicle_leads,
-      is_active,
-      is_founder
+      is_active
     `
     )
     .eq("id", resolvedDealerId)
