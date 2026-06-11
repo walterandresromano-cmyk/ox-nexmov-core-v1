@@ -44,6 +44,38 @@
   <meta name="twitter:title" content="oX NEXMOV — Marketplace de vehículos verificados" />
   <meta name="twitter:description" content="Encontrá tu próximo vehículo en oX NEXMOV. Publicaciones de dealers verificados con datos reales." />
   <meta name="twitter:image" content="https://www.oxnexmov.com.ar/1hero-car.png" />
+
+  <!-- schema.org: WebSite + Organization (estático, todas las páginas) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "oX NEXMOV",
+    "url": "https://www.oxnexmov.com.ar",
+    "inLanguage": "es-AR",
+    "description": "Marketplace de vehículos usados verificados en Argentina.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://www.oxnexmov.com.ar/?buscar={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "oX NEXMOV",
+    "url": "https://www.oxnexmov.com.ar",
+    "logo": "https://www.oxnexmov.com.ar/logo.svg",
+    "description": "Marketplace de vehículos usados verificados en Argentina.",
+    "areaServed": "AR",
+    "foundingLocation": { "@type": "Country", "name": "Argentina" }
+  }
+  </script>
 </head>
 
 

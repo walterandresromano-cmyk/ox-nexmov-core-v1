@@ -5,6 +5,7 @@ import {
   getDealerPublicVehicles,
 } from "../../services/publicDealer.service.js";
 import { getDealerRatingStats } from "../../services/dealerRatings.service.js";
+import { injectJsonLd, removeJsonLd, buildDealerSchema } from "../../lib/schema.js";
 
 const PLAN_LABELS = {
   inicio: "Inicio",
@@ -46,10 +47,14 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
     setMeta("property", "og:url", shareUrl);
     if (dealer.logo) setMeta("property", "og:image", dealer.logo);
 
+    // schema.org/AutoDealer — rich results en Google Maps y búsqueda local
+    injectJsonLd("ox-dealer-jsonld", buildDealerSchema(dealer, shareUrl));
+
     return () => {
       document.title = previousTitle;
       setMeta("property", "og:title", "oX NEXMOV — Marketplace de vehículos verificados");
       setMeta("property", "og:description", "Encontrá tu próximo vehículo en oX NEXMOV.");
+      removeJsonLd("ox-dealer-jsonld");
     };
   }, [dealer]);
 

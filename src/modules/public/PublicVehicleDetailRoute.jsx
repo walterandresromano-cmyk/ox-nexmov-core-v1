@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import VehicleDetailModal from "../../components/cards/VehicleDetailModal.jsx";
 import { getPublicVehicleById } from "../../services/vehicles.service.js";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
+import { injectJsonLd, removeJsonLd, buildCarSchema } from "../../lib/schema.js";
 
 function getVehicleTitle(vehicle) {
   return [vehicle?.brand, vehicle?.model, vehicle?.year]
@@ -123,43 +124,8 @@ export default function PublicVehicleDetailRoute({
     setMetaContent("name", "twitter:description", description);
     setCanonical(shareUrl);
 
-    // JSON-LD structured data for Google Shopping / rich results
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "Vehicle",
-      "name": title,
-      "brand": { "@type": "Brand", "name": vehicle.brand },
-      "model": vehicle.model,
-      "vehicleModelDate": vehicle.year ? String(vehicle.year) : undefined,
-      "mileageFromOdometer": vehicle.kilometers
-        ? { "@type": "QuantitativeValue", "value": vehicle.kilometers, "unitCode": "KMT" }
-        : undefined,
-      "fuelType": vehicle.fuelType || vehicle.raw?.fuel_type || undefined,
-      "vehicleTransmission": vehicle.transmission || vehicle.raw?.transmission || undefined,
-      "bodyType": vehicle.bodyType || vehicle.raw?.body_type || undefined,
-      "description": description,
-      "url": shareUrl,
-      "image": vehicle.mainImageUrl || vehicle.imageUrl || undefined,
-      "offers": {
-        "@type": "Offer",
-        "price": vehicle.price || undefined,
-        "priceCurrency": "ARS",
-        "availability": "https://schema.org/InStock",
-        "url": shareUrl,
-        "seller": vehicle.dealer?.commercialName
-          ? { "@type": "AutoDealer", "name": vehicle.dealer.commercialName }
-          : undefined,
-      },
-    };
-
-    // Remove undefined values to keep the schema clean
-    const cleanJsonLd = JSON.parse(JSON.stringify(jsonLd));
-
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "ox-vehicle-jsonld";
-    script.textContent = JSON.stringify(cleanJsonLd);
-    document.head.appendChild(script);
+    // JSON-LD schema.org/Car — rich results en Google para autos usados
+    injectJsonLd("ox-vehicle-jsonld", buildCarSchema(vehicle, shareUrl));
 
     return () => {
       document.title = previousTitle;
@@ -169,7 +135,7 @@ export default function PublicVehicleDetailRoute({
       setMetaContent("property", "og:image", "https://www.oxnexmov.com.ar/1hero-car.png");
       setMetaContent("name", "twitter:image", "https://www.oxnexmov.com.ar/1hero-car.png");
       if (previousCanonical) setCanonical(previousCanonical);
-      document.getElementById("ox-vehicle-jsonld")?.remove();
+      removeJsonLd("ox-vehicle-jsonld");
     };
   }, [vehicle]);
 
