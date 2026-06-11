@@ -29,7 +29,7 @@ function getPrivatePanelForRole(role) {
   }
 
   if (normalizedRole === "buyer") {
-    return { id: "buyer", label: "Comprador" };
+    return { id: "buyer", label: "Perfil" };
   }
 
   if (normalizedRole === "internal0km") {

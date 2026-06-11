@@ -2644,6 +2644,18 @@
   pointer-events: none;
 }
 
+/* While the "Más" drawer is open: push header + float buttons behind the backdrop.
+   backdrop-filter on .site-header creates its own stacking context, which prevents
+   the z-index comparison with the backdrop (z-index 78) from working as expected.
+   Explicitly lowering these elements ensures the overlay covers the full screen. */
+:root:has(.mobile-dock-backdrop) .site-header {
+  z-index: 1 !important;
+}
+:root:has(.mobile-dock-backdrop) .mobile-theme-float-btn,
+:root:has(.mobile-dock-backdrop) .mobile-access-float-btn {
+  z-index: 1 !important;
+}
+
 /* Hide dealer mobile tabs and quicknav when a modal is open.
    These render in-page (not fixed) but appear over the modal
    due to dealer-panel stacking context. */
@@ -5090,6 +5102,12 @@
 @media (max-width: 860px) {
   :root {
     --mobile-dock-height: 72px;
+  }
+
+  /* Ensure the last content item can always be scrolled above the dock */
+  body {
+    scroll-padding-bottom: calc(var(--mobile-dock-height) + env(safe-area-inset-bottom, 0px) + 16px);
+    padding-bottom: calc(var(--mobile-dock-height) + env(safe-area-inset-bottom, 0px) + 16px);
   }
 
   .mobile-dock {
