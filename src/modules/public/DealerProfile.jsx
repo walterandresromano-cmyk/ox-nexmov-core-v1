@@ -4,6 +4,7 @@ import {
   getDealerPublicProfile,
   getDealerPublicVehicles,
 } from "../../services/publicDealer.service.js";
+import { getDealerRatingStats } from "../../services/dealerRatings.service.js";
 
 const PLAN_LABELS = {
   inicio: "Inicio",
@@ -15,10 +16,11 @@ const PLAN_LABELS = {
 export default function DealerProfile({ onNavigate, appActions, routeParams }) {
   const dealerId = routeParams?.dealerId;
 
-  const [dealer, setDealer] = useState(null);
-  const [vehicles, setVehicles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [dealer, setDealer]       = useState(null);
+  const [vehicles, setVehicles]   = useState([]);
+  const [loading, setLoading]     = useState(true);
+  const [error, setError]         = useState("");
+  const [ratingStats, setRatingStats] = useState(null);
 
   useEffect(() => {
     if (!dealer) return;
@@ -79,6 +81,8 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
       setDealer(dealerData);
       setVehicles(vehicleData);
       setLoading(false);
+
+      getDealerRatingStats(dealerId).then(setRatingStats);
     }
 
     load();
@@ -164,6 +168,14 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
                 </span>
                 {dealer.isFounder && (
                   <span className="founder-badge">Concesionaria Fundadora</span>
+                )}
+                {ratingStats && ratingStats.count >= 1 && (
+                  <span className="dealer-rating-badge">
+                    ★ {ratingStats.average.toFixed(1)}
+                    <span className="dealer-rating-badge__count">
+                      ({ratingStats.count} {ratingStats.count === 1 ? "calificación" : "calificaciones"})
+                    </span>
+                  </span>
                 )}
               </div>
               <h1>{dealer.name}</h1>

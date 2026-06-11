@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { submitDealerRating } from "../../services/dealerRatings.service.js";
 
 import { buildRadarCriteriaSummary } from "../../services/radarRequests.service.js";
 import { getObjectPositionXY } from "../../lib/imagePosition.js";
@@ -296,6 +297,8 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const [activeMovimientoTab, setActiveMovimientoTab] = useState("shortlist");
   const [garageNotifications, setGarageNotifications] = useState([]);
   const [garageNotificationsLoaded, setGarageNotificationsLoaded] = useState(false);
+  // key: lead identifier (created_at+index), value: { rating, submitted, submitting }
+  const [leadRatings, setLeadRatings] = useState({});
 
   const radarSectionRef = useRef(null);
 
@@ -309,6 +312,25 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   }
 
   useEffect(() => { refreshBuyerPanel(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleLeadRating = useCallback(async (leadKey, lead, stars) => {
+    setLeadRatings(prev => ({ ...prev, [leadKey]: { rating: stars, submitting: true, submitted: false } }));
+
+    const leadId   = lead.lead_id ?? lead.id ?? null;
+    const dealerId = lead.dealer_id ?? null;
+
+    const { error } = await submitDealerRating({
+      dealerId,
+      leadId,
+      rating:  stars,
+      comment: "",
+    });
+
+    setLeadRatings(prev => ({
+      ...prev,
+      [leadKey]: { rating: stars, submitting: false, submitted: !error },
+    }));
+  }, []);
 
   // Dispara procesos backend una vez por sesión de usuario.
   // Falla silenciosamente si las RPCs no están instaladas todavía.
@@ -1816,33 +1838,68 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                       </div>
                     ) : (
                       <div className="garage-ox-activity-list">
-                        {vehicleLeads.map((lead, index) => (
-                          <article
-                            key={`${lead.created_at}-${index}`}
-                            className="garage-ox-activity-card"
-                          >
-                            <div className="garage-ox-activity-card__main">
-                              <span className="garage-ox-activity-card__eyebrow">
-                                Consulta a dealer
+                        {vehicleLeads.map((lead, index) => {
+                          const leadKey    = `${lead.created_at}-${index}`;
+                          const ratingState = leadRatings[leadKey];
+                          const submitted  = ratingState?.submitted;
+                          const selected   = ratingState?.rating ?? 0;
+
+                          return (
+                            <article
+                              key={leadKey}
+                              className="garage-ox-activity-card"
+                            >
+                              <div className="garage-ox-activity-card__main">
+                                <span className="garage-ox-activity-card__eyebrow">
+                                  Consulta a dealer
+                                </span>
+                                <strong>
+                                  {[lead.vehicle_brand, lead.vehicle_model]
+                                    .filter(Boolean)
+                                    .join(" ") || "Vehículo consultado"}
+                                </strong>
+                                <p>{lead.vehicle_version || lead.vehicle_title || "Sin versión informada"}</p>
+                              </div>
+                              <div className="garage-ox-activity-card__meta">
+                                <span>{formatDateTime(lead.created_at).split(",")[0]}</span>
+                                <span>{formatARS(lead.price_snapshot)}</span>
+                                <span>{lead.dealer_name || "Dealer"}</span>
+                                <small>{lead.dealer_phone || "Contacto registrado"}</small>
+                              </div>
+                              <span className={`admin-chip ${getVehicleLeadChipClass(lead.crm_status)}`.trim()}>
+                                {getVehicleLeadStatusLabel(lead.crm_status)}
                               </span>
-                              <strong>
-                                {[lead.vehicle_brand, lead.vehicle_model]
-                                  .filter(Boolean)
-                                  .join(" ") || "Vehículo consultado"}
-                              </strong>
-                              <p>{lead.vehicle_version || lead.vehicle_title || "Sin versión informada"}</p>
-                            </div>
-                            <div className="garage-ox-activity-card__meta">
-                              <span>{formatDateTime(lead.created_at).split(",")[0]}</span>
-                              <span>{formatARS(lead.price_snapshot)}</span>
-                              <span>{lead.dealer_name || "Dealer"}</span>
-                              <small>{lead.dealer_phone || "Contacto registrado"}</small>
-                            </div>
-                            <span className={`admin-chip ${getVehicleLeadChipClass(lead.crm_status)}`.trim()}>
-                              {getVehicleLeadStatusLabel(lead.crm_status)}
-                            </span>
-                          </article>
-                        ))}
+
+                              <div className="dealer-rating-widget">
+                                {submitted ? (
+                                  <span className="dealer-rating-widget__thanks">
+                                    ¡Gracias por tu calificación!
+                                  </span>
+                                ) : (
+                                  <>
+                                    <span className="dealer-rating-widget__label">
+                                      ¿Cómo fue la atención?
+                                    </span>
+                                    <div className="dealer-rating-widget__stars" role="group" aria-label="Calificar dealer">
+                                      {[1, 2, 3, 4, 5].map((star) => (
+                                        <button
+                                          key={star}
+                                          type="button"
+                                          className={`dealer-rating-star${star <= selected ? " is-active" : ""}`}
+                                          onClick={() => handleLeadRating(leadKey, lead, star)}
+                                          disabled={ratingState?.submitting}
+                                          aria-label={`${star} estrella${star !== 1 ? "s" : ""}`}
+                                        >
+                                          ★
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </article>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
