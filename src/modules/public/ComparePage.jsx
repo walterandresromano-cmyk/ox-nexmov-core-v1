@@ -32,7 +32,27 @@ function SpecRow({ label, value, highlight = false }) {
   );
 }
 
-function CompareCard({ vehicle, onOpenDetail, onRemove }) {
+function MarketScoreRow({ market }) {
+  if (!market) {
+    return (
+      <div className="compare-spec-row compare-market-score compare-market-score--none">
+        <span className="compare-spec-label">vs. mercado</span>
+        <strong className="compare-spec-value">Sin referencia</strong>
+      </div>
+    );
+  }
+  const pct = Math.abs(market.percent).toFixed(1);
+  const tone = market.isBelowMarket ? "below" : "above";
+  const label = market.isBelowMarket ? `↓ ${pct}% bajo` : `↑ ${pct}% sobre`;
+  return (
+    <div className={`compare-spec-row compare-market-score compare-market-score--${tone}`}>
+      <span className="compare-spec-label">vs. mercado</span>
+      <strong className="compare-spec-value">{label}</strong>
+    </div>
+  );
+}
+
+function CompareCard({ vehicle, onOpenDetail, onRemove, isBestDeal }) {
   const images = getVehicleImages(vehicle);
   const imageUrl = images[0]?.url || "";
   const title = getVehicleTitle(vehicle);
@@ -84,17 +104,21 @@ function CompareCard({ vehicle, onOpenDetail, onRemove }) {
           </p>
         </div>
 
-        <strong className="compare-card-price">{formatARS(vehicle.price)}</strong>
+        <div className="compare-card-price-block">
+          <strong className="compare-card-price">{formatARS(vehicle.price)}</strong>
+          {isBestDeal && (
+            <span className="compare-best-deal-badge">Mejor precio</span>
+          )}
+        </div>
 
-        {market && market.isBelowMarket && (
-          <div className="compare-market is-below">
-            <span>Referencia de mercado</span>
-            <strong>{Math.abs(market.percent).toFixed(1)}% bajo el mercado</strong>
-            <p>Ref. {formatARS(market.reference)}</p>
+        {market && market.reference > 0 && (
+          <div className="compare-market-ref">
+            <span>Ref. mercado: {formatARS(market.reference)}</span>
           </div>
         )}
 
         <div className="compare-spec-list">
+          <MarketScoreRow market={market} />
           <SpecRow label="Año" value={vehicle.year || vehicle.raw?.year} highlight />
           <SpecRow label="Km" value={km != null ? formatKm(km) : null} highlight />
           <SpecRow label="Ubicación" value={getLocationLabel(vehicle)} />
@@ -184,6 +208,18 @@ export default function ComparePage({ appActions, onNavigate }) {
   }
 
   const countClass = `compare-count-${Math.max(1, Math.min(vehicles.length, 4))}`;
+
+  // Vehículo con mejor posición relativa al mercado (mayor % por debajo)
+  const bestDealId = vehicles.length >= 2
+    ? vehicles.reduce((best, v) => {
+        const delta = getMarketDelta(v);
+        if (!delta?.isBelowMarket) return best;
+        if (!best) return v;
+        const bestDelta = getMarketDelta(best);
+        return delta.percent > (bestDelta?.percent ?? -Infinity) ? v : best;
+      }, null)?.id ?? null
+    : null;
+
   const shareUrl = vehicles.length
     ? `${window.location.origin}/comparar?ids=${vehicles.map((v) => v.id).join(",")}`
     : "";
@@ -260,6 +296,7 @@ export default function ComparePage({ appActions, onNavigate }) {
                   vehicle={vehicle}
                   onOpenDetail={handleOpenDetail}
                   onRemove={handleRemove}
+                  isBestDeal={bestDealId !== null && vehicle.id === bestDealId}
                 />
               ))}
             </div>
