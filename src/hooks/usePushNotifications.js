@@ -12,15 +12,6 @@ function urlBase64ToUint8Array(base64String) {
   return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
 }
 
-async function getAccessToken() {
-  if (!isSupabaseConfigured || !supabase) return null;
-  try {
-    const { data } = await supabase.auth.getSession();
-    return data?.session?.access_token || null;
-  } catch {
-    return null;
-  }
-}
 
 export function usePushNotifications({ authUser } = {}) {
   const supported =
@@ -72,39 +63,19 @@ export function usePushNotifications({ authUser } = {}) {
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
       });
 
-      // 3. Obtener token de sesión fresco
-      const token = await getAccessToken();
-      if (!token) {
-        setError("Sesión no válida. Intentá cerrar sesión y volver a entrar.");
-        // Revertir suscripción local si no podemos guardarla
+      // 3. Guardar en Edge Function push-subscribe
+      const { error: fnError } = await supabase.functions.invoke(
+        "push-subscribe",
+        { body: subscription }
+      );
+
+      if (fnError) {
+        setError(`No se pudo activar: ${fnError.message}`);
         await subscription.unsubscribe().catch(() => {});
         return;
       }
 
-      // 4. Guardar en backend — await para confirmar
-      const apiRes = await fetch("/api/push-subscribe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(subscription),
-      });
-
-      if (!apiRes.ok) {
-        let detail = `Error ${apiRes.status}`;
-        try {
-          const body = await apiRes.json();
-          detail = body?.error || body?.step
-            ? `${body.step ? `[${body.step}] ` : ""}${body.error || detail}`
-            : detail;
-        } catch {}
-        setError(`No se pudo activar: ${detail}`);
-        await subscription.unsubscribe().catch(() => {});
-        return;
-      }
-
-      // 5. Solo marcar suscripto si todo salió bien
+      // 4. Solo marcar suscripto si todo salió bien
       setIsSubscribed(true);
     } catch (err) {
       setError(err?.message || "No se pudo activar las notificaciones.");

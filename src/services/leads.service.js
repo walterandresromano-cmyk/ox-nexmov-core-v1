@@ -430,6 +430,24 @@ export async function createVehicleContactLead({
       .catch((err) => {
         console.error("[leads.service] notify-lead fetch failed:", err?.message);
       });
+
+    // Web Push: notify dealer device instantly
+    if (resolvedDealerId && isSupabaseConfigured && supabase) {
+      const buyerName =
+        `${buyerProfile.first_name || ""} ${buyerProfile.last_name || ""}`.trim() ||
+        "Un comprador";
+      supabase.functions
+        .invoke("push-send", {
+          body: {
+            dealerId: resolvedDealerId,
+            title: "Nueva consulta recibida",
+            body: `${buyerName} preguntó por ${vehicleTitle}`,
+            url: "/dealer",
+            tag: `lead-${data.id}`,
+          },
+        })
+        .catch(() => {});
+    }
   }
 
   return {
