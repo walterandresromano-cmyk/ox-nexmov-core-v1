@@ -1,20 +1,25 @@
-import * as Sentry from "@sentry/react";
+// Sentry se carga SOLO si hay DSN configurado.
+// Sin DSN: este módulo no tiene efectos secundarios y no parchea fetch.
 
 const DSN = import.meta.env.VITE_SENTRY_DSN;
-const ENV = import.meta.env.MODE; // "production" | "development"
+const ENV = import.meta.env.MODE;
 
-export function initSentry() {
-  if (!DSN) return; // No-op si no hay DSN configurado
+let _sentry = null;
+
+async function getSentry() {
+  if (!_sentry) _sentry = await import("@sentry/react");
+  return _sentry;
+}
+
+export async function initSentry() {
+  if (!DSN) return;
+
+  const Sentry = await getSentry();
 
   Sentry.init({
     dsn: DSN,
     environment: ENV,
-
-    // Captura el 100% de errores pero solo el 10% de trazas de performance
-    // en producción para no exceder la cuota gratuita
     tracesSampleRate: ENV === "production" ? 0.1 : 1.0,
-
-    // Ignorar errores conocidos de red / extensiones de browser
     ignoreErrors: [
       "ResizeObserver loop limit exceeded",
       "ResizeObserver loop completed with undelivered notifications",
@@ -22,7 +27,6 @@ export function initSentry() {
       /^Loading chunk \d+ failed/,
       /^Failed to fetch dynamically imported module/,
     ],
-
     integrations: [
       Sentry.browserTracingIntegration(),
       Sentry.replayIntegration({
@@ -30,63 +34,35 @@ export function initSentry() {
         blockAllMedia: false,
       }),
     ],
-
-    // Session replay: 1% de sesiones normales, 100% con error
     replaysSessionSampleRate: 0.01,
     replaysOnErrorSampleRate: 1.0,
-
     beforeSend(event) {
-      // No enviar errores en desarrollo
       if (ENV !== "production") return null;
       return event;
     },
   });
 }
 
-/**
- * Captura una excepción con contexto adicional.
- * Safe to call aunque Sentry no esté inicializado.
- */
 export function captureError(error, context = {}) {
-  if (!DSN) return;
-  Sentry.withScope((scope) => {
+  if (!DSN || !_sentry) return;
+  _sentry.withScope((scope) => {
     Object.entries(context).forEach(([key, val]) => scope.setExtra(key, val));
-    Sentry.captureException(error);
+    _sentry.captureException(error);
   });
 }
 
-/**
- * Identifica al usuario en Sentry para correlacionar errores.
- * Llamar después del login.
- */
 export function setSentryUser(user) {
-  if (!DSN) return;
-  if (!user) {
-    Sentry.setUser(null);
-    return;
-  }
-  Sentry.setUser({
-    id: user.id,
-    email: user.email,
-    // No enviar datos sensibles — solo ID y email
-  });
+  if (!DSN || !_sentry) return;
+  _sentry.setUser(user ? { id: user.id, email: user.email } : null);
 }
 
-/**
- * Captura errores del patrón { data, error } de Supabase.
- * Solo reporta errores reales (no RLS silenciosos de usuario no autenticado).
- *
- * Uso: const { data, error } = await supabase.from(...).select(...)
- *       reportSupabaseError(error, "leads.service / createLead")
- */
 export function reportSupabaseError(error, context = "") {
-  if (!error || !DSN) return;
+  if (!error || !DSN || !_sentry) return;
 
-  // Ignorar errores esperados que no indican bugs
   const IGNORED_CODES = new Set([
-    "PGRST116", // No rows found (normal en queries opcionales)
-    "42501",    // RLS violation (usuario no autorizado — esperado)
-    "23505",    // Unique violation (deduplicación intencionada)
+    "PGRST116",
+    "42501",
+    "23505",
   ]);
   if (IGNORED_CODES.has(error.code)) return;
 
@@ -97,5 +73,3 @@ export function reportSupabaseError(error, context = "") {
     context,
   });
 }
-
-export { Sentry };

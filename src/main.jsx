@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { initSentry } from "./lib/sentry.js";
 import App from "./app/App.jsx";
 
-initSentry();
+initSentry(); // fire-and-forget: async pero no bloquea el render
 
 import "./styles/tokens.css";
 import "./styles/base.css";
