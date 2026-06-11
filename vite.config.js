@@ -1,8 +1,45 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import purgecss from "@fullhuman/postcss-purgecss";
 
-export default defineConfig({
+const purgecssPlugin = purgecss({
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "./index.html"],
+  defaultExtractor: (content) => content.match(/[\w-:/[\].]+/g) || [],
+  safelist: {
+    // Clases con sufijos dinámicos (rank, status, tone, priority)
+    patterns: [
+      /^dealer-rank-/,
+      /^rank-/,
+      /^tone-/,
+      /^status-/,
+      /^priority-/,
+      /^agenda-group--/,
+      /^app-notice--/,
+      /^dealer-commercial-report__recommendation--/,
+      /^dealer-inv-card__health/,
+      /^dealer-plan-perf__/,
+      /^dealer-stock-signal--/,
+      /^dealer-today-item--/,
+      /^dealer-profile-logo--rank/,
+      /^ox-assistant-panel__badge--/,
+      /^jnp-card--/,
+      /^detail-img-slide/,
+      /^vd-col/,
+      /^ox-hero-reveal/,
+      /^ox-shimmer/,
+      /^route-/,
+      // Keyframes y animaciones referenciadas dinámicamente
+      /^animate-/,
+      /^pwa-/,
+    ],
+    // Selectores de atributo y pseudo-clases no detectables
+    deep: [/\[data-theme/, /\[data-rank/, /\[aria-/],
+    greedy: [/:root/],
+  },
+});
+
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     VitePWA({
@@ -64,6 +101,11 @@ export default defineConfig({
       },
     }),
   ],
+  css: {
+    postcss: {
+      plugins: mode === "production" ? [purgecssPlugin] : [],
+    },
+  },
   build: {
     rollupOptions: {
       output: {
@@ -75,4 +117,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
