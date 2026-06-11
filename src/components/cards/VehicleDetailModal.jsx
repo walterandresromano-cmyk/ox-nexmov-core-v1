@@ -5,6 +5,7 @@ import "../../styles/vehicle-detail-modal.css";
 import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import { getVehicleImages, isVehicleReserved } from "../../lib/vehicle.js";
+import { getOptimizedUrl } from "../../lib/imageUrl.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleImage from "../VehicleImage.jsx";
 import { useScramble } from "../../hooks/useScramble.js";
@@ -665,7 +666,7 @@ export default function VehicleDetailModal({
                 <img
                   key={images[0].url}
                   className="detail-gallery-ambient"
-                  src={images[0].url}
+                  src={getOptimizedUrl(images[0].url, "card")}
                   alt=""
                   aria-hidden="true"
                   draggable="false"
@@ -690,8 +691,10 @@ export default function VehicleDetailModal({
                     key={selectedImage.url}
                     src={selectedImage.url}
                     alt={`${currentVehicle.brand} ${currentVehicle.model}`}
+                    size="detail"
                     draggable={false}
                     loading="eager"
+                    fetchpriority="high"
                     className={`detail-main-image__photo detail-img-slide${slideDir > 0 ? "--right" : "--left"}`}
                     style={{
                       transform: `translate3d(${zoomPosition.x}px, ${zoomPosition.y}px, 0) scale(${zoomScale})`,
@@ -783,7 +786,7 @@ export default function VehicleDetailModal({
                     onClick={() => setSelectedImageIndex(i)}
                     aria-label={`Ver imagen ${i + 1}`}
                   >
-                    <img src={img.url} alt="" loading="lazy" draggable="false" />
+                    <VehicleImage src={img.url} alt="" size="thumb" loading="lazy" draggable={false} />
                   </button>
                 ))}
               </div>

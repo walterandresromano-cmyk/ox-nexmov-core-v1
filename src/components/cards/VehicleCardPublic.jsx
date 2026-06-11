@@ -213,6 +213,7 @@ export default function VehicleCardPublic({
             <VehicleImage
               src={imageUrl}
               alt={vehicleTitle}
+              size="card"
               className="vehicle-card__image"
               loading="lazy"
             />

@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
+import { compressToWebP } from "../lib/imageUrl.js";
 
 const VEHICLE_IMAGES_BUCKET = "vehicle-images";
 const CURRENT_YEAR = new Date().getFullYear();
@@ -182,7 +183,8 @@ export async function uploadVehicleImages({ vehicleId, files }) {
 
   const uploadedImages = [];
 
-  for (const file of safeFiles) {
+  for (const rawFile of safeFiles) {
+    const file = await compressToWebP(rawFile);
     const safeName = sanitizeFileName(file.name);
     const path = `vehicles/${vehicleId}/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
 

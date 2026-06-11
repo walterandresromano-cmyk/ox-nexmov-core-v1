@@ -1,20 +1,42 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { getOptimizedUrl, getSrcSet } from "../lib/imageUrl.js";
 
 export default function VehicleImage({
   src,
   alt,
+  size = "card",
   className,
   style,
   draggable,
   loading = "lazy",
+  fetchpriority,
   ...props
 }) {
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState(false);
+  const [loaded, setLoaded]         = useState(false);
+  const [useFallback, setFallback]  = useState(false);
+  const [failed, setFailed]         = useState(false);
 
-  if (!src || error) {
+  const optimizedSrc = useMemo(() => getOptimizedUrl(src, size), [src, size]);
+  const srcSet       = useMemo(
+    () => (useFallback ? "" : getSrcSet(src, size)),
+    [src, size, useFallback]
+  );
+
+  function handleError() {
+    if (!useFallback && optimizedSrc !== src) {
+      // La URL transformada falló (plan free o feature desactivada) → reintentar con original
+      setFallback(true);
+    } else {
+      setFailed(true);
+    }
+  }
+
+  if (!src || failed) {
     return (
-      <div className={`vehicle-img-placeholder${className ? ` ${className}` : ""}`} style={style}>
+      <div
+        className={`vehicle-img-placeholder${className ? ` ${className}` : ""}`}
+        style={style}
+      >
         <span>{alt || "Imagen no disponible"}</span>
       </div>
     );
@@ -22,14 +44,16 @@ export default function VehicleImage({
 
   return (
     <img
-      src={src}
+      src={useFallback ? src : optimizedSrc}
+      srcSet={srcSet || undefined}
       alt={alt}
       className={`vehicle-img${loaded ? " vehicle-img--loaded" : " vehicle-img--loading"}${className ? ` ${className}` : ""}`}
       loading={loading}
       decoding="async"
+      fetchpriority={fetchpriority}
       draggable={draggable ?? "false"}
       onLoad={() => setLoaded(true)}
-      onError={() => setError(true)}
+      onError={handleError}
       style={style}
       {...props}
     />
