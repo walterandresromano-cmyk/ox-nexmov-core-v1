@@ -66,7 +66,7 @@ export async function getProfileByUserId(userId) {
   const { data, error } = await supabase
     .from("profiles")
     .select(
-      "id, role, full_name, email, phone_visible, phone_whatsapp, status, created_at, updated_at"
+      "id, role, full_name, email, phone_visible, phone_whatsapp, status, theme, created_at, updated_at"
     )
     .eq("id", userId)
     .single();
@@ -75,4 +75,25 @@ export async function getProfileByUserId(userId) {
     profile: data || null,
     error,
   };
+}
+
+/*
+  Para activar el sync de tema entre dispositivos, ejecutar en Supabase SQL Editor:
+
+  alter table public.profiles
+    add column if not exists theme text check (theme in ('dark', 'light'));
+*/
+
+/**
+ * Guarda la preferencia de tema en el perfil del usuario autenticado.
+ * Falla silenciosamente si la columna `theme` no existe todavía.
+ */
+export async function saveUserTheme(theme) {
+  if (!isSupabaseConfigured || !supabase) return;
+  if (theme !== "dark" && theme !== "light") return;
+
+  await supabase
+    .from("profiles")
+    .update({ theme })
+    .eq("id", (await supabase.auth.getUser()).data?.user?.id);
 }

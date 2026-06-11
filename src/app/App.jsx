@@ -25,7 +25,7 @@ const Internal0kmPanel = lazy(() => import("../modules/internal0km/Internal0kmPa
 const SupportPanel     = lazy(() => import("../modules/support/SupportPanel.jsx"));
 
 import { getCurrentSession } from "../services/auth.service.js";
-import { getProfileByUserId } from "../services/profiles.service.js";
+import { getProfileByUserId, saveUserTheme } from "../services/profiles.service.js";
 import { normalizeRole } from "../lib/auth.js";
 import {
   listBuyerFavorites,
@@ -353,6 +353,11 @@ export default function App() {
     setAuthProfile(normalizedProfile);
     setAuthError("");
 
+    // Aplicar tema guardado en el perfil (sincroniza entre dispositivos)
+    if (normalizedProfile.theme === "dark" || normalizedProfile.theme === "light") {
+      setTheme(normalizedProfile.theme);
+    }
+
     return normalizedProfile;
   }
 
@@ -484,6 +489,23 @@ export default function App() {
     window.localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
 
+  // Sincronizar con cambios del sistema operativo mientras la app está abierta.
+  // Solo aplica si el usuario no fijó una preferencia manualmente (localStorage vacío).
+  useEffect(() => {
+    const mq = window.matchMedia?.("(prefers-color-scheme: light)");
+    if (!mq) return;
+
+    function handleSystemChange(e) {
+      const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+      if (!THEME_OPTIONS.has(stored)) {
+        setTheme(e.matches ? "light" : "dark");
+      }
+    }
+
+    mq.addEventListener("change", handleSystemChange);
+    return () => mq.removeEventListener("change", handleSystemChange);
+  }, []);
+
   useEffect(() => {
     function onRippleClick(e) {
       const btn = e.target.closest("button, .primary-action, .admin-refresh-btn, .table-action-btn");
@@ -568,7 +590,12 @@ export default function App() {
   }, []);
 
   function toggleTheme() {
-    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
+    setTheme((currentTheme) => {
+      const next = currentTheme === "dark" ? "light" : "dark";
+      // Sync al perfil si hay sesión (fire-and-forget)
+      if (authUser?.id) saveUserTheme(next);
+      return next;
+    });
   }
 
   function addToCompare(vehicle) {

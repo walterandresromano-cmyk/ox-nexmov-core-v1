@@ -1,7 +1,21 @@
 <!doctype html>
 <html lang="es">
-  
+
 <head>
+  <!-- FOUC prevention: setear data-theme antes de cualquier CSS -->
+  <script>
+    (function(){
+      var k="ox-nexmov-theme";
+      var stored=localStorage.getItem(k);
+      if(stored==="light"||stored==="dark"){
+        document.documentElement.dataset.theme=stored;
+      } else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches){
+        document.documentElement.dataset.theme="light";
+      } else {
+        document.documentElement.dataset.theme="dark";
+      }
+    })();
+  </script>
   <meta charset="UTF-8" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=10" />
