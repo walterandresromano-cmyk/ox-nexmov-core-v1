@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { flushSync } from "react-dom";
 
 import Layout from "../components/Layout.jsx";
 import ErrorBoundary from "../components/ErrorBoundary.jsx";
@@ -380,18 +381,24 @@ export default function App() {
       return;
     }
 
-    setRouteParams(payload || {});
-    setCurrentRoute(safeNextRoute);
-
     const nextUrl = getRouteUrl(safeNextRoute, payload || {});
     const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-
     if (currentUrl !== nextUrl) {
       window.history.pushState({ route: safeNextRoute }, "", nextUrl);
     }
-
     if (ROUTE_TITLES[safeNextRoute]) {
       document.title = ROUTE_TITLES[safeNextRoute];
+    }
+
+    const doUpdate = () => {
+      setRouteParams(payload || {});
+      setCurrentRoute(safeNextRoute);
+    };
+
+    if (document.startViewTransition) {
+      document.startViewTransition(() => flushSync(doUpdate));
+    } else {
+      doUpdate();
     }
   }
 

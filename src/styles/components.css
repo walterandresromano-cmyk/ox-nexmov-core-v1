@@ -9055,6 +9055,18 @@ body::-webkit-scrollbar {
   grid-template-columns: repeat(4, minmax(230px, 1fr));
 }
 
+/* ── Compare cards entrance stagger ─────────────────────────── */
+.compare-grid > .compare-card {
+  animation: ox-fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.compare-grid > .compare-card:nth-child(1) { animation-delay: 0.05s; }
+.compare-grid > .compare-card:nth-child(2) { animation-delay: 0.12s; }
+.compare-grid > .compare-card:nth-child(3) { animation-delay: 0.19s; }
+.compare-grid > .compare-card:nth-child(4) { animation-delay: 0.26s; }
+@media (prefers-reduced-motion: reduce) {
+  .compare-grid > .compare-card { animation: none; }
+}
+
 .compare-card {
   position: relative;
   scroll-snap-align: start;
@@ -10457,6 +10469,24 @@ body::-webkit-scrollbar {
   background:
     radial-gradient(circle at 18% 0%, rgba(14, 165, 233, 0.10), transparent 34%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 255, 0.92));
+}
+
+/* ── Search grid stagger entrance ───────────────────────────── */
+.ox-search-grid-enter > * {
+  animation: ox-fade-up 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.ox-search-grid-enter > *:nth-child(1)  { animation-delay: 0.03s; }
+.ox-search-grid-enter > *:nth-child(2)  { animation-delay: 0.07s; }
+.ox-search-grid-enter > *:nth-child(3)  { animation-delay: 0.11s; }
+.ox-search-grid-enter > *:nth-child(4)  { animation-delay: 0.15s; }
+.ox-search-grid-enter > *:nth-child(5)  { animation-delay: 0.19s; }
+.ox-search-grid-enter > *:nth-child(6)  { animation-delay: 0.23s; }
+.ox-search-grid-enter > *:nth-child(7)  { animation-delay: 0.27s; }
+.ox-search-grid-enter > *:nth-child(8)  { animation-delay: 0.30s; }
+.ox-search-grid-enter > *:nth-child(n+9) { animation-delay: 0.33s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ox-search-grid-enter > * { animation: none; }
 }
 
 /* oX NEXMOV - P1 unified button system */
@@ -15797,6 +15827,18 @@ body::-webkit-scrollbar {
     text-align: center;
     white-space: normal;
   }
+}
+
+/* ── Utility entrance animations ────────────────────────────── */
+
+@keyframes ox-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ox-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Shimmer / skeleton ──────────────────────────────────────── */
@@ -28283,4 +28325,28 @@ button.buyer-shortlist-compare__slot:hover {
   border-color: rgba(14, 165, 233, 0.35);
   background: rgba(14, 165, 233, 0.10);
   color: rgba(3, 105, 161, 0.95);
+}
+
+/* ── View Transitions (page navigation crossfade) ───────────── */
+@keyframes ox-vt-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ox-vt-fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+::view-transition-old(root) {
+  animation: ox-vt-fade-out 0.18s ease-in both;
+}
+::view-transition-new(root) {
+  animation: ox-vt-fade-in 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }
