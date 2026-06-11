@@ -65,6 +65,26 @@ export default function CreateSupportTicketModal({
     }
   }
 
+  if (createdTicket) {
+    return (
+      <div className="modal-backdrop">
+        <section className="contact-modal">
+          <button className="modal-close-btn" onClick={onClose}>×</button>
+          <div className="lead-created-box">
+            <h3>Ticket creado correctamente</h3>
+            <p>
+              El caso quedó registrado para {dealer?.commercialName}. Soporte o
+              administración podrá tomarlo desde su bandeja.
+            </p>
+            <button className="primary-action" onClick={onClose}>
+              Cerrar
+            </button>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="modal-backdrop">
       <section className="contact-modal">
@@ -83,20 +103,7 @@ export default function CreateSupportTicketModal({
           </button>
         </div>
 
-        {createdTicket ? (
-          <div className="lead-created-box">
-            <h3>Ticket creado correctamente</h3>
-            <p>
-              El caso quedó registrado para {dealer?.commercialName}. Soporte o
-              administración podrá tomarlo desde su bandeja.
-            </p>
-
-            <button className="primary-action" onClick={onClose}>
-              Cerrar
-            </button>
-          </div>
-        ) : (
-          <form className="contact-form" onSubmit={handleSubmit}>
+        <form className="contact-form" onSubmit={handleSubmit}>
             <div className="contact-summary">
               <span>Dealer</span>
               <strong>{dealer?.commercialName || "Dealer no informado"}</strong>
@@ -169,7 +176,6 @@ export default function CreateSupportTicketModal({
               {submitting ? "Creando ticket..." : "Crear ticket"}
             </button>
           </form>
-        )}
       </section>
     </div>
   );
