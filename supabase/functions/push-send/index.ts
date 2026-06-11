@@ -1,16 +1,14 @@
-// Deploy WITHOUT --no-verify-jwt.
-// Callable only by service_role, admin, or support.
-// Regular users (buyers, dealers) receive 403 — use notify-lead instead.
-
+// @ts-nocheck
 // deno-lint-ignore-file no-explicit-any
-/// <reference lib="deno.window" />
+// Callable only by service_role, admin, or support — returns 403 otherwise.
+// Deploy WITHOUT --no-verify-jwt.
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import webpush from "npm:web-push";
 
-const VAPID_PUBLIC_KEY  = Deno.env.get("VAPID_PUBLIC_KEY")!;
-const VAPID_PRIVATE_KEY = Deno.env.get("VAPID_PRIVATE_KEY")!;
+const VAPID_PUBLIC_KEY  = Deno.env.get("VAPID_PUBLIC_KEY");
+const VAPID_PRIVATE_KEY = Deno.env.get("VAPID_PRIVATE_KEY");
 const VAPID_SUBJECT     = Deno.env.get("VAPID_SUBJECT") ?? "mailto:soporte@oxnexmov.com";
 
 webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
@@ -21,7 +19,7 @@ const CORS = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-function json(body: unknown, status = 200): Response {
+function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
     headers: { ...CORS, "Content-Type": "application/json" },
@@ -30,22 +28,7 @@ function json(body: unknown, status = 200): Response {
 
 const TRUSTED_ROLES = new Set(["admin", "support", "soporte"]);
 
-interface PushPayload {
-  userId?: string;
-  dealerId?: number;
-  title: string;
-  body: string;
-  url?: string;
-  tag?: string;
-}
-
-interface PushSub {
-  endpoint: string;
-  p256dh: string;
-  auth_key: string;
-}
-
-serve(async (req: Request): Promise<Response> => {
+serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
 
   // ── Auth gate — trusted callers only ────────────────────────────────────
@@ -55,8 +38,8 @@ serve(async (req: Request): Promise<Response> => {
 
   if (!isServiceRole) {
     const anonClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
+      Deno.env.get("SUPABASE_URL"),
+      Deno.env.get("SUPABASE_ANON_KEY"),
       { global: { headers: { Authorization: authHeader } } }
     );
     const { data: { user }, error: authErr } = await anonClient.auth.getUser();
@@ -75,68 +58,49 @@ serve(async (req: Request): Promise<Response> => {
   }
 
   // ── Parse body ───────────────────────────────────────────────────────────
-  let payload: PushPayload;
+  let payload;
   try {
-    payload = await req.json() as PushPayload;
+    payload = await req.json();
   } catch {
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  const {
-    userId,
-    dealerId,
-    title,
-    body,
-    url = "/dealer",
-    tag = "ox-notification",
-  } = payload;
+  const { dealerId, title, body, url = "/dealer", tag = "ox-notification" } = payload;
 
-  // ── Resolve target user ───────────────────────────────────────────────────
+  if (!dealerId) return json({ error: "dealerId is required" }, 400);
+
+  // ── Fetch subscriptions by dealer_id ─────────────────────────────────────
   const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    Deno.env.get("SUPABASE_URL"),
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
   );
 
-  let resolvedUserId: string | null = userId ?? null;
-  if (!resolvedUserId && dealerId) {
-    const { data: dealer } = await supabase
-      .from("dealers")
-      .select("profile_id")
-      .eq("id", dealerId)
-      .single();
-    resolvedUserId = dealer?.profile_id ?? null;
-  }
-
-  if (!resolvedUserId) return json({ sent: 0, reason: "no target user" });
-
-  // ── Fetch subscriptions and send ─────────────────────────────────────────
   const { data: subs, error: subsErr } = await supabase
     .from("push_subscriptions")
-    .select("endpoint, p256dh, auth_key")
-    .eq("user_id", resolvedUserId);
+    .select("endpoint, p256dh, auth")          // column is "auth", not "auth_key"
+    .eq("dealer_id", dealerId);                // column is "dealer_id", not "user_id"
 
   if (subsErr) return json({ error: subsErr.message }, 500);
   if (!subs?.length) return json({ sent: 0, reason: "no subscriptions" });
 
-  const typedSubs = subs as PushSub[];
-
+  // ── Send ─────────────────────────────────────────────────────────────────
   const results = await Promise.allSettled(
-    typedSubs.map((sub: PushSub) =>
+    subs.map((sub) =>
       webpush.sendNotification(
-        { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth_key } },
+        { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
         JSON.stringify({ title, body, url, tag, icon: "/favicon.svg" })
       )
     )
   );
 
   // Remove expired subscriptions (410 Gone / 404 Not Found)
-  const expiredEndpoints = typedSubs
-    .filter((_: PushSub, i: number) => {
-      const r = results[i] as PromiseRejectedResult;
+  const expiredEndpoints = subs
+    .filter((_, i) => {
+      const r = results[i];
       return r.status === "rejected" &&
         (r.reason?.statusCode === 410 || r.reason?.statusCode === 404);
     })
-    .map((s: PushSub) => s.endpoint);
+    .map((s) => s.endpoint);
 
   if (expiredEndpoints.length) {
     await supabase
@@ -146,5 +110,5 @@ serve(async (req: Request): Promise<Response> => {
   }
 
   const sent = results.filter((r) => r.status === "fulfilled").length;
-  return json({ sent, total: typedSubs.length });
+  return json({ sent, total: subs.length });
 });
