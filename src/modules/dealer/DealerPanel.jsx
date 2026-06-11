@@ -369,7 +369,9 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
   const [leads, setLeads] = useState([]);
   const [loadingLeads, setLoadingLeads] = useState(true);
   const [leadsError, setLeadsError] = useState("");
-  const [newLeadAlert, setNewLeadAlert] = useState(false);
+  const [newLeadAlert, setNewLeadAlert]     = useState(false);
+  const [newLeadVehicle, setNewLeadVehicle] = useState("");
+  const dealerVehicleIdsRef = useRef(new Set());
 
   const [tickets, setTickets] = useState([]);
   const [loadingTickets, setLoadingTickets] = useState(true);
@@ -666,6 +668,13 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
     setProfileSuccess("");
   }, [dealer?.id]);
 
+  // Mantener el ref de vehicle IDs actualizado para el filtro de Realtime
+  useEffect(() => {
+    dealerVehicleIdsRef.current = new Set(
+      dealerVehicles.map((v) => Number(v.vehicle_id)).filter(Boolean)
+    );
+  }, [dealerVehicles]);
+
   // Supabase Realtime: auto-refresh leads on new INSERT without manual reload
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase || !dealer?.id) return;
@@ -675,9 +684,14 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "vehicle_action_leads" },
-        () => {
+        (payload) => {
+          // Ignorar leads de otros dealers
+          const vehicleId = Number(payload.new?.vehicle_id);
+          if (!vehicleId || !dealerVehicleIdsRef.current.has(vehicleId)) return;
+
           loadLeads();
           setNewLeadAlert(true);
+          setNewLeadVehicle(payload.new?.vehicle_title_snapshot || "");
         }
       )
       .subscribe();
@@ -686,7 +700,10 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
   }, [dealer?.id]);
 
   useEffect(() => {
-    if (!newLeadAlert) return;
+    if (!newLeadAlert) {
+      setNewLeadVehicle("");
+      return;
+    }
     const t = setTimeout(() => setNewLeadAlert(false), 30_000);
     return () => clearTimeout(t);
   }, [newLeadAlert]);
@@ -2324,7 +2341,9 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
                 <strong>{newLeadsCount}</strong>
                 <span>nuevos · {leads.length} total</span>
                 {newLeadAlert && (
-                  <span className="dealer-mc-realtime-badge">Nuevo ahora</span>
+                  <span className="dealer-mc-realtime-badge">
+                    {newLeadVehicle ? `Lead en ${newLeadVehicle}` : "Nuevo ahora"}
+                  </span>
                 )}
               </div>
               <h3>Leads recibidos</h3>
