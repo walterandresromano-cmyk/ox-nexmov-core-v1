@@ -14401,8 +14401,15 @@ textarea:focus-visible,
 .dealer-panel .dealer-mobile-plan,
 .dealer-panel .dealer-mobile-quicknav,
 .dealer-panel .dealer-mobile-tabs,
-.dealer-panel .dealer-nav-grid {
+.dealer-panel .dealer-nav-grid,
+.dealer-mobile-back-btn {
   display: none !important;
+}
+
+@media (max-width: 900px) {
+  .dealer-mobile-back-btn {
+    display: inline-flex !important;
+  }
 }
 
 @media (max-width: 900px) {
@@ -14415,19 +14422,27 @@ textarea:focus-visible,
     display: flex !important;
   }
 
-  .dealer-panel .dealer-mobile-tabs.dealer-nav-grid {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 6px !important;
-    padding: 6px !important;
+  /* Back button replaces the full tabs nav on mobile */
+  .dealer-mobile-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 14px;
+    border: 1px solid var(--ox-border);
+    border-radius: 999px;
+    background: var(--ox-surface-button);
+    color: var(--ox-text-secondary);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
     margin-bottom: 12px;
+    transition: background 0.14s, color 0.14s;
   }
-  .dealer-panel .dealer-mobile-tabs.dealer-nav-grid::-webkit-scrollbar {
-    display: none;
+  .dealer-mobile-back-btn:hover {
+    background: rgba(56, 189, 248, 0.10);
+    color: var(--ox-text-primary);
   }
 }
 

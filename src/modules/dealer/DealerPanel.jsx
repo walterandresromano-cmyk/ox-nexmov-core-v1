@@ -1456,20 +1456,13 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
   function renderDealerMobileTabs() {
     if (activeDealerMobileSection === "home") return null;
     return (
-      <nav className="dealer-mobile-tabs dealer-nav-grid" aria-label="Secciones dealer mobile">
-        {DEALER_MOBILE_SECTIONS.map((section) => (
-          <button
-            key={section.id}
-            type="button"
-            className={`dealer-mobile-tab${
-              activeDealerMobileSection === section.id ? " is-active" : ""
-            }`}
-            onClick={() => handleDealerMobileSectionChange(section.id)}
-          >
-            {section.label}
-          </button>
-        ))}
-      </nav>
+      <button
+        type="button"
+        className="dealer-mobile-back-btn"
+        onClick={() => handleDealerMobileSectionChange("home")}
+      >
+        ← Menú
+      </button>
     );
   }
 
