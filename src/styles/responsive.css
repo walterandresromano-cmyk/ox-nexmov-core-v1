@@ -2992,8 +2992,8 @@
   .contact-modal .contact-modal-head,
   .edit-images-modal .contact-modal-head {
     position: sticky;
-    top: -14px;
-    z-index: 10;
+    top: 0;
+    z-index: 80;
     align-items: flex-start;
     margin: -14px -14px 12px !important;
     padding: 14px !important;

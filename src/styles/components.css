@@ -28359,7 +28359,7 @@ button.buyer-shortlist-compare__slot:hover {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 340px;
+  max-height: clamp(200px, 35vh, 340px);
   min-height: 120px;
 }
 
