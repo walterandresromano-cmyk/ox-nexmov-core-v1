@@ -1,61 +1,70 @@
 -- ──────────────────────────────────────────────────────────────────────────
 -- ticket_messages: threaded chat replies on support tickets
--- Run this in Supabase SQL editor or via `supabase db push`
+-- Run in Supabase SQL editor or via `supabase db push`
 -- ──────────────────────────────────────────────────────────────────────────
 
-CREATE TABLE IF NOT EXISTS ticket_messages (
-  id          bigserial    PRIMARY KEY,
-  ticket_id   bigint       NOT NULL,
-  sender_id   uuid         NOT NULL DEFAULT auth.uid(),
-  sender_role text         NOT NULL DEFAULT 'dealer',
+create table if not exists public.ticket_messages (
+  id          bigint generated always as identity primary key,
+  ticket_id   bigint      not null references public.support_tickets(id) on delete cascade,
+  sender_id   uuid        not null default auth.uid(),
+  sender_role text        not null default 'dealer',
   sender_name text,
-  content     text         NOT NULL,
-  created_at  timestamptz  NOT NULL DEFAULT now(),
-  CONSTRAINT ticket_messages_content_length CHECK (char_length(content) BETWEEN 1 AND 2000)
+  content     text        not null,
+  created_at  timestamptz not null default now(),
+  constraint ticket_messages_content_length
+    check (char_length(content) between 1 and 2000)
 );
 
-CREATE INDEX IF NOT EXISTS ticket_messages_ticket_id_idx  ON ticket_messages (ticket_id);
-CREATE INDEX IF NOT EXISTS ticket_messages_created_at_idx ON ticket_messages (created_at);
+create index if not exists ticket_messages_ticket_id_idx
+  on public.ticket_messages (ticket_id);
+
+create index if not exists ticket_messages_created_at_idx
+  on public.ticket_messages (created_at desc);
 
 -- ── Row Level Security ────────────────────────────────────────────────────
 
-ALTER TABLE ticket_messages ENABLE ROW LEVEL SECURITY;
+alter table public.ticket_messages enable row level security;
 
--- SELECT: ticket creator, any admin / support role
-CREATE POLICY "ticket_messages_select" ON ticket_messages
-  FOR SELECT TO authenticated
-  USING (
-    -- ticket owner
-    ticket_id IN (
-      SELECT ticket_id FROM support_tickets
-      WHERE created_by = auth.uid()
+drop policy if exists "ticket_messages_select" on public.ticket_messages;
+drop policy if exists "ticket_messages_insert" on public.ticket_messages;
+
+-- SELECT: ticket creator or admin/support
+create policy "ticket_messages_select"
+  on public.ticket_messages
+  for select to authenticated
+  using (
+    exists (
+      select 1 from public.support_tickets t
+      where t.id = ticket_messages.ticket_id
+        and t.created_by = auth.uid()
     )
-    -- admin / support can read all
-    OR EXISTS (
-      SELECT 1 FROM profiles
-      WHERE user_id = auth.uid()
-        AND role IN ('admin', 'support', 'soporte')
+    or exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid()
+        and p.role in ('admin', 'support', 'soporte')
     )
   );
 
--- INSERT: sender must be the authenticated user and must have access to the ticket
-CREATE POLICY "ticket_messages_insert" ON ticket_messages
-  FOR INSERT TO authenticated
-  WITH CHECK (
+-- INSERT: sender must be authenticated and have access to the ticket
+create policy "ticket_messages_insert"
+  on public.ticket_messages
+  for insert to authenticated
+  with check (
     sender_id = auth.uid()
-    AND (
-      ticket_id IN (
-        SELECT ticket_id FROM support_tickets
-        WHERE created_by = auth.uid()
+    and (
+      exists (
+        select 1 from public.support_tickets t
+        where t.id = ticket_messages.ticket_id
+          and t.created_by = auth.uid()
       )
-      OR EXISTS (
-        SELECT 1 FROM profiles
-        WHERE user_id = auth.uid()
-          AND role IN ('admin', 'support', 'soporte')
+      or exists (
+        select 1 from public.profiles p
+        where p.id = auth.uid()
+          and p.role in ('admin', 'support', 'soporte')
       )
     )
   );
 
 -- ── Realtime ──────────────────────────────────────────────────────────────
--- Enable realtime for this table so clients receive INSERT events instantly.
-ALTER PUBLICATION supabase_realtime ADD TABLE ticket_messages;
+-- Run this separately if the above already succeeded once:
+alter publication supabase_realtime add table public.ticket_messages;
