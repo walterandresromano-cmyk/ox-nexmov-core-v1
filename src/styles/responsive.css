@@ -2257,8 +2257,17 @@
 
   .dealer-panel .dealer-module-open-head,
   .dealer-panel .buyer-section-head {
-    gap: 8px;
-    margin-bottom: 10px !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px !important;
+  }
+
+  .dealer-panel .dealer-module-open-head .admin-refresh-btn,
+  .dealer-panel .buyer-section-head .admin-refresh-btn {
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
   .dealer-panel .dealer-module-open-head h2,
@@ -2330,6 +2339,49 @@
   .dealer-panel .primary-action {
     min-height: 42px;
     border-radius: 16px;
+  }
+
+  /* ── Métricas head: botones en fila con wrap ── */
+  .dealer-metrics-head-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .dealer-metrics-head-actions .table-action-btn,
+  .dealer-metrics-head-actions .admin-refresh-btn {
+    flex: 1 1 auto;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  /* ── Soporte module: gap entre "Crear ticket" y "Actualizar" ── */
+  .dealer-panel .dealer-module-card.dealer-module-card-open {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* ── Chat textarea: más compacta en mobile ── */
+  .tc-textarea {
+    min-height: 44px;
+    max-height: 80px;
+  }
+
+  /* ── Métricas table: ocultar columnas menos críticas en mobile ──
+     cols 3 (vs. promedio) y 5 (Conversión) */
+  .dealer-metrics-table th:nth-child(3),
+  .dealer-metrics-table td:nth-child(3),
+  .dealer-metrics-table th:nth-child(5),
+  .dealer-metrics-table td:nth-child(5) {
+    display: none !important;
+  }
+
+  /* ── Soporte table: ocultar Categoría y Prioridad en mobile ──
+     cols 3 (Categoría) y 4 (Prioridad) */
+  .dealer-panel .dealer-leads-section .admin-table th:nth-child(3),
+  .dealer-panel .dealer-leads-section .admin-table td:nth-child(3),
+  .dealer-panel .dealer-leads-section .admin-table th:nth-child(4),
+  .dealer-panel .dealer-leads-section .admin-table td:nth-child(4) {
+    display: none !important;
   }
 
   .dealer-dashboard-shell {
