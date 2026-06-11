@@ -467,8 +467,17 @@ export default function EditVehicleModal({
 
   return (
     <div className="modal-backdrop">
-      <section className="ticket-detail-modal">
+      <section className="ticket-detail-modal edit-vehicle-modal">
         <div className="contact-modal-head">
+          <button
+            type="button"
+            className="edit-vehicle-back-btn"
+            onClick={onClose}
+            disabled={submitting}
+          >
+            ← Volver
+          </button>
+
           <div>
             <p className="eyebrow">Editar publicación</p>
             <h2>
@@ -482,6 +491,15 @@ export default function EditVehicleModal({
 
           <button className="modal-close-btn" onClick={onClose}>
             ×
+          </button>
+
+          <button
+            type="submit"
+            form="edit-vehicle-form"
+            className="edit-vehicle-save-btn primary-action"
+            disabled={submitting}
+          >
+            {submitting ? "Guardando..." : "Guardar"}
           </button>
         </div>
 
@@ -501,7 +519,7 @@ export default function EditVehicleModal({
             </button>
           </div>
         ) : (
-          <form className="zero-km-form" onSubmit={handleSubmit}>
+          <form id="edit-vehicle-form" className="zero-km-form" onSubmit={handleSubmit}>
             {/* Quality checklist panel */}
             <div className="vehicle-quality-panel">
               <div className="vehicle-quality-panel__head">

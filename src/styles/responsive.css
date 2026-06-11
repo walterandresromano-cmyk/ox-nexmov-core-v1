@@ -3223,6 +3223,72 @@
     color: var(--ox-text) !important;
     box-shadow: 0 10px 22px rgba(33, 48, 71, 0.12);
   }
+
+  /* Edit vehicle full-screen mobile UX */
+  .edit-vehicle-modal .modal-close-btn {
+    display: none !important;
+  }
+
+  .edit-vehicle-modal .contact-modal-head {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .edit-vehicle-modal .contact-modal-head > div {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .edit-vehicle-back-btn {
+    display: flex !important;
+    align-items: center !important;
+    flex: 0 0 auto !important;
+    padding: 6px 12px !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(148, 163, 184, 0.22) !important;
+    background: transparent !important;
+    color: var(--ox-muted) !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+  }
+
+  .edit-vehicle-save-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
+    padding: 7px 14px !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+  }
+
+  .edit-vehicle-modal .dealer-modal-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 10 !important;
+    margin: 16px -14px -14px !important;
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.14) !important;
+    border-radius: 0 !important;
+  }
+
+  :root[data-theme="light"] .edit-vehicle-modal .dealer-modal-footer {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-top-color: rgba(14, 116, 144, 0.14) !important;
+  }
+}
+
+/* Edit vehicle modal — hide mobile-only buttons on desktop */
+@media (min-width: 901px) {
+  .edit-vehicle-back-btn,
+  .edit-vehicle-save-btn {
+    display: none;
+  }
 }
 
 /* oX NEXMOV Core v1 - unified mobile action system */
