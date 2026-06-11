@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import TicketStatusSelect from "./TicketStatusSelect.jsx";
+import TicketChat from "./TicketChat.jsx";
 import { updateSupportTicketStatus } from "../services/tickets.service.js";
 
 function formatDateTime(dateValue) {
@@ -134,7 +135,15 @@ export default function TicketDetailModal({
           <article className="ticket-detail-card ticket-detail-main">
             <span>Asunto</span>
             <strong>{ticket.subject}</strong>
-            <p>{ticket.message}</p>
+          </article>
+
+          {/* Chat thread — full width */}
+          <article className="ticket-detail-card ticket-detail-main ticket-detail-chat">
+            <TicketChat
+              ticketId={ticket.ticket_id}
+              initialMessage={ticket.message}
+              authProfile={authProfile || appActions?.authProfile}
+            />
           </article>
 
           <article className="ticket-detail-card">
