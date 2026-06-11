@@ -51,7 +51,7 @@ export default function TicketChat({ ticketId, initialMessage, authProfile }) {
   const [sending,   setSending]   = useState(false);
   const [sendError, setSendError] = useState("");
   const [myId,      setMyId]      = useState(null);
-  const bottomRef = useRef(null);
+  const messagesRef = useRef(null);
   const textareaRef = useRef(null);
 
   // Resolve current user id once
@@ -92,7 +92,9 @@ export default function TicketChat({ ticketId, initialMessage, authProfile }) {
   // Auto-scroll on new messages
   useEffect(() => {
     if (!loading) {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      if (messagesRef.current) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      }
     }
   }, [messages, loading]);
 
@@ -154,7 +156,7 @@ export default function TicketChat({ ticketId, initialMessage, authProfile }) {
     <div className="tc-root">
       <h3 className="tc-title">Conversación</h3>
 
-      <div className="tc-messages">
+      <div className="tc-messages" ref={messagesRef}>
         {/* Original ticket message as first bubble */}
         {initialMessage && (
           <div className="tc-initial">
@@ -175,7 +177,6 @@ export default function TicketChat({ ticketId, initialMessage, authProfile }) {
           <Bubble key={m.id} message={m} myId={myId} />
         ))}
 
-        <div ref={bottomRef} />
       </div>
 
       <div className="tc-input-row">
