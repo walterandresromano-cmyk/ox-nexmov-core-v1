@@ -387,6 +387,10 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
   const [whatsappForm, setWhatsappForm] = useState("");
   const [savingWhatsapp, setSavingWhatsapp] = useState(false);
   const [whatsappError, setWhatsappError] = useState("");
+
+  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
+  const [onboardingCelebrating, setOnboardingCelebrating] = useState(false);
+  const whatsappInputRef = useRef(null);
   const [whatsappSuccess, setWhatsappSuccess] = useState("");
   const [uploadingDealerLogo, setUploadingDealerLogo] = useState(false);
   const [dealerLogoError, setDealerLogoError] = useState("");
@@ -649,6 +653,12 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
     setWhatsappError("");
     setWhatsappSuccess("");
   }, [dealer?.id, dealer?.contactPhone, dealer?.phoneWhatsapp, dealer?.phone]);
+
+  useEffect(() => {
+    if (!dealer?.id) return;
+    const dismissed = localStorage.getItem(`ox-onboarding-dismissed-${dealer.id}`);
+    if (dismissed === "1") setOnboardingDismissed(true);
+  }, [dealer?.id]);
 
   useEffect(() => {
     if (!dealer?.id) return;
@@ -984,6 +994,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
           <label>
             Número de contacto
             <input
+              ref={whatsappInputRef}
               type="tel"
               autoComplete="tel"
               inputMode="tel"
@@ -1550,26 +1561,59 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
 
   function renderDealerOnboarding() {
     if (loadingVehicles || loadingLeads) return null;
+    if (!dealer) return null;
+    if (onboardingDismissed) return null;
 
     const step1Done = Boolean(
       dealer.contactPhone || dealer.phone || dealer.phoneWhatsapp
     );
     const step2Done = Boolean(dealerLogo);
     const step3Done = dealerVehicles.length > 0;
+    const allDone   = step1Done && step2Done && step3Done;
 
-    if (step1Done && step2Done && step3Done) return null;
+    // Cuando se completan los 3, mostrar celebración 3s y luego ocultar
+    if (allDone && !onboardingCelebrating) {
+      setOnboardingCelebrating(true);
+      setTimeout(() => {
+        localStorage.setItem(`ox-onboarding-dismissed-${dealer.id}`, "1");
+        setOnboardingDismissed(true);
+        setOnboardingCelebrating(false);
+      }, 3000);
+    }
+
+    function dismiss() {
+      localStorage.setItem(`ox-onboarding-dismissed-${dealer.id}`, "1");
+      setOnboardingDismissed(true);
+    }
+
+    function goToWhatsApp() {
+      whatsappInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => whatsappInputRef.current?.focus(), 400);
+    }
 
     const completedCount = [step1Done, step2Done, step3Done].filter(Boolean).length;
+
+    if (onboardingCelebrating) {
+      return (
+        <section className="dealer-onboarding dealer-onboarding--complete" aria-live="polite">
+          <div className="dealer-onboarding-celebrate">
+            <span className="dealer-onboarding-celebrate__icon">✓</span>
+            <div>
+              <strong>¡Panel configurado!</strong>
+              <p>Ya estás listo para operar en la red oX NEXMOV.</p>
+            </div>
+          </div>
+        </section>
+      );
+    }
 
     return (
       <section className="dealer-onboarding" aria-label="Primeros pasos">
         <div className="dealer-onboarding-head">
           <div>
             <p className="eyebrow">Primeros pasos</p>
-            <h2>Bienvenido a tu panel, {dealer.commercialName}.</h2>
-            <p>
-              Completá estos pasos para operar dentro de la red oX NEXMOV.
-            </p>
+            <h2>Bienvenido a tu panel, {dealer.commercialName || dealer.name}.</h2>
+            <p>Completá estos pasos para operar dentro de la red oX NEXMOV.</p>
           </div>
           <div className="dealer-onboarding-progress">
             <span>{completedCount} de 3 completados</span>
@@ -1579,6 +1623,14 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
                 style={{ width: `${Math.round((completedCount / 3) * 100)}%` }}
               />
             </div>
+            <button
+              type="button"
+              className="dealer-onboarding-dismiss"
+              onClick={dismiss}
+              aria-label="Cerrar primeros pasos"
+            >
+              Ahora no
+            </button>
           </div>
         </div>
 
@@ -1592,11 +1644,18 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
             <div className="dealer-onboarding-step-body">
               <strong>Configurá tu WhatsApp de contacto</strong>
               <p>
-                Número que aparece en tus publicaciones para recibir consultas.
-                Lo encontrás en el panel de contacto de arriba a la derecha.
+                Número que aparece en tus publicaciones para que los compradores te contacten.
               </p>
-              {step1Done && (
+              {step1Done ? (
                 <span className="dealer-onboarding-done-label">Completado</span>
+              ) : (
+                <button
+                  type="button"
+                  className="table-action-btn"
+                  onClick={goToWhatsApp}
+                >
+                  Ir a configurar
+                </button>
               )}
             </div>
           </article>
