@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import "../../styles/home.css";
 import ScrambleStat from "../../components/ScrambleStat.jsx";
 import { usePlaceholderCycle } from "../../hooks/usePlaceholderCycle.js";
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
-import VehicleDetailModal from "../../components/cards/VehicleDetailModal.jsx";
-import ContactGate from "./ContactGate.jsx";
+const VehicleDetailModal = lazy(() => import("../../components/cards/VehicleDetailModal.jsx"));
+const ContactGate        = lazy(() => import("./ContactGate.jsx"));
 import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
@@ -959,31 +960,33 @@ export default function Home({ onNavigate, appActions = {} }) {
       </div>
     </section>
 
-    {showFeaturedDetail && selectedFeaturedVehicle && (
-      <VehicleDetailModal
-        vehicle={selectedFeaturedVehicle}
-        dealer={selectedFeaturedDealer}
-        onClose={() => setShowFeaturedDetail(false)}
-        onCompare={() => safeAppActions?.addToCompare?.(selectedFeaturedVehicle)}
-        onFavorite={() => safeAppActions?.toggleFavorite?.(selectedFeaturedVehicle)}
-        favoriteActive={safeAppActions?.isFavorite?.(selectedFeaturedVehicle.id)}
-        onContact={() => {
-          setShowFeaturedDetail(false);
-          setShowFeaturedContactGate(true);
-        }}
-      />
-    )}
+    <Suspense fallback={null}>
+      {showFeaturedDetail && selectedFeaturedVehicle && (
+        <VehicleDetailModal
+          vehicle={selectedFeaturedVehicle}
+          dealer={selectedFeaturedDealer}
+          onClose={() => setShowFeaturedDetail(false)}
+          onCompare={() => safeAppActions?.addToCompare?.(selectedFeaturedVehicle)}
+          onFavorite={() => safeAppActions?.toggleFavorite?.(selectedFeaturedVehicle)}
+          favoriteActive={safeAppActions?.isFavorite?.(selectedFeaturedVehicle.id)}
+          onContact={() => {
+            setShowFeaturedDetail(false);
+            setShowFeaturedContactGate(true);
+          }}
+        />
+      )}
 
-    {showFeaturedContactGate && selectedFeaturedVehicle && (
-      <ContactGate
-        vehicle={selectedFeaturedVehicle}
-        dealer={selectedFeaturedDealer}
-        authUser={safeAppActions?.authUser}
-        authProfile={safeAppActions?.authProfile}
-        onClose={() => setShowFeaturedContactGate(false)}
-        onNavigate={onNavigate}
-      />
-    )}
+      {showFeaturedContactGate && selectedFeaturedVehicle && (
+        <ContactGate
+          vehicle={selectedFeaturedVehicle}
+          dealer={selectedFeaturedDealer}
+          authUser={safeAppActions?.authUser}
+          authProfile={safeAppActions?.authProfile}
+          onClose={() => setShowFeaturedContactGate(false)}
+          onNavigate={onNavigate}
+        />
+      )}
+    </Suspense>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { lazy, Suspense, useRef, useState } from "react";
 
 import { formatARS, formatKm, getMarketDelta } from "../../lib/formatters.js";
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
@@ -8,8 +8,8 @@ import {
   getLocationLabel,
   isVehicleReserved,
 } from "../../lib/vehicle.js";
-import ContactGate from "../../modules/public/ContactGate.jsx";
-import VehicleDetailModal from "./VehicleDetailModal.jsx";
+const ContactGate       = lazy(() => import("../../modules/public/ContactGate.jsx"));
+const VehicleDetailModal = lazy(() => import("./VehicleDetailModal.jsx"));
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 import { SpeedometerIcon, PriceTagIcon, HeartIcon, CompareIcon } from "../icons/VehicleIcons.jsx";
 import VehicleImage from "../VehicleImage.jsx";
@@ -335,38 +335,40 @@ export default function VehicleCardPublic({
         </div>
       </article>
 
-      {showDetailModal && (
-        <VehicleDetailModal
-          vehicle={vehicle}
-          dealer={safeDealer}
-          onClose={() => setShowDetailModal(false)}
-          onCompare={() => appActions?.addToCompare?.(vehicle)}
-          onFavorite={() => appActions?.toggleFavorite?.(vehicle)}
-          favoriteActive={favoriteActive}
-          onContact={() => {
-            if (reserved) return;
-            setShowDetailModal(false);
-            setShowContactGate(true);
-          }}
-          vehicles={vehicles}
-          getDealer={getDealer}
-          appActions={appActions}
-          onNavigate={onNavigate}
-        />
-      )}
+      <Suspense fallback={null}>
+        {showDetailModal && (
+          <VehicleDetailModal
+            vehicle={vehicle}
+            dealer={safeDealer}
+            onClose={() => setShowDetailModal(false)}
+            onCompare={() => appActions?.addToCompare?.(vehicle)}
+            onFavorite={() => appActions?.toggleFavorite?.(vehicle)}
+            favoriteActive={favoriteActive}
+            onContact={() => {
+              if (reserved) return;
+              setShowDetailModal(false);
+              setShowContactGate(true);
+            }}
+            vehicles={vehicles}
+            getDealer={getDealer}
+            appActions={appActions}
+            onNavigate={onNavigate}
+          />
+        )}
 
-      {showContactGate && !reserved && (
-        <ContactGate
-          vehicle={vehicle}
-          dealer={safeDealer}
-          authUser={appActions?.authUser}
-          authProfile={appActions?.authProfile}
-          onClose={() => setShowContactGate(false)}
-          onRequireLogin={requireLoginForContact}
-          onNavigate={onNavigate}
-          onLeadCreated={(lead) => setLastLead(lead)}
-        />
-      )}
+        {showContactGate && !reserved && (
+          <ContactGate
+            vehicle={vehicle}
+            dealer={safeDealer}
+            authUser={appActions?.authUser}
+            authProfile={appActions?.authProfile}
+            onClose={() => setShowContactGate(false)}
+            onRequireLogin={requireLoginForContact}
+            onNavigate={onNavigate}
+            onLeadCreated={(lead) => setLastLead(lead)}
+          />
+        )}
+      </Suspense>
     </>
   );
 }

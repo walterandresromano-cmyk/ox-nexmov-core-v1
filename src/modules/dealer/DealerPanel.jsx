@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import "../../styles/dealer-dashboard.css";
 import { usePushNotifications } from "../../hooks/usePushNotifications.js";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient.js";
 
