@@ -952,6 +952,19 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     Cuando compres, asignes o registres un vehículo, vas a poder seguir
                     su historial, servicios y futura reventa desde acá.
                   </p>
+                  <div className="buyer-empty-radar-cta">
+                    <div className="buyer-empty-radar-cta__copy">
+                      <span className="buyer-empty-radar-cta__badge">Radar oX</span>
+                      <p>¿Sabés qué auto buscás? Activá el Radar y te avisamos cuando aparezca uno que coincida.</p>
+                    </div>
+                    <button
+                      type="button"
+                      className="buyer-empty-radar-cta__btn"
+                      onClick={() => onNavigate?.("search")}
+                    >
+                      Activar Radar oX
+                    </button>
+                  </div>
                   <div className="garage-ox-garage__empty-actions">
                     <button
                       type="button"
@@ -1646,6 +1659,19 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                   <p>
                     Guardá vehículos que te interesen y armá tu primera selección.
                   </p>
+                  <div className="buyer-empty-radar-cta">
+                    <div className="buyer-empty-radar-cta__copy">
+                      <span className="buyer-empty-radar-cta__badge">Radar oX</span>
+                      <p>Si ya tenés en mente marca, modelo o zona, el Radar te avisa en cuanto aparezca.</p>
+                    </div>
+                    <button
+                      type="button"
+                      className="buyer-empty-radar-cta__btn"
+                      onClick={() => onNavigate?.("search")}
+                    >
+                      Activar Radar oX
+                    </button>
+                  </div>
                   <button
                     type="button"
                     className="primary-action"
@@ -1834,7 +1860,20 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     {vehicleLeads.length === 0 ? (
                       <div className="empty-state">
                         <strong>Todavía no realizaste consultas.</strong>
-                        <p>Abrí un vehículo desde Buscar y usá el botón Contactar.</p>
+                        <p>Encontrá un vehículo que te interese y contactá al dealer directamente desde la ficha.</p>
+                        <div className="buyer-empty-radar-cta">
+                          <div className="buyer-empty-radar-cta__copy">
+                            <span className="buyer-empty-radar-cta__badge">Radar oX</span>
+                            <p>¿No encontraste lo que buscás? Activá el Radar y te avisamos cuando aparezca.</p>
+                          </div>
+                          <button
+                            type="button"
+                            className="buyer-empty-radar-cta__btn"
+                            onClick={() => onNavigate?.("search")}
+                          >
+                            Buscar y activar Radar
+                          </button>
+                        </div>
                       </div>
                     ) : (
                       <div className="garage-ox-activity-list">

@@ -28119,3 +28119,77 @@ button.buyer-shortlist-compare__slot:hover {
 :root[data-theme="light"] .dealer-rating-widget__label  { color: rgba(71, 85, 105, 0.65); }
 :root[data-theme="light"] .dealer-rating-star           { color: rgba(148, 163, 184, 0.40); }
 :root[data-theme="light"] .dealer-rating-widget__thanks { color: rgba(21, 128, 61, 0.90); }
+
+/* =========================================================
+   EMPTY STATE — Radar CTA inline en BuyerPanel
+   ========================================================= */
+
+.buyer-empty-radar-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 14px 0 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(56, 189, 248, 0.20);
+  background:
+    linear-gradient(135deg, rgba(56, 189, 248, 0.07), rgba(14, 165, 233, 0.04)),
+    rgba(15, 23, 42, 0.50);
+  flex-wrap: wrap;
+}
+
+.buyer-empty-radar-cta__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.buyer-empty-radar-cta__badge {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(56, 189, 248, 0.90);
+}
+
+.buyer-empty-radar-cta__copy p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(203, 213, 225, 0.72);
+  line-height: 1.4;
+}
+
+.buyer-empty-radar-cta__btn {
+  flex-shrink: 0;
+  padding: 9px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(56, 189, 248, 0.12);
+  color: rgba(186, 230, 253, 0.95);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.buyer-empty-radar-cta__btn:hover {
+  background: rgba(56, 189, 248, 0.20);
+  border-color: rgba(56, 189, 248, 0.55);
+}
+
+/* Light mode */
+:root[data-theme="light"] .buyer-empty-radar-cta {
+  border-color: rgba(14, 165, 233, 0.22);
+  background: rgba(224, 242, 254, 0.60);
+}
+:root[data-theme="light"] .buyer-empty-radar-cta__badge { color: rgba(3, 105, 161, 0.90); }
+:root[data-theme="light"] .buyer-empty-radar-cta__copy p { color: rgba(71, 85, 105, 0.80); }
+:root[data-theme="light"] .buyer-empty-radar-cta__btn {
+  border-color: rgba(14, 165, 233, 0.35);
+  background: rgba(14, 165, 233, 0.10);
+  color: rgba(3, 105, 161, 0.95);
+}
