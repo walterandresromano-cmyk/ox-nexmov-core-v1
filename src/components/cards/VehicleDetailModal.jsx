@@ -13,6 +13,7 @@ import {
   DEFAULT_DOWN_PCT,
   DEFAULT_TERM_MONTHS,
 } from "../../lib/financing.js";
+import { getVehiclePriceHistory } from "../../services/priceHistory.service.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleImage from "../VehicleImage.jsx";
 import { useScramble } from "../../hooks/useScramble.js";
@@ -164,7 +165,8 @@ export default function VehicleDetailModal({
 }) {
   const [currentVehicle, setCurrentVehicle] = useState(vehicle);
   const [showContactGate, setShowContactGate] = useState(false);
-  const [shareState, setShareState] = useState("idle");
+  const [shareState, setShareState]           = useState("idle");
+  const [priceHistory, setPriceHistory]       = useState([]);
   const [financingDownPayment, setFinancingDownPayment] = useState("");
   const [financingTermMonths, setFinancingTermMonths] = useState(String(DEFAULT_TERM_MONTHS));
   const [financingIncome, setFinancingIncome]         = useState("");
@@ -306,6 +308,13 @@ export default function VehicleDetailModal({
     setFinancingTermMonths(currentVehicle?.months ? String(currentVehicle.months) : String(DEFAULT_TERM_MONTHS));
     setFinancingIncome("");
     setFinancingRateIdx(DEFAULT_RATE_INDEX);
+
+    const vid = currentVehicle?.vehicle_id ?? currentVehicle?.id;
+    if (vid) {
+      getVehiclePriceHistory(vid).then(setPriceHistory);
+    } else {
+      setPriceHistory([]);
+    }
   }, [currentVehicle?.id, currentVehicle?.vehicle_id, images[0]?.url]);
 
   useEffect(() => {
@@ -944,6 +953,39 @@ export default function VehicleDetailModal({
             )}
 
             <PriceReveal price={currentVehicle.price} />
+
+            {priceHistory.length >= 2 && (() => {
+              const first  = priceHistory[0].price;
+              const last   = priceHistory[priceHistory.length - 1].price;
+              const drops  = priceHistory.slice(1).filter((e, i) => e.price < priceHistory[i].price).length;
+              const pctDrop = first > 0 ? Math.round(((first - last) / first) * 100) : 0;
+              return (
+                <div className="detail-price-history" aria-label="Historial de precios">
+                  {drops > 0 && (
+                    <p className="detail-price-history__summary">
+                      Bajó {drops} {drops === 1 ? "vez" : "veces"} desde su publicación
+                      {pctDrop > 0 && <span> · {pctDrop}% menos</span>}
+                    </p>
+                  )}
+                  <ol className="detail-price-history__list">
+                    {priceHistory.map((entry, i) => {
+                      const isLast = i === priceHistory.length - 1;
+                      const prev   = priceHistory[i - 1];
+                      const went   = prev ? (entry.price < prev.price ? "down" : entry.price > prev.price ? "up" : "same") : "first";
+                      return (
+                        <li key={i} className={`detail-price-history__entry detail-price-history__entry--${went}`}>
+                          <span className="detail-price-history__price">{formatARS(entry.price)}</span>
+                          <span className="detail-price-history__date">
+                            {new Date(entry.recorded_at).toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" })}
+                            {isLast && " (actual)"}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                </div>
+              );
+            })()}
 
             {delta && (
               <div className="detail-market-box">

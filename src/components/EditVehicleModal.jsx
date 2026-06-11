@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { updateAdminVehicleData } from "../services/adminVehicles.service.js";
 import { updateCurrentDealerVehicleData } from "../services/dealerVehicles.service.js";
+import { logPriceChange } from "../services/priceHistory.service.js";
 import { MIN_VEHICLE_IMAGES } from "../config/constants.js";
 import {
   buildCatalogTree,
@@ -437,6 +438,13 @@ export default function EditVehicleModal({
       setError(result.error.message || "No se pudo editar la publicación.");
       setSubmitting(false);
       return;
+    }
+
+    // Log price change if it differs from the original (fire-and-forget)
+    const newPrice  = Number(form.price);
+    const origPrice = Number(vehicle?.price);
+    if (newPrice > 0 && origPrice > 0 && newPrice !== origPrice) {
+      logPriceChange({ vehicleId: form.vehicleId, price: newPrice });
     }
 
     setSavedVehicle(result.vehicle);

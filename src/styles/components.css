@@ -27974,3 +27974,68 @@ button.buyer-shortlist-compare__slot:hover {
   border-color: rgba(14, 165, 233, 0.40);
   color: rgba(3, 105, 161, 0.95);
 }
+
+/* =========================================================
+   HISTORIAL DE PRECIOS — timeline en el modal de detalle
+   ========================================================= */
+
+.detail-price-history {
+  margin: 6px 0 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.40);
+}
+
+.detail-price-history__summary {
+  margin: 0 0 8px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: rgba(34, 197, 94, 0.90);
+}
+
+.detail-price-history__summary span {
+  font-weight: 500;
+  color: rgba(203, 213, 225, 0.60);
+}
+
+.detail-price-history__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-price-history__entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.72rem;
+}
+
+.detail-price-history__price {
+  font-weight: 600;
+  color: rgba(248, 250, 252, 0.90);
+}
+
+.detail-price-history__entry--down  .detail-price-history__price { color: rgba(34, 197, 94, 0.88); }
+.detail-price-history__entry--up    .detail-price-history__price { color: rgba(251, 191, 36, 0.85); }
+.detail-price-history__entry--first .detail-price-history__price { color: rgba(148, 163, 184, 0.70); }
+
+.detail-price-history__date {
+  color: rgba(148, 163, 184, 0.55);
+  font-size: 0.66rem;
+  white-space: nowrap;
+}
+
+/* Light mode */
+:root[data-theme="light"] .detail-price-history {
+  background: rgba(241, 245, 249, 0.70);
+  border-color: rgba(148, 163, 184, 0.22);
+}
+:root[data-theme="light"] .detail-price-history__price { color: rgba(15, 23, 42, 0.90); }
+:root[data-theme="light"] .detail-price-history__date  { color: rgba(71, 85, 105, 0.60); }
+:root[data-theme="light"] .detail-price-history__entry--down .detail-price-history__price { color: rgba(21, 128, 61, 0.88); }
