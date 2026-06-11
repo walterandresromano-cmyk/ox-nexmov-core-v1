@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { signOut } from "../services/auth.service.js";
 import { normalizeRole } from "../lib/auth.js";
@@ -52,6 +52,21 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
 
   const [loggingOut, setLoggingOut] = useState(false);
   const [isMoreOpen, setIsMoreOpen] = useState(false);
+
+  // Close the "Más" menu whenever a modal opens, and prevent it from opening
+  useEffect(() => {
+    if (!isMoreOpen) return;
+    const observer = new MutationObserver(() => {
+      if (document.querySelector(".modal-backdrop")) setIsMoreOpen(false);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [isMoreOpen]);
+
+  function openMore() {
+    if (document.querySelector(".modal-backdrop")) return;
+    setIsMoreOpen((v) => !v);
+  }
 
   const isMoreRouteActive = MORE_DOCK_ITEMS.some(
     (item) => item.id === currentRoute
@@ -166,7 +181,7 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
                     ? "dock-btn active"
                     : "dock-btn"
                 }
-                onClick={() => setIsMoreOpen((value) => !value)}
+                onClick={openMore}
               >
                 {item.label}
               </button>

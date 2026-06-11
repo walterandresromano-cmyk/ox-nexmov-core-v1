@@ -2583,10 +2583,13 @@
    Acceso a pestañas públicas secundarias en mobile.
    ========================================================= */
 
-/* Hide the "Más" panel while any modal is open — avoids z-index conflict */
+/* While any modal is open: hide the "Más" panel and block dock interactions */
 :root:has(.modal-backdrop) .mobile-dock-backdrop,
 :root:has(.modal-backdrop) .mobile-dock-more {
   display: none;
+}
+:root:has(.modal-backdrop) .mobile-dock {
+  pointer-events: none;
 }
 
 .mobile-dock-backdrop {
