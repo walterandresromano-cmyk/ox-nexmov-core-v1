@@ -2635,13 +2635,21 @@
    Acceso a pestañas públicas secundarias en mobile.
    ========================================================= */
 
-/* While any modal is open: hide the "Más" panel and block dock interactions */
+/* While any modal is open: hide overlay menus and block dock interactions */
 :root:has(.modal-backdrop) .mobile-dock-backdrop,
 :root:has(.modal-backdrop) .mobile-dock-more {
   display: none;
 }
 :root:has(.modal-backdrop) .mobile-dock {
   pointer-events: none;
+}
+
+/* Hide dealer mobile tabs and quicknav when a modal is open.
+   These render in-page (not fixed) but appear over the modal
+   due to dealer-panel stacking context. */
+:root:has(.modal-backdrop) .dealer-mobile-tabs,
+:root:has(.modal-backdrop) .dealer-mobile-quicknav {
+  display: none !important;
 }
 
 .mobile-dock-backdrop {
