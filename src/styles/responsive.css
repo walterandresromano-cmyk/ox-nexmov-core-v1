@@ -3239,6 +3239,27 @@
   .edit-vehicle-modal .contact-modal-head > div {
     flex: 1 !important;
     min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .edit-vehicle-modal .contact-modal-head > div .eyebrow {
+    font-size: 0.62rem !important;
+    margin-bottom: 1px !important;
+    line-height: 1.2 !important;
+  }
+
+  .edit-vehicle-modal .contact-modal-head > div h2 {
+    font-size: 0.95rem !important;
+    line-height: 1.25 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  .edit-vehicle-modal .contact-modal-head > div p:not(.eyebrow) {
+    display: none !important;
   }
 
   .edit-vehicle-back-btn {
@@ -3260,6 +3281,9 @@
     align-items: center !important;
     justify-content: center !important;
     flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: fit-content !important;
     padding: 7px 14px !important;
     font-size: 0.8rem !important;
     white-space: nowrap !important;
