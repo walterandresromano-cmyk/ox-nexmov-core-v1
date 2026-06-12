@@ -226,6 +226,7 @@ export default function EditVehicleImagesModal({
     <div className="modal-backdrop">
       <section className="ticket-detail-modal edit-images-modal">
         <div className="contact-modal-head">
+          <button className="edit-images-back-btn" type="button" onClick={onClose}>← Volver</button>
           <div>
             <p className="eyebrow">Editar imágenes</p>
             <h2>
@@ -237,7 +238,9 @@ export default function EditVehicleImagesModal({
               publicación.
             </p>
           </div>
-
+          <button className="edit-images-save-btn primary-action" type="button" onClick={handleSave} disabled={submitting}>
+            {submitting ? "Guardando..." : "Guardar"}
+          </button>
           <button className="modal-close-btn" onClick={onClose}>
             ×
           </button>

@@ -91,17 +91,21 @@ export default function DealerMaintenanceModal({ vehicle, onClose, onUpdated }) 
 
   const title = `${vehicle.brand} ${vehicle.model}${vehicle.version ? ` · ${vehicle.version}` : ""}`;
 
-  return (
+  return createPortal(
     <div className="modal-backdrop" onClick={onClose}>
       <div
         className="dealer-maintenance-modal"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="dealer-maintenance-modal__head">
+          <button className="maintenance-back-btn" type="button" onClick={onClose}>← Volver</button>
           <div>
             <p className="dealer-maintenance-modal__eyebrow">Historial de mantenimiento</p>
             <h3 className="dealer-maintenance-modal__title">{title}</h3>
           </div>
+          <button className="maintenance-save-btn primary-action" type="button" onClick={handleSave} disabled={loading}>
+            {saved ? "Guardado ✓" : loading ? "Guardando…" : "Guardar"}
+          </button>
           <button className="modal-close-btn" onClick={onClose}>×</button>
         </div>
 
