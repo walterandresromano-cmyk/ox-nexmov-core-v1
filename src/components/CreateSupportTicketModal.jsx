@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { createDealerSupportTicket } from "../services/tickets.service.js";
 
 const initialForm = {
@@ -66,7 +67,7 @@ export default function CreateSupportTicketModal({
   }
 
   if (createdTicket) {
-    return (
+    return createPortal(
       <div className="modal-backdrop">
         <section className="contact-modal">
           <button className="modal-close-btn" onClick={onClose}>×</button>
@@ -177,6 +178,7 @@ export default function CreateSupportTicketModal({
             </button>
           </form>
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }

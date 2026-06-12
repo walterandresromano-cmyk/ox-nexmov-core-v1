@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 import LeadStatusSelect from "./LeadStatusSelect.jsx";
 import { assignVehicleToBuyerGarage } from "../services/buyerGarage.service.js";
@@ -207,7 +208,7 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
     }
   }
 
-  return (
+  return createPortal(
     <div className="modal-backdrop">
       <section className="ticket-detail-modal">
         <div className="contact-modal-head">
@@ -423,6 +424,7 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
           </article>
         </div>
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { updateAdminVehicleData } from "../services/adminVehicles.service.js";
 import { updateCurrentDealerVehicleData } from "../services/dealerVehicles.service.js";
@@ -465,7 +466,7 @@ export default function EditVehicleModal({
     ? "Descripción mínima completa. Podés mejorarla agregando más detalles útiles."
     : "Buena descripción comercial.";
 
-  return (
+  return createPortal(
     <div className="modal-backdrop">
       <section className="ticket-detail-modal edit-vehicle-modal">
         <div className="contact-modal-head">
@@ -1096,6 +1097,7 @@ export default function EditVehicleModal({
           </form>
         )}
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }

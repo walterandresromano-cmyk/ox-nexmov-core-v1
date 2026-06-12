@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { assignVehicleToBuyerGarage } from "../services/buyerGarage.service.js";
 import { formatARS, formatKm } from "../lib/formatters.js";
 
@@ -70,7 +71,7 @@ export default function DealerTransferGarageModal({ vehicle, vehicleLeads, deale
   }
 
   if (done) {
-    return (
+    return createPortal(
       <div className="modal-backdrop">
         <div className="dealer-transfer-modal dealer-transfer-modal--done">
           <div className="dealer-transfer-modal__done-icon">✓</div>
@@ -206,6 +207,7 @@ export default function DealerTransferGarageModal({ vehicle, vehicleLeads, deale
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { createRadarRequest, buildRadarCriteriaSummary } from "../services/radarRequests.service.js";
 
 export default function RadarActivationModal({
@@ -138,6 +139,7 @@ export default function RadarActivationModal({
           contactan hasta que vos iniciés la consulta.
         </p>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

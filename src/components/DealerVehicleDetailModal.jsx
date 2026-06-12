@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 import DealerVehicleActions from "./DealerVehicleActions.jsx";
 import OxAssistantPanel from "./OxAssistantPanel.jsx";
@@ -252,7 +253,7 @@ export default function DealerVehicleDetailModal({
     setTimeout(() => setCardState("idle"), 2500);
   }
 
-  return (
+  return createPortal(
     <div className="modal-backdrop">
       <section className="ticket-detail-modal dealer-vehicle-detail-modal">
         <div className="contact-modal-head">
@@ -541,6 +542,7 @@ export default function DealerVehicleDetailModal({
         </div>
         )}
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }

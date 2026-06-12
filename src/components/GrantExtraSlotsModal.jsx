@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { grantExtraPublishSlots } from "../services/adminDealers.service.js";
 
 const initialForm = {
@@ -59,7 +60,7 @@ export default function GrantExtraSlotsModal({ dealer, onClose, onGranted }) {
     }
   }
 
-  return (
+  return createPortal(
     <div className="modal-backdrop">
       <section className="contact-modal">
         <div className="contact-modal-head">
@@ -140,6 +141,7 @@ export default function GrantExtraSlotsModal({ dealer, onClose, onGranted }) {
           </form>
         )}
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }

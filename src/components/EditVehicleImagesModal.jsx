@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 import {
   updateAdminVehicleImages,
@@ -221,7 +222,7 @@ export default function EditVehicleImagesModal({
     }
   }
 
-  return (
+  return createPortal(
     <div className="modal-backdrop">
       <section className="ticket-detail-modal edit-images-modal">
         <div className="contact-modal-head">
@@ -395,6 +396,7 @@ export default function EditVehicleImagesModal({
           </button>
         </div>
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }

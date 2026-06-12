@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   attachImagesToCurrentDealerVehicle,
   createVehicleForCurrentDealer,
@@ -505,7 +506,7 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
     ? "Mínimo completo. Podés sumar más fotos para mejorar la publicación."
     : "Buen nivel visual para la publicación.";
 
-  return (
+  return createPortal(
     <div className="modal-backdrop">
       <section className="ticket-detail-modal">
         <div className="contact-modal-head">
@@ -1116,6 +1117,7 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
           </form>
         )}
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }

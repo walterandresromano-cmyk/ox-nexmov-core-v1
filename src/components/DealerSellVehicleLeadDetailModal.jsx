@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 import DealerSellVehicleLeadStatusSelect from "./DealerSellVehicleLeadStatusSelect.jsx";
 import { updateSellVehicleLeadDealer } from "../services/sellVehicle.service.js";
@@ -98,7 +99,7 @@ export default function DealerSellVehicleLeadDetailModal({
     window.setTimeout(() => setNotesSaved(false), 1600);
   }
 
-  return (
+  return createPortal(
     <div className="modal-backdrop">
       <section className="ticket-detail-modal">
         <div className="contact-modal-head">
@@ -254,6 +255,7 @@ export default function DealerSellVehicleLeadDetailModal({
           </article>
         </div>
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }

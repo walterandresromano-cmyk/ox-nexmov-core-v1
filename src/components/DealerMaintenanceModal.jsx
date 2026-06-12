@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { updateCurrentDealerVehicleData } from "../services/dealerVehicles.service.js";
 
 const SERVICE_TYPES = [
@@ -211,6 +212,7 @@ export default function DealerMaintenanceModal({ vehicle, onClose, onUpdated }) 
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
