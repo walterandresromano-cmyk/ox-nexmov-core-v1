@@ -736,6 +736,15 @@ export default function App() {
     setMetaContent("property", "og:url", url);
     setMetaContent("name", "twitter:title", title);
     setMetaContent("name", "twitter:description", description);
+
+    // Update canonical link
+    let canonical = document.querySelector("link[rel='canonical']");
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", url.split("?")[0]);
   }, [safeCurrentRoute, authProfile?.role]);
 
   const CurrentPage = ROUTES[safeCurrentRoute] || NotFound;
