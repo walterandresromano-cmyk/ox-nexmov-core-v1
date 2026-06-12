@@ -692,6 +692,8 @@ export default function VehicleDetailModal({
                   alt=""
                   aria-hidden="true"
                   draggable="false"
+                  loading="lazy"
+                  decoding="async"
                 />
               )}
               <div

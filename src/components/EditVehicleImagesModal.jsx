@@ -308,7 +308,7 @@ export default function EditVehicleImagesModal({
                   }`}
                   key={image.url}
                 >
-                  <img src={image.url} alt={image.name || "Imagen vehículo"} />
+                  <img src={image.url} alt={image.name || "Imagen vehículo"} loading="lazy" decoding="async" />
 
                   <div className="edit-image-actions">
                     <button

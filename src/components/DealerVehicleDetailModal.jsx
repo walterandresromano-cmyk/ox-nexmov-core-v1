@@ -280,7 +280,9 @@ export default function DealerVehicleDetailModal({
                 <img
                   src={selectedImage.url}
                   alt={`${vehicle.brand} ${vehicle.model}`}
-                  loading="lazy"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
                 />
               ) : (
                 <span>
@@ -303,7 +305,7 @@ export default function DealerVehicleDetailModal({
                     onClick={() => setSelectedImageIndex(index)}
                     aria-label={`Ver imagen ${index + 1}`}
                   >
-                    <img src={image.url} alt={image.name || `Imagen ${index + 1}`} />
+                    <img src={image.url} alt={image.name || `Imagen ${index + 1}`} loading="lazy" decoding="async" />
                   </button>
                 ))}
               </div>
