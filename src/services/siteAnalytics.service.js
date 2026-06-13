@@ -2,6 +2,7 @@ import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 
 const VISITOR_KEY = "ox-visitor-id";
 const SESSION_KEY = "ox-session-id";
+const UTM_KEY    = "ox-utm";
 
 function uuid() {
   if (typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID();
@@ -24,6 +25,29 @@ function getSessionId() {
   } catch { return "unknown"; }
 }
 
+// Lee UTMs de la URL y los persiste en sessionStorage para toda la sesión.
+// Si la URL no tiene UTMs, usa los guardados (primer toque de la sesión).
+function getUtms() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = {
+      source:   params.get("utm_source")   || null,
+      medium:   params.get("utm_medium")   || null,
+      campaign: params.get("utm_campaign") || null,
+    };
+
+    if (fromUrl.source || fromUrl.medium || fromUrl.campaign) {
+      sessionStorage.setItem(UTM_KEY, JSON.stringify(fromUrl));
+      return fromUrl;
+    }
+
+    const stored = sessionStorage.getItem(UTM_KEY);
+    return stored ? JSON.parse(stored) : { source: null, medium: null, campaign: null };
+  } catch {
+    return { source: null, medium: null, campaign: null };
+  }
+}
+
 // Rutas privadas que no aportan valor en analytics públicos
 const SKIP_ROUTES = new Set(["buyer", "dealer", "admin", "internal0km", "support"]);
 
@@ -34,16 +58,20 @@ export async function trackPageView(route, userRole = null) {
   if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") return;
 
   const path = window.location.pathname + window.location.search;
+  const utms = getUtms();
 
   // Fire-and-forget — no bloquea navegación
   supabase.rpc("track_site_page_view", {
-    p_page: route,
-    p_route: path,
-    p_user_role: userRole || null,
-    p_visitor_id: getVisitorId(),
-    p_session_id: getSessionId(),
-    p_referrer: document.referrer || null,
-    p_user_agent: navigator.userAgent?.slice(0, 200) || null,
+    p_page:         route,
+    p_route:        path,
+    p_user_role:    userRole || null,
+    p_visitor_id:   getVisitorId(),
+    p_session_id:   getSessionId(),
+    p_referrer:     document.referrer || null,
+    p_user_agent:   navigator.userAgent?.slice(0, 200) || null,
+    p_utm_source:   utms.source,
+    p_utm_medium:   utms.medium,
+    p_utm_campaign: utms.campaign,
   }).then(() => {}).catch(() => {});
 }
 
@@ -58,7 +86,7 @@ export async function getSiteAnalytics({ days = 7 } = {}) {
 
   const { data, error } = await supabase
     .from("site_page_views")
-    .select("page, route, user_role, visitor_id, session_id, visited_at")
+    .select("page, route, user_role, visitor_id, session_id, visited_at, utm_source, utm_medium, utm_campaign")
     .gte("visited_at", since.toISOString())
     .order("visited_at", { ascending: false });
 
@@ -71,18 +99,14 @@ export function aggregateAnalytics(rows) {
 
   const todayRows = rows.filter((r) => new Date(r.visited_at) >= today);
 
-  // Visitas totales del período
   const totalVisits = rows.length;
   const todayVisits = todayRows.length;
 
-  // Visitantes únicos (visitor_id)
-  const uniqueVisitors = new Set(rows.map((r) => r.visitor_id).filter(Boolean)).size;
+  const uniqueVisitors      = new Set(rows.map((r) => r.visitor_id).filter(Boolean)).size;
   const todayUniqueVisitors = new Set(todayRows.map((r) => r.visitor_id).filter(Boolean)).size;
+  const uniqueSessions      = new Set(rows.map((r) => r.session_id).filter(Boolean)).size;
 
-  // Sesiones únicas
-  const uniqueSessions = new Set(rows.map((r) => r.session_id).filter(Boolean)).size;
-
-  // Top páginas del período
+  // Top páginas
   const pageCount = {};
   for (const r of rows) {
     const key = r.page || r.route || "unknown";
@@ -93,7 +117,7 @@ export function aggregateAnalytics(rows) {
     .slice(0, 8)
     .map(([page, count]) => ({ page, count }));
 
-  // Visitas por día (últimos N días)
+  // Visitas por día
   const byDay = {};
   for (const r of rows) {
     const day = r.visited_at.slice(0, 10);
@@ -110,6 +134,16 @@ export function aggregateAnalytics(rows) {
     byRole[role] = (byRole[role] || 0) + 1;
   }
 
+  // Por fuente UTM
+  const bySource = {};
+  for (const r of rows) {
+    const src = r.utm_source || "orgánico";
+    bySource[src] = (bySource[src] || 0) + 1;
+  }
+  const topSources = Object.entries(bySource)
+    .sort(([, a], [, b]) => b - a)
+    .map(([source, count]) => ({ source, count }));
+
   return {
     totalVisits,
     todayVisits,
@@ -119,5 +153,6 @@ export function aggregateAnalytics(rows) {
     topPages,
     dailyTrend,
     byRole,
+    topSources,
   };
 }

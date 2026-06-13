@@ -1244,6 +1244,15 @@ export default function AdminPanel({ authProfile }) {
                 <p>Tabs de browser abiertas</p>
               </article>
             </div>
+            {siteStats.topSources?.length > 0 && (
+              <div className="admin-utm-sources">
+                {siteStats.topSources.map(({ source, count }) => (
+                  <span key={source} className="admin-utm-chip">
+                    {source} <strong>{count}</strong>
+                  </span>
+                ))}
+              </div>
+            )}
           </section>
 
           <section className="admin-analytics-strip__panel">

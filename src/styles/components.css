@@ -3445,6 +3445,43 @@
   }
 }
 
+/* UTM source chips */
+.admin-utm-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(56, 189, 248, 0.10);
+}
+.admin-utm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  background: rgba(56, 189, 248, 0.07);
+  font-size: 0.72rem;
+  color: rgba(186, 230, 253, 0.85);
+  letter-spacing: 0.01em;
+}
+.admin-utm-chip strong {
+  color: #fff;
+  font-weight: 600;
+}
+:root[data-theme="light"] .admin-utm-sources {
+  border-top-color: rgba(14, 116, 144, 0.10);
+}
+:root[data-theme="light"] .admin-utm-chip {
+  border-color: rgba(14, 116, 144, 0.18);
+  background: rgba(14, 165, 233, 0.07);
+  color: rgba(3, 105, 161, 0.85);
+}
+:root[data-theme="light"] .admin-utm-chip strong {
+  color: #0369a1;
+}
+
 /* Light mode */
 :root[data-theme="light"] .admin-analytics-strip__panel,
 :root[data-theme="light"] .admin-views-kpi-card {
