@@ -15479,6 +15479,13 @@ textarea:focus-visible,
 
   .dealer-maintenance-modal {
     padding: 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .dealer-maintenance-modal__history {
+    flex: 1 !important;
+    min-height: 0 !important;
   }
 
   .dealer-transfer-modal--done {

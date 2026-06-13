@@ -28499,6 +28499,7 @@ button.buyer-shortlist-compare__slot:hover {
 .tc-char-count {
   font-size: 0.72rem;
   color: var(--ox-text-muted);
+  white-space: nowrap;
 }
 
 .tc-send-error {
