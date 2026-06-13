@@ -1215,6 +1215,67 @@ export default function AdminPanel({ authProfile }) {
           </div>
         )}
 
+        {/* ── Franja analytics compacta ── */}
+        <div className="admin-analytics-strip">
+          <section className="admin-analytics-strip__panel">
+            <div className="admin-analytics-strip__head">
+              <div>
+                <span>Tráfico del sitio</span>
+                <p>Últimos 30 días · páginas públicas</p>
+              </div>
+              <button type="button" className="admin-refresh-btn" onClick={loadSiteAnalytics} disabled={loadingAnalytics}>
+                {loadingAnalytics ? "…" : "Actualizar"}
+              </button>
+            </div>
+            <div className="admin-views-kpi-grid admin-views-kpi-grid--compact">
+              <article className="admin-views-kpi-card">
+                <span>Hoy</span>
+                <strong>{siteStats.todayVisits.toLocaleString("es-AR")}</strong>
+                <p>{siteStats.todayUniqueVisitors} visitantes únicos</p>
+              </article>
+              <article className="admin-views-kpi-card">
+                <span>30 días</span>
+                <strong>{siteStats.totalVisits.toLocaleString("es-AR")}</strong>
+                <p>{siteStats.uniqueVisitors} únicos · {siteStats.uniqueSessions} sesiones</p>
+              </article>
+              <article className="admin-views-kpi-card">
+                <span>Sesiones</span>
+                <strong>{siteStats.uniqueSessions.toLocaleString("es-AR")}</strong>
+                <p>Tabs de browser abiertas</p>
+              </article>
+            </div>
+          </section>
+
+          <section className="admin-analytics-strip__panel">
+            <div className="admin-analytics-strip__head">
+              <div>
+                <span>Actividad de la plataforma</span>
+                <p>Vistas acumuladas sobre publicaciones activas</p>
+              </div>
+              <button type="button" className="table-action-btn" onClick={() => openModule(ADMIN_MODULES.VEHICLES)}>
+                Ver publicaciones
+              </button>
+            </div>
+            <div className="admin-views-kpi-grid admin-views-kpi-grid--compact">
+              <article className="admin-views-kpi-card">
+                <span>Vistas totales</span>
+                <strong>{totalViews.toLocaleString("es-AR")}</strong>
+                <p>Todas las publicaciones</p>
+              </article>
+              <article className="admin-views-kpi-card">
+                <span>Con visitas</span>
+                <strong>{vehiclesWithViews}</strong>
+                <p>De {activeVehicles} activas</p>
+              </article>
+              <article className="admin-views-kpi-card">
+                <span>Promedio</span>
+                <strong>{avgViewsPerActive}</strong>
+                <p>Por publicación activa</p>
+              </article>
+            </div>
+          </section>
+        </div>
+
         <section className="admin-ops-dashboard">
           <div className="admin-ops-hero">
             <div>
@@ -1355,126 +1416,6 @@ export default function AdminPanel({ authProfile }) {
           </section>
         </section>
 
-        {/* ── Tráfico del sitio (site_page_views) ── */}
-        <section className="admin-section-block">
-          <div className="buyer-section-head">
-            <div>
-              <h2>Tráfico del sitio</h2>
-              <p>Visitas a páginas públicas — últimos 30 días. No incluye paneles privados.</p>
-            </div>
-            <button
-              type="button"
-              className="admin-refresh-btn"
-              onClick={loadSiteAnalytics}
-              disabled={loadingAnalytics}
-            >
-              {loadingAnalytics ? "Cargando…" : "Actualizar"}
-            </button>
-          </div>
-
-          <div className="admin-views-kpi-grid">
-            <article className="admin-views-kpi-card">
-              <span>Visitas hoy</span>
-              <strong>{siteStats.todayVisits.toLocaleString("es-AR")}</strong>
-              <p>{siteStats.todayUniqueVisitors} visitantes únicos hoy.</p>
-            </article>
-
-            <article className="admin-views-kpi-card">
-              <span>Últimos 30 días</span>
-              <strong>{siteStats.totalVisits.toLocaleString("es-AR")}</strong>
-              <p>{siteStats.uniqueVisitors} visitantes únicos · {siteStats.uniqueSessions} sesiones.</p>
-            </article>
-
-            <article className="admin-views-kpi-card">
-              <span>Sesiones únicas</span>
-              <strong>{siteStats.uniqueSessions.toLocaleString("es-AR")}</strong>
-              <p>Cada sesión = tab de browser abierta.</p>
-            </article>
-          </div>
-
-          {siteStats.topPages.length > 0 && (
-            <div className="admin-top-viewed">
-              <p className="admin-top-viewed-label">Páginas más visitadas (30 días)</p>
-              <div className="admin-top-viewed-list">
-                {siteStats.topPages.map((item, i) => (
-                  <div key={item.page} className="admin-top-viewed-row">
-                    <span className="admin-top-viewed-rank">#{i + 1}</span>
-                    <div className="admin-top-viewed-info">
-                      <strong>{item.page}</strong>
-                      <span>{Math.round((item.count / siteStats.totalVisits) * 100)}% del tráfico</span>
-                    </div>
-                    <span className="admin-top-viewed-count">
-                      {item.count.toLocaleString("es-AR")} visitas
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {!loadingAnalytics && siteStats.totalVisits === 0 && (
-            <div className="admin-ops-empty">
-              Aún no hay datos de tráfico registrados. Las visitas aparecerán acá en tiempo real.
-            </div>
-          )}
-        </section>
-
-        {/* ── Actividad de la plataforma — vistas ── */}
-        <section className="admin-section-block">
-          <div className="buyer-section-head">
-            <div>
-              <h2>Actividad de la plataforma</h2>
-              <p>Contadores de vistas acumuladas sobre publicaciones activas.</p>
-            </div>
-            <button
-              type="button"
-              className="table-action-btn"
-              onClick={() => openModule(ADMIN_MODULES.VEHICLES)}
-            >
-              Ver publicaciones
-            </button>
-          </div>
-
-          <div className="admin-views-kpi-grid">
-            <article className="admin-views-kpi-card">
-              <span>Vistas totales</span>
-              <strong>{totalViews.toLocaleString("es-AR")}</strong>
-              <p>Interacciones acumuladas en todas las publicaciones.</p>
-            </article>
-
-            <article className="admin-views-kpi-card">
-              <span>Publicaciones vistas</span>
-              <strong>{vehiclesWithViews}</strong>
-              <p>De {activeVehicles} publicaciones activas recibieron al menos 1 visita.</p>
-            </article>
-
-            <article className="admin-views-kpi-card">
-              <span>Promedio por publicación</span>
-              <strong>{avgViewsPerActive}</strong>
-              <p>Vistas promedio entre publicaciones activas.</p>
-            </article>
-          </div>
-
-          {topViewedVehicles.length > 0 && (
-            <div className="admin-top-viewed">
-              <p className="admin-top-viewed-label">Top publicaciones por vistas</p>
-              <div className="admin-top-viewed-list">
-                {topViewedVehicles.map((v, i) => (
-                  <div key={v.id} className="admin-top-viewed-row">
-                    <span className="admin-top-viewed-rank">#{i + 1}</span>
-                    <div className="admin-top-viewed-info">
-                      <strong>{[v.brand, v.model, v.version].filter(Boolean).join(" ")}</strong>
-                      <span>{v.dealer_name || "Dealer"} · {v.city || v.province || ""}</span>
-                    </div>
-                    <span className="admin-top-viewed-count">
-                      {Number(v.views ?? 0).toLocaleString("es-AR")} vistas
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </section>
 
         {false && (
           <>

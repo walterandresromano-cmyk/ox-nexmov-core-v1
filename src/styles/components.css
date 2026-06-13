@@ -3380,6 +3380,85 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
+/* ── Admin analytics strip (tráfico + actividad compactos) ── */
+.admin-analytics-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.admin-analytics-strip__panel {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.07), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(8, 15, 28, 0.64));
+}
+
+.admin-analytics-strip__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.admin-analytics-strip__head > div > span {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(125, 211, 252, 0.9);
+  margin-bottom: 2px;
+}
+
+.admin-analytics-strip__head > div > p {
+  margin: 0;
+  font-size: 0.68rem;
+  color: var(--ox-muted);
+}
+
+.admin-views-kpi-grid--compact {
+  gap: 8px;
+}
+
+.admin-views-kpi-grid--compact .admin-views-kpi-card {
+  padding: 10px 12px;
+}
+
+.admin-views-kpi-grid--compact .admin-views-kpi-card strong {
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+  margin-bottom: 3px;
+}
+
+.admin-views-kpi-grid--compact .admin-views-kpi-card p {
+  font-size: 0.66rem;
+}
+
+@media (max-width: 900px) {
+  .admin-analytics-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Light mode */
+:root[data-theme="light"] .admin-analytics-strip__panel,
+:root[data-theme="light"] .admin-views-kpi-card {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.06), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(240, 249, 255, 0.80));
+  box-shadow: 0 2px 10px rgba(14, 116, 144, 0.06);
+}
+
+:root[data-theme="light"] .admin-analytics-strip__head > div > span {
+  color: rgba(2, 132, 199, 0.95);
+}
+
 /* ── Admin views metrics ── */
 .admin-views-kpi-grid {
   display: grid;
