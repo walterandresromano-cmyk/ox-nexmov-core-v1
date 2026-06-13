@@ -2970,7 +2970,18 @@ export default function AdminPanel({ authProfile }) {
     }
 
     if (activeModule === ADMIN_MODULES.ANALYTICS) {
-      return <AdminAnalytics onBack={() => setActiveModule(null)} vehicles={adminVehicles} />;
+      return (
+        <div className="admin-section-block">
+          <div className="buyer-section-head">
+            <div>
+              <h2>Analytics</h2>
+              <p>Tráfico de páginas públicas · sin rutas privadas ni localhost</p>
+            </div>
+            {renderBackToSummaryButton()}
+          </div>
+          <AdminAnalytics vehicles={adminVehicles} />
+        </div>
+      );
     }
 
     if (activeModule === ADMIN_MODULES.ACTION_LOG) {

@@ -86,7 +86,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-export default function AdminAnalytics({ onBack, vehicles = [] }) {
+export default function AdminAnalytics({ vehicles = [] }) {
   const [days, setDays]   = useState(30);
   const [rows, setRows]   = useState([]);
   const [loading, setLoading] = useState(true);
@@ -206,21 +206,14 @@ export default function AdminAnalytics({ onBack, vehicles = [] }) {
   return (
     <div className="analytics-panel">
 
-      {/* ── Header ── */}
-      <div className="analytics-header">
-        <div>
-          <button type="button" className="admin-back-btn" onClick={onBack}>← Volver</button>
-          <h2>Analytics</h2>
-          <p>Tráfico de páginas públicas · sin rutas privadas ni localhost</p>
-        </div>
-        <div className="analytics-period-selector">
-          {PERIODS.map((p) => (
-            <button key={p.days} type="button"
-              className={`analytics-period-btn${days === p.days ? " is-active" : ""}`}
-              onClick={() => setDays(p.days)}
-            >{p.label}</button>
-          ))}
-        </div>
+      {/* ── Selector de período ── */}
+      <div className="analytics-period-selector">
+        {PERIODS.map((p) => (
+          <button key={p.days} type="button"
+            className={`analytics-period-btn${days === p.days ? " is-active" : ""}`}
+            onClick={() => setDays(p.days)}
+          >{p.label}</button>
+        ))}
       </div>
 
       {loading && <div className="analytics-loading">Cargando datos…</div>}
@@ -322,15 +315,15 @@ export default function AdminAnalytics({ onBack, vehicles = [] }) {
 
         {/* ── Qué ven ── */}
         <div className="analytics-section-label">Qué ven y desde dónde entran</div>
-        <div className="analytics-charts-row">
+        <div className="analytics-charts-row analytics-charts-row--2">
 
           <section className="analytics-chart-card">
             <h3>Páginas de entrada <span className="analytics-chart-subtitle">· primera pág. de la sesión</span></h3>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={stats.entryPages} layout="vertical" margin={{ top: 0, right: 12, left: 40, bottom: 0 }}>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={stats.entryPages} layout="vertical" margin={{ top: 0, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.1)" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11, fill: "#94a3b8" }} allowDecimals={false} />
-                <YAxis type="category" dataKey="page" tick={{ fontSize: 11, fill: "#94a3b8" }} width={80} />
+                <YAxis type="category" dataKey="page" tick={{ fontSize: 11, fill: "#94a3b8" }} width={100} />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="sesiones" name="Sesiones" radius={[0, 4, 4, 0]}>
                   {stats.entryPages.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
@@ -341,29 +334,16 @@ export default function AdminAnalytics({ onBack, vehicles = [] }) {
 
           <section className="analytics-chart-card">
             <h3>Top contenido <span className="analytics-chart-subtitle">· total de vistas por página</span></h3>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={stats.topPages} layout="vertical" margin={{ top: 0, right: 12, left: 40, bottom: 0 }}>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={stats.topPages} layout="vertical" margin={{ top: 0, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.1)" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11, fill: "#94a3b8" }} allowDecimals={false} />
-                <YAxis type="category" dataKey="page" tick={{ fontSize: 11, fill: "#94a3b8" }} width={80} />
+                <YAxis type="category" dataKey="page" tick={{ fontSize: 11, fill: "#94a3b8" }} width={100} />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="visitas" name="Visitas" radius={[0, 4, 4, 0]}>
                   {stats.topPages.map((_, i) => <Cell key={i} fill={COLORS[(i + 2) % COLORS.length]} />)}
                 </Bar>
               </BarChart>
-            </ResponsiveContainer>
-          </section>
-
-          <section className="analytics-chart-card">
-            <h3>Dispositivos</h3>
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie data={stats.devices} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} paddingAngle={3}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
-                  {stats.devices.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                </Pie>
-                <Tooltip formatter={(v, n) => [v, n]} />
-              </PieChart>
             </ResponsiveContainer>
           </section>
 
