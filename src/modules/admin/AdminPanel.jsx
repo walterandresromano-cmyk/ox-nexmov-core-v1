@@ -267,6 +267,7 @@ export default function AdminPanel({ authProfile }) {
   const [suspendingDealer, setSuspendingDealer] = useState(false);
   const [suspendDealerError, setSuspendDealerError] = useState("");
   const [suspendConfirmPending, setSuspendConfirmPending] = useState(false);
+  const [opsOpen, setOpsOpen] = useState({ alerts: true, activity: true });
 
 
   async function loadDealers() {
@@ -1323,64 +1324,78 @@ export default function AdminPanel({ authProfile }) {
           </div>
 
           <div className="admin-ops-grid">
-            <section className="admin-ops-panel admin-ops-panel--alerts">
-              <div className="admin-ops-panel-head">
+            <section className={`admin-ops-panel admin-ops-panel--alerts admin-ops-panel--accordion${opsOpen.alerts ? " is-open" : ""}`}>
+              <button
+                type="button"
+                className="admin-ops-panel-head admin-ops-accordion-toggle"
+                onClick={() => setOpsOpen((s) => ({ ...s, alerts: !s.alerts }))}
+              >
                 <div>
                   <span>Alertas operativas</span>
                   <h3>Prioridad de gestión</h3>
                 </div>
-              </div>
+                <span className="admin-ops-chevron">{opsOpen.alerts ? "▲" : "▼"}</span>
+              </button>
 
-              {activeAlerts.length === 0 ? (
-                <div className="admin-ops-empty">
-                  No hay alertas operativas pendientes con los datos cargados.
-                </div>
-              ) : (
-                <div className="admin-ops-alert-list">
-                  {activeAlerts.map((alert) => (
-                    <button
-                      key={alert.label}
-                      type="button"
-                      className={`admin-ops-alert admin-ops-tone-${alert.tone}`}
-                      onClick={() => openModule(alert.module)}
-                    >
-                      <strong>{alert.value}</strong>
-                      <span>{alert.label}</span>
-                      <p>{alert.text}</p>
-                    </button>
-                  ))}
-                </div>
+              {opsOpen.alerts && (
+                activeAlerts.length === 0 ? (
+                  <div className="admin-ops-empty">
+                    No hay alertas operativas pendientes con los datos cargados.
+                  </div>
+                ) : (
+                  <div className="admin-ops-alert-list">
+                    {activeAlerts.map((alert) => (
+                      <button
+                        key={alert.label}
+                        type="button"
+                        className={`admin-ops-alert admin-ops-tone-${alert.tone}`}
+                        onClick={() => openModule(alert.module)}
+                      >
+                        <strong>{alert.value}</strong>
+                        <span>{alert.label}</span>
+                        <p>{alert.text}</p>
+                      </button>
+                    ))}
+                  </div>
+                )
               )}
             </section>
 
-            <section className="admin-ops-panel">
-              <div className="admin-ops-panel-head">
+            <section className={`admin-ops-panel admin-ops-panel--accordion${opsOpen.activity ? " is-open" : ""}`}>
+              <button
+                type="button"
+                className="admin-ops-panel-head admin-ops-accordion-toggle"
+                onClick={() => setOpsOpen((s) => ({ ...s, activity: !s.activity }))}
+              >
                 <div>
                   <span>Actividad reciente</span>
                   <h3>Últimos movimientos</h3>
                 </div>
-              </div>
+                <span className="admin-ops-chevron">{opsOpen.activity ? "▲" : "▼"}</span>
+              </button>
 
-              {recentActivity.length === 0 ? (
-                <div className="admin-ops-empty">
-                  La actividad reciente aparecerá cuando existan datos reales.
-                </div>
-              ) : (
-                <div className="admin-ops-activity-list">
-                  {recentActivity.map((item) => (
-                    <button
-                      key={`${item.type}-${item.title}-${item.date}`}
-                      type="button"
-                      className="admin-ops-activity"
-                      onClick={() => openModule(item.module)}
-                    >
-                      <span>{item.type}</span>
-                      <strong>{item.title}</strong>
-                      <p>{item.detail}</p>
-                      <small>{formatDateTime(item.date)}</small>
-                    </button>
-                  ))}
-                </div>
+              {opsOpen.activity && (
+                recentActivity.length === 0 ? (
+                  <div className="admin-ops-empty">
+                    La actividad reciente aparecerá cuando existan datos reales.
+                  </div>
+                ) : (
+                  <div className="admin-ops-activity-list">
+                    {recentActivity.map((item) => (
+                      <button
+                        key={`${item.type}-${item.title}-${item.date}`}
+                        type="button"
+                        className="admin-ops-activity"
+                        onClick={() => openModule(item.module)}
+                      >
+                        <span>{item.type}</span>
+                        <strong>{item.title}</strong>
+                        <p>{item.detail}</p>
+                        <small>{formatDateTime(item.date)}</small>
+                      </button>
+                    ))}
+                  </div>
+                )
               )}
             </section>
           </div>

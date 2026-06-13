@@ -15579,6 +15579,27 @@ body::-webkit-scrollbar {
   gap: 12px;
 }
 
+/* Acordeón */
+.admin-ops-accordion-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+.admin-ops-chevron {
+  font-size: 0.65rem;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+.admin-ops-panel--accordion {
+  gap: 0;
+}
+.admin-ops-panel--accordion.is-open {
+  gap: 12px;
+}
+
 .admin-ops-alert-list,
 .admin-ops-activity-list {
   display: grid;
