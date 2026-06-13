@@ -28756,3 +28756,56 @@ button.buyer-shortlist-compare__slot:hover {
     animation: none;
   }
 }
+
+/* ── Admin ops panel — light mode ─────────────────────────────────────── */
+:root[data-theme="light"] .admin-ops-hero,
+:root[data-theme="light"] .admin-ops-panel,
+:root[data-theme="light"] .admin-ops-kpi-card,
+:root[data-theme="light"] .admin-ops-alert,
+:root[data-theme="light"] .admin-ops-activity {
+  border-color: rgba(14, 116, 144, 0.14);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.06), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(240, 249, 255, 0.80));
+  box-shadow:
+    0 2px 12px rgba(14, 116, 144, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.80);
+}
+
+:root[data-theme="light"] .admin-ops-kpi-card:hover,
+:root[data-theme="light"] .admin-ops-alert:hover,
+:root[data-theme="light"] .admin-ops-activity:hover {
+  border-color: rgba(14, 165, 233, 0.30);
+  box-shadow:
+    0 6px 20px rgba(14, 116, 144, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
+}
+
+:root[data-theme="light"] .admin-ops-kpi-card strong {
+  color: #0c1c2c;
+}
+
+:root[data-theme="light"] .admin-ops-hero span,
+:root[data-theme="light"] .admin-ops-panel-head span,
+:root[data-theme="light"] .admin-ops-kpi-card span,
+:root[data-theme="light"] .admin-ops-alert span,
+:root[data-theme="light"] .admin-ops-activity span,
+:root[data-theme="light"] .admin-ops-attention-card span {
+  color: rgba(2, 132, 199, 0.95);
+}
+
+:root[data-theme="light"] .admin-ops-attention-card {
+  border-color: rgba(202, 138, 4, 0.22);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(250, 204, 21, 0.10), transparent 36%),
+    rgba(255, 253, 235, 0.80);
+}
+
+:root[data-theme="light"] .admin-ops-attention-card strong {
+  color: #1a2a3a;
+}
+
+:root[data-theme="light"] .admin-top-viewed-row {
+  background: rgba(240, 249, 255, 0.70);
+  border: 1px solid rgba(14, 116, 144, 0.10);
+}
