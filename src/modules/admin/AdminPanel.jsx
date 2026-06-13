@@ -2970,7 +2970,7 @@ export default function AdminPanel({ authProfile }) {
     }
 
     if (activeModule === ADMIN_MODULES.ANALYTICS) {
-      return <AdminAnalytics onBack={() => setActiveModule(null)} />;
+      return <AdminAnalytics onBack={() => setActiveModule(null)} vehicles={adminVehicles} />;
     }
 
     if (activeModule === ADMIN_MODULES.ACTION_LOG) {

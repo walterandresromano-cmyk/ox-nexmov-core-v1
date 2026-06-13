@@ -3,7 +3,7 @@ import {
   AreaChart, Area,
   BarChart, Bar,
   PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { getSiteAnalytics } from "../../services/siteAnalytics.service.js";
 
@@ -25,6 +25,10 @@ function detectDevice(ua = "") {
 function fmtDate(dateStr) {
   const [, m, d] = dateStr.split("-");
   return `${d}/${m}`;
+}
+
+function fmtARS(n) {
+  return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(n);
 }
 
 function KpiCard({ label, value, sub }) {
@@ -51,7 +55,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-export default function AdminAnalytics({ onBack }) {
+export default function AdminAnalytics({ onBack, vehicles = [] }) {
   const [days, setDays]   = useState(30);
   const [rows, setRows]   = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,13 +75,12 @@ export default function AdminAnalytics({ onBack }) {
     today.setHours(0, 0, 0, 0);
     const todayRows = rows.filter((r) => new Date(r.visited_at) >= today);
 
-    // KPIs
-    const totalVisits       = rows.length;
-    const uniqueVisitors    = new Set(rows.map((r) => r.visitor_id).filter(Boolean)).size;
-    const uniqueSessions    = new Set(rows.map((r) => r.session_id).filter(Boolean)).size;
+    const totalVisits        = rows.length;
+    const uniqueVisitors     = new Set(rows.map((r) => r.visitor_id).filter(Boolean)).size;
+    const uniqueSessions     = new Set(rows.map((r) => r.session_id).filter(Boolean)).size;
     const avgPagesPerVisitor = uniqueVisitors ? (totalVisits / uniqueVisitors).toFixed(1) : 0;
 
-    // Daily trend
+    // Tendencia diaria
     const byDay = {};
     for (const r of rows) {
       const day = r.visited_at.slice(0, 10);
@@ -121,6 +124,15 @@ export default function AdminAnalytics({ onBack }) {
     return { totalVisits, uniqueVisitors, uniqueSessions, avgPagesPerVisitor, dailyTrend, topPages, sources, devices, todayVisits: todayRows.length };
   }, [rows]);
 
+  // Top publicaciones por vistas (de adminVehicles, sin filtro de período)
+  const topVehicles = useMemo(() =>
+    [...vehicles]
+      .filter((v) => Number(v.views ?? 0) > 0)
+      .sort((a, b) => Number(b.views ?? 0) - Number(a.views ?? 0))
+      .slice(0, 10),
+    [vehicles]
+  );
+
   return (
     <div className="analytics-panel">
       {/* Header */}
@@ -154,9 +166,9 @@ export default function AdminAnalytics({ onBack }) {
         <>
           {/* KPIs */}
           <div className="analytics-kpi-grid">
-            <KpiCard label="Visitas totales"      value={stats.totalVisits.toLocaleString("es-AR")}    sub={`${stats.todayVisits} hoy`} />
-            <KpiCard label="Visitantes únicos"    value={stats.uniqueVisitors.toLocaleString("es-AR")} />
-            <KpiCard label="Sesiones"             value={stats.uniqueSessions.toLocaleString("es-AR")} />
+            <KpiCard label="Visitas totales"       value={stats.totalVisits.toLocaleString("es-AR")}    sub={`${stats.todayVisits} hoy`} />
+            <KpiCard label="Visitantes únicos"     value={stats.uniqueVisitors.toLocaleString("es-AR")} />
+            <KpiCard label="Sesiones"              value={stats.uniqueSessions.toLocaleString("es-AR")} />
             <KpiCard label="Páginas por visitante" value={stats.avgPagesPerVisitor} />
           </div>
 
@@ -180,7 +192,7 @@ export default function AdminAnalytics({ onBack }) {
             </ResponsiveContainer>
           </section>
 
-          {/* Top páginas + Fuentes */}
+          {/* Top páginas + Fuentes + Dispositivos */}
           <div className="analytics-charts-row">
             <section className="analytics-chart-card">
               <h3>Top páginas</h3>
@@ -203,7 +215,8 @@ export default function AdminAnalytics({ onBack }) {
               <h3>Fuentes de tráfico</h3>
               <ResponsiveContainer width="100%" height={220}>
                 <PieChart>
-                  <Pie data={stats.sources} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={75} paddingAngle={3} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+                  <Pie data={stats.sources} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={75} paddingAngle={3}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
                     {stats.sources.map((_, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
@@ -217,7 +230,8 @@ export default function AdminAnalytics({ onBack }) {
               <h3>Dispositivos</h3>
               <ResponsiveContainer width="100%" height={220}>
                 <PieChart>
-                  <Pie data={stats.devices} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={75} paddingAngle={3} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+                  <Pie data={stats.devices} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={75} paddingAngle={3}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
                     {stats.devices.map((_, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
@@ -228,6 +242,36 @@ export default function AdminAnalytics({ onBack }) {
             </section>
           </div>
         </>
+      )}
+
+      {/* Publicaciones más vistas — independiente del período */}
+      {topVehicles.length > 0 && (
+        <section className="analytics-chart-card analytics-chart-card--wide">
+          <h3>Publicaciones más vistas <span className="analytics-chart-subtitle">· acumulado total</span></h3>
+          <div className="analytics-vehicles-table">
+            <div className="analytics-vehicles-header">
+              <span>#</span>
+              <span>Vehículo</span>
+              <span>Dealer</span>
+              <span>Precio</span>
+              <span>Vistas</span>
+            </div>
+            {topVehicles.map((v, i) => (
+              <div key={v.id} className="analytics-vehicles-row">
+                <span className="analytics-vehicles-rank">{i + 1}</span>
+                <span className="analytics-vehicles-name">
+                  {v.brand} {v.model}
+                  {v.year && <em> {v.year}</em>}
+                </span>
+                <span className="analytics-vehicles-dealer">{v.dealer_name || "—"}</span>
+                <span className="analytics-vehicles-price">{v.price ? fmtARS(v.price) : "—"}</span>
+                <span className="analytics-vehicles-views">
+                  <strong>{Number(v.views).toLocaleString("es-AR")}</strong>
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
     </div>
   );
