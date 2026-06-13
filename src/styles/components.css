@@ -3389,7 +3389,8 @@
 }
 
 .admin-analytics-strip__panel {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   padding: 14px 16px;
   border: 1px solid rgba(56, 189, 248, 0.14);
@@ -3404,6 +3405,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  min-height: 40px;
+}
+
+.admin-analytics-strip__head .admin-strip-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .admin-analytics-strip__head > div > span {
@@ -3450,7 +3459,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 10px;
+  margin-top: auto;
   padding-top: 10px;
   border-top: 1px solid rgba(56, 189, 248, 0.10);
 }

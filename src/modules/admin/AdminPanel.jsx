@@ -1226,8 +1226,8 @@ export default function AdminPanel({ authProfile }) {
                 <span>Tráfico del sitio</span>
                 <p>Últimos 30 días · páginas públicas</p>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <button type="button" className="admin-refresh-btn" onClick={loadSiteAnalytics} disabled={loadingAnalytics}>
+              <div className="admin-strip-actions">
+                <button type="button" className="table-action-btn" onClick={loadSiteAnalytics} disabled={loadingAnalytics}>
                   {loadingAnalytics ? "…" : "Actualizar"}
                 </button>
                 <button type="button" className="table-action-btn" onClick={() => openModule(ADMIN_MODULES.ANALYTICS)}>
