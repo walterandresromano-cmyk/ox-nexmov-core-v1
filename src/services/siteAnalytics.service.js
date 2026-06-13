@@ -31,6 +31,7 @@ export async function trackPageView(route, userRole = null) {
   if (!isSupabaseConfigured || !supabase) return;
   if (typeof window === "undefined") return;
   if (SKIP_ROUTES.has(route)) return;
+  if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") return;
 
   const path = window.location.pathname + window.location.search;
 
