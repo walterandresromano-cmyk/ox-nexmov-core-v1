@@ -29191,3 +29191,96 @@ button.buyer-shortlist-compare__slot:hover {
 :root[data-theme="light"] .analytics-vehicles-dealer { color: rgba(71, 85, 105, 0.75); }
 :root[data-theme="light"] .analytics-vehicles-price { color: #0369a1; }
 :root[data-theme="light"] .analytics-vehicles-views strong { color: #0284c7; }
+
+/* ── Analytics: sección labels ── */
+.analytics-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(56, 189, 248, 0.6);
+  padding: 4px 2px 0;
+  border-top: 1px solid rgba(56, 189, 248, 0.08);
+}
+
+/* ── Analytics: fuente de adquisición ── */
+.analytics-charts-row--2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.analytics-source-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.analytics-source-row {
+  display: grid;
+  grid-template-columns: 22px 90px 1fr 36px;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.analytics-source-icon { font-size: 1rem; text-align: center; }
+.analytics-source-name { color: #e2e8f0; font-weight: 500; }
+.analytics-source-count { color: #38bdf8; font-weight: 700; text-align: right; }
+
+.analytics-source-bar-wrap {
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.analytics-source-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  opacity: 0.85;
+}
+
+/* ── Analytics: campañas UTM ── */
+.analytics-campaigns-table {
+  display: grid;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.analytics-campaigns-header,
+.analytics-campaigns-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 60px;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  align-items: center;
+}
+
+.analytics-campaigns-header {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(148, 163, 184, 0.6);
+}
+
+.analytics-campaigns-row {
+  background: rgba(255,255,255,0.03);
+}
+
+.analytics-campaigns-row:hover { background: rgba(56,189,248,0.06); }
+.analytics-campaigns-row strong { color: #38bdf8; font-weight: 700; text-align: right; }
+.analytics-campaigns-row span { color: #e2e8f0; }
+
+/* Light mode additions */
+:root[data-theme="light"] .analytics-section-label {
+  color: rgba(2, 132, 199, 0.6);
+  border-top-color: rgba(14, 116, 144, 0.08);
+}
+:root[data-theme="light"] .analytics-source-name { color: #0f172a; }
+:root[data-theme="light"] .analytics-source-count { color: #0284c7; }
+:root[data-theme="light"] .analytics-source-bar-wrap { background: rgba(0,0,0,0.06); }
+:root[data-theme="light"] .analytics-campaigns-row { background: rgba(0,0,0,0.02); }
+:root[data-theme="light"] .analytics-campaigns-row strong { color: #0284c7; }
+:root[data-theme="light"] .analytics-campaigns-row span { color: #0f172a; }
