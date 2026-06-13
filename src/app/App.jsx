@@ -202,6 +202,11 @@ function getInitialRouteParamsFromLocation() {
     return { vehicleId };
   }
 
+  const search = new URLSearchParams(window.location.search);
+  if (search.get("openForm") === "true") {
+    return { openForm: true };
+  }
+
   return {};
 }
 
