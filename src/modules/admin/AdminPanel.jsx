@@ -27,6 +27,7 @@ import { persistAdminAction, listAdminActionLogs } from "../../services/adminAct
 import { getSiteAnalytics, aggregateAnalytics } from "../../services/siteAnalytics.service.js";
 import { listRadarRequestsForAdmin, buildRadarCriteriaSummary } from "../../services/radarRequests.service.js";
 import { formatRelativeTime } from "../../lib/formatters.js";
+import AdminAnalytics from "./AdminAnalytics.jsx";
 
 const ADMIN_MODULES = {
   DEALERS: "dealers",
@@ -37,6 +38,7 @@ const ADMIN_MODULES = {
   TICKETS: "tickets",
   ACTION_LOG: "actionLog",
   RADAR: "radar",
+  ANALYTICS: "analytics",
 };
 
 const ACTION_LABELS = {
@@ -1224,9 +1226,14 @@ export default function AdminPanel({ authProfile }) {
                 <span>Tráfico del sitio</span>
                 <p>Últimos 30 días · páginas públicas</p>
               </div>
-              <button type="button" className="admin-refresh-btn" onClick={loadSiteAnalytics} disabled={loadingAnalytics}>
-                {loadingAnalytics ? "…" : "Actualizar"}
-              </button>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button type="button" className="admin-refresh-btn" onClick={loadSiteAnalytics} disabled={loadingAnalytics}>
+                  {loadingAnalytics ? "…" : "Actualizar"}
+                </button>
+                <button type="button" className="table-action-btn" onClick={() => openModule(ADMIN_MODULES.ANALYTICS)}>
+                  Ver analytics
+                </button>
+              </div>
             </div>
             <div className="admin-views-kpi-grid admin-views-kpi-grid--compact">
               <article className="admin-views-kpi-card">
@@ -2960,6 +2967,10 @@ export default function AdminPanel({ authProfile }) {
 
     if (activeModule === ADMIN_MODULES.RADAR) {
       return renderRadarModule();
+    }
+
+    if (activeModule === ADMIN_MODULES.ANALYTICS) {
+      return <AdminAnalytics onBack={() => setActiveModule(null)} />;
     }
 
     if (activeModule === ADMIN_MODULES.ACTION_LOG) {

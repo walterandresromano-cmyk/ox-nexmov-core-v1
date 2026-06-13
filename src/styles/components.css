@@ -28946,3 +28946,163 @@ button.buyer-shortlist-compare__slot:hover {
   background: rgba(240, 249, 255, 0.70);
   border: 1px solid rgba(14, 116, 144, 0.10);
 }
+
+/* ── Analytics Panel ── */
+.analytics-panel {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+  max-width: 1200px;
+}
+
+.analytics-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.analytics-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 4px 0 2px;
+  color: #f0f9ff;
+}
+
+.analytics-header p {
+  font-size: 0.8rem;
+  color: rgba(148, 163, 184, 0.8);
+}
+
+.analytics-period-selector {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.analytics-period-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  background: transparent;
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.analytics-period-btn.is-active,
+.analytics-period-btn:hover {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  color: #e0f2fe;
+}
+
+.analytics-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.analytics-kpi-card {
+  display: grid;
+  gap: 4px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  background: radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.08), transparent 60%),
+              linear-gradient(180deg, rgba(15, 23, 42, 0.85), rgba(8, 14, 32, 0.9));
+}
+
+.analytics-kpi-card span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(56, 189, 248, 0.8);
+}
+
+.analytics-kpi-card strong {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 700;
+  color: #f0f9ff;
+  line-height: 1;
+}
+
+.analytics-kpi-card p {
+  font-size: 0.75rem;
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.analytics-chart-card {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  background: radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.05), transparent 60%),
+              linear-gradient(180deg, rgba(15, 23, 42, 0.85), rgba(8, 14, 32, 0.9));
+}
+
+.analytics-chart-card h3 {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(186, 230, 253, 0.85);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.analytics-chart-card--wide {
+  grid-column: 1 / -1;
+}
+
+.analytics-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.analytics-tooltip {
+  background: rgba(8, 14, 32, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  color: #e2e8f0;
+}
+
+.analytics-tooltip__label {
+  color: rgba(148, 163, 184, 0.7);
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+}
+
+.analytics-loading,
+.analytics-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(148, 163, 184, 0.6);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .analytics-panel { padding: 16px; gap: 14px; }
+  .analytics-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .analytics-charts-row { grid-template-columns: 1fr; }
+}
+
+/* Light mode */
+:root[data-theme="light"] .analytics-header h2 { color: #0c4a6e; }
+:root[data-theme="light"] .analytics-period-btn { color: rgba(3, 105, 161, 0.8); border-color: rgba(14, 116, 144, 0.2); }
+:root[data-theme="light"] .analytics-period-btn.is-active,
+:root[data-theme="light"] .analytics-period-btn:hover { border-color: #0284c7; background: rgba(14, 165, 233, 0.1); color: #0c4a6e; }
+:root[data-theme="light"] .analytics-kpi-card,
+:root[data-theme="light"] .analytics-chart-card {
+  border-color: rgba(14, 116, 144, 0.14);
+  background: radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.06), transparent 50%),
+              linear-gradient(180deg, rgba(255,255,255,0.92), rgba(240,249,255,0.85));
+}
+:root[data-theme="light"] .analytics-kpi-card span { color: rgba(2, 132, 199, 0.9); }
+:root[data-theme="light"] .analytics-kpi-card strong { color: #0c4a6e; }
+:root[data-theme="light"] .analytics-kpi-card p { color: rgba(71, 85, 105, 0.7); }
+:root[data-theme="light"] .analytics-chart-card h3 { color: rgba(3, 105, 161, 0.85); }
+:root[data-theme="light"] .analytics-tooltip { background: rgba(255,255,255,0.97); border-color: rgba(14, 116, 144, 0.2); color: #1e293b; }
