@@ -281,7 +281,7 @@ export default function DealerVehicleDetailModal({
                   src={selectedImage.url}
                   alt={`${vehicle.brand} ${vehicle.model}`}
                   loading="eager"
-                  fetchpriority="high"
+                  fetchPriority="high"
                   decoding="async"
                 />
               ) : (
