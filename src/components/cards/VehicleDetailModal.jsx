@@ -14,6 +14,7 @@ import {
   DEFAULT_TERM_MONTHS,
 } from "../../lib/financing.js";
 import { getVehiclePriceHistory } from "../../services/priceHistory.service.js";
+import { createContraoferta } from "../../services/contraofertas.service.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleImage from "../VehicleImage.jsx";
 import { useScramble } from "../../hooks/useScramble.js";
@@ -164,8 +165,14 @@ export default function VehicleDetailModal({
   shareUrl,
 }) {
   const [currentVehicle, setCurrentVehicle] = useState(vehicle);
-  const [showContactGate, setShowContactGate] = useState(false);
-  const [shareState, setShareState]           = useState("idle");
+  const [showContactGate, setShowContactGate]       = useState(false);
+  const [showContraofertaForm, setShowContraofertaForm] = useState(false);
+  const [contraofertaPrecio, setContraofertaPrecio] = useState("");
+  const [contraofertaNombre, setContraofertaNombre] = useState("");
+  const [contraofertaPhone, setContraofertaPhone]   = useState("");
+  const [contraofertaStatus, setContraofertaStatus] = useState("idle"); // idle | submitting | ok | error
+  const [contraofertaError, setContraofertaError]   = useState("");
+  const [shareState, setShareState]                 = useState("idle");
   const [priceHistory, setPriceHistory]       = useState([]);
   const [financingDownPayment, setFinancingDownPayment] = useState("");
   const [financingTermMonths, setFinancingTermMonths] = useState(String(DEFAULT_TERM_MONTHS));
@@ -242,6 +249,29 @@ export default function VehicleDetailModal({
       financingRateIdx,
     ]
   );
+
+  async function handleContraofertaSubmit(e) {
+    e.preventDefault();
+    const precio = Number(String(contraofertaPrecio).replace(/\D/g, ""));
+    if (!precio || precio <= 0) {
+      setContraofertaError("Ingresá un precio válido.");
+      return;
+    }
+    setContraofertaStatus("submitting");
+    setContraofertaError("");
+    const { error } = await createContraoferta({
+      vehicleId:      currentVehicle.id,
+      buyerName:      contraofertaNombre,
+      buyerPhone:     contraofertaPhone,
+      precioOfertado: precio,
+    });
+    if (error) {
+      setContraofertaError(error.message || "No se pudo enviar la oferta.");
+      setContraofertaStatus("error");
+    } else {
+      setContraofertaStatus("ok");
+    }
+  }
 
   function goTo(index) {
     if (!vehicles || index < 0 || index >= vehicles.length) return;
@@ -1161,6 +1191,20 @@ export default function VehicleDetailModal({
                 {reserved ? "Unidad reservada" : "Contactar dealer"}
               </button>
 
+              {currentVehicle.contraoferta_habilitada && !reserved && (
+                <button
+                  type="button"
+                  className="detail-action-contraoferta"
+                  onClick={() => {
+                    setShowContraofertaForm((v) => !v);
+                    setContraofertaStatus("idle");
+                    setContraofertaError("");
+                  }}
+                >
+                  {showContraofertaForm ? "Cerrar oferta" : "Contraofertar precio"}
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={() => {
@@ -1200,6 +1244,67 @@ export default function VehicleDetailModal({
                 {shareState === "copied" ? "¡Copiado!" : "Copiar enlace"}
               </button>
             </div>
+
+            {showContraofertaForm && currentVehicle.contraoferta_habilitada && (
+              <div className="detail-contraoferta-panel">
+                {contraofertaStatus === "ok" ? (
+                  <div className="detail-contraoferta-ok">
+                    <span className="detail-contraoferta-ok__icon">✓</span>
+                    <p>Tu oferta fue enviada al dealer. Te contactarán a la brevedad.</p>
+                  </div>
+                ) : (
+                  <form className="detail-contraoferta-form" onSubmit={handleContraofertaSubmit}>
+                    <p className="detail-contraoferta-label">
+                      Precio publicado: <strong>{formatARS(currentVehicle.price)}</strong>
+                    </p>
+                    <label className="detail-contraoferta-field">
+                      <span>Tu oferta</span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        min="1"
+                        placeholder={`Ej: ${Math.round((currentVehicle.price || 0) * 0.9).toLocaleString("es-AR")}`}
+                        value={contraofertaPrecio}
+                        onChange={(e) => setContraofertaPrecio(e.target.value)}
+                        required
+                      />
+                    </label>
+                    {!appActions?.authUser && (
+                      <>
+                        <label className="detail-contraoferta-field">
+                          <span>Tu nombre</span>
+                          <input
+                            type="text"
+                            placeholder="Nombre y apellido"
+                            value={contraofertaNombre}
+                            onChange={(e) => setContraofertaNombre(e.target.value)}
+                          />
+                        </label>
+                        <label className="detail-contraoferta-field">
+                          <span>Tu teléfono</span>
+                          <input
+                            type="tel"
+                            placeholder="Ej: 1150001234"
+                            value={contraofertaPhone}
+                            onChange={(e) => setContraofertaPhone(e.target.value)}
+                          />
+                        </label>
+                      </>
+                    )}
+                    {contraofertaError && (
+                      <p className="detail-contraoferta-error">{contraofertaError}</p>
+                    )}
+                    <button
+                      type="submit"
+                      className="detail-contraoferta-submit"
+                      disabled={contraofertaStatus === "submitting"}
+                    >
+                      {contraofertaStatus === "submitting" ? "Enviando..." : "Enviar oferta"}
+                    </button>
+                  </form>
+                )}
+              </div>
+            )}
 
           </div>
 

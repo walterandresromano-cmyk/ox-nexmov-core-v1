@@ -269,6 +269,12 @@ export default function VehicleCardPublic({
             ))}
           </div>
 
+          {vehicle.contraoferta_habilitada && (
+            <div className="vehicle-card__contraoferta-badge">
+              Acepta contraoferta
+            </div>
+          )}
+
           <div className="vehicle-card__price-box">
             <div className="vehicle-card__price-copy">
               <span className="vehicle-card__price-label">Precio</span>

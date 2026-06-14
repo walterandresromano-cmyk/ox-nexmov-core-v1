@@ -7,6 +7,7 @@ import CreateVehicleModal from "../../components/CreateVehicleModal.jsx";
 
 import DealerInventoryModule from "./DealerInventoryModule.jsx";
 import DealerLeadsModule from "./DealerLeadsModule.jsx";
+import DealerContraofertasModule from "./DealerContraofertasModule.jsx";
 import DealerSupportModule from "./DealerSupportModule.jsx";
 import DealerSellVehicleModule from "./DealerSellVehicleModule.jsx";
 import DealerMetricsModule from "./DealerMetricsModule.jsx";
@@ -549,6 +550,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
       summary: "home",
       inventory: "vehicles",
       leads: "leads",
+      contraofertas: "leads",
       support: "tickets",
       publish: "publish",
       sellVehicle: "leads",
@@ -2404,6 +2406,20 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
             </article>
 
             <article
+              data-module="contraofertas"
+              className="dealer-module-card clickable-module-card"
+              onClick={() => openModule("contraofertas")}
+            >
+              <div className="dealer-mc-kpi">
+                <strong>↔</strong>
+                <span>contraofertas</span>
+              </div>
+              <h3>Contraofertas</h3>
+              <p>Ofertas de precio recibidas de compradores.</p>
+              <button type="button">Ver contraofertas</button>
+            </article>
+
+            <article
               data-module="metrics"
               className="dealer-module-card clickable-module-card"
               onClick={() => openModule("metrics")}
@@ -2568,6 +2584,21 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
             initialViewMode={leadsInitialContext?.viewMode ?? "pipeline"}
             initialAgendaGroup={leadsInitialContext?.agendaGroup ?? null}
           />
+        )}
+
+        {activeDealerModule === "contraofertas" && (
+          <div className="dealer-module-section">
+            <div className="buyer-section-head dealer-module-open-head">
+              <div>
+                <h2>Contraofertas</h2>
+                <p>Ofertas de precio recibidas de compradores</p>
+              </div>
+              <button type="button" className="back-to-summary-btn" onClick={handleModuleBack}>
+                ← Volver
+              </button>
+            </div>
+            <DealerContraofertasModule />
+          </div>
         )}
 
         {activeDealerModule === "sellVehicle" && (

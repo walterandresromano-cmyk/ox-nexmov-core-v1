@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 
 import { updateAdminVehicleData } from "../services/adminVehicles.service.js";
 import { updateCurrentDealerVehicleData } from "../services/dealerVehicles.service.js";
+import { setVehicleContraoferta } from "../services/contraofertas.service.js";
 import { logPriceChange } from "../services/priceHistory.service.js";
 import { MIN_VEHICLE_IMAGES } from "../config/constants.js";
 import {
@@ -21,6 +22,9 @@ function getInitialForm(vehicle) {
 
   return {
     vehicleId: vehicle?.vehicle_id,
+    contraoferta_habilitada: Boolean(vehicle?.contraoferta_habilitada ?? vehicle?.raw?.contraoferta_habilitada ?? false),
+    precio_min_contraoferta: vehicle?.precio_min_contraoferta ?? vehicle?.raw?.precio_min_contraoferta ?? "",
+    precio_max_contraoferta: vehicle?.precio_max_contraoferta ?? vehicle?.raw?.precio_max_contraoferta ?? "",
     brand: vehicle?.brand || "",
     model: vehicle?.model || "",
     version: vehicle?.version || "",
@@ -448,6 +452,16 @@ export default function EditVehicleModal({
       logPriceChange({ vehicleId: form.vehicleId, price: newPrice });
     }
 
+    // Sync contraoferta settings (dealer mode only, fire-and-forget)
+    if (mode !== "admin") {
+      setVehicleContraoferta({
+        vehicleId:  form.vehicleId,
+        habilitada: Boolean(form.contraoferta_habilitada),
+        precioMin:  form.precio_min_contraoferta ? Number(form.precio_min_contraoferta) : null,
+        precioMax:  form.precio_max_contraoferta ? Number(form.precio_max_contraoferta) : null,
+      });
+    }
+
     setSavedVehicle(result.vehicle);
     setSubmitting(false);
 
@@ -851,6 +865,46 @@ export default function EditVehicleModal({
                 </label>
               )}
             </div>
+
+            {mode !== "admin" && (
+              <div className="vehicle-create-quality__block">
+                <label className="contraoferta-toggle-label">
+                  <input
+                    type="checkbox"
+                    checked={form.contraoferta_habilitada}
+                    onChange={(e) => updateField("contraoferta_habilitada", e.target.checked)}
+                  />
+                  Habilitar contraoferta en esta publicación
+                </label>
+
+                {form.contraoferta_habilitada && (
+                  <div className="contraoferta-range-fields">
+                    <label>
+                      Precio mínimo aceptable <span className="form-hint--inline">(privado)</span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        min="0"
+                        value={form.precio_min_contraoferta}
+                        onChange={(e) => updateField("precio_min_contraoferta", e.target.value)}
+                        placeholder="Ej: 22000000"
+                      />
+                    </label>
+                    <label>
+                      Precio máximo de referencia <span className="form-hint--inline">(privado)</span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        min="0"
+                        value={form.precio_max_contraoferta}
+                        onChange={(e) => updateField("precio_max_contraoferta", e.target.value)}
+                        placeholder="Ej: 25000000"
+                      />
+                    </label>
+                  </div>
+                )}
+              </div>
+            )}
 
             <label>
               Detalles / aclaraciones

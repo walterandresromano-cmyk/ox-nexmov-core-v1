@@ -6,6 +6,7 @@ import {
   uploadVehicleImages,
 } from "../services/publish.service.js";
 import { MAX_VEHICLE_IMAGES, MIN_VEHICLE_IMAGES } from "../config/constants.js";
+import { setVehicleContraoferta } from "../services/contraofertas.service.js";
 import { canDealerPublish } from "../lib/permissions.js";
 import {
   buildCatalogTree,
@@ -42,6 +43,9 @@ const initialForm = {
   estimated_monthly_maintenance: "",
   maintenance_notes: "",
   maintenance_updated_at: "",
+  contraoferta_habilitada: false,
+  precio_min_contraoferta: "",
+  precio_max_contraoferta: "",
 };
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -482,6 +486,16 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
       }
     }
 
+    // Contraoferta settings (fire-and-forget, non-blocking)
+    if (form.contraoferta_habilitada) {
+      setVehicleContraoferta({
+        vehicleId: vehicle.id ?? vehicle.vehicle_id,
+        habilitada: true,
+        precioMin: form.precio_min_contraoferta ? Number(form.precio_min_contraoferta) : null,
+        precioMax: form.precio_max_contraoferta ? Number(form.precio_max_contraoferta) : null,
+      });
+    }
+
     setCreatedVehicle(vehicle);
     setUploadSummary({
       count: uploadedImages.length,
@@ -910,6 +924,44 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
                   No uses el precio principal para cargar solo una entrada o anticipo. Ejemplo: precio total del vehículo + entrada $500.000 + 48 cuotas. La financiación debe cargarse como dato complementario, no reemplaza el precio real del vehículo.
                 </span>
               </label>
+            </div>
+
+            <div className="vehicle-create-quality__block">
+              <label className="contraoferta-toggle-label">
+                <input
+                  type="checkbox"
+                  checked={form.contraoferta_habilitada}
+                  onChange={(e) => updateField("contraoferta_habilitada", e.target.checked)}
+                />
+                Habilitar contraoferta en esta publicación
+              </label>
+
+              {form.contraoferta_habilitada && (
+                <div className="contraoferta-range-fields">
+                  <label>
+                    Precio mínimo aceptable <span className="form-hint--inline">(privado, no visible al comprador)</span>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      min="0"
+                      value={form.precio_min_contraoferta}
+                      onChange={(e) => updateField("precio_min_contraoferta", e.target.value)}
+                      placeholder="Ej: 22000000"
+                    />
+                  </label>
+                  <label>
+                    Precio máximo de referencia <span className="form-hint--inline">(privado)</span>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      min="0"
+                      value={form.precio_max_contraoferta}
+                      onChange={(e) => updateField("precio_max_contraoferta", e.target.value)}
+                      placeholder="Ej: 25000000"
+                    />
+                  </label>
+                </div>
+              )}
             </div>
 
             <label>

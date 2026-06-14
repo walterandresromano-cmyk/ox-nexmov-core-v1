@@ -34,6 +34,7 @@ const PUBLIC_VEHICLE_SELECT = `
   usage,
   views,
   leads_count,
+  contraoferta_habilitada,
   doors,
   reserved,
   reserved_by,
@@ -263,6 +264,7 @@ export function mapVehicleFromSupabase(row) {
 
     views: Number(row.views ?? 0),
     leads_count: Number(row.leads_count ?? 0),
+    contraoferta_habilitada: Boolean(row.contraoferta_habilitada ?? false),
     badges: row.featured ? ["featured"] : [],
     raw: row,
   };
