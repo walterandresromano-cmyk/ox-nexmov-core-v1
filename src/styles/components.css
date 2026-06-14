@@ -22540,11 +22540,12 @@ body::-webkit-scrollbar {
 
 .vehicle-card__counters {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
+  flex-direction: row;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
   flex-shrink: 0;
-  padding-top: 2px;
+  padding-top: 3px;
 }
 
 .vehicle-card__counter {
