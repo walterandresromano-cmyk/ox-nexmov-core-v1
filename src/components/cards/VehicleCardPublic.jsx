@@ -227,29 +227,31 @@ export default function VehicleCardPublic({
 
         <div className="vehicle-card__body">
           <div className="vehicle-card__identity">
-            <h3 className="vehicle-card__title">{vehicleTitle}</h3>
+            <div className="vehicle-card__identity-text">
+              <h3 className="vehicle-card__title">{vehicleTitle}</h3>
 
-            {vehicle.version && (
-              <p className="vehicle-card__version">{vehicle.version}</p>
-            )}
-          </div>
-
-          {(vehicle.views > 0 || vehicle.leads_count > 0) && (
-            <div className="vehicle-card__counters" aria-label="Estadísticas de la publicación">
-              {vehicle.views > 0 && (
-                <span className="vehicle-card__counter">
-                  <EyeIcon size={12} />
-                  {vehicle.views.toLocaleString("es-AR")}
-                </span>
-              )}
-              {vehicle.leads_count > 0 && (
-                <span className="vehicle-card__counter">
-                  <ChatIcon size={12} />
-                  {vehicle.leads_count}
-                </span>
+              {vehicle.version && (
+                <p className="vehicle-card__version">{vehicle.version}</p>
               )}
             </div>
-          )}
+
+            {(vehicle.views > 0 || vehicle.leads_count > 0) && (
+              <div className="vehicle-card__counters" aria-label="Estadísticas de la publicación">
+                {vehicle.views > 0 && (
+                  <span className="vehicle-card__counter">
+                    <EyeIcon size={12} />
+                    {vehicle.views.toLocaleString("es-AR")}
+                  </span>
+                )}
+                {vehicle.leads_count > 0 && (
+                  <span className="vehicle-card__counter">
+                    <ChatIcon size={12} />
+                    {vehicle.leads_count}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
 
           <div className="vehicle-card__stats" aria-label="Datos destacados">
             {vehicleStats.map((stat) => (
