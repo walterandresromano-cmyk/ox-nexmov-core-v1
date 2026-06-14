@@ -22518,6 +22518,10 @@ body::-webkit-scrollbar {
 .vehicle-card__identity {
   min-height: 45px;
   padding: 1px 1px 0;
+}
+
+/* specificity (0,2,0) para ganar sobre los display:grid anteriores */
+.vehicle-card .vehicle-card__identity {
   display: flex;
   align-items: flex-start;
   gap: 6px;
@@ -22907,9 +22911,6 @@ body::-webkit-scrollbar {
   position: relative;
   min-height: 48px;
   padding: 2px 5px 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
 }
 
 .vehicle-card__identity::after {
