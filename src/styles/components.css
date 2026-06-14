@@ -22530,6 +22530,22 @@ body::-webkit-scrollbar {
   font-size: 0.66rem;
 }
 
+.vehicle-card__counters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.vehicle-card__counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: rgba(148, 163, 184, 0.7);
+  line-height: 1;
+}
+
 .vehicle-card__stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -22685,6 +22701,11 @@ body::-webkit-scrollbar {
 :root.light .vehicle-card__version,
 :root[data-theme="light"] .vehicle-card__version {
   color: rgba(51, 65, 85, 0.76);
+}
+
+:root.light .vehicle-card__counter,
+:root[data-theme="light"] .vehicle-card__counter {
+  color: rgba(51, 65, 85, 0.55);
 }
 
 :root.light .vehicle-card__stat,

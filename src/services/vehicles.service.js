@@ -33,6 +33,7 @@ const PUBLIC_VEHICLE_SELECT = `
   market_reference_price,
   usage,
   views,
+  leads_count,
   doors,
   reserved,
   reserved_by,
@@ -261,6 +262,7 @@ export function mapVehicleFromSupabase(row) {
     show_maintenance_info: Boolean(row.show_maintenance_info ?? false),
 
     views: Number(row.views ?? 0),
+    leads_count: Number(row.leads_count ?? 0),
     badges: row.featured ? ["featured"] : [],
     raw: row,
   };

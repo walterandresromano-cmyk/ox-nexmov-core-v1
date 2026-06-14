@@ -12,7 +12,7 @@ import {
 const ContactGate       = lazy(() => import("../../modules/public/ContactGate.jsx"));
 const VehicleDetailModal = lazy(() => import("./VehicleDetailModal.jsx"));
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
-import { SpeedometerIcon, PriceTagIcon, HeartIcon, CompareIcon } from "../icons/VehicleIcons.jsx";
+import { SpeedometerIcon, PriceTagIcon, HeartIcon, CompareIcon, EyeIcon, ChatIcon } from "../icons/VehicleIcons.jsx";
 import VehicleImage from "../VehicleImage.jsx";
 import { useDominantColor } from "../../hooks/useDominantColor.js";
 import { useScrollReveal } from "../../hooks/useScrollReveal.js";
@@ -233,6 +233,23 @@ export default function VehicleCardPublic({
               <p className="vehicle-card__version">{vehicle.version}</p>
             )}
           </div>
+
+          {(vehicle.views > 0 || vehicle.leads_count > 0) && (
+            <div className="vehicle-card__counters" aria-label="Estadísticas de la publicación">
+              {vehicle.views > 0 && (
+                <span className="vehicle-card__counter">
+                  <EyeIcon size={12} />
+                  {vehicle.views.toLocaleString("es-AR")}
+                </span>
+              )}
+              {vehicle.leads_count > 0 && (
+                <span className="vehicle-card__counter">
+                  <ChatIcon size={12} />
+                  {vehicle.leads_count}
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="vehicle-card__stats" aria-label="Datos destacados">
             {vehicleStats.map((stat) => (
