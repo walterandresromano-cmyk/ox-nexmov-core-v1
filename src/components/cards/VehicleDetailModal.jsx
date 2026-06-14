@@ -168,8 +168,6 @@ export default function VehicleDetailModal({
   const [showContactGate, setShowContactGate]       = useState(false);
   const [showContraofertaForm, setShowContraofertaForm] = useState(false);
   const [contraofertaPrecio, setContraofertaPrecio] = useState("");
-  const [contraofertaNombre, setContraofertaNombre] = useState("");
-  const [contraofertaPhone, setContraofertaPhone]   = useState("");
   const [contraofertaStatus, setContraofertaStatus] = useState("idle"); // idle | submitting | ok | error
   const [contraofertaError, setContraofertaError]   = useState("");
   const [shareState, setShareState]                 = useState("idle");
@@ -259,10 +257,11 @@ export default function VehicleDetailModal({
     }
     setContraofertaStatus("submitting");
     setContraofertaError("");
+    const profile = appActions?.authProfile;
     const { error } = await createContraoferta({
       vehicleId:      currentVehicle.id,
-      buyerName:      contraofertaNombre,
-      buyerPhone:     contraofertaPhone,
+      buyerName:      profile?.full_name || profile?.name || "",
+      buyerPhone:     profile?.phone || profile?.whatsapp || "",
       precioOfertado: precio,
     });
     if (error) {
@@ -1196,6 +1195,11 @@ export default function VehicleDetailModal({
                   type="button"
                   className="detail-action-contraoferta"
                   onClick={() => {
+                    if (!appActions?.authUser) {
+                      handleClose();
+                      onNavigate?.("login");
+                      return;
+                    }
                     setShowContraofertaForm((v) => !v);
                     setContraofertaStatus("idle");
                     setContraofertaError("");
@@ -1269,28 +1273,6 @@ export default function VehicleDetailModal({
                         required
                       />
                     </label>
-                    {!appActions?.authUser && (
-                      <>
-                        <label className="detail-contraoferta-field">
-                          <span>Tu nombre</span>
-                          <input
-                            type="text"
-                            placeholder="Nombre y apellido"
-                            value={contraofertaNombre}
-                            onChange={(e) => setContraofertaNombre(e.target.value)}
-                          />
-                        </label>
-                        <label className="detail-contraoferta-field">
-                          <span>Tu teléfono</span>
-                          <input
-                            type="tel"
-                            placeholder="Ej: 1150001234"
-                            value={contraofertaPhone}
-                            onChange={(e) => setContraofertaPhone(e.target.value)}
-                          />
-                        </label>
-                      </>
-                    )}
                     {contraofertaError && (
                       <p className="detail-contraoferta-error">{contraofertaError}</p>
                     )}
