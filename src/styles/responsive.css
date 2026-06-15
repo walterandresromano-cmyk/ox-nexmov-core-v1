@@ -13760,7 +13760,7 @@ textarea:focus-visible,
   padding: 1.25rem 1.5rem;
   border: 1px solid rgba(56, 189, 248, 0.3);
   border-radius: var(--ox-radius-md);
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.06) 0%, rgba(2, 6, 23, 0.6) 100%);
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(56, 189, 248, 0.04) 100%);
   flex-wrap: wrap;
 }
 .ox-radar-cta-body {
