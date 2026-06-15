@@ -386,6 +386,40 @@ function getGhostCompletion(query, suggestions) {
   };
 }
 
+// Componente aislado para que el ciclo de placeholder (setText cada 35-60ms)
+// solo re-renderice el input, no todo Home.
+function HeroSearchInput({ value, ghostCompletion, onChange, onAcceptCompletion }) {
+  const cycledPlaceholder = usePlaceholderCycle(value === "");
+  return (
+    <div className="vehicle-autocomplete-field">
+      {ghostCompletion && (
+        <span className="vehicle-autocomplete-ghost" aria-hidden="true">
+          <span>{value}</span>
+          {ghostCompletion.suffix}
+        </span>
+      )}
+      <input
+        type="search"
+        autoComplete="off"
+        aria-label="Buscar vehículos"
+        value={value}
+        onChange={onChange}
+        onKeyDown={(event) => {
+          if (
+            ghostCompletion &&
+            (event.key === "Tab" || event.key === "ArrowRight") &&
+            event.currentTarget.selectionStart === value.length
+          ) {
+            event.preventDefault();
+            onAcceptCompletion(ghostCompletion.value);
+          }
+        }}
+        placeholder={cycledPlaceholder || "¿Qué vehículo estás buscando?"}
+      />
+    </div>
+  );
+}
+
 export default function Home({ onNavigate, appActions = {} }) {
   const [publicDealers, setPublicDealers] = useState([]);
   const [loadingDealers, setLoadingDealers] = useState(true);
@@ -395,7 +429,6 @@ export default function Home({ onNavigate, appActions = {} }) {
   const [loadingLatestVehicles, setLoadingLatestVehicles] = useState(true);
   const [latestVehiclesError, setLatestVehiclesError] = useState("");
   const [heroSearchText, setHeroSearchText] = useState("");
-  const cycledPlaceholder = usePlaceholderCycle(heroSearchText === "");
 
   const latestVehiclesCarouselRef = useRef(null);
   const heroRef        = useRef(null);
@@ -662,33 +695,12 @@ export default function Home({ onNavigate, appActions = {} }) {
               className="ox-home-search-v3 vehicle-autocomplete ox-hero-reveal ox-hero-reveal--5"
               onSubmit={handleHeroSearch}
             >
-              <div className="vehicle-autocomplete-field">
-                {heroGhostCompletion && (
-                  <span className="vehicle-autocomplete-ghost" aria-hidden="true">
-                    <span>{heroSearchText}</span>
-                    {heroGhostCompletion.suffix}
-                  </span>
-                )}
-
-                <input
-                  type="search"
-                  autoComplete="off"
-                  aria-label="Buscar vehículos"
-                  value={heroSearchText}
-                  onChange={(event) => setHeroSearchText(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (
-                      heroGhostCompletion &&
-                      (event.key === "Tab" || event.key === "ArrowRight") &&
-                      event.currentTarget.selectionStart === heroSearchText.length
-                    ) {
-                      event.preventDefault();
-                      setHeroSearchText(heroGhostCompletion.value);
-                    }
-                  }}
-                  placeholder={cycledPlaceholder || "¿Qué vehículo estás buscando?"}
-                />
-              </div>
+              <HeroSearchInput
+                value={heroSearchText}
+                ghostCompletion={heroGhostCompletion}
+                onChange={(event) => setHeroSearchText(event.target.value)}
+                onAcceptCompletion={setHeroSearchText}
+              />
 
               <button type="submit">Buscar</button>
             </form>
