@@ -2155,6 +2155,10 @@ h1 .ox-hero-reveal {
     display: block;
   }
 
+  .ox-home-hero-copy-v3 h1 br {
+    display: none;
+  }
+
   .ox-home-hero-copy-v3 > p {
     width: 100%;
     max-width: 100%;
