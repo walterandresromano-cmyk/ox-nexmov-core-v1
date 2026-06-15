@@ -98,6 +98,12 @@ export default defineConfig(({ mode }) => ({
       },
       injectManifest: {
         globPatterns: ["**/*.{js,css,html,ico,svg,png,webp}"],
+        // Excluir chunks lazy-loaded del precache: se cachean al primer uso.
+        // Reduce el install del SW en ~500 kB sin afectar la experiencia offline.
+        globIgnores: [
+          "**/vendor-recharts-*.js",
+          "**/vendor-sentry-*.js",
+        ],
       },
     }),
   ],
@@ -107,12 +113,19 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    target: "es2020",
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes("node_modules/@supabase")) return "vendor-supabase";
+          // Recharts + D3 van con AdminPanel (lazy) — no contaminan el bundle principal
+          if (id.includes("node_modules/recharts") || id.includes("node_modules/d3-") || id.includes("node_modules/victory-")) return "vendor-recharts";
+          // Sentry siempre lazy — forzar chunk separado por si acaso
+          if (id.includes("node_modules/@sentry")) return "vendor-sentry";
           if (id.includes("node_modules/react-dom")) return "vendor-react";
           if (id.includes("node_modules/react")) return "vendor-react";
+          if (id.includes("node_modules/scheduler")) return "vendor-react";
+          if (id.includes("node_modules/use-sync-external-store")) return "vendor-react";
         },
       },
     },
