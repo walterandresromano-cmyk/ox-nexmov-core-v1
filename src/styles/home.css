@@ -103,15 +103,14 @@
 :root[data-theme="light"] .ox-hero-spotlight { display: none; }
 
 /* ── Hero reveal ──────────────────────────────────────────────── */
+/* clip-path es non-composited → usar solo transform + opacity (GPU) */
 @keyframes ox-hero-reveal {
   from {
     opacity: 0;
-    clip-path: inset(100% 0 0 0);
-    transform: translateY(14px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
-    clip-path: inset(0% 0 0 0);
     transform: translateY(0);
   }
 }
@@ -120,6 +119,7 @@
   display: block;
   opacity: 0;
   animation: ox-hero-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
 }
 
 /* Las líneas del h1 son spans inline — override a inline-block */
@@ -139,8 +139,8 @@ h1 .ox-hero-reveal {
   .ox-hero-reveal {
     animation: none;
     opacity: 1;
-    clip-path: none;
     transform: none;
+    will-change: auto;
   }
 }
 
