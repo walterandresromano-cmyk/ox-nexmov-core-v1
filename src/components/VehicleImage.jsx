@@ -9,7 +9,7 @@ export default function VehicleImage({
   style,
   draggable,
   loading = "lazy",
-  fetchpriority,
+  fetchPriority,
   ...props
 }) {
   const [loaded, setLoaded]         = useState(false);
@@ -50,7 +50,7 @@ export default function VehicleImage({
       className={`vehicle-img${loaded ? " vehicle-img--loaded" : " vehicle-img--loading"}${className ? ` ${className}` : ""}`}
       loading={loading}
       decoding="async"
-      fetchpriority={fetchpriority}
+      fetchPriority={fetchPriority}
       draggable={draggable ?? "false"}
       onLoad={() => setLoaded(true)}
       onError={handleError}

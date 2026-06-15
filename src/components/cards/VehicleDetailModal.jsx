@@ -747,7 +747,7 @@ export default function VehicleDetailModal({
                     size="detail"
                     draggable={false}
                     loading="eager"
-                    fetchpriority="high"
+                    fetchPriority="high"
                     className={`detail-main-image__photo detail-img-slide${slideDir > 0 ? "--right" : "--left"}`}
                     style={{
                       transform: `translate3d(${zoomPosition.x}px, ${zoomPosition.y}px, 0) scale(${zoomScale})`,
