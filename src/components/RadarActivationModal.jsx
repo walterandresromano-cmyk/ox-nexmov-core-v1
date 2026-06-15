@@ -34,7 +34,17 @@ export default function RadarActivationModal({
     setSaving(false);
 
     if (saveError) {
-      setError("No pudimos activar Radar oX en este momento. Probá nuevamente.");
+      const isAuthError =
+        saveError?.code === "42501" ||
+        saveError?.message?.toLowerCase().includes("policy") ||
+        saveError?.message?.toLowerCase().includes("permission") ||
+        saveError?.message?.toLowerCase().includes("jwt") ||
+        saveError?.message?.toLowerCase().includes("auth");
+      setError(
+        isAuthError
+          ? "Tenés que iniciar sesión para activar Radar oX."
+          : "No pudimos activar Radar oX en este momento. Probá nuevamente."
+      );
       return;
     }
 
@@ -46,7 +56,7 @@ export default function RadarActivationModal({
     if (e.target === e.currentTarget) onClose?.();
   }
 
-  return (
+  return createPortal(
     <div
       className="radar-modal-backdrop"
       role="dialog"

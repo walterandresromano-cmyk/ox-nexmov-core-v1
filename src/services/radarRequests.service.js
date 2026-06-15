@@ -86,6 +86,10 @@ export async function createRadarRequest(requestData) {
   }
 
   try {
+    const { data: sessionData } = await supabase.auth.getUser();
+    const userId = sessionData?.user?.id;
+    if (userId) supabasePayload.user_id = userId;
+
     const { data, error } = await supabase
       .from("buyer_radar_requests")
       .insert([supabasePayload])
