@@ -15,10 +15,18 @@ jobs:
         run: sleep 90
 
       - name: Llamar endpoint de notificación
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          NOTIFY_SECRET: ${{ secrets.FOUNDERS_NOTIFY_SECRET }}
         run: |
+          if [ -z "$APP_URL" ]; then
+            echo "⚠️  Secret APP_URL no configurado — saltando notificación."
+            exit 0
+          fi
+
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -X POST "${{ secrets.APP_URL }}/api/notify-founders" \
-            -H "x-notify-secret: ${{ secrets.FOUNDERS_NOTIFY_SECRET }}" \
+            -X POST "${APP_URL}/api/notify-founders" \
+            -H "x-notify-secret: ${NOTIFY_SECRET}" \
             -H "Content-Type: application/json" \
             -d "{\"message\": \"Nuevas mejoras publicadas en la plataforma.\", \"version\": \"${{ github.sha }}\"}")
 
