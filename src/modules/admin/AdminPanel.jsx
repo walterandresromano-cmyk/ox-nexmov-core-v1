@@ -27,6 +27,7 @@ import { persistAdminAction, listAdminActionLogs } from "../../services/adminAct
 import { getSiteAnalytics, aggregateAnalytics } from "../../services/siteAnalytics.service.js";
 import { listRadarRequestsForAdmin, buildRadarCriteriaSummary } from "../../services/radarRequests.service.js";
 import { formatRelativeTime } from "../../lib/formatters.js";
+import { exportToCSV } from "../../lib/exportCsv.js";
 import AdminAnalytics from "./AdminAnalytics.jsx";
 
 const ADMIN_MODULES = {
@@ -2151,6 +2152,30 @@ export default function AdminPanel({ authProfile }) {
             <button
               type="button"
               className="admin-refresh-btn"
+              onClick={() =>
+                exportToCSV(
+                  filteredDealers,
+                  [
+                    { header: "Nombre comercial", value: (r) => r.commercialName ?? r.name ?? "" },
+                    { header: "Email", value: (r) => r.email ?? "" },
+                    { header: "Ciudad", value: (r) => r.city ?? "" },
+                    { header: "Provincia", value: (r) => r.province ?? "" },
+                    { header: "Plan", value: (r) => r.plan ?? "" },
+                    { header: "Estado", value: (r) => r.planStatus ?? "" },
+                    { header: "Vence", value: (r) => r.planExpiresAt ? new Date(r.planExpiresAt).toLocaleDateString("es-AR") : "" },
+                    { header: "Fundador", value: (r) => r.isFounder ? "Sí" : "No" },
+                    { header: "Teléfono", value: (r) => r.phone ?? "" },
+                    { header: "WhatsApp", value: (r) => r.whatsapp ?? r.phone ?? "" },
+                  ],
+                  "dealers"
+                )
+              }
+            >
+              Exportar CSV
+            </button>
+            <button
+              type="button"
+              className="admin-refresh-btn"
               onClick={() => {
                 setSelectedDealer(null);
                 setCreateDealerError("");
@@ -2371,6 +2396,31 @@ export default function AdminPanel({ authProfile }) {
           </div>
 
           <div className="admin-action-row">
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={() =>
+                exportToCSV(
+                  filteredLeads,
+                  [
+                    { header: "Fecha", value: (r) => r.created_at ? new Date(r.created_at).toLocaleString("es-AR") : "" },
+                    { header: "Lead ID", value: (r) => r.lead_id ?? "" },
+                    { header: "Comprador nombre", value: (r) => `${r.buyer_first_name ?? ""} ${r.buyer_last_name ?? ""}`.trim() },
+                    { header: "Comprador email", value: (r) => r.buyer_email ?? "" },
+                    { header: "Comprador teléfono", value: (r) => r.buyer_phone ?? "" },
+                    { header: "Dealer", value: (r) => r.dealer_name_real || r.dealer_name_snapshot || "" },
+                    { header: "Dealer teléfono", value: (r) => r.dealer_phone_snapshot ?? "" },
+                    { header: "Vehículo", value: (r) => `${r.vehicle_brand ?? ""} ${r.vehicle_model ?? ""} ${r.vehicle_version ?? ""}`.trim() },
+                    { header: "Precio", value: (r) => r.price_snapshot ?? "" },
+                    { header: "Mensaje", value: (r) => r.message ?? "" },
+                    { header: "Estado", value: (r) => r.crm_status ?? "" },
+                  ],
+                  "leads_comerciales"
+                )
+              }
+            >
+              Exportar CSV
+            </button>
             <button className="admin-refresh-btn" onClick={loadLeads}>
               Actualizar leads
             </button>
@@ -2803,6 +2853,28 @@ export default function AdminPanel({ authProfile }) {
             <p>Señales de búsqueda activas de compradores — con datos de contacto del solicitante.</p>
           </div>
           <div className="admin-action-row">
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={() =>
+                exportToCSV(
+                  filteredRadarRequests,
+                  [
+                    { header: "Fecha", value: (r) => r.created_at ? new Date(r.created_at).toLocaleString("es-AR") : "" },
+                    { header: "Comprador nombre", value: (r) => r.buyerName ?? "" },
+                    { header: "Comprador email", value: (r) => r.buyerEmail ?? "" },
+                    { header: "Comprador teléfono", value: (r) => r.buyerPhone ?? "" },
+                    { header: "Búsqueda", value: (r) => r.search_text ?? "" },
+                    { header: "Criterios", value: (r) => buildRadarCriteriaSummary(r.search_text, r.filters, r.parsed_intent).join(" | ") },
+                    { header: "Estado", value: (r) => r.status ?? "" },
+                    { header: "Notas", value: (r) => r.notes ?? "" },
+                  ],
+                  "radar_ox"
+                )
+              }
+            >
+              Exportar CSV
+            </button>
             <button
               type="button"
               className="admin-refresh-btn"
