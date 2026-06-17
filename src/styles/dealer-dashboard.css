@@ -4591,3 +4591,104 @@
   cursor: pointer;
   padding: 0.2rem;
 }
+
+/* ── Lead Reply Assist ─────────────────────────────────────── */
+.lead-reply-assist {
+  margin-top: 8px;
+}
+.lead-reply-assist__btn {
+  background: none;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 999px;
+  color: var(--ox-cyan, #38bdf8);
+  font-size: 0.62rem;
+  font-weight: 850;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.lead-reply-assist__btn:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.5);
+}
+.lead-reply-assist__loading,
+.lead-reply-assist__error {
+  font-size: 0.62rem;
+  margin: 6px 0 0;
+}
+.lead-reply-assist__loading {
+  color: var(--ox-text-soft);
+}
+.lead-reply-assist__error {
+  color: var(--ox-danger, #f87171);
+}
+.lead-reply-assist__preview {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 14px;
+  background: rgba(56, 189, 248, 0.04);
+}
+.lead-reply-assist__text {
+  font-size: 0.68rem;
+  line-height: 1.5;
+  color: var(--ox-text);
+  margin: 0 0 8px;
+  white-space: pre-wrap;
+}
+.lead-reply-assist__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.lead-reply-assist__copy,
+.lead-reply-assist__wa,
+.lead-reply-assist__dismiss {
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 850;
+  padding: 4px 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+.lead-reply-assist__copy {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+  color: var(--ox-cyan, #38bdf8);
+}
+.lead-reply-assist__copy:hover {
+  background: rgba(56, 189, 248, 0.2);
+}
+.lead-reply-assist__wa {
+  background: rgba(37, 211, 102, 0.12);
+  border-color: rgba(37, 211, 102, 0.3);
+  color: #25d366;
+}
+.lead-reply-assist__wa:hover {
+  background: rgba(37, 211, 102, 0.2);
+}
+.lead-reply-assist__dismiss {
+  background: none;
+  color: var(--ox-text-muted);
+}
+.lead-reply-assist__dismiss:hover {
+  color: var(--ox-text-soft);
+}
+
+:root[data-theme="light"] .lead-reply-assist__btn {
+  border-color: rgba(37, 99, 235, 0.3);
+  color: #2563eb;
+}
+:root[data-theme="light"] .lead-reply-assist__btn:hover {
+  background: rgba(37, 99, 235, 0.06);
+}
+:root[data-theme="light"] .lead-reply-assist__preview {
+  border-color: rgba(37, 99, 235, 0.15);
+  background: rgba(37, 99, 235, 0.03);
+}
+:root[data-theme="light"] .lead-reply-assist__copy {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.25);
+  color: #2563eb;
+}

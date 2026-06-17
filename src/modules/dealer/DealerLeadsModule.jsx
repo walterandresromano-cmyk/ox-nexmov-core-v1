@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { parseLeadsNaturalQuery } from "../../services/oxAssistant.service.js";
+import { parseLeadsNaturalQuery, generateLeadReply } from "../../services/oxAssistant.service.js";
 
 import LeadStatusSelect from "../../components/LeadStatusSelect.jsx";
 import VehicleLeadDetailModal from "../../components/VehicleLeadDetailModal.jsx";
@@ -157,6 +157,75 @@ const NEXT_STATUS_LABELS = {
   negotiation: "Pasar a negociación",
   sold:        "Marcar vendido",
 };
+
+function LeadReplyAssist({ lead }) {
+  const [generating, setGenerating] = useState(false);
+  const [reply, setReply] = useState("");
+  const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const hasPhone = !!normalizeWhatsAppArgentina(lead.buyer_phone);
+
+  async function handleGenerate() {
+    setGenerating(true);
+    setReply("");
+    setError("");
+    const { text, error: err } = await generateLeadReply(lead);
+    if (err) setError(err);
+    else setReply(text);
+    setGenerating(false);
+  }
+
+  function handleCopy() {
+    navigator.clipboard?.writeText(reply);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  function handleOpenWhatsApp() {
+    const normalized = normalizeWhatsAppArgentina(lead.buyer_phone);
+    if (!normalized) return;
+    window.open(
+      `https://wa.me/${normalized}?text=${encodeURIComponent(reply)}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
+  return (
+    <div className="lead-reply-assist">
+      {!reply && !generating && (
+        <button type="button" className="lead-reply-assist__btn" onClick={handleGenerate}>
+          ✦ Redactar respuesta
+        </button>
+      )}
+      {generating && <p className="lead-reply-assist__loading">Generando…</p>}
+      {error && <p className="lead-reply-assist__error">{error}</p>}
+      {reply && (
+        <div className="lead-reply-assist__preview">
+          <p className="lead-reply-assist__text">{reply}</p>
+          <div className="lead-reply-assist__actions">
+            <button type="button" className="lead-reply-assist__copy" onClick={handleCopy}>
+              {copied ? "Copiado ✓" : "Copiar"}
+            </button>
+            {hasPhone && (
+              <button type="button" className="lead-reply-assist__wa" onClick={handleOpenWhatsApp}>
+                Abrir WhatsApp
+              </button>
+            )}
+            <button
+              type="button"
+              className="lead-reply-assist__dismiss"
+              onClick={() => { setReply(""); setError(""); }}
+            >
+              Descartar
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function NoteEditor({ lead, onUpdated }) {
   const [open, setOpen] = useState(false);
@@ -323,6 +392,8 @@ function LeadCrmCard({ lead, onOpen, onUpdated }) {
           Ver detalle
         </button>
       </div>
+
+      <LeadReplyAssist lead={lead} />
 
       <div className="lead-crm-management">
         <NoteEditor lead={lead} onUpdated={onUpdated} />

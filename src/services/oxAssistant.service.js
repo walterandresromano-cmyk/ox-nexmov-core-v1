@@ -80,6 +80,51 @@ Solo devolvé el texto de la descripción, sin comillas ni explicaciones.`;
 }
 
 /**
+ * Genera un mensaje de WhatsApp personalizado para responder a un lead.
+ * Retorna { text, error }.
+ */
+export async function generateLeadReply(lead) {
+  const l = lead || {};
+  const buyerName = `${l.buyer_first_name || ""}`.trim() || "el comprador";
+  const vehicle = [l.vehicle_brand, l.vehicle_model, l.vehicle_version]
+    .filter(Boolean).join(" ") || l.vehicle_title_snapshot || "el vehículo consultado";
+  const price = l.vehicle_price
+    ? `$${Number(l.vehicle_price).toLocaleString("es-AR")}`
+    : null;
+
+  const parts = [
+    `Nombre del comprador: ${buyerName}`,
+    `Vehículo de interés: ${vehicle}`,
+    price && `Precio publicado: ${price}`,
+    l.message && `Mensaje del comprador: "${l.message}"`,
+    l.crm_status && `Estado actual del lead: ${l.crm_status}`,
+  ].filter(Boolean).join("\n");
+
+  const prompt = `Sos un vendedor de una concesionaria argentina, profesional y cercano.
+Generá un mensaje de WhatsApp para responder a este lead de forma personalizada y natural.
+
+${parts}
+
+Instrucciones:
+- Empezá con "Hola [nombre]!" usando el nombre real
+- Máximo 3 oraciones cortas
+- Si el comprador hizo una pregunta, hacé referencia a ella
+- Tono cercano y profesional, en español rioplatense
+- Terminá con una pregunta abierta para mantener el diálogo
+- Máximo 1 emoji y solo si suma
+- No inventes datos técnicos del vehículo
+
+Solo devolvé el texto del mensaje, sin comillas ni explicaciones.`;
+
+  try {
+    const text = await callClaude(prompt, 250);
+    return { text, error: null };
+  } catch (err) {
+    return { text: null, error: err.message };
+  }
+}
+
+/**
  * Parsea una consulta en lenguaje natural y devuelve criterios de filtro para leads.
  * Retorna { filters, error } donde filters es un objeto con los campos detectados.
  */
