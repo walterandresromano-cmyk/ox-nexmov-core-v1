@@ -229,3 +229,26 @@ export async function signOut() {
   setSentryUser(null);
   return supabase.auth.signOut();
 }
+
+export function localizeAuthError(error) {
+  const msg = String(error?.message || "").toLowerCase();
+  if (msg.includes("invalid login credentials") || msg.includes("invalid_credentials"))
+    return "Email o contraseña incorrectos.";
+  if (msg.includes("email not confirmed"))
+    return "Confirmá tu email antes de ingresar. Revisá tu casilla.";
+  if (msg.includes("already registered") || msg.includes("already been registered"))
+    return "Ya existe una cuenta con ese email. Podés iniciar sesión directamente.";
+  if (msg.includes("password should be at least"))
+    return "La contraseña debe tener al menos 6 caracteres.";
+  if (msg.includes("too many requests") || msg.includes("rate limit") || msg.includes("email rate limit"))
+    return "Demasiados intentos. Esperá unos minutos antes de reintentar.";
+  if (msg.includes("network") || msg.includes("fetch"))
+    return "Error de conexión. Verificá tu internet e intentá de nuevo.";
+  return error?.message || "Ocurrió un error inesperado.";
+}
+
+export function subscribeToAuthChanges(callback) {
+  if (!isSupabaseConfigured || !supabase) return { unsubscribe: () => {} };
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
+  return subscription;
+}

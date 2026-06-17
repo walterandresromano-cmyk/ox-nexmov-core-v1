@@ -9,6 +9,7 @@ import {
   signUpDealer,
   resetPasswordForEmail,
   updateCurrentUserPassword,
+  localizeAuthError,
 } from "../../services/auth.service.js";
 import { isSupabaseConfigured } from "../../lib/supabaseClient.js";
 
@@ -47,12 +48,22 @@ function getPanelRoute(role) {
   return "buyer";
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const MODE_TITLES = {
+  login: "Ingresar",
+  registerBuyer: "Crear cuenta",
+  registerDealer: "Acceso dealer",
+  resetPassword: "Recuperar contraseña",
+  newPassword: "Nueva contraseña",
+};
+
 function validateRegisterForm(form) {
   if (!form.fullName.trim()) {
     return "Ingresá tu nombre.";
   }
 
-  if (!form.email.includes("@")) {
+  if (!EMAIL_RE.test(form.email)) {
     return "Ingresá un email válido.";
   }
 
@@ -82,6 +93,7 @@ export default function AuthPanel({
     useState(initialResetPassword);
   const [newPasswordForm, setNewPasswordForm] = useState(initialNewPassword);
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [promoStatus, setPromoStatus] = useState(null);
   const promoDebounceRef = useRef(null);
 
@@ -153,21 +165,24 @@ export default function AuthPanel({
   function switchMode(nextMode) {
     setMode(nextMode);
     setMessage("");
+    setIsSubmitting(false);
   }
 
   async function handleLogin(event) {
     event.preventDefault();
     setMessage("");
+    setIsSubmitting(true);
 
     const { data, error } = await signInWithEmail(loginForm);
 
     if (error) {
-      setMessage(error.message || "No se pudo iniciar sesión.");
+      setMessage(localizeAuthError(error));
+      setIsSubmitting(false);
       return;
     }
 
     await onAuthChange(data?.user || null, { redirectByRole: true });
-    setMessage("Sesión iniciada correctamente.");
+    setIsSubmitting(false);
   }
 
   async function handleRegisterBuyer(event) {
@@ -175,24 +190,28 @@ export default function AuthPanel({
     setMessage("");
 
     const validationError = validateRegisterForm(registerForm);
-
     if (validationError) {
       setMessage(validationError);
       return;
     }
 
+    setIsSubmitting(true);
     const { data, error } = await signUpBuyer(registerForm);
 
     if (error) {
-      setMessage(error.message || "No se pudo registrar el comprador.");
+      setMessage(localizeAuthError(error));
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!data?.session) {
+      setMessage("Cuenta creada. Revisá tu casilla y hacé clic en el enlace de confirmación para activarla.");
+      setIsSubmitting(false);
       return;
     }
 
     await onAuthChange(data?.user || null, { redirectByRole: true });
-
-    setMessage(
-      "Registro comprador creado. Si Supabase requiere confirmación por email, revisá tu correo."
-    );
+    setIsSubmitting(false);
   }
 
   async function handleRegisterDealer(event) {
@@ -200,12 +219,12 @@ export default function AuthPanel({
     setMessage("");
 
     const validationError = validateRegisterForm(registerForm);
-
     if (validationError) {
       setMessage(validationError);
       return;
     }
 
+    setIsSubmitting(true);
     const { data, error } = await signUpDealer(registerForm);
 
     if (error) {
@@ -218,37 +237,36 @@ export default function AuthPanel({
       setMessage(
         isDealerNotFound
           ? "No encontramos un dealer autorizado asociado a este email. Si todavía no solicitaste el alta, completá primero la solicitud comercial desde Sumate a la red."
-          : raw || "No se pudo registrar el dealer. Verificá que el email coincida con el autorizado por administración."
+          : localizeAuthError(error)
       );
+      setIsSubmitting(false);
       return;
     }
 
     await onAuthChange(data?.user || null, { redirectByRole: true });
-
-    setMessage(
-      "Registro dealer creado y vinculado. Ya podés ingresar con tu email y contraseña."
-    );
+    setIsSubmitting(false);
   }
 
   async function handleResetPassword(event) {
     event.preventDefault();
     setMessage("");
 
-    if (!resetPasswordForm.email.includes("@")) {
+    if (!EMAIL_RE.test(resetPasswordForm.email)) {
       setMessage("Ingresá un email válido.");
       return;
     }
 
+    setIsSubmitting(true);
     const { error } = await resetPasswordForEmail(resetPasswordForm);
 
     if (error) {
-      setMessage(error.message || "No se pudo enviar el email de recuperación.");
+      setMessage(localizeAuthError(error));
+      setIsSubmitting(false);
       return;
     }
 
-    setMessage(
-      "Te enviamos un email para recuperar tu contraseña. Revisá tu casilla y seguí el enlace."
-    );
+    setMessage("Te enviamos un email para recuperar tu contraseña. Revisá tu casilla y seguí el enlace.");
+    setIsSubmitting(false);
   }
 
   async function handleUpdatePassword(event) {
@@ -265,21 +283,21 @@ export default function AuthPanel({
       return;
     }
 
+    setIsSubmitting(true);
     const { error } = await updateCurrentUserPassword({
       password: newPasswordForm.password,
     });
 
     if (error) {
-      setMessage(
-        error.message ||
-          "No se pudo actualizar la contraseña. Abrí nuevamente el enlace de recuperación."
-      );
+      setMessage(localizeAuthError(error));
+      setIsSubmitting(false);
       return;
     }
 
     setNewPasswordForm(initialNewPassword);
     setMessage("Contraseña actualizada correctamente. Ya podés ingresar.");
     setMode("login");
+    setIsSubmitting(false);
   }
 
   async function handleLogout() {
@@ -310,7 +328,7 @@ export default function AuthPanel({
     <section className="page-section">
       <div className="container panel auth-panel">
         <p className="eyebrow">Acceso oX NEXMOV</p>
-        <h1>Ingresar</h1>
+        <h1>{MODE_TITLES[mode] || "Ingresar"}</h1>
         <p>
           El comprador puede explorar libremente. Para contactar, publicar,
           operar como dealer o gestionar la red, se requiere acceso identificado.
@@ -404,8 +422,8 @@ export default function AuthPanel({
                   </small>
                 )}
 
-                <button className="primary-action" type="submit">
-                  Actualizar contraseña
+                <button className="primary-action" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Actualizando…" : "Actualizar contraseña"}
                 </button>
               </form>
             )}
@@ -458,8 +476,8 @@ export default function AuthPanel({
                   value={loginForm.password}
                   onChange={(e) => updateLogin("password", e.target.value)}
                 />
-                <button className="primary-action" type="submit">
-                  Ingresar
+                <button className="primary-action" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Ingresando…" : "Ingresar"}
                 </button>
               </form>
             )}
@@ -503,8 +521,8 @@ export default function AuthPanel({
                   de oX NEXMOV.
                 </p>
 
-                <button className="primary-action" type="submit">
-                  Crear cuenta comprador
+                <button className="primary-action" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Creando cuenta…" : "Crear cuenta comprador"}
                 </button>
               </form>
             )}
@@ -576,8 +594,8 @@ export default function AuthPanel({
                   de oX NEXMOV.
                 </p>
 
-                <button className="primary-action" type="submit">
-                  Crear acceso dealer
+                <button className="primary-action" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Verificando…" : "Crear acceso dealer"}
                 </button>
               </form>
             )}
@@ -593,8 +611,8 @@ export default function AuthPanel({
                 <FloatField label="Email" type="email" autoComplete="email"
                   value={resetPasswordForm.email} onChange={(e) => updateResetPassword("email", e.target.value)} />
 
-                <button className="primary-action" type="submit">
-                  Enviar recuperación
+                <button className="primary-action" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Enviando…" : "Enviar recuperación"}
                 </button>
               </form>
             )}

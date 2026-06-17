@@ -25,7 +25,7 @@ const AdminPanel       = lazy(() => import("../modules/admin/AdminPanel.jsx"));
 const Internal0kmPanel = lazy(() => import("../modules/internal0km/Internal0kmPanel.jsx"));
 const SupportPanel     = lazy(() => import("../modules/support/SupportPanel.jsx"));
 
-import { getCurrentSession } from "../services/auth.service.js";
+import { getCurrentSession, subscribeToAuthChanges } from "../services/auth.service.js";
 import { getProfileByUserId, saveUserTheme } from "../services/profiles.service.js";
 import { normalizeRole } from "../lib/auth.js";
 import {
@@ -467,6 +467,21 @@ export default function App() {
     }
 
     loadSession();
+
+    // Reaccionar a cambios de sesión en otras pestañas o refrescos de token
+    const subscription = subscribeToAuthChanges((event, session) => {
+      if (event === "SIGNED_OUT") {
+        setAuthUser(null);
+        setAuthProfile(null);
+        setAuthError("");
+        setFavoriteItems([]);
+        setCurrentRoute("home");
+      } else if (event === "TOKEN_REFRESHED" && session?.user) {
+        setAuthUser(session.user);
+      }
+    });
+
+    return () => subscription.unsubscribe?.();
   }, []);
 
   useEffect(() => {
