@@ -4,6 +4,121 @@ import {
   getScoreChipClass,
 } from "../lib/publicationScore.js";
 
+const ANTHROPIC_API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
+const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
+
+async function callClaude(prompt, maxTokens = 400) {
+  if (!ANTHROPIC_API_KEY) {
+    throw new Error("VITE_ANTHROPIC_API_KEY no configurada.");
+  }
+
+  const response = await fetch(ANTHROPIC_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true",
+    },
+    body: JSON.stringify({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: maxTokens,
+      messages: [{ role: "user", content: prompt }],
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Claude API error ${response.status}: ${err}`);
+  }
+
+  const data = await response.json();
+  return data.content?.[0]?.text?.trim() ?? "";
+}
+
+/**
+ * Genera una descripción comercial para una publicación de vehículo.
+ * Retorna { text, error }.
+ */
+export async function generateVehicleDescription(vehicle) {
+  const v = vehicle || {};
+  const parts = [
+    v.brand && `Marca: ${v.brand}`,
+    v.model && `Modelo: ${v.model}`,
+    v.version && `Versión: ${v.version}`,
+    v.year && `Año: ${v.year}`,
+    v.km != null && v.km !== "" && `Kilómetros: ${Number(v.km).toLocaleString("es-AR")} km`,
+    v.price && `Precio: $${Number(v.price).toLocaleString("es-AR")}`,
+    v.bodyType && `Carrocería: ${v.bodyType}`,
+    v.transmission && `Transmisión: ${v.transmission}`,
+    v.fuelType && `Combustible: ${v.fuelType}`,
+    (v.city || v.province) && `Ubicación: ${[v.city, v.province].filter(Boolean).join(", ")}`,
+    v.financing && "Tiene financiación disponible",
+  ].filter(Boolean).join("\n");
+
+  const prompt = `Sos un asistente para concesionarias de vehículos argentinas.
+Escribí una descripción comercial profesional y convincente para este vehículo en un marketplace online.
+
+${parts}
+
+Instrucciones:
+- Entre 120 y 280 caracteres
+- Tono profesional pero cercano, en español rioplatense
+- Destacá los puntos más fuertes del vehículo
+- No uses listas ni viñetas, solo texto corrido
+- No repitas datos que ya se muestran en el título (marca/modelo/año)
+- Terminá con una llamada a la acción sutil si hay espacio
+
+Solo devolvé el texto de la descripción, sin comillas ni explicaciones.`;
+
+  try {
+    const text = await callClaude(prompt, 300);
+    return { text, error: null };
+  } catch (err) {
+    return { text: null, error: err.message };
+  }
+}
+
+/**
+ * Parsea una consulta en lenguaje natural y devuelve criterios de filtro para leads.
+ * Retorna { filters, error } donde filters es un objeto con los campos detectados.
+ */
+export async function parseLeadsNaturalQuery(query, availableStatuses) {
+  const statusList = (availableStatuses || []).join(", ");
+  const prompt = `Analizá esta consulta en lenguaje natural de un dealer de vehículos y extraé los filtros de búsqueda.
+
+Consulta: "${query}"
+
+Estados disponibles: ${statusList || "new, seen, contacted, negotiation, sold, lost, closed"}
+
+Devolvé SOLO un objeto JSON válido (sin markdown) con estos campos opcionales:
+{
+  "status": "estado exacto o null",
+  "daysSince": número de días atrás o null,
+  "brand": "marca o null",
+  "model": "modelo o null",
+  "hasFollowUp": true/false/null,
+  "isNew": true/false/null,
+  "keyword": "texto libre para buscar en mensaje o null"
+}
+
+Ejemplos:
+- "leads sin responder" → {"status": "new", "isNew": true}
+- "leads de esta semana" → {"daysSince": 7}
+- "leads de Toyota" → {"brand": "Toyota"}
+- "leads en negociación sin seguimiento" → {"status": "negotiation", "hasFollowUp": false}`;
+
+  try {
+    const raw = await callClaude(prompt, 200);
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return { filters: {}, error: null };
+    const filters = JSON.parse(jsonMatch[0]);
+    return { filters, error: null };
+  } catch (err) {
+    return { filters: {}, error: err.message };
+  }
+}
+
 // Priority order for suggestions — highest impact first
 const PRIORITY_ORDER = [
   "main_image",

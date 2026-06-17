@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { generateVehicleDescription } from "../services/oxAssistant.service.js";
 
 import { updateAdminVehicleData } from "../services/adminVehicles.service.js";
 import { updateCurrentDealerVehicleData } from "../services/dealerVehicles.service.js";
@@ -279,6 +280,9 @@ export default function EditVehicleModal({
   const [catalogError, setCatalogError] = useState("");
   const [qualityOpen, setQualityOpen] = useState(true);
   const [descGuideOpen, setDescGuideOpen] = useState(false);
+  const [aiDescGenerating, setAiDescGenerating] = useState(false);
+  const [aiDescPreview, setAiDescPreview] = useState(null);
+  const [aiDescError, setAiDescError] = useState("");
 
   const qualityChecklist = useMemo(
     () => getVehicleQualityChecklist({ ...vehicle, ...form }),
@@ -915,6 +919,71 @@ export default function EditVehicleModal({
                 placeholder="Estado general, detalles comerciales, financiación, observaciones."
               />
             </label>
+
+            <div className="ai-desc-assist">
+              <button
+                type="button"
+                className="ai-desc-assist__btn"
+                disabled={aiDescGenerating}
+                onClick={async () => {
+                  setAiDescGenerating(true);
+                  setAiDescError("");
+                  setAiDescPreview(null);
+                  const { text, error: aiErr } = await generateVehicleDescription({
+                    brand: form.brand,
+                    model: form.model,
+                    version: form.version,
+                    year: form.year,
+                    km: form.km,
+                    price: form.price,
+                    bodyType: form.bodyType,
+                    transmission: form.transmission,
+                    fuelType: form.fuelType,
+                    city: form.city,
+                    province: form.province,
+                    financing: form.financing,
+                  });
+                  setAiDescGenerating(false);
+                  if (aiErr) {
+                    setAiDescError("No se pudo generar la descripción. Verificá la API key o intentá de nuevo.");
+                  } else {
+                    setAiDescPreview(text);
+                  }
+                }}
+              >
+                {aiDescGenerating ? "Generando…" : "✦ Generar descripción con IA"}
+              </button>
+
+              {aiDescError && (
+                <p className="ai-desc-assist__error">{aiDescError}</p>
+              )}
+
+              {aiDescPreview && (
+                <div className="ai-desc-assist__preview">
+                  <p className="ai-desc-assist__preview-label">Sugerencia generada — podés editarla antes de aceptar:</p>
+                  <p className="ai-desc-assist__preview-text">{aiDescPreview}</p>
+                  <div className="ai-desc-assist__preview-actions">
+                    <button
+                      type="button"
+                      className="ai-desc-assist__accept"
+                      onClick={() => {
+                        updateField("details", aiDescPreview);
+                        setAiDescPreview(null);
+                      }}
+                    >
+                      Usar esta descripción
+                    </button>
+                    <button
+                      type="button"
+                      className="ai-desc-assist__dismiss"
+                      onClick={() => setAiDescPreview(null)}
+                    >
+                      Descartar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Description quality guide */}
             <div className="vehicle-description-guide">

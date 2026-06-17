@@ -4462,3 +4462,132 @@
     justify-content: center;
   }
 }
+/* ── Asistente IA — generador de descripción ──────────────────────── */
+.ai-desc-assist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+.ai-desc-assist__btn {
+  align-self: flex-start;
+  padding: 0.4rem 1rem;
+  border-radius: var(--ox-radius-sm);
+  border: 1px solid var(--ox-cyan);
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--ox-cyan);
+  font-size: var(--ox-fs-sm);
+  font-weight: var(--ox-fw-semibold);
+  cursor: pointer;
+  transition: background var(--ox-duration-fast);
+}
+.ai-desc-assist__btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.16);
+}
+.ai-desc-assist__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.ai-desc-assist__error {
+  margin: 0;
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-red, #ef4444);
+}
+.ai-desc-assist__preview {
+  border: 1px solid var(--ox-border);
+  border-left: 3px solid var(--ox-cyan);
+  border-radius: var(--ox-radius-sm);
+  padding: 0.75rem 1rem;
+  background: var(--ox-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ai-desc-assist__preview-label {
+  margin: 0;
+  font-size: var(--ox-fs-xs, 0.75rem);
+  color: var(--ox-text-muted);
+  font-weight: var(--ox-fw-medium);
+}
+.ai-desc-assist__preview-text {
+  margin: 0;
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text);
+  line-height: var(--ox-lh-snug);
+}
+.ai-desc-assist__preview-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.ai-desc-assist__accept {
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--ox-radius-sm);
+  border: 1px solid var(--ox-cyan);
+  background: var(--ox-cyan);
+  color: #fff;
+  font-size: var(--ox-fs-sm);
+  font-weight: var(--ox-fw-semibold);
+  cursor: pointer;
+}
+.ai-desc-assist__dismiss {
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--ox-radius-sm);
+  border: 1px solid var(--ox-border);
+  background: transparent;
+  color: var(--ox-text-muted);
+  font-size: var(--ox-fs-sm);
+  cursor: pointer;
+}
+
+/* ── Asistente IA — filtro de leads por lenguaje natural ─────────── */
+.dealer-leads-ai-filter {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: var(--ox-radius-sm);
+  background: rgba(56, 189, 248, 0.04);
+  flex-wrap: wrap;
+}
+.dealer-leads-ai-filter__input {
+  flex: 1 1 200px;
+  border: none;
+  background: transparent;
+  color: var(--ox-text);
+  font-size: var(--ox-fs-sm);
+  outline: none;
+  min-width: 0;
+}
+.dealer-leads-ai-filter__input::placeholder {
+  color: var(--ox-text-muted);
+}
+.dealer-leads-ai-filter__btn {
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--ox-radius-xs);
+  border: 1px solid var(--ox-cyan);
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--ox-cyan);
+  font-size: var(--ox-fs-xs, 0.75rem);
+  font-weight: var(--ox-fw-semibold);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dealer-leads-ai-filter__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.dealer-leads-ai-filter__badge {
+  font-size: var(--ox-fs-xs, 0.75rem);
+  color: var(--ox-cyan);
+  font-weight: var(--ox-fw-medium);
+}
+.dealer-leads-ai-filter__clear {
+  background: none;
+  border: none;
+  color: var(--ox-text-muted);
+  font-size: var(--ox-fs-xs, 0.75rem);
+  cursor: pointer;
+  padding: 0.2rem;
+}

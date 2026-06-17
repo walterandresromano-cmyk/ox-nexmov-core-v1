@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { parseLeadsNaturalQuery } from "../../services/oxAssistant.service.js";
 
 import LeadStatusSelect from "../../components/LeadStatusSelect.jsx";
 import VehicleLeadDetailModal from "../../components/VehicleLeadDetailModal.jsx";
@@ -436,6 +437,17 @@ export default function DealerLeadsModule({
   const [activeStage, setActiveStage] = useState(initialStage);
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState(initialViewMode);
+  const [aiQuery, setAiQuery] = useState("");
+  const [aiFilters, setAiFilters] = useState(null);
+  const [aiParsing, setAiParsing] = useState(false);
+
+  const handleAiFilter = useCallback(async () => {
+    if (!aiQuery.trim()) return;
+    setAiParsing(true);
+    const { filters } = await parseLeadsNaturalQuery(aiQuery);
+    setAiFilters(filters);
+    setAiParsing(false);
+  }, [aiQuery]);
 
   const stageCounts = useMemo(() =>
     PIPELINE_STAGES.reduce((acc, stage) => {
@@ -458,8 +470,29 @@ export default function DealerLeadsModule({
       );
     }
 
+    if (aiFilters) {
+      const f = aiFilters;
+      const cutoff = f.daysSince ? new Date(Date.now() - f.daysSince * 86400000) : null;
+      list = list.filter((l) => {
+        const status = String(l.crm_status || "").toLowerCase();
+        if (f.status && !status.includes(f.status.toLowerCase())) return false;
+        if (f.isNew === true && status !== "new") return false;
+        if (cutoff && new Date(l.created_at) < cutoff) return false;
+        if (f.brand && !String(l.vehicle_brand || "").toLowerCase().includes(f.brand.toLowerCase())) return false;
+        if (f.model && !String(l.vehicle_model || "").toLowerCase().includes(f.model.toLowerCase())) return false;
+        if (f.hasFollowUp === false && l.next_action_date) return false;
+        if (f.hasFollowUp === true && !l.next_action_date) return false;
+        if (f.keyword) {
+          const kw = f.keyword.toLowerCase();
+          const hay = `${l.message || ""} ${l.buyer_first_name || ""} ${l.buyer_last_name || ""}`.toLowerCase();
+          if (!hay.includes(kw)) return false;
+        }
+        return true;
+      });
+    }
+
     return list;
-  }, [leads, activeStage, search]);
+  }, [leads, activeStage, search, aiFilters]);
 
   const followUpAgenda = useMemo(() => {
     const priority = { overdue: 0, today: 1, upcoming: 2 };
@@ -640,6 +673,39 @@ export default function DealerLeadsModule({
             <span className="inventory-filter-count">
               {filtered.length} lead{filtered.length !== 1 ? "s" : ""}
             </span>
+          </div>
+
+          {/* Filtro IA */}
+          <div className="dealer-leads-ai-filter">
+            <input
+              className="dealer-leads-ai-filter__input"
+              type="text"
+              placeholder="✦ Filtrar con IA: «leads sin responder», «Toyota de esta semana»…"
+              value={aiQuery}
+              onChange={(e) => setAiQuery(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleAiFilter(); }}
+            />
+            {aiFilters ? (
+              <>
+                <span className="dealer-leads-ai-filter__badge">Filtro IA activo</span>
+                <button
+                  type="button"
+                  className="dealer-leads-ai-filter__clear"
+                  onClick={() => { setAiFilters(null); setAiQuery(""); }}
+                >
+                  ✕ Limpiar
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                className="dealer-leads-ai-filter__btn"
+                disabled={aiParsing || !aiQuery.trim()}
+                onClick={handleAiFilter}
+              >
+                {aiParsing ? "Filtrando…" : "Filtrar"}
+              </button>
+            )}
           </div>
 
           {filtered.length === 0 ? (
