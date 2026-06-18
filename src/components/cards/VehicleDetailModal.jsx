@@ -179,8 +179,7 @@ export default function VehicleDetailModal({
   const [financingRateIdx, setFinancingRateIdx]       = useState(DEFAULT_RATE_INDEX);
   const [termDropdownOpen, setTermDropdownOpen] = useState(false);
   const termDropdownRef = useRef(null);
-  const [actionsVisible, setActionsVisible] = useState(false);
-  const actionsRef = useRef(null);
+  const [activeTab, setActiveTab] = useState("galeria");
 
   const currentDealer = useMemo(() => {
     if (vehicles && getDealer) return getDealer(currentVehicle) || dealer;
@@ -281,6 +280,7 @@ export default function VehicleDetailModal({
     setSelectedImageIndex(0);
     resetImageZoom();
     setShowContactGate(false);
+    setActiveTab("galeria");
   }
 
   function clampZoomPosition(position, scale = zoomScale) {
@@ -616,17 +616,6 @@ export default function VehicleDetailModal({
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const el = actionsRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => setActionsVisible(entry.isIntersecting),
-      { threshold: 0.4 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
   function handleClose() {
     resetImageZoom();
     onClose();
@@ -724,9 +713,37 @@ export default function VehicleDetailModal({
           </div>
         )}
 
-        <div className="vehicle-detail-layout vd-layout-enter">
-          <div className="vehicle-detail-gallery vd-col-enter vd-col-enter--left">
-            <div className="detail-gallery-frame">
+        {/* Identity bar — always visible above tabs */}
+        <div className="vd-modal-identity">
+          <div className="vd-modal-identity-info">
+            <h2 className="vd-modal-identity-title">
+              {currentVehicle.brand} {currentVehicle.model}
+            </h2>
+            <p className="vd-modal-identity-sub">
+              {currentVehicle.version} · {currentVehicle.year} · {formatKm(currentVehicle.kilometers)}
+            </p>
+          </div>
+          <div className="vd-modal-identity-right">
+            <span className="vd-modal-identity-price">{formatARS(currentVehicle.price)}</span>
+            {reserved && <span className="vd-modal-identity-reserved">Reservado</span>}
+          </div>
+        </div>
+
+        {/* Tab bar */}
+        <div className="vd-tabs" role="tablist">
+          <button type="button" role="tab" aria-selected={activeTab === "galeria"} className={`vd-tab${activeTab === "galeria" ? " is-active" : ""}`} onClick={() => setActiveTab("galeria")}>Fotos</button>
+          <button type="button" role="tab" aria-selected={activeTab === "detalles"} className={`vd-tab${activeTab === "detalles" ? " is-active" : ""}`} onClick={() => setActiveTab("detalles")}>Detalles</button>
+          <button type="button" role="tab" aria-selected={activeTab === "precio"} className={`vd-tab${activeTab === "precio" ? " is-active" : ""}`} onClick={() => setActiveTab("precio")}>Precio</button>
+          <button type="button" role="tab" aria-selected={activeTab === "contactar"} className={`vd-tab${activeTab === "contactar" ? " is-active" : ""}`} onClick={() => setActiveTab("contactar")}>Contactar</button>
+        </div>
+
+        {/* Tab content */}
+        <div className="vd-tab-content" role="tabpanel">
+
+          {/* ── FOTOS ── */}
+          {activeTab === "galeria" && (
+            <div className="vd-pane vd-pane--galeria">
+              <div className="detail-gallery-frame">
               {images[0]?.url && (
                 <img
                   key={images[0].url}
@@ -858,7 +875,12 @@ export default function VehicleDetailModal({
                 ))}
               </div>
             )}
+            </div>
+          )}
 
+          {/* ── DETALLES ── */}
+          {activeTab === "detalles" && (
+            <div className="vd-pane vd-pane--detalles">
             <div className="vehicle-detail-quick-specs vd-specs-enter">
               <div>
                 <span>Año</span>
@@ -965,38 +987,12 @@ export default function VehicleDetailModal({
                   </button>
                 )}
             </div>
-
-          </div>
-
-          <div className="vehicle-detail-info vd-col-enter vd-col-enter--right">
-            <div className="vehicle-detail-title-card">
-              <p className="eyebrow">Detalle del vehículo</p>
-              <h2>
-                {currentVehicle.brand} {currentVehicle.model}
-              </h2>
-              <p>
-                {currentVehicle.version} · {currentVehicle.year} ·{" "}
-                {formatKm(currentVehicle.kilometers)}
-              </p>
             </div>
+          )}
 
-            <div className="detail-rank-row">
-              <span className={`admin-chip rank-${permissions.rankTheme}`}>
-                {permissions.rankLabel}
-              </span>
-
-              <span className="detail-status">
-                {reserved ? "Reservado" : "Activo"}
-              </span>
-            </div>
-
-            {reserved && (
-              <div className="vehicle-status-alert">
-                <strong>Reservado</strong>
-                <span>Esta unidad fue marcada como reservada por el dealer.</span>
-              </div>
-            )}
-
+          {/* ── PRECIO ── */}
+          {activeTab === "precio" && (
+            <div className="vd-pane vd-pane--precio">
             <PriceReveal price={currentVehicle.price} />
 
             {priceHistory.length >= 2 && (() => {
@@ -1181,8 +1177,29 @@ export default function VehicleDetailModal({
                 finales dependen del proveedor, dealer y análisis crediticio.
               </p>
             </div>
+            </div>
+          )}
 
-            <div className="detail-actions" ref={actionsRef}>
+          {/* ── CONTACTAR ── */}
+          {activeTab === "contactar" && (
+            <div className="vd-pane vd-pane--contactar">
+            <div className="detail-rank-row">
+              <span className={`admin-chip rank-${permissions.rankTheme}`}>
+                {permissions.rankLabel}
+              </span>
+              <span className="detail-status">
+                {reserved ? "Reservado" : "Activo"}
+              </span>
+            </div>
+
+            {reserved && (
+              <div className="vehicle-status-alert">
+                <strong>Reservado</strong>
+                <span>Esta unidad fue marcada como reservada por el dealer.</span>
+              </div>
+            )}
+
+            <div className="detail-actions">
               <button
                 type="button"
                 className={`primary-action${!reserved ? " detail-cta-pulse" : ""}`}
@@ -1323,29 +1340,73 @@ export default function VehicleDetailModal({
               </div>
             )}
 
-          </div>
+            <div className="detail-published-by">
+              {(currentDealer.logo || currentDealer.raw?.logo_url) && (
+                <img
+                  className="detail-published-by-bg"
+                  src={currentDealer.logo || currentDealer.raw?.logo_url}
+                  alt=""
+                  aria-hidden="true"
+                />
+              )}
+              <div className="detail-published-by-header">
+                <span className="detail-published-by-label">Publicado por</span>
+                <span className={`admin-chip rank-${permissions.rankTheme}`}>
+                  {permissions.rankLabel}
+                </span>
+              </div>
+              <strong className="detail-published-by-name">
+                {currentDealer.commercialName}
+              </strong>
+              <p className="detail-published-by-location">
+                {currentDealer.city}, {currentDealer.province}
+              </p>
+              <p className="detail-published-by-trust">
+                Concesionaria verificada dentro de oX NEXMOV.
+              </p>
+              {onNavigate &&
+                currentDealer.id &&
+                currentDealer.id !== "dealer-fallback" &&
+                currentDealer.id !== "dealer-snapshot" && (
+                  <button
+                    type="button"
+                    className="dealer-profile-link-btn"
+                    onClick={() =>
+                      onNavigate("dealerProfile", {
+                        dealerId: currentDealer.id,
+                      })
+                    }
+                  >
+                    Ver más de este dealer →
+                  </button>
+                )}
+            </div>
 
-          <div className="vehicle-detail-footer">
-            <p className="vehicle-detail-legal-note">
-              La información de esta publicación fue declarada por el dealer
-              anunciante. Verificá disponibilidad, precio final, documentación
-              y condiciones antes de avanzar. oX NEXMOV no certifica el estado
-              mecánico ni garantiza la operación comercial.
-              {currentVehicle.hasFinancing && " Los valores de financiación son informativos y pueden variar según aprobación crediticia, entidad financiera, condiciones del dealer y fecha de operación."}
-            </p>
-            <img
-              className="vehicle-detail-footer-logo"
-              src="/logo.svg"
-              alt="oX NEXMOV"
-              width="120"
-              height="23"
-            />
-          </div>
+            </div>
+          )}
+
+        </div>{/* /vd-tab-content */}
+
+        <div className="vehicle-detail-footer">
+          <p className="vehicle-detail-legal-note">
+            La información de esta publicación fue declarada por el dealer
+            anunciante. Verificá disponibilidad, precio final, documentación
+            y condiciones antes de avanzar. oX NEXMOV no certifica el estado
+            mecánico ni garantiza la operación comercial.
+            {currentVehicle.hasFinancing && " Los valores de financiación son informativos y pueden variar según aprobación crediticia, entidad financiera, condiciones del dealer y fecha de operación."}
+          </p>
+          <img
+            className="vehicle-detail-footer-logo"
+            src="/logo.svg"
+            alt="oX NEXMOV"
+            width="120"
+            height="23"
+          />
         </div>
 
         <div
-          className={`vd-mobile-cta-bar${actionsVisible ? " is-hidden" : ""}`}
-          aria-hidden={actionsVisible}
+          className={`vd-mobile-cta-bar${activeTab === "contactar" ? " is-hidden" : ""}`}
+          aria-hidden={activeTab === "contactar"}
         >
           <span className="vd-mobile-cta-bar__price">{formatARS(currentVehicle.price)}</span>
           <button
