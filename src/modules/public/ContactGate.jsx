@@ -117,8 +117,8 @@ export default function ContactGate({
             <p className="eyebrow">Contacto verificado</p>
             <h2>Contactar al vendedor</h2>
             <p>
-              Dejá tu mensaje y se lo enviamos directamente al vendedor.
-              El contacto queda registrado para tu seguridad.
+              Dejá un mensaje para que el vendedor tenga contexto.
+              Tu consulta queda registrada y se habilita el contacto por WhatsApp.
             </p>
           </div>
 
@@ -137,9 +137,8 @@ export default function ContactGate({
             </div>
 
             <p className="contact-legal-note">
-              Este paso ayuda a evitar consultas falsas, spam y operaciones
-              sospechosas. No implica reserva, compra ni obligación de
-              operación.
+              Para contactar al vendedor necesitamos identificarte.
+              No implica reserva ni compromiso de compra.
             </p>
 
             <button className="primary-action" onClick={onRequireLogin}>
@@ -157,9 +156,8 @@ export default function ContactGate({
             </div>
 
             <div className="contact-summary">
-              <span>Comprador registrado</span>
+              <span>Consultás como</span>
               <strong>{authProfile?.full_name || authUser.email}</strong>
-              <span>Datos protegidos por oX NEXMOV</span>
             </div>
 
             <label>
@@ -176,12 +174,11 @@ export default function ContactGate({
             {error && <p className="form-error">{error}</p>}
 
             <p className="contact-legal-note">
-              Al enviar, tu consulta queda registrada en la plataforma.
-              No implica reserva, compra ni obligación de operación.
+              No implica reserva ni compromiso de compra.
             </p>
 
             <button className="primary-action" type="submit" disabled={submitting}>
-              {submitting ? "Enviando..." : "Enviar consulta"}
+              {submitting ? "Registrando consulta..." : "Enviar consulta"}
             </button>
           </form>
         ) : (
@@ -193,13 +190,8 @@ export default function ContactGate({
             </h3>
             <p>
               {leadWasReused
-                ? "Ya tenés una consulta activa para este vehículo. Podés continuar el contacto con el vendedor."
-                : "Consulta registrada. Ya podés continuar el contacto con el vendedor."}
-            </p>
-
-            <p>
-              Guardamos un registro de tu consulta para que el vendedor pueda
-              responderte. No implica reserva ni compromiso de compra.
+                ? "Tu consulta para este vehículo ya estaba registrada. Podés continuar el contacto con el vendedor."
+                : "Tu consulta quedó guardada. El vendedor tiene el contexto y puede responderte."}
             </p>
 
             {error && <p className="form-error">{error}</p>}
@@ -215,8 +207,7 @@ export default function ContactGate({
                 </button>
               ) : (
                 <div className="contact-warning" role="status">
-                  El vendedor no tiene un WhatsApp válido cargado. La consulta ya
-                  quedó registrada.
+                  El vendedor no tiene WhatsApp cargado. Tu consulta ya quedó registrada.
                 </div>
               )}
 

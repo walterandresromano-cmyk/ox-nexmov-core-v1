@@ -9,7 +9,7 @@ const aboutPillars = [
   {
     eyebrow: "Vendedores verificados",
     title: "Red",
-    text: "Trabajamos con agencias, concesionarias y vendedores profesionales que buscan operar con datos, orden y responsabilidad comercial.",
+    text: "Trabajamos con agencias y vendedores profesionales que buscan operar con datos, orden y responsabilidad comercial.",
   },
   {
     eyebrow: "Datos para decidir",
@@ -38,13 +38,14 @@ const visionItems = [
   },
   {
     title: "Red profesional",
-    text: "El vendedor cuenta con panel, cupos, consultas, tickets y herramientas para gestionar su operación dentro de la red.",
+    text: "El vendedor tiene un panel propio con herramientas para gestionar publicaciones, consultas y su presencia dentro de la red.",
   },
 ];
 
 const differences = [
   "Vehículos reales",
   "Vendedores verificados",
+  "Sin comisión",
   "Consultas registradas",
   "Comparador integrado",
   "Financiación 0km",
