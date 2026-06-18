@@ -1801,21 +1801,28 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 ) : (
                   <>
                     {vehicleLeads.slice(0, 3).map((lead, index) => (
-                      <div key={`movement-${index}`} className="garage-ox-movement-card">
+                      <div
+                        key={`movement-${index}`}
+                        className={`garage-ox-movement-card garage-ox-movement-card--${getVehicleLeadChipClass(lead.crm_status) || "default"}`}
+                      >
                         <div className="garage-ox-movement-card__body">
                           <strong className="garage-ox-movement-card__vehicle">
                             {[lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ") || "Vehículo"}
                           </strong>
-                          <span className="garage-ox-movement-card__dealer">
-                            {lead.dealer_name || "Vendedor"}
+                          <span className="garage-ox-movement-card__meta">
+                            <span className="garage-ox-movement-card__dealer">{lead.dealer_name || "Vendedor"}</span>
+                            <span aria-hidden="true" className="garage-ox-movement-card__sep">·</span>
+                            <time className="garage-ox-movement-card__date">{formatDateTime(lead.created_at).split(",")[0]}</time>
                           </span>
-                          <time className="garage-ox-movement-card__date">
-                            {formatDateTime(lead.created_at).split(",")[0]}
-                          </time>
                         </div>
-                        <span className={`admin-chip ${getVehicleLeadChipClass(lead.crm_status)}`}>
-                          {getVehicleLeadStatusLabel(lead.crm_status)}
-                        </span>
+                        <div className="garage-ox-movement-card__right">
+                          {Number(lead.price_snapshot) > 0 && (
+                            <span className="garage-ox-movement-card__price">{formatARS(lead.price_snapshot)}</span>
+                          )}
+                          <span className={`admin-chip ${getVehicleLeadChipClass(lead.crm_status)}`}>
+                            {getVehicleLeadStatusLabel(lead.crm_status)}
+                          </span>
+                        </div>
                       </div>
                     ))}
                     {vehicleLeads.length > 3 && (

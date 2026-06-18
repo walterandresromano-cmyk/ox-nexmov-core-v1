@@ -2647,12 +2647,18 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 11px 14px 11px 16px;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.10);
+  border-left: 3px solid rgba(56, 189, 248, 0.35);
   background: rgba(255, 255, 255, 0.03);
   transition: background 0.12s;
 }
+
+.garage-ox-movement-card--success { border-left-color: rgba(52, 211, 153, 0.65); }
+.garage-ox-movement-card--warning { border-left-color: rgba(251, 191, 36, 0.65); }
+.garage-ox-movement-card--danger  { border-left-color: rgba(248, 113, 113, 0.65); }
+.garage-ox-movement-card--default { border-left-color: rgba(56, 189, 248, 0.35); }
 
 .garage-ox-movement-card:hover {
   background: rgba(255, 255, 255, 0.06);
@@ -2661,8 +2667,9 @@
 .garage-ox-movement-card__body {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   min-width: 0;
+  flex: 1;
 }
 
 .garage-ox-movement-card__vehicle {
@@ -2674,14 +2681,42 @@
   text-overflow: ellipsis;
 }
 
+.garage-ox-movement-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
 .garage-ox-movement-card__dealer {
   font-size: 0.72rem;
   color: rgba(148, 163, 184, 0.70);
 }
 
+.garage-ox-movement-card__sep {
+  font-size: 0.6rem;
+  color: rgba(148, 163, 184, 0.30);
+  line-height: 1;
+}
+
 .garage-ox-movement-card__date {
-  font-size: 0.66rem;
-  color: rgba(148, 163, 184, 0.50);
+  font-size: 0.68rem;
+  color: rgba(148, 163, 184, 0.48);
+}
+
+.garage-ox-movement-card__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.garage-ox-movement-card__price {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(56, 189, 248, 0.80);
+  white-space: nowrap;
 }
 
 .garage-ox-movement__more {
@@ -2730,7 +2765,12 @@
 :root[data-theme="light"] .garage-ox-movement-card {
   background: rgba(255, 255, 255, 0.72);
   border-color: rgba(148, 163, 184, 0.18);
+  border-left-color: rgba(2, 132, 199, 0.40);
 }
+
+:root[data-theme="light"] .garage-ox-movement-card--success { border-left-color: rgba(5, 150, 105, 0.60); }
+:root[data-theme="light"] .garage-ox-movement-card--warning { border-left-color: rgba(217, 119, 6, 0.60); }
+:root[data-theme="light"] .garage-ox-movement-card--danger  { border-left-color: rgba(220, 38, 38, 0.55); }
 
 :root[data-theme="light"] .garage-ox-movement-card:hover {
   background: rgba(241, 245, 249, 0.95);
@@ -2742,6 +2782,14 @@
 
 :root[data-theme="light"] .garage-ox-movement-card__dealer {
   color: #64748b;
+}
+
+:root[data-theme="light"] .garage-ox-movement-card__sep {
+  color: rgba(148, 163, 184, 0.45);
+}
+
+:root[data-theme="light"] .garage-ox-movement-card__price {
+  color: #0284c7;
 }
 
 :root[data-theme="light"] .garage-ox-movement__more {
