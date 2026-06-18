@@ -59,6 +59,11 @@ const faqSections = [
           "Es tu espacio personal dentro de la plataforma: guardás vehículos de interés, registrás los que ya tenés, llevás el historial de servicios y vencimientos, y podés preparar una futura venta.",
       },
       {
+        question: "¿oX NEXMOV cobra algo al comprador?",
+        answer:
+          "No. Buscar, comparar, guardar vehículos y contactar vendedores es completamente gratis para el comprador. oX NEXMOV no cobra comisión ni cargos de ningún tipo sobre la operación.",
+      },
+      {
         question: "¿oX NEXMOV vende autos?",
         answer:
           "No vendemos vehículos de forma directa. La plataforma conecta compradores con agencias y vendedores profesionales verificados.",
@@ -80,6 +85,11 @@ const faqSections = [
     title: "Publicar, recibir consultas y operar dentro de la red.",
     text: "Cada vendedor trabaja desde su panel con cupos, publicaciones, consultas, métricas, tickets y herramientas habilitadas según su plan.",
     items: [
+      {
+        question: "¿oX NEXMOV cobra comisión por cada venta cerrada?",
+        answer:
+          "No. Los vendedores pagan una suscripción mensual según el plan que contratan. No hay comisión por operación cerrada ni cargos adicionales sobre las ventas que cierran.",
+      },
       {
         question: "¿Cómo se incorpora un vendedor a la red?",
         answer:

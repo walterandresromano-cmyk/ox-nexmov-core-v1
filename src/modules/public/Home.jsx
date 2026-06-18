@@ -55,6 +55,7 @@ const trustItems = [
   { title: "Contactos seguros", text: "Registrados antes del chat", icon: TargetIcon },
   { title: "Financiación visible", text: "Entrega, cuotas y tasa siempre claros", icon: DollarSignIcon },
   { title: "Publicaciones auditadas", text: "Revisadas antes de publicarse", icon: ClipboardCheckIcon },
+  { title: "Sin comisión", text: "Buscar, comparar y contactar no tiene ningún costo para el comprador.", icon: CheckIcon },
 ];
 
 const confidenceItems = [

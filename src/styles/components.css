@@ -2792,6 +2792,14 @@
   color: #0284c7;
 }
 
+:root[data-theme="light"] .garage-ox-movement-card__date {
+  color: #94a3b8;
+}
+
+:root[data-theme="light"] .garage-ox-movement-card--default {
+  border-left-color: rgba(2, 132, 199, 0.45);
+}
+
 :root[data-theme="light"] .garage-ox-movement__more {
   color: #94a3b8;
 }
@@ -21747,6 +21755,13 @@ body::-webkit-scrollbar {
 :root[data-theme="light"] .garage-ox-activity-section__head h2,
 :root[data-theme="light"] .garage-ox-activity-card__main strong {
   color: rgba(15, 23, 42, 0.94);
+}
+
+:root.light .garage-ox-activity-section__head span,
+:root.light .garage-ox-activity-card__eyebrow,
+:root[data-theme="light"] .garage-ox-activity-section__head span,
+:root[data-theme="light"] .garage-ox-activity-card__eyebrow {
+  color: #0284c7;
 }
 
 :root.light .garage-ox-activity-section__head p,

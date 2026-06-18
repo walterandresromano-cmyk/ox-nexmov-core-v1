@@ -578,6 +578,11 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
             </p>
           </div>
 
+          <aside className="jnp-nocomision-note">
+            <strong>Sin comisión por operación.</strong>
+            <span>El plan mensual es tu único costo fijo. oX no cobra ningún porcentaje sobre las ventas que cerrás.</span>
+          </aside>
+
           {/* ── Formulario de solicitud ── */}
           {requestPlan && (
             <div id="dealer-request-form" className="jnp-request-wrap">

@@ -31,6 +31,14 @@ const GARAGE_FEATURES = [
     icon: "↑",
     wide: true,
   },
+  {
+    id: "nocomision",
+    label: "Sin comisión",
+    title: "Sin comisión ni cargos ocultos.",
+    text: "Registrarte y usar Garage oX es gratis. Si tu vehículo se vende a través de la red, oX no cobra ningún porcentaje sobre la operación.",
+    icon: "○",
+    wide: true,
+  },
 ];
 
 export default function SellVehicle({ authUser, onNavigate }) {
