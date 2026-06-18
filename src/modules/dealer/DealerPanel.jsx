@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import ErrorBoundary from "../../components/ErrorBoundary.jsx";
 import "../../styles/dealer-dashboard.css";
 import { usePushNotifications } from "../../hooks/usePushNotifications.js";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient.js";
@@ -2508,6 +2509,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
           </div>
         )}
 
+        <ErrorBoundary variant="panel" label="el módulo del panel">
         <Suspense fallback={<div className="route-loading" />}>
 
         {activeDealerModule === "inventory" && (
@@ -2702,6 +2704,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
         )}
 
         </Suspense>
+        </ErrorBoundary>
       </div>
     </section>
   );

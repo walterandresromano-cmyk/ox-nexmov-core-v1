@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import ErrorBoundary from "../../components/ErrorBoundary.jsx";
 const VehicleLeadDetailModal      = lazy(() => import("../../components/VehicleLeadDetailModal.jsx"));
 const CreateSupportTicketModal    = lazy(() => import("../../components/CreateSupportTicketModal.jsx"));
 const AdminSellVehicleLeadsSection = lazy(() => import("../../components/AdminSellVehicleLeadsSection.jsx"));
@@ -3189,6 +3190,7 @@ export default function AdminPanel({ authProfile }) {
 
         {renderAdminMobileTabs()}
 
+        <ErrorBoundary variant="panel" label="el módulo de administración">
         <Suspense fallback={<div className="route-loading" />}>
           <div
             className={`admin-desktop-content${
@@ -3247,6 +3249,7 @@ export default function AdminPanel({ authProfile }) {
             />
           )}
         </Suspense>
+        </ErrorBoundary>
       </div>
     </section>
   );
