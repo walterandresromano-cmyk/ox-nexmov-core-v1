@@ -12225,52 +12225,50 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 }
 
 @media (max-width: 760px) {
+  .ox-search-vehicle-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
   .ox-search-vehicle-grid .vehicle-card__media {
-    height: 150px !important;
-    min-height: 150px !important;
+    height: 188px !important;
+    min-height: 188px !important;
   }
 
   .ox-search-vehicle-grid .vehicle-card__body {
-    padding: 7px !important;
-    gap: 5px !important;
+    padding: 10px !important;
+    gap: 7px !important;
   }
 
   .ox-search-vehicle-grid .vehicle-card__stat:nth-child(n+3) {
-    display: none !important;
+    display: flex !important;
   }
 
-  .ox-search-vehicle-grid .vehicle-card__stat {
-    min-height: 24px !important;
-    font-size: 0.56rem !important;
-    padding: 0 6px !important;
+  .ox-search-vehicle-grid .vehicle-card__version {
+    display: block !important;
+  }
+
+  .ox-search-vehicle-grid .vehicle-card__monthly-hint {
+    display: inline !important;
   }
 
   .ox-search-vehicle-grid .vehicle-card__price-box {
-    min-height: 40px !important;
-    padding: 6px 8px !important;
-  }
-
-  .ox-search-vehicle-grid .vehicle-card__price {
-    font-size: 0.82rem !important;
+    min-height: 52px !important;
   }
 
   .ox-search-vehicle-grid .vehicle-card__actions {
     grid-template-columns: 1fr auto auto auto !important;
-    gap: 4px !important;
+    gap: 6px !important;
   }
 
   .ox-search-vehicle-grid .vehicle-card__btn {
-    min-height: 30px !important;
-    font-size: 0.58rem !important;
+    min-height: 40px !important;
+    font-size: 0.62rem !important;
   }
 
   .ox-search-vehicle-grid .vehicle-card__btn--icon {
-    width: 30px !important;
-    min-width: 30px !important;
-  }
-
-  .ox-search-vehicle-grid .vehicle-card__version {
-    display: none !important;
+    width: 40px !important;
+    min-width: 40px !important;
   }
 }
 
