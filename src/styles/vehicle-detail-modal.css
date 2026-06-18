@@ -3132,6 +3132,27 @@
   border-color: rgba(56, 189, 248, 0.18);
 }
 
+/* Persistent actions bar — always visible */
+.vd-actions-bar {
+  flex-shrink: 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.10);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+  padding: 12px 0;
+}
+
+.vd-actions-bar .detail-actions {
+  gap: 10px;
+}
+
+.vd-actions-bar .detail-action-contraoferta {
+  grid-column: 1 / -1 !important;
+}
+
+:root[data-theme="light"] .vd-actions-bar {
+  border-top-color: rgba(15, 23, 42, 0.07);
+  border-bottom-color: rgba(15, 23, 42, 0.07);
+}
+
 /* Tab content: flex-1 scrollable area */
 .vd-tab-content {
   flex: 1;
