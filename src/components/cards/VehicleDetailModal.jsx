@@ -1377,11 +1377,8 @@ export default function VehicleDetailModal({
 
         <div className="vehicle-detail-footer">
           <p className="vehicle-detail-legal-note">
-            La información de esta publicación fue declarada por el dealer
-            anunciante. Verificá disponibilidad, precio final, documentación
-            y condiciones antes de avanzar. oX NEXMOV no certifica el estado
-            mecánico ni garantiza la operación comercial.
-            {currentVehicle.hasFinancing && " Los valores de financiación son informativos y pueden variar según aprobación crediticia, entidad financiera, condiciones del dealer y fecha de operación."}
+            Datos declarados por el dealer. Verificá disponibilidad y condiciones antes de avanzar. oX NEXMOV no certifica el estado ni garantiza la operación.
+            {currentVehicle.hasFinancing && " Valores de financiación orientativos, sujetos a aprobación crediticia."}
           </p>
           <img
             className="vehicle-detail-footer-logo"
