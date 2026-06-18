@@ -3041,7 +3041,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 0 12px;
+  padding: 8px 0 10px;
   flex-shrink: 0;
   border-bottom: 1px solid rgba(148, 163, 184, 0.10);
 }
@@ -3102,13 +3102,13 @@
 .vd-tabs {
   display: flex;
   gap: 3px;
-  padding: 8px 0;
+  padding: 6px 0;
   flex-shrink: 0;
   border-bottom: 1px solid rgba(148, 163, 184, 0.10);
 }
 
 .vd-tab {
-  padding: 7px 14px;
+  padding: 6px 13px;
   border-radius: var(--ox-radius-lg);
   border: 1px solid transparent;
   background: transparent;
@@ -3135,21 +3135,32 @@
 /* Persistent actions bar — always visible */
 .vd-actions-bar {
   flex-shrink: 0;
-  border-top: 1px solid rgba(148, 163, 184, 0.10);
   border-bottom: 1px solid rgba(148, 163, 184, 0.10);
-  padding: 12px 0;
+  padding: 10px 0;
 }
 
 .vd-actions-bar .detail-actions {
-  gap: 10px;
+  gap: 8px;
 }
 
 .vd-actions-bar .detail-action-contraoferta {
   grid-column: 1 / -1 !important;
 }
 
+/* Compact icon buttons inside the persistent bar */
+.vd-actions-bar .detail-action-icon-btn {
+  min-height: 40px !important;
+  padding: 5px 4px !important;
+  gap: 3px !important;
+  font-size: 0.58rem !important;
+}
+
+.vd-actions-bar .detail-action-icon-btn svg {
+  width: 15px !important;
+  height: 15px !important;
+}
+
 :root[data-theme="light"] .vd-actions-bar {
-  border-top-color: rgba(15, 23, 42, 0.07);
   border-bottom-color: rgba(15, 23, 42, 0.07);
 }
 
@@ -3203,8 +3214,8 @@
   grid-column: unset !important;
   flex-shrink: 0;
   border-top: 1px solid rgba(148, 163, 184, 0.08);
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   margin-top: 0;
 }
 
