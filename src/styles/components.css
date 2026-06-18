@@ -21523,7 +21523,7 @@ body::-webkit-scrollbar {
 }
 
 .garage-ox-movement.buyer-activity-disclosure {
-  padding-top: 20px;
+  padding: 20px 22px 8px;
 }
 
 .buyer-activity-disclosure-head {
@@ -21588,24 +21588,24 @@ body::-webkit-scrollbar {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 12px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  background: rgba(15, 23, 42, 0.24);
+  padding: 10px 0 12px;
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
 }
 
 .garage-ox-activity-toolbar span {
-  color: rgba(226, 232, 240, 0.72);
-  font-size: 0.74rem;
-  font-weight: 800;
+  color: rgba(148, 163, 184, 0.55);
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
 .garage-ox-activity-section {
-  padding: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  background:
-    linear-gradient(135deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.7)),
-    rgba(15, 23, 42, 0.5);
+  padding: 18px 0 4px;
+  border: none;
+  background: transparent;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
 }
 
 .garage-ox-activity-section__head {
@@ -21699,8 +21699,20 @@ body::-webkit-scrollbar {
   color: rgba(224, 242, 254, 0.92);
 }
 
-.buyer-privacy-note--garage {
-  margin-top: 0;
+.buyer-panel .buyer-privacy-note--garage {
+  margin-top: 4px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 12px 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+:root[data-theme="light"] .buyer-panel .buyer-privacy-note--garage {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
 }
 
 :root.light .buyer-garage-section,
