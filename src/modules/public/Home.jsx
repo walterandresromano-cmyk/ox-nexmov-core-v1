@@ -3,6 +3,7 @@ import "../../styles/home.css";
 import ScrambleStat from "../../components/ScrambleStat.jsx";
 import { usePlaceholderCycle } from "../../hooks/usePlaceholderCycle.js";
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
+import VehicleCardSkeleton from "../../components/cards/VehicleCardSkeleton.jsx";
 const VehicleDetailModal = lazy(() => import("../../components/cards/VehicleDetailModal.jsx"));
 const ContactGate        = lazy(() => import("./ContactGate.jsx"));
 import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
@@ -811,14 +812,7 @@ export default function Home({ onNavigate, appActions = {} }) {
               <div className="ox-home-vehicles-carousel-v3 ox-home-vehicles-skeleton-v3" aria-hidden="true">
                 {Array.from({ length: 5 }, (_, n) => (
                   <div key={n} className="ox-home-vehicle-wrap-v3">
-                    <div className="vehicle-card-skeleton">
-                      <div className="vehicle-card-skeleton__image ox-shimmer" style={{ height: "108px" }} />
-                      <div className="vehicle-card-skeleton__body">
-                        <div className="vehicle-card-skeleton__line ox-shimmer" />
-                        <div className="vehicle-card-skeleton__line vehicle-card-skeleton__line--short ox-shimmer" />
-                        <div className="vehicle-card-skeleton__price ox-shimmer" />
-                      </div>
-                    </div>
+                    <VehicleCardSkeleton compact index={n} />
                   </div>
                 ))}
               </div>

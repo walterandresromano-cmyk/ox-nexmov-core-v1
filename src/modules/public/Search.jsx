@@ -2,6 +2,7 @@ import "../../styles/search.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import VehicleCardPublic from "../../components/cards/VehicleCardPublic.jsx";
+import VehicleCardSkeleton from "../../components/cards/VehicleCardSkeleton.jsx";
 import RadarActivationModal from "../../components/RadarActivationModal.jsx";
 import {
   normalizeSearchText,
@@ -1802,14 +1803,7 @@ export default function Search({
             <div key={gridKey} className="vehicle-grid ox-search-vehicle-grid ox-search-grid-enter">
               {loadingVehicles
                 ? Array.from({ length: 6 }, (_, n) => (
-                    <div key={n} className="vehicle-card-skeleton">
-                      <div className="vehicle-card-skeleton__image ox-shimmer" />
-                      <div className="vehicle-card-skeleton__body">
-                        <div className="vehicle-card-skeleton__line ox-shimmer" />
-                        <div className="vehicle-card-skeleton__line vehicle-card-skeleton__line--short ox-shimmer" />
-                        <div className="vehicle-card-skeleton__price ox-shimmer" />
-                      </div>
-                    </div>
+                    <VehicleCardSkeleton key={n} index={n} />
                   ))
                 : sortedVehicles.slice(0, visibleCount).map((vehicle) => (
                     <VehicleCardPublic
