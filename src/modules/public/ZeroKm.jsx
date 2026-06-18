@@ -95,8 +95,8 @@ export default function ZeroKm({ authUser, authProfile }) {
           Explorá opciones 0km con <span>condiciones claras</span>
         </h1>
         <p className="ox-public-lead">
-          Consultá disponibilidad, entrega, plazos y condiciones comerciales
-          declaradas para unidades 0km, sin cargar datos sensibles.
+          Consultá disponibilidad, entrega, plazos y condiciones para unidades
+          0km sin presentar documentación al inicio.
         </p>
 
         <div className="zero-km-hero-actions">
@@ -365,7 +365,7 @@ export default function ZeroKm({ authUser, authProfile }) {
                 </div>
                 <div>
                   <strong>2</strong>
-                  <span>La oportunidad queda ordenada.</span>
+                  <span>Tu consulta queda registrada.</span>
                 </div>
                 <div>
                   <strong>3</strong>
