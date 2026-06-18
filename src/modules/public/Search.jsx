@@ -925,6 +925,7 @@ export default function Search({
   const [filters, setFilters] = useState(getInitialFilters);
   const gridKeyRef = useRef(0);
   const prevFiltersSig = useRef("");
+  const origMetaRef = useRef(null);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState("default");
   const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
@@ -971,6 +972,52 @@ export default function Search({
   useEffect(() => {
     loadVehicles();
   }, []);
+
+  // Guarda title/desc/canonical originales al montar; los restaura al desmontar
+  useEffect(() => {
+    const descEl   = document.querySelector("meta[name='description']");
+    const canonEl  = document.querySelector("link[rel='canonical']");
+    origMetaRef.current = {
+      title:     document.title,
+      desc:      descEl?.getAttribute("content") || "",
+      canonical: canonEl?.href || "",
+    };
+    return () => {
+      const orig = origMetaRef.current;
+      if (!orig) return;
+      document.title = orig.title;
+      descEl?.setAttribute("content", orig.desc);
+      if (canonEl) canonEl.href = orig.canonical;
+    };
+  }, []);
+
+  // Actualiza title, meta description y canonical cuando cambian filtros o búsqueda
+  useEffect(() => {
+    const text   = debouncedSearchText.trim();
+    const brand  = filters.brand;
+    const model  = filters.model;
+    const ORIGIN = "https://www.oxnexmov.com.ar";
+    const DEFAULT_DESC = "Encontrá tu próximo vehículo en oX NEXMOV. Publicaciones de vendedores verificados con datos reales, comparador y consultas trazables.";
+
+    let title;
+    if (brand && model)  title = `${brand} ${model} en venta — oX NEXMOV`;
+    else if (brand)      title = `${brand} en venta — oX NEXMOV`;
+    else if (text)       title = `"${text}" — Vehículos | oX NEXMOV`;
+    else                 title = "Buscar vehículos — oX NEXMOV";
+
+    const subject = brand ? `${brand}${model ? ` ${model}` : ""}` : text;
+    const desc = subject
+      ? `Encontrá vehículos ${subject} en oX NEXMOV. Publicaciones de vendedores verificados con datos reales y comparador integrado.`
+      : DEFAULT_DESC;
+
+    const qs = buildSearchQueryString(debouncedSearchText, filters);
+    const canonical = `${ORIGIN}${qs ? `/buscar?${qs}` : "/buscar"}`;
+
+    document.title = title;
+    document.querySelector("meta[name='description']")?.setAttribute("content", desc);
+    const canonEl = document.querySelector("link[rel='canonical']");
+    if (canonEl) canonEl.href = canonical;
+  }, [debouncedSearchText, filters]);
 
   useEffect(() => {
     try {
