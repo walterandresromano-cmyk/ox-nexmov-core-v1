@@ -1278,7 +1278,7 @@ export default function Search({
         return `Filtros aplicados: ${activeAdvancedFiltersCount}.`;
       }
 
-      return "Escribí una marca, modelo, versión, precio, kilometraje, año, financiación o tipo de vehículo.";
+      return "Marca, modelo, precio, km, año, combustible o financiación.";
     }
 
     const parts = [];
