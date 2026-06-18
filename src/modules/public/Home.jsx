@@ -50,9 +50,9 @@ const QUICK_SEARCH_PRESETS = {
 };
 
 const trustItems = [
-  { title: "Dealers verificados", text: "Datos comerciales validados por oX antes de operar", icon: ShieldCheckIcon },
-  { title: "Comparador real", text: "Lado a lado con datos reales", icon: ArrowsSwapIcon },
-  { title: "Contactos trazables", text: "Registrados antes del chat", icon: TargetIcon },
+  { title: "Vendedores verificados", text: "Datos comerciales validados por oX antes de operar", icon: ShieldCheckIcon },
+  { title: "Comparar hasta 4 autos", text: "Lado a lado, con datos reales", icon: ArrowsSwapIcon },
+  { title: "Contactos seguros", text: "Registrados antes del chat", icon: TargetIcon },
   { title: "Financiación visible", text: "Entrega, cuotas y tasa siempre claros", icon: DollarSignIcon },
   { title: "Publicaciones auditadas", text: "Revisadas antes de publicarse", icon: ClipboardCheckIcon },
 ];
@@ -70,22 +70,22 @@ const confidenceItems = [
     ],
   },
   {
-    title: "Dealer identificado",
+    title: "Vendedor identificado",
     text: "Operadores habilitados dentro de la red.",
     details: [
       "Cuenta comercial asociada a cada unidad",
-      "Plan del dealer visible en la publicación",
+      "Categoría del vendedor visible en la publicación",
       "Teléfono validado antes de derivar",
       "Historial operativo dentro de la plataforma",
       "Soporte interno si la información no coincide",
     ],
   },
   {
-    title: "Consulta trazable",
+    title: "Consulta registrada",
     text: "Tu contacto queda registrado antes del chat.",
     details: [
       "Tu interés queda asociado al vehículo",
-      "El dealer recibe una consulta con contexto",
+      "El vendedor recibe tu consulta con contexto",
       "No necesitás registrarte para explorar",
       "Podés comparar alternativas antes de decidir",
       "La conversación empieza con datos ordenados",
@@ -686,9 +686,8 @@ export default function Home({ onNavigate, appActions = {} }) {
             </h1>
 
             <p className="ox-hero-reveal ox-hero-reveal--4">
-              Publicaciones revisadas, dealers habilitados, financiación
-              visible. Compará y contactá con todo el contexto antes de
-              decidir.
+              Comprá sin sorpresas. Publicaciones revisadas, vendedores
+              identificados y precio visible desde el primer clic.
             </p>
 
             <form
@@ -730,7 +729,7 @@ export default function Home({ onNavigate, appActions = {} }) {
                 Ver financiación 0km
               </button>
               <button type="button" onClick={() => onNavigate("sellVehicle")}>
-                Garage oX
+                Mi Garage
               </button>
             </div>
 
@@ -791,7 +790,7 @@ export default function Home({ onNavigate, appActions = {} }) {
             <div className="ox-home-section-head-v3">
               <div>
                 <h2>Vehículos destacados</h2>
-                <p>Unidades recientes con lectura comercial.</p>
+                <p>Publicadas recientemente, con datos completos.</p>
               </div>
 
               <div className="ox-home-section-actions-v3">
@@ -873,7 +872,7 @@ export default function Home({ onNavigate, appActions = {} }) {
               Antes de contactar, ya sabés más
             </h2>
             <p>
-              Precio, ubicación, financiación y señales del dealer conviven
+              Precio, ubicación, financiación e información del vendedor conviven
               en una misma lectura, sin presión y sin pasos innecesarios.
             </p>
           </div>
@@ -903,8 +902,8 @@ export default function Home({ onNavigate, appActions = {} }) {
         <section className="ox-home-intelligence-grid-v3">
           <article className="ox-home-inventory-v3">
             <div className="ox-home-inventory-road" aria-hidden="true" />
-            <h2>Inventario en todo el país</h2>
-            <p>La red más activa de Argentina.</p>
+            <h2>Vehículos en todo el país</h2>
+            <p>Publicaciones en las principales plazas de Argentina.</p>
 
             <div className="ox-home-map-v3">
               <span></span>
@@ -915,7 +914,7 @@ export default function Home({ onNavigate, appActions = {} }) {
 
             <div className="ox-home-stats-v3">
               {(extraStats.activeDealers || homeStats.visibleDealers) > 0 && (
-                <ScrambleStat value={extraStats.activeDealers || homeStats.visibleDealers} label="Dealers activos" />
+                <ScrambleStat value={extraStats.activeDealers || homeStats.visibleDealers} label="Vendedores activos" />
               )}
               {homeStats.totalActiveVehicles > 0 && (
                 <ScrambleStat value={homeStats.totalActiveVehicles} label="Publicaciones activas" />
@@ -942,7 +941,7 @@ export default function Home({ onNavigate, appActions = {} }) {
                 <ScrambleStat value={extraStats.withFinancing} label="Con financiación" />
               )}
               {extraStats.contacts > 0 && (
-                <ScrambleStat value={extraStats.contacts} label="Contactos trazados" />
+                <ScrambleStat value={extraStats.contacts} label="Consultas registradas" />
               )}
             </div>
 

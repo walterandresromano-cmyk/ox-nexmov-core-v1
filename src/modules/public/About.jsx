@@ -4,22 +4,22 @@ const aboutPillars = [
   {
     eyebrow: "Comprador primero",
     title: "Claridad",
-    text: "La plataforma prioriza información útil, comparación real y contacto trazable antes que publicidad invasiva o publicaciones confusas.",
+    text: "La plataforma prioriza información útil, comparación real y contacto seguro antes que publicidad invasiva o publicaciones confusas.",
   },
   {
-    eyebrow: "Dealers verificados",
+    eyebrow: "Vendedores verificados",
     title: "Red",
     text: "Trabajamos con agencias, concesionarias y vendedores profesionales que buscan operar con datos, orden y responsabilidad comercial.",
   },
   {
     eyebrow: "Datos para decidir",
     title: "Contexto",
-    text: "El vehículo no se muestra aislado: se acompaña con señales, comparación, referencias y herramientas para entender mejor cada oportunidad.",
+    text: "Cada vehículo se acompaña con precio de referencia, comparador, financiación y datos del vendedor para que tengas todo el contexto antes de consultar.",
   },
   {
-    eyebrow: "Operación trazable",
+    eyebrow: "Contactos ordenados",
     title: "Confianza",
-    text: "Las consultas, leads, solicitudes y contactos comerciales quedan ordenados para reducir pérdidas de información y mejorar el seguimiento.",
+    text: "Las consultas, solicitudes y contactos quedan ordenados para reducir pérdidas de información y mejorar el seguimiento.",
   },
 ];
 
@@ -34,23 +34,23 @@ const visionItems = [
   },
   {
     title: "Contactos cuidados",
-    text: "El contacto comercial se registra para mejorar la trazabilidad y evitar consultas anónimas o desordenadas.",
+    text: "El contacto se registra para evitar consultas anónimas o desordenadas y mantener un historial claro.",
   },
   {
     title: "Red profesional",
-    text: "El dealer cuenta con panel, cupos, leads, tickets y herramientas para gestionar su operación dentro de la red.",
+    text: "El vendedor cuenta con panel, cupos, consultas, tickets y herramientas para gestionar su operación dentro de la red.",
   },
 ];
 
 const differences = [
   "Vehículos reales",
-  "Dealers identificados",
-  "Leads trazables",
+  "Vendedores verificados",
+  "Consultas registradas",
   "Comparador integrado",
   "Financiación 0km",
   "Solicitudes de venta",
-  "Paneles operativos",
-  "Soporte interno",
+  "Panel del vendedor",
+  "Soporte disponible",
 ];
 
 export default function About({ onNavigate }) {
@@ -67,9 +67,10 @@ export default function About({ onNavigate }) {
             </h1>
 
             <p className="ox-public-lead">
-              Ordenamos información, dealers, publicaciones y herramientas de
-              comparación para que comprar o vender un vehículo sea una
-              experiencia más clara, trazable y confiable.
+              En Argentina, comprar un vehículo puede ser confuso: publicaciones
+              incompletas, vendedores anónimos y precios que no se sostienen.
+              oX NEXMOV ordena todo eso para que puedas comparar, consultar y
+              decidir con la información que necesitás.
             </p>
           </div>
 
@@ -101,10 +102,10 @@ export default function About({ onNavigate }) {
             <p className="eyebrow">Nuestra mirada</p>
             <h2>No queremos sumar ruido. Queremos ordenar la decisión.</h2>
             <p>
-              Comprar un vehículo implica comparar precios, estado,
-              financiación, ubicación, confianza del vendedor y oportunidad real.
-              oX NEXMOV busca reunir esos elementos en una experiencia clara,
-              moderna y pensada para que cada paso tenga sentido.
+              Comprar un vehículo implica comparar precios, estado, financiación,
+              ubicación y confianza del vendedor — todo al mismo tiempo.
+              oX NEXMOV reúne esos elementos para que cada paso tenga sentido
+              y cada decisión esté respaldada por información real.
             </p>
           </div>
 
@@ -141,9 +142,9 @@ export default function About({ onNavigate }) {
             <p className="eyebrow">Nuestra promesa</p>
             <h2>No buscamos que decidas más rápido. Buscamos que decidas mejor.</h2>
             <p>
-              oX NEXMOV busca convertirse en una nueva forma de trabajar en el
-              rubro automotriz: más clara para el comprador, más ordenada para el
-              dealer y más inteligente para toda la red.
+              oX NEXMOV nació para que comprar o vender un vehículo en Argentina
+              sea una experiencia más clara, más honesta y con menos incertidumbre
+              en cada paso.
             </p>
           </div>
 

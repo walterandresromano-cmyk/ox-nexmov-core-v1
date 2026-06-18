@@ -58,7 +58,7 @@ export default function ContactGate({
     if (submitting || createdLead) return;
 
     if (!authUser?.id) {
-      setError("Para contactar al dealer primero tenés que iniciar sesión.");
+      setError("Para contactar al vendedor primero tenés que iniciar sesión.");
       return;
     }
 
@@ -101,7 +101,7 @@ export default function ContactGate({
 
     if (!whatsappUrl) {
       setError(
-        "El dealer no tiene un WhatsApp válido cargado. La consulta ya quedó registrada."
+        "El vendedor no tiene un WhatsApp válido cargado. La consulta ya quedó registrada."
       );
       return;
     }
@@ -114,11 +114,11 @@ export default function ContactGate({
       <section className="contact-modal">
         <div className="contact-modal-head">
           <div>
-            <p className="eyebrow">Registro de seguridad comercial</p>
-            <h2>Contacto seguro</h2>
+            <p className="eyebrow">Contacto verificado</p>
+            <h2>Contactar al vendedor</h2>
             <p>
-              Para proteger la trazabilidad comercial, primero registramos el
-              lead en oX NEXMOV y luego habilitamos el canal de contacto.
+              Dejá tu mensaje y se lo enviamos directamente al vendedor.
+              El contacto queda registrado para tu seguridad.
             </p>
           </div>
 
@@ -163,7 +163,7 @@ export default function ContactGate({
             </div>
 
             <label>
-              Consulta
+              Tu mensaje
               <textarea
                 value={form.message}
                 onChange={(event) => updateField("message", event.target.value)}
@@ -176,13 +176,12 @@ export default function ContactGate({
             {error && <p className="form-error">{error}</p>}
 
             <p className="contact-legal-note">
-              Al continuar, oX NEXMOV registrará esta consulta para generar
-              trazabilidad del contacto comercial. No implica reserva, compra
-              ni obligación de operación.
+              Al enviar, tu consulta queda registrada en la plataforma.
+              No implica reserva, compra ni obligación de operación.
             </p>
 
             <button className="primary-action" type="submit" disabled={submitting}>
-              {submitting ? "Preparando contacto..." : "Generar lead y continuar"}
+              {submitting ? "Enviando..." : "Enviar consulta"}
             </button>
           </form>
         ) : (
@@ -194,14 +193,13 @@ export default function ContactGate({
             </h3>
             <p>
               {leadWasReused
-                ? "Ya tenés una consulta activa para este vehículo. Podés continuar el contacto con el dealer."
-                : "Consulta registrada. Ya podés continuar el contacto con el dealer."}
+                ? "Ya tenés una consulta activa para este vehículo. Podés continuar el contacto con el vendedor."
+                : "Consulta registrada. Ya podés continuar el contacto con el vendedor."}
             </p>
 
             <p>
-              Registramos esta consulta para que el contacto sea trazable y el
-              dealer pueda responderte mejor. No implica reserva ni compromiso
-              de compra.
+              Guardamos un registro de tu consulta para que el vendedor pueda
+              responderte. No implica reserva ni compromiso de compra.
             </p>
 
             {error && <p className="form-error">{error}</p>}
@@ -217,7 +215,7 @@ export default function ContactGate({
                 </button>
               ) : (
                 <div className="contact-warning" role="status">
-                  El dealer no tiene un WhatsApp válido cargado. La consulta ya
+                  El vendedor no tiene un WhatsApp válido cargado. La consulta ya
                   quedó registrada.
                 </div>
               )}

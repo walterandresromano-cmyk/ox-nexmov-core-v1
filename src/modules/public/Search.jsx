@@ -654,7 +654,7 @@ const FILTER_CHIP_LABELS = {
   transmission: "Transmisión",
   financing: "Financiación",
   status: "Estado",
-  dealerRank: "Dealer",
+  dealerRank: "Categoría",
   dealer: "Concesionaria",
   hasImages: "Con fotos",
 };
@@ -834,8 +834,8 @@ const SEARCH_QUICK_ACTIONS = [
 
 const SEARCH_TRUST_ITEMS = [
   {
-    title: "Dealers verificados",
-    text: "Publican solo dealers validados por oX NEXMOV.",
+    title: "Vendedores verificados",
+    text: "Publican solo vendedores validados por oX NEXMOV.",
   },
   {
     title: "Datos reales",
@@ -846,7 +846,7 @@ const SEARCH_TRUST_ITEMS = [
     text: "Hasta 4 vehículos lado a lado.",
   },
   {
-    title: "Consultas trazables",
+    title: "Consultas registradas",
     text: "Cada contacto queda registrado antes del WhatsApp.",
   },
   {
@@ -1652,7 +1652,7 @@ export default function Search({
                 />
 
                 <FilterDropdown
-                  label="Rango dealer"
+                  label="Categoría del vendedor"
                   value={filters.dealerRank}
                   placeholder="Todos"
                   options={[

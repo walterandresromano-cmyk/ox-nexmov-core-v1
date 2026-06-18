@@ -1,4 +1,4 @@
-﻿import "../../styles/faq.css";
+import "../../styles/faq.css";
 import { useState } from "react";
 
 function FaqItem({ question, answer }) {
@@ -26,7 +26,7 @@ const faqSections = [
   {
     eyebrow: "Compradores",
     title: "Buscar, comparar y consultar vehículos.",
-    text: "El comprador puede navegar la plataforma, comparar unidades y revisar oportunidades antes de iniciar un contacto comercial.",
+    text: "Podés navegar la plataforma, comparar unidades y revisar oportunidades antes de contactar a un vendedor.",
     items: [
       {
         question: "¿Necesito registrarme para buscar?",
@@ -36,34 +36,59 @@ const faqSections = [
       {
         question: "¿Cuándo tengo que iniciar sesión?",
         answer:
-          "Cuando quieras contactar a un dealer, enviar una consulta, iniciar una solicitud de venta o generar una acción comercial trazable.",
+          "Solo cuando quieras enviar una consulta a un vendedor. Para explorar y comparar no hace falta.",
+      },
+      {
+        question: "¿Qué pasa después de que envío una consulta?",
+        answer:
+          "Tu consulta queda registrada y se habilita el contacto por WhatsApp con el vendedor. El vendedor puede ver el contexto de tu consulta y responderte con información del vehículo.",
+      },
+      {
+        question: "¿El vendedor me puede contactar a mí?",
+        answer:
+          "El vendedor recibe tu consulta con contexto. El contacto directo se maneja por WhatsApp una vez que vos iniciás la conversación desde la plataforma.",
+      },
+      {
+        question: "¿Puedo guardar vehículos para ver después?",
+        answer:
+          "Sí. Podés guardar vehículos en tu lista y compararlos cuando quieras desde tu Garage oX.",
+      },
+      {
+        question: "¿Qué es Garage oX?",
+        answer:
+          "Es tu espacio personal dentro de la plataforma: guardás vehículos de interés, registrás los que ya tenés, llevás el historial de servicios y vencimientos, y podés preparar una futura venta.",
       },
       {
         question: "¿oX NEXMOV vende autos?",
         answer:
-          "No vendemos vehículos de forma directa. La plataforma conecta compradores con dealers, agencias y vendedores profesionales.",
+          "No vendemos vehículos de forma directa. La plataforma conecta compradores con agencias y vendedores profesionales verificados.",
       },
       {
         question: "¿Para qué sirve comparar?",
         answer:
-          "El comparador ayuda a revisar diferencias de precio, año, kilometraje, ubicación y propuesta comercial antes de consultar.",
+          "El comparador ayuda a revisar diferencias de precio, año, kilometraje, ubicación y propuesta del vendedor antes de consultar.",
+      },
+      {
+        question: "¿Cómo sé si el precio es negociable?",
+        answer:
+          "El precio publicado es el precio de referencia declarado por el vendedor. La negociación final se acuerda directamente entre las partes.",
       },
     ],
   },
   {
-    eyebrow: "Dealers",
-    title: "Publicar, recibir leads y operar dentro de la red.",
-    text: "Cada dealer trabaja desde su panel con cupos, publicaciones, oportunidades, métricas, tickets y herramientas habilitadas según su plan.",
+    eyebrow: "Vendedores",
+    title: "Publicar, recibir consultas y operar dentro de la red.",
+    text: "Cada vendedor trabaja desde su panel con cupos, publicaciones, consultas, métricas, tickets y herramientas habilitadas según su plan.",
     items: [
       {
-        question: "¿Cómo se incorpora un dealer?",
+        question: "¿Cómo se incorpora un vendedor a la red?",
         answer:
           "El alta se realiza con revisión administrativa. Se cargan los datos comerciales, se asigna un plan y se activa el período operativo.",
       },
       {
         question: "¿Qué pasa si vence el plan?",
         answer:
-          "Las publicaciones se pausan automáticamente. El dealer conserva un período de gracia para revisar información y comunicarse con admin.",
+          "Las publicaciones se pausan automáticamente. El vendedor conserva un período de gracia para revisar información y comunicarse con administración.",
       },
       {
         question: "¿Los cupos son acumulativos?",
@@ -73,46 +98,41 @@ const faqSections = [
       {
         question: "¿Qué planes existen?",
         answer:
-          "Inicio, Pro, Elite y Platinum. Cada uno habilita distintos cupos, herramientas, señales comerciales y beneficios operativos.",
+          "Inicio, Pro, Elite y Platinum. Cada uno habilita distintos cupos, señales comerciales, presencia visual, métricas y herramientas operativas.",
       },
     ],
   },
   {
-    eyebrow: "Leads y contacto",
-    title: "Consultas comerciales con trazabilidad.",
-    text: "El contacto entre comprador y dealer se registra dentro de la plataforma para evitar consultas anónimas y mejorar el seguimiento.",
+    eyebrow: "Consultas y contacto",
+    title: "Cómo funciona el contacto entre comprador y vendedor.",
+    text: "El contacto entre comprador y vendedor se registra dentro de la plataforma para evitar consultas anónimas y mejorar el seguimiento.",
     items: [
       {
-        question: "¿Qué es un lead?",
+        question: "¿Por qué necesito una cuenta para contactar?",
         answer:
-          "Es una consulta o acción comercial generada por un comprador sobre un vehículo, una financiación o una solicitud de venta.",
+          "Para que el vendedor reciba consultas identificadas y pueda responderte con contexto. Evita spam y consultas sin seguimiento.",
       },
       {
-        question: "¿Por qué se exige login para contactar?",
+        question: "¿Tengo que cargar el DNI?",
         answer:
-          "Para que la operación tenga trazabilidad mínima y el dealer reciba consultas identificadas, no contactos anónimos sin seguimiento.",
-      },
-      {
-        question: "¿El comprador carga DNI?",
-        answer:
-          "No. Para el contacto comercial inicial se usan datos mínimos no sensibles, suficientes para ordenar la consulta.",
+          "No. Para el contacto inicial se usan datos mínimos: nombre, email y teléfono. No se pide documentación.",
       },
       {
         question: "¿Qué pasa con WhatsApp?",
         answer:
-          "Antes de abrir un canal comercial, la plataforma registra la acción para mantener trazabilidad interna del lead.",
+          "Antes de abrir el chat con el vendedor, la plataforma registra tu consulta. Así el vendedor sabe de qué vehículo se trata y puede responderte mejor.",
       },
       {
         question: "¿Contactar implica reservar o comprar?",
         answer:
-          "No. El contacto genera trazabilidad comercial, pero no implica reserva, compra ni obligación de operación.",
+          "No. El contacto queda registrado en la plataforma, pero no implica reserva, compra ni ningún tipo de compromiso.",
       },
     ],
   },
   {
     eyebrow: "Financiación y venta particular",
-    title: "Dos flujos separados para oportunidades distintas.",
-    text: "La financiación 0km y el módulo “Vender mi vehículo” generan oportunidades específicas que pueden ser gestionadas por admin, equipo interno o dealers habilitados.",
+    title: "Dos opciones para oportunidades distintas.",
+    text: "La financiación 0km y el módulo \"Vender mi vehículo\" generan consultas específicas que puede atender el equipo de oX o vendedores habilitados.",
     items: [
       {
         question: "¿Qué es Financiación 0km?",
@@ -125,22 +145,22 @@ const faqSections = [
           "No. La consulta no implica aprobación crediticia. Las cuotas, tasas, entregas y condiciones finales dependen del proveedor, plan, modelo y situación del solicitante.",
       },
       {
-        question: "¿Quién recibe esos leads?",
+        question: "¿Quién atiende esas consultas?",
         answer:
-          "Pueden ser trabajados por administración, usuarios internos especiales o dealers asignados según criterio operativo.",
+          "Pueden ser atendidas por el equipo de oX NEXMOV o vendedores habilitados, según el tipo de consulta y el criterio operativo.",
       },
       {
-        question: "¿Qué es “Vender mi vehículo”?",
+        question: "¿Qué es \"Vender mi vehículo\"?",
         answer:
-          "Es un módulo para que una persona cargue su intención de venta y la plataforma pueda derivarla a dealers habilitados.",
+          "Es un módulo para que una persona cargue su intención de venta y la plataforma pueda derivarla a vendedores habilitados.",
       },
       {
         question: "¿Cargar mi vehículo garantiza una oferta?",
         answer:
-          "No. La solicitud no es tasación oficial ni garantiza venta u oferta. La evaluación depende del interés de dealers habilitados y de las condiciones acordadas entre las partes.",
+          "No. La solicitud no es tasación oficial ni garantiza venta u oferta. La evaluación depende del interés de los vendedores habilitados y de las condiciones acordadas entre las partes.",
       },
       {
-        question: "¿Todos los dealers reciben esas oportunidades?",
+        question: "¿Todos los vendedores reciben esas oportunidades?",
         answer:
           "No necesariamente. El acceso depende del plan, beneficios otorgados y criterio comercial definido por administración.",
       },
@@ -149,22 +169,22 @@ const faqSections = [
   {
     eyebrow: "Publicaciones y planes",
     title: "Cupos, visibilidad y reglas claras.",
-    text: "Las publicaciones dependen del plan del dealer y de la información disponible en cada unidad.",
+    text: "Las publicaciones dependen del plan del vendedor y de la información disponible en cada unidad.",
     items: [
       {
         question: "¿Todos los planes permiten comparar vehículos?",
         answer:
-          "Sí. La comparación es una función útil para el comprador y no se bloquea por plan.",
+          "Sí. La comparación es una función para el comprador y no se bloquea por plan.",
       },
       {
-        question: "¿Qué diferencia a los planes dealer?",
+        question: "¿Qué diferencia a los planes de vendedor?",
         answer:
           "La diferencia está en cupos, señales comerciales, presencia visual, métricas y herramientas operativas.",
       },
       {
-        question: "¿oX NEXMOV garantiza leads o ventas?",
+        question: "¿oX NEXMOV garantiza consultas o ventas?",
         answer:
-          "No. La plataforma ordena publicaciones, consultas y herramientas comerciales, pero no garantiza volumen de leads, ventas ni resultados comerciales.",
+          "No. La plataforma ordena publicaciones, consultas y herramientas comerciales, pero no garantiza volumen de consultas, ventas ni resultados comerciales.",
       },
       {
         question: "¿Elite es ilimitado?",
@@ -180,23 +200,23 @@ const faqSections = [
   },
   {
     eyebrow: "Seguridad y datos",
-    title: "Información mínima para operar con trazabilidad.",
-    text: "La plataforma registra datos necesarios para ordenar consultas, soporte y oportunidades comerciales.",
+    title: "Información mínima para operar con seguridad.",
+    text: "La plataforma registra los datos necesarios para ordenar consultas, soporte y operaciones.",
     items: [
       {
         question: "¿Se muestran teléfonos públicamente?",
         answer:
-          "No. El contacto se habilita mediante flujos trazables y no se exponen teléfonos como dato público innecesario.",
+          "No. El contacto se habilita a través de flujos verificados y no se exponen teléfonos como dato público.",
       },
       {
         question: "¿Qué datos se usan para una consulta?",
         answer:
-          "Nombre, email, teléfono y contexto de la operación, solo para gestionar la oportunidad comercial.",
+          "Nombre, email y teléfono, solo para gestionar la consulta. No se pide documentación.",
       },
       {
         question: "¿oX NEXMOV certifica el estado mecánico del vehículo?",
         answer:
-          "No. La información publicada, incluyendo mantenimiento o estado declarado, debe verificarse con el dealer o vendedor antes de concretar una operación.",
+          "No. La información publicada, incluyendo mantenimiento o estado declarado, debe verificarse con el vendedor antes de concretar una operación.",
       },
       {
         question: "¿Los costos de mantenimiento son oficiales?",
@@ -211,20 +231,20 @@ const faqSections = [
     ],
   },
   {
-    eyebrow: "Seguridad y publicaciones sospechosas",
-    title: "Prevención, trazabilidad y decisión informada.",
-    text: "oX NEXMOV reduce el contacto anónimo y ayuda a ordenar operaciones, pero cada comprador debe verificar la información antes de avanzar.",
+    eyebrow: "Publicaciones sospechosas",
+    title: "Cómo cuidarte antes de avanzar.",
+    text: "oX NEXMOV reduce el contacto anónimo y ayuda a ordenar operaciones, pero cada comprador debe verificar la información antes de concretar cualquier acuerdo.",
     security: true,
     items: [
       {
-        question: "¿Cómo protege oX NEXMOV el contacto entre comprador y dealer?",
+        question: "¿Cómo protege oX NEXMOV el contacto entre comprador y vendedor?",
         answer:
-          "Para contactar a un dealer, oX NEXMOV solicita registro y genera trazabilidad comercial. Esto ayuda a reducir consultas falsas, spam y operaciones sospechosas. El contacto no implica reserva, compra ni obligación de operación.",
+          "Para contactar a un vendedor, oX NEXMOV solicita registro y deja constancia de la consulta. Esto ayuda a reducir consultas falsas, spam y operaciones sospechosas. El contacto no implica reserva, compra ni obligación de operación.",
       },
       {
         question: "¿oX NEXMOV garantiza que una publicación es 100% segura?",
         answer:
-          "No. oX NEXMOV organiza información y consultas comerciales, pero los datos publicados pueden ser declarados por dealers o vendedores. Antes de concretar una operación, el comprador debe verificar documentación, estado del vehículo, titularidad y condiciones acordadas.",
+          "No. oX NEXMOV organiza información y consultas, pero los datos publicados son declarados por los vendedores. Antes de concretar una operación, el comprador debe verificar documentación, estado del vehículo, titularidad y condiciones acordadas.",
       },
       {
         question: "¿Qué señales pueden indicar una publicación sospechosa?",
@@ -239,7 +259,7 @@ const faqSections = [
       {
         question: "¿oX NEXMOV certifica el estado mecánico del vehículo?",
         answer:
-          "No. La plataforma no certifica mecánicamente los vehículos. Los datos publicados y datos orientativos de mantenimiento son declarados por el vendedor o dealer.",
+          "No. La plataforma no certifica mecánicamente los vehículos. Los datos publicados son declarados por el vendedor y deben verificarse antes de cualquier acuerdo.",
       },
       {
         question: "¿Debo pagar una seña desde oX NEXMOV?",
@@ -263,7 +283,7 @@ export default function FAQ({ onNavigate }) {
 
             <p className="ox-public-lead">
               Resolvemos las dudas más importantes para que compradores y
-              dealers usen oX NEXMOV con claridad y confianza.
+              vendedores usen oX NEXMOV con claridad y confianza.
             </p>
           </div>
 
@@ -305,7 +325,7 @@ export default function FAQ({ onNavigate }) {
             <h2>¿Todavía tenés dudas?</h2>
             <p>
               Podés explorar vehículos publicados, comparar opciones reales o
-              sumarte a la red como dealer.
+              sumarte a la red como vendedor.
             </p>
           </div>
 

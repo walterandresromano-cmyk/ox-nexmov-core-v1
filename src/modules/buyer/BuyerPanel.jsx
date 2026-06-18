@@ -181,7 +181,7 @@ function getGarageVehicleSourceLabel(vehicle) {
     return "Vehículo propio";
   }
 
-  return "Asignado por dealer";
+  return "Asignado por vendedor";
 }
 
 function isOwnedGarageVehicle(vehicle) {
@@ -725,7 +725,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
               <form className="buyer-garage-owned-form" onSubmit={handleSaveGarageVehicle}>
                 <div className="buyer-garage-owned-head">
                   <div>
-                    <span className="eyebrow">{editingGarageVehicleId ? "Editando card" : "Vehículo propio"}</span>
+                    <span className="eyebrow">{editingGarageVehicleId ? "Editando vehículo" : "Vehículo propio"}</span>
                     <h3>{editingGarageVehicleId ? "Actualizar unidad" : "Cargar unidad familiar"}</h3>
                     <p>
                       Sumá una unidad a tu colección y mantené su historia lista para
@@ -934,7 +934,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     {garageVehicleSaving
                       ? "Guardando..."
                       : editingGarageVehicleId
-                        ? "Actualizar card"
+                        ? "Guardar cambios"
                         : "Guardar en Garage oX"}
                   </button>
                   {garageVehicleSaved && <span>Vehículo guardado</span>}
@@ -1468,7 +1468,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                         <div className="buyer-garage-tab-panel buyer-garage-sale-panel" role="tabpanel" aria-label="Venta futura del vehículo">
                           <span className="eyebrow">Venta futura</span>
                           <div className="buyer-garage-sale-readiness-head">
-                            <h3>Preparación comercial</h3>
+                            <h3>Preparar para la venta</h3>
                             <span className="buyer-garage-sale-progress">{saleReadyCount}/4 listo</span>
                           </div>
                           <p>
@@ -1600,7 +1600,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 className={`movimiento-subnav__btn${activeMovimientoTab === "shortlist" ? " is-active" : ""}`}
                 onClick={() => setActiveMovimientoTab("shortlist")}
               >
-                Shortlist
+                Guardados
                 {favorites.length > 0 && <span className="movimiento-subnav__badge">{favorites.length}</span>}
               </button>
               <button
@@ -1807,7 +1807,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                             {[lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ") || "Vehículo"}
                           </strong>
                           <span className="garage-ox-movement-card__dealer">
-                            {lead.dealer_name || "Dealer"}
+                            {lead.dealer_name || "Vendedor"}
                           </span>
                           <time className="garage-ox-movement-card__date">
                             {formatDateTime(lead.created_at).split(",")[0]}
@@ -1851,7 +1851,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     <div className="garage-ox-activity-section__head">
                       <div>
                         <span>Consultas</span>
-                        <h2>Contactos a dealers</h2>
+                        <h2>Mis consultas</h2>
                         <p>Seguimiento de los vehículos que consultaste.</p>
                       </div>
                       <strong>{vehicleLeads.length}</strong>
@@ -1860,7 +1860,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                     {vehicleLeads.length === 0 ? (
                       <div className="empty-state">
                         <strong>Todavía no realizaste consultas.</strong>
-                        <p>Encontrá un vehículo que te interese y contactá al dealer directamente desde la ficha.</p>
+                        <p>Encontrá un vehículo que te interese y contactá al vendedor directamente desde la ficha.</p>
                         <div className="buyer-empty-radar-cta">
                           <div className="buyer-empty-radar-cta__copy">
                             <span className="buyer-empty-radar-cta__badge">Radar oX</span>
@@ -1890,7 +1890,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                             >
                               <div className="garage-ox-activity-card__main">
                                 <span className="garage-ox-activity-card__eyebrow">
-                                  Consulta a dealer
+                                  Consulta a vendedor
                                 </span>
                                 <strong>
                                   {[lead.vehicle_brand, lead.vehicle_model]
@@ -1902,7 +1902,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                               <div className="garage-ox-activity-card__meta">
                                 <span>{formatDateTime(lead.created_at).split(",")[0]}</span>
                                 <span>{formatARS(lead.price_snapshot)}</span>
-                                <span>{lead.dealer_name || "Dealer"}</span>
+                                <span>{lead.dealer_name || "Vendedor"}</span>
                                 <small>{lead.dealer_phone || "Contacto registrado"}</small>
                               </div>
                               <span className={`admin-chip ${getVehicleLeadChipClass(lead.crm_status)}`.trim()}>
@@ -1919,7 +1919,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                                     <span className="dealer-rating-widget__label">
                                       ¿Cómo fue la atención?
                                     </span>
-                                    <div className="dealer-rating-widget__stars" role="group" aria-label="Calificar dealer">
+                                    <div className="dealer-rating-widget__stars" role="group" aria-label="Calificar al vendedor">
                                       {[1, 2, 3, 4, 5].map((star) => (
                                         <button
                                           key={star}
@@ -1967,7 +1967,7 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                           >
                             <div className="garage-ox-activity-card__main">
                               <span className="garage-ox-activity-card__eyebrow">
-                                Financiacion 0km
+                                Financiación 0km
                               </span>
                               <strong>
                                 {lead.brand_interest || "Marca abierta"}{" "}

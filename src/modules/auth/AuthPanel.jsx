@@ -53,7 +53,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MODE_TITLES = {
   login: "Ingresar",
   registerBuyer: "Crear cuenta",
-  registerDealer: "Acceso dealer",
+  registerDealer: "Soy vendedor",
   resetPassword: "Recuperar contraseña",
   newPassword: "Nueva contraseña",
 };
@@ -449,7 +449,7 @@ export default function AuthPanel({
                 className={mode === "registerDealer" ? "active" : ""}
                 onClick={() => switchMode("registerDealer")}
               >
-                Registro dealer autorizado
+                Soy vendedor registrado
               </button>
 
               <button
@@ -485,8 +485,8 @@ export default function AuthPanel({
             {mode === "registerBuyer" && (
               <form className="auth-form" onSubmit={handleRegisterBuyer}>
                 <div className="auth-warning">
-                  Este registro es para compradores. Si sos dealer, usá{" "}
-                  <strong>Registro dealer</strong> con el email autorizado por
+                  Este registro es para compradores. Si sos vendedor, usá{" "}
+                  <strong>Soy vendedor registrado</strong> con el email autorizado por
                   administración.
                 </div>
 
@@ -530,9 +530,9 @@ export default function AuthPanel({
             {mode === "registerDealer" && (
               <form className="auth-form" onSubmit={handleRegisterDealer}>
                 <div className="auth-warning">
-                  <strong>Registro dealer autorizado</strong>
+                  <strong>Registro de vendedor autorizado</strong>
                   <br />
-                  Este registro es solo para dealers previamente dados de alta
+                  Este registro es solo para vendedores previamente dados de alta
                   por administración. El email debe coincidir con el email
                   autorizado.
                   {onNavigate && (
@@ -595,7 +595,7 @@ export default function AuthPanel({
                 </p>
 
                 <button className="primary-action" type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Verificando…" : "Crear acceso dealer"}
+                  {isSubmitting ? "Verificando…" : "Crear acceso de vendedor"}
                 </button>
               </form>
             )}
@@ -603,7 +603,7 @@ export default function AuthPanel({
             {mode === "resetPassword" && (
               <form className="auth-form" onSubmit={handleResetPassword}>
                 <div className="auth-warning">
-                  La recuperación sirve para compradores, dealers, admin, soporte
+                  La recuperación sirve para compradores, vendedores, admin, soporte
                   y usuarios internos. Te enviaremos un enlace al email de tu
                   cuenta.
                 </div>

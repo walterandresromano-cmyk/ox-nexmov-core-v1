@@ -6,8 +6,8 @@ import { listPublicActiveDealers } from "../../services/dealers.service.js";
 import { checkPromoCodeAvailable, claimPromoCode } from "../../services/promoCodes.service.js";
 
 const dealerSignals = [
-  "Dealers verificados",
-  "Leads trazables",
+  "Vendedores verificados",
+  "Consultas registradas",
   "Publicaciones con contexto",
 ];
 
@@ -18,11 +18,11 @@ const dealerChallenges = [
   },
   {
     title: "La confianza define el contacto",
-    text: "Una publicación ordenada, con datos coherentes y trazabilidad comercial, mejora la percepción del dealer.",
+    text: "Una publicación ordenada, con datos coherentes y claros, mejora la percepción del vendedor.",
   },
   {
     title: "Cada consulta tiene valor",
-    text: "Registrar el lead antes del WhatsApp ayuda a cuidar el seguimiento y evita perder oportunidades comerciales.",
+    text: "Registrar la consulta antes del WhatsApp ayuda a cuidar el seguimiento y evita perder oportunidades.",
   },
 ];
 
@@ -32,7 +32,7 @@ const proposalCards = [
     text: "Vehículos presentados con datos clave, fotos, precio, ubicación y contexto para decidir mejor.",
   },
   {
-    title: "Leads trazables",
+    title: "Consultas registradas",
     text: "Cada consulta queda registrada antes de abrir el canal de contacto.",
   },
   {
@@ -41,11 +41,11 @@ const proposalCards = [
   },
   {
     title: "Señales comerciales",
-    text: "Badges, ranking y presencia visual ayudan a diferenciar la operación del dealer.",
+    text: "Badges, ranking y presencia visual ayudan a diferenciar la operación del vendedor.",
   },
   {
-    title: "Panel dealer mobile",
-    text: "Una experiencia tipo app para revisar publicaciones, leads, tickets, plan y cupos.",
+    title: "Panel del vendedor",
+    text: "Una experiencia tipo app para revisar publicaciones, consultas, tickets, plan y cupos.",
   },
   {
     title: "Soporte interno",
@@ -63,8 +63,8 @@ const planCommercial = {
     promoPrice: "$56.000",
     features: [
       "10 publicaciones por período.",
-      "Panel dealer operativo.",
-      "Leads trazables.",
+      "Panel del vendedor.",
+      "Consultas registradas.",
       "Métricas esenciales.",
       "Soporte por ticket.",
     ],
@@ -81,7 +81,7 @@ const planCommercial = {
     promoPrice: "$168.000",
     features: [
       "30 publicaciones por período.",
-      "CRM de leads.",
+      "Gestión de consultas.",
       "Métricas esenciales.",
       "Mayor presencia visual.",
       "Cupo adicional con costo.",
@@ -99,7 +99,7 @@ const planCommercial = {
     promoPrice: "$200.000",
     features: [
       "50 publicaciones por período.",
-      "Radar oX Dealer.",
+      "Radar oX.",
       "Métricas avanzadas.",
       "Kit de redes.",
       "Card promocional.",
@@ -114,7 +114,7 @@ const planCommercial = {
   platinum: {
     badge: "Alto volumen",
     badgeVariant: "premium",
-    headline: "Para dealers grandes con operación intensiva.",
+    headline: "Para agencias grandes con operación intensiva.",
     cup: "Publicaciones ilimitadas",
     price: "$390.000",
     promoPrice: "$312.000",
@@ -136,17 +136,17 @@ const workflowSteps = [
   "Revisamos la agencia.",
   "Activamos tu plan.",
   "Cargás publicaciones.",
-  "Recibís consultas trazables.",
+  "Recibís consultas registradas.",
   "Gestionás desde tu panel.",
 ];
 
 const planOrder = ["inicio", "pro", "elite", "platinum"];
 
 const publicDealerPlanLabels = {
-  inicio: "Dealer verificado",
-  pro: "Dealer Pro",
-  elite: "Dealer Elite",
-  platinum: "Dealer Platinum",
+  inicio: "Vendedor verificado",
+  pro: "Vendedor Pro",
+  elite: "Vendedor Elite",
+  platinum: "Vendedor Platinum",
 };
 
 const publicDealerPlanClass = {
@@ -172,7 +172,7 @@ function formatDealerLocation(dealer) {
 
 function mapPublicDealerCard(dealer) {
   const plan = publicDealerPlanLabels[dealer.plan] ? dealer.plan : "inicio";
-  const name = dealer.commercialName || dealer.name || "Dealer verificado";
+  const name = dealer.commercialName || dealer.name || "Vendedor verificado";
 
   return {
     id: dealer.id,
@@ -356,7 +356,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
         <section className="join-network-hero">
           <div className="join-network-hero-road" aria-hidden="true" />
           <div className="join-network-hero-copy">
-            <p className="eyebrow ox-public-eyebrow">Red de dealers</p>
+            <p className="eyebrow ox-public-eyebrow">Red de vendedores</p>
 
             <h1 className="ox-public-title">
               Sumá tu agencia a una nueva forma de{" "}
@@ -365,7 +365,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
 
             <p className="ox-public-lead">
               oX NEXMOV reúne publicaciones, consultas, herramientas
-              comerciales y señales de confianza para que cada dealer trabaje
+              comerciales y señales de confianza para que cada vendedor trabaje
               con más claridad.
             </p>
 
@@ -402,7 +402,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
             <p className="eyebrow">Contexto comercial</p>
             <h2>Una red pensada para vender con más claridad.</h2>
             <p>
-              Presencia, señales comerciales y trazabilidad reunidas en una
+              Presencia, señales comerciales y consultas ordenadas reunidas en una
               experiencia que mejora la percepción de cada agencia.
             </p>
           </div>
@@ -422,11 +422,11 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
           <div className="join-network-section-head">
             <p className="eyebrow">Propuesta oX NEXMOV</p>
             <h2>
-              Una red donde el comprador decide con claridad y el dealer trabaja
+              Una red donde el comprador decide con claridad y el vendedor trabaja
               con mejores herramientas.
             </h2>
             <p>
-              Publicaciones claras, leads trazables y herramientas comerciales
+              Publicaciones claras, consultas registradas y herramientas comerciales
               para convertir mejor cada oportunidad.
             </p>
           </div>
@@ -450,11 +450,11 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
 
         <section className="join-network-section join-network-plan-section">
           <div className="join-network-section-head">
-            <p className="eyebrow">Planes dealer</p>
+            <p className="eyebrow">Planes de vendedor</p>
             <h2>Elegí cómo querés vender dentro de oX.</h2>
             <p>
-              Planes pensados para publicar, gestionar leads y acceder a
-              herramientas comerciales según el nivel de operación de tu dealer.
+              Planes pensados para publicar, gestionar consultas y acceder a
+              herramientas comerciales según el nivel de operación de tu agencia.
             </p>
             <p className="jnp-pilot-note">
               La activación se realiza con validación administrativa previa.
@@ -546,7 +546,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
             </div>
             <div className="jnp-extras-grid">
               <div className="jnp-extras-item">
-                <span>Publicación suelta</span>
+                <span>Cupo extra (x1)</span>
                 <strong>$10.000</strong>
               </div>
               <div className="jnp-extras-item">
@@ -586,7 +586,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
                 <form className="jnp-request-form" onSubmit={handleRequestSubmit}>
                   <div className="jnp-request-head">
                     <div>
-                      <strong>Solicitud de alta dealer</strong>
+                      <strong>Solicitud de alta</strong>
                       <p>
                         Completá los datos y te contactamos para avanzar con
                         la activación.
@@ -682,7 +682,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
                         {planOrder.map((id) => (
                           <option key={id} value={id}>
                             {planCommercial[id]
-                              ? `Dealer ${id.charAt(0).toUpperCase()}${id.slice(1)} — ${planCommercial[id].cup} — ${planCommercial[id].promoPrice}/mes (promo 20%)`
+                              ? `Vendedor ${id.charAt(0).toUpperCase()}${id.slice(1)} — ${planCommercial[id].cup} — ${planCommercial[id].promoPrice}/mes (promo 20%)`
                               : id}
                           </option>
                         ))}
@@ -767,7 +767,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
             Los valores promocionales pueden actualizarse al finalizar el
             período comercial acordado. Los planes definen cupos, visibilidad
             y herramientas de trabajo. La contratación no garantiza resultados
-            comerciales, leads ni ventas. La activación queda sujeta a
+            comerciales, consultas ni ventas. La activación queda sujeta a
             validación administrativa de oX.
           </p>
         </section>
@@ -787,7 +787,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
 
         <section className="join-network-section">
           <div className="join-network-section-head">
-            <p className="eyebrow">Alta dealer</p>
+            <p className="eyebrow">Solicitar alta</p>
             <h2>Un ingreso simple a una operación más ordenada.</h2>
           </div>
 
@@ -813,15 +813,15 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
             <p className="eyebrow">Próximo paso</p>
             <h2>Convertí tu stock en una experiencia de compra más clara.</h2>
             <p>
-              Solicitá el alta como dealer y prepará tu operación para trabajar
-              con publicaciones premium, leads trazables y una red diseñada para
+              Solicitá el alta como vendedor y prepará tu operación para trabajar
+              con publicaciones premium, consultas registradas y una red diseñada para
               vender con más confianza.
             </p>
           </div>
 
           <div className="join-network-final-actions">
             <button type="button" onClick={() => onNavigate?.("login")}>
-              Solicitar alta como dealer
+              Solicitar alta como vendedor
             </button>
 
             <button
