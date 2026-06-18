@@ -110,7 +110,7 @@ const PLAN_ORDER = ["inicio", "pro", "elite", "platinum"];
 const DEALER_MOBILE_SECTIONS = [
   { id: "home", label: "Resumen" },
   { id: "vehicles", label: "Publicaciones" },
-  { id: "leads", label: "Leads" },
+  { id: "leads", label: "Consultas" },
   { id: "tickets", label: "Soporte" },
   { id: "publish", label: "Publicar" },
   { id: "metrics", label: "Métricas" },
@@ -220,7 +220,7 @@ function getPlanStatusDescription(status, expiresInDays) {
   }
 
   if (status === "inactive") {
-    return "No hay un plan comercial activo para este dealer.";
+    return "No hay un plan comercial activo.";
   }
 
   return "Estado del plan normal. Si tenés dudas, consultá con administración.";
@@ -743,7 +743,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
 
     const newLeads = leads.filter((l) => l.crm_status === "new").length;
     if (newLeads > 0) {
-      items.push({ level: "urgent", key: "new_leads", label: `Responder ${newLeads} lead${newLeads !== 1 ? "s" : ""} nuevo${newLeads !== 1 ? "s" : ""}`, sub: "Sin respuesta aún.", action: () => navigateToLeads() });
+      items.push({ level: "urgent", key: "new_leads", label: `Responder ${newLeads} consulta${newLeads !== 1 ? "s" : ""} nueva${newLeads !== 1 ? "s" : ""}`, sub: "Sin respuesta aún.", action: () => navigateToLeads() });
     }
 
     const overdueLeads = leads.filter((l) => l.next_action_date && new Date(l.next_action_date + "T00:00:00") < today).length;
@@ -818,8 +818,8 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
     return (
       <section className="page-section">
         <div className="container panel dealer-panel">
-          <p className="eyebrow">Panel dealer único</p>
-          <h1>Panel dealer</h1>
+          <p className="eyebrow">Panel comercial</p>
+          <h1>Tu panel</h1>
 
           {authProfile && (
             <p className="admin-session-note">
@@ -829,7 +829,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
 
           {dealersError && <div className="auth-warning">{dealersError}</div>}
 
-          <div className="empty-state">No hay dealer operativo disponible.</div>
+          <div className="empty-state">No hay cuenta comercial disponible.</div>
         </div>
       </section>
     );
@@ -1512,9 +1512,9 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
             </article>
 
             <article className="dealer-mobile-kpi-card">
-              <span>Leads</span>
+              <span>Consultas</span>
               <strong>{newLeadsCount}</strong>
-              <p>Nuevos</p>
+              <p>Nuevas</p>
             </article>
 
             <article className="dealer-mobile-kpi-card">
@@ -1798,7 +1798,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
           <article className="dealer-mobile-plan-card">
             <span>Soporte</span>
             <strong>Admin</strong>
-            <p>Tickets para plan, cupo, leads o publicaciones.</p>
+            <p>Consultas sobre plan, cupo o publicaciones.</p>
             {isPlatinum && (
               <span className="dealer-platinum-priority-badge">
                 Prioridad Platinum
@@ -1826,7 +1826,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
         <div className="buyer-section-head">
           <div>
             <h2>Ajustes</h2>
-            <p>Imagen institucional, contacto y configuración del dealer.</p>
+            <p>Imagen institucional, contacto y configuración de tu cuenta.</p>
           </div>
         </div>
 
@@ -1859,7 +1859,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
           </article>
 
           <article className="dealer-mobile-plan-card">
-            <span>Dealer operativo</span>
+            <span>Cuenta activa</span>
             <select
               value={dealer.id}
               onChange={(event) => setSelectedDealerId(event.target.value)}
@@ -1947,7 +1947,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
           <article className="dealer-mobile-plan-card">
             <span>Soporte</span>
             <strong>Admin</strong>
-            <p>Tickets para plan, cupo, leads o publicaciones.</p>
+            <p>Consultas sobre plan, cupo o publicaciones.</p>
             {isPlatinum && (
               <span className="dealer-platinum-priority-badge">
                 Prioridad Platinum
@@ -1973,8 +1973,8 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
       <div className="container panel dealer-panel">
         <div className="panel-head-row dealer-header-control">
           <div className="dealer-header-intro">
-    <p className="eyebrow">{isPlatinum ? "Dealer Platinum" : "Panel dealer"}</p>
-    <h1>{dealer.commercialName || "Panel dealer"}</h1>
+    <p className="eyebrow">{isPlatinum ? "Nivel Platinum" : "Panel comercial"}</p>
+    <h1>{dealer.commercialName || "Tu panel"}</h1>
     <p>
       {isPlatinum
         ? "Máxima presencia para operaciones de alto volumen."
@@ -1986,7 +1986,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
       <span>{getPlanStatusLabel(dealer.planStatus)}</span>
       <span>{capacityLabel}</span>
       {dealer.isFounder && (
-        <span className="founder-badge">Concesionaria Fundadora</span>
+        <span className="founder-badge">Agencia Fundadora</span>
       )}
     </div>
 
@@ -2211,14 +2211,14 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
               <p>{dealerVehicles.length} cargadas · {reviewVehiclesCount} en revisión</p>
             </div>
             <div className="dealer-summary-stat">
-              <span>Leads nuevos</span>
+              <span>Consultas nuevas</span>
               <strong>{newLeadsCount}</strong>
               <p>{leads.length} consultas totales</p>
             </div>
             <div className="dealer-summary-stat">
               <span>Soporte</span>
               <strong>{openTicketsCount}</strong>
-              <p>{isPlatinum ? "Prioridad Platinum" : "Tickets abiertos"}</p>
+              <p>{isPlatinum ? "Prioridad Platinum" : "Casos abiertos"}</p>
             </div>
             <div className={`dealer-summary-stat${isPlatinum ? " is-platinum" : ""}`}>
               <span>{isPlatinum ? "Platinum · ilimitado" : "Cupo del período"}</span>
@@ -2393,16 +2393,16 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
             >
               <div className="dealer-mc-kpi">
                 <strong>{newLeadsCount}</strong>
-                <span>nuevos · {leads.length} total</span>
+                <span>nuevas · {leads.length} total</span>
                 {newLeadAlert && (
                   <span className="dealer-mc-realtime-badge">
-                    {newLeadVehicle ? `Lead en ${newLeadVehicle}` : "Nuevo ahora"}
+                    {newLeadVehicle ? `Consulta en ${newLeadVehicle}` : "Nueva ahora"}
                   </span>
                 )}
               </div>
-              <h3>Leads recibidos</h3>
+              <h3>Consultas recibidas</h3>
               <p>Consultas de compradores sobre tus publicaciones.</p>
-              <button type="button">Gestionar leads</button>
+              <button type="button">Gestionar consultas</button>
             </article>
 
             <article
@@ -2487,7 +2487,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
                 <span>abiertos</span>
               </div>
               <h3>Soporte</h3>
-              <p>{isPlatinum ? "Atención con prioridad Platinum incluida." : "Tickets y consultas a administración."}</p>
+              <p>{isPlatinum ? "Atención con prioridad Platinum incluida." : "Consultas y soporte a administración."}</p>
               {isPlatinum && <span className="dealer-platinum-priority-badge">Prioridad Platinum</span>}
               <button type="button">Abrir soporte</button>
             </article>
