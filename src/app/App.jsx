@@ -660,23 +660,12 @@ export default function App() {
     const next = theme === "dark" ? "light" : "dark";
     if (authUser?.id) saveUserTheme(next);
 
-    if (!document.startViewTransition) {
+    if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setTheme(next);
       return;
     }
 
-    // Coordenadas del botón visible (desktop o mobile) para el origen del círculo
-    const btn = [...document.querySelectorAll("[data-theme-btn]")]
-      .find((el) => el.offsetParent !== null) ?? document.querySelector("[data-theme-btn]");
-    const rect = btn?.getBoundingClientRect();
-    document.documentElement.style.setProperty(
-      "--vt-x", rect ? `${Math.round(rect.left + rect.width  / 2)}px` : "50vw"
-    );
-    document.documentElement.style.setProperty(
-      "--vt-y", rect ? `${Math.round(rect.top  + rect.height / 2)}px` : "50vh"
-    );
     document.documentElement.classList.add("ox-theme-transitioning");
-
     document.startViewTransition(() => {
       flushSync(() => setTheme(next));
     }).finished.finally(() => {

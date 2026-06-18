@@ -11979,6 +11979,60 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     0 14px 30px rgba(15, 23, 42, 0.08) !important;
 }
 
+/* ── Home carousel — cards más compactas, imagen completa ─────────────────── */
+.ox-home-vehicles-carousel-v3 .vehicle-card__media {
+  height: 192px !important;
+  min-height: 192px !important;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__image {
+  object-fit: contain !important;
+  object-position: center center !important;
+}
+
+/* Body: grid 2 col — nombre + contadores en la misma fila */
+.ox-home-vehicles-carousel-v3 .vehicle-card__body {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  align-items: start !important;
+  padding: 10px 10px 8px !important;
+  gap: 8px !important;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__identity {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  align-self: center !important;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__counters {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  align-self: center !important;
+  position: static !important;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__stats,
+.ox-home-vehicles-carousel-v3 .vehicle-card__price-box,
+.ox-home-vehicles-carousel-v3 .vehicle-card__actions {
+  grid-column: 1 / -1 !important;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__price-box {
+  min-height: 60px !important;
+}
+
+.ox-home-vehicles-carousel-v3 .vehicle-card__btn--primary {
+  min-height: 38px !important;
+}
+
+/* Ocultar botón de contacto en home carousel */
+.ox-home-vehicles-carousel-v3 .vehicle-card__btn--contact {
+  display: none !important;
+}
+
 @media (max-width: 760px) {
   .ox-search-vehicle-grid .vehicle-card,
   .ox-home-vehicles-carousel-v3 .vehicle-card {

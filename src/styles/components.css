@@ -9528,6 +9528,70 @@ body::-webkit-scrollbar {
   background: rgba(56, 189, 248, 0.06);
 }
 
+.compare-spec-row.compare-bar-row {
+  grid-template-columns: minmax(54px, auto) 1fr auto;
+  gap: var(--ox-space-2);
+  min-height: 38px;
+}
+
+.compare-spec-row.compare-bar-row.is-winner {
+  border-color: rgba(74, 222, 128, 0.24);
+  background: rgba(74, 222, 128, 0.07);
+}
+
+.compare-bar-track {
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(148, 163, 184, 0.13);
+  overflow: hidden;
+  align-self: center;
+}
+
+.compare-bar-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 3px;
+  background: rgba(56, 189, 248, 0.6);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .compare-bar-fill {
+    animation: compare-bar-grow 0.6s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+    animation-delay: 0.38s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compare-bar-fill {
+    width: var(--bar-w, 50%);
+  }
+}
+
+@keyframes compare-bar-grow {
+  to { width: var(--bar-w, 50%); }
+}
+
+.compare-bar-row.is-winner .compare-bar-fill {
+  background: rgba(74, 222, 128, 0.75);
+}
+
+:root[data-theme="light"] .compare-spec-row.compare-bar-row.is-winner {
+  border-color: rgba(22, 163, 74, 0.22);
+  background: rgba(22, 163, 74, 0.07);
+}
+
+:root[data-theme="light"] .compare-bar-track {
+  background: rgba(100, 116, 139, 0.15);
+}
+
+:root[data-theme="light"] .compare-bar-fill {
+  background: rgba(14, 165, 233, 0.55);
+}
+
+:root[data-theme="light"] .compare-bar-row.is-winner .compare-bar-fill {
+  background: rgba(22, 163, 74, 0.65);
+}
+
 .compare-spec-value {
   min-width: 0;
   color: var(--ox-text-soft);
@@ -29107,20 +29171,17 @@ button.buyer-shortlist-compare__slot:hover {
   }
 }
 
-/* ── Theme toggle — circular reveal desde el botón ──────────────────────── */
-/* Solo activa cuando toggleTheme añade la clase ox-theme-transitioning a <html> */
+/* ── Theme toggle — fundido suave entre temas ───────────────────────────── */
 @media (prefers-reduced-motion: no-preference) {
   :root.ox-theme-transitioning::view-transition-old(root) {
-    animation: none; /* el tema viejo queda fijo debajo */
+    animation: ox-theme-fade-out 0.22s ease-out forwards;
   }
   :root.ox-theme-transitioning::view-transition-new(root) {
-    clip-path: circle(0px at var(--vt-x, 50vw) var(--vt-y, 50vh));
-    animation: ox-theme-reveal 0.52s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: ox-theme-fade-in 0.32s ease-in forwards;
   }
 }
-@keyframes ox-theme-reveal {
-  to { clip-path: circle(150vmax at var(--vt-x, 50vw) var(--vt-y, 50vh)); }
-}
+@keyframes ox-theme-fade-out { to   { opacity: 0; } }
+@keyframes ox-theme-fade-in  { from { opacity: 0; } }
 
 /* ── Admin ops panel — light mode ─────────────────────────────────────── */
 :root[data-theme="light"] .admin-ops-hero,

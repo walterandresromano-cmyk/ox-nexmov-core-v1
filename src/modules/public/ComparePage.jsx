@@ -52,7 +52,59 @@ function MarketScoreRow({ market }) {
   );
 }
 
-function CompareCard({ vehicle, onOpenDetail, onRemove, isBestDeal }) {
+function computeBarData(vehicles) {
+  const getWidths = (values, lowerIsBetter) => {
+    const valid = values.filter((v) => v > 0);
+    if (valid.length === 0) return values.map(() => 0);
+    const best = lowerIsBetter ? Math.min(...valid) : Math.max(...valid);
+    return values.map((v) => {
+      if (!v) return 0;
+      return Math.round(Math.max(18, (lowerIsBetter ? best / v : v / best) * 100));
+    });
+  };
+  const getWinner = (values, lowerIsBetter) => {
+    const valid = values.filter((v) => v > 0);
+    if (valid.length < 2) return -1;
+    const best = lowerIsBetter ? Math.min(...valid) : Math.max(...valid);
+    const idx = values.indexOf(best);
+    return values.filter((v) => v === best).length === 1 ? idx : -1;
+  };
+
+  const prices = vehicles.map((v) => v.price || 0);
+  const kms = vehicles.map((v) => v.kilometers || v.km || v.raw?.km || 0);
+  const years = vehicles.map((v) => parseInt(v.year || v.raw?.year || 0, 10));
+
+  const priceW = getWidths(prices, true);
+  const kmW = getWidths(kms, true);
+  const yearW = getWidths(years, false);
+  const priceWin = getWinner(prices, true);
+  const kmWin = getWinner(kms, true);
+  const yearWin = getWinner(years, false);
+
+  return vehicles.map((_, i) => ({
+    priceBar: priceW[i],
+    kmBar: kmW[i],
+    yearBar: yearW[i],
+    isPriceBest: i === priceWin,
+    isKmBest: i === kmWin,
+    isYearBest: i === yearWin,
+  }));
+}
+
+function BarSpecRow({ label, value, barWidth, isWinner }) {
+  if (!value && value !== 0) return null;
+  return (
+    <div className={`compare-spec-row compare-bar-row is-highlight${isWinner ? " is-winner" : ""}`}>
+      <span className="compare-spec-label">{label}</span>
+      <div className="compare-bar-track">
+        <div className="compare-bar-fill" style={{ "--bar-w": `${barWidth ?? 50}%` }} />
+      </div>
+      <strong className="compare-spec-value">{value}</strong>
+    </div>
+  );
+}
+
+function CompareCard({ vehicle, onOpenDetail, onRemove, isBestDeal, bars }) {
   const images = getVehicleImages(vehicle);
   const imageUrl = images[0]?.url || "";
   const title = getVehicleTitle(vehicle);
@@ -119,8 +171,8 @@ function CompareCard({ vehicle, onOpenDetail, onRemove, isBestDeal }) {
 
         <div className="compare-spec-list">
           <MarketScoreRow market={market} />
-          <SpecRow label="Año" value={vehicle.year || vehicle.raw?.year} highlight />
-          <SpecRow label="Km" value={km != null ? formatKm(km) : null} highlight />
+          <BarSpecRow label="Año" value={vehicle.year || vehicle.raw?.year} barWidth={bars?.yearBar} isWinner={bars?.isYearBest} />
+          <BarSpecRow label="Km" value={km != null ? formatKm(km) : null} barWidth={bars?.kmBar} isWinner={bars?.isKmBest} />
           <SpecRow label="Ubicación" value={getLocationLabel(vehicle)} />
           <SpecRow label="Estado" value={getVehicleStatus(vehicle)} />
           <SpecRow label="Financiación" value={hasFinancing ? "Disponible" : "No informada"} highlight />
@@ -208,6 +260,7 @@ export default function ComparePage({ appActions, onNavigate }) {
   }
 
   const countClass = `compare-count-${Math.max(1, Math.min(vehicles.length, 4))}`;
+  const barData = vehicles.length >= 2 ? computeBarData(vehicles) : null;
 
   // Vehículo con mejor posición relativa al mercado (mayor % por debajo)
   const bestDealId = vehicles.length >= 2
@@ -297,6 +350,7 @@ export default function ComparePage({ appActions, onNavigate }) {
                   onOpenDetail={handleOpenDetail}
                   onRemove={handleRemove}
                   isBestDeal={bestDealId !== null && vehicle.id === bestDealId}
+                  bars={barData?.[index] ?? null}
                 />
               ))}
             </div>
