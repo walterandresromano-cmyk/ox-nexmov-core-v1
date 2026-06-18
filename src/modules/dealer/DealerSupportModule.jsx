@@ -30,10 +30,10 @@ export default function DealerSupportModule({
           <button className="table-action-btn" type="button" onClick={onBack}>
             ← Volver al resumen
           </button>
-          <h2>Soporte admin</h2>
+          <h2>Soporte</h2>
           <p>
-            Tickets internos estilo Remedy para resolver consultas con soporte o
-            administración sin salir de la plataforma.
+            Abrí consultas a administración para resolver dudas de plan, publicaciones
+            o cuenta sin salir de la plataforma.
           </p>
         </div>
         <button className="admin-refresh-btn" onClick={onRefresh}>
@@ -42,10 +42,10 @@ export default function DealerSupportModule({
       </div>
 
       <div className="dealer-module-card dealer-module-card-open">
-        <h3>Crear nuevo ticket</h3>
+        <h3>Abrir consulta de soporte</h3>
         <p>
-          Abrí una consulta interna para soporte técnico, facturación,
-          publicaciones, leads o cuenta.
+          Abrí una consulta para soporte técnico, facturación,
+          publicaciones o gestión de cuenta.
         </p>
         {isPlatinum && (
           <span className="dealer-platinum-priority-badge">
@@ -56,13 +56,13 @@ export default function DealerSupportModule({
           className="primary-action"
           onClick={() => setShowTicketModal(true)}
         >
-          Crear ticket
+          Abrir consulta
         </button>
       </div>
 
       {tickets.length === 0 ? (
         <div className="empty-state">
-          Todavía no hay tickets internos para mostrar.
+          Todavía no hay consultas de soporte para mostrar.
         </div>
       ) : (
         <div className="admin-table-wrap">
@@ -83,7 +83,7 @@ export default function DealerSupportModule({
                 <tr key={ticket.ticket_id}>
                   <td>
                     <strong>{formatDateTime(ticket.created_at)}</strong>
-                    <span>Ticket #{ticket.ticket_id}</span>
+                    <span>Caso #{ticket.ticket_id}</span>
                   </td>
 
                   <td>

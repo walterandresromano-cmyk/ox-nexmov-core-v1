@@ -59,7 +59,7 @@ const FUNNEL_STAGES = [
 ];
 
 const NEXT_PLAN = {
-  inicio:   { next: "Pro",      highlight: ["Hasta 15 publicaciones", "Métricas de leads", "Soporte prioritario"] },
+  inicio:   { next: "Pro",      highlight: ["Hasta 15 publicaciones", "Métricas de consultas", "Soporte prioritario"] },
   pro:      { next: "Elite",    highlight: ["Hasta 30 publicaciones", "Publicaciones destacadas", "Badge Elite en todas las cards"] },
   elite:    { next: "Platinum", highlight: ["Publicaciones ilimitadas", "Máxima visibilidad", "Badge Platinum con efecto premium"] },
   platinum: { next: null,       highlight: [] },
@@ -210,7 +210,7 @@ export default function DealerMetricsModule({
     if (planExpiringSoon) return { text: `Tu plan vence en ${expiresInDays} día${expiresInDays !== 1 ? "s" : ""}. Planificá la renovación.`, level: "urgent" };
     if (quotaFull) return { text: "Alcanzaste el cupo de publicaciones. Marcá vendidas las unidades cerradas para liberar cupo.", level: "attention" };
     if (quotaNearLimit) return { text: `Quedan ${remaining} publicación${remaining !== 1 ? "es" : ""} disponible${remaining !== 1 ? "s" : ""} en tu plan.`, level: "attention" };
-    if (newLeadsCount > 0) return { text: `Tenés ${newLeadsCount} lead${newLeadsCount !== 1 ? "s" : ""} nuevo${newLeadsCount !== 1 ? "s" : ""} sin responder. Respondé rápido para no perder la oportunidad.`, level: "attention" };
+    if (newLeadsCount > 0) return { text: `Tenés ${newLeadsCount} consulta${newLeadsCount !== 1 ? "s" : ""} nueva${newLeadsCount !== 1 ? "s" : ""} sin responder. Respondé rápido para no perder la oportunidad.`, level: "attention" };
     if (reviewVehiclesCount > 0) return { text: `${reviewVehiclesCount} publicación${reviewVehiclesCount !== 1 ? "es" : ""} en revisión. Corregí los datos para que vuelvan a ser visibles.`, level: "attention" };
     if (lowScoreCount > 0) return { text: `${lowScoreCount} publicación${lowScoreCount !== 1 ? "es" : ""} con score bajo. Mejorá fotos y descripción para aumentar consultas.`, level: "info" };
     if (!isPlatinum && remaining >= 3) return { text: "Tenés cupo disponible para sumar más unidades a tu inventario.", level: "info" };
@@ -311,7 +311,7 @@ export default function DealerMetricsModule({
           </div>
           <div className="dealer-plan-perf__kpi">
             <strong>{leads.length}</strong>
-            <span>Leads totales</span>
+            <span>Consultas totales</span>
           </div>
           <div className="dealer-plan-perf__kpi">
             <strong>{newLeadsCount}</strong>
@@ -368,7 +368,7 @@ export default function DealerMetricsModule({
         <div className="dealer-commercial-report__head">
           <div>
             <h3>Reporte comercial</h3>
-            <p>Lectura rápida del movimiento de tus publicaciones y leads.</p>
+            <p>Lectura rápida del movimiento de tus publicaciones y consultas.</p>
           </div>
           <button
             type="button"
@@ -398,7 +398,7 @@ export default function DealerMetricsModule({
           </p>
         ) : leads.length === 0 ? (
           <p className="dealer-commercial-report__empty">
-            Todavía no hay leads suficientes para analizar el rendimiento comercial.
+            Todavía no hay consultas suficientes para analizar el rendimiento comercial.
           </p>
         ) : (
           <>
@@ -454,7 +454,7 @@ export default function DealerMetricsModule({
                       </div>
                       <div className="dealer-commercial-report__vehicle-stat">
                         <strong>{commercialReport.topVehicles.mostLeads.leads}</strong>
-                        <span>{commercialReport.topVehicles.mostLeads.leads === 1 ? "lead" : "leads"}</span>
+                        <span>{commercialReport.topVehicles.mostLeads.leads === 1 ? "consulta" : "consultas"}</span>
                       </div>
                     </div>
                   )}
@@ -493,7 +493,7 @@ export default function DealerMetricsModule({
                       </div>
                       <div className="dealer-commercial-report__vehicle-stat">
                         <strong>{commercialReport.topVehicles.highViewsNoLeads.views}</strong>
-                        <span>vistas · 0 leads</span>
+                        <span>vistas · 0 consultas</span>
                       </div>
                     </div>
                   )}
@@ -545,9 +545,9 @@ export default function DealerMetricsModule({
                     }`}>
                       <span>Sin seguimiento</span>
                       <strong>{commercialReport.actionableLeads.withoutFollowUp}</strong>
-                      <p>leads activos sin fecha de acción</p>
+                      <p>consultas activas sin fecha de acción</p>
                       <button type="button" className="dealer-today-item__btn" onClick={() => onOpenLeads({ viewMode: "agenda", agendaGroup: "nodate" })}>
-                        Ver leads →
+                        Ver consultas →
                       </button>
                     </div>
                   )}
@@ -555,7 +555,7 @@ export default function DealerMetricsModule({
                     <div className="dealer-commercial-report__alert-card dealer-commercial-report__alert-card--warn">
                       <span>Vistas sin consulta</span>
                       <strong>{commercialReport.inventory.withViewsNoLeads}</strong>
-                      <p>publicaciones con vistas pero sin leads</p>
+                      <p>publicaciones con vistas pero sin consultas</p>
                       <button type="button" className="dealer-today-item__btn" onClick={() => onOpenInventory({ insight: "viewsNoLeads" })}>
                         Ver inventario →
                       </button>
@@ -577,7 +577,7 @@ export default function DealerMetricsModule({
                         ? " dealer-commercial-report__alert-card--good"
                         : ""
                     }`}>
-                      <span>Conversión vista/lead</span>
+                      <span>Conversión vista/consulta</span>
                       <strong>{commercialReport.conversion.viewToLeadRate}%</strong>
                       <p>de vistas se convierten en consulta</p>
                     </div>

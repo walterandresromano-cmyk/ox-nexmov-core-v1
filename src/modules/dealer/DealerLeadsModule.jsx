@@ -457,7 +457,7 @@ function AgendaView({ groups, onOpen, initialAgendaGroup = null }) {
     return (
       <div className="dealer-agenda-view">
         <div className="empty-state">
-          Sin leads con fecha de seguimiento asignada. Abrí un lead y agregá una próxima acción.
+          Sin consultas con fecha de seguimiento asignada. Abrí una consulta y agregá una próxima acción.
         </div>
       </div>
     );
@@ -611,8 +611,8 @@ export default function DealerLeadsModule({
           <button className="table-action-btn" type="button" onClick={onBack}>
             ← Volver al resumen
           </button>
-          <h2>Leads recibidos</h2>
-          <p>Consultas generadas desde publicaciones asociadas a este dealer.</p>
+          <h2>Consultas recibidas</h2>
+          <p>Consultas generadas desde tus publicaciones.</p>
         </div>
         <div className="dealer-module-head-actions">
           <div className="dealer-leads-view-toggle">
@@ -649,7 +649,7 @@ export default function DealerLeadsModule({
       </div>
 
       {leads.length === 0 ? (
-        <div className="empty-state">Todavía no hay leads reales para mostrar.</div>
+        <div className="empty-state">Todavía no hay consultas para mostrar.</div>
       ) : viewMode === "agenda" ? (
         <AgendaView
           groups={agendaGroups}
@@ -722,7 +722,7 @@ export default function DealerLeadsModule({
               onChange={(e) => setSearch(e.target.value)}
             />
             <span className="inventory-filter-count">
-              {filtered.length} lead{filtered.length !== 1 ? "s" : ""}
+              {filtered.length} consulta{filtered.length !== 1 ? "s" : ""}
             </span>
           </div>
 
@@ -731,7 +731,7 @@ export default function DealerLeadsModule({
             <input
               className="dealer-leads-ai-filter__input"
               type="text"
-              placeholder="✦ Filtrar con IA: «leads sin responder», «Toyota de esta semana»…"
+              placeholder="✦ Filtrar con IA: «consultas sin responder», «Toyota de esta semana»…"
               value={aiQuery}
               onChange={(e) => setAiQuery(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") handleAiFilter(); }}
@@ -761,7 +761,7 @@ export default function DealerLeadsModule({
 
           {filtered.length === 0 ? (
             <div className="empty-state">
-              Sin leads en este estado.
+              Sin consultas en este estado.
             </div>
           ) : (
             <>

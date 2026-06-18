@@ -30,7 +30,7 @@ export default function DealerSellVehicleModule({
           <h2>Oportunidades Vender mi vehículo</h2>
           <p>
             Solicitudes de compradores asignadas por administración para que el
-            dealer pueda evaluarlas y gestionarlas.
+            vendedor pueda evaluarlas y gestionarlas.
           </p>
         </div>
         <button className="admin-refresh-btn" onClick={onRefresh}>
