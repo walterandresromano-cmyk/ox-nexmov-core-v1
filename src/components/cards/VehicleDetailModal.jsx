@@ -700,15 +700,7 @@ export default function VehicleDetailModal({
           </div>
         )}
 
-        {/* Tab bar */}
-        <div className="vd-tabs" role="tablist">
-          <button type="button" role="tab" aria-selected={activeTab === "galeria"} className={`vd-tab${activeTab === "galeria" ? " is-active" : ""}`} onClick={() => setActiveTab("galeria")}>Fotos</button>
-          <button type="button" role="tab" aria-selected={activeTab === "detalles"} className={`vd-tab${activeTab === "detalles" ? " is-active" : ""}`} onClick={() => setActiveTab("detalles")}>Detalles</button>
-          <button type="button" role="tab" aria-selected={activeTab === "precio"} className={`vd-tab${activeTab === "precio" ? " is-active" : ""}`} onClick={() => setActiveTab("precio")}>Precio</button>
-          <button type="button" role="tab" aria-selected={activeTab === "contactar"} className={`vd-tab${activeTab === "contactar" ? " is-active" : ""}`} onClick={() => setActiveTab("contactar")}>Contactar</button>
-        </div>
-
-        {/* Identity bar */}
+        {/* Identity bar — anchored */}
         <div className="vd-modal-identity">
           <div className="vd-modal-identity-info">
             <h2 className="vd-modal-identity-title">
@@ -722,6 +714,14 @@ export default function VehicleDetailModal({
             <span className="vd-modal-identity-price">{formatARS(currentVehicle.price)}</span>
             {reserved && <span className="vd-modal-identity-reserved">Reservado</span>}
           </div>
+        </div>
+
+        {/* Tab bar */}
+        <div className="vd-tabs" role="tablist">
+          <button type="button" role="tab" aria-selected={activeTab === "galeria"} className={`vd-tab${activeTab === "galeria" ? " is-active" : ""}`} onClick={() => setActiveTab("galeria")}>Fotos</button>
+          <button type="button" role="tab" aria-selected={activeTab === "detalles"} className={`vd-tab${activeTab === "detalles" ? " is-active" : ""}`} onClick={() => setActiveTab("detalles")}>Detalles</button>
+          <button type="button" role="tab" aria-selected={activeTab === "precio"} className={`vd-tab${activeTab === "precio" ? " is-active" : ""}`} onClick={() => setActiveTab("precio")}>Precio</button>
+          <button type="button" role="tab" aria-selected={activeTab === "contactar"} className={`vd-tab${activeTab === "contactar" ? " is-active" : ""}`} onClick={() => setActiveTab("contactar")}>Contactar</button>
         </div>
 
         {/* Tab content */}
