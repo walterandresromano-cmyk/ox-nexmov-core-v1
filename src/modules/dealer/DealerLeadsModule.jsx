@@ -501,12 +501,14 @@ export default function DealerLeadsModule({
   const [aiQuery, setAiQuery] = useState("");
   const [aiFilters, setAiFilters] = useState(null);
   const [aiParsing, setAiParsing] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(30);
 
   const handleAiFilter = useCallback(async () => {
     if (!aiQuery.trim()) return;
     setAiParsing(true);
     const { filters } = await parseLeadsNaturalQuery(aiQuery);
     setAiFilters(filters);
+    setVisibleCount(30);
     setAiParsing(false);
   }, [aiQuery]);
 
@@ -714,7 +716,7 @@ export default function DealerLeadsModule({
                 key={stage.key}
                 type="button"
                 className={`leads-pipeline-stage${activeStage === stage.key ? " is-active" : ""}${STAGE_CHIP[stage.key] ? ` is-${STAGE_CHIP[stage.key]}` : ""}`}
-                onClick={() => setActiveStage(stage.key)}
+                onClick={() => { setActiveStage(stage.key); setVisibleCount(30); }}
               >
                 <span>{stage.label}</span>
                 <strong>{stageCounts[stage.key]}</strong>
@@ -774,16 +776,29 @@ export default function DealerLeadsModule({
               Sin leads en este estado.
             </div>
           ) : (
-            <div className="dealer-leads-card-grid">
-            {filtered.map((lead) => (
-              <LeadCrmCard
-                key={lead.lead_id}
-                lead={lead}
-                onOpen={handleOpenLead}
-                onUpdated={onRefresh}
-              />
-            ))}
-          </div>
+            <>
+              <div className="dealer-leads-card-grid">
+                {filtered.slice(0, visibleCount).map((lead) => (
+                  <LeadCrmCard
+                    key={lead.lead_id}
+                    lead={lead}
+                    onOpen={handleOpenLead}
+                    onUpdated={onRefresh}
+                  />
+                ))}
+              </div>
+              {visibleCount < filtered.length && (
+                <div className="leads-load-more">
+                  <button
+                    type="button"
+                    className="table-action-btn"
+                    onClick={() => setVisibleCount((n) => n + 30)}
+                  >
+                    Ver más ({filtered.length - visibleCount} restantes)
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </>
       )}

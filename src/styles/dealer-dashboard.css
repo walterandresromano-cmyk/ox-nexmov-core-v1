@@ -4692,3 +4692,10 @@
   border-color: rgba(37, 99, 235, 0.25);
   color: #2563eb;
 }
+
+/* ── Leads load more ───────────────────────────────────────── */
+.leads-load-more {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0 8px;
+}

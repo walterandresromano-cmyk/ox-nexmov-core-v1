@@ -11,28 +11,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Esperar deploy de Vercel (~90s)
-        run: sleep 90
-
-      - name: Llamar endpoint de notificación
+      - name: Llamar endpoint de notificación (con retry)
         env:
           APP_URL: ${{ secrets.APP_URL }}
           NOTIFY_SECRET: ${{ secrets.FOUNDERS_NOTIFY_SECRET }}
+          COMMIT_SHA: ${{ github.sha }}
         run: |
           if [ -z "$APP_URL" ]; then
             echo "⚠️  Secret APP_URL no configurado — saltando notificación."
             exit 0
           fi
 
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -X POST "${APP_URL}/api/notify-founders" \
-            -H "x-notify-secret: ${NOTIFY_SECRET}" \
-            -H "Content-Type: application/json" \
-            -d "{\"message\": \"Nuevas mejoras publicadas en la plataforma.\", \"version\": \"${{ github.sha }}\"}")
+          PAYLOAD="{\"message\": \"Nuevas mejoras publicadas en la plataforma.\", \"version\": \"${COMMIT_SHA}\"}"
 
-          echo "HTTP status: $RESPONSE"
-          if [ "$RESPONSE" != "200" ]; then
-            echo "⚠️  El endpoint respondió $RESPONSE. Verificar logs."
-            exit 1
-          fi
-          echo "✅ Dealers fundadores notificados."
+          for i in 1 2 3 4; do
+            WAIT=$((i * 30))
+            echo "Intento $i — esperando ${WAIT}s para que Vercel complete el deploy..."
+            sleep $WAIT
+
+            RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 \
+              -X POST "${APP_URL}/api/notify-founders" \
+              -H "x-notify-secret: ${NOTIFY_SECRET}" \
+              -H "Content-Type: application/json" \
+              -d "$PAYLOAD")
+
+            echo "HTTP status: $RESPONSE"
+            if [ "$RESPONSE" = "200" ]; then
+              echo "✅ Dealers fundadores notificados en el intento $i."
+              exit 0
+            fi
+            echo "El endpoint respondió $RESPONSE. Reintentando..."
+          done
+
+          echo "⚠️  No se pudo notificar después de 4 intentos. Verificar logs de Vercel."
+          exit 1

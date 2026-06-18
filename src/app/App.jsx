@@ -434,10 +434,14 @@ export default function App() {
       return;
     }
 
-    const [profile] = await Promise.all([
+    const [profile, favResult] = await Promise.all([
       loadProfileForUser(user),
-      listBuyerFavorites().then(({ favorites }) => setFavoriteItems(favorites)),
+      listBuyerFavorites(),
     ]);
+
+    if (normalizeRole(profile?.role) === "buyer") {
+      setFavoriteItems(favResult.favorites || []);
+    }
 
     if (options.redirectByRole) {
       setCurrentRoute(getHomeRouteForRole(profile?.role));
@@ -454,10 +458,13 @@ export default function App() {
       setAuthUser(user);
 
       if (user) {
-        const [profile] = await Promise.all([
+        const [profile, favResult] = await Promise.all([
           loadProfileForUser(user),
-          listBuyerFavorites().then(({ favorites }) => setFavoriteItems(favorites)),
+          listBuyerFavorites(),
         ]);
+        if (normalizeRole(profile?.role) === "buyer") {
+          setFavoriteItems(favResult.favorites || []);
+        }
         if (!["resetPassword", "vehicleDetail"].includes(getInitialRouteFromLocation())) {
           setCurrentRoute(getHomeRouteForRole(profile?.role));
         }
