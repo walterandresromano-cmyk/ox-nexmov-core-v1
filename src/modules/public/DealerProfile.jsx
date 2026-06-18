@@ -27,10 +27,10 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
     if (!dealer) return;
 
     const previousTitle = document.title;
-    const name = dealer.commercialName || dealer.name || "Dealer";
+    const name = dealer.commercialName || dealer.name || "Vendedor";
     const title = `${name} — oX NEXMOV`;
     const city = [dealer.city, dealer.province].filter(Boolean).join(", ");
-    const description = `Visitá el perfil de ${name} en oX NEXMOV.${city ? ` Ubicado en ${city}.` : ""} Dealer verificado con vehículos reales.`;
+    const description = `Visitá el perfil de ${name} en oX NEXMOV.${city ? ` Ubicado en ${city}.` : ""} Vendedor verificado con vehículos reales.`;
     const shareUrl = window.location.href;
 
     document.title = title;
@@ -60,7 +60,7 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
 
   useEffect(() => {
     if (!dealerId) {
-      setError("No se especificó el dealer.");
+      setError("No se especificó el vendedor.");
       setLoading(false);
       return;
     }
@@ -78,7 +78,7 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
       ]);
 
       if (dealerError || !dealerData) {
-        setError("No se pudo cargar el perfil del dealer.");
+        setError("No se pudo cargar el perfil del vendedor.");
         setLoading(false);
         return;
       }
@@ -108,7 +108,7 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
     return (
       <section className="page-section">
         <div className="container">
-          <div className="auth-message">Cargando perfil del dealer...</div>
+          <div className="auth-message">Cargando perfil...</div>
         </div>
       </section>
     );
@@ -118,7 +118,7 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
     return (
       <section className="page-section">
         <div className="container dealer-profile-page">
-          <div className="auth-warning">{error || "Dealer no encontrado."}</div>
+          <div className="auth-warning">{error || "Vendedor no encontrado."}</div>
           <button
             type="button"
             className="table-action-btn"
@@ -169,7 +169,7 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
             <div className="dealer-profile-info">
               <div className="dealer-profile-chips">
                 <span className={`admin-chip rank-${dealer.plan}`}>
-                  Dealer {PLAN_LABELS[dealer.plan] || dealer.plan}
+                  Vendedor {PLAN_LABELS[dealer.plan] || dealer.plan}
                 </span>
                 {dealer.isFounder && (
                   <span className="founder-badge">Concesionaria Fundadora</span>
@@ -217,7 +217,7 @@ export default function DealerProfile({ onNavigate, appActions, routeParams }) {
 
         {vehicles.length === 0 ? (
           <div className="empty-state">
-            Este dealer no tiene publicaciones activas en este momento.
+            Este vendedor no tiene publicaciones activas en este momento.
           </div>
         ) : (
           <>
