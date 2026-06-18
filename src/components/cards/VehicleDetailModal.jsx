@@ -713,7 +713,15 @@ export default function VehicleDetailModal({
           </div>
         )}
 
-        {/* Identity bar — always visible above tabs */}
+        {/* Tab bar */}
+        <div className="vd-tabs" role="tablist">
+          <button type="button" role="tab" aria-selected={activeTab === "galeria"} className={`vd-tab${activeTab === "galeria" ? " is-active" : ""}`} onClick={() => setActiveTab("galeria")}>Fotos</button>
+          <button type="button" role="tab" aria-selected={activeTab === "detalles"} className={`vd-tab${activeTab === "detalles" ? " is-active" : ""}`} onClick={() => setActiveTab("detalles")}>Detalles</button>
+          <button type="button" role="tab" aria-selected={activeTab === "precio"} className={`vd-tab${activeTab === "precio" ? " is-active" : ""}`} onClick={() => setActiveTab("precio")}>Precio</button>
+          <button type="button" role="tab" aria-selected={activeTab === "contactar"} className={`vd-tab${activeTab === "contactar" ? " is-active" : ""}`} onClick={() => setActiveTab("contactar")}>Contactar</button>
+        </div>
+
+        {/* Identity bar */}
         <div className="vd-modal-identity">
           <div className="vd-modal-identity-info">
             <h2 className="vd-modal-identity-title">
@@ -726,104 +734,6 @@ export default function VehicleDetailModal({
           <div className="vd-modal-identity-right">
             <span className="vd-modal-identity-price">{formatARS(currentVehicle.price)}</span>
             {reserved && <span className="vd-modal-identity-reserved">Reservado</span>}
-          </div>
-        </div>
-
-        {/* Tab bar */}
-        <div className="vd-tabs" role="tablist">
-          <button type="button" role="tab" aria-selected={activeTab === "galeria"} className={`vd-tab${activeTab === "galeria" ? " is-active" : ""}`} onClick={() => setActiveTab("galeria")}>Fotos</button>
-          <button type="button" role="tab" aria-selected={activeTab === "detalles"} className={`vd-tab${activeTab === "detalles" ? " is-active" : ""}`} onClick={() => setActiveTab("detalles")}>Detalles</button>
-          <button type="button" role="tab" aria-selected={activeTab === "precio"} className={`vd-tab${activeTab === "precio" ? " is-active" : ""}`} onClick={() => setActiveTab("precio")}>Precio</button>
-          <button type="button" role="tab" aria-selected={activeTab === "contactar"} className={`vd-tab${activeTab === "contactar" ? " is-active" : ""}`} onClick={() => setActiveTab("contactar")}>Contactar</button>
-        </div>
-
-        {/* Persistent actions — always visible regardless of active tab */}
-        <div className="vd-actions-bar">
-          <div className="detail-actions">
-            <button
-              type="button"
-              className={`primary-action${!reserved ? " detail-cta-pulse" : ""}`}
-              onClick={() => {
-                if (reserved) return;
-                if (appActions) setShowContactGate(true);
-                else onContact?.();
-              }}
-              disabled={reserved}
-              title={reserved ? "Esta unidad está reservada por el dealer." : "Contactar dealer"}
-            >
-              {reserved ? "Unidad reservada" : "Contactar dealer"}
-            </button>
-
-            {currentVehicle.contraoferta_habilitada && !reserved && (
-              <button
-                type="button"
-                className="detail-action-contraoferta"
-                onClick={() => {
-                  if (!appActions?.authUser) { handleClose(); onNavigate?.("login"); return; }
-                  const opening = !showContraofertaForm;
-                  setShowContraofertaForm(opening);
-                  setContraofertaStatus("idle");
-                  setContraofertaError("");
-                  if (opening) setActiveTab("contactar");
-                }}
-              >
-                {showContraofertaForm ? "Cerrar oferta" : "Contraofertar precio"}
-              </button>
-            )}
-
-            <div className="detail-actions-secondary">
-              <button
-                type="button"
-                className="detail-action-icon-btn"
-                onClick={() => { if (appActions) appActions.addToCompare?.(currentVehicle); else onCompare?.(); }}
-                aria-label="Agregar a comparar"
-              >
-                <CompareIcon size={16} />
-                <span>Comparar</span>
-              </button>
-
-              <button
-                type="button"
-                className={`detail-action-icon-btn${currentFavoriteActive ? " is-favorite" : ""}`}
-                onClick={() => { if (appActions) appActions.toggleFavorite?.(currentVehicle); else onFavorite?.(); }}
-                aria-label={currentFavoriteActive ? "Quitar de favoritos" : "Guardar en favoritos"}
-              >
-                <HeartIcon size={16} filled={currentFavoriteActive} />
-                <span>{currentFavoriteActive ? "Guardado" : "Favorito"}</span>
-              </button>
-
-              <button
-                type="button"
-                className="detail-action-icon-btn detail-action-icon-btn--whatsapp"
-                onClick={handleShareWhatsApp}
-                aria-label="Compartir por WhatsApp"
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M8 1.5a6.5 6.5 0 00-5.42 10.1L1.5 14.5l3.02-.97A6.5 6.5 0 108 1.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M6.1 7.1c.08.62.37 1.6 1.4 2.3 1.04.72 1.86.77 2.3.62.3-.09.28-.47.05-.68l-.38-.34a.46.46 0 00-.56-.04l-.24.16a2.02 2.02 0 01-1.36-1.36l.16-.24a.46.46 0 00-.04-.56l-.34-.38c-.2-.23-.67-.25-.67-.25L6.1 7.1z" fill="currentColor"/>
-                </svg>
-                <span>WhatsApp</span>
-              </button>
-
-              <button
-                type="button"
-                className={`detail-action-icon-btn${shareState === "copied" ? " is-copied" : ""}`}
-                onClick={handleCopyShareLink}
-                aria-label="Copiar enlace"
-              >
-                {shareState === "copied" ? (
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M2.5 8.5l3.5 3.5 7.5-8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                ) : (
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M7 10a3 3 0 004.24.06l2-2A3 3 0 009 4.34L8 5.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                    <path d="M9 6a3 3 0 00-4.24-.06l-2 2A3 3 0 007 11.66L8 10.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                  </svg>
-                )}
-                <span>{shareState === "copied" ? "¡Copiado!" : "Copiar"}</span>
-              </button>
-            </div>
           </div>
         </div>
 
@@ -1374,6 +1284,96 @@ export default function VehicleDetailModal({
           )}
 
         </div>{/* /vd-tab-content */}
+
+        {/* Persistent actions — anchored at bottom */}
+        <div className="vd-actions-bar">
+          <div className="detail-actions">
+            <button
+              type="button"
+              className={`primary-action${!reserved ? " detail-cta-pulse" : ""}`}
+              onClick={() => {
+                if (reserved) return;
+                if (appActions) setShowContactGate(true);
+                else onContact?.();
+              }}
+              disabled={reserved}
+              title={reserved ? "Esta unidad está reservada por el dealer." : "Contactar dealer"}
+            >
+              {reserved ? "Unidad reservada" : "Contactar dealer"}
+            </button>
+
+            {currentVehicle.contraoferta_habilitada && !reserved && (
+              <button
+                type="button"
+                className="detail-action-contraoferta"
+                onClick={() => {
+                  if (!appActions?.authUser) { handleClose(); onNavigate?.("login"); return; }
+                  const opening = !showContraofertaForm;
+                  setShowContraofertaForm(opening);
+                  setContraofertaStatus("idle");
+                  setContraofertaError("");
+                  if (opening) setActiveTab("contactar");
+                }}
+              >
+                {showContraofertaForm ? "Cerrar oferta" : "Contraofertar precio"}
+              </button>
+            )}
+
+            <div className="detail-actions-secondary">
+              <button
+                type="button"
+                className="detail-action-icon-btn"
+                onClick={() => { if (appActions) appActions.addToCompare?.(currentVehicle); else onCompare?.(); }}
+                aria-label="Agregar a comparar"
+              >
+                <CompareIcon size={16} />
+                <span>Comparar</span>
+              </button>
+
+              <button
+                type="button"
+                className={`detail-action-icon-btn${currentFavoriteActive ? " is-favorite" : ""}`}
+                onClick={() => { if (appActions) appActions.toggleFavorite?.(currentVehicle); else onFavorite?.(); }}
+                aria-label={currentFavoriteActive ? "Quitar de favoritos" : "Guardar en favoritos"}
+              >
+                <HeartIcon size={16} filled={currentFavoriteActive} />
+                <span>{currentFavoriteActive ? "Guardado" : "Favorito"}</span>
+              </button>
+
+              <button
+                type="button"
+                className="detail-action-icon-btn detail-action-icon-btn--whatsapp"
+                onClick={handleShareWhatsApp}
+                aria-label="Compartir por WhatsApp"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 1.5a6.5 6.5 0 00-5.42 10.1L1.5 14.5l3.02-.97A6.5 6.5 0 108 1.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M6.1 7.1c.08.62.37 1.6 1.4 2.3 1.04.72 1.86.77 2.3.62.3-.09.28-.47.05-.68l-.38-.34a.46.46 0 00-.56-.04l-.24.16a2.02 2.02 0 01-1.36-1.36l.16-.24a.46.46 0 00-.04-.56l-.34-.38c-.2-.23-.67-.25-.67-.25L6.1 7.1z" fill="currentColor"/>
+                </svg>
+                <span>WhatsApp</span>
+              </button>
+
+              <button
+                type="button"
+                className={`detail-action-icon-btn${shareState === "copied" ? " is-copied" : ""}`}
+                onClick={handleCopyShareLink}
+                aria-label="Copiar enlace"
+              >
+                {shareState === "copied" ? (
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M2.5 8.5l3.5 3.5 7.5-8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M7 10a3 3 0 004.24.06l2-2A3 3 0 009 4.34L8 5.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                    <path d="M9 6a3 3 0 00-4.24-.06l-2 2A3 3 0 007 11.66L8 10.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                  </svg>
+                )}
+                <span>{shareState === "copied" ? "¡Copiado!" : "Copiar"}</span>
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div className="vehicle-detail-footer">
           <p className="vehicle-detail-legal-note">

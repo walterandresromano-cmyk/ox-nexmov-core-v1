@@ -3132,10 +3132,10 @@
   border-color: rgba(56, 189, 248, 0.18);
 }
 
-/* Persistent actions bar — always visible */
+/* Persistent actions bar — anchored at bottom */
 .vd-actions-bar {
   flex-shrink: 0;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+  border-top: 1px solid rgba(148, 163, 184, 0.10);
   padding: 10px 0;
 }
 
@@ -3161,7 +3161,7 @@
 }
 
 :root[data-theme="light"] .vd-actions-bar {
-  border-bottom-color: rgba(15, 23, 42, 0.07);
+  border-top-color: rgba(15, 23, 42, 0.07);
 }
 
 /* Tab content: flex-1 scrollable area */
