@@ -113,8 +113,8 @@ const ROUTE_TITLES = {
   home: "oX NEXMOV — Marketplace de vehículos verificados",
   search: "Buscar vehículos — oX NEXMOV",
   zeroKm: "Financiación 0km — oX NEXMOV",
-  sellVehicle: "Garage oX — oX NEXMOV",
-  joinNetwork: "Sumate a la red de dealers — oX NEXMOV",
+  sellVehicle: "Vender mi vehículo — oX NEXMOV",
+  joinNetwork: "Sumate a la red de vendedores — oX NEXMOV",
   about: "Quiénes somos — oX NEXMOV",
   faq: "Preguntas frecuentes — oX NEXMOV",
   terms: "Términos y condiciones — oX NEXMOV",
@@ -126,24 +126,24 @@ const ROUTE_TITLES = {
   login: "Ingresar — oX NEXMOV",
   resetPassword: "Crear nueva contraseña — oX NEXMOV",
   buyer: "Mi panel — oX NEXMOV",
-  dealer: "Panel dealer — oX NEXMOV",
+  dealer: "Panel vendedor — oX NEXMOV",
   admin: "Panel admin — oX NEXMOV",
   internal0km: "Panel 0km — oX NEXMOV",
   support: "Panel soporte — oX NEXMOV",
-  dealerProfile: "Dealer — oX NEXMOV",
-  vehicleDetail: "Detalle de vehiculo - oX NEXMOV",
+  dealerProfile: "Vendedor — oX NEXMOV",
+  vehicleDetail: "Detalle de vehículo — oX NEXMOV",
   compare: "Comparar vehículos — oX NEXMOV",
 };
 
 const ROUTE_DESCRIPTIONS = {
-  home: "Encontrá tu próximo vehículo en oX NEXMOV. Publicaciones de dealers verificados con datos reales, comparador y consultas trazables.",
-  search: "Buscá vehículos por marca, modelo, precio, kilómetros, financiación y ubicación. Dealers verificados en Argentina.",
-  zeroKm: "Financiación 0km con entrega inmediata. Explorá opciones de cuotas y condiciones antes de contactar al dealer.",
-  sellVehicle: "Garage oX organiza tus vehículos, servicios, vencimientos y el camino para una futura reventa dentro de oX NEXMOV.",
-  joinNetwork: "Sumá tu agencia a oX NEXMOV. Publicaciones premium, leads trazables y herramientas comerciales para dealers verificados.",
+  home: "Encontrá tu próximo vehículo en oX NEXMOV. Vendedores verificados, comparador integrado y consultas registradas.",
+  search: "Buscá vehículos por marca, modelo, precio, kilómetros, financiación y ubicación. Vendedores verificados en Argentina.",
+  zeroKm: "Financiación 0km con entrega inmediata. Explorá opciones de cuotas y condiciones antes de contactar al vendedor.",
+  sellVehicle: "Vendé mejor con un historial claro. Garage oX organiza servicios, vencimientos y documentación para que tu vehículo hable por sí solo.",
+  joinNetwork: "Sumá tu agencia a oX NEXMOV. Publicaciones premium, consultas registradas y herramientas comerciales para vendedores verificados.",
   about: "Conocé quiénes somos y por qué construimos oX NEXMOV como un marketplace de vehículos verificados en Argentina.",
-  faq: "Preguntas frecuentes sobre oX NEXMOV: cómo funciona, cómo publicar, cómo contactar dealers y cómo comparar vehículos.",
-  compare: "Compará hasta 4 vehículos lado a lado: precio, kilómetros, financiación y specs técnicas. Dealers verificados en oX NEXMOV.",
+  faq: "Preguntas frecuentes sobre oX NEXMOV: cómo funciona, cómo publicar, cómo contactar vendedores y cómo comparar vehículos.",
+  compare: "Compará hasta 4 vehículos lado a lado: precio, kilómetros, financiación y specs técnicas. Vendedores verificados en oX NEXMOV.",
 };
 
 const THEME_STORAGE_KEY = "ox-nexmov-theme";
@@ -739,7 +739,7 @@ export default function App() {
 
   useEffect(() => {
     const title = ROUTE_TITLES[safeCurrentRoute] || "oX NEXMOV";
-    const description = ROUTE_DESCRIPTIONS[safeCurrentRoute] || "Encontrá tu próximo vehículo en oX NEXMOV. Publicaciones de dealers verificados con datos reales.";
+    const description = ROUTE_DESCRIPTIONS[safeCurrentRoute] || "Encontrá tu próximo vehículo en oX NEXMOV. Vendedores verificados con datos reales.";
     const url = window.location.href;
 
     document.title = title;

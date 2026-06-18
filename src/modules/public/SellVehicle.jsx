@@ -5,29 +5,29 @@ const GARAGE_FEATURES = [
     id: "passport",
     label: "Pasaporte digital",
     title: "Pasaporte digital.",
-    text: "Cada unidad puede conservar identidad, recorrido y contexto propio.",
+    text: "Armá el expediente de tu vehículo: servicios realizados, vencimientos, observaciones y estado general en un solo lugar. Cuando quieras vender, la información ya está lista.",
     icon: "◈",
     featured: true,
   },
   {
     id: "fleet",
-    label: "Flota familiar",
-    title: "Flota familiar.",
-    text: "Tus vehículos propios reunidos en una colección privada.",
+    label: "Tus vehículos",
+    title: "Todos tus vehículos.",
+    text: "Si tenés más de uno, reuní toda tu flota en un mismo panel. Útil para seguimiento y para cuando decidas vender alguno.",
     icon: "⊕",
   },
   {
     id: "services",
-    label: "Servicios",
-    title: "Servicios y vencimientos.",
-    text: "Controles, VTV, seguro y notas importantes siempre a mano.",
+    label: "Historial de servicios",
+    title: "Historial de servicios.",
+    text: "Registrá cambios de aceite, VTV, revisiones y vencimientos. Un historial claro puede respaldar el precio que pedís.",
     icon: "≡",
   },
   {
     id: "resale",
-    label: "Reventa futura",
-    title: "Valor futuro.",
-    text: "Un historial cuidado puede sumar confianza en una futura reventa.",
+    label: "Preparar para la venta",
+    title: "Preparar para la venta.",
+    text: "Cuando llegue el momento, podés cargar tu intención de venta y la plataforma puede derivarla a vendedores habilitados dentro de la red.",
     icon: "↑",
     wide: true,
   },
@@ -43,11 +43,13 @@ export default function SellVehicle({ authUser, onNavigate }) {
         <div className="garage-public-hero">
           <div className="garage-public-hero-bg" aria-hidden="true" />
           <div className="garage-public-hero-text">
-            <p className="eyebrow">Garage oX</p>
-            <h1>Garage oX</h1>
+            <p className="eyebrow">Vender mi vehículo</p>
+            <h1>Vendé mejor cuando el historial habla por vos.</h1>
             <p>
-              Tu historial automotriz privado: vehículos, servicios,
-              vencimientos y valor futuro en un solo lugar.
+              En Argentina, el precio de un vehículo usado depende de cuánto
+              podés demostrar. Garage oX te ayuda a ordenar servicios, estado
+              y documentación para que el comprador tenga toda la información
+              antes de consultar.
             </p>
             <div className="garage-public-actions">
               <button
@@ -55,7 +57,7 @@ export default function SellVehicle({ authUser, onNavigate }) {
                 type="button"
                 onClick={() => onNavigate?.(isLoggedIn ? "buyer" : "login")}
               >
-                {isLoggedIn ? "Ingresar a mi Garage" : "Ingresar a Garage oX"}
+                {isLoggedIn ? "Ingresar a mi Garage" : "Crear mi Garage"}
               </button>
               <button
                 className="admin-refresh-btn"
@@ -131,8 +133,8 @@ export default function SellVehicle({ authUser, onNavigate }) {
         <div className="garage-public-note">
           <strong>Garage oX no reemplaza documentación oficial.</strong>
           <span>
-            Los datos cargados por el usuario son informativos y deben
-            verificarse antes de cualquier operación.
+            Los datos cargados son informativos y deben verificarse antes
+            de cualquier operación.
           </span>
         </div>
       </div>
