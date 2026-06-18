@@ -21588,24 +21588,24 @@ body::-webkit-scrollbar {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 0 12px;
+  padding: 8px 0 16px;
   border: none;
   background: transparent;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
 }
 
 .garage-ox-activity-toolbar span {
-  color: rgba(148, 163, 184, 0.55);
-  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.50);
+  font-size: 0.70rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .garage-ox-activity-section {
-  padding: 18px 0 4px;
-  border: none;
-  background: transparent;
-  border-top: 1px solid rgba(148, 163, 184, 0.08);
+  padding: 16px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.10);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .garage-ox-activity-section__head {
