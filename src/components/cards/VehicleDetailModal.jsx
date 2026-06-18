@@ -178,6 +178,8 @@ export default function VehicleDetailModal({
   const [financingRateIdx, setFinancingRateIdx]       = useState(DEFAULT_RATE_INDEX);
   const [termDropdownOpen, setTermDropdownOpen] = useState(false);
   const termDropdownRef = useRef(null);
+  const [actionsVisible, setActionsVisible] = useState(false);
+  const actionsRef = useRef(null);
 
   const currentDealer = useMemo(() => {
     if (vehicles && getDealer) return getDealer(currentVehicle) || dealer;
@@ -611,6 +613,17 @@ export default function VehicleDetailModal({
     function onScroll() { setStickyHeader(el.scrollTop > 120); }
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = actionsRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setActionsVisible(entry.isIntersecting),
+      { threshold: 0.4 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   function handleClose() {
@@ -1168,7 +1181,7 @@ export default function VehicleDetailModal({
               </p>
             </div>
 
-            <div className="detail-actions">
+            <div className="detail-actions" ref={actionsRef}>
               <button
                 type="button"
                 className={`primary-action${!reserved ? " detail-cta-pulse" : ""}`}
@@ -1306,6 +1319,25 @@ export default function VehicleDetailModal({
               height="23"
             />
           </div>
+        </div>
+
+        <div
+          className={`vd-mobile-cta-bar${actionsVisible ? " is-hidden" : ""}`}
+          aria-hidden={actionsVisible}
+        >
+          <span className="vd-mobile-cta-bar__price">{formatARS(currentVehicle.price)}</span>
+          <button
+            type="button"
+            className="vd-mobile-cta-bar__btn"
+            onClick={() => {
+              if (reserved) return;
+              if (appActions) setShowContactGate(true);
+              else onContact?.();
+            }}
+            disabled={reserved}
+          >
+            {reserved ? "Reservado" : "Contactar dealer"}
+          </button>
         </div>
       </section>
     </div>
