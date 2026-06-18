@@ -21523,7 +21523,17 @@ body::-webkit-scrollbar {
 }
 
 .garage-ox-movement.buyer-activity-disclosure {
-  padding: 20px 22px 8px;
+  padding: 20px 0 8px;
+}
+
+.garage-ox-movement.buyer-activity-disclosure > .garage-ox-movement__head,
+.garage-ox-movement.buyer-activity-disclosure > .garage-ox-movement__summary {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.garage-ox-movement .buyer-activity-disclosure-body {
+  padding: 0 18px;
 }
 
 .buyer-activity-disclosure-head {
