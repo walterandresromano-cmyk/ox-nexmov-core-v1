@@ -129,12 +129,6 @@ export default function ContactGate({
 
         {!authUser ? (
           <div className="lead-created-box">
-            <h3>Contacto seguro con trazabilidad</h3>
-            <p>
-              Para proteger a compradores y dealers, oX NEXMOV registra cada
-              consulta comercial. Ingresá para continuar.
-            </p>
-
             <div className="contact-summary">
               <strong>
                 {vehicle.brand} {vehicle.model}

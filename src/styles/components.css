@@ -950,6 +950,7 @@
 .lead-created-box {
   display: grid;
   gap: 14px;
+  padding: 18px;
 }
 
 .lead-created-box p {
