@@ -3229,7 +3229,7 @@
   grid-column: unset !important;
   flex-shrink: 0;
   border-top: 1px solid rgba(148, 163, 184, 0.08);
-  padding-top: 8px;
+  padding-top: 14px;
   padding-bottom: 8px;
   margin-top: 0;
 }
