@@ -3148,19 +3148,19 @@
 
 .vd-actions-bar .primary-action {
   grid-column: unset !important;
-  flex: 0 0 auto !important;
-  white-space: nowrap !important;
+  flex: 1 !important;
+  min-width: 0 !important;
 }
 
 .vd-actions-bar .detail-action-contraoferta {
   grid-column: unset !important;
-  flex: 0 0 auto !important;
-  white-space: nowrap !important;
+  flex: 1 !important;
+  min-width: 0 !important;
 }
 
 .vd-actions-bar .detail-actions-secondary {
   grid-column: unset !important;
-  flex: 1 !important;
+  flex: 4 !important;
   display: flex !important;
   flex-direction: row !important;
   gap: 6px !important;
