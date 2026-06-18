@@ -1,33 +1,23 @@
 import { useState, useMemo, useCallback } from "react";
 import { parseLeadsNaturalQuery, generateLeadReply } from "../../services/oxAssistant.service.js";
+import { exportToCSV } from "../../lib/exportCsv.js";
 
 import LeadStatusSelect from "../../components/LeadStatusSelect.jsx";
 import VehicleLeadDetailModal from "../../components/VehicleLeadDetailModal.jsx";
 import { updateVehicleLeadStatus } from "../../services/leads.service.js";
 import { formatRelativeTime, normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 
-function exportLeadsCSV(leads) {
-  const headers = ["ID", "Fecha", "Comprador", "Email", "Teléfono", "Vehículo", "Mensaje", "Estado", "Nota interna"];
-  const rows = leads.map((l) => [
-    l.lead_id,
-    l.created_at ? new Date(l.created_at).toLocaleDateString("es-AR") : "",
-    `${l.buyer_first_name || ""} ${l.buyer_last_name || ""}`.trim(),
-    l.buyer_email || "",
-    l.buyer_phone || "",
-    `${l.vehicle_brand || ""} ${l.vehicle_model || ""} ${l.vehicle_version || ""}`.trim(),
-    l.message || "",
-    l.crm_status || "",
-    l.next_action_note || "",
-  ].map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","));
-  const csv = [headers.join(","), ...rows].join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `leads-${new Date().toISOString().slice(0, 10)}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+const LEADS_CSV_COLUMNS = [
+  { header: "ID",           value: (l) => l.lead_id },
+  { header: "Fecha",        value: (l) => l.created_at ? new Date(l.created_at).toLocaleDateString("es-AR") : "" },
+  { header: "Comprador",    value: (l) => `${l.buyer_first_name || ""} ${l.buyer_last_name || ""}`.trim() },
+  { header: "Email",        value: (l) => l.buyer_email || "" },
+  { header: "Teléfono",     value: (l) => l.buyer_phone || "" },
+  { header: "Vehículo",     value: (l) => `${l.vehicle_brand || ""} ${l.vehicle_model || ""} ${l.vehicle_version || ""}`.trim() },
+  { header: "Mensaje",      value: (l) => l.message || "" },
+  { header: "Estado",       value: (l) => l.crm_status || "" },
+  { header: "Nota interna", value: (l) => l.next_action_note || "" },
+];
 
 function formatDateTime(dateValue) {
   if (!dateValue) return "Sin fecha";
@@ -657,7 +647,7 @@ export default function DealerLeadsModule({
           <button
             type="button"
             className="table-action-btn"
-            onClick={() => exportLeadsCSV(leads)}
+            onClick={() => exportToCSV(leads, LEADS_CSV_COLUMNS, "leads")}
             disabled={leads.length === 0}
           >
             Exportar CSV
@@ -784,122 +774,16 @@ export default function DealerLeadsModule({
               Sin leads en este estado.
             </div>
           ) : (
-            <>
             <div className="dealer-leads-card-grid">
-              {filtered.map((lead) => (
-                <LeadCrmCard
-                  key={lead.lead_id}
-                  lead={lead}
-                  onOpen={handleOpenLead}
-                  onUpdated={onRefresh}
-                />
-              ))}
-            </div>
-            <div className="admin-table-wrap">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Comprador</th>
-                    <th>Vehículo</th>
-                    <th>Mensaje</th>
-                    <th>Nota interna</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {filtered.map((lead) => {
-                    const vehicleLabel = [lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ");
-                    const waLink = getWhatsAppLink(lead.buyer_phone, `${lead.buyer_first_name} ${lead.buyer_last_name}`, vehicleLabel);
-                    const isNew = lead.crm_status === "new";
-                    const followUpState = getFollowUpState(lead.next_action_date);
-
-                    return (
-                      <tr
-                        key={lead.lead_id}
-                        className={isNew ? "lead-row--new" : ""}
-                      >
-                        <td>
-                          <strong title={formatDateTime(lead.created_at)}>
-                            {formatRelativeTime(lead.created_at)}
-                          </strong>
-                          <span>Lead #{lead.lead_id}</span>
-                          {isNew && <span className="lead-new-badge">Nuevo</span>}
-                          {(followUpState || lead.next_action_note) && (
-                            <span className="lead-followup-block">
-                              {followUpState && (
-                                <span className={`lead-followup-chip lead-followup-chip--${followUpState}`}>
-                                  {followUpState === "overdue" && "Vencido: "}
-                                  {followUpState === "today" && "Hoy: "}
-                                  {followUpState === "upcoming" && "Próxima acción: "}
-                                  {formatFollowUpDate(lead.next_action_date)}
-                                </span>
-                              )}
-                            </span>
-                          )}
-                        </td>
-
-                        <td>
-                          <strong>
-                            {lead.buyer_first_name} {lead.buyer_last_name}
-                          </strong>
-                          <span>{lead.buyer_email}</span>
-                          {lead.buyer_phone && (
-                            <span className="lead-buyer-phone">
-                              {lead.buyer_phone}
-                              {waLink && (
-                                <a
-                                  href={waLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="lead-whatsapp-btn"
-                                  title="Abrir WhatsApp con mensaje pre-armado"
-                                >
-                                  WhatsApp
-                                </a>
-                              )}
-                            </span>
-                          )}
-                        </td>
-
-                        <td>
-                          <strong>{vehicleLabel}</strong>
-                          <span>{lead.vehicle_version}</span>
-                          <span>{lead.vehicle_title_snapshot}</span>
-                        </td>
-
-                        <td>
-                          <span>{lead.message || "Sin mensaje."}</span>
-                        </td>
-
-                        <td>
-                          <NoteEditor lead={lead} onUpdated={onRefresh} />
-                        </td>
-
-                        <td>
-                          <div className="lead-status-with-advance">
-                            <LeadStatusSelect lead={lead} onUpdated={onRefresh} />
-                            <QuickAdvanceBtn lead={lead} onUpdated={onRefresh} />
-                          </div>
-                        </td>
-
-                        <td>
-                          <button
-                            className="table-action-btn"
-                            onClick={() => handleOpenLead(lead)}
-                          >
-                            Ver detalle
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            </>
+            {filtered.map((lead) => (
+              <LeadCrmCard
+                key={lead.lead_id}
+                lead={lead}
+                onOpen={handleOpenLead}
+                onUpdated={onRefresh}
+              />
+            ))}
+          </div>
           )}
         </>
       )}
