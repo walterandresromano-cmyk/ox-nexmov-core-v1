@@ -726,10 +726,10 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
                 <div className="buyer-garage-owned-head">
                   <div>
                     <span className="eyebrow">{editingGarageVehicleId ? "Editando vehículo" : "Vehículo propio"}</span>
-                    <h3>{editingGarageVehicleId ? "Actualizar unidad" : "Cargar unidad familiar"}</h3>
+                    <h3>{editingGarageVehicleId ? "Actualizar vehículo" : "Agregar mi vehículo"}</h3>
                     <p>
-                      Sumá una unidad a tu colección y mantené su historia lista para
-                      evolucionar.
+                      Registrá marca, modelo, kilómetros y servicios para llevar
+                      el historial desde un solo lugar.
                     </p>
                   </div>
                   <label className="buyer-garage-sale-toggle">
