@@ -211,13 +211,23 @@ export default function VehicleCardPublic({
           )}
 
           {imageUrl ? (
-            <VehicleImage
-              src={imageUrl}
-              alt={vehicleTitle}
-              size="card"
-              className="vehicle-card__image"
-              loading="lazy"
-            />
+            <>
+              <img
+                src={imageUrl}
+                alt=""
+                aria-hidden="true"
+                className="vehicle-card__blur-bg"
+                loading="lazy"
+                draggable="false"
+              />
+              <VehicleImage
+                src={imageUrl}
+                alt={vehicleTitle}
+                size="card"
+                className="vehicle-card__image"
+                loading="lazy"
+              />
+            </>
           ) : (
             <div className="vehicle-card__placeholder">
               <span>Imagen no disponible</span>
