@@ -1,5 +1,6 @@
 import "../../styles/faq.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { injectJsonLd, removeJsonLd, buildFaqSchema } from "../../lib/schema.js";
 
 function FaqItem({ question, answer }) {
   const [open, setOpen] = useState(false);
@@ -281,6 +282,12 @@ const faqSections = [
 ];
 
 export default function FAQ({ onNavigate }) {
+  useEffect(() => {
+    const allItems = faqSections.flatMap(s => s.items);
+    injectJsonLd("ox-faq-jsonld", buildFaqSchema(allItems));
+    return () => removeJsonLd("ox-faq-jsonld");
+  }, []);
+
   return (
     <section className="page-section faq-page">
       <div className="container panel faq-panel">

@@ -43,26 +43,43 @@ export function buildCarSchema(vehicle, shareUrl) {
     ...(Array.isArray(vehicle.images) ? vehicle.images.map(i => i?.url ?? i) : []),
   ].filter(Boolean).slice(0, 5);
 
-  const title = [vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(" ");
+  const isNew = vehicle.kilometers === 0;
+  const condition = isNew
+    ? "https://schema.org/NewCondition"
+    : "https://schema.org/UsedCondition";
+
+  const nameParts = [vehicle.brand, vehicle.model, vehicle.version, vehicle.year]
+    .filter(v => v && v !== "Versión no informada")
+    .join(" ");
+
+  // ISO date 60 días en el futuro — indica a Google que la oferta es vigente
+  const priceValidUntil = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+
+  const kmLabel = isNew
+    ? "0 km"
+    : vehicle.kilometers
+      ? `${Number(vehicle.kilometers).toLocaleString("es-AR")} km`
+      : "";
 
   return {
     "@context": "https://schema.org",
     "@type":    "Car",
-    "name":     title,
-    "description": [
-      title,
-      vehicle.kilometers ? `${Number(vehicle.kilometers).toLocaleString("es-AR")} km` : "",
+    "name":     nameParts,
+    "description": vehicle.details || [
+      nameParts,
+      kmLabel,
       vehicle.city ? `en ${vehicle.city}` : "",
     ].filter(Boolean).join(" · "),
     "url":   shareUrl,
     "image": images.length === 1 ? images[0] : images.length > 1 ? images : undefined,
 
-    // Atributos del vehículo
     "brand":               vehicle.brand ? { "@type": "Brand", "name": vehicle.brand } : undefined,
     "model":               vehicle.model,
     "vehicleModelDate":    vehicle.year  ? String(vehicle.year) : undefined,
-    "vehicleCondition":    "https://schema.org/UsedCondition",
-    "mileageFromOdometer": vehicle.kilometers
+    "vehicleCondition":    condition,
+    "mileageFromOdometer": vehicle.kilometers != null
       ? { "@type": "QuantitativeValue", "value": Number(vehicle.kilometers), "unitCode": "KMT" }
       : undefined,
     "fuelType":             vehicle.fuelType         || vehicle.raw?.fuel_type    || undefined,
@@ -71,16 +88,16 @@ export function buildCarSchema(vehicle, shareUrl) {
     "numberOfDoors":        vehicle.doors            || vehicle.raw?.doors        || undefined,
     "driveWheelConfiguration": vehicle.raw?.drive_type || undefined,
 
-    // Oferta
     "offers": {
-      "@type":         "Offer",
-      "price":          vehicle.price || undefined,
-      "priceCurrency": "ARS",
-      "availability":  vehicle.reserved
+      "@type":           "Offer",
+      "price":            vehicle.price || undefined,
+      "priceCurrency":   "ARS",
+      "priceValidUntil":  priceValidUntil,
+      "availability":    vehicle.reserved
         ? "https://schema.org/SoldOut"
         : "https://schema.org/InStock",
-      "itemCondition": "https://schema.org/UsedCondition",
-      "url":            shareUrl,
+      "itemCondition":   condition,
+      "url":              shareUrl,
       "seller": vehicle.dealer?.commercialName ? {
         "@type":     "AutoDealer",
         "name":       vehicle.dealer.commercialName,
@@ -89,6 +106,42 @@ export function buildCarSchema(vehicle, shareUrl) {
           : undefined,
       } : undefined,
     },
+  };
+}
+
+/**
+ * schema.org/FAQPage — habilita rich results con preguntas expandibles en Google.
+ * @param {Array<{question: string, answer: string}>} items
+ */
+export function buildFaqSchema(items) {
+  return {
+    "@context":   "https://schema.org",
+    "@type":      "FAQPage",
+    "mainEntity":  items.map(item => ({
+      "@type": "Question",
+      "name":   item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text":   item.answer,
+      },
+    })),
+  };
+}
+
+/**
+ * schema.org/BreadcrumbList — muestra la ruta de navegación en el snippet de Google.
+ * @param {Array<{name: string, url: string}>} crumbs
+ */
+export function buildBreadcrumbSchema(crumbs) {
+  return {
+    "@context":        "https://schema.org",
+    "@type":           "BreadcrumbList",
+    "itemListElement":  crumbs.map((crumb, i) => ({
+      "@type":    "ListItem",
+      "position":  i + 1,
+      "name":      crumb.name,
+      "item":      crumb.url,
+    })),
   };
 }
 

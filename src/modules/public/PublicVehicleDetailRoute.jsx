@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import VehicleDetailModal from "../../components/cards/VehicleDetailModal.jsx";
 import { getPublicVehicleById } from "../../services/vehicles.service.js";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
-import { injectJsonLd, removeJsonLd, buildCarSchema } from "../../lib/schema.js";
+import { injectJsonLd, removeJsonLd, buildCarSchema, buildBreadcrumbSchema } from "../../lib/schema.js";
 
 function getVehicleTitle(vehicle) {
   return [vehicle?.brand, vehicle?.model, vehicle?.year]
@@ -127,6 +127,14 @@ export default function PublicVehicleDetailRoute({
     // JSON-LD schema.org/Car — rich results en Google para autos usados
     injectJsonLd("ox-vehicle-jsonld", buildCarSchema(vehicle, shareUrl));
 
+    // BreadcrumbList — ruta de navegación visible en el snippet de búsqueda
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://www.oxnexmov.com.ar";
+    injectJsonLd("ox-vehicle-breadcrumb", buildBreadcrumbSchema([
+      { name: "oX NEXMOV", url: origin },
+      { name: "Buscar vehículos", url: `${origin}/buscar` },
+      { name: `${vehicle.brand} ${vehicle.model}`, url: shareUrl },
+    ]));
+
     return () => {
       document.title = previousTitle;
       setMetaContent("property", "og:type", "website");
@@ -136,6 +144,7 @@ export default function PublicVehicleDetailRoute({
       setMetaContent("name", "twitter:image", "https://www.oxnexmov.com.ar/1hero-car.png");
       if (previousCanonical) setCanonical(previousCanonical);
       removeJsonLd("ox-vehicle-jsonld");
+      removeJsonLd("ox-vehicle-breadcrumb");
     };
   }, [vehicle]);
 
