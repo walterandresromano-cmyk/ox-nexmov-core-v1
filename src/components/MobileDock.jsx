@@ -125,6 +125,7 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
         type="button"
         className="mobile-theme-float-btn"
         onClick={appActions?.toggleTheme}
+        data-theme-btn
         aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
       >
         <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>

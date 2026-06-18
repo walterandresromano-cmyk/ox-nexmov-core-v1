@@ -29107,6 +29107,21 @@ button.buyer-shortlist-compare__slot:hover {
   }
 }
 
+/* ── Theme toggle — circular reveal desde el botón ──────────────────────── */
+/* Solo activa cuando toggleTheme añade la clase ox-theme-transitioning a <html> */
+@media (prefers-reduced-motion: no-preference) {
+  :root.ox-theme-transitioning::view-transition-old(root) {
+    animation: none; /* el tema viejo queda fijo debajo */
+  }
+  :root.ox-theme-transitioning::view-transition-new(root) {
+    clip-path: circle(0px at var(--vt-x, 50vw) var(--vt-y, 50vh));
+    animation: ox-theme-reveal 0.52s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+}
+@keyframes ox-theme-reveal {
+  to { clip-path: circle(150vmax at var(--vt-x, 50vw) var(--vt-y, 50vh)); }
+}
+
 /* ── Admin ops panel — light mode ─────────────────────────────────────── */
 :root[data-theme="light"] .admin-ops-hero,
 :root[data-theme="light"] .admin-ops-panel,

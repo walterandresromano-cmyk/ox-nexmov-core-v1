@@ -132,6 +132,7 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
             type="button"
             className="theme-toggle-btn"
             onClick={appActions?.toggleTheme}
+            data-theme-btn
             aria-label={nextThemeLabel}
             title={nextThemeLabel}
           >
