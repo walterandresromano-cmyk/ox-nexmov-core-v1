@@ -523,6 +523,39 @@ export default function App() {
     window.localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
 
+  // Actualiza title, meta description, canonical y OG tags al cambiar de ruta.
+  // "search" y "vehicleDetail" gestionan sus propias metas — se omiten aquí.
+  useEffect(() => {
+    const ORIGIN    = "https://www.oxnexmov.com.ar";
+    const PRIV      = new Set(["buyer", "dealer", "admin", "internal0km", "support"]);
+    const SELF_META = new Set(["search", "vehicleDetail"]);
+
+    if (SELF_META.has(currentRoute)) return;
+
+    const title = ROUTE_TITLES[currentRoute];
+    const desc  = ROUTE_DESCRIPTIONS[currentRoute];
+    const path  = ROUTE_TO_PATH[currentRoute];
+
+    if (title) {
+      document.title = title;
+      document.querySelector("meta[property='og:title']")?.setAttribute("content", title);
+      document.querySelector("meta[name='twitter:title']")?.setAttribute("content", title);
+    }
+
+    if (desc) {
+      document.querySelector("meta[name='description']")?.setAttribute("content", desc);
+      document.querySelector("meta[property='og:description']")?.setAttribute("content", desc);
+      document.querySelector("meta[name='twitter:description']")?.setAttribute("content", desc);
+    }
+
+    if (!PRIV.has(currentRoute) && path) {
+      const url = `${ORIGIN}${path}`;
+      const canonEl = document.querySelector("link[rel='canonical']");
+      if (canonEl) canonEl.href = url;
+      document.querySelector("meta[property='og:url']")?.setAttribute("content", url);
+    }
+  }, [currentRoute]);
+
   // Sincronizar con cambios del sistema operativo mientras la app está abierta.
   // Solo aplica si el usuario no fijó una preferencia manualmente (localStorage vacío).
   useEffect(() => {
