@@ -535,9 +535,21 @@
 
   .auth-mode-row {
     gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
   }
 
-  .auth-mode-row button,
+  .auth-mode-row::-webkit-scrollbar { display: none; }
+
+  .auth-mode-row button {
+    flex-shrink: 0;
+    width: auto;
+    min-height: 42px;
+  }
+
   .auth-actions button,
   .auth-form .primary-action {
     min-height: 42px;

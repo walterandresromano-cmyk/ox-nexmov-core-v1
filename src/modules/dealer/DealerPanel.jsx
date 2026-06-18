@@ -2176,17 +2176,17 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
           <div className="auth-warning">{sellVehicleLeadsError}</div>
         )}
 
-        {loadingDealers && <div className="auth-message">Cargando dealer...</div>}
-        {loadingVehicles && (
-          <div className="auth-message">Cargando vehículos...</div>
-        )}
-        {loadingLeads && <div className="auth-message">Cargando leads...</div>}
-        {loadingTickets && (
-          <div className="auth-message">Cargando tickets...</div>
-        )}
-        {loadingSellVehicleLeads && (
-          <div className="auth-message">
-            Cargando oportunidades Vender mi vehículo...
+        {(loadingDealers || loadingVehicles || loadingLeads || loadingTickets || loadingSellVehicleLeads) && (
+          <div className="dealer-panel-skeleton">
+            <div className="dealer-panel-skeleton__bar dealer-panel-skeleton__bar--wide" />
+            <div className="dealer-panel-skeleton__row">
+              <div className="dealer-panel-skeleton__card" />
+              <div className="dealer-panel-skeleton__card" />
+              <div className="dealer-panel-skeleton__card" />
+              <div className="dealer-panel-skeleton__card" />
+            </div>
+            <div className="dealer-panel-skeleton__bar" />
+            <div className="dealer-panel-skeleton__bar dealer-panel-skeleton__bar--short" />
           </div>
         )}
 

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { memo, useState, useMemo, useCallback } from "react";
 import { parseLeadsNaturalQuery, generateLeadReply } from "../../services/oxAssistant.service.js";
 import { exportToCSV } from "../../lib/exportCsv.js";
 
@@ -314,10 +314,9 @@ function QuickAdvanceBtn({ lead, onUpdated }) {
   );
 }
 
-function LeadCrmCard({ lead, onOpen, onUpdated }) {
+const LeadCrmCard = memo(function LeadCrmCard({ lead, onOpen, onUpdated }) {
   const vehicleLabel = getVehicleLabel(lead);
   const buyerName = getBuyerName(lead);
-  const waLink = getWhatsAppLink(lead.buyer_phone, buyerName, vehicleLabel);
   const isNew = lead.crm_status === "new";
   const followUpState = getFollowUpState(lead.next_action_date);
   const closeReason = getCloseReason(lead);
@@ -367,17 +366,6 @@ function LeadCrmCard({ lead, onOpen, onUpdated }) {
       )}
 
       <div className="lead-crm-actions">
-        {lead.buyer_phone && waLink && (
-          <a
-            href={waLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="lead-whatsapp-btn"
-            title="Abrir WhatsApp con mensaje pre-armado"
-          >
-            WhatsApp
-          </a>
-        )}
         <button className="table-action-btn" type="button" onClick={() => onOpen(lead)}>
           Ver detalle
         </button>
@@ -394,7 +382,7 @@ function LeadCrmCard({ lead, onOpen, onUpdated }) {
       </div>
     </article>
   );
-}
+});
 
 function AgendaLeadRow({ lead, onOpen }) {
   const waLink = getWhatsAppLink(
@@ -608,13 +596,13 @@ export default function DealerLeadsModule({
     return groups;
   }, [leads]);
 
-  async function handleOpenLead(lead) {
+  const handleOpenLead = useCallback(async (lead) => {
     setSelectedLead(lead);
     if (lead.crm_status === "new") {
       await updateVehicleLeadStatus({ leadId: lead.lead_id, crmStatus: "seen" });
       onRefresh();
     }
-  }
+  }, [onRefresh]);
 
   return (
     <div className="dealer-leads-section">

@@ -4699,3 +4699,59 @@
   justify-content: center;
   padding: 16px 0 8px;
 }
+
+/* ── Panel skeleton loader ─────────────────────────────────── */
+.dealer-panel-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 0 8px;
+  animation: ox-shimmer-fade 0.3s ease both;
+}
+@keyframes ox-shimmer-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.dealer-panel-skeleton__bar,
+.dealer-panel-skeleton__card {
+  border-radius: 14px;
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.06) 25%,
+    rgba(148, 163, 184, 0.13) 50%,
+    rgba(148, 163, 184, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: ox-shimmer 1.6s ease-in-out infinite;
+}
+.dealer-panel-skeleton__bar {
+  height: 18px;
+  width: 55%;
+}
+.dealer-panel-skeleton__bar--wide  { width: 72%; height: 24px; }
+.dealer-panel-skeleton__bar--short { width: 38%; }
+.dealer-panel-skeleton__row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.dealer-panel-skeleton__card {
+  height: 88px;
+  border-radius: 18px;
+}
+@media (max-width: 760px) {
+  .dealer-panel-skeleton__row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+:root[data-theme="light"] .dealer-panel-skeleton__bar,
+:root[data-theme="light"] .dealer-panel-skeleton__card {
+  background: linear-gradient(
+    90deg,
+    rgba(100, 116, 139, 0.07) 25%,
+    rgba(100, 116, 139, 0.14) 50%,
+    rgba(100, 116, 139, 0.07) 75%
+  );
+  background-size: 200% 100%;
+}
