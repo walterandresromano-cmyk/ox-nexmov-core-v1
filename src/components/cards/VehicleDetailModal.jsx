@@ -198,7 +198,6 @@ export default function VehicleDetailModal({
   const images = useMemo(() => getVehicleImages(currentVehicle), [currentVehicle]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [slideDir, setSlideDir] = useState(1); // 1 = right, -1 = left
-  const [stickyHeader, setStickyHeader] = useState(false);
   const modalScrollRef = useRef(null);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomScale, setZoomScale] = useState(1);
@@ -608,13 +607,6 @@ export default function VehicleDetailModal({
     return () => frame.removeEventListener("wheel", handleWheel);
   }, [handleWheel]);
 
-  useEffect(() => {
-    const el = modalScrollRef.current;
-    if (!el) return;
-    function onScroll() { setStickyHeader(el.scrollTop > 120); }
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
 
   function handleClose() {
     resetImageZoom();
@@ -681,11 +673,6 @@ export default function VehicleDetailModal({
         >
           ×
         </button>
-
-        <div className={`vd-sticky-header${stickyHeader ? " is-visible" : ""}`} aria-hidden={!stickyHeader}>
-          <strong>{currentVehicle.brand} {currentVehicle.model} {currentVehicle.year}</strong>
-          <span>{formatARS(currentVehicle.price)}</span>
-        </div>
 
         {vehicles && vehicles.length > 1 && (
           <div className="vehicle-detail-nav">
