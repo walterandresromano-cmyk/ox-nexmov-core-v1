@@ -31,7 +31,7 @@ function getCategoryLabel(category) {
     technical: "Técnico",
     billing: "Facturación",
     publication: "Publicación",
-    lead: "Lead",
+    lead: "Consulta recibida",
     account: "Cuenta",
     urgent_review: "Revisión urgente",
   };
@@ -120,10 +120,10 @@ export default function TicketDetailModal({
       <section className="ticket-detail-modal">
         <div className="contact-modal-head">
           <div>
-            <p className="eyebrow">Detalle de ticket</p>
-            <h2>Ticket #{ticket.ticket_id}</h2>
+            <p className="eyebrow">Detalle del caso</p>
+            <h2>Caso #{ticket.ticket_id}</h2>
             <p>
-              Caso interno entre dealer, administración y soporte de oX NEXMOV.
+              Caso interno entre tu cuenta, administración y soporte de oX NEXMOV.
             </p>
           </div>
 
@@ -148,13 +148,13 @@ export default function TicketDetailModal({
           </article>
 
           <article className="ticket-detail-card">
-            <span>Dealer</span>
-            <strong>{ticket.dealer_name || "Sin dealer asociado"}</strong>
-            <p>ID dealer: {ticket.dealer_id || "No informado"}</p>
+            <span>Cuenta</span>
+            <strong>{ticket.dealer_name || "Sin cuenta asociada"}</strong>
+            <p>ID cuenta: {ticket.dealer_id || "No informado"}</p>
             {isPlatinumTicket && (
               <div className="ticket-platinum-priority-note">
                 <span>Prioridad Platinum</span>
-                <p>Dealer Platinum identificado para seguimiento interno.</p>
+                <p>Cuenta Platinum identificada para seguimiento interno.</p>
               </div>
             )}
           </article>
@@ -169,7 +169,7 @@ export default function TicketDetailModal({
             <span>Asignado a</span>
             <strong>{ticket.assigned_to_email || "Sin asignar"}</strong>
             <p>
-              Al cambiar el estado desde soporte/admin, el ticket puede quedar
+              Al cambiar el estado desde soporte/admin, el caso puede quedar
               tomado por ese usuario.
             </p>
           </article>
@@ -183,7 +183,7 @@ export default function TicketDetailModal({
           <article className="ticket-detail-card">
             <span>Prioridad</span>
             <strong>{getPriorityLabel(ticket.priority)}</strong>
-            <p>Impacto declarado al momento de crear el ticket.</p>
+            <p>Impacto declarado al abrir la consulta.</p>
           </article>
 
           <article className="ticket-detail-card">
@@ -211,7 +211,7 @@ export default function TicketDetailModal({
                   setNotesError("");
                 }}
                 rows={6}
-                placeholder="Ej: Se revisó el caso. Falta respuesta del dealer. Derivar a administración si persiste."
+                placeholder="Ej: Se revisó el caso. Falta respuesta del vendedor. Derivar a administración si persiste."
               />
 
               <div className="lead-notes-actions">
@@ -235,13 +235,13 @@ export default function TicketDetailModal({
               <span>Seguimiento de soporte</span>
               <p>
                 Soporte o administración revisará este caso. Las notas internas
-                no son visibles para dealer.
+                no son visibles para el vendedor.
               </p>
             </article>
           )}
 
           <article className="ticket-detail-card ticket-detail-main">
-            <span>Estado del ticket</span>
+            <span>Estado del caso</span>
             <TicketStatusSelect ticket={ticket} onUpdated={onUpdated} />
           </article>
         </div>

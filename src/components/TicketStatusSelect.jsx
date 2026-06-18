@@ -5,7 +5,7 @@ const TICKET_STATUS_OPTIONS = [
   { value: "new", label: "Nuevo" },
   { value: "open", label: "Abierto" },
   { value: "in_progress", label: "En proceso" },
-  { value: "waiting_dealer", label: "Espera dealer" },
+  { value: "waiting_dealer", label: "Espera vendedor" },
   { value: "resolved", label: "Resuelto" },
   { value: "closed", label: "Cerrado" },
 ];
@@ -41,7 +41,7 @@ export default function TicketStatusSelect({
 
     if (updateError) {
       setValue(previousStatus);
-      setError(updateError.message || "No se pudo actualizar el ticket.");
+      setError(updateError.message || "No se pudo actualizar el caso.");
       setLoading(false);
       return;
     }

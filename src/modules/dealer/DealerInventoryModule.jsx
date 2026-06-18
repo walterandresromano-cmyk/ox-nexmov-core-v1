@@ -234,7 +234,7 @@ export default function DealerInventoryModule({
           </button>
           <h2>Mis vehículos publicados</h2>
           <p>
-            Inventario real asociado a este dealer. Incluye publicaciones
+            Inventario real de tu cuenta. Incluye publicaciones
             activas, pausadas, reservadas o enviadas a revisión.
           </p>
         </div>

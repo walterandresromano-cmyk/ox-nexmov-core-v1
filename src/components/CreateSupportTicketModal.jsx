@@ -33,7 +33,7 @@ export default function CreateSupportTicketModal({
     setError("");
 
     if (!form.subject.trim()) {
-      setError("Ingresá un asunto para el ticket.");
+      setError("Ingresá un asunto para la consulta.");
       setSubmitting(false);
       return;
     }
@@ -53,7 +53,7 @@ export default function CreateSupportTicketModal({
     });
 
     if (ticketError) {
-      setError(ticketError.message || "No se pudo crear el ticket.");
+      setError(ticketError.message || "No se pudo registrar la consulta.");
       setSubmitting(false);
       return;
     }
@@ -72,7 +72,7 @@ export default function CreateSupportTicketModal({
         <section className="contact-modal">
           <button className="modal-close-btn" onClick={onClose}>×</button>
           <div className="lead-created-box">
-            <h3>Ticket creado correctamente</h3>
+            <h3>Consulta registrada correctamente</h3>
             <p>
               El caso quedó registrado para {dealer?.commercialName}. Soporte o
               administración podrá tomarlo desde su bandeja.
@@ -92,9 +92,9 @@ export default function CreateSupportTicketModal({
         <div className="contact-modal-head">
           <div>
             <p className="eyebrow">Soporte interno</p>
-            <h2>Crear ticket</h2>
+            <h2>Nueva consulta de soporte</h2>
             <p>
-              El ticket queda trazado para que administración o soporte puedan
+              La consulta queda trazada para que administración o soporte puedan
               responder y dar seguimiento.
             </p>
           </div>
@@ -106,8 +106,8 @@ export default function CreateSupportTicketModal({
 
         <form className="contact-form" onSubmit={handleSubmit}>
             <div className="contact-summary">
-              <span>Dealer</span>
-              <strong>{dealer?.commercialName || "Dealer no informado"}</strong>
+              <span>Tu cuenta</span>
+              <strong>{dealer?.commercialName || "Sin cuenta"}</strong>
               <span>
                 {dealer?.city || "Sin ciudad"}, {dealer?.province || "Sin provincia"}
               </span>
@@ -135,7 +135,7 @@ export default function CreateSupportTicketModal({
                 <option value="technical">Técnico</option>
                 <option value="billing">Facturación</option>
                 <option value="publication">Publicación</option>
-                <option value="lead">Lead</option>
+                <option value="lead">Consulta recibida</option>
                 <option value="account">Cuenta</option>
                 <option value="urgent_review">Revisión urgente</option>
               </select>
@@ -174,7 +174,7 @@ export default function CreateSupportTicketModal({
                 submitting || !form.subject.trim() || !form.message.trim()
               }
             >
-              {submitting ? "Creando ticket..." : "Crear ticket"}
+              {submitting ? "Registrando consulta..." : "Abrir consulta"}
             </button>
           </form>
       </section>
