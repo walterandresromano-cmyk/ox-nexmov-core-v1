@@ -73,12 +73,24 @@ export function useDominantColor(imageUrl) {
   useEffect(() => {
     if (!imageUrl) return;
     let cancelled = false;
+    let handle = null;
+    const useRIC = typeof requestIdleCallback !== "undefined";
 
-    extractDominantColor(imageUrl).then((result) => {
-      if (!cancelled) setColor(result);
-    });
+    const run = () => {
+      extractDominantColor(imageUrl).then((result) => {
+        if (!cancelled) setColor(result);
+      });
+    };
 
-    return () => { cancelled = true; };
+    handle = useRIC
+      ? requestIdleCallback(run, { timeout: 3000 })
+      : setTimeout(run, 500);
+
+    return () => {
+      cancelled = true;
+      if (useRIC) cancelIdleCallback(handle);
+      else clearTimeout(handle);
+    };
   }, [imageUrl]);
 
   return color;

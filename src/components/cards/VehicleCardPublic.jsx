@@ -118,6 +118,7 @@ export default function VehicleCardPublic({
   onNavigate,
   vehicles,
   getDealer,
+  priority = false,
 }) {
   const [showContactGate, setShowContactGate] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -217,7 +218,7 @@ export default function VehicleCardPublic({
                 alt=""
                 aria-hidden="true"
                 className="vehicle-card__blur-bg"
-                loading="lazy"
+                loading={priority ? "eager" : "lazy"}
                 draggable="false"
               />
               <VehicleImage
@@ -225,7 +226,8 @@ export default function VehicleCardPublic({
                 alt={vehicleTitle}
                 size="card"
                 className="vehicle-card__image"
-                loading="lazy"
+                loading={priority ? "eager" : "lazy"}
+                fetchPriority={priority ? "high" : "auto"}
               />
             </>
           ) : (

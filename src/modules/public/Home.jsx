@@ -836,7 +836,7 @@ export default function Home({ onNavigate, appActions = {} }) {
                 ref={latestVehiclesCarouselRef}
                 className="ox-home-vehicles-carousel-v3"
               >
-                {latestVehicles.slice(0, 8).map((vehicle) => {
+                {latestVehicles.slice(0, 8).map((vehicle, idx) => {
                   const dealer = buildDealerForVehicle(vehicle);
 
                   return (
@@ -851,6 +851,7 @@ export default function Home({ onNavigate, appActions = {} }) {
                         dealer={dealer}
                         appActions={safeAppActions}
                         onNavigate={onNavigate}
+                        priority={idx < 3}
                       />
                     </div>
                   );

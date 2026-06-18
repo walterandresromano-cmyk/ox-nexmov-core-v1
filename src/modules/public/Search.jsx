@@ -1805,7 +1805,7 @@ export default function Search({
                 ? Array.from({ length: 6 }, (_, n) => (
                     <VehicleCardSkeleton key={n} index={n} />
                   ))
-                : sortedVehicles.slice(0, visibleCount).map((vehicle) => (
+                : sortedVehicles.slice(0, visibleCount).map((vehicle, idx) => (
                     <VehicleCardPublic
                       key={vehicle.id}
                       vehicle={vehicle}
@@ -1814,6 +1814,7 @@ export default function Search({
                       onNavigate={onNavigate}
                       vehicles={sortedVehicles}
                       getDealer={getDealer}
+                      priority={idx < 4}
                     />
                   ))}
             </div>
