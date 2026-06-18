@@ -1918,6 +1918,15 @@
 .vehicle-detail-layout {
   grid-template-columns: minmax(390px, 1fr) minmax(340px, 0.94fr) !important;
   gap: 16px !important;
+  align-items: start !important;
+}
+
+/* Info column sticky — se queda visible en el top mientras la galería scrollea */
+@media (min-width: 981px) {
+  .vehicle-detail-info {
+    position: sticky;
+    top: 0;
+  }
 }
 
 /* ── Footer — solo seguro + disclaimer ───────────────────── */
