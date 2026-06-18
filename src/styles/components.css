@@ -21522,6 +21522,10 @@ body::-webkit-scrollbar {
   padding: 0;
 }
 
+.garage-ox-movement.buyer-activity-disclosure {
+  padding-top: 20px;
+}
+
 .buyer-activity-disclosure-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
