@@ -12216,6 +12216,8 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 
 .ox-search-vehicle-grid .vehicle-card__btn--contact {
   display: inline-flex !important;
+  width: auto !important;
+  margin-top: 0 !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__monthly-hint {
