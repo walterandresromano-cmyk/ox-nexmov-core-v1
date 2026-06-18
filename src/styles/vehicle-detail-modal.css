@@ -481,8 +481,8 @@
 .detail-image-counter {
   font-size: 8px;
   font-weight: 600;
-  color: rgba(248, 250, 252, 0.38);
-  background: rgba(2, 6, 23, 0.20);
+  color: rgba(248, 250, 252, 0.22);
+  background: none;
   border: none;
   border-radius: 999px;
   padding: 0 5px;
