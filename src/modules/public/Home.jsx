@@ -10,6 +10,7 @@ import { normalizeWhatsAppArgentina } from "../../lib/formatters.js";
 import { registerVehicleDetailView } from "../../services/vehicleViews.service.js";
 import { listPublicActiveDealers } from "../../services/dealers.service.js";
 import { listPublicLatestVehicles, getPublicInventoryStats, isPublicVehicleVisible } from "../../services/vehicles.service.js";
+import { saveVehiclePreview, loadVehiclePreview } from "../../lib/vehiclePreviewCache.js";
 import {
   ShieldCheckIcon,
   ArrowsSwapIcon,
@@ -427,8 +428,8 @@ export default function Home({ onNavigate, appActions = {} }) {
   const [loadingDealers, setLoadingDealers] = useState(true);
   const [dealersError, setDealersError] = useState("");
 
-  const [latestVehicles, setLatestVehicles] = useState([]);
-  const [loadingLatestVehicles, setLoadingLatestVehicles] = useState(true);
+  const [latestVehicles, setLatestVehicles] = useState(() => loadVehiclePreview() || []);
+  const [loadingLatestVehicles, setLoadingLatestVehicles] = useState(() => loadVehiclePreview() === null);
   const [latestVehiclesError, setLatestVehiclesError] = useState("");
   const [heroSearchText, setHeroSearchText] = useState("");
 
@@ -484,22 +485,29 @@ export default function Home({ onNavigate, appActions = {} }) {
   }
 
   async function loadLatestVehicles() {
-    setLoadingLatestVehicles(true);
     setLatestVehiclesError("");
 
     const { vehicles, error } = await listPublicLatestVehicles({ limit: 8 });
 
+    setLoadingLatestVehicles(false);
+
     if (error) {
-      setLatestVehicles([]);
-      setLatestVehiclesError(
-        "No pudimos cargar vehículos disponibles en este momento."
-      );
-      setLoadingLatestVehicles(false);
+      // Si hay datos cacheados, los mantenemos silenciosamente
+      setLatestVehicles((prev) => {
+        if (prev.length === 0) {
+          setLatestVehiclesError(
+            "No pudimos cargar vehículos disponibles en este momento."
+          );
+          return [];
+        }
+        return prev;
+      });
       return;
     }
 
-    setLatestVehicles((vehicles || []).filter(isPublicVehicleVisible));
-    setLoadingLatestVehicles(false);
+    const filtered = (vehicles || []).filter(isPublicVehicleVisible);
+    saveVehiclePreview(filtered);
+    setLatestVehicles(filtered);
   }
 
   useEffect(() => {
