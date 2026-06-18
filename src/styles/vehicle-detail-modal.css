@@ -1921,14 +1921,6 @@
   align-items: start !important;
 }
 
-/* Info column sticky — se queda visible en el top mientras la galería scrollea */
-@media (min-width: 981px) {
-  .vehicle-detail-info {
-    position: sticky;
-    top: 0;
-  }
-}
-
 /* ── Footer — solo seguro + disclaimer ───────────────────── */
 .vehicle-detail-footer {
   grid-column: 1 / -1;
