@@ -216,6 +216,7 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
   const [requestLoading, setRequestLoading] = useState(false);
   const [requestError, setRequestError] = useState("");
   const [promoStatus, setPromoStatus] = useState(null); // null | "checking" | "valid" | "invalid" | "exhausted"
+  const [fieldErrors, setFieldErrors] = useState({});
   const promoDebounceRef = useRef(null);
 
   useEffect(() => {
@@ -239,6 +240,19 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
     setTimeout(() => {
       document.getElementById("dealer-request-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 80);
+  }
+
+  function validateField(field, value) {
+    let error = "";
+    if (field === "email") {
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (value && !emailRe.test(value)) error = "El email no parece válido.";
+    }
+    if (field === "whatsapp") {
+      const digits = String(value || "").replace(/\D/g, "");
+      if (value && digits.length < 10) error = "Ingresá al menos 10 dígitos.";
+    }
+    setFieldErrors((prev) => ({ ...prev, [field]: error }));
   }
 
   function updateRequest(field, value) {
@@ -602,6 +616,25 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
                     </button>
                   </div>
 
+                  {planCommercial[requestPlan] && (
+                    <div className="jnp-form-plan-summary">
+                      <div className="jnp-fps-info">
+                        <strong className="jnp-fps-name">
+                          {requestPlan.charAt(0).toUpperCase() + requestPlan.slice(1)}
+                        </strong>
+                        <span className="jnp-fps-cup">{planCommercial[requestPlan].cup}</span>
+                      </div>
+                      <div className="jnp-fps-price">
+                        <s>{planCommercial[requestPlan].price}</s>
+                        <strong>
+                          {planCommercial[requestPlan].promoPrice}
+                          <span>/mes</span>
+                        </strong>
+                        <span className="jnp-fps-promo">20% OFF · Promo por tiempo limitado</span>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="jnp-request-grid">
                     <label className="jnp-request-label">
                       Nombre comercial *
@@ -630,8 +663,13 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
                         type="email"
                         value={requestForm.email}
                         onChange={(e) => updateRequest("email", e.target.value)}
+                        onBlur={(e) => validateField("email", e.target.value)}
                         placeholder="contacto@agencia.com"
+                        className={fieldErrors.email ? "jnp-input--error" : ""}
                       />
+                      {fieldErrors.email && (
+                        <span className="jnp-field-error">{fieldErrors.email}</span>
+                      )}
                     </label>
 
                     <label className="jnp-request-label">
@@ -643,8 +681,13 @@ export default function JoinNetwork({ onNavigate, routeParams }) {
                         inputMode="tel"
                         value={requestForm.whatsapp}
                         onChange={(e) => updateRequest("whatsapp", e.target.value)}
+                        onBlur={(e) => validateField("whatsapp", e.target.value)}
                         placeholder="11 XXXX XXXX"
+                        className={fieldErrors.whatsapp ? "jnp-input--error" : ""}
                       />
+                      {fieldErrors.whatsapp && (
+                        <span className="jnp-field-error">{fieldErrors.whatsapp}</span>
+                      )}
                     </label>
 
                     <label className="jnp-request-label">
