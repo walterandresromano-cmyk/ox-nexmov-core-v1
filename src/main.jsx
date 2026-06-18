@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { initSentry } from "./lib/sentry.js";
+import { initSentry, initWebVitals } from "./lib/sentry.js";
 import App from "./app/App.jsx";
 
 initSentry(); // fire-and-forget: async pero no bloquea el render
+initWebVitals(); // registra LCP, CLS, INP, FCP, TTFB — dynamic import, cero peso en main bundle
 
 // Cuando el service worker actualiza a una versión nueva, recargar la página
 // para que todos los usuarios reciban el deploy sin intervención manual.
