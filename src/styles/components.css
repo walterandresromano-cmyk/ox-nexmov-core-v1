@@ -29636,3 +29636,30 @@ button.buyer-shortlist-compare__slot:hover {
 .contraoferta-module-loading,
 .contraoferta-module-empty { font-size: 0.84rem; color: rgba(148,163,184,0.65); padding: 24px 0; text-align: center; }
 .contraoferta-module-error  { font-size: 0.84rem; color: #f87171; padding: 24px 0; text-align: center; }
+
+:root[data-theme="light"] .contraoferta-card {
+  border-color: rgba(148, 163, 184, 0.2);
+  background: #fff;
+}
+:root[data-theme="light"] .contraoferta-card__vehicle { color: #0f172a; }
+:root[data-theme="light"] .contraoferta-card__pub { color: #64748b; }
+:root[data-theme="light"] .contraoferta-card__offer strong { color: #b45309; }
+:root[data-theme="light"] .contraoferta-card__buyer { color: #64748b; }
+:root[data-theme="light"] .contraoferta-card__date { color: #94a3b8; }
+:root[data-theme="light"] .contraoferta-card__dealer-note { color: #64748b; }
+:root[data-theme="light"] .contraoferta-card__note-input {
+  border-color: rgba(148, 163, 184, 0.3);
+  background: #f8fafc;
+  color: #0f172a;
+}
+:root[data-theme="light"] .contraoferta-card__btn--primary {
+  background: rgba(0, 0, 0, 0.04);
+  color: #334155;
+  border-color: rgba(148, 163, 184, 0.25);
+}
+:root[data-theme="light"] .contraoferta-card__btn--accept { background: rgba(5,150,105,0.1); color: #059669; border-color: rgba(5,150,105,0.2); }
+:root[data-theme="light"] .contraoferta-card__btn--reject { background: rgba(220,38,38,0.08); color: #dc2626; border-color: rgba(220,38,38,0.18); }
+:root[data-theme="light"] .contraoferta-card__btn--cancel { background: rgba(0,0,0,0.03); color: #64748b; border-color: rgba(148,163,184,0.2); }
+:root[data-theme="light"] .contraoferta-status--pending  { background: rgba(180,83,9,0.08); color: #b45309; }
+:root[data-theme="light"] .contraoferta-status--accepted { background: rgba(5,150,105,0.08); color: #059669; }
+:root[data-theme="light"] .contraoferta-status--rejected { background: rgba(220,38,38,0.08); color: #dc2626; }

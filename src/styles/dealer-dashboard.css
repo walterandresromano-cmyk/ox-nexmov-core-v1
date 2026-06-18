@@ -2195,6 +2195,12 @@
 :root.light .dealer-plan-perf__kpi span,
 :root[data-theme="light"] .dealer-plan-perf__kpi span { color: #64748b; }
 
+:root.light .dealer-plan-perf__kpi--alert strong,
+:root[data-theme="light"] .dealer-plan-perf__kpi--alert strong { color: #dc2626; }
+
+:root.light .dealer-plan-perf__kpi--warning strong,
+:root[data-theme="light"] .dealer-plan-perf__kpi--warning strong { color: #92400e; }
+
 :root.light .dealer-plan-perf__benefits li,
 :root[data-theme="light"] .dealer-plan-perf__benefits li { color: #334155; }
 
