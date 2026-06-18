@@ -3140,24 +3140,39 @@
 }
 
 .vd-actions-bar .detail-actions {
-  gap: 8px;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+}
+
+.vd-actions-bar .primary-action {
+  grid-column: unset !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
 }
 
 .vd-actions-bar .detail-action-contraoferta {
-  grid-column: 1 / -1 !important;
+  grid-column: unset !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
 }
 
-/* Compact icon buttons inside the persistent bar */
+.vd-actions-bar .detail-actions-secondary {
+  grid-column: unset !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 6px !important;
+}
+
+/* Compact icon buttons in the persistent bar */
 .vd-actions-bar .detail-action-icon-btn {
+  flex: 1 !important;
   min-height: 40px !important;
   padding: 5px 4px !important;
   gap: 3px !important;
   font-size: 0.58rem !important;
-}
-
-.vd-actions-bar .detail-action-icon-btn svg {
-  width: 15px !important;
-  height: 15px !important;
 }
 
 :root[data-theme="light"] .vd-actions-bar {
