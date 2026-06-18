@@ -56,7 +56,7 @@ function getUrgencyForVehicle(vehicle) {
       type: "low_score",
       level: "attention",
       badge: `${score}% · Publicación débil`,
-      reason: "El score bajo reduce la visibilidad y convierte menos leads.",
+      reason: "El score bajo reduce la visibilidad y convierte menos consultas.",
       suggestions: topMissing,
       primaryAction: hasPhotoMissing ? "fotos" : "edit",
     };

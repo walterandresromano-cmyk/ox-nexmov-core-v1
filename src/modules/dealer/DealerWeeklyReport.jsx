@@ -67,7 +67,7 @@ export default function DealerWeeklyReport({
 
     const kpiData = [
       {
-        label: "Leads nuevos",
+        label: "Consultas nuevas",
         value: thisNew.length,
         delta: delta(thisNew.length, prevNew.length),
         sub: "vs. semana anterior",
@@ -82,7 +82,7 @@ export default function DealerWeeklyReport({
         label: "En gestión activa",
         value: thisManaged.length,
         delta: null,
-        sub: "leads actualizados esta semana",
+        sub: "consultas actualizadas esta semana",
       },
     ];
 
@@ -152,7 +152,7 @@ export default function DealerWeeklyReport({
         {/* Mini funnel */}
         {funnel.stages.length > 0 && (
           <div className="dealer-weekly-section">
-            <h3 className="dealer-weekly-section__title">Leads nuevos por estado</h3>
+            <h3 className="dealer-weekly-section__title">Consultas nuevas por estado</h3>
             <div className="dealer-weekly-funnel">
               {funnel.stages.map((s) => (
                 <div key={s.label} className="dealer-weekly-funnel-row">
@@ -182,7 +182,7 @@ export default function DealerWeeklyReport({
                 </strong>
                 <span>{topVehicle.vehicle.year || ""}</span>
               </div>
-              <span className="admin-chip info">{topVehicle.leads} lead{topVehicle.leads !== 1 ? "s" : ""}</span>
+              <span className="admin-chip info">{topVehicle.leads} consulta{topVehicle.leads !== 1 ? "s" : ""}</span>
             </div>
           </div>
         )}

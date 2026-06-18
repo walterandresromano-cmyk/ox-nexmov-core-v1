@@ -178,7 +178,7 @@ export default function DealerRadarModule({ onBack }) {
 
           <p className="dealer-radar-disclaimer">
             Las señales Radar oX son intención de búsqueda sin datos de contacto
-            del comprador. No reemplazan leads. Usá esta información para evaluar
+            del comprador. No reemplazan las consultas reales. Usá esta información para evaluar
             tu inventario.
           </p>
         </>
