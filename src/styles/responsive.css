@@ -7545,6 +7545,73 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   color: rgba(248, 251, 255, 0.92) !important;
 }
 
+/* Confidence panel: definitivos — lista plana, sin cajas anidadas */
+.ox-home-confidence-list-v3 {
+  gap: 0 !important;
+}
+
+.ox-home-confidence-list-v3 article {
+  align-items: flex-start !important;
+  min-height: 0 !important;
+  padding: 13px 0 !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12) !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.ox-home-confidence-list-v3 article:last-child {
+  border-bottom: none !important;
+}
+
+.ox-home-confidence-list-v3 article > span {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  border-radius: 50% !important;
+  background: rgba(56, 189, 248, 0.10) !important;
+  border: 1px solid rgba(56, 189, 248, 0.22) !important;
+  box-shadow: none !important;
+  color: #38bdf8 !important;
+  margin-top: 1px !important;
+}
+
+.ox-home-confidence-cta-v3 {
+  padding: 14px 0 0 !important;
+  margin-top: 14px !important;
+  border: none !important;
+  border-top: 1px solid rgba(148, 163, 184, 0.12) !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme="light"] .ox-home-confidence-list-v3 article {
+  border-bottom-color: rgba(15, 23, 42, 0.09) !important;
+  color: #1f3448 !important;
+}
+
+:root[data-theme="light"] .ox-home-confidence-list-v3 article > span {
+  background: rgba(3, 105, 161, 0.07) !important;
+  border-color: rgba(3, 105, 161, 0.18) !important;
+  color: rgba(3, 105, 161, 0.9) !important;
+}
+
+:root[data-theme="light"] .ox-home-confidence-cta-v3 {
+  border-top-color: rgba(15, 23, 42, 0.09) !important;
+}
+
+:root[data-theme="dark"] .ox-home-confidence-list-v3 article {
+  border-bottom-color: rgba(125, 211, 252, 0.10) !important;
+  background: none !important;
+  color: rgba(248, 251, 255, 0.92) !important;
+}
+
+:root[data-theme="dark"] .ox-home-confidence-cta-v3 {
+  border-top-color: rgba(125, 211, 252, 0.10) !important;
+}
+
 @media (max-width: 920px) {
   .ox-home-hero-v3 {
     grid-template-columns: 1fr !important;
