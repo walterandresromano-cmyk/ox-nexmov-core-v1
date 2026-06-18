@@ -341,6 +341,20 @@ export default function VehicleCardPublic({
             <button
               type="button"
               className={
+                reserved
+                  ? "vehicle-card__btn vehicle-card__btn--icon vehicle-card__btn--contact vehicle-card__btn--disabled"
+                  : "vehicle-card__btn vehicle-card__btn--icon vehicle-card__btn--contact"
+              }
+              disabled={reserved}
+              onClick={() => setShowContactGate(true)}
+              title={reserved ? "Unidad reservada" : "Contactar dealer"}
+            >
+              <ChatIcon size={15} />
+            </button>
+
+            <button
+              type="button"
+              className={
                 favoriteActive
                   ? "vehicle-card__btn vehicle-card__btn--icon vehicle-card__btn--favorite is-active"
                   : "vehicle-card__btn vehicle-card__btn--icon vehicle-card__btn--favorite"
@@ -360,20 +374,6 @@ export default function VehicleCardPublic({
               <CompareIcon size={15} />
             </button>
           </div>
-
-          <button
-            type="button"
-            className={
-              reserved
-                ? "vehicle-card__btn vehicle-card__btn--contact vehicle-card__btn--disabled"
-                : "vehicle-card__btn vehicle-card__btn--contact"
-            }
-            disabled={reserved}
-            onClick={() => setShowContactGate(true)}
-            title={reserved ? "Esta unidad está reservada por el dealer." : "Contactar dealer"}
-          >
-            {reserved ? "Reservado" : "Contactar dealer"}
-          </button>
         </div>
       </article>
 

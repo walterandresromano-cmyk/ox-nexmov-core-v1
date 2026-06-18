@@ -12206,12 +12206,16 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   min-height: 52px !important;
 }
 
+.ox-search-vehicle-grid .vehicle-card__actions {
+  grid-template-columns: 1fr auto auto auto !important;
+}
+
 .ox-search-vehicle-grid .vehicle-card__btn--primary {
   min-height: 34px !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__btn--contact {
-  display: none !important;
+  display: inline-flex !important;
 }
 
 .ox-search-vehicle-grid .vehicle-card__monthly-hint {
@@ -12249,6 +12253,7 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   }
 
   .ox-search-vehicle-grid .vehicle-card__actions {
+    grid-template-columns: 1fr auto auto auto !important;
     gap: 4px !important;
   }
 
