@@ -2136,7 +2136,7 @@ h1 .ox-hero-reveal {
   }
 
   .ox-home-hero-v3 {
-    overflow: hidden;
+    overflow: clip;
     padding-inline: 14px;
   }
 
