@@ -1,18 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import "../../styles/dealer-dashboard.css";
 import { usePushNotifications } from "../../hooks/usePushNotifications.js";
 import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient.js";
 
-import CreateVehicleModal from "../../components/CreateVehicleModal.jsx";
+const CreateVehicleModal    = lazy(() => import("../../components/CreateVehicleModal.jsx"));
 
-import DealerInventoryModule from "./DealerInventoryModule.jsx";
-import DealerLeadsModule from "./DealerLeadsModule.jsx";
-import DealerContraofertasModule from "./DealerContraofertasModule.jsx";
-import DealerSupportModule from "./DealerSupportModule.jsx";
-import DealerSellVehicleModule from "./DealerSellVehicleModule.jsx";
-import DealerMetricsModule from "./DealerMetricsModule.jsx";
-import DealerUrgentModule from "./DealerUrgentModule.jsx";
-import DealerRadarModule from "./DealerRadarModule.jsx";
+const DealerInventoryModule   = lazy(() => import("./DealerInventoryModule.jsx"));
+const DealerLeadsModule       = lazy(() => import("./DealerLeadsModule.jsx"));
+const DealerContraofertasModule = lazy(() => import("./DealerContraofertasModule.jsx"));
+const DealerSupportModule     = lazy(() => import("./DealerSupportModule.jsx"));
+const DealerSellVehicleModule = lazy(() => import("./DealerSellVehicleModule.jsx"));
+const DealerMetricsModule     = lazy(() => import("./DealerMetricsModule.jsx"));
+const DealerUrgentModule      = lazy(() => import("./DealerUrgentModule.jsx"));
+const DealerRadarModule       = lazy(() => import("./DealerRadarModule.jsx"));
 
 import {
   canDealerPublish,
@@ -2508,6 +2508,8 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
           </div>
         )}
 
+        <Suspense fallback={<div className="route-loading" />}>
+
         {activeDealerModule === "inventory" && (
           <DealerInventoryModule
             dealerVehicles={dealerVehicles}
@@ -2698,6 +2700,8 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
             onCreated={refreshDealerPanel}
           />
         )}
+
+        </Suspense>
       </div>
     </section>
   );

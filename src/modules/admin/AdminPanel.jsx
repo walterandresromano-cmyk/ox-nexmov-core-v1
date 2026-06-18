@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
-import VehicleLeadDetailModal from "../../components/VehicleLeadDetailModal.jsx";
-import CreateSupportTicketModal from "../../components/CreateSupportTicketModal.jsx";
-import AdminSellVehicleLeadsSection from "../../components/AdminSellVehicleLeadsSection.jsx";
-import GrantExtraSlotsModal from "../../components/GrantExtraSlotsModal.jsx";
-import AdminVehiclesSection from "../../components/AdminVehiclesSection.jsx";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+const VehicleLeadDetailModal      = lazy(() => import("../../components/VehicleLeadDetailModal.jsx"));
+const CreateSupportTicketModal    = lazy(() => import("../../components/CreateSupportTicketModal.jsx"));
+const AdminSellVehicleLeadsSection = lazy(() => import("../../components/AdminSellVehicleLeadsSection.jsx"));
+const GrantExtraSlotsModal        = lazy(() => import("../../components/GrantExtraSlotsModal.jsx"));
+const AdminVehiclesSection        = lazy(() => import("../../components/AdminVehiclesSection.jsx"));
 import LeadStatusSelect from "../../components/LeadStatusSelect.jsx";
-import TicketDetailModal from "../../components/TicketDetailModal.jsx";
+const TicketDetailModal           = lazy(() => import("../../components/TicketDetailModal.jsx"));
 import TicketStatusSelect from "../../components/TicketStatusSelect.jsx";
-import AdminZeroKmLeadsSection from "../../components/AdminZeroKmLeadsSection.jsx";
+const AdminZeroKmLeadsSection     = lazy(() => import("../../components/AdminZeroKmLeadsSection.jsx"));
 import { getEffectiveDealerPermissions } from "../../lib/permissions.js";
 import { listDealersForAdmin } from "../../services/dealers.service.js";
 import { listVehicleLeadsForCurrentUser } from "../../services/leads.service.js";
@@ -28,7 +28,7 @@ import { getSiteAnalytics, aggregateAnalytics } from "../../services/siteAnalyti
 import { listRadarRequestsForAdmin, buildRadarCriteriaSummary } from "../../services/radarRequests.service.js";
 import { formatRelativeTime } from "../../lib/formatters.js";
 import { exportToCSV } from "../../lib/exportCsv.js";
-import AdminAnalytics from "./AdminAnalytics.jsx";
+const AdminAnalytics = lazy(() => import("./AdminAnalytics.jsx"));
 
 const ADMIN_MODULES = {
   DEALERS: "dealers",
@@ -3189,62 +3189,64 @@ export default function AdminPanel({ authProfile }) {
 
         {renderAdminMobileTabs()}
 
-        <div
-          className={`admin-desktop-content${
-            (activeAdminMobileSection === "summary" ||
-              activeAdminMobileSection === "system") &&
-            !activeModule
-              ? " admin-desktop-content--mobile-system"
-              : ""
-          }`}
-        >
-          {renderActiveModule()}
-        </div>
+        <Suspense fallback={<div className="route-loading" />}>
+          <div
+            className={`admin-desktop-content${
+              (activeAdminMobileSection === "summary" ||
+                activeAdminMobileSection === "system") &&
+              !activeModule
+                ? " admin-desktop-content--mobile-system"
+                : ""
+            }`}
+          >
+            {renderActiveModule()}
+          </div>
 
-        {activeAdminMobileSection === "summary" &&
-          !activeModule &&
-          renderAdminMobileSummary()}
+          {activeAdminMobileSection === "summary" &&
+            !activeModule &&
+            renderAdminMobileSummary()}
 
-        {activeAdminMobileSection === "system" &&
-          !activeModule &&
-          renderAdminMobileSystemPanel()}
+          {activeAdminMobileSection === "system" &&
+            !activeModule &&
+            renderAdminMobileSystemPanel()}
 
-        {selectedTicket && (
-          <TicketDetailModal
-            ticket={selectedTicket}
-            onClose={() => setSelectedTicket(null)}
-            onUpdated={handleTicketUpdated}
-            authProfile={authProfile}
-          />
-        )}
+          {selectedTicket && (
+            <TicketDetailModal
+              ticket={selectedTicket}
+              onClose={() => setSelectedTicket(null)}
+              onUpdated={handleTicketUpdated}
+              authProfile={authProfile}
+            />
+          )}
 
-        {selectedDealerForSlots && (
-          <GrantExtraSlotsModal
-            dealer={selectedDealerForSlots}
-            onClose={() => setSelectedDealerForSlots(null)}
-            onGranted={refreshAdminPanel}
-          />
-        )}
+          {selectedDealerForSlots && (
+            <GrantExtraSlotsModal
+              dealer={selectedDealerForSlots}
+              onClose={() => setSelectedDealerForSlots(null)}
+              onGranted={refreshAdminPanel}
+            />
+          )}
 
-        {selectedDealerForTicket && (
-          <CreateSupportTicketModal
-            dealer={selectedDealerForTicket}
-            onClose={() => setSelectedDealerForTicket(null)}
-            onCreated={async () => {
-              setSelectedDealerForTicket(null);
-              await loadTickets();
-            }}
-            authProfile={authProfile}
-          />
-        )}
+          {selectedDealerForTicket && (
+            <CreateSupportTicketModal
+              dealer={selectedDealerForTicket}
+              onClose={() => setSelectedDealerForTicket(null)}
+              onCreated={async () => {
+                setSelectedDealerForTicket(null);
+                await loadTickets();
+              }}
+              authProfile={authProfile}
+            />
+          )}
 
-        {selectedLead && (
-          <VehicleLeadDetailModal
-            lead={selectedLead}
-            onClose={() => setSelectedLead(null)}
-            onUpdated={loadLeads}
-          />
-        )}
+          {selectedLead && (
+            <VehicleLeadDetailModal
+              lead={selectedLead}
+              onClose={() => setSelectedLead(null)}
+              onUpdated={loadLeads}
+            />
+          )}
+        </Suspense>
       </div>
     </section>
   );
