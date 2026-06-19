@@ -971,7 +971,13 @@ export default function VehicleDetailModal({
                     <strong>{currentVehicle.bodyType}</strong>
                   </div>
                 )}
-                <div className="vd-galeria-spec">
+                {currentVehicle.doors && (
+                  <div className="vd-galeria-spec">
+                    <span>Puertas</span>
+                    <strong>{currentVehicle.doors}</strong>
+                  </div>
+                )}
+                <div className="vd-galeria-spec vd-galeria-spec--full">
                   <span>Ubicación</span>
                   <strong>{currentVehicle.city}, {currentVehicle.province}</strong>
                 </div>

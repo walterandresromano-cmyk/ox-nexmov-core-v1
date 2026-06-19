@@ -3586,6 +3586,11 @@
   color: rgba(248, 250, 252, 0.92);
 }
 
+/* Ubicación y otros campos full-width */
+.vd-galeria-spec--full {
+  grid-column: 1 / -1;
+}
+
 /* Descripción debajo del grid */
 .vd-galeria-spec--desc {
   flex: 1;
@@ -4075,13 +4080,16 @@
 
   .vd-galeria-left {
     width: 100% !important;
-    flex: none !important;
+    flex: 0 1 auto !important;   /* shrink permitido para pantallas muy chicas */
+    min-height: 0 !important;
   }
 
   /* 16/9 = imagen más corta → las specs caben debajo sin scroll */
   .vd-pane--galeria .detail-gallery-frame {
     aspect-ratio: 16/9 !important;
     height: auto !important;
+    min-height: 0 !important;
+    flex-shrink: 1 !important;
     padding: 6px !important;
   }
 
