@@ -10291,6 +10291,12 @@ body::-webkit-scrollbar {
     place-items: start stretch !important;
     overflow: hidden !important;
   }
+  .vehicle-detail-modal {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: unset !important;
+    margin: 0 !important;
+  }
 }
 
 .modal-backdrop:has(.contact-modal)::before,

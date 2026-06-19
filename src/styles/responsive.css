@@ -16929,3 +16929,14 @@ select option {
     padding: 14px !important;
   }
 }
+
+/* VehicleDetailModal mobile — pantalla completa exacta sin gaps */
+@media (max-width: 900px) {
+  .vehicle-detail-modal {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: unset !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+}
