@@ -4058,7 +4058,9 @@
     overflow-y: hidden !important;
     scrollbar-width: none !important;
     gap: 4px !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
   }
+  .vd-tabs::after { display: none !important; }
   .vd-tabs::-webkit-scrollbar { display: none; }
 
   .vd-tab {
