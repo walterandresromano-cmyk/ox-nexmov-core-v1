@@ -4069,32 +4069,32 @@
     height: 11px !important;
   }
 
-  /* ── 3. Pane Fotos: hero image — imagen llena el espacio libre ── */
+  /* ── 3. Pane Fotos: imagen ratio fijo, specs llenan el resto ─── */
   .vd-pane--galeria {
     flex-direction: column !important;
-    overflow-y: auto !important;
+    overflow-y: hidden !important;
     flex: 1 !important;
     gap: 0 !important;
     padding: 0 !important;
   }
 
-  /* galeria-left crece para ocupar todo el espacio sobre las specs */
+  /* galeria-left: altura natural según aspect-ratio de la imagen */
   .vd-galeria-left {
     width: 100% !important;
-    flex: 1 !important;              /* rellena el espacio libre */
+    flex: 0 0 auto !important;
     min-height: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     gap: 4px !important;
   }
 
-  /* Frame sin aspect-ratio fijo: crece con galeria-left */
+  /* Frame con ratio fijo 3/2 — imagen siempre landscape, bien proporcional */
   .vd-pane--galeria .detail-gallery-frame {
-    flex: 1 !important;
-    aspect-ratio: unset !important;  /* sin ratio fijo, la imagen toma el alto disponible */
-    height: 100% !important;
-    min-height: 140px !important;    /* evita imágenes diminutas en pantallas muy pequeñas */
-    padding: 4px !important;
+    flex: none !important;
+    aspect-ratio: 3/2 !important;
+    height: auto !important;
+    width: 100% !important;
+    padding: 0 !important;
   }
 
   /* Thumbnails compactos bajo el frame */
@@ -4104,16 +4104,16 @@
   }
 
   .detail-thumb-strip {
-    padding: 2px 2px 3px !important;
+    padding: 3px 2px 4px !important;
     gap: 4px !important;
   }
 
-  /* Specs fijos en la parte inferior, tamaño natural */
+  /* Specs: flex:1 → rellena EXACTAMENTE el espacio hasta la action bar */
   .vd-galeria-specs {
-    flex: 0 0 auto !important;
-    overflow-y: visible !important;
-    padding: 6px 0 4px !important;
-    gap: 5px !important;
+    flex: 1 !important;
+    overflow-y: auto !important;
+    padding: 8px 0 4px !important;
+    min-height: 0 !important;
   }
 
   /* Lista inline: label izquierda / valor derecha — sin card background */
