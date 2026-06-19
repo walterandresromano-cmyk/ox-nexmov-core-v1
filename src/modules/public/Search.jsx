@@ -1814,6 +1814,7 @@ export default function Search({
                       onNavigate={onNavigate}
                       vehicles={sortedVehicles}
                       getDealer={getDealer}
+                      allVehicles={publicSearchVehicles}
                       priority={idx < 4}
                     />
                   ))}

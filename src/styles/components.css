@@ -7218,7 +7218,7 @@ body::-webkit-scrollbar {
 
 .vehicle-card__actions {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   gap: 7px;
   margin-top: auto;
 }
@@ -7233,8 +7233,8 @@ body::-webkit-scrollbar {
 }
 
 .vehicle-card__btn--contact {
-  width: 100%;
-  margin-top: 6px;
+  width: 40px;
+  min-width: 40px;
 }
 
 .vehicle-card__btn {
@@ -8055,7 +8055,7 @@ body::-webkit-scrollbar {
 }
 
 .vehicle-card__actions {
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   gap: var(--ox-space-3);
 }
 
@@ -23253,6 +23253,7 @@ body::-webkit-scrollbar {
 .vehicle-card__btn--primary {
   min-height: 42px;
   font-size: 0.66rem;
+  padding-inline: 8px;
 }
 
 
@@ -28536,6 +28537,24 @@ button.buyer-shortlist-compare__slot:hover {
 }
 
 :root[data-theme="light"] .financing-rate-btn.is-active {
+  background: rgba(14, 165, 233, 0.12);
+  border-color: rgba(14, 165, 233, 0.40);
+  color: rgba(3, 105, 161, 0.95);
+}
+
+.financing-rate-declared {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.50);
+  background: rgba(56, 189, 248, 0.16);
+  color: rgba(186, 230, 253, 0.98);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+:root[data-theme="light"] .financing-rate-declared {
   background: rgba(14, 165, 233, 0.12);
   border-color: rgba(14, 165, 233, 0.40);
   color: rgba(3, 105, 161, 0.95);

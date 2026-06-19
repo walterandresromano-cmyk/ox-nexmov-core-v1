@@ -15,6 +15,7 @@ import {
 } from "../../lib/financing.js";
 import { getVehiclePriceHistory } from "../../services/priceHistory.service.js";
 import { createContraoferta } from "../../services/contraofertas.service.js";
+import { listDealerPublicVehicles } from "../../services/vehicles.service.js";
 import ContactGate from "../../modules/public/ContactGate.jsx";
 import VehicleImage from "../VehicleImage.jsx";
 import { useScramble } from "../../hooks/useScramble.js";
@@ -146,9 +147,14 @@ function getVehicleMaintenanceInfo(vehicle) {
   };
 }
 
-function PriceReveal({ price }) {
+function PriceReveal({ price, children }) {
   const display = useScramble(Number(price || 0), { duration: 700, delay: 120 });
-  return <strong className="detail-price">$ {display}</strong>;
+  return (
+    <div className="detail-price">
+      <strong className="detail-price__number">$ {display}</strong>
+      {children}
+    </div>
+  );
 }
 
 export default function VehicleDetailModal({
@@ -161,6 +167,7 @@ export default function VehicleDetailModal({
   favoriteActive,
   vehicles,
   getDealer,
+  allVehicles,
   appActions,
   onNavigate,
   shareUrl,
@@ -196,6 +203,15 @@ export default function VehicleDetailModal({
   const isPlatinumDealer = permissions.rankTheme === "platinum";
   const delta = getMarketDelta(currentVehicle);
   const images = useMemo(() => getVehicleImages(currentVehicle), [currentVehicle]);
+
+  const vehicleRates = useMemo(() => {
+    if (currentVehicle.hasFinancing && currentVehicle.rate > 0) {
+      return [{ label: `Tasa del vendedor (TNA ${currentVehicle.rate}%)`, monthly: currentVehicle.rate / 100 / 12 }];
+    }
+    return FINANCING_RATES;
+  }, [currentVehicle]);
+
+  const [dealerVehicles, setDealerVehicles] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [slideDir, setSlideDir] = useState(1); // 1 = right, -1 = left
   const modalScrollRef = useRef(null);
@@ -229,6 +245,11 @@ export default function VehicleDetailModal({
     () => getVehicleMaintenanceInfo(currentVehicle),
     [currentVehicle]
   );
+  const hasDetalles = maintenanceInfo.shouldShow;
+
+  useEffect(() => {
+    if (activeTab === "detalles" && !hasDetalles) setActiveTab("galeria");
+  }, [hasDetalles, activeTab]);
   const usedFinancingResult = useMemo(
     () =>
       calculateUsedVehicleFinancing({
@@ -236,7 +257,7 @@ export default function VehicleDetailModal({
         downPayment:  financingDownPayment || currentVehicle.delivery || "",
         termMonths:   financingTermMonths  || currentVehicle.months   || String(DEFAULT_TERM_MONTHS),
         monthlyIncome: financingIncome,
-        monthlyRate:  FINANCING_RATES[financingRateIdx]?.monthly,
+        monthlyRate:  vehicleRates[financingRateIdx]?.monthly,
       }),
     [
       currentVehicle.price,
@@ -338,7 +359,8 @@ export default function VehicleDetailModal({
     setFinancingDownPayment(defaultDown);
     setFinancingTermMonths(currentVehicle?.months ? String(currentVehicle.months) : String(DEFAULT_TERM_MONTHS));
     setFinancingIncome("");
-    setFinancingRateIdx(DEFAULT_RATE_INDEX);
+    setFinancingRateIdx(currentVehicle?.hasFinancing && currentVehicle?.rate > 0 ? 0 : DEFAULT_RATE_INDEX);
+    setDealerVehicles([]);
 
     const vid = currentVehicle?.vehicle_id ?? currentVehicle?.id;
     if (vid) {
@@ -357,6 +379,17 @@ export default function VehicleDetailModal({
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [currentIndex, hasPrev, hasNext]);
+
+  useEffect(() => {
+    if (activeTab !== "contactar") return;
+    const dealerId = currentVehicle.dealerId || currentVehicle.dealer?.id;
+    if (!dealerId || dealerId === "dealer-fallback" || dealerId === "dealer-snapshot") return;
+    let cancelled = false;
+    listDealerPublicVehicles(dealerId, currentVehicle.id, 5).then((list) => {
+      if (!cancelled) setDealerVehicles(list);
+    });
+    return () => { cancelled = true; };
+  }, [activeTab, currentVehicle]);
 
   // Zoom to the point the user clicked. Formula: newTx = cx - (cx - tx) * (newScale / s)
   // where (cx, cy) is the cursor position relative to the container center.
@@ -665,15 +698,6 @@ export default function VehicleDetailModal({
         ref={modalScrollRef}
         className={`vehicle-detail-modal vehicle-detail-modal--${permissions.rankTheme}`}
       >
-        <button
-          type="button"
-          className="modal-close-btn vehicle-detail-close"
-          onClick={handleClose}
-          aria-label="Cerrar detalle"
-        >
-          ×
-        </button>
-
         {vehicles && vehicles.length > 1 && (
           <div className="vehicle-detail-nav">
             <button
@@ -704,24 +728,78 @@ export default function VehicleDetailModal({
         <div className="vd-modal-identity">
           <div className="vd-modal-identity-info">
             <h2 className="vd-modal-identity-title">
-              {currentVehicle.brand} {currentVehicle.model}
+              {currentVehicle.brand} <span className="vd-modal-identity-model">{currentVehicle.model}</span>
             </h2>
             <p className="vd-modal-identity-sub">
-              {currentVehicle.version} · {currentVehicle.year} · {formatKm(currentVehicle.kilometers)}
+              {currentVehicle.version !== "Versión no informada" && <>{currentVehicle.version} · </>}
+              {currentVehicle.year} · {formatKm(currentVehicle.kilometers)}
             </p>
           </div>
           <div className="vd-modal-identity-right">
-            <span className="vd-modal-identity-price">{formatARS(currentVehicle.price)}</span>
+            <div className="vd-modal-identity-top-row">
+              <span className="vd-modal-identity-price">{formatARS(currentVehicle.price)}</span>
+              <button
+                type="button"
+                className="vd-modal-close-inline"
+                onClick={handleClose}
+                aria-label="Cerrar"
+              >
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
             {reserved && <span className="vd-modal-identity-reserved">Reservado</span>}
+            {(currentVehicle.views > 0 || currentVehicle.leads_count > 0) && (
+              <div className="vd-identity-signals">
+                {currentVehicle.views > 0 && (
+                  <span className="vd-identity-signal">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/></svg>
+                    {currentVehicle.views >= 1000 ? `${(currentVehicle.views / 1000).toFixed(1)}k` : currentVehicle.views}
+                  </span>
+                )}
+                {currentVehicle.leads_count > 0 && (
+                  <span className="vd-identity-signal">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    {currentVehicle.leads_count}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Tab bar */}
         <div className="vd-tabs" role="tablist">
-          <button type="button" role="tab" aria-selected={activeTab === "galeria"} className={`vd-tab${activeTab === "galeria" ? " is-active" : ""}`} onClick={() => setActiveTab("galeria")}>Fotos</button>
-          <button type="button" role="tab" aria-selected={activeTab === "detalles"} className={`vd-tab${activeTab === "detalles" ? " is-active" : ""}`} onClick={() => setActiveTab("detalles")}>Detalles</button>
-          <button type="button" role="tab" aria-selected={activeTab === "precio"} className={`vd-tab${activeTab === "precio" ? " is-active" : ""}`} onClick={() => setActiveTab("precio")}>Precio</button>
-          <button type="button" role="tab" aria-selected={activeTab === "contactar"} className={`vd-tab${activeTab === "contactar" ? " is-active" : ""}`} onClick={() => setActiveTab("contactar")}>Contactar</button>
+          <button type="button" role="tab" aria-selected={activeTab === "galeria"} className={`vd-tab${activeTab === "galeria" ? " is-active" : ""}`} onClick={() => setActiveTab("galeria")}>
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <rect x="1" y="4" width="11" height="7.5" rx="1.6" stroke="currentColor" strokeWidth="1.3"/>
+              <path d="M4.5 4v-1a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="6.5" cy="7.8" r="1.65" stroke="currentColor" strokeWidth="1.2"/>
+            </svg>
+            Fotos
+          </button>
+          {hasDetalles && (
+            <button type="button" role="tab" aria-selected={activeTab === "detalles"} className={`vd-tab${activeTab === "detalles" ? " is-active" : ""}`} onClick={() => setActiveTab("detalles")}>
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                <path d="M2 4h9M2 6.5h9M2 9h5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              Detalles
+            </button>
+          )}
+          <button type="button" role="tab" aria-selected={activeTab === "precio"} className={`vd-tab${activeTab === "precio" ? " is-active" : ""}`} onClick={() => setActiveTab("precio")}>
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <path d="M2 3h5.5l3.8 3.5-3.8 3.5H2V3z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+              <circle cx="9" cy="6.5" r="1.1" fill="currentColor"/>
+            </svg>
+            Precio
+          </button>
+          <button type="button" role="tab" aria-selected={activeTab === "contactar"} className={`vd-tab${activeTab === "contactar" ? " is-active" : ""}`} onClick={() => setActiveTab("contactar")}>
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <path d="M2 2.8a.8.8 0 01.8-.8h7.4a.8.8 0 01.8.8V8a.8.8 0 01-.8.8H7.5L5 11V8.8H2.8A.8.8 0 012 8V2.8z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+            </svg>
+            Contactar
+          </button>
         </div>
 
         {/* Tab content */}
@@ -730,6 +808,7 @@ export default function VehicleDetailModal({
           {/* ── FOTOS ── */}
           {activeTab === "galeria" && (
             <div className="vd-pane vd-pane--galeria">
+            <div className="vd-galeria-left">
               <div className="detail-gallery-frame">
               {images[0]?.url && (
                 <img
@@ -862,44 +941,54 @@ export default function VehicleDetailModal({
                 ))}
               </div>
             )}
+            </div>{/* vd-galeria-left */}
+
+            <div className="vd-galeria-specs">
+              <div className="vd-galeria-grid">
+                <div className="vd-galeria-spec">
+                  <span>Año</span>
+                  <strong>{currentVehicle.year}</strong>
+                </div>
+                <div className="vd-galeria-spec">
+                  <span>Kilómetros</span>
+                  <strong>{formatKm(currentVehicle.kilometers)}</strong>
+                </div>
+                {currentVehicle.fuelType && (
+                  <div className="vd-galeria-spec">
+                    <span>Combustible</span>
+                    <strong>{currentVehicle.fuelType}</strong>
+                  </div>
+                )}
+                {currentVehicle.transmission && (
+                  <div className="vd-galeria-spec">
+                    <span>Transmisión</span>
+                    <strong>{currentVehicle.transmission}</strong>
+                  </div>
+                )}
+                {currentVehicle.bodyType && (
+                  <div className="vd-galeria-spec">
+                    <span>Carrocería</span>
+                    <strong>{currentVehicle.bodyType}</strong>
+                  </div>
+                )}
+                <div className="vd-galeria-spec">
+                  <span>Ubicación</span>
+                  <strong>{currentVehicle.city}, {currentVehicle.province}</strong>
+                </div>
+              </div>
+              {currentVehicle.details && (
+                <div className="vd-galeria-spec vd-galeria-spec--desc">
+                  <span>Descripción</span>
+                  <p>{currentVehicle.details}</p>
+                </div>
+              )}
+            </div>
             </div>
           )}
 
           {/* ── DETALLES ── */}
           {activeTab === "detalles" && (
             <div className="vd-pane vd-pane--detalles">
-            <div className="vehicle-detail-quick-specs vd-specs-enter">
-              <div>
-                <span>Año</span>
-                <strong>{currentVehicle.year}</strong>
-              </div>
-              <div>
-                <span>Kilómetros</span>
-                <strong>{formatKm(currentVehicle.kilometers)}</strong>
-              </div>
-              {currentVehicle.fuelType && (
-                <div>
-                  <span>Combustible</span>
-                  <strong>{currentVehicle.fuelType}</strong>
-                </div>
-              )}
-              {currentVehicle.transmission && (
-                <div>
-                  <span>Transmisión</span>
-                  <strong>{currentVehicle.transmission}</strong>
-                </div>
-              )}
-              {currentVehicle.bodyType && (
-                <div>
-                  <span>Carrocería</span>
-                  <strong>{currentVehicle.bodyType}</strong>
-                </div>
-              )}
-              <div>
-                <span>Ubicación</span>
-                <strong>{currentVehicle.city}, {currentVehicle.province}</strong>
-              </div>
-            </div>
 
             {maintenanceInfo.shouldShow && (
               <div className="vehicle-detail-maintenance-block">
@@ -926,61 +1015,25 @@ export default function VehicleDetailModal({
               </div>
             )}
 
-            {currentVehicle.details && (
-              <div className="detail-vehicle-description">
-                <span>Descripción del vehículo</span>
-                <p>{currentVehicle.details}</p>
-              </div>
-            )}
-
-            <div className="detail-published-by">
-              {(currentDealer.logo || currentDealer.raw?.logo_url) && (
-                <img
-                  className="detail-published-by-bg"
-                  src={currentDealer.logo || currentDealer.raw?.logo_url}
-                  alt=""
-                  aria-hidden="true"
-                />
-              )}
-              <div className="detail-published-by-header">
-                <span className="detail-published-by-label">Publicado por</span>
-                <span className={`admin-chip rank-${permissions.rankTheme}`}>
-                  {permissions.rankLabel}
-                </span>
-              </div>
-              <strong className="detail-published-by-name">
-                {currentDealer.commercialName}
-              </strong>
-              <p className="detail-published-by-location">
-                {currentDealer.city}, {currentDealer.province}
-              </p>
-              <p className="detail-published-by-trust">
-                Concesionaria verificada dentro de oX NEXMOV.
-              </p>
-              {onNavigate &&
-                currentDealer.id &&
-                currentDealer.id !== "dealer-fallback" &&
-                currentDealer.id !== "dealer-snapshot" && (
-                  <button
-                    type="button"
-                    className="dealer-profile-link-btn"
-                    onClick={() =>
-                      onNavigate("dealerProfile", {
-                        dealerId: currentDealer.id,
-                      })
-                    }
-                  >
-                    Ver más de este dealer →
-                  </button>
-                )}
-            </div>
             </div>
           )}
 
           {/* ── PRECIO ── */}
           {activeTab === "precio" && (
             <div className="vd-pane vd-pane--precio">
-            <PriceReveal price={currentVehicle.price} />
+            <PriceReveal price={currentVehicle.price}>
+              {delta && (
+                <div className="vd-price-market-ref">
+                  <span>Ref. mercado</span>
+                  <strong>{formatARS(currentVehicle.marketReferencePrice)}</strong>
+                  <em className={delta.isBelowMarket ? "vd-delta--below" : "vd-delta--above"}>
+                    {delta.isBelowMarket
+                      ? `${delta.percent.toFixed(1)}% debajo del mercado`
+                      : `${Math.abs(delta.percent).toFixed(1)}% por encima del mercado`}
+                  </em>
+                </div>
+              )}
+            </PriceReveal>
 
             {priceHistory.length >= 2 && (() => {
               const first  = priceHistory[0].price;
@@ -1015,42 +1068,6 @@ export default function VehicleDetailModal({
               );
             })()}
 
-            {delta && (
-              <div className="detail-market-box">
-                <span>Referencia de mercado</span>
-                <strong>{formatARS(currentVehicle.marketReferencePrice)}</strong>
-                <p>
-                  {delta.isBelowMarket
-                    ? `${delta.percent.toFixed(1)}% debajo de la referencia cargada`
-                    : `${Math.abs(delta.percent).toFixed(1)}% por encima de la referencia cargada`}
-                </p>
-              </div>
-            )}
-
-            {currentVehicle.hasFinancing && (currentVehicle.delivery > 0 || currentVehicle.months > 0 || currentVehicle.rate > 0) && (
-              <div className="vehicle-detail-financing-details">
-                <p className="vehicle-detail-financing-label">Condiciones de financiación</p>
-                {currentVehicle.delivery > 0 && (
-                  <div>
-                    <span>Entrega</span>
-                    <strong>{formatARS(currentVehicle.delivery)}</strong>
-                  </div>
-                )}
-                {currentVehicle.months > 0 && (
-                  <div>
-                    <span>Cuotas</span>
-                    <strong>{currentVehicle.months} meses</strong>
-                  </div>
-                )}
-                {currentVehicle.rate > 0 && (
-                  <div>
-                    <span>Tasa</span>
-                    <strong>{currentVehicle.rate}%</strong>
-                  </div>
-                )}
-              </div>
-            )}
-
             <div className="vehicle-detail-used-financing">
               <div className="vehicle-detail-used-financing-head">
                 <div>
@@ -1061,7 +1078,9 @@ export default function VehicleDetailModal({
               </div>
 
               <div className="vehicle-detail-used-financing-rates">
-                {FINANCING_RATES.map((r, i) => (
+                {vehicleRates.length === 1
+                  ? <span className="financing-rate-declared">{vehicleRates[0].label}</span>
+                  : vehicleRates.map((r, i) => (
                   <button
                     key={i}
                     type="button"
@@ -1072,6 +1091,7 @@ export default function VehicleDetailModal({
                   </button>
                 ))}
               </div>
+
 
               <div className="vehicle-detail-used-financing-inputs">
                 <label>
@@ -1170,21 +1190,6 @@ export default function VehicleDetailModal({
           {/* ── CONTACTAR ── */}
           {activeTab === "contactar" && (
             <div className="vd-pane vd-pane--contactar">
-            <div className="detail-rank-row">
-              <span className={`admin-chip rank-${permissions.rankTheme}`}>
-                {permissions.rankLabel}
-              </span>
-              <span className="detail-status">
-                {reserved ? "Reservado" : "Activo"}
-              </span>
-            </div>
-
-            {reserved && (
-              <div className="vehicle-status-alert">
-                <strong>Reservado</strong>
-                <span>Esta unidad fue marcada como reservada por el dealer.</span>
-              </div>
-            )}
 
             {showContraofertaForm && currentVehicle.contraoferta_habilitada && (
               <div className="detail-contraoferta-panel">
@@ -1266,6 +1271,44 @@ export default function VehicleDetailModal({
                   </button>
                 )}
             </div>
+
+            {dealerVehicles.length > 0 && (
+              <div className="vd-dealer-more">
+                <p className="vd-dealer-more-label">Más de este vendedor</p>
+                {dealerVehicles.map((v) => {
+                  const vIdx = vehicles ? vehicles.findIndex((x) => x.id === v.id) : -1;
+                  const thumb = getVehicleImages(v)[0]?.url || "";
+                  function handleGoToDealer() {
+                    if (vIdx >= 0) { goTo(vIdx); }
+                    else {
+                      setCurrentVehicle(v);
+                      setActiveTab("galeria");
+                    }
+                  }
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      className="vd-dealer-more-card"
+                      onClick={handleGoToDealer}
+                    >
+                      <div className="vd-dealer-more-thumb">
+                        {thumb
+                          ? <img src={thumb} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                          : <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.5"/><path d="M3 15l5-5 4 4 3-3 6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+
+                      </div>
+                      <div className="vd-dealer-more-info">
+                        <strong>{v.brand} {v.model}</strong>
+                        <span>{v.year} · {v.kilometers != null ? `${Number(v.kilometers).toLocaleString("es-AR")} km` : ""}</span>
+                        <em>{formatARS(v.price)}</em>
+                      </div>
+                      {isVehicleReserved(v) && <span className="vd-dealer-more-reserved">Reservado</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             </div>
           )}

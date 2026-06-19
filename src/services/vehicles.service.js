@@ -84,7 +84,7 @@ export function isPublicVehicleVisible(vehicle) {
   if (vehicle.raw?.is_active === false) return false;
   if (vehicle.active === false || vehicle.is_active === false) return false;
 
-  // publication_status solo "active" es público
+  // publication_status "active" y "reserved" son públicos; todo lo demás queda oculto
   const pubStatus = String(
     vehicle.publicationStatus ||
     vehicle.publication_status ||
@@ -95,7 +95,7 @@ export function isPublicVehicleVisible(vehicle) {
     .replace(/_/g, " ")
     .trim();
 
-  if (pubStatus && pubStatus !== "active") return false;
+  if (pubStatus && pubStatus !== "active" && pubStatus !== "reserved") return false;
 
   // status "sold" / "vendido" nunca es público
   const st = String(vehicle.status || vehicle.raw?.status || "").toLowerCase();
@@ -284,7 +284,7 @@ export async function listPublicVehicles() {
     .from("vehicles")
     .select(PUBLIC_VEHICLE_SELECT)
     .eq("is_active", true)
-    .eq("publication_status", "active")
+    .in("publication_status", ["active", "reserved"])
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -314,7 +314,7 @@ export async function listPublicLatestVehicles({ limit = 8 } = {}) {
     .from("vehicles")
     .select(PUBLIC_VEHICLE_SELECT)
     .eq("is_active", true)
-    .eq("publication_status", "active")
+    .in("publication_status", ["active", "reserved"])
     .order("created_at", { ascending: false })
     .limit(Number(limit || 8));
 
@@ -370,6 +370,20 @@ export async function getPublicVehicleById(id) {
     vehicle: data ? mapVehicleFromSupabase(data) : null,
     error: null,
   };
+}
+
+export async function listDealerPublicVehicles(dealerId, excludeId, limit = 5) {
+  if (!isSupabaseConfigured || !supabase || !dealerId) return [];
+  const { data } = await supabase
+    .from("vehicles")
+    .select(PUBLIC_VEHICLE_SELECT)
+    .eq("dealer_id", dealerId)
+    .eq("is_active", true)
+    .in("publication_status", ["active", "reserved"])
+    .neq("id", excludeId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  return (data || []).map(mapVehicleFromSupabase).filter(isPublicVehicleVisible);
 }
 
 export async function getPublicInventoryStats() {

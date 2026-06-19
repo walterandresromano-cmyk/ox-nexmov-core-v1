@@ -118,6 +118,7 @@ export default function VehicleCardPublic({
   onNavigate,
   vehicles,
   getDealer,
+  allVehicles,
   priority = false,
 }) {
   const [showContactGate, setShowContactGate] = useState(false);
@@ -395,6 +396,7 @@ export default function VehicleCardPublic({
             }}
             vehicles={vehicles}
             getDealer={getDealer}
+            allVehicles={allVehicles}
             appActions={appActions}
             onNavigate={onNavigate}
           />
