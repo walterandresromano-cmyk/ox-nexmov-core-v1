@@ -4072,7 +4072,7 @@
   /* ── 3. Pane Fotos: columna única sin scroll ─────────────────── */
   .vd-pane--galeria {
     flex-direction: column !important;
-    overflow-y: hidden !important;   /* todo debe caber, sin scroll */
+    overflow-y: auto !important;     /* scroll solo si el contenido no entra */
     flex: 1 !important;
     gap: 6px !important;
     padding-bottom: 4px !important;
