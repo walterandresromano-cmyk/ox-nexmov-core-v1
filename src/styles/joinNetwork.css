@@ -756,6 +756,41 @@
   background: rgba(255, 255, 255, 0.72);
 }
 
+/* ── WhatsApp contact button ─────────────────────────────── */
+.jnp-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(37, 211, 102, 0.38);
+  background: rgba(37, 211, 102, 0.12);
+  color: #25d366;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.14s ease;
+  white-space: nowrap;
+}
+
+.jnp-wa-btn:hover {
+  background: rgba(37, 211, 102, 0.20);
+  border-color: rgba(37, 211, 102, 0.55);
+  transform: translateY(-1px);
+}
+
+:root[data-theme="light"] .jnp-wa-btn {
+  border-color: rgba(22, 163, 74, 0.30);
+  background: rgba(220, 252, 231, 0.72);
+  color: #15803d;
+}
+
+:root[data-theme="light"] .jnp-wa-btn:hover {
+  background: rgba(187, 247, 208, 0.88);
+  border-color: rgba(22, 163, 74, 0.46);
+}
+
 @media (max-width: 1180px) {
   .join-network-plan-section .join-network-plans,
   .join-network-proposal-grid,
