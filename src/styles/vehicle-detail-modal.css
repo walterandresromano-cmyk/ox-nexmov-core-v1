@@ -4155,9 +4155,26 @@
     grid-column: unset !important;
   }
 
-  /* Descripción se mueve a pestaña Detalles — no en Fotos */
+  /* Descripción: columna, debajo de la lista de specs */
   .vd-galeria-spec--desc {
-    display: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+    padding: 8px 2px !important;
+    border-bottom: none !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.10) !important;
+    background: none !important;
+    border-radius: 0 !important;
+    min-height: unset !important;
+  }
+
+  .vd-galeria-spec--desc p {
+    font-size: 0.80rem !important;
+    line-height: 1.5 !important;
+    overflow: visible !important;
+    max-height: none !important;
   }
 
   .detail-thumb-strip {
