@@ -429,6 +429,7 @@
 
 .join-network-actions button,
 .join-network-final button,
+.join-network-final .jnp-wa-btn,
 .join-network-plan-card button {
   min-height: 42px;
   padding: 0 18px;
@@ -756,39 +757,48 @@
   background: rgba(255, 255, 255, 0.72);
 }
 
-/* ── WhatsApp contact button ─────────────────────────────── */
+/* ── WhatsApp contact button — unificado con los otros dos ── */
 .jnp-wa-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 11px 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(37, 211, 102, 0.38);
-  background: rgba(37, 211, 102, 0.12);
-  color: #25d366;
-  font-size: 0.88rem;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(37, 211, 102, 0.50);
+  background: rgba(37, 211, 102, 0.18);
+  color: #4ade80;
+  font-size: 0.74rem;
   font-weight: 600;
+  letter-spacing: 0.01em;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.18s ease, border-color 0.18s ease, transform 0.14s ease;
   white-space: nowrap;
+  transition: transform 0.22s var(--ox-ease, ease), box-shadow 0.22s var(--ox-ease, ease), border-color 0.22s ease, background 0.18s ease;
+}
+
+.jnp-wa-btn svg {
+  flex-shrink: 0;
 }
 
 .jnp-wa-btn:hover {
-  background: rgba(37, 211, 102, 0.20);
-  border-color: rgba(37, 211, 102, 0.55);
   transform: translateY(-1px);
+  background: rgba(37, 211, 102, 0.26);
+  border-color: rgba(37, 211, 102, 0.70);
+  box-shadow: 0 0 18px rgba(37, 211, 102, 0.22);
 }
 
 :root[data-theme="light"] .jnp-wa-btn {
-  border-color: rgba(22, 163, 74, 0.30);
-  background: rgba(220, 252, 231, 0.72);
+  border-color: rgba(22, 163, 74, 0.40);
+  background: rgba(220, 252, 231, 0.80);
   color: #15803d;
 }
 
 :root[data-theme="light"] .jnp-wa-btn:hover {
-  background: rgba(187, 247, 208, 0.88);
-  border-color: rgba(22, 163, 74, 0.46);
+  background: rgba(187, 247, 208, 0.95);
+  border-color: rgba(22, 163, 74, 0.60);
+  box-shadow: 0 0 16px rgba(22, 163, 74, 0.18);
 }
 
 @media (max-width: 1180px) {
