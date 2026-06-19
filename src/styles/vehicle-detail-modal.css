@@ -4108,18 +4108,23 @@
     gap: 4px !important;
   }
 
-  /* Specs: flex:1 → rellena EXACTAMENTE el espacio hasta la action bar */
+  /* Specs: flex:1 → rellena el espacio hasta la action bar */
   .vd-galeria-specs {
     flex: 1 !important;
     overflow-y: auto !important;
     padding: 8px 0 4px !important;
     min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   /* Lista inline: label izquierda / valor derecha — sin card background */
   .vd-galeria-grid {
-    grid-template-columns: 1fr !important;  /* columna única */
+    grid-template-columns: 1fr !important;
     gap: 0 !important;
+    flex: 1 !important;                     /* ocupa todo el alto disponible antes de descripción */
+    align-content: space-between !important; /* distribuye filas para llenar ese espacio */
+    min-height: 0 !important;
   }
 
   .vd-galeria-spec {
