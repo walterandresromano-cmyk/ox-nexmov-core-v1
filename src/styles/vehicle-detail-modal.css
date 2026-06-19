@@ -4006,3 +4006,118 @@
 :root[data-theme="light"] .vd-galeria-spec strong {
   color: #07172b !important;
 }
+
+/* ================================================================
+   oX NEXMOV — Mobile modal: fix pantalla completa + layout responsive
+   Estas reglas usan !important para pisar el bloque de desktop que
+   tiene su propio !important en width/padding/border-radius.
+   ================================================================ */
+
+@keyframes vd-modal-enter-mobile {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  /* ── 1. Modal pantalla completa ──────────────────────────────── */
+  .modal-backdrop:has(.vehicle-detail-modal),
+  .modal-backdrop.vehicle-detail-backdrop {
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .vehicle-detail-modal {
+    width: 100% !important;
+    max-width: none !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    padding: 14px 16px 0 16px !important;
+    animation: vd-modal-enter-mobile 0.36s cubic-bezier(0.22, 1, 0.36, 1) both !important;
+  }
+
+  /* Footer con texto legal — demasiado pequeño en mobile, no agrega valor */
+  .vehicle-detail-footer {
+    display: none !important;
+  }
+
+  /* ── 2. Tab bar: scroll horizontal si no entran las 4 tabs ───── */
+  .vd-tabs {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch;
+    gap: 4px !important;
+  }
+
+  .vd-tabs::-webkit-scrollbar { display: none; }
+
+  .vd-tab {
+    flex: none !important;
+    white-space: nowrap !important;
+    padding: 7px 11px !important;
+    font-size: 0.76rem !important;
+  }
+
+  .vd-tab svg {
+    width: 11px !important;
+    height: 11px !important;
+  }
+
+  /* ── 3. Pane Fotos: columna única en mobile ───────────────────── */
+  .vd-pane--galeria {
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    flex: 1 !important;
+    gap: 10px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .vd-galeria-left {
+    width: 100% !important;
+    flex: none !important;
+  }
+
+  .vd-pane--galeria .detail-gallery-frame {
+    aspect-ratio: 4/3 !important;
+    height: auto !important;
+    padding: 8px !important;
+  }
+
+  .vd-galeria-specs {
+    flex: none !important;
+    overflow-y: visible !important;
+    padding-top: 0 !important;
+    gap: 8px !important;
+  }
+
+  .vd-galeria-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+  }
+
+  .vd-galeria-spec--desc {
+    overflow-y: visible !important;
+    min-height: unset !important;
+  }
+
+  /* ── 4. Actions bar: safe area + spacing ─────────────────────── */
+  .vd-actions-bar {
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* ── 5. Identity bar: precio compacto en pantallas chicas ─────── */
+  .vd-modal-identity-price {
+    font-size: clamp(0.95rem, 4.5vw, 1.3rem) !important;
+  }
+
+  .vd-modal-identity-title {
+    font-size: clamp(1rem, 4.5vw, 1.3rem) !important;
+  }
+}
+
+@media (max-width: 900px) and (prefers-reduced-motion: reduce) {
+  .vehicle-detail-modal {
+    animation: none !important;
+  }
+}
