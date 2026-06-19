@@ -4064,13 +4064,13 @@
     height: 11px !important;
   }
 
-  /* ── 3. Pane Fotos: columna única en mobile ───────────────────── */
+  /* ── 3. Pane Fotos: columna única sin scroll ─────────────────── */
   .vd-pane--galeria {
     flex-direction: column !important;
-    overflow-y: auto !important;
+    overflow-y: hidden !important;   /* todo debe caber, sin scroll */
     flex: 1 !important;
-    gap: 10px !important;
-    padding-bottom: 8px !important;
+    gap: 6px !important;
+    padding-bottom: 4px !important;
   }
 
   .vd-galeria-left {
@@ -4078,32 +4078,87 @@
     flex: none !important;
   }
 
+  /* 16/9 = imagen más corta → las specs caben debajo sin scroll */
   .vd-pane--galeria .detail-gallery-frame {
-    aspect-ratio: 4/3 !important;
+    aspect-ratio: 16/9 !important;
     height: auto !important;
-    padding: 8px !important;
+    padding: 6px !important;
   }
 
   .vd-galeria-specs {
     flex: none !important;
     overflow-y: visible !important;
     padding-top: 0 !important;
-    gap: 8px !important;
+    gap: 5px !important;
   }
 
   .vd-galeria-grid {
     grid-template-columns: 1fr 1fr !important;
-    gap: 6px !important;
+    gap: 5px !important;
   }
 
+  /* Specs compactos para que entren 3 filas sin scroll */
+  .vd-galeria-spec {
+    padding: 6px 10px !important;
+    min-height: 46px !important;
+  }
+
+  .vd-galeria-spec span {
+    font-size: 0.58rem !important;
+  }
+
+  .vd-galeria-spec strong {
+    font-size: 0.82rem !important;
+  }
+
+  /* Descripción verbose no cabe en layout sin scroll */
   .vd-galeria-spec--desc {
-    overflow-y: visible !important;
-    min-height: unset !important;
+    display: none !important;
   }
 
-  /* ── 4. Actions bar: safe area + spacing ─────────────────────── */
+  /* Thumbnails compactos */
+  .detail-thumb {
+    flex: 0 0 54px !important;
+    height: 38px !important;
+  }
+
+  .detail-thumb-strip {
+    padding: 3px 2px 4px !important;
+    gap: 5px !important;
+  }
+
+  /* ── 4. Actions bar: iconos arriba, CTA abajo ────────────────── */
   .vd-actions-bar {
+    padding-top: 8px !important;
     padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Mover botón principal DEBAJO de los iconos secundarios */
+  .vd-actions-bar .detail-actions {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    align-items: stretch !important;
+  }
+
+  .vd-actions-bar .detail-actions-secondary {
+    order: 1 !important;
+    flex: 1 1 100% !important;
+  }
+
+  /* flex-basis 50% → se expande a 100% cuando está solo,
+     comparte fila al 50%/50% cuando está con contraoferta */
+  .vd-actions-bar .primary-action {
+    order: 2 !important;
+    flex: 1 1 calc(50% - 3px) !important;
+    min-height: 42px !important;
+    font-size: 0.82rem !important;
+  }
+
+  .vd-actions-bar .detail-action-contraoferta {
+    order: 3 !important;
+    flex: 1 1 calc(50% - 3px) !important;
+    min-height: 42px !important;
+    font-size: 0.82rem !important;
   }
 
   /* ── 5. Identity bar: precio compacto en pantallas chicas ─────── */
