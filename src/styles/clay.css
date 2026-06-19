@@ -141,34 +141,62 @@
 .join-network-plan-section .join-network-plan-elite  { transform: rotate(-0.4deg); }
 .join-network-plan-section .join-network-plan-platinum { transform: rotate(0.8deg); }
 
-/* ── Rank shadows — dark ─────────────────────────────────── */
+/* ── Rank — dark: blobs de color sobre oscuro profundo ────── */
+
+/* Inicio — glow ámbar arriba-izq + acento abajo-der */
 .join-network-plan-section .join-network-plan-inicio {
+  background:
+    radial-gradient(ellipse 75% 58% at 18%  6%,  rgba(251, 191,  36, 0.22) 0%, transparent 62%),
+    radial-gradient(ellipse 48% 40% at 88% 92%,  rgba(245, 158,  11, 0.12) 0%, transparent 56%),
+    linear-gradient(160deg, rgba(22, 14,  4, 0.97) 0%, rgba(2, 6, 23, 0.99) 100%) !important;
+  border-color: rgba(251, 191, 36, 0.24) !important;
   box-shadow:
     inset 0  2px 0 rgba(251, 191,  36, 0.16),
     inset 0 -2px 0 rgba(0,   0,   0,   0.42),
-    0 10px 36px rgba(0, 0, 0, 0.52),
-    0  3px 10px rgba(0, 0, 0, 0.28) !important;
+    0 12px 38px rgba(0, 0, 0, 0.56),
+    0  4px 12px rgba(245, 158, 11, 0.08) !important;
 }
+
+/* Pro — glow azul arriba-centro + acento abajo-izq */
 .join-network-plan-section .join-network-plan-pro {
+  background:
+    radial-gradient(ellipse 75% 58% at 52%  4%,  rgba( 56, 189, 248, 0.24) 0%, transparent 62%),
+    radial-gradient(ellipse 48% 40% at  6% 94%,  rgba( 14, 165, 233, 0.13) 0%, transparent 56%),
+    linear-gradient(160deg, rgba( 4, 14, 28, 0.97) 0%, rgba(2, 6, 23, 0.99) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.24) !important;
   box-shadow:
     inset 0  2px 0 rgba(125, 211, 252, 0.16),
     inset 0 -2px 0 rgba(0,   0,   0,   0.42),
-    0 10px 36px rgba(0, 0, 0, 0.52),
-    0  3px 10px rgba(0, 0, 0, 0.28) !important;
+    0 12px 38px rgba(0, 0, 0, 0.56),
+    0  4px 12px rgba(14, 165, 233, 0.08) !important;
 }
+
+/* Elite — glow dorado arriba-der + acento abajo-izq */
 .join-network-plan-section .join-network-plan-elite {
+  background:
+    radial-gradient(ellipse 75% 58% at 84%  4%,  rgba(234, 179,   8, 0.26) 0%, transparent 62%),
+    radial-gradient(ellipse 48% 40% at 12% 94%,  rgba(251, 191,  36, 0.14) 0%, transparent 56%),
+    linear-gradient(160deg, rgba(18, 14,  3, 0.97) 0%, rgba(2, 6, 23, 0.99) 100%) !important;
+  border-color: rgba(234, 179, 8, 0.28) !important;
   box-shadow:
     inset 0  2px 0 rgba(253, 230, 138, 0.20),
     inset 0 -2px 0 rgba(0,   0,   0,   0.42),
-    0 10px 38px rgba(0, 0, 0, 0.54),
-    0  3px 10px rgba(0, 0, 0, 0.28) !important;
+    0 12px 40px rgba(0, 0, 0, 0.58),
+    0  4px 12px rgba(234, 179,  8, 0.09) !important;
 }
+
+/* Platinum — glow slate arriba-izq difuso + acento der */
 .join-network-plan-section .join-network-plan-platinum {
+  background:
+    radial-gradient(ellipse 72% 55% at 22%  6%,  rgba(148, 163, 184, 0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 48% 40% at 90% 92%,  rgba(100, 116, 139, 0.12) 0%, transparent 55%),
+    linear-gradient(160deg, rgba(10, 14, 22, 0.97) 0%, rgba(2, 6, 23, 0.99) 100%) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
   box-shadow:
     inset 0  2px 0 rgba(248, 250, 252, 0.22),
     inset 0 -2px 0 rgba(0,   0,   0,   0.38),
-    0 10px 38px rgba(0, 0, 0, 0.54),
-    0  3px 10px rgba(0, 0, 0, 0.28) !important;
+    0 12px 40px rgba(0, 0, 0, 0.58),
+    0  4px 12px rgba(148, 163, 184, 0.07) !important;
 }
 
 /* ── Panel de precio — frosted glass flotante (ambos modos) ─ */
