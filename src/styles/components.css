@@ -10286,6 +10286,13 @@ body::-webkit-scrollbar {
   -webkit-backdrop-filter: blur(18px) saturate(0.82) !important;
 }
 
+@media (max-width: 900px) {
+  .modal-backdrop:has(.vehicle-detail-modal) {
+    place-items: start stretch !important;
+    overflow: hidden !important;
+  }
+}
+
 .modal-backdrop:has(.contact-modal)::before,
 .modal-backdrop:has(.vehicle-detail-modal)::before,
 .modal-backdrop:has(.dealer-vehicle-detail-modal)::before,

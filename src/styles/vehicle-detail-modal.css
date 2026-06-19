@@ -4033,6 +4033,8 @@
   .modal-backdrop.vehicle-detail-backdrop {
     padding: 0 !important;
     overflow: hidden !important;
+    align-items: start !important;   /* evita centrado vertical que saca el modal del viewport */
+    justify-items: stretch !important;
   }
 
   .vehicle-detail-modal {
