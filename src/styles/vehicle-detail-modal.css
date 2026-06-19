@@ -4077,7 +4077,7 @@
     flex-direction: column !important;
     overflow: hidden !important;     /* el pane NO scrollea */
     gap: 0 !important;
-    padding: 0 !important;
+    padding: 10px 0 0 !important;
   }
 
   /* Bloque imagen + miniaturas: altura natural, no crece */
@@ -4182,7 +4182,7 @@
   }
 
   /* ── 6. DETALLES ──────────────────────────────────────────────── */
-  .vd-pane--detalles { padding: 8px 0 !important; }
+  .vd-pane--detalles { padding: 10px 0 !important; }
 
   .vd-pane--detalles .vehicle-detail-maintenance-block {
     flex: none !important;
