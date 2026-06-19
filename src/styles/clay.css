@@ -101,3 +101,28 @@
     0  4px 18px rgba(30, 45, 70, 0.09),
     0  1px  4px rgba(30, 45, 70, 0.05);
 }
+
+/* ── Market badge — fix light mode (regla oscura sin tema en responsive.css la pisa) ── */
+:root[data-theme="light"] .vehicle-card__market--below {
+  background: linear-gradient(
+    180deg,
+    rgba(220, 252, 231, 0.98),
+    rgba(187, 247, 208, 0.80)
+  ) !important;
+  border-color: rgba(22, 163, 74, 0.28) !important;
+  color: #14532d !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+:root[data-theme="light"] .vehicle-card__market--above {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 251, 235, 0.98),
+    rgba(254, 243, 199, 0.80)
+  ) !important;
+  border-color: rgba(217, 119, 6, 0.24) !important;
+  color: #7c2d12 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
