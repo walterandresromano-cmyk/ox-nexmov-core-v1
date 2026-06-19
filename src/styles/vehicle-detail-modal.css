@@ -4116,23 +4116,43 @@
     gap: 5px !important;
   }
 
+  /* Lista inline: label izquierda / valor derecha — sin card background */
   .vd-galeria-grid {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 5px !important;
+    grid-template-columns: 1fr !important;  /* columna única */
+    gap: 0 !important;
   }
 
-  /* Celdas compactas */
   .vd-galeria-spec {
-    padding: 5px 10px !important;
-    min-height: 42px !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: baseline !important;
+    gap: 8px !important;
+    background: none !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.10) !important;
+    border-radius: 0 !important;
+    padding: 7px 2px !important;
+    min-height: unset !important;
+  }
+
+  .vd-galeria-spec:last-child {
+    border-bottom: none !important;
   }
 
   .vd-galeria-spec span {
-    font-size: 0.57rem !important;
+    flex: none !important;
+    font-size: 0.60rem !important;
+    white-space: nowrap !important;
   }
 
   .vd-galeria-spec strong {
-    font-size: 0.80rem !important;
+    font-size: 0.84rem !important;
+    text-align: right !important;
+  }
+
+  /* Full-width en lista de 1 col no hace diferencia — override igual */
+  .vd-galeria-spec--full {
+    grid-column: unset !important;
   }
 
   /* Descripción se mueve a pestaña Detalles — no en Fotos */
@@ -4179,7 +4199,17 @@
     font-size: 0.82rem !important;
   }
 
-  /* ── 5. Identity bar: precio compacto en pantallas chicas ─────── */
+  /* ── 5. Detalles: maintenance card rellena el pane (sin hueco al fondo) */
+  .vd-pane--detalles {
+    padding: 6px 0 !important;
+  }
+
+  .vd-pane--detalles .vehicle-detail-maintenance-block {
+    flex: 1 !important;       /* crece para llenar el pane */
+    overflow-y: auto !important;
+  }
+
+  /* ── 6. Identity bar: precio compacto en pantallas chicas ─────── */
   .vd-modal-identity-price {
     font-size: clamp(0.95rem, 4.5vw, 1.3rem) !important;
   }
