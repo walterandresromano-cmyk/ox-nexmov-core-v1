@@ -4069,16 +4069,15 @@
     height: 11px !important;
   }
 
-  /* ── 3. Pane Fotos: imagen ratio fijo, specs llenan el resto ─── */
+  /* ── 3. Pane Fotos: scroll natural, alturas reales — sin hacks ── */
   .vd-pane--galeria {
     flex-direction: column !important;
-    overflow-y: hidden !important;
+    overflow-y: auto !important;
     flex: 1 !important;
     gap: 0 !important;
     padding: 0 !important;
   }
 
-  /* galeria-left: altura natural según aspect-ratio de la imagen */
   .vd-galeria-left {
     width: 100% !important;
     flex: 0 0 auto !important;
@@ -4088,61 +4087,44 @@
     gap: 4px !important;
   }
 
-  /* Frame con ratio fijo 3/2 — imagen siempre landscape, bien proporcional */
+  /* Frame 16:9 — compacto para dejar espacio a los specs */
   .vd-pane--galeria .detail-gallery-frame {
     flex: none !important;
-    aspect-ratio: 3/2 !important;
+    aspect-ratio: 16/9 !important;
     height: auto !important;
     width: 100% !important;
     padding: 0 !important;
   }
 
-  /* Thumbnails compactos bajo el frame */
-  .detail-thumb {
-    flex: 0 0 52px !important;
-    height: 36px !important;
-  }
+  .detail-thumb { flex: 0 0 52px !important; height: 36px !important; }
+  .detail-thumb-strip { padding: 3px 2px 4px !important; gap: 4px !important; }
 
-  .detail-thumb-strip {
-    padding: 3px 2px 4px !important;
-    gap: 4px !important;
-  }
-
-  /* Specs: flex:1 → rellena el espacio hasta la action bar */
+  /* Specs: altura natural, no scrollea por su cuenta */
   .vd-galeria-specs {
-    flex: 1 !important;
-    overflow-y: auto !important;
+    flex: 0 0 auto !important;
     padding: 8px 0 4px !important;
-    min-height: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
   }
 
-  /* Lista inline: label izquierda / valor derecha — sin card background */
+  /* Grid simple: 1 columna, sin distribuir */
   .vd-galeria-grid {
     grid-template-columns: 1fr !important;
     gap: 0 !important;
-    flex: 1 !important;                     /* ocupa todo el alto disponible antes de descripción */
-    align-content: space-between !important; /* distribuye filas para llenar ese espacio */
-    min-height: 0 !important;
   }
 
   .vd-galeria-spec {
     flex-direction: row !important;
     justify-content: space-between !important;
-    align-items: baseline !important;
+    align-items: center !important;
     gap: 8px !important;
     background: none !important;
     border: none !important;
     border-bottom: 1px solid rgba(148, 163, 184, 0.10) !important;
     border-radius: 0 !important;
-    padding: 7px 2px !important;
+    padding: 5px 2px !important;
     min-height: unset !important;
   }
 
-  .vd-galeria-spec:last-child {
-    border-bottom: none !important;
-  }
+  .vd-galeria-spec:last-child { border-bottom: none !important; }
 
   .vd-galeria-spec span {
     flex: none !important;
@@ -4155,12 +4137,7 @@
     text-align: right !important;
   }
 
-  /* Full-width en lista de 1 col no hace diferencia — override igual */
-  .vd-galeria-spec--full {
-    grid-column: unset !important;
-  }
-
-  /* Descripción: columna, debajo de la lista de specs */
+  /* Descripción: columna debajo de la lista */
   .vd-galeria-spec--desc {
     display: flex !important;
     flex-direction: column !important;
@@ -4173,6 +4150,7 @@
     background: none !important;
     border-radius: 0 !important;
     min-height: unset !important;
+    max-height: none !important;
   }
 
   .vd-galeria-spec--desc p {
@@ -4221,13 +4199,24 @@
     font-size: 0.82rem !important;
   }
 
-  /* ── 5. Detalles: maintenance card rellena el pane (sin hueco al fondo) */
+  /* ── 5. Panes con contenido de altura variable: el pane mismo scrollea */
   .vd-pane--detalles {
     padding: 6px 0 !important;
+    overflow-y: auto !important;
   }
 
+  /* Maintenance card: altura natural — el pane la contiene, no la card */
   .vd-pane--detalles .vehicle-detail-maintenance-block {
-    flex: 1 !important;       /* crece para llenar el pane */
+    flex: none !important;
+    overflow-y: visible !important;
+  }
+
+  /* Precio y Contactar: pane scrollea si el contenido supera el alto */
+  .vd-pane--precio {
+    overflow-y: auto !important;
+  }
+
+  .vd-pane--contactar {
     overflow-y: auto !important;
   }
 
