@@ -1197,6 +1197,17 @@ export default function VehicleDetailModal({
           {activeTab === "contactar" && (
             <div className="vd-pane vd-pane--contactar">
 
+            <button
+              type="button"
+              className="vd-contactar-cta"
+              onClick={() => {
+                if (appActions) setShowContactGate(true);
+                else onContact?.();
+              }}
+            >
+              {reserved ? "Consultar disponibilidad" : "Consultar al dealer"}
+            </button>
+
             {showContraofertaForm && currentVehicle.contraoferta_habilitada && (
               <div className="detail-contraoferta-panel">
                 {contraofertaStatus === "ok" ? (

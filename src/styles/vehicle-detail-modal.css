@@ -3498,6 +3498,9 @@
   overflow: hidden;
 }
 
+/* CTA solo visible en mobile — oculto en desktop */
+.vd-contactar-cta { display: none; }
+
 /* Base pane */
 .vd-pane {
   flex: 1;
@@ -4024,7 +4027,8 @@
 }
 
 @media (max-width: 900px) {
-  /* ── 1. Modal pantalla completa ──────────────────────────────── */
+
+  /* ── 1. SHELL: modal pantalla completa, flex-column fija ─────── */
   .modal-backdrop:has(.vehicle-detail-modal),
   .modal-backdrop.vehicle-detail-backdrop {
     padding: 0 !important;
@@ -4037,57 +4041,55 @@
     height: 100dvh !important;
     max-height: 100dvh !important;
     border-radius: 0 !important;
-    padding: 14px 16px env(safe-area-inset-bottom, 6px) 16px !important;
+    padding: 14px 16px env(safe-area-inset-bottom, 8px) 16px !important;
     animation: vd-modal-enter-mobile 0.36s cubic-bezier(0.22, 1, 0.36, 1) both !important;
   }
 
-  /* Footer con texto legal — demasiado pequeño en mobile, no agrega valor */
-  .vehicle-detail-footer {
-    display: none !important;
-  }
+  .vehicle-detail-footer { display: none !important; }
 
-  /* ── 2. Tab bar: scroll horizontal si no entran las 4 tabs ───── */
+  /* ── 2. IDENTITY BAR ──────────────────────────────────────────── */
+  .vd-modal-identity-price { font-size: clamp(0.88rem, 4vw, 1.2rem) !important; }
+  .vd-modal-identity-title { font-size: clamp(0.88rem, 4vw, 1.2rem) !important; }
+
+  /* ── 3. TAB BAR ───────────────────────────────────────────────── */
   .vd-tabs {
+    flex: 0 0 auto !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
     scrollbar-width: none !important;
-    -webkit-overflow-scrolling: touch;
     gap: 4px !important;
   }
-
   .vd-tabs::-webkit-scrollbar { display: none; }
 
   .vd-tab {
     flex: none !important;
     white-space: nowrap !important;
-    padding: 7px 11px !important;
+    padding: 7px 12px !important;
     font-size: 0.76rem !important;
   }
+  .vd-tab svg { width: 11px !important; height: 11px !important; }
 
-  .vd-tab svg {
-    width: 11px !important;
-    height: 11px !important;
-  }
+  /* ── 4. PANE BASE — todos scrollean su contenido ──────────────── */
+  /* El .vd-pane base ya tiene flex:1, min-height:0, overflow-y:auto */
 
-  /* ── 3. Pane Fotos: scroll natural, alturas reales — sin hacks ── */
+  /* ── 5. FOTOS: imagen anclada arriba, specs scrollean debajo ──── */
   .vd-pane--galeria {
     flex-direction: column !important;
-    overflow-y: auto !important;
-    flex: 1 !important;
+    overflow: hidden !important;     /* el pane NO scrollea */
     gap: 0 !important;
     padding: 0 !important;
   }
 
+  /* Bloque imagen + miniaturas: altura natural, no crece */
   .vd-galeria-left {
-    width: 100% !important;
     flex: 0 0 auto !important;
+    width: 100% !important;
     min-height: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     gap: 4px !important;
   }
 
-  /* Frame 16:9 — compacto para dejar espacio a los specs */
   .vd-pane--galeria .detail-gallery-frame {
     flex: none !important;
     aspect-ratio: 16/9 !important;
@@ -4096,57 +4098,75 @@
     padding: 0 !important;
   }
 
-  .detail-thumb { flex: 0 0 52px !important; height: 36px !important; }
-  .detail-thumb-strip { padding: 3px 2px 4px !important; gap: 4px !important; }
+  .detail-thumb-strip { padding: 2px 0 !important; gap: 4px !important; }
+  .detail-thumb { flex: 0 0 46px !important; height: 30px !important; }
 
-  /* Specs: altura natural, no scrollea por su cuenta */
+  /* Sección de specs: ocupa el espacio restante, scrollea si hace falta */
   .vd-galeria-specs {
-    flex: 0 0 auto !important;
-    padding: 8px 0 4px !important;
-  }
-
-  /* Grid simple: 1 columna, sin distribuir */
-  .vd-galeria-grid {
-    grid-template-columns: 1fr !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    padding: 12px 0 4px !important;
     gap: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    scrollbar-width: none !important;
+  }
+  .vd-galeria-specs::-webkit-scrollbar { display: none; }
+
+  /* Grid 2 columnas — limpio, sin fondos de tarjeta */
+  .vd-galeria-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px 20px !important;
   }
 
+  /* Spec cell: etiqueta arriba, valor abajo */
   .vd-galeria-spec {
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    gap: 8px !important;
-    background: none !important;
-    border: none !important;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.10) !important;
-    border-radius: 0 !important;
-    padding: 5px 2px !important;
-    min-height: unset !important;
-  }
-
-  .vd-galeria-spec:last-child { border-bottom: none !important; }
-
-  .vd-galeria-spec span {
-    flex: none !important;
-    font-size: 0.60rem !important;
-    white-space: nowrap !important;
-  }
-
-  .vd-galeria-spec strong {
-    font-size: 0.84rem !important;
-    text-align: right !important;
-  }
-
-  /* Descripción: columna debajo de la lista */
-  .vd-galeria-spec--desc {
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-start !important;
     justify-content: flex-start !important;
-    gap: 4px !important;
-    padding: 8px 2px !important;
-    border-bottom: none !important;
-    border-top: 1px solid rgba(148, 163, 184, 0.10) !important;
+    gap: 2px !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    min-height: unset !important;
+  }
+
+  /* Etiqueta: KILÓMETROS, AÑO… */
+  .vd-galeria-spec span {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    opacity: 0.5 !important;
+    white-space: nowrap !important;
+    flex: none !important;
+  }
+
+  /* Valor: 12.000 km, 2020… */
+  .vd-galeria-spec strong {
+    font-size: 0.90rem !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    text-align: left !important;
+  }
+
+  /* UBICACIÓN abarca las dos columnas */
+  .vd-galeria-spec--full {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* Descripción: debajo del grid, separada por línea */
+  .vd-galeria-spec--desc {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 5px !important;
+    padding: 14px 0 8px !important;
+    margin-top: 10px !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.15) !important;
     background: none !important;
     border-radius: 0 !important;
     min-height: unset !important;
@@ -4154,24 +4174,47 @@
   }
 
   .vd-galeria-spec--desc p {
-    font-size: 0.80rem !important;
-    line-height: 1.5 !important;
+    font-size: 0.84rem !important;
+    line-height: 1.55 !important;
     overflow: visible !important;
     max-height: none !important;
+    margin: 0 !important;
   }
 
-  .detail-thumb-strip {
-    padding: 3px 2px 4px !important;
-    gap: 5px !important;
+  /* ── 6. DETALLES ──────────────────────────────────────────────── */
+  .vd-pane--detalles { padding: 8px 0 !important; }
+
+  .vd-pane--detalles .vehicle-detail-maintenance-block {
+    flex: none !important;
+    overflow-y: visible !important;
   }
 
-  /* ── 4. Actions bar: pegado al fondo sin padding extra ──────── */
+  /* ── 7. CONTACTAR — CTA visible en mobile ─────────────────────── */
+  .vd-contactar-cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    padding: 15px !important;
+    border-radius: 12px !important;
+    background: var(--ox-accent, #3b82f6) !important;
+    color: #fff !important;
+    font-size: 0.92rem !important;
+    font-weight: 600 !important;
+    border: none !important;
+    cursor: pointer !important;
+    margin-bottom: 14px !important;
+    letter-spacing: 0.01em !important;
+  }
+
+  /* ── 8. ACTIONS BAR ───────────────────────────────────────────── */
   .vd-actions-bar {
+    flex: 0 0 auto !important;
     padding-top: 8px !important;
-    padding-bottom: 6px !important;   /* safe-area va en el modal, no aquí */
+    padding-bottom: 6px !important;
   }
 
-  /* Mover botón principal DEBAJO de los iconos secundarios */
+  /* Botón principal abajo, iconos secundarios arriba */
   .vd-actions-bar .detail-actions {
     flex-wrap: wrap !important;
     gap: 6px !important;
@@ -4183,8 +4226,6 @@
     flex: 1 1 100% !important;
   }
 
-  /* flex-basis 50% → se expande a 100% cuando está solo,
-     comparte fila al 50%/50% cuando está con contraoferta */
   .vd-actions-bar .primary-action {
     order: 2 !important;
     flex: 1 1 calc(50% - 3px) !important;
@@ -4198,40 +4239,8 @@
     min-height: 42px !important;
     font-size: 0.82rem !important;
   }
-
-  /* ── 5. Panes con contenido de altura variable: el pane mismo scrollea */
-  .vd-pane--detalles {
-    padding: 6px 0 !important;
-    overflow-y: auto !important;
-  }
-
-  /* Maintenance card: altura natural — el pane la contiene, no la card */
-  .vd-pane--detalles .vehicle-detail-maintenance-block {
-    flex: none !important;
-    overflow-y: visible !important;
-  }
-
-  /* Precio y Contactar: pane scrollea si el contenido supera el alto */
-  .vd-pane--precio {
-    overflow-y: auto !important;
-  }
-
-  .vd-pane--contactar {
-    overflow-y: auto !important;
-  }
-
-  /* ── 6. Identity bar: precio compacto en pantallas chicas ─────── */
-  .vd-modal-identity-price {
-    font-size: clamp(0.95rem, 4.5vw, 1.3rem) !important;
-  }
-
-  .vd-modal-identity-title {
-    font-size: clamp(1rem, 4.5vw, 1.3rem) !important;
-  }
 }
 
 @media (max-width: 900px) and (prefers-reduced-motion: reduce) {
-  .vehicle-detail-modal {
-    animation: none !important;
-  }
+  .vehicle-detail-modal { animation: none !important; }
 }
