@@ -4048,6 +4048,10 @@
   .vehicle-detail-footer { display: none !important; }
 
   /* ── 2. IDENTITY BAR ──────────────────────────────────────────── */
+  .vd-modal-identity {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
+  }
+  .vd-modal-identity::after { display: none !important; }
   .vd-modal-identity-price { font-size: clamp(0.88rem, 4vw, 1.2rem) !important; }
   .vd-modal-identity-title { font-size: clamp(0.88rem, 4vw, 1.2rem) !important; }
 
