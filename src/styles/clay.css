@@ -102,6 +102,168 @@
     0  1px  4px rgba(30, 45, 70, 0.05);
 }
 
+/* ══════════════════════════════════════════════════════════════
+   Plan cards (JoinNetwork) — clay morphism
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Grid — más aire ─────────────────────────────────────── */
+.join-network-plan-section .join-network-plans {
+  gap: 20px !important;
+}
+
+/* ── Base shell — geometría orgánica ─────────────────────── */
+.join-network-plan-section .join-network-plan-card {
+  border-radius: 28px !important;
+  padding: 22px !important;
+  gap: 13px !important;
+  box-shadow:
+    inset 0  2px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -2px 0 rgba(0,   0,   0,   0.40),
+    0 10px 36px rgba(0, 0, 0, 0.52),
+    0  3px 10px rgba(0, 0, 0, 0.28) !important;
+  transition:
+    transform    0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow   0.22s ease,
+    border-color 0.18s ease !important;
+}
+
+.join-network-plan-section .join-network-plan-card:hover {
+  box-shadow:
+    inset 0  2px 0 rgba(255, 255, 255, 0.13),
+    inset 0 -3px 0 rgba(0,   0,   0,   0.46),
+    0 18px 52px rgba(0, 0, 0, 0.62),
+    0  5px 14px rgba(0, 0, 0, 0.30) !important;
+}
+
+/* ── Micro-rotación orgánica por rango ───────────────────── */
+.join-network-plan-section .join-network-plan-inicio { transform: rotate(-0.7deg); }
+.join-network-plan-section .join-network-plan-pro    { transform: rotate(0.5deg);  }
+.join-network-plan-section .join-network-plan-elite  { transform: rotate(-0.4deg); }
+.join-network-plan-section .join-network-plan-platinum { transform: rotate(0.8deg); }
+
+/* ── Rank shadows — dark ─────────────────────────────────── */
+.join-network-plan-section .join-network-plan-inicio {
+  box-shadow:
+    inset 0  2px 0 rgba(251, 191,  36, 0.16),
+    inset 0 -2px 0 rgba(0,   0,   0,   0.42),
+    0 10px 36px rgba(0, 0, 0, 0.52),
+    0  3px 10px rgba(0, 0, 0, 0.28) !important;
+}
+.join-network-plan-section .join-network-plan-pro {
+  box-shadow:
+    inset 0  2px 0 rgba(125, 211, 252, 0.16),
+    inset 0 -2px 0 rgba(0,   0,   0,   0.42),
+    0 10px 36px rgba(0, 0, 0, 0.52),
+    0  3px 10px rgba(0, 0, 0, 0.28) !important;
+}
+.join-network-plan-section .join-network-plan-elite {
+  box-shadow:
+    inset 0  2px 0 rgba(253, 230, 138, 0.20),
+    inset 0 -2px 0 rgba(0,   0,   0,   0.42),
+    0 10px 38px rgba(0, 0, 0, 0.54),
+    0  3px 10px rgba(0, 0, 0, 0.28) !important;
+}
+.join-network-plan-section .join-network-plan-platinum {
+  box-shadow:
+    inset 0  2px 0 rgba(248, 250, 252, 0.22),
+    inset 0 -2px 0 rgba(0,   0,   0,   0.38),
+    0 10px 38px rgba(0, 0, 0, 0.54),
+    0  3px 10px rgba(0, 0, 0, 0.28) !important;
+}
+
+/* ── Panel de precio — frosted glass flotante (ambos modos) ─ */
+.join-network-plan-section .jnp-price {
+  padding: 10px 12px !important;
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+
+/* ── Base light ──────────────────────────────────────────── */
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-card {
+  box-shadow:
+    inset 0  2px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -2px 0 rgba(140, 160, 195, 0.22),
+    0 12px 32px rgba(20, 35, 65, 0.11),
+    0  3px  8px rgba(20, 35, 65, 0.06) !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-card:hover {
+  box-shadow:
+    inset 0  2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 0 rgba(140, 160, 195, 0.28),
+    0 18px 48px rgba(20, 35, 65, 0.14),
+    0  5px 12px rgba(20, 35, 65, 0.08) !important;
+}
+:root[data-theme="light"] .join-network-plan-section .jnp-price {
+  background: rgba(255, 255, 255, 0.72) !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Ocultar stripe superior en light mode — se reemplaza con el glow del blob */
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-card::after {
+  display: none !important;
+}
+
+/* ── Rank — light: wash translúcido, sin saturación ───────── */
+
+/* Inicio — wash ámbar muy suave */
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-inicio {
+  background:
+    radial-gradient(ellipse 85% 60% at 18% -8%,  rgba(251, 191,  36, 0.26) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 42% at 88% 108%, rgba(253, 186, 116, 0.16) 0%, transparent 58%),
+    #ffffff !important;
+  border-color: rgba(245, 158, 11, 0.18) !important;
+  box-shadow:
+    inset 0  2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 0 rgba(180, 100, 20, 0.12),
+    0 20px 50px rgba(251, 146, 60, 0.14),
+    0  5px 14px rgba(180, 100, 20, 0.07) !important;
+}
+
+/* Pro — wash azul muy suave */
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-pro {
+  background:
+    radial-gradient(ellipse 80% 58% at 50% -6%,  rgba( 56, 189, 248, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 42% at  6% 105%, rgba( 14, 165, 233, 0.14) 0%, transparent 56%),
+    #f9fdff !important;
+  border-color: rgba(14, 165, 233, 0.16) !important;
+  box-shadow:
+    inset 0  2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 0 rgba(14, 116, 180, 0.12),
+    0 20px 50px rgba(14, 165, 233, 0.13),
+    0  5px 14px rgba(14, 116, 180, 0.06) !important;
+}
+
+/* Elite — wash dorado muy suave */
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-elite {
+  background:
+    radial-gradient(ellipse 82% 58% at 80% -6%,  rgba(234, 179,   8, 0.26) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 42% at 12% 110%, rgba(251, 191,  36, 0.16) 0%, transparent 56%),
+    #fffef9 !important;
+  border-color: rgba(234, 179, 8, 0.20) !important;
+  box-shadow:
+    inset 0  2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 0 rgba(180, 140,  0, 0.12),
+    0 20px 50px rgba(234, 179,  8, 0.14),
+    0  5px 14px rgba(180, 140,  0, 0.07) !important;
+}
+
+/* Platinum — wash slate muy suave */
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-platinum {
+  background:
+    radial-gradient(ellipse 78% 56% at 22% -6%,  rgba(100, 116, 139, 0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 42% at 92% 108%, rgba( 71,  85, 105, 0.13) 0%, transparent 56%),
+    #fafbfc !important;
+  border-color: rgba(100, 116, 139, 0.18) !important;
+  box-shadow:
+    inset 0  2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 0 rgba( 71,  85, 105, 0.12),
+    0 20px 50px rgba(100, 116, 139, 0.13),
+    0  5px 14px rgba( 71,  85, 105, 0.06) !important;
+}
+
 /* ── Market badge — fix light mode (regla oscura sin tema en responsive.css la pisa) ── */
 :root[data-theme="light"] .vehicle-card__market--below {
   background: linear-gradient(

@@ -430,7 +430,8 @@
 .join-network-actions button,
 .join-network-final button,
 .join-network-final .jnp-wa-btn,
-.join-network-plan-card button {
+.join-network-plan-card button,
+.join-network-plan-card .jnp-wa-btn {
   min-height: 42px;
   padding: 0 18px;
   font-size: 0.74rem;
@@ -755,6 +756,22 @@
 :root[data-theme="light"] .join-network-final-actions .secondary-btn {
   color: rgba(13, 23, 38, 0.78);
   background: rgba(255, 255, 255, 0.72);
+}
+
+/* ── Plan card action group (CTA + WhatsApp) ─────────────── */
+.jnp-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-self: end;
+}
+
+.jnp-card-actions .jnp-wa-btn {
+  display: flex;
+  min-height: 38px;
+  font-size: 0.66rem;
+  justify-content: center;
+  width: 100%;
 }
 
 /* ── WhatsApp contact button — unificado con los otros dos ── */
