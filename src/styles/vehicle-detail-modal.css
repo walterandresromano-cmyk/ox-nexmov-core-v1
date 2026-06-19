@@ -4069,34 +4069,50 @@
     height: 11px !important;
   }
 
-  /* ── 3. Pane Fotos: columna única sin scroll ─────────────────── */
+  /* ── 3. Pane Fotos: hero image — imagen llena el espacio libre ── */
   .vd-pane--galeria {
     flex-direction: column !important;
-    overflow-y: auto !important;     /* scroll solo si el contenido no entra */
+    overflow-y: auto !important;
     flex: 1 !important;
-    gap: 6px !important;
-    padding-bottom: 4px !important;
+    gap: 0 !important;
+    padding: 0 !important;
   }
 
+  /* galeria-left crece para ocupar todo el espacio sobre las specs */
   .vd-galeria-left {
     width: 100% !important;
-    flex: 0 1 auto !important;   /* shrink permitido para pantallas muy chicas */
+    flex: 1 !important;              /* rellena el espacio libre */
     min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
   }
 
-  /* 16/9 = imagen más corta → las specs caben debajo sin scroll */
+  /* Frame sin aspect-ratio fijo: crece con galeria-left */
   .vd-pane--galeria .detail-gallery-frame {
-    aspect-ratio: 16/9 !important;
-    height: auto !important;
-    min-height: 0 !important;
-    flex-shrink: 1 !important;
-    padding: 6px !important;
+    flex: 1 !important;
+    aspect-ratio: unset !important;  /* sin ratio fijo, la imagen toma el alto disponible */
+    height: 100% !important;
+    min-height: 140px !important;    /* evita imágenes diminutas en pantallas muy pequeñas */
+    padding: 4px !important;
   }
 
+  /* Thumbnails compactos bajo el frame */
+  .detail-thumb {
+    flex: 0 0 52px !important;
+    height: 36px !important;
+  }
+
+  .detail-thumb-strip {
+    padding: 2px 2px 3px !important;
+    gap: 4px !important;
+  }
+
+  /* Specs fijos en la parte inferior, tamaño natural */
   .vd-galeria-specs {
-    flex: none !important;
+    flex: 0 0 auto !important;
     overflow-y: visible !important;
-    padding-top: 0 !important;
+    padding: 6px 0 4px !important;
     gap: 5px !important;
   }
 
@@ -4105,29 +4121,23 @@
     gap: 5px !important;
   }
 
-  /* Specs compactos para que entren 3 filas sin scroll */
+  /* Celdas compactas */
   .vd-galeria-spec {
-    padding: 6px 10px !important;
-    min-height: 46px !important;
+    padding: 5px 10px !important;
+    min-height: 42px !important;
   }
 
   .vd-galeria-spec span {
-    font-size: 0.58rem !important;
+    font-size: 0.57rem !important;
   }
 
   .vd-galeria-spec strong {
-    font-size: 0.82rem !important;
+    font-size: 0.80rem !important;
   }
 
-  /* Descripción verbose no cabe en layout sin scroll */
+  /* Descripción se mueve a pestaña Detalles — no en Fotos */
   .vd-galeria-spec--desc {
     display: none !important;
-  }
-
-  /* Thumbnails compactos */
-  .detail-thumb {
-    flex: 0 0 54px !important;
-    height: 38px !important;
   }
 
   .detail-thumb-strip {
