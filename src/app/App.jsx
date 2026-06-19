@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 
 import Layout from "../components/Layout.jsx";
@@ -322,6 +322,7 @@ function canAccessRoute(route, role, authUser) {
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState(getInitialRouteFromLocation);
+  const lastTrackedRouteRef = useRef(null);
   const [routeParams, setRouteParams] = useState(getInitialRouteParamsFromLocation);
   const [compareItems, setCompareItems] = useState(getInitialCompareItems);
   const [favoriteItems, setFavoriteItems] = useState([]);
@@ -785,8 +786,12 @@ export default function App() {
 
     document.title = title;
 
-    // Analytics: track cada cambio de ruta pública
-    trackPageView(safeCurrentRoute, authProfile?.role ?? null);
+    // Analytics: una sola visita por cambio de ruta (el efecto puede re-correr
+    // cuando authProfile carga, pero no queremos contar eso como visita nueva)
+    if (lastTrackedRouteRef.current !== safeCurrentRoute) {
+      lastTrackedRouteRef.current = safeCurrentRoute;
+      trackPageView(safeCurrentRoute, authProfile?.role ?? null);
+    }
 
     function setMetaContent(attr, attrValue, content) {
       let el = document.querySelector(`meta[${attr}="${attrValue}"]`);
