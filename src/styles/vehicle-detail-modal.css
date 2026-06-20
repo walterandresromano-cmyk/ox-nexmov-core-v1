@@ -4459,6 +4459,7 @@
 
   /* Tabs: mismo estilo que botones de acción — ícono arriba, texto abajo */
   .vd-tab {
+    flex: 1 !important;
     flex-direction: column !important;
     gap: 4px !important;
     padding: 7px 4px !important;
@@ -4467,6 +4468,7 @@
     letter-spacing: 0.05em !important;
     text-transform: uppercase !important;
     font-weight: 700 !important;
+    white-space: nowrap !important;
     border-radius: var(--ox-radius-lg) !important;
   }
 
