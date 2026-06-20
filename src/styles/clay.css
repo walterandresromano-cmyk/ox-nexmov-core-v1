@@ -199,10 +199,30 @@
     0  4px 12px rgba(148, 163, 184, 0.05) !important;
 }
 
-/* ── Card actions — botón CTA grande, WA ícono cuadrado ─────── */
-.join-network-plan-section .join-network-plan-card button.jnp-cta {
+/* ── Card actions — fila CTA grande + WA ícono ───────────────
+   responsive.css tiene width:100%!important en todos los button
+   de la card; lo neutralizamos aquí para el layout flex row.    */
+.join-network-plan-section .jnp-card-actions .jnp-cta {
+  flex: 1 1 0 !important;
+  width: auto !important;
   min-height: 50px !important;
   font-size: 0.82rem !important;
+  white-space: nowrap !important;
+}
+
+.join-network-plan-section .jnp-card-actions .jnp-wa-btn {
+  flex: 0 0 50px !important;
+  width: 50px !important;
+  min-height: 50px !important;
+  padding: 0 !important;
+  font-size: 0 !important;
+  gap: 0 !important;
+}
+
+.join-network-plan-section .jnp-card-actions .jnp-wa-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
 }
 
 /* ── Panel de precio — frosted glass flotante (ambos modos) ─ */
