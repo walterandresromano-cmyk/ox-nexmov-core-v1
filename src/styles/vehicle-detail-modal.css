@@ -4129,7 +4129,7 @@
 
   .vd-pane--galeria .vehicle-detail-main-image img,
   .vd-pane--galeria .detail-main-image img {
-    object-fit: cover !important;
+    object-fit: contain !important;
     object-position: center center !important;
   }
 
