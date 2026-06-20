@@ -4087,7 +4087,6 @@
   }
 
   .vd-pane {
-    height: 100% !important;               /* ocupa exactamente el área disponible */
     min-height: 0 !important;
     overflow: hidden !important;
     gap: 8px !important;
@@ -4095,21 +4094,37 @@
     overscroll-behavior: none !important;
   }
 
-  /* ── 5. FOTOS ────────────────────────────────────────────────── */
+  /* ── 5. FOTOS — imagen llena todo el espacio disponible ─────── */
   .vd-pane--galeria {
+    height: 100% !important;               /* el pane de fotos sí ocupa todo */
     flex-direction: column !important;
-    justify-content: flex-start !important;
     gap: 0 !important;
     padding: 10px 0 0 !important;
   }
 
-  /* Imagen: altura proporcional al viewport, no aspect-ratio fijo */
-  .vd-pane--galeria .detail-gallery-frame {
-    flex: none !important;
+  /* Bloque imagen+thumbs: crece para llenar espacio disponible */
+  .vd-galeria-left {
+    flex: 1 1 auto !important;             /* llena lo que no usan las specs */
+    min-height: 0 !important;
     width: 100% !important;
-    height: clamp(140px, 26dvh, 196px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+
+  /* Imagen: crece dentro de vd-galeria-left */
+  .vd-pane--galeria .detail-gallery-frame {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    height: auto !important;
     aspect-ratio: auto !important;
     padding: 0 !important;
+  }
+
+  .vd-pane--galeria .vehicle-detail-main-image,
+  .vd-pane--galeria .detail-main-image {
+    height: 100% !important;
   }
 
   .vd-pane--galeria .vehicle-detail-main-image img,
@@ -4118,14 +4133,7 @@
     object-position: center center !important;
   }
 
-  /* Tira de miniaturas: una fila, compacta */
-  .vd-galeria-left {
-    flex: 0 0 auto !important;
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 4px !important;
-  }
+  /* Tira de miniaturas: una fila fija debajo de la imagen */
   .detail-thumb-strip {
     flex: 0 0 auto !important;
     padding: 4px 0 0 !important;
@@ -4177,8 +4185,14 @@
   /* Descripción: oculta — no hay espacio para texto libre */
   .vd-galeria-spec--desc { display: none !important; }
 
-  /* ── 6. DETALLES ──────────────────────────────────────────────── */
-  .vd-pane--detalles { padding: 10px 0 0 !important; } /* top right/left bottom */
+  /* ── 6. DETALLES — contenido puede ser largo, scroll limpio ─── */
+  .vd-pane--detalles {
+    overflow-y: auto !important;           /* scroll si el contenido no cabe */
+    overflow-x: hidden !important;
+    scrollbar-width: none !important;
+    padding: 10px 0 4px !important;
+  }
+  .vd-pane--detalles::-webkit-scrollbar { display: none; }
 
   .vd-pane--detalles .vehicle-detail-maintenance-block {
     flex: none !important;
@@ -4282,29 +4296,44 @@
     margin: 0 !important;
   }
 
-  /* ── 8. CONTACTAR — CTA en acciones, solo mostrar dealer ──────── */
+  /* ── 8. CONTACTAR — CTA en acciones, centrar dealer card ──────── */
 
-  /* La CTA está en la actions bar — no duplicar en el pane */
+  /* La CTA duplica la de la actions bar */
   .vd-pane--contactar .vd-contactar-cta { display: none !important; }
 
-  /* "Más de este vendedor" ocupa demasiado espacio en mobile */
+  /* "Más de este vendedor" ocupa demasiado espacio */
   .vd-pane--contactar .vd-dealer-more { display: none !important; }
 
-  /* Dealer card: compacto pero completo */
+  /* Centrar el dealer card en el espacio disponible */
+  .vd-pane--contactar {
+    justify-content: center !important;
+    padding-bottom: 12px !important;
+  }
+
+  /* Dealer card: centrado con margin auto (más robusto que justify-content en chain de flex) */
   .vd-pane--contactar .detail-published-by {
-    padding: 14px !important;
-    border-radius: 14px !important;
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    width: 100% !important;
   }
   .vd-pane--contactar .detail-published-by-header {
-    margin-bottom: 5px !important;
+    margin-bottom: 6px !important;
   }
   .vd-pane--contactar .detail-published-by-name {
-    font-size: 0.95rem !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    margin: 2px 0 !important;
   }
   .vd-pane--contactar .detail-published-by-location,
   .vd-pane--contactar .detail-published-by-trust {
-    font-size: 0.64rem !important;
+    font-size: 0.66rem !important;
     line-height: 1.4 !important;
+  }
+  .vd-pane--contactar .dealer-profile-link-btn {
+    margin-top: 10px !important;
+    font-size: 0.72rem !important;
   }
 
   /* ── 9. ACTIONS BAR — anclada al pie del modal ───────────────── */
@@ -4343,8 +4372,14 @@
     font-size: 0.82rem !important;
   }
 
+  /* Reservado: mostrar el botón deshabilitado (no ocultarlo) */
   .vd-actions-bar--reserved .primary-action {
-    display: none !important;
+    flex: 1 1 100% !important;            /* full-width cuando no hay contraoferta */
+    opacity: 0.72 !important;
+    cursor: default !important;
+    background: rgba(245, 158, 11, 0.14) !important;
+    border-color: rgba(245, 184, 75, 0.30) !important;
+    color: rgba(254, 243, 199, 0.84) !important;
   }
 
   .vd-actions-bar--reserved .detail-actions-secondary {
