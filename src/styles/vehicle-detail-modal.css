@@ -4596,6 +4596,29 @@
     overflow: hidden !important;
   }
 
+  /* ── CONTACTAR: mostrar vehículos del dealer, scroll vertical ── */
+  .vd-pane--contactar {
+    justify-content: flex-start !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: none !important;
+    padding-top: 10px !important;
+    padding-bottom: 12px !important;
+    gap: 12px !important;
+  }
+  .vd-pane--contactar::-webkit-scrollbar { display: none !important; }
+
+  /* Dealer card: fluye desde arriba, sin centrado vertical */
+  .vd-pane--contactar .detail-published-by {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Mostrar otros vehículos del dealer */
+  .vd-pane--contactar .vd-dealer-more {
+    display: flex !important;
+  }
+
   /* Actions bar: full-width natural (el modal no tiene padding lateral)
      Sólo define su propio padding interno y el borde superior */
   .vd-actions-bar {
