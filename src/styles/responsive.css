@@ -7540,9 +7540,10 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 :root[data-theme="dark"] .ox-home-stats-v3 div,
 :root[data-theme="dark"] .ox-home-locations-v3 button,
 :root[data-theme="dark"] .ox-home-bottom-trust-v3 article {
-  border-color: rgba(125, 211, 252, 0.16) !important;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(8, 18, 32, 0.82)) !important;
-  color: rgba(248, 251, 255, 0.92) !important;
+  border-color: rgba(148, 210, 252, 0.35) !important;
+  background: linear-gradient(135deg, rgba(60, 110, 180, 0.52), rgba(40, 80, 150, 0.46)) !important;
+  color: rgba(226, 240, 255, 0.96) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
 }
 
 /* Confidence panel: definitivos — lista plana, sin cajas anidadas */
@@ -7926,9 +7927,18 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
 :root[data-theme="dark"] .ox-home-stats-v3 div,
 :root[data-theme="dark"] .ox-home-locations-v3 button,
 :root[data-theme="dark"] .ox-home-bottom-trust-v3 article {
-  border-color: rgba(125, 211, 252, 0.16) !important;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(8, 18, 32, 0.82)) !important;
-  color: rgba(248, 251, 255, 0.92) !important;
+  border-color: rgba(148, 210, 252, 0.35) !important;
+  background: linear-gradient(135deg, rgba(60, 110, 180, 0.52), rgba(40, 80, 150, 0.46)) !important;
+  color: rgba(226, 240, 255, 0.96) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+}
+
+:root[data-theme="dark"] .ox-home-primary-actions-v3 button:first-child,
+:root[data-theme="dark"] .ox-home-section-actions-v3 button:first-child {
+  background: linear-gradient(135deg, #22b7ee, #2563eb) !important;
+  border-color: rgba(37, 99, 235, 0.40) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.30) !important;
 }
 
 @media (max-width: 920px) {
@@ -10077,7 +10087,6 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
     inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
 
-.ox-home-primary-actions-v3 button:not(:first-child),
 .join-network-actions .secondary-btn,
 .join-network-final .secondary-btn,
 .contact-modal .secondary-action,
@@ -10087,6 +10096,18 @@ html[data-theme="light"] .ox-home-page-v3 .ox-home-hero-v3 .ox-home-featured-car
   background:
     linear-gradient(180deg, rgba(20, 33, 54, 0.92), rgba(8, 15, 28, 0.88)) !important;
   color: rgba(242, 246, 251, 0.92) !important;
+}
+
+.ox-home-primary-actions-v3 button:not(:first-child) {
+  border-color: rgba(148, 210, 252, 0.32) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(224, 242, 255, 0.78)) !important;
+  color: #0f2236 !important;
+}
+
+:root[data-theme="dark"] .ox-home-primary-actions-v3 button:not(:first-child) {
+  border-color: rgba(125, 200, 252, 0.32) !important;
+  background: linear-gradient(135deg, rgba(40, 75, 130, 0.72), rgba(25, 52, 100, 0.66)) !important;
+  color: rgba(220, 238, 255, 0.96) !important;
 }
 
 .join-network-hero-copy > p,
