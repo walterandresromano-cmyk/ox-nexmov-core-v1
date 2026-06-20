@@ -761,17 +761,34 @@
 /* ── Plan card action group (CTA + WhatsApp) ─────────────── */
 .jnp-card-actions {
   display: flex;
-  flex-direction: column;
-  gap: 7px;
+  flex-direction: row;
+  gap: 8px;
   align-self: end;
+  width: 100%;
 }
 
+/* CTA ocupa todo el espacio disponible */
+.jnp-card-actions .jnp-cta,
+.jnp-card-actions button {
+  flex: 1 1 0;
+  min-height: 50px !important;
+}
+
+/* WA compacto: solo ícono */
 .jnp-card-actions .jnp-wa-btn {
   display: flex;
-  min-height: 38px;
-  font-size: 0.66rem;
-  justify-content: center;
-  width: 100%;
+  flex: 0 0 auto;
+  min-height: 50px;
+  width: 50px;
+  padding: 0;
+  font-size: 0;
+  gap: 0;
+}
+
+.jnp-card-actions .jnp-wa-btn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 /* ── WhatsApp contact button — unificado con los otros dos ── */
