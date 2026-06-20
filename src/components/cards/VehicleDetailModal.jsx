@@ -890,11 +890,6 @@ export default function VehicleDetailModal({
 
                 {/* Bottom-right: counter + zoom */}
                 <div className="detail-image-toolbar">
-                  {images.length > 1 && (
-                    <span className="detail-image-counter">
-                      {selectedImageIndex + 1} / {images.length}
-                    </span>
-                  )}
                   {selectedImage?.url && (
                     <>
                       <button
