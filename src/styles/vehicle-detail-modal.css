@@ -4226,7 +4226,7 @@
 
   /* Bloque de precio: más compacto */
   .vd-pane--precio .detail-price {
-    padding: 12px 14px !important;
+    padding: 16px 16px !important;
     border-radius: 14px !important;
   }
   .vd-pane--precio .detail-price__number {
@@ -4251,9 +4251,10 @@
 
   /* Financing: restaurar 3-col (el breakpoint 980px lo pone en 1-col) */
   .vd-pane--precio .vehicle-detail-used-financing {
-    padding: 12px !important;
+    padding: 14px !important;
     gap: 10px !important;
     border-radius: 14px !important;
+    margin-top: 14px !important;
   }
   .vd-pane--precio .vehicle-detail-used-financing-head {
     align-items: center !important;
