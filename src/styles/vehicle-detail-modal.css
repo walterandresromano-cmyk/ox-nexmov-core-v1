@@ -4235,6 +4235,20 @@
     margin-bottom: 6px !important;
   }
 
+  /* Market ref: achicar para que quepan en 1 línea en 390px */
+  .vd-pane--precio .vd-price-market-ref {
+    gap: 6px !important;
+  }
+  .vd-pane--precio .vd-price-market-ref span {
+    font-size: 0.58rem !important;
+  }
+  .vd-pane--precio .vd-price-market-ref strong {
+    font-size: 0.78rem !important;
+  }
+  .vd-pane--precio .vd-price-market-ref em {
+    font-size: 0.62rem !important;
+  }
+
   /* Financing: restaurar 3-col (el breakpoint 980px lo pone en 1-col) */
   .vd-pane--precio .vehicle-detail-used-financing {
     padding: 12px !important;
