@@ -1201,11 +1201,13 @@ export default function VehicleDetailModal({
               type="button"
               className="vd-contactar-cta"
               onClick={() => {
+                if (reserved) return;
                 if (appActions) setShowContactGate(true);
                 else onContact?.();
               }}
+              disabled={reserved}
             >
-              {reserved ? "Consultar disponibilidad" : "Consultar al dealer"}
+              {reserved ? "Unidad reservada" : "Consultar al dealer"}
             </button>
 
             {showContraofertaForm && currentVehicle.contraoferta_habilitada && (
@@ -1333,7 +1335,7 @@ export default function VehicleDetailModal({
         </div>{/* /vd-tab-content */}
 
         {/* Persistent actions — anchored at bottom */}
-        <div className="vd-actions-bar">
+        <div className={`vd-actions-bar${reserved ? " vd-actions-bar--reserved" : ""}`}>
           <div className="detail-actions">
             <button
               type="button"
