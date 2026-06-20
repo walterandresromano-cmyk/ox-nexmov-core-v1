@@ -340,6 +340,211 @@
     0  5px 14px rgba( 71,  85, 105, 0.06) !important;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   Plan cards — tipografía y presentación visual mejorada
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Nombre del plan — más editorial ────────────────────── */
+.join-network-plan-section .jnp-plan-name {
+  font-size: 1.22rem !important;
+  letter-spacing: -0.032em !important;
+  line-height: 1.05 !important;
+}
+
+/* ── Headline — más aire ─────────────────────────────────── */
+.join-network-plan-section .jnp-headline {
+  font-size: 0.72rem !important;
+  line-height: 1.46 !important;
+  color: rgba(148, 163, 184, 0.58) !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .jnp-headline {
+  color: #94a3b8 !important;
+}
+
+/* ── Feature list — más legible ──────────────────────────── */
+.join-network-plan-section .jnp-features li {
+  font-size: 0.7rem !important;
+  line-height: 1.44 !important;
+  font-weight: 600 !important;
+  color: rgba(203, 213, 225, 0.82) !important;
+  padding-left: 18px !important;
+}
+
+:root[data-theme="light"] .join-network-plan-section .jnp-features li {
+  color: #334155 !important;
+}
+
+/* Tick en lugar de punto — más premium */
+.join-network-plan-section .jnp-features li::before {
+  content: "✓" !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  background: none !important;
+  font-size: 0.58rem !important;
+  font-weight: 900 !important;
+  top: 0.14em !important;
+  left: 0 !important;
+  color: rgba(56, 189, 248, 0.72) !important;
+}
+
+/* ── Cup badge — más prominente ──────────────────────────── */
+.join-network-plan-section .jnp-cup span {
+  font-size: 0.7rem !important;
+  font-weight: 850 !important;
+  padding: 4px 11px !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* ── Nombre del plan — color por rango ───────────────────── */
+.join-network-plan-section .join-network-plan-inicio .jnp-plan-name {
+  color: rgba(251, 191, 36, 0.90) !important;
+}
+.join-network-plan-section .join-network-plan-pro .jnp-plan-name {
+  color: rgba(125, 211, 252, 0.94) !important;
+}
+.join-network-plan-section .join-network-plan-elite .jnp-plan-name {
+  background: linear-gradient(115deg, #fbbf24 0%, #f59e0b 45%, #fde68a 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+.join-network-plan-section .join-network-plan-platinum .jnp-plan-name {
+  background: linear-gradient(115deg, #e2e8f0 0%, #94a3b8 40%, #f8fafc 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* Light mode — nombres de plan con tonos oscuros sobre fondo claro */
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-inicio .jnp-plan-name {
+  color: #b45309 !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-pro .jnp-plan-name {
+  color: #0284c7 !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-elite .jnp-plan-name {
+  background: linear-gradient(115deg, #b45309 0%, #d97706 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-platinum .jnp-plan-name {
+  background: linear-gradient(115deg, #475569 0%, #334155 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* ── Tick — color por rango ──────────────────────────────── */
+.join-network-plan-section .join-network-plan-inicio .jnp-features li::before {
+  color: rgba(251, 191, 36, 0.75) !important;
+}
+.join-network-plan-section .join-network-plan-elite .jnp-features li::before {
+  color: rgba(234, 179, 8, 0.80) !important;
+}
+.join-network-plan-section .join-network-plan-platinum .jnp-features li::before {
+  color: rgba(148, 163, 184, 0.72) !important;
+}
+
+/* Light mode ticks */
+:root[data-theme="light"] .join-network-plan-section .jnp-features li::before {
+  color: rgba(14, 165, 233, 0.65) !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-inicio .jnp-features li::before {
+  color: rgba(180, 83, 9, 0.65) !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-elite .jnp-features li::before {
+  color: rgba(161, 98, 7, 0.70) !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-platinum .jnp-features li::before {
+  color: rgba(71, 85, 105, 0.65) !important;
+}
+
+/* ── Cup — color por rango ───────────────────────────────── */
+.join-network-plan-section .join-network-plan-inicio .jnp-cup span {
+  color: rgba(251, 191, 36, 0.82) !important;
+  background: rgba(245, 158, 11, 0.08) !important;
+  border-color: rgba(251, 191, 36, 0.18) !important;
+}
+.join-network-plan-section .join-network-plan-elite .jnp-cup span {
+  color: rgba(234, 179, 8, 0.88) !important;
+  background: rgba(234, 179, 8, 0.08) !important;
+  border-color: rgba(250, 204, 21, 0.20) !important;
+}
+.join-network-plan-section .join-network-plan-platinum .jnp-cup span {
+  color: rgba(248, 250, 252, 0.80) !important;
+  background: rgba(148, 163, 184, 0.08) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+/* ── CTA — color por rango ───────────────────────────────── */
+.join-network-plan-section .join-network-plan-inicio .jnp-card-actions .jnp-cta {
+  border-color: rgba(251, 191, 36, 0.28) !important;
+  background: rgba(245, 158, 11, 0.10) !important;
+  color: rgba(253, 230, 138, 0.92) !important;
+}
+.join-network-plan-section .join-network-plan-inicio .jnp-card-actions .jnp-cta:hover {
+  background: rgba(245, 158, 11, 0.18) !important;
+  border-color: rgba(251, 191, 36, 0.46) !important;
+}
+.join-network-plan-section .join-network-plan-pro .jnp-card-actions .jnp-cta {
+  border-color: rgba(56, 189, 248, 0.28) !important;
+  background: rgba(14, 165, 233, 0.10) !important;
+  color: rgba(186, 230, 253, 0.92) !important;
+}
+.join-network-plan-section .join-network-plan-pro .jnp-card-actions .jnp-cta:hover {
+  background: rgba(14, 165, 233, 0.18) !important;
+  border-color: rgba(56, 189, 248, 0.46) !important;
+}
+.join-network-plan-section .join-network-plan-elite .jnp-card-actions .jnp-cta {
+  border-color: rgba(234, 179, 8, 0.36) !important;
+  background: rgba(234, 179, 8, 0.11) !important;
+  color: rgba(253, 224, 71, 0.96) !important;
+}
+.join-network-plan-section .join-network-plan-elite .jnp-card-actions .jnp-cta:hover {
+  background: rgba(234, 179, 8, 0.20) !important;
+  border-color: rgba(234, 179, 8, 0.52) !important;
+}
+.join-network-plan-section .join-network-plan-platinum .jnp-card-actions .jnp-cta {
+  border-color: rgba(148, 163, 184, 0.26) !important;
+  background: rgba(148, 163, 184, 0.09) !important;
+  color: rgba(248, 250, 252, 0.88) !important;
+}
+.join-network-plan-section .join-network-plan-platinum .jnp-card-actions .jnp-cta:hover {
+  background: rgba(148, 163, 184, 0.17) !important;
+  border-color: rgba(226, 232, 240, 0.42) !important;
+}
+
+/* Light mode CTAs por rango */
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-inicio .jnp-card-actions .jnp-cta {
+  border-color: rgba(180, 83, 9, 0.24) !important;
+  background: rgba(245, 158, 11, 0.09) !important;
+  color: #92400e !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-pro .jnp-card-actions .jnp-cta {
+  border-color: rgba(14, 116, 144, 0.24) !important;
+  background: rgba(14, 165, 233, 0.09) !important;
+  color: #0284c7 !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-elite .jnp-card-actions .jnp-cta {
+  border-color: rgba(161, 98, 7, 0.28) !important;
+  background: rgba(234, 179, 8, 0.09) !important;
+  color: #92400e !important;
+}
+:root[data-theme="light"] .join-network-plan-section .join-network-plan-platinum .jnp-card-actions .jnp-cta {
+  border-color: rgba(71, 85, 105, 0.22) !important;
+  background: rgba(71, 85, 105, 0.07) !important;
+  color: #334155 !important;
+}
+
 /* ── Market badge — fix light mode (regla oscura sin tema en responsive.css la pisa) ── */
 :root[data-theme="light"] .vehicle-card__market--below {
   background: linear-gradient(
