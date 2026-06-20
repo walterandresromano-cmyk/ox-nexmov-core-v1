@@ -4104,9 +4104,9 @@
     padding: 10px 0 0 !important;
   }
 
-  /* galeria-left: tamaño fijo (frame + thumbs), specs crece debajo */
+  /* galeria-left: crece para ocupar todo el espacio sobre las specs */
   .vd-galeria-left {
-    flex: 0 0 auto !important;
+    flex: 1 1 auto !important;
     min-height: 0 !important;
     width: 100% !important;
     display: flex !important;
@@ -4114,11 +4114,12 @@
     gap: 6px !important;
   }
 
-  /* Frame transparente: altura fija para que specs y botones siempre quepan */
+  /* Frame: crece para llenar galeria-left (imagen grande, sin espacio vacío) */
   .vd-pane--galeria .detail-gallery-frame {
-    flex: 0 0 auto !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
     width: 100% !important;
-    height: clamp(140px, 30dvh, 185px) !important;
+    height: auto !important;
     aspect-ratio: auto !important;
     padding: 0 !important;
     background: transparent !important;
@@ -4157,10 +4158,9 @@
   }
   .detail-thumb { flex: 0 0 38px !important; height: 24px !important; }
 
-  /* Specs: crece para llenar el espacio restante bajo la imagen */
+  /* Specs: altura natural, no crece (el espacio sobrante lo absorbe la imagen) */
   .vd-galeria-specs {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
+    flex: 0 0 auto !important;
     overflow-y: auto !important;
     scrollbar-width: none !important;
     overflow-x: hidden !important;
@@ -4452,6 +4452,28 @@
   }
   .vd-tabs {
     padding-inline: 14px !important;
+    gap: 4px !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  /* Tabs: mismo estilo que botones de acción — ícono arriba, texto abajo */
+  .vd-tab {
+    flex-direction: column !important;
+    gap: 4px !important;
+    padding: 7px 4px !important;
+    min-height: 44px !important;
+    font-size: 0.50rem !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+    border-radius: var(--ox-radius-lg) !important;
+  }
+
+  .vd-tab svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important;
   }
 
   /* Tab content: padding lateral para el contenido de las pestañas */
@@ -4469,24 +4491,25 @@
     align-items: stretch !important;
   }
 
-  /* Left col ocupa todo el ancho */
+  /* Left col: crece para absorber todo el espacio disponible sobre las specs */
   .vd-galeria-left {
     width: 100% !important;
-    flex: 0 0 auto !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
     gap: 6px !important;
     overflow: visible !important;
   }
 
-  /* Frame: ancho completo, altura fija, clipea el overflow */
+  /* Frame: crece para llenar galeria-left, sin altura fija */
   .vd-pane--galeria .detail-gallery-frame {
-    flex: 0 0 auto !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
     width: 100% !important;
     margin-inline: 0 !important;
-    height: clamp(140px, 30dvh, 185px) !important;
+    height: auto !important;
     overflow: hidden !important;
     aspect-ratio: unset !important;
     padding: 0 !important;
-    min-height: unset !important;
     border-radius: 8px !important;
     background: transparent !important;
     border: none !important;
@@ -4522,10 +4545,9 @@
     flex: 0 0 46px !important;
   }
 
-  /* Specs: flex-1, ocupa el espacio restante */
+  /* Specs: altura natural, imagen arriba absorbe el espacio sobrante */
   .vd-galeria-specs {
-    flex: 1 !important;
-    min-height: 0 !important;
+    flex: 0 0 auto !important;
     overflow-y: auto !important;
     scrollbar-width: none !important;
   }
@@ -4617,10 +4639,10 @@
   .vd-modal-identity-sub { font-size: 0.66rem !important; margin-top: 2px !important; }
   .vd-modal-identity-price { font-size: clamp(0.80rem, 3.6vw, 0.96rem) !important; }
 
-  /* Tabs: más compactos (padding-inline heredado del bloque 12px) */
-  .vd-tabs { gap: 2px !important; padding-top: 5px !important; padding-bottom: 0 !important; }
-  .vd-tab { padding: 5px 7px !important; font-size: 0.66rem !important; gap: 3px !important; }
-  .vd-tab svg { width: 10px !important; height: 10px !important; }
+  /* Tabs: más compactos en pantallas muy pequeñas */
+  .vd-tabs { gap: 3px !important; padding-top: 5px !important; padding-bottom: 5px !important; }
+  .vd-tab { padding: 6px 3px !important; min-height: 42px !important; font-size: 0.47rem !important; gap: 3px !important; }
+  .vd-tab svg { width: 14px !important; height: 14px !important; }
 
   /* Fotos: imagen algo más baja en pantallas muy pequeñas */
   .vd-pane--galeria { padding-top: 8px !important; }
