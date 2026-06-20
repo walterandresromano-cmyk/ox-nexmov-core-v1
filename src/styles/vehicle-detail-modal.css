@@ -4094,31 +4094,28 @@
     overscroll-behavior: none !important;
   }
 
-  /* ── 5. FOTOS — imagen llena todo el espacio disponible ─────── */
+  /* ── 5. FOTOS ───────────────────────────────────────────────── */
   .vd-pane--galeria {
-    height: 100% !important;               /* el pane de fotos sí ocupa todo */
     flex-direction: column !important;
     gap: 0 !important;
     padding: 10px 0 0 !important;
   }
 
-  /* Bloque imagen+thumbs: crece para llenar espacio disponible */
+  /* Bloque imagen+thumbs: tamaño natural, no crece */
   .vd-galeria-left {
-    flex: 1 1 auto !important;             /* llena lo que no usan las specs */
-    min-height: 0 !important;
+    flex: 0 0 auto !important;
     width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
     gap: 0 !important;
   }
 
-  /* Imagen: crece dentro de vd-galeria-left */
+  /* Frame con aspect-ratio 4:3 — coincide con el ratio típico de fotos de autos */
   .vd-pane--galeria .detail-gallery-frame {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
+    flex: none !important;
     width: 100% !important;
+    aspect-ratio: 4/3 !important;
     height: auto !important;
-    aspect-ratio: auto !important;
     padding: 0 !important;
   }
 
