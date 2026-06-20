@@ -4104,23 +4104,21 @@
     padding: 10px 0 0 !important;
   }
 
-  /* galeria-left crece para llenar todo el espacio sobre las specs */
+  /* galeria-left: tamaño fijo (frame + thumbs), specs crece debajo */
   .vd-galeria-left {
-    flex: 1 1 auto !important;
+    flex: 0 0 auto !important;
     min-height: 0 !important;
     width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 0 !important;
+    gap: 6px !important;
   }
 
-  /* Frame transparente: el auto flota sobre el fondo del modal,
-     las áreas de letterbox se funden sin percibirse como espacio vacío */
+  /* Frame transparente: altura fija para que specs y botones siempre quepan */
   .vd-pane--galeria .detail-gallery-frame {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
+    flex: 0 0 auto !important;
     width: 100% !important;
-    height: auto !important;
+    height: clamp(140px, 30dvh, 185px) !important;
     aspect-ratio: auto !important;
     padding: 0 !important;
     background: transparent !important;
@@ -4136,13 +4134,19 @@
 
   .vd-pane--galeria .vehicle-detail-main-image,
   .vd-pane--galeria .detail-main-image {
+    width: 100% !important;
     height: 100% !important;
+    overflow: hidden !important;
+    background: transparent !important;
   }
 
   .vd-pane--galeria .vehicle-detail-main-image img,
   .vd-pane--galeria .detail-main-image img {
+    width: 100% !important;
+    height: 100% !important;
     object-fit: contain !important;
     object-position: center center !important;
+    background: transparent !important;
   }
 
   /* Tira de miniaturas: una fila fija debajo de la imagen */
@@ -4153,14 +4157,18 @@
   }
   .detail-thumb { flex: 0 0 38px !important; height: 24px !important; }
 
-  /* Specs: 3 cols, tamaño natural, sin scroll */
+  /* Specs: crece para llenar el espacio restante bajo la imagen */
   .vd-galeria-specs {
-    flex: 0 0 auto !important;
-    overflow: hidden !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    scrollbar-width: none !important;
+    overflow-x: hidden !important;
     padding: 8px 0 0 !important;
     display: flex !important;
     flex-direction: column !important;
   }
+  .vd-galeria-specs::-webkit-scrollbar { display: none !important; }
   .vd-galeria-grid {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
@@ -4194,8 +4202,8 @@
   }
   .vd-galeria-spec--full { grid-column: 1 / -1 !important; }
 
-  /* Descripción: oculta — no hay espacio para texto libre */
-  .vd-galeria-spec--desc { display: none !important; }
+  /* Descripción: visible en mobile */
+  .vd-galeria-spec--desc { display: block !important; }
 
   /* ── 6. DETALLES — contenido puede ser largo, scroll limpio ─── */
   .vd-pane--detalles {
@@ -4387,11 +4395,17 @@
   /* Reservado: mostrar el botón deshabilitado (no ocultarlo) */
   .vd-actions-bar--reserved .primary-action {
     flex: 1 1 100% !important;            /* full-width cuando no hay contraoferta */
-    opacity: 0.72 !important;
+    opacity: 0.85 !important;
     cursor: default !important;
     background: rgba(245, 158, 11, 0.14) !important;
     border-color: rgba(245, 184, 75, 0.30) !important;
     color: rgba(254, 243, 199, 0.84) !important;
+  }
+
+  :root[data-theme="light"] .vd-actions-bar--reserved .primary-action {
+    background: rgba(217, 119, 6, 0.10) !important;
+    border-color: rgba(161, 77, 0, 0.30) !important;
+    color: rgba(92, 45, 0, 0.80) !important;
   }
 
   .vd-actions-bar--reserved .detail-actions-secondary {
@@ -4404,20 +4418,193 @@
   .vehicle-detail-modal { animation: none !important; }
 }
 
+/* ── Mobile: pantalla completa — reset definitivo ───────────────────
+   El modal ES la pantalla del móvil: 100dvw × 100dvh, sin margen.
+   Imagen del vehículo: full-width edge-to-edge, object-fit contain
+   (auto completo visible). Specs: 3 columnas compactas debajo.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Backdrop: div + 2 clases = (0,2,1) > (0,2,0) de la regla base */
+  div.modal-backdrop:has(.vehicle-detail-modal),
+  div.modal-backdrop.vehicle-detail-backdrop {
+    padding: 0 !important;
+    overflow: hidden !important;
+    place-items: stretch !important;
+  }
+
+  /* Modal: descendant selector = (0,2,0) > (0,1,0) de base y collectible */
+  .modal-backdrop .vehicle-detail-modal {
+    width: 100% !important;
+    max-width: none !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: max(8px, env(safe-area-inset-top, 8px)) 0 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Identidad y tabs reciben el margen lateral */
+  .vd-modal-identity {
+    padding-inline: 14px !important;
+  }
+  .vd-tabs {
+    padding-inline: 14px !important;
+  }
+
+  /* Tab content: padding lateral para el contenido de las pestañas */
+  .vd-tab-content {
+    padding-inline: 14px !important;
+  }
+
+  /* ── FOTOS: imagen full-width, después thumbs y specs ── */
+  .vd-pane--galeria {
+    flex-direction: column !important;
+    flex: 1 !important;
+    overflow: visible !important;
+    padding: 6px 0 0 !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+  }
+
+  /* Left col ocupa todo el ancho */
+  .vd-galeria-left {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+    gap: 6px !important;
+    overflow: visible !important;
+  }
+
+  /* Frame: ancho completo, altura fija, clipea el overflow */
+  .vd-pane--galeria .detail-gallery-frame {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    margin-inline: 0 !important;
+    height: clamp(140px, 30dvh, 185px) !important;
+    overflow: hidden !important;
+    aspect-ratio: unset !important;
+    padding: 0 !important;
+    min-height: unset !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Imagen: llena el frame, auto completo con contain */
+  .vd-pane--galeria .vehicle-detail-main-image,
+  .vd-pane--galeria .detail-main-image {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: unset !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  .vd-pane--galeria .vehicle-detail-main-image img,
+  .vd-pane--galeria .detail-main-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+
+  /* Thumbnails: compactos */
+  .vd-pane--galeria .detail-thumb-strip {
+    padding: 2px 0 !important;
+  }
+
+  .vd-pane--galeria .detail-thumb {
+    height: 32px !important;
+    flex: 0 0 46px !important;
+  }
+
+  /* Specs: flex-1, ocupa el espacio restante */
+  .vd-galeria-specs {
+    flex: 1 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    scrollbar-width: none !important;
+  }
+
+  .vd-galeria-specs::-webkit-scrollbar { display: none !important; }
+
+  /* 3 columnas compactas */
+  .vd-galeria-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .vd-galeria-spec {
+    padding: 5px 8px !important;
+  }
+
+  .vd-galeria-spec span {
+    font-size: 0.52rem !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  .vd-galeria-spec strong {
+    font-size: 0.76rem !important;
+  }
+
+  /* Descripción: visible (anula display:none del bloque anterior) */
+  .vd-galeria-spec--desc {
+    display: block !important;
+    flex: 0 0 auto !important;
+    max-height: 72px !important;
+    overflow-y: auto !important;
+    scrollbar-width: none !important;
+  }
+
+  .vd-galeria-spec--desc::-webkit-scrollbar { display: none !important; }
+
+  .vd-galeria-spec--desc p {
+    font-size: 0.72rem !important;
+    line-height: 1.4 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 4 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  /* Actions bar: full-width natural (el modal no tiene padding lateral)
+     Sólo define su propio padding interno y el borde superior */
+  .vd-actions-bar {
+    flex-shrink: 0 !important;
+    margin-top: auto !important;
+    padding-inline: 14px !important;
+    padding-top: 8px !important;
+    padding-bottom: max(8px, env(safe-area-inset-bottom, 8px)) !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.12) !important;
+  }
+}
+
 /* ================================================================
    oX NEXMOV — Modal ≤420px (375px)
    Ajuste fino de densidad para pantallas estrechas
    ================================================================ */
 @media (max-width: 420px) {
 
-  /* Shell: padding lateral reducido + safe area */
+  /* Shell: sin padding lateral (mismo que el bloque 900px) */
   .vehicle-detail-modal {
-    padding: 8px 12px max(8px, env(safe-area-inset-bottom, 0px)) 12px !important;
+    padding: max(8px, env(safe-area-inset-top, 8px)) 0 0 !important;
   }
 
-  /* Identity: más compacto */
+  /* Elementos internos: reducir a 12px */
+  .vd-modal-identity { padding-inline: 12px !important; }
+  .vd-tabs { padding-inline: 12px !important; }
+  .vd-tab-content { padding-inline: 12px !important; }
+  .vd-actions-bar { padding-inline: 12px !important; }
+
+  /* Identity: más compacto (padding-inline heredado del bloque 12px de arriba) */
   .vd-modal-identity {
-    padding: 5px 0 8px !important;
+    padding-top: 5px !important;
+    padding-bottom: 8px !important;
     gap: 8px !important;
     align-items: flex-start !important;
   }
@@ -4430,8 +4617,8 @@
   .vd-modal-identity-sub { font-size: 0.66rem !important; margin-top: 2px !important; }
   .vd-modal-identity-price { font-size: clamp(0.80rem, 3.6vw, 0.96rem) !important; }
 
-  /* Tabs: más compactos */
-  .vd-tabs { gap: 2px !important; padding: 5px 0 !important; }
+  /* Tabs: más compactos (padding-inline heredado del bloque 12px) */
+  .vd-tabs { gap: 2px !important; padding-top: 5px !important; padding-bottom: 0 !important; }
   .vd-tab { padding: 5px 7px !important; font-size: 0.66rem !important; gap: 3px !important; }
   .vd-tab svg { width: 10px !important; height: 10px !important; }
 
@@ -4444,11 +4631,11 @@
   .vd-galeria-spec span { font-size: 0.50rem !important; }
   .vd-galeria-spec strong { font-size: 0.78rem !important; }
 
-  /* Actions: 4 iconos en fila única */
+  /* Actions: 4 iconos en fila única, mismo ancho que el CTA */
   .vd-actions-bar .detail-actions-secondary {
     display: grid !important;
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    flex: none !important;
+    width: 100% !important;
     gap: 4px !important;
   }
   .vd-actions-bar .detail-action-icon-btn {
