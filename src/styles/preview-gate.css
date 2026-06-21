@@ -1,37 +1,35 @@
 /* ============================================================
-   PreviewGate — pantalla de acceso previo al preview
+   PreviewGate — usa el design system de oX NEXMOV
    ============================================================ */
 
 .pg-root {
   min-height: 100dvh;
-  background: #050913;
+  background: var(--ox-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   color-scheme: dark;
 }
 
-/* ── Hero car (dentro del form-wrap) ─────────────────────── */
+/* ── Logo ─────────────────────────────────────────────────── */
 
 .pg-hero-car {
   width: 100%;
-  max-width: 260px;
+  max-width: 220px;
   height: auto;
   display: block;
-  margin: 0 auto 28px;
-  filter: drop-shadow(0 16px 40px rgba(56, 189, 248, 0.2))
-          drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+  margin: 0 auto 24px;
+  filter: drop-shadow(0 12px 32px rgba(56, 189, 248, 0.18));
   animation: pg-float 4.5s ease-in-out infinite;
 }
 
 @keyframes pg-float {
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
+  50%       { transform: translateY(-7px); }
 }
 
-/* ── Form ─────────────────────────────────────────────────── */
+/* ── Wrapper ──────────────────────────────────────────────── */
 
 .pg-form-wrap {
   width: 100%;
@@ -39,29 +37,40 @@
   padding: 0 20px 48px;
 }
 
+/* ── Card ─────────────────────────────────────────────────── */
+
 .pg-form {
-  background: #0b1424;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  border-radius: 16px;
-  padding: 28px 28px 24px;
+  background: var(--ox-surface-card);
+  border: 1px solid var(--ox-border);
+  border-radius: var(--ox-radius-xl);
+  padding: 28px 24px 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.28),
+    0 4px 16px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
+
+/* ── Label de sección ─────────────────────────────────────── */
 
 .pg-form-label {
   margin: 0;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--ox-fs-xs);
+  font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(155, 179, 206, 0.7);
+  color: var(--ox-muted);
+  font-family: var(--ox-font-sans);
 }
+
+/* ── Fields ───────────────────────────────────────────────── */
 
 .pg-field-group {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .pg-field {
@@ -71,57 +80,69 @@
 }
 
 .pg-field-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(219, 229, 239, 0.8);
+  font-size: var(--ox-fs-xs);
+  font-weight: 800;
+  color: var(--ox-text-soft);
+  font-family: var(--ox-font-sans);
+  letter-spacing: 0.02em;
 }
+
+/* ── Inputs — idénticos a .auth-form input ────────────────── */
 
 .pg-input {
   width: 100%;
   box-sizing: border-box;
-  background-color: #0d1929;
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  border-radius: 10px;
-  padding: 11px 14px;
-  font-size: 15px;
-  color: #f2f6fb;
+  min-height: var(--ox-input-h-page);
+  border: 1px solid var(--ox-border);
+  border-radius: 15px;
+  background: var(--ox-surface-input);
+  color: var(--ox-text);
+  font-family: var(--ox-font-sans);
+  font-size: var(--ox-fs-input);
+  font-weight: 650;
+  padding: 0 14px;
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  font-family: inherit;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 8px 18px rgba(0, 0, 0, 0.07);
+  transition:
+    border-color 0.15s var(--ox-ease),
+    box-shadow 0.15s var(--ox-ease);
   color-scheme: dark;
-  appearance: none;
-  -webkit-appearance: none;
-  /* Override browser light-mode default for inputs */
-  -webkit-box-shadow: 0 0 0 1000px #0d1929 inset !important;
-  box-shadow: 0 0 0 1000px #0d1929 inset;
+  /* Forzar fondo oscuro en todos los browsers */
+  -webkit-box-shadow:
+    0 0 0 1000px rgba(15, 23, 42, 0.82) inset,
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
 }
 
 .pg-input::placeholder {
-  color: rgba(159, 176, 195, 0.4);
-  -webkit-text-fill-color: rgba(159, 176, 195, 0.4);
+  color: var(--ox-muted-2);
+  -webkit-text-fill-color: var(--ox-muted-2);
 }
 
 .pg-input:focus {
-  border-color: rgba(56, 189, 248, 0.5);
-  -webkit-box-shadow: 0 0 0 1000px #0d1929 inset, 0 0 0 3px rgba(56, 189, 248, 0.12) !important;
-  box-shadow: 0 0 0 1000px #0d1929 inset, 0 0 0 3px rgba(56, 189, 248, 0.12);
+  border-color: var(--ox-border-accent);
+  -webkit-box-shadow:
+    0 0 0 1000px rgba(15, 23, 42, 0.82) inset,
+    0 0 0 4px rgba(56, 189, 248, 0.14),
+    0 14px 32px rgba(37, 99, 235, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  box-shadow:
+    0 0 0 4px rgba(56, 189, 248, 0.14),
+    0 14px 32px rgba(37, 99, 235, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.pg-input:disabled {
+  opacity: 0.45;
 }
 
 .pg-input:-webkit-autofill,
 .pg-input:-webkit-autofill:hover,
 .pg-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #0d1929 inset !important;
-  -webkit-text-fill-color: #f2f6fb !important;
-  caret-color: #f2f6fb;
-}
-
-.pg-input:focus {
-  border-color: rgba(56, 189, 248, 0.5);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
-}
-
-.pg-input:disabled {
-  opacity: 0.5;
+  -webkit-box-shadow: 0 0 0 1000px rgba(15, 23, 42, 0.9) inset !important;
+  -webkit-text-fill-color: var(--ox-text) !important;
+  caret-color: var(--ox-text);
 }
 
 /* ── Error ────────────────────────────────────────────────── */
@@ -129,32 +150,37 @@
 .pg-error {
   margin: 0;
   padding: 10px 14px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  border-radius: 8px;
-  font-size: 13px;
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: var(--ox-radius-sm);
+  background: rgba(239, 68, 68, 0.09);
+  font-size: var(--ox-fs-xs);
   color: #fca5a5;
+  font-family: var(--ox-font-sans);
   text-align: center;
 }
 
-/* ── Submit ───────────────────────────────────────────────── */
+/* ── Botón — idéntico a .primary-action ──────────────────── */
 
 .pg-submit {
   width: 100%;
-  padding: 13px;
-  background: #2563eb;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
+  min-height: var(--ox-input-h-page);
+  border: 1px solid rgba(56, 189, 248, 0.38);
+  background: var(--ox-surface-primary);
+  color: white;
+  border-radius: 14px;
+  font-family: var(--ox-font-sans);
+  font-size: var(--ox-fs-input);
+  font-weight: 900;
   cursor: pointer;
-  transition: background 0.15s, opacity 0.15s, transform 0.1s;
-  font-family: inherit;
+  transition: all 0.22s var(--ox-ease), transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+  letter-spacing: 0.02em;
 }
 
 .pg-submit:hover:not(:disabled) {
-  background: #3b82f6;
+  transform: translateY(-1px);
+  border-color: rgba(125, 211, 252, 0.70);
+  box-shadow: var(--ox-shadow-glow-primary);
 }
 
 .pg-submit:active:not(:disabled) {
@@ -162,7 +188,7 @@
 }
 
 .pg-submit:disabled {
-  opacity: 0.45;
+  opacity: 0.38;
   cursor: not-allowed;
 }
 
@@ -170,11 +196,11 @@
 
 @media (max-width: 480px) {
   .pg-hero-car {
-    max-width: 200px;
-    margin-bottom: 22px;
+    max-width: 180px;
+    margin-bottom: 18px;
   }
 
   .pg-form {
-    padding: 22px 20px 20px;
+    padding: 22px 18px 20px;
   }
 }
