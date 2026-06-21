@@ -58,65 +58,63 @@ export default function PreviewGate({ children }) {
 
   return (
     <div className="pg-root" data-theme="dark">
-      <div className="pg-form-wrap">
-        <img
-          className="pg-hero-car"
-          src="/hero-car.svg"
-          alt="oX NEXMOV — plataforma de vehículos"
-        />
-        <form className="pg-form" onSubmit={handleSubmit} noValidate>
-          <p className="pg-form-label">Acceso de prueba</p>
+      <img
+        className="pg-hero-car"
+        src="/hero-car.svg"
+        alt="oX NEXMOV — plataforma de vehículos"
+      />
+      <form className="pg-form" onSubmit={handleSubmit} noValidate>
+        <p className="pg-form-label">Acceso de prueba</p>
 
-          <div className="pg-field-group">
-            <div className="pg-field">
-              <label className="pg-field-label" htmlFor="pg-user">
-                Usuario
-              </label>
-              <input
-                id="pg-user"
-                className="pg-input"
-                type="text"
-                autoComplete="username"
-                autoFocus
-                value={user}
-                onChange={(e) => { setUser(e.target.value); setError(""); }}
-                disabled={loading}
-                placeholder="usuario"
-              />
-            </div>
-
-            <div className="pg-field">
-              <label className="pg-field-label" htmlFor="pg-pass">
-                Contraseña
-              </label>
-              <input
-                id="pg-pass"
-                className="pg-input"
-                type="password"
-                autoComplete="current-password"
-                value={pass}
-                onChange={(e) => { setPass(e.target.value); setError(""); }}
-                disabled={loading}
-                placeholder="contraseña"
-              />
-            </div>
+        <div className="pg-field-group">
+          <div className="pg-field">
+            <label className="pg-field-label" htmlFor="pg-user">
+              Usuario
+            </label>
+            <input
+              id="pg-user"
+              className="pg-input"
+              type="text"
+              autoComplete="username"
+              autoFocus
+              value={user}
+              onChange={(e) => { setUser(e.target.value); setError(""); }}
+              disabled={loading}
+              placeholder="usuario"
+            />
           </div>
 
-          {error && (
-            <p className="pg-error" role="alert">
-              {error}
-            </p>
-          )}
+          <div className="pg-field">
+            <label className="pg-field-label" htmlFor="pg-pass">
+              Contraseña
+            </label>
+            <input
+              id="pg-pass"
+              className="pg-input"
+              type="password"
+              autoComplete="current-password"
+              value={pass}
+              onChange={(e) => { setPass(e.target.value); setError(""); }}
+              disabled={loading}
+              placeholder="contraseña"
+            />
+          </div>
+        </div>
 
-          <button
-            className="pg-submit"
-            type="submit"
-            disabled={loading || !user || !pass}
-          >
-            {loading ? "Verificando…" : "Ingresar"}
-          </button>
-        </form>
-      </div>
+        {error && (
+          <p className="pg-error" role="alert">
+            {error}
+          </p>
+        )}
+
+        <button
+          className="pg-submit"
+          type="submit"
+          disabled={loading || !user || !pass}
+        >
+          {loading ? "Verificando…" : "Ingresar"}
+        </button>
+      </form>
     </div>
   );
 }

@@ -9,46 +9,41 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 32px;
+  padding: 40px 20px;
   color-scheme: dark;
 }
 
-/* ── Logo ─────────────────────────────────────────────────── */
+/* ── Logo — hijo directo de pg-root, centrado por flexbox ─── */
 
 .pg-hero-car {
-  width: 100%;
-  max-width: 300px;
+  width: 200px;
   height: auto;
   display: block;
-  margin: 0 auto 28px;
-  filter: drop-shadow(0 12px 32px rgba(56, 189, 248, 0.18));
+  flex-shrink: 0;
+  filter: drop-shadow(0 8px 28px rgba(56, 189, 248, 0.20));
   animation: pg-float 4.5s ease-in-out infinite;
 }
 
 @keyframes pg-float {
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-7px); }
+  50%       { transform: translateY(-6px); }
 }
 
-/* ── Wrapper ──────────────────────────────────────────────── */
-
-.pg-form-wrap {
-  width: 100%;
-  max-width: 340px;
-  padding: 0 20px 48px;
-}
-
-/* ── Card ─────────────────────────────────────────────────── */
+/* ── Card del formulario ──────────────────────────────────── */
 
 .pg-form {
+  width: 100%;
+  max-width: 300px;
   background: var(--ox-surface-card);
   border: 1px solid var(--ox-border);
   border-radius: var(--ox-radius-xl);
-  padding: 28px 24px 24px;
+  padding: 22px 20px 20px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
   box-shadow:
-    0 24px 48px rgba(0, 0, 0, 0.28),
+    0 24px 60px rgba(0, 0, 0, 0.32),
     0 4px 16px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
@@ -57,12 +52,12 @@
 
 .pg-form-label {
   margin: 0;
-  font-size: var(--ox-fs-xs);
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  font-family: var(--ox-font-display);
+  font-size: var(--ox-fs-caption);
+  font-weight: var(--ox-fw-bold);
+  letter-spacing: var(--ox-ls-eyebrow);
   text-transform: uppercase;
   color: var(--ox-muted);
-  font-family: var(--ox-font-sans);
 }
 
 /* ── Fields ───────────────────────────────────────────────── */
@@ -70,21 +65,21 @@
 .pg-field-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .pg-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .pg-field-label {
-  font-size: var(--ox-fs-xs);
-  font-weight: 800;
-  color: var(--ox-text-soft);
   font-family: var(--ox-font-sans);
-  letter-spacing: 0.02em;
+  font-size: var(--ox-fs-caption);
+  font-weight: var(--ox-fw-bold);
+  color: var(--ox-text-soft);
+  letter-spacing: 0.01em;
 }
 
 /* ── Inputs — idénticos a .auth-form input ────────────────── */
@@ -94,17 +89,14 @@
   box-sizing: border-box;
   min-height: var(--ox-input-h-page);
   border: 1px solid var(--ox-border);
-  border-radius: 15px;
+  border-radius: var(--ox-radius-md);
   background: var(--ox-surface-input);
   color: var(--ox-text);
   font-family: var(--ox-font-sans);
   font-size: var(--ox-fs-input);
-  font-weight: 650;
-  padding: 0 14px;
+  font-weight: var(--ox-fw-medium);
+  padding: 0 12px;
   outline: none;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.055),
-    0 8px 18px rgba(0, 0, 0, 0.07);
   transition:
     border-color 0.15s var(--ox-ease),
     box-shadow 0.15s var(--ox-ease);
@@ -112,7 +104,7 @@
   /* Forzar fondo oscuro en todos los browsers */
   -webkit-box-shadow:
     0 0 0 1000px rgba(15, 23, 42, 0.82) inset,
-    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
 }
 
 .pg-input::placeholder {
@@ -124,13 +116,11 @@
   border-color: var(--ox-border-accent);
   -webkit-box-shadow:
     0 0 0 1000px rgba(15, 23, 42, 0.82) inset,
-    0 0 0 4px rgba(56, 189, 248, 0.14),
-    0 14px 32px rgba(37, 99, 235, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    0 0 0 3px rgba(56, 189, 248, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
   box-shadow:
-    0 0 0 4px rgba(56, 189, 248, 0.14),
-    0 14px 32px rgba(37, 99, 235, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 0 0 3px rgba(56, 189, 248, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .pg-input:disabled {
@@ -149,13 +139,13 @@
 
 .pg-error {
   margin: 0;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border: 1px solid rgba(239, 68, 68, 0.28);
   border-radius: var(--ox-radius-sm);
   background: rgba(239, 68, 68, 0.09);
-  font-size: var(--ox-fs-xs);
-  color: #fca5a5;
   font-family: var(--ox-font-sans);
+  font-size: var(--ox-fs-caption);
+  color: #fca5a5;
   text-align: center;
 }
 
@@ -163,18 +153,19 @@
 
 .pg-submit {
   width: 100%;
-  min-height: var(--ox-input-h-page);
+  min-height: var(--ox-button-h-page);
   border: 1px solid rgba(56, 189, 248, 0.38);
   background: var(--ox-surface-primary);
   color: white;
-  border-radius: 14px;
+  border-radius: var(--ox-radius-md);
   font-family: var(--ox-font-sans);
-  font-size: var(--ox-fs-input);
-  font-weight: 900;
+  font-size: var(--ox-fs-button);
+  font-weight: var(--ox-fw-black);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.22s var(--ox-ease), transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
-  letter-spacing: 0.02em;
 }
 
 .pg-submit:hover:not(:disabled) {
@@ -195,12 +186,16 @@
 /* ── Mobile ───────────────────────────────────────────────── */
 
 @media (max-width: 480px) {
+  .pg-root {
+    gap: 24px;
+    padding: 32px 16px;
+  }
+
   .pg-hero-car {
-    max-width: 240px;
-    margin-bottom: 20px;
+    width: 160px;
   }
 
   .pg-form {
-    padding: 20px 16px 18px;
+    padding: 18px 16px 16px;
   }
 }
