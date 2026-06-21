@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
+import { withRetry } from "../lib/withRetry.js";
 
 const DEALER_IMAGES_BUCKET = "vehicle-images";
 const MAX_DEALER_LOGO_BYTES = 3 * 1024 * 1024;
@@ -129,43 +130,39 @@ export async function listDealersForCurrentUser() {
     };
   }
 
-  const { data, error } = await supabase
-    .from("dealers")
-    .select(
+  const { data, error } = await withRetry(() =>
+    supabase
+      .from("dealers")
+      .select(
+        `
+        id,
+        profile_id,
+        name,
+        slug,
+        plan_code,
+        plan_status,
+        publications_used,
+        extra_publish_slots,
+        plan_expires_at,
+        province,
+        city,
+        logo_url,
+        image_url,
+        contact_phone,
+        phone_whatsapp,
+        can_receive_sell_vehicle_leads,
+        is_active
       `
-      id,
-      profile_id,
-      name,
-      slug,
-      plan_code,
-      plan_status,
-      publications_used,
-      extra_publish_slots,
-      plan_expires_at,
-      province,
-      city,
-      logo_url,
-      image_url,
-      contact_phone,
-      phone_whatsapp,
-      can_receive_sell_vehicle_leads,
-      is_active
-    `
-    )
-    .eq("profile_id", user.id)
-    .order("id", { ascending: true });
+      )
+      .eq("profile_id", user.id)
+      .order("id", { ascending: true })
+  );
 
   if (error) {
-    return {
-      dealers: [],
-      error,
-    };
+    return { dealers: [], error };
   }
 
-  return {
-    dealers: (data || []).map(mapDealerFromSupabase),
-    error: null,
-  };
+  return { dealers: (data || []).map(mapDealerFromSupabase), error: null };
 }
 
 export async function uploadCurrentDealerLogo({ dealerId, file }) {

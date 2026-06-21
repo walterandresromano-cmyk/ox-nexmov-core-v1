@@ -277,6 +277,16 @@ export default function VehicleDetailModal({
       setContraofertaError("Ingresá un precio válido.");
       return;
     }
+    const pMin = currentVehicle.precio_min_contraoferta;
+    const pMax = currentVehicle.precio_max_contraoferta;
+    if (pMin && precio < pMin) {
+      setContraofertaError(`La oferta mínima aceptada es ${formatARS(pMin)}.`);
+      return;
+    }
+    if (pMax && precio > pMax) {
+      setContraofertaError(`La oferta máxima aceptada es ${formatARS(pMax)}.`);
+      return;
+    }
     setContraofertaStatus("submitting");
     setContraofertaError("");
     const profile = appActions?.authProfile;
@@ -1191,12 +1201,21 @@ export default function VehicleDetailModal({
                     <p className="detail-contraoferta-label">
                       Precio publicado: <strong>{formatARS(currentVehicle.price)}</strong>
                     </p>
+                    {(currentVehicle.precio_min_contraoferta || currentVehicle.precio_max_contraoferta) && (
+                      <p className="detail-contraoferta-range">
+                        Rango aceptado:{" "}
+                        {currentVehicle.precio_min_contraoferta ? formatARS(currentVehicle.precio_min_contraoferta) : "—"}
+                        {" – "}
+                        {currentVehicle.precio_max_contraoferta ? formatARS(currentVehicle.precio_max_contraoferta) : "—"}
+                      </p>
+                    )}
                     <label className="detail-contraoferta-field">
                       <span>Tu oferta</span>
                       <input
                         type="number"
                         inputMode="numeric"
-                        min="1"
+                        min={currentVehicle.precio_min_contraoferta || 1}
+                        max={currentVehicle.precio_max_contraoferta || undefined}
                         placeholder={`Ej: ${Math.round((currentVehicle.price || 0) * 0.9).toLocaleString("es-AR")}`}
                         value={contraofertaPrecio}
                         onChange={(e) => setContraofertaPrecio(e.target.value)}

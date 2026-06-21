@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
+import { withRetry } from "../lib/withRetry.js";
 
 const PUBLIC_VEHICLE_SELECT = `
   id,
@@ -270,64 +271,54 @@ export function mapVehicleFromSupabase(row) {
   };
 }
 
+let _publicVehiclesCache = null;
+let _publicVehiclesCacheAt = 0;
+const PUBLIC_VEHICLES_TTL_MS = 2 * 60 * 1000;
+
 export async function listPublicVehicles() {
   if (!isSupabaseConfigured || !supabase) {
-    return {
-      vehicles: [],
-      error: {
-        message: "Supabase no está configurado.",
-      },
-    };
+    return { vehicles: [], error: { message: "Supabase no está configurado." } };
   }
 
-  const { data, error } = await supabase
-    .from("vehicles")
-    .select(PUBLIC_VEHICLE_SELECT)
-    .eq("is_active", true)
-    .in("publication_status", ["active", "reserved"])
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    return {
-      vehicles: [],
-      error,
-    };
+  if (_publicVehiclesCache && Date.now() - _publicVehiclesCacheAt < PUBLIC_VEHICLES_TTL_MS) {
+    return { vehicles: _publicVehiclesCache, error: null };
   }
 
-  return {
-    vehicles: (data || []).map(mapVehicleFromSupabase).filter(isPublicVehicleVisible),
-    error: null,
-  };
+  const { data, error } = await withRetry(() =>
+    supabase
+      .from("vehicles")
+      .select(PUBLIC_VEHICLE_SELECT)
+      .eq("is_active", true)
+      .in("publication_status", ["active", "reserved"])
+      .order("created_at", { ascending: false })
+  );
+
+  if (error) return { vehicles: [], error };
+
+  const vehicles = (data || []).map(mapVehicleFromSupabase).filter(isPublicVehicleVisible);
+  _publicVehiclesCache = vehicles;
+  _publicVehiclesCacheAt = Date.now();
+  return { vehicles, error: null };
 }
 
 export async function listPublicLatestVehicles({ limit = 8 } = {}) {
   if (!isSupabaseConfigured || !supabase) {
-    return {
-      vehicles: [],
-      error: {
-        message: "Supabase no está configurado.",
-      },
-    };
+    return { vehicles: [], error: { message: "Supabase no está configurado." } };
   }
 
-  const { data, error } = await supabase
-    .from("vehicles")
-    .select(PUBLIC_VEHICLE_SELECT)
-    .eq("is_active", true)
-    .in("publication_status", ["active", "reserved"])
-    .order("created_at", { ascending: false })
-    .limit(Number(limit || 8));
-
-  if (error) {
-    return {
-      vehicles: [],
-      error,
-    };
-  }
+  const { data, error } = await withRetry(() =>
+    supabase
+      .from("vehicles")
+      .select(PUBLIC_VEHICLE_SELECT)
+      .eq("is_active", true)
+      .in("publication_status", ["active", "reserved"])
+      .order("created_at", { ascending: false })
+      .limit(Number(limit || 8))
+  );
 
   return {
-    vehicles: (data || []).map(mapVehicleFromSupabase).filter(isPublicVehicleVisible),
-    error: null,
+    vehicles: error ? [] : (data || []).map(mapVehicleFromSupabase).filter(isPublicVehicleVisible),
+    error: error || null,
   };
 }
 

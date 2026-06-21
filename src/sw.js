@@ -1,17 +1,18 @@
 import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { NetworkFirst } from "workbox-strategies";
+import { ExpirationPlugin } from "workbox-expiration";
 
 // Precache all assets injected by vite-plugin-pwa
 precacheAndRoute(self.__WB_MANIFEST);
 cleanupOutdatedCaches();
 
-// Runtime: Supabase API calls — network first, short cache
+// Runtime: Supabase API calls — network first, 5-min cache fallback
 registerRoute(
   ({ url }) => url.href.includes(".supabase.co"),
   new NetworkFirst({
     cacheName: "supabase-cache",
-    plugins: [{ maxEntries: 50, maxAgeSeconds: 300 }],
+    plugins: [new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 300 })],
   })
 );
 

@@ -46,8 +46,25 @@ function buildEmailHtml({ dealerName, vehicleTitle, buyerName, buyerEmail, buyer
   return `<!DOCTYPE html><html><body style="font-family:sans-serif;max-width:600px;margin:0 auto">${lines}</body></html>`;
 }
 
+async function verifyAuth(authHeader) {
+  if (!SERVICE_ROLE_KEY || !SUPABASE_URL) return false;
+  const token = String(authHeader || "").replace(/^Bearer\s+/i, "").trim();
+  if (!token) return false;
+  try {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${token}` },
+    });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
+
+  const authed = await verifyAuth(req.headers["authorization"]);
+  if (!authed) return res.status(401).json({ error: "Unauthorized" });
 
   const {
     dealerId,

@@ -1,4 +1,5 @@
 import { isSupabaseConfigured, supabase } from "../lib/supabaseClient.js";
+import { withRetry } from "../lib/withRetry.js";
 
 const RADAR_LS_KEY = "ox_radar_requests_v1";
 
@@ -142,21 +143,18 @@ export async function listRadarRequestsForDealer() {
     return { requests: readLocalRadar(), error: null };
   }
 
-  try {
-    const { data, error } = await supabase
+  const { data, error } = await withRetry(() =>
+    supabase
       .from("buyer_radar_requests")
       .select(
         "id, search_text, filters, parsed_intent, notes, trigger_reason, results_count, created_at"
         // NO user_id — nunca se expone al dealer
       )
       .eq("status", "active")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+  );
 
-    if (error) return { requests: [], error };
-    return { requests: data || [], error: null };
-  } catch (err) {
-    return { requests: [], error: err };
-  }
+  return { requests: data || [], error: error || null };
 }
 
 // ── Admin: listar todas las solicitudes con datos del comprador ────────

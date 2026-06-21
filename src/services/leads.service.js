@@ -1,6 +1,7 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 import { normalizeWhatsAppArgentina } from "../lib/formatters.js";
 import { reportSupabaseError } from "../lib/sentry.js";
+import { withRetry } from "../lib/withRetry.js";
 
 function toNumericVehicleId(vehicleId) {
   const value = Number(vehicleId);
@@ -405,9 +406,17 @@ export async function createVehicleContactLead({
       console.warn("[leads.service] notify-lead skipped: dealerId resolved to", resolvedDealerId, "— dealer:", dealer);
     }
 
+    const { data: sessionData } = supabase
+      ? await supabase.auth.getSession().catch(() => ({ data: {} }))
+      : { data: {} };
+    const token = sessionData?.session?.access_token;
+
     fetch("/api/notify-lead", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify({
         dealerEmail,
         dealerName: dealerSnapshot.dealerName,
@@ -423,27 +432,11 @@ export async function createVehicleContactLead({
       }),
     })
       .then((res) => {
-        if (!res.ok) {
-          console.error("[leads.service] notify-lead HTTP error:", res.status);
-        }
+        if (!res.ok) console.warn("[leads] notify-lead HTTP error:", res.status);
       })
       .catch((err) => {
-        console.error("[leads.service] notify-lead fetch failed:", err?.message);
+        console.warn("[leads] notify-lead failed:", err?.message);
       });
-
-    // Web Push: only when the dealer's tab is not in the foreground.
-    // Calls notify-lead (not push-send directly) — the Edge Function derives
-    // the dealer server-side from the leadId so the client never controls dealerId.
-    if (
-      data?.id &&
-      isSupabaseConfigured &&
-      supabase &&
-      document.visibilityState !== "visible"
-    ) {
-      supabase.functions
-        .invoke("notify-lead", { body: { leadId: data.id } })
-        .catch(() => {});
-    }
   }
 
   return {
@@ -455,29 +448,14 @@ export async function createVehicleContactLead({
 
 export async function listVehicleLeadsForCurrentUser() {
   if (!isSupabaseConfigured || !supabase) {
-    return {
-      leads: [],
-      error: {
-        message: "Supabase no está configurado.",
-      },
-    };
+    return { leads: [], error: { message: "Supabase no está configurado." } };
   }
 
-  const { data, error } = await supabase.rpc(
-    "get_vehicle_leads_for_current_user"
+  const { data, error } = await withRetry(() =>
+    supabase.rpc("get_vehicle_leads_for_current_user")
   );
 
-  if (error) {
-    return {
-      leads: [],
-      error,
-    };
-  }
-
-  return {
-    leads: data || [],
-    error: null,
-  };
+  return { leads: data || [], error: error || null };
 }
 
 // MIGRATION – run in Supabase SQL editor before using next_action fields:

@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { submitDealerRating } from "../../services/dealerRatings.service.js";
+import { supabase, isSupabaseConfigured } from "../../lib/supabaseClient.js";
 
 import { buildRadarCriteriaSummary } from "../../services/radarRequests.service.js";
+import { listContraofertasForBuyer } from "../../services/contraofertas.service.js";
 import { getObjectPositionXY } from "../../lib/imagePosition.js";
 import {
   listBuyerNotifications,
@@ -297,8 +299,11 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   const [activeMovimientoTab, setActiveMovimientoTab] = useState("shortlist");
   const [garageNotifications, setGarageNotifications] = useState([]);
   const [garageNotificationsLoaded, setGarageNotificationsLoaded] = useState(false);
-  // key: lead identifier (created_at+index), value: { rating, submitted, submitting }
   const [leadRatings, setLeadRatings] = useState({});
+
+  const [buyerOfertas, setBuyerOfertas]           = useState([]);
+  const [ofertasLoading, setOfertasLoading]       = useState(false);
+  const [ofertasLoaded, setOfertasLoaded]         = useState(false);
 
   const radarSectionRef = useRef(null);
 
@@ -312,6 +317,17 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
   }
 
   useEffect(() => { refreshBuyerPanel(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (activeSection === "ofertas" && !ofertasLoaded) {
+      setOfertasLoading(true);
+      listContraofertasForBuyer().then(({ data }) => {
+        setBuyerOfertas(data || []);
+        setOfertasLoaded(true);
+        setOfertasLoading(false);
+      });
+    }
+  }, [activeSection, ofertasLoaded]);
 
   const handleLeadRating = useCallback(async (leadKey, lead, stars) => {
     setLeadRatings(prev => ({ ...prev, [leadKey]: { rating: stars, submitting: true, submitted: false } }));
@@ -349,6 +365,39 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
     });
   }, [authUser?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Realtime: prepend nuevas notificaciones sin recargar toda la lista
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase || !authUser?.id) return;
+
+    const channel = supabase
+      .channel(`buyer-notifications-${authUser.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "buyer_notifications",
+          filter: `user_id=eq.${authUser.id}`,
+        },
+        (payload) => {
+          const newNotif = payload.new;
+          if (!newNotif?.id) return;
+          setGarageNotifications((prev) => {
+            if (prev.some((n) => n.id === newNotif.id)) return prev;
+            return [newNotif, ...prev].slice(0, 50);
+          });
+          // Si el buyer está viendo sus ofertas y llega una notif de contraoferta,
+          // marcar la lista como desactualizada para que recargue al volver a entrar.
+          if (newNotif.type === "contraoferta_response") {
+            setOfertasLoaded(false);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [authUser?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
   async function markOneGarageNotificationRead(dbId) {
     await markBuyerNotificationRead(dbId);
     setGarageNotifications((prev) =>
@@ -363,7 +412,10 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
 
   function handleNotificationAction(n) {
     if (!n.is_read) markOneGarageNotificationRead(n.id);
-    if (n.type === "radar_match") {
+    if (n.type === "contraoferta_response") {
+      setActiveSection("ofertas");
+      setOfertasLoaded(false);
+    } else if (n.type === "radar_match") {
       onNavigate?.("search");
     } else if (n.type === "vtv_due" || n.type === "insurance_due") {
       setActiveSection("garage");
@@ -662,6 +714,16 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
               meta: radarRequests.length > 0
                 ? `${radarRequests.length} criterio${radarRequests.length !== 1 ? "s" : ""} activo${radarRequests.length !== 1 ? "s" : ""}`
                 : "Sin criterios activos",
+            },
+            {
+              id: "ofertas",
+              label: "Mis ofertas",
+              meta: (() => {
+                const pending = buyerOfertas.filter((o) => ["pendiente","contraofertada"].includes(o.status));
+                return pending.length > 0
+                  ? `${pending.length} oferta${pending.length !== 1 ? "s" : ""} activa${pending.length !== 1 ? "s" : ""}`
+                  : buyerOfertas.length > 0 ? `${buyerOfertas.length} en historial` : "Sin ofertas enviadas";
+              })(),
             },
           ].map(({ id, label, meta }) => (
             <button
@@ -2162,6 +2224,118 @@ export default function BuyerPanel({ authUser, authProfile, appActions, onNaviga
               {radarDeleteError && (
                 <p className="garage-inline-error" style={{ marginTop: "8px" }}>{radarDeleteError}</p>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* ── Mis ofertas ───────────────────────────────────────── */}
+        {activeSection === "ofertas" && (
+          <div className="garage-ox-section-body">
+            <div className="buyer-ofertas-section">
+              <div className="buyer-radar-section__head">
+                <div>
+                  <p className="garage-ox-search__eyebrow">Contraofertas</p>
+                  <h2>Mis ofertas enviadas</h2>
+                  <p>Estado de las ofertas de precio que enviaste a dealers.</p>
+                </div>
+              </div>
+
+              {ofertasLoading && (
+                <p className="buyer-ofertas-loading">Cargando ofertas…</p>
+              )}
+
+              {!ofertasLoading && buyerOfertas.length === 0 && (
+                <div className="buyer-radar-empty">
+                  <p>Todavía no enviaste ninguna oferta de precio.</p>
+                  <p>Cuando un vehículo muestre la opción "Contraofertar precio", podés proponer el tuyo.</p>
+                </div>
+              )}
+
+              {!ofertasLoading && buyerOfertas.length > 0 && (() => {
+                const activas   = buyerOfertas.filter((o) => ["pendiente","contraofertada"].includes(o.status));
+                const historial = buyerOfertas.filter((o) => !["pendiente","contraofertada"].includes(o.status));
+
+                const STATUS_LABEL = {
+                  pendiente:      "Pendiente de respuesta",
+                  aceptada:       "Aceptada",
+                  rechazada:      "Rechazada",
+                  contraofertada: "El dealer hizo una contraoferta",
+                  expirada:       "Expirada",
+                };
+                const STATUS_CLASS = {
+                  pendiente:      "buyer-oferta-status--pending",
+                  aceptada:       "buyer-oferta-status--accepted",
+                  rechazada:      "buyer-oferta-status--rejected",
+                  contraofertada: "buyer-oferta-status--countered",
+                  expirada:       "buyer-oferta-status--expired",
+                };
+
+                function renderCard(o) {
+                  const waNumber = o.dealer_whatsapp
+                    ? o.dealer_whatsapp.replace(/\D/g, "")
+                    : null;
+                  const showWa = waNumber && (o.status === "contraofertada" || o.status === "aceptada");
+                  const waText = o.status === "aceptada"
+                    ? encodeURIComponent(`Hola, acepté tu oferta por el ${o.vehicle_brand} ${o.vehicle_model}. ¿Coordinamos los próximos pasos?`)
+                    : encodeURIComponent(`Hola, vi tu contraoferta de ${formatARS(o.dealer_precio_contraoferta)} por el ${o.vehicle_brand} ${o.vehicle_model}. ¿Podemos hablar?`);
+
+                  return (
+                    <li key={o.id} className={`buyer-oferta-card buyer-oferta-card--${o.status}`}>
+                      <div className="buyer-oferta-card__vehicle">
+                        {o.vehicle_brand} {o.vehicle_model} · {o.vehicle_year}
+                        {o.dealer_name && (
+                          <span className="buyer-oferta-card__dealer"> · {o.dealer_name}</span>
+                        )}
+                      </div>
+                      <div className="buyer-oferta-card__prices">
+                        <span>Publicado: <strong>{formatARS(o.vehicle_price)}</strong></span>
+                        <span>Tu oferta: <strong>{formatARS(o.precio_ofertado)}</strong></span>
+                        {o.dealer_precio_contraoferta && (
+                          <span className="buyer-oferta-card__counter">
+                            Contraoferta del dealer: <strong>{formatARS(o.dealer_precio_contraoferta)}</strong>
+                          </span>
+                        )}
+                      </div>
+                      <span className={`buyer-oferta-status ${STATUS_CLASS[o.status] || ""}`}>
+                        {STATUS_LABEL[o.status] || o.status}
+                      </span>
+                      {o.dealer_note && (
+                        <p className="buyer-oferta-card__note">"{o.dealer_note}"</p>
+                      )}
+                      {showWa && (
+                        <a
+                          href={`https://wa.me/${waNumber}?text=${waText}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="buyer-oferta-card__wa-btn"
+                        >
+                          {o.status === "aceptada" ? "Coordinar por WhatsApp" : "Responder al dealer"}
+                        </a>
+                      )}
+                      <time className="dealer-radar-item-date">
+                        {new Intl.DateTimeFormat("es-AR", { dateStyle: "short" }).format(new Date(o.created_at))}
+                      </time>
+                    </li>
+                  );
+                }
+
+                return (
+                  <>
+                    {activas.length > 0 && (
+                      <div className="buyer-ofertas-group">
+                        <h3 className="buyer-ofertas-group__title">Activas ({activas.length})</h3>
+                        <ul className="buyer-oferta-list">{activas.map(renderCard)}</ul>
+                      </div>
+                    )}
+                    {historial.length > 0 && (
+                      <div className="buyer-ofertas-group">
+                        <h3 className="buyer-ofertas-group__title">Historial</h3>
+                        <ul className="buyer-oferta-list">{historial.map(renderCard)}</ul>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           </div>
         )}

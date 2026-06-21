@@ -383,6 +383,7 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
   const [markingRead, setMarkingRead] = useState(false);
 
   const [showVehicleModal, setShowVehicleModal] = useState(false);
+  const [vehicleModalPrefill, setVehicleModalPrefill] = useState({});
   const [leadsInitialContext, setLeadsInitialContext] = useState(null);
   const [inventoryInitialContext, setInventoryInitialContext] = useState(null);
 
@@ -2683,7 +2684,14 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
 
         {activeDealerModule === "radar" && (
           permissions.marketIntelligence
-            ? <DealerRadarModule onBack={handleModuleBack} />
+            ? <DealerRadarModule
+                onBack={handleModuleBack}
+                dealerVehicles={dealerVehicles}
+                onPublishSimilar={(prefills) => {
+                  setVehicleModalPrefill(prefills || {});
+                  setShowVehicleModal(true);
+                }}
+              />
             : (
               <div className="dealer-module-locked-screen">
                 <p className="eyebrow">Radar oX</p>
@@ -2698,7 +2706,8 @@ export default function DealerPanel({ authProfile, authUser, onNavigate }) {
           <CreateVehicleModal
             dealer={dealer}
             dealerVehicles={dealerVehicles}
-            onClose={() => setShowVehicleModal(false)}
+            initialValues={vehicleModalPrefill}
+            onClose={() => { setShowVehicleModal(false); setVehicleModalPrefill({}); }}
             onCreated={refreshDealerPanel}
           />
         )}

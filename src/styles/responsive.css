@@ -14279,6 +14279,100 @@ textarea:focus-visible,
 .buyer-radar-section {
   margin-top: 2rem;
 }
+
+/* ── BuyerPanel — Mis ofertas ──────────────────────────────────────── */
+.buyer-ofertas-section { margin-top: 2rem; }
+.buyer-ofertas-loading { color: var(--ox-text-muted); font-size: var(--ox-fs-sm); }
+.buyer-ofertas-group { margin-bottom: 1.5rem; }
+.buyer-ofertas-group__title {
+  font-size: var(--ox-fs-sm);
+  font-weight: 600;
+  color: var(--ox-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.6rem;
+}
+.buyer-oferta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.buyer-oferta-card {
+  background: var(--ox-surface-2, rgba(255,255,255,0.04));
+  border: 1px solid var(--ox-border-accent);
+  border-radius: var(--ox-radius-sm);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.buyer-oferta-card__vehicle {
+  font-weight: 600;
+  font-size: var(--ox-fs-base);
+}
+.buyer-oferta-card__prices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-secondary);
+}
+.buyer-oferta-card__counter {
+  color: var(--ox-accent, #2563eb);
+  font-weight: 600;
+}
+.buyer-oferta-status {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 9px;
+  border-radius: var(--ox-radius-pill);
+  border: 1px solid currentColor;
+  width: fit-content;
+}
+.buyer-oferta-status--pending   { color: var(--ox-text-muted); }
+.buyer-oferta-status--accepted  { color: #4ade80; }
+.buyer-oferta-status--rejected  { color: var(--ox-text-muted); opacity: 0.7; }
+.buyer-oferta-status--countered { color: #818cf8; }
+.buyer-oferta-status--expired   { color: var(--ox-text-muted); opacity: 0.5; }
+.buyer-oferta-card__dealer {
+  font-weight: 400;
+  color: var(--ox-text-muted);
+}
+.buyer-oferta-card__note {
+  font-size: var(--ox-fs-sm);
+  color: var(--ox-text-muted);
+  font-style: italic;
+  margin: 0;
+}
+.buyer-oferta-card__wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #25d366;
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.2);
+  transition: background 0.15s;
+  width: fit-content;
+  margin-top: 2px;
+}
+.buyer-oferta-card__wa-btn:hover { background: rgba(37, 211, 102, 0.18); }
+:root[data-theme="light"] .buyer-oferta-card__wa-btn {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.08);
+  border-color: rgba(22, 163, 74, 0.2);
+}
+:root[data-theme="light"] .buyer-oferta-card__wa-btn:hover { background: rgba(22, 163, 74, 0.14); }
 .buyer-radar-list {
   list-style: none;
   margin: 0;
@@ -14461,6 +14555,146 @@ textarea:focus-visible,
   border: 1px solid var(--ox-border-accent);
   border-radius: var(--ox-radius-xs);
   background: rgba(255, 255, 255, 0.02);
+}
+
+/* ── Radar oX v2 ────────────────────────────────────────────────────── */
+.dealer-radar-brand-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.dealer-radar-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.75rem;
+  border-radius: var(--ox-radius-pill);
+  border: 1px solid var(--ox-border-accent);
+  background: transparent;
+  color: var(--ox-text-muted);
+  font-size: var(--ox-fs-xs, 0.72rem);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.dealer-radar-chip-btn--active,
+.dealer-radar-chip-btn:hover {
+  background: var(--ox-accent, #2563eb);
+  border-color: var(--ox-accent, #2563eb);
+  color: #fff;
+}
+.dealer-radar-chip-count {
+  background: rgba(255,255,255,0.25);
+  border-radius: 999px;
+  padding: 0 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.dealer-radar-sort-select {
+  font-size: var(--ox-fs-sm);
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--ox-radius-xs);
+  border: 1px solid var(--ox-border-accent);
+  background: var(--ox-surface-1, transparent);
+  color: var(--ox-text-primary);
+}
+.dealer-radar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+.dealer-radar-item--urgent {
+  border-left: 3px solid var(--ox-warning, #f59e0b) !important;
+}
+.dealer-radar-item-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.dealer-radar-demand-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(99,102,241,0.18);
+  color: #818cf8;
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: var(--ox-radius-pill);
+  padding: 2px 8px;
+}
+.dealer-radar-item--match {
+  border-left: 3px solid var(--ox-success, #10b981) !important;
+}
+.dealer-radar-match-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(16,185,129,0.18);
+  color: #34d399;
+  border: 1px solid rgba(16,185,129,0.35);
+  border-radius: var(--ox-radius-pill);
+  padding: 2px 8px;
+}
+.dealer-radar-stock-match {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+.dealer-radar-stock-vehicle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(16,185,129,0.1);
+  color: #6ee7b7;
+  border: 1px solid rgba(16,185,129,0.25);
+  border-radius: var(--ox-radius-pill);
+  padding: 2px 8px;
+}
+.dealer-radar-stock-vehicle--more {
+  color: var(--ox-muted);
+  background: transparent;
+  border-color: transparent;
+}
+:root[data-theme="light"] .dealer-radar-match-badge {
+  color: #059669;
+  background: rgba(5,150,105,0.12);
+  border-color: rgba(5,150,105,0.3);
+}
+:root[data-theme="light"] .dealer-radar-stock-vehicle {
+  color: #065f46;
+  background: rgba(5,150,105,0.1);
+  border-color: rgba(5,150,105,0.25);
+}
+.dealer-radar-results-hint--urgent {
+  color: var(--ox-warning, #f59e0b) !important;
+  opacity: 1 !important;
+  font-weight: 600;
+}
+.dealer-radar-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.5rem;
+}
+.dealer-radar-publish-btn {
+  font-size: var(--ox-fs-xs, 0.72rem);
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--ox-radius-pill);
+  border: 1px solid var(--ox-accent, #2563eb);
+  background: transparent;
+  color: var(--ox-accent, #2563eb);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.dealer-radar-publish-btn:hover {
+  background: var(--ox-accent, #2563eb);
+  color: #fff;
 }
 
 /* ── Desktop nav v3 — pill flotante en activo, texto limpio en inactivo

@@ -34,13 +34,22 @@ export async function listContraofertasForDealer() {
   return { data: data || [], error: error || null };
 }
 
-export async function respondContraoferta({ id, status, dealerNote }) {
+export async function listContraofertasForBuyer() {
+  if (!isSupabaseConfigured || !supabase) return { data: [], error: null };
+
+  const { data, error } = await supabase.rpc("list_contraofertas_for_buyer");
+
+  return { data: data || [], error: error || null };
+}
+
+export async function respondContraoferta({ id, status, dealerNote, dealerPrecio }) {
   if (!isSupabaseConfigured || !supabase) return { error: { message: "Supabase no configurado." } };
 
   const { error } = await supabase.rpc("respond_contraoferta", {
-    p_id:          id,
-    p_status:      status,
-    p_dealer_note: dealerNote || null,
+    p_id:            id,
+    p_status:        status,
+    p_dealer_note:   dealerNote || null,
+    p_dealer_precio: dealerPrecio ? Number(dealerPrecio) : null,
   });
 
   return { error: error || null };

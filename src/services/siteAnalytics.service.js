@@ -72,7 +72,7 @@ export async function trackPageView(route, userRole = null) {
     p_utm_source:   utms.source,
     p_utm_medium:   utms.medium,
     p_utm_campaign: utms.campaign,
-  }).then(() => {}).catch(() => {});
+  }).catch((err) => { console.warn("[analytics] trackPageView failed:", err?.message); });
 }
 
 export async function getSiteAnalytics({ days = 7 } = {}) {

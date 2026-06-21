@@ -1,23 +1,16 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
+import { withRetry } from "../lib/withRetry.js";
 
 export async function listSupportTicketsForCurrentUser() {
   if (!isSupabaseConfigured || !supabase) {
-    return {
-      tickets: [],
-      error: {
-        message: "Supabase no está configurado.",
-      },
-    };
+    return { tickets: [], error: { message: "Supabase no está configurado." } };
   }
 
-  const { data, error } = await supabase.rpc(
-    "get_support_tickets_for_current_user"
+  const { data, error } = await withRetry(() =>
+    supabase.rpc("get_support_tickets_for_current_user")
   );
 
-  return {
-    tickets: data || [],
-    error,
-  };
+  return { tickets: data || [], error: error || null };
 }
 
 export async function createDealerSupportTicket({

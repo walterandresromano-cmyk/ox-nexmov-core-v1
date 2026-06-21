@@ -11472,6 +11472,35 @@ body::-webkit-scrollbar {
 .garage-assign-error {
   color: #fca5a5;
 }
+.garage-assign-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.garage-assign-confirm__label {
+  font-size: 0.75rem;
+  color: var(--ox-warning, #f59e0b);
+  font-weight: 600;
+}
+.garage-assign-confirm__btns {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.table-action-btn--danger {
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  color: #fca5a5 !important;
+}
+.table-action-btn--danger:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+:root[data-theme="light"] .garage-assign-confirm__label {
+  color: #b45309;
+}
+:root[data-theme="light"] .table-action-btn--danger {
+  border-color: rgba(220, 38, 38, 0.4) !important;
+  color: #dc2626 !important;
+}
 
 :root[data-theme="light"] .admin-panel .panel-head-row,
 :root[data-theme="light"] .dealer-panel .panel-head-row,
@@ -29731,6 +29760,7 @@ button.buyer-shortlist-compare__slot:hover {
 .detail-contraoferta-submit:disabled { opacity: 0.55; cursor: not-allowed; }
 
 .detail-contraoferta-error { font-size: 0.78rem; color: #f87171; margin-bottom: 8px; }
+.detail-contraoferta-range { font-size: 0.74rem; color: rgba(148,163,184,0.6); margin: -4px 0 4px; }
 
 .detail-contraoferta-ok {
   display: flex;
@@ -29762,6 +29792,8 @@ button.buyer-shortlist-compare__slot:hover {
   background: #fff;
   color: #1e293b;
 }
+:root.light .detail-contraoferta-range,
+:root[data-theme="light"] .detail-contraoferta-range { color: #94a3b8; }
 
 /* =========================================================
    Contraoferta — dealer vehicle form fields
@@ -29825,6 +29857,18 @@ button.buyer-shortlist-compare__slot:hover {
 .contraoferta-card__offer strong { color: #fbbf24; }
 .contraoferta-card__buyer { display: flex; gap: 10px; font-size: 0.76rem; color: rgba(148, 163, 184, 0.7); }
 .contraoferta-card__date { font-size: 0.7rem; color: rgba(148, 163, 184, 0.5); }
+.contraoferta-card__expiry { font-size: 0.68rem; color: rgba(148,163,184,0.45); margin-left: 6px; }
+.contraoferta-card__expiry--warn { color: #f97316; font-weight: 600; }
+.contraoferta-card--countered { border-color: rgba(99,102,241,0.22); }
+.contraoferta-card__action-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.contraoferta-card__wa-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.74rem; font-weight: 600; color: #25d366; text-decoration: none;
+  padding: 3px 9px; border-radius: 6px; background: rgba(37,211,102,0.1);
+  transition: background 0.15s; width: fit-content; margin-top: 2px;
+}
+.contraoferta-card__wa-btn:hover { background: rgba(37,211,102,0.18); }
+.contraoferta-card__wa-btn--primary { font-size: 0.8rem; padding: 5px 12px; background: rgba(37,211,102,0.15); }
 
 .contraoferta-card__respond-form { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
 .contraoferta-card__note-input {
@@ -29833,6 +29877,8 @@ button.buyer-shortlist-compare__slot:hover {
   background: rgba(255, 255, 255, 0.05);
   color: rgba(248, 250, 252, 0.9); font-size: 0.82rem;
 }
+.contraoferta-card__respond-hint { font-size: 0.78rem; color: rgba(148,163,184,0.7); margin: 0; }
+.contraoferta-card__respond-hint strong { color: #fbbf24; }
 .contraoferta-card__respond-btns { display: flex; gap: 8px; }
 .contraoferta-card__btn {
   flex: 1; padding: 8px 10px; border-radius: 7px; border: none;
@@ -29845,12 +29891,17 @@ button.buyer-shortlist-compare__slot:hover {
 .contraoferta-card__btn--accept  { background: rgba(74,222,128,0.15);  color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
 .contraoferta-card__btn--reject  { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
 .contraoferta-card__btn--cancel  { background: rgba(255,255,255,0.04); color: rgba(148,163,184,0.6); border: 1px solid rgba(255,255,255,0.06); }
+.contraoferta-card__btn--counter { background: rgba(99,102,241,0.15);  color: #818cf8; border: 1px solid rgba(99,102,241,0.25); }
 .contraoferta-card__dealer-note  { font-size: 0.76rem; color: rgba(148,163,184,0.65); font-style: italic; margin: 0; }
+.contraoferta-card__error        { font-size: 0.75rem; color: #f87171; margin: 0.25rem 0 0; }
+:root[data-theme="light"] .contraoferta-card__error { color: #dc2626; }
 
 .contraoferta-status { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 100px; width: fit-content; }
-.contraoferta-status--pending  { background: rgba(251,191,36,0.12); color: #fbbf24; }
-.contraoferta-status--accepted { background: rgba(74,222,128,0.1);  color: #4ade80; }
-.contraoferta-status--rejected { background: rgba(248,113,113,0.1); color: #f87171; }
+.contraoferta-status--pending    { background: rgba(251,191,36,0.12); color: #fbbf24; }
+.contraoferta-status--accepted   { background: rgba(74,222,128,0.1);  color: #4ade80; }
+.contraoferta-status--rejected   { background: rgba(248,113,113,0.1); color: #f87171; }
+.contraoferta-status--countered  { background: rgba(99,102,241,0.15); color: #818cf8; }
+.contraoferta-status--expired    { background: rgba(100,116,139,0.1); color: #64748b; opacity: 0.7; }
 
 .contraoferta-module-loading,
 .contraoferta-module-empty { font-size: 0.84rem; color: rgba(148,163,184,0.65); padding: 24px 0; text-align: center; }
@@ -29879,9 +29930,19 @@ button.buyer-shortlist-compare__slot:hover {
 :root[data-theme="light"] .contraoferta-card__btn--accept { background: rgba(5,150,105,0.1); color: #059669; border-color: rgba(5,150,105,0.2); }
 :root[data-theme="light"] .contraoferta-card__btn--reject { background: rgba(220,38,38,0.08); color: #dc2626; border-color: rgba(220,38,38,0.18); }
 :root[data-theme="light"] .contraoferta-card__btn--cancel { background: rgba(0,0,0,0.03); color: #64748b; border-color: rgba(148,163,184,0.2); }
-:root[data-theme="light"] .contraoferta-status--pending  { background: rgba(180,83,9,0.08); color: #b45309; }
-:root[data-theme="light"] .contraoferta-status--accepted { background: rgba(5,150,105,0.08); color: #059669; }
-:root[data-theme="light"] .contraoferta-status--rejected { background: rgba(220,38,38,0.08); color: #dc2626; }
+:root[data-theme="light"] .contraoferta-status--pending    { background: rgba(180,83,9,0.08);   color: #b45309; }
+:root[data-theme="light"] .contraoferta-status--accepted   { background: rgba(5,150,105,0.08);  color: #059669; }
+:root[data-theme="light"] .contraoferta-status--rejected   { background: rgba(220,38,38,0.08);  color: #dc2626; }
+:root[data-theme="light"] .contraoferta-status--countered  { background: rgba(79,70,229,0.08);  color: #4f46e5; }
+:root[data-theme="light"] .contraoferta-status--expired    { background: rgba(71,85,105,0.08);  color: #475569; }
+:root[data-theme="light"] .contraoferta-card--countered { border-color: rgba(79,70,229,0.15); }
+:root[data-theme="light"] .contraoferta-card__btn--counter { background: rgba(79,70,229,0.08); color: #4f46e5; border-color: rgba(79,70,229,0.2); }
+:root[data-theme="light"] .contraoferta-card__respond-hint { color: #64748b; }
+:root[data-theme="light"] .contraoferta-card__respond-hint strong { color: #b45309; }
+:root[data-theme="light"] .contraoferta-card__wa-btn { color: #16a34a; background: rgba(22,163,74,0.08); }
+:root[data-theme="light"] .contraoferta-card__wa-btn:hover { background: rgba(22,163,74,0.14); }
+:root[data-theme="light"] .contraoferta-card__expiry { color: #94a3b8; }
+:root[data-theme="light"] .contraoferta-card__expiry--warn { color: #ea580c; }
 
 /* ── Panel error boundary ─────────────────────────────────────────────────── */
 .panel-error-boundary {

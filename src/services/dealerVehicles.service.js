@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
+import { withRetry } from "../lib/withRetry.js";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -60,22 +61,19 @@ function validateVehiclePayload(form) {
 
 export async function listVehiclesForCurrentDealer() {
   if (!isSupabaseConfigured || !supabase) {
-    return {
-      vehicles: [],
-      error: {
-        message: "Supabase no está configurado.",
-      },
-    };
+    return { vehicles: [], error: { message: "Supabase no está configurado." } };
   }
 
-  const { data, error } = await supabase.rpc("get_vehicles_for_current_dealer");
+  const { data, error } = await withRetry(() =>
+    supabase.rpc("get_vehicles_for_current_dealer")
+  );
 
   return {
-    vehicles: (data || []).map(vehicle => ({
+    vehicles: (data || []).map((vehicle) => ({
       ...vehicle,
       images: vehicle.images_json || [],
     })),
-    error,
+    error: error || null,
   };
 }
 

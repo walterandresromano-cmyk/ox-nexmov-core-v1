@@ -3,37 +3,28 @@ import {
   getScoreLabel,
   getScoreChipClass,
 } from "../lib/publicationScore.js";
+import { supabase } from "../lib/supabaseClient.js";
 
-const ANTHROPIC_API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
-const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
+async function callAssistantAPI(action, data) {
+  // Send the current session token so the server can verify the caller
+  const { data: sessionData } = supabase
+    ? await supabase.auth.getSession()
+    : { data: {} };
+  const token = sessionData?.session?.access_token;
 
-async function callClaude(prompt, maxTokens = 400) {
-  if (!ANTHROPIC_API_KEY) {
-    throw new Error("VITE_ANTHROPIC_API_KEY no configurada.");
-  }
-
-  const response = await fetch(ANTHROPIC_API_URL, {
+  const res = await fetch("/api/ai-assistant", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: maxTokens,
-      messages: [{ role: "user", content: prompt }],
-    }),
+    body: JSON.stringify({ action, data }),
   });
-
-  if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`Claude API error ${response.status}: ${err}`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+    throw new Error(body.error || `Error ${res.status}`);
   }
-
-  const data = await response.json();
-  return data.content?.[0]?.text?.trim() ?? "";
+  return res.json();
 }
 
 /**
@@ -41,38 +32,8 @@ async function callClaude(prompt, maxTokens = 400) {
  * Retorna { text, error }.
  */
 export async function generateVehicleDescription(vehicle) {
-  const v = vehicle || {};
-  const parts = [
-    v.brand && `Marca: ${v.brand}`,
-    v.model && `Modelo: ${v.model}`,
-    v.version && `Versión: ${v.version}`,
-    v.year && `Año: ${v.year}`,
-    v.km != null && v.km !== "" && `Kilómetros: ${Number(v.km).toLocaleString("es-AR")} km`,
-    v.price && `Precio: $${Number(v.price).toLocaleString("es-AR")}`,
-    v.bodyType && `Carrocería: ${v.bodyType}`,
-    v.transmission && `Transmisión: ${v.transmission}`,
-    v.fuelType && `Combustible: ${v.fuelType}`,
-    (v.city || v.province) && `Ubicación: ${[v.city, v.province].filter(Boolean).join(", ")}`,
-    v.financing && "Tiene financiación disponible",
-  ].filter(Boolean).join("\n");
-
-  const prompt = `Sos un asistente para concesionarias de vehículos argentinas.
-Escribí una descripción comercial profesional y convincente para este vehículo en un marketplace online.
-
-${parts}
-
-Instrucciones:
-- Entre 120 y 280 caracteres
-- Tono profesional pero cercano, en español rioplatense
-- Destacá los puntos más fuertes del vehículo
-- No uses listas ni viñetas, solo texto corrido
-- No repitas datos que ya se muestran en el título (marca/modelo/año)
-- Terminá con una llamada a la acción sutil si hay espacio
-
-Solo devolvé el texto de la descripción, sin comillas ni explicaciones.`;
-
   try {
-    const text = await callClaude(prompt, 300);
+    const { text } = await callAssistantAPI("generate_description", vehicle || {});
     return { text, error: null };
   } catch (err) {
     return { text: null, error: err.message };
@@ -84,40 +45,8 @@ Solo devolvé el texto de la descripción, sin comillas ni explicaciones.`;
  * Retorna { text, error }.
  */
 export async function generateLeadReply(lead) {
-  const l = lead || {};
-  const buyerName = `${l.buyer_first_name || ""}`.trim() || "el comprador";
-  const vehicle = [l.vehicle_brand, l.vehicle_model, l.vehicle_version]
-    .filter(Boolean).join(" ") || l.vehicle_title_snapshot || "el vehículo consultado";
-  const price = l.vehicle_price
-    ? `$${Number(l.vehicle_price).toLocaleString("es-AR")}`
-    : null;
-
-  const parts = [
-    `Nombre del comprador: ${buyerName}`,
-    `Vehículo de interés: ${vehicle}`,
-    price && `Precio publicado: ${price}`,
-    l.message && `Mensaje del comprador: "${l.message}"`,
-    l.crm_status && `Estado actual del lead: ${l.crm_status}`,
-  ].filter(Boolean).join("\n");
-
-  const prompt = `Sos un vendedor de una concesionaria argentina, profesional y cercano.
-Generá un mensaje de WhatsApp para responder a este lead de forma personalizada y natural.
-
-${parts}
-
-Instrucciones:
-- Empezá con "Hola [nombre]!" usando el nombre real
-- Máximo 3 oraciones cortas
-- Si el comprador hizo una pregunta, hacé referencia a ella
-- Tono cercano y profesional, en español rioplatense
-- Terminá con una pregunta abierta para mantener el diálogo
-- Máximo 1 emoji y solo si suma
-- No inventes datos técnicos del vehículo
-
-Solo devolvé el texto del mensaje, sin comillas ni explicaciones.`;
-
   try {
-    const text = await callClaude(prompt, 250);
+    const { text } = await callAssistantAPI("generate_lead_reply", lead || {});
     return { text, error: null };
   } catch (err) {
     return { text: null, error: err.message };
@@ -129,36 +58,9 @@ Solo devolvé el texto del mensaje, sin comillas ni explicaciones.`;
  * Retorna { filters, error } donde filters es un objeto con los campos detectados.
  */
 export async function parseLeadsNaturalQuery(query, availableStatuses) {
-  const statusList = (availableStatuses || []).join(", ");
-  const prompt = `Analizá esta consulta en lenguaje natural de un dealer de vehículos y extraé los filtros de búsqueda.
-
-Consulta: "${query}"
-
-Estados disponibles: ${statusList || "new, seen, contacted, negotiation, sold, lost, closed"}
-
-Devolvé SOLO un objeto JSON válido (sin markdown) con estos campos opcionales:
-{
-  "status": "estado exacto o null",
-  "daysSince": número de días atrás o null,
-  "brand": "marca o null",
-  "model": "modelo o null",
-  "hasFollowUp": true/false/null,
-  "isNew": true/false/null,
-  "keyword": "texto libre para buscar en mensaje o null"
-}
-
-Ejemplos:
-- "leads sin responder" → {"status": "new", "isNew": true}
-- "leads de esta semana" → {"daysSince": 7}
-- "leads de Toyota" → {"brand": "Toyota"}
-- "leads en negociación sin seguimiento" → {"status": "negotiation", "hasFollowUp": false}`;
-
   try {
-    const raw = await callClaude(prompt, 200);
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) return { filters: {}, error: null };
-    const filters = JSON.parse(jsonMatch[0]);
-    return { filters, error: null };
+    const { filters } = await callAssistantAPI("parse_leads_query", { query, availableStatuses });
+    return { filters: filters ?? {}, error: null };
   } catch (err) {
     return { filters: {}, error: err.message };
   }

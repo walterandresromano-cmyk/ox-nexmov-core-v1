@@ -63,14 +63,21 @@ export function usePushNotifications({ authUser } = {}) {
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
       });
 
-      // 3. Guardar en Edge Function push-subscribe
-      const { error: fnError } = await supabase.functions.invoke(
-        "push-subscribe",
-        { body: subscription }
-      );
+      // 3. Guardar suscripción en el servidor
+      const { data: sessionData } = await supabase.auth.getSession().catch(() => ({ data: {} }));
+      const token = sessionData?.session?.access_token;
+      const saveRes = await fetch("/api/push-subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(subscription),
+      });
 
-      if (fnError) {
-        setError(`No se pudo activar: ${fnError.message}`);
+      if (!saveRes.ok) {
+        const detail = await saveRes.json().catch(() => ({}));
+        setError(`No se pudo activar: ${detail?.error || saveRes.status}`);
         await subscription.unsubscribe().catch(() => {});
         return;
       }

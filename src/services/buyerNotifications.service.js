@@ -614,6 +614,7 @@
 */
 
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
+import { withRetry } from "../lib/withRetry.js";
 
 // ── Lectura de notificaciones ─────────────────────────────────────────
 
@@ -622,14 +623,12 @@ export async function listBuyerNotifications() {
     return { notifications: [], error: null };
   }
 
-  const { data, error } = await supabase.rpc(
-    "get_buyer_notifications_for_current_user"
+  const { data, error } = await withRetry(() =>
+    supabase.rpc("get_buyer_notifications_for_current_user")
   );
 
   if (error) {
-    if (import.meta.env.DEV) {
-      console.warn("buyer_notifications no disponible:", error.message);
-    }
+    console.warn("[buyer] notifications unavailable:", error.message);
     return { notifications: [], error: null };
   }
 
