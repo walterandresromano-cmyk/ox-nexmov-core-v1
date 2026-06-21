@@ -45,16 +45,12 @@ export default function PreviewGate({ children }) {
 
   return (
     <div className="pg-root" data-theme="dark">
-      <div className="pg-hero">
+      <div className="pg-form-wrap">
         <img
           className="pg-hero-car"
           src="/hero-car.svg"
           alt="oX NEXMOV — plataforma de vehículos"
         />
-        <div className="pg-hero-fade" aria-hidden="true" />
-      </div>
-
-      <div className="pg-form-wrap">
         <form className="pg-form" onSubmit={handleSubmit} noValidate>
           <p className="pg-form-label">Acceso de prueba</p>
 

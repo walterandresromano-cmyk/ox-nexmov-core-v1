@@ -13,41 +13,22 @@
   color-scheme: dark;
 }
 
-/* ── Hero ─────────────────────────────────────────────────── */
-
-.pg-hero {
-  position: relative;
-  width: 100%;
-  max-width: 680px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 56px;
-}
+/* ── Hero car (dentro del form-wrap) ─────────────────────── */
 
 .pg-hero-car {
   width: 100%;
-  max-width: 440px;
+  max-width: 260px;
   height: auto;
   display: block;
-  filter: drop-shadow(0 24px 48px rgba(56, 189, 248, 0.22))
-          drop-shadow(0 4px 16px rgba(0, 0, 0, 0.5));
+  margin: 0 auto 28px;
+  filter: drop-shadow(0 16px 40px rgba(56, 189, 248, 0.2))
+          drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
   animation: pg-float 4.5s ease-in-out infinite;
-}
-
-.pg-hero-fade {
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(to bottom, transparent, #050913);
-  pointer-events: none;
 }
 
 @keyframes pg-float {
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-10px); }
+  50%       { transform: translateY(-8px); }
 }
 
 /* ── Form ─────────────────────────────────────────────────── */
@@ -56,7 +37,6 @@
   width: 100%;
   max-width: 400px;
   padding: 0 20px 48px;
-  margin-top: 8px;
 }
 
 .pg-form {
@@ -189,16 +169,9 @@
 /* ── Mobile ───────────────────────────────────────────────── */
 
 @media (max-width: 480px) {
-  .pg-hero {
-    padding-top: 36px;
-  }
-
   .pg-hero-car {
-    max-width: 85%;
-  }
-
-  .pg-form-wrap {
-    margin-top: 4px;
+    max-width: 200px;
+    margin-bottom: 22px;
   }
 
   .pg-form {
