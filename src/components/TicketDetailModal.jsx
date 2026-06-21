@@ -117,17 +117,17 @@ export default function TicketDetailModal({
 
   return createPortal(
     <div className="modal-backdrop">
-      <section className="ticket-detail-modal">
+      <section className="ticket-detail-modal" role="dialog" aria-modal="true" aria-labelledby="ticket-detail-title">
         <div className="contact-modal-head">
           <div>
             <p className="eyebrow">Detalle del caso</p>
-            <h2>Caso #{ticket.ticket_id}</h2>
+            <h2 id="ticket-detail-title">Caso #{ticket.ticket_id}</h2>
             <p>
               Caso interno entre tu cuenta, administración y soporte de oX NEXMOV.
             </p>
           </div>
 
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>

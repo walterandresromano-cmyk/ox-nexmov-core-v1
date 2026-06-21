@@ -486,7 +486,7 @@ export default function EditVehicleModal({
 
   return createPortal(
     <div className="modal-backdrop">
-      <section className="ticket-detail-modal edit-vehicle-modal">
+      <section className="ticket-detail-modal edit-vehicle-modal" role="dialog" aria-modal="true" aria-labelledby="edit-vehicle-title">
         <div className="contact-modal-head">
           <button
             type="button"
@@ -499,7 +499,7 @@ export default function EditVehicleModal({
 
           <div>
             <p className="eyebrow">Editar publicación</p>
-            <h2>
+            <h2 id="edit-vehicle-title">
               {vehicle.brand} {vehicle.model}
             </h2>
             <p>
@@ -508,7 +508,7 @@ export default function EditVehicleModal({
             </p>
           </div>
 
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
 

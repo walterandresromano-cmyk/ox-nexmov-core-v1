@@ -120,9 +120,10 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
   const [savingNotes, setSavingNotes] = useState(false);
   const [notesSaved, setNotesSaved] = useState(false);
   const [notesError, setNotesError] = useState("");
-  const [assigningGarage, setAssigningGarage] = useState(false);
-  const [garageMessage, setGarageMessage] = useState("");
-  const [garageError, setGarageError] = useState("");
+  const [assigningGarage, setAssigningGarage]   = useState(false);
+  const [garageConfirming, setGarageConfirming] = useState(false);
+  const [garageMessage, setGarageMessage]       = useState("");
+  const [garageError, setGarageError]           = useState("");
 
   useEffect(() => {
     setNotes(lead?.notes || "");
@@ -166,23 +167,8 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
   }
 
   async function handleAssignGarage() {
-    const buyerName =
-      [lead.buyer_first_name, lead.buyer_last_name].filter(Boolean).join(" ") ||
-      lead.buyer_email ||
-      lead.buyer_phone ||
-      "este comprador";
-    const vehicleName =
-      [lead.vehicle_brand, lead.vehicle_model].filter(Boolean).join(" ") ||
-      lead.vehicle_title_snapshot ||
-      "esta unidad";
-
-    const confirmed = window.confirm(
-      `Asignar ${vehicleName} al Garage oX de ${buyerName}?`
-    );
-
-    if (!confirmed) return;
-
     setAssigningGarage(true);
+    setGarageConfirming(false);
     setGarageMessage("");
     setGarageError("");
 
@@ -193,9 +179,7 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
     });
 
     if (error) {
-      setGarageError(
-        error.message || "No se pudo asignar la unidad al Garage oX."
-      );
+      setGarageError(error.message || "No se pudo asignar la unidad al Garage oX.");
       setAssigningGarage(false);
       return;
     }
@@ -210,18 +194,18 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
 
   return createPortal(
     <div className="modal-backdrop">
-      <section className="ticket-detail-modal">
+      <section className="ticket-detail-modal" role="dialog" aria-modal="true" aria-labelledby="lead-detail-title">
         <div className="contact-modal-head">
           <div>
             <p className="eyebrow">Detalle de lead comercial</p>
-            <h2>Lead #{lead.lead_id}</h2>
+            <h2 id="lead-detail-title">Lead #{lead.lead_id}</h2>
             <p>
               Consulta generada desde una publicación de vehículo usado o
               disponible en oX NEXMOV.
             </p>
           </div>
 
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>
@@ -271,14 +255,39 @@ export default function VehicleLeadDetailModal({ lead, onClose, onUpdated }) {
               Usa este lead para asociar la unidad al comprador identificado por
               nombre, email o teléfono.
             </p>
-            <button
-              type="button"
-              className="table-action-btn"
-              onClick={handleAssignGarage}
-              disabled={assigningGarage || !lead.vehicle_id || !lead.lead_id}
-            >
-              {assigningGarage ? "Asignando..." : "Asignar a Garage oX"}
-            </button>
+            {garageConfirming ? (
+              <div className="garage-assign-confirm">
+                <small className="garage-assign-confirm__label">
+                  ¿Asignar al Garage oX del comprador?
+                </small>
+                <div className="garage-assign-confirm__btns">
+                  <button
+                    type="button"
+                    className="table-action-btn table-action-btn--danger"
+                    onClick={handleAssignGarage}
+                    disabled={assigningGarage}
+                  >
+                    Sí, asignar
+                  </button>
+                  <button
+                    type="button"
+                    className="table-action-btn"
+                    onClick={() => setGarageConfirming(false)}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="table-action-btn"
+                onClick={() => { setGarageConfirming(true); setGarageError(""); }}
+                disabled={assigningGarage || !lead.vehicle_id || !lead.lead_id}
+              >
+                {assigningGarage ? "Asignando..." : "Asignar a Garage oX"}
+              </button>
+            )}
             {garageMessage && (
               <small className="garage-assign-success">{garageMessage}</small>
             )}

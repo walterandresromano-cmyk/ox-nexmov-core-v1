@@ -70,7 +70,7 @@ export default function CreateSupportTicketModal({
     return createPortal(
       <div className="modal-backdrop">
         <section className="contact-modal">
-          <button className="modal-close-btn" onClick={onClose}>×</button>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">×</button>
           <div className="lead-created-box">
             <h3>Consulta registrada correctamente</h3>
             <p>
@@ -99,7 +99,7 @@ export default function CreateSupportTicketModal({
             </p>
           </div>
 
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>

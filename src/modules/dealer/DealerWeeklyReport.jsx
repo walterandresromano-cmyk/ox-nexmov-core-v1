@@ -129,7 +129,7 @@ export default function DealerWeeklyReport({
             <h2>Resumen de actividad</h2>
             <p className="dealer-weekly-period">{weekLabel}</p>
           </div>
-          <button className="modal-close-btn" type="button" onClick={onClose}>×</button>
+          <button className="modal-close-btn" type="button" onClick={onClose} aria-label="Cerrar">×</button>
         </div>
 
         {/* KPI row */}

@@ -111,18 +111,18 @@ export default function ContactGate({
 
   const contactGateModal = (
     <div className="modal-backdrop">
-      <section className="contact-modal">
+      <section className="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-gate-title">
         <div className="contact-modal-head">
           <div>
             <p className="eyebrow">Contacto verificado</p>
-            <h2>Contactar al vendedor</h2>
+            <h2 id="contact-gate-title">Contactar al vendedor</h2>
             <p>
               Dejá un mensaje para que el vendedor tenga contexto.
               Tu consulta queda registrada y se habilita el contacto por WhatsApp.
             </p>
           </div>
 
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>

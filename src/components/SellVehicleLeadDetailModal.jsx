@@ -135,7 +135,7 @@ export default function SellVehicleLeadDetailModal({
             <p>Solicitud de venta creada por comprador.</p>
           </div>
 
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>

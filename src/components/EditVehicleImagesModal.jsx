@@ -241,7 +241,7 @@ export default function EditVehicleImagesModal({
           <button className="edit-images-save-btn primary-action" type="button" onClick={handleSave} disabled={submitting}>
             {submitting ? "Guardando..." : "Guardar"}
           </button>
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>

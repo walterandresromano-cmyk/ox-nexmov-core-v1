@@ -160,6 +160,7 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
                       : "mobile-dock-more-btn"
                   }
                   onClick={() => handleNavigate(item.id)}
+                  aria-current={currentRoute === item.id ? "page" : undefined}
                 >
                   {item.label}
                 </button>
@@ -183,6 +184,8 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
                     : "dock-btn"
                 }
                 onClick={openMore}
+                aria-expanded={isMoreOpen}
+                aria-haspopup="menu"
               >
                 {item.label}
               </button>
@@ -197,6 +200,7 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
                 currentRoute === item.id ? "dock-btn active" : "dock-btn"
               }
               onClick={() => handleNavigate(item.id)}
+              aria-current={currentRoute === item.id ? "page" : undefined}
             >
               {item.label}
             </button>
@@ -209,6 +213,7 @@ export default function MobileDock({ currentRoute, onNavigate, appActions }) {
             className="dock-btn logout-dock-btn"
             onClick={handleLogout}
             disabled={loggingOut}
+            aria-label={loggingOut ? "Cerrando sesión" : "Cerrar sesión"}
           >
             {loggingOut ? "..." : "Salir"}
           </button>

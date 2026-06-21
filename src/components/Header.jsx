@@ -121,6 +121,7 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
               ].filter(Boolean).join(" ")}
               onMouseEnter={() => ROUTE_PREFETCH[item.id]?.()}
               onClick={() => handleNavClick(item.id)}
+              aria-current={currentRoute === item.id ? "page" : undefined}
             >
               {item.label}
             </button>
@@ -167,6 +168,7 @@ export default function Header({ currentRoute, onNavigate, appActions }) {
                   : "login-btn private-panel-btn"
               }
               onClick={() => onNavigate(privatePanel.id)}
+              aria-current={currentRoute === privatePanel.id ? "page" : undefined}
             >
               {privatePanelLabel}
             </button>

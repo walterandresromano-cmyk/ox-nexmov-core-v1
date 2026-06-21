@@ -5,13 +5,17 @@ const BASE_URL = "https://www.oxnexmov.com.ar";
 
 const STATIC_PAGES = [
   { path: "/", priority: "1.0", changefreq: "daily" },
-  { path: "/buscar", priority: "0.9", changefreq: "hourly" },
-  { path: "/financiacion", priority: "0.7", changefreq: "weekly" },
-  { path: "/sumate", priority: "0.7", changefreq: "weekly" },
-  { path: "/quienes-somos", priority: "0.5", changefreq: "monthly" },
-  { path: "/faq", priority: "0.5", changefreq: "monthly" },
-  { path: "/legal/terminos", priority: "0.3", changefreq: "monthly" },
-  { path: "/legal/privacidad", priority: "0.3", changefreq: "monthly" },
+  { path: "/buscar", priority: "0.9", changefreq: "daily" },
+  { path: "/financiacion", priority: "0.8", changefreq: "weekly" },
+  { path: "/sumate", priority: "0.8", changefreq: "weekly" },
+  { path: "/quienes-somos", priority: "0.6", changefreq: "monthly" },
+  { path: "/faq", priority: "0.7", changefreq: "monthly" },
+  { path: "/legal/terminos", priority: "0.4", changefreq: "monthly" },
+  { path: "/legal/privacidad", priority: "0.4", changefreq: "monthly" },
+  { path: "/legal/cookies", priority: "0.4", changefreq: "monthly" },
+  { path: "/legal/defensa-consumidor", priority: "0.4", changefreq: "monthly" },
+  { path: "/legal/arrepentimiento", priority: "0.4", changefreq: "monthly" },
+  { path: "/legal/baja-servicio", priority: "0.4", changefreq: "monthly" },
 ];
 
 function escapeXml(str) {

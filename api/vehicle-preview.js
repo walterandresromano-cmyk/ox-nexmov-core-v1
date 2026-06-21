@@ -172,10 +172,26 @@ function buildHtml({ title, description, image, url, vehicleId, vehicle }) {
     <meta name="twitter:title" content="${safeTitle}">
     <meta name="twitter:description" content="${safeDescription}">
     <meta name="twitter:image" content="${safeImage}">
+    <link rel="canonical" href="${safeUrl}">
     ${jsonLd}
   </head>
   <body>
-    <p><a href="${appUrl}">Abrir publicaci&oacute;n</a></p>
+    <main>
+      <h1>${safeTitle}</h1>
+      <p>${safeDescription}</p>
+      ${vehicle ? `<ul>
+        ${vehicle.brand ? `<li>Marca: ${escapeHtml(vehicle.brand)}</li>` : ""}
+        ${vehicle.model ? `<li>Modelo: ${escapeHtml(vehicle.model)}</li>` : ""}
+        ${vehicle.version ? `<li>Versión: ${escapeHtml(vehicle.version)}</li>` : ""}
+        ${vehicle.year ? `<li>Año: ${escapeHtml(String(vehicle.year))}</li>` : ""}
+        ${vehicle.km ? `<li>Kilómetros: ${Number(vehicle.km).toLocaleString("es-AR")} km</li>` : ""}
+        ${vehicle.fuel_type ? `<li>Combustible: ${escapeHtml(vehicle.fuel_type)}</li>` : ""}
+        ${vehicle.transmission ? `<li>Transmisión: ${escapeHtml(vehicle.transmission)}</li>` : ""}
+        ${vehicle.city || vehicle.province ? `<li>Ubicación: ${escapeHtml([vehicle.city, vehicle.province].filter(Boolean).join(", "))}</li>` : ""}
+        ${vehicle.price > 0 ? `<li>Precio: ${escapeHtml(formatARS(vehicle.price))}</li>` : ""}
+      </ul>` : ""}
+      <p><a href="${appUrl}">Ver publicaci&oacute;n completa en oX NEXMOV</a></p>
+    </main>
     <script>
       window.location.replace("${appUrl}");
     <\/script>

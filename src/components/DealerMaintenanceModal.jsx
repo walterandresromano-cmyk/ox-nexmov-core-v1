@@ -106,7 +106,7 @@ export default function DealerMaintenanceModal({ vehicle, onClose, onUpdated }) 
           <button className="maintenance-save-btn primary-action" type="button" onClick={handleSave} disabled={loading}>
             {saved ? "Guardado ✓" : loading ? "Guardando…" : "Guardar"}
           </button>
-          <button className="modal-close-btn" onClick={onClose}>×</button>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">×</button>
         </div>
 
         {/* Next service */}

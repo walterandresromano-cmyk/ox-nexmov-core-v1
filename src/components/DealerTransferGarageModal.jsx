@@ -93,7 +93,7 @@ export default function DealerTransferGarageModal({ vehicle, vehicleLeads, deale
             <p className="dealer-transfer-modal__eyebrow">Transferir al Garage oX</p>
             <h3 className="dealer-transfer-modal__title">Pasaporte digital del vehículo</h3>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">✕</button>
         </div>
 
         {/* Passport card */}

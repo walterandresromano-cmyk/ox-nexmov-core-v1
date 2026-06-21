@@ -73,7 +73,7 @@ export default function GrantExtraSlotsModal({ dealer, onClose, onGranted }) {
             </p>
           </div>
 
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>

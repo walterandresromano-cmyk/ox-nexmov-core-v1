@@ -246,8 +246,8 @@ function vehicleToForm(v) {
   };
 }
 
-export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerVehicles = [] }) {
-  const [form, setForm] = useState(initialForm);
+export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerVehicles = [], initialValues = {} }) {
+  const [form, setForm] = useState({ ...initialForm, ...initialValues });
   const [prefillSource, setPrefillSource] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
   const [createdVehicle, setCreatedVehicle] = useState(null);
@@ -522,18 +522,18 @@ export default function CreateVehicleModal({ dealer, onClose, onCreated, dealerV
 
   return createPortal(
     <div className="modal-backdrop">
-      <section className="ticket-detail-modal">
+      <section className="ticket-detail-modal" role="dialog" aria-modal="true" aria-labelledby="create-vehicle-title">
         <div className="contact-modal-head">
           <div>
             <p className="eyebrow">Alta de vehículo</p>
-            <h2>Publicar vehículo</h2>
+            <h2 id="create-vehicle-title">Publicar vehículo</h2>
             <p>
               La publicación se asociará automáticamente a{" "}
               <strong>{dealer?.commercialName}</strong>.
             </p>
           </div>
 
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>

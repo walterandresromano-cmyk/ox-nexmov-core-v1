@@ -255,11 +255,11 @@ export default function DealerVehicleDetailModal({
 
   return createPortal(
     <div className="modal-backdrop">
-      <section className="ticket-detail-modal dealer-vehicle-detail-modal">
+      <section className="ticket-detail-modal dealer-vehicle-detail-modal" role="dialog" aria-modal="true" aria-labelledby="dealer-vehicle-detail-title">
         <div className="contact-modal-head">
           <div>
             <p className="eyebrow">Detalle de publicación</p>
-            <h2>
+            <h2 id="dealer-vehicle-detail-title">
               {vehicle.brand} {vehicle.model}
             </h2>
             <p>
@@ -268,7 +268,7 @@ export default function DealerVehicleDetailModal({
             </p>
           </div>
 
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>
