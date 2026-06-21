@@ -707,6 +707,9 @@ export default function VehicleDetailModal({
       <section
         ref={modalScrollRef}
         className={`vehicle-detail-modal vehicle-detail-modal--${permissions.rankTheme}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="vehicle-detail-title"
       >
         {vehicles && vehicles.length > 1 && (
           <div className="vehicle-detail-nav">
@@ -737,7 +740,7 @@ export default function VehicleDetailModal({
         {/* Identity bar — anchored */}
         <div className="vd-modal-identity">
           <div className="vd-modal-identity-info">
-            <h2 className="vd-modal-identity-title">
+            <h2 id="vehicle-detail-title" className="vd-modal-identity-title">
               {currentVehicle.brand} <span className="vd-modal-identity-model">{currentVehicle.model}</span>
             </h2>
             <p className="vd-modal-identity-sub">
