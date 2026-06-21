@@ -16,10 +16,10 @@
 
 .pg-hero-car {
   width: 100%;
-  max-width: 220px;
+  max-width: 300px;
   height: auto;
   display: block;
-  margin: 0 auto 24px;
+  margin: 0 auto 28px;
   filter: drop-shadow(0 12px 32px rgba(56, 189, 248, 0.18));
   animation: pg-float 4.5s ease-in-out infinite;
 }
@@ -33,7 +33,7 @@
 
 .pg-form-wrap {
   width: 100%;
-  max-width: 400px;
+  max-width: 340px;
   padding: 0 20px 48px;
 }
 
@@ -196,11 +196,11 @@
 
 @media (max-width: 480px) {
   .pg-hero-car {
-    max-width: 180px;
-    margin-bottom: 18px;
+    max-width: 240px;
+    margin-bottom: 20px;
   }
 
   .pg-form {
-    padding: 22px 18px 20px;
+    padding: 20px 16px 18px;
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/preview-gate.css";
 
 // Credenciales de acceso al preview — cambiar en .env.local
@@ -22,6 +22,19 @@ export default function PreviewGate({ children }) {
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Forzar dark mode en el <html> mientras el gate está activo,
+  // independientemente del tema guardado en localStorage.
+  useEffect(() => {
+    if (unlocked) return;
+    const html = document.documentElement;
+    const prev = html.getAttribute("data-theme");
+    html.setAttribute("data-theme", "dark");
+    return () => {
+      if (prev) html.setAttribute("data-theme", prev);
+      else html.removeAttribute("data-theme");
+    };
+  }, [unlocked]);
 
   if (unlocked) return children;
 
