@@ -54,7 +54,7 @@ export default defineConfig(({ mode }) => ({
         description: "Marketplace de vehículos verificados en Argentina",
         theme_color: "#020617",
         background_color: "#020617",
-        display: "standalone",
+        display: "browser",
         orientation: "portrait",
         start_url: "/",
         scope: "/",
