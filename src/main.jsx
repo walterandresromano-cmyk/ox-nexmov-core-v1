@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { initSentry, initWebVitals } from "./lib/sentry.js";
 import App from "./app/App.jsx";
+import PreviewGate from "./components/PreviewGate.jsx";
 
 initSentry(); // fire-and-forget: async pero no bloquea el render
 initWebVitals(); // registra LCP, CLS, INP, FCP, TTFB — dynamic import, cero peso en main bundle
@@ -24,6 +25,8 @@ import "./styles/clay.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <PreviewGate>
+      <App />
+    </PreviewGate>
   </React.StrictMode>
 );

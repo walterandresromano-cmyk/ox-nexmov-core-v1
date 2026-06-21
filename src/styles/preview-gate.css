@@ -1,0 +1,207 @@
+/* ============================================================
+   PreviewGate — pantalla de acceso previo al preview
+   ============================================================ */
+
+.pg-root {
+  min-height: 100dvh;
+  background: #050913;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color-scheme: dark;
+}
+
+/* ── Hero ─────────────────────────────────────────────────── */
+
+.pg-hero {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 56px;
+}
+
+.pg-hero-car {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 24px 48px rgba(56, 189, 248, 0.22))
+          drop-shadow(0 4px 16px rgba(0, 0, 0, 0.5));
+  animation: pg-float 4.5s ease-in-out infinite;
+}
+
+.pg-hero-fade {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, #050913);
+  pointer-events: none;
+}
+
+@keyframes pg-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* ── Form ─────────────────────────────────────────────────── */
+
+.pg-form-wrap {
+  width: 100%;
+  max-width: 400px;
+  padding: 0 20px 48px;
+  margin-top: 8px;
+}
+
+.pg-form {
+  background: #0b1424;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 16px;
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pg-form-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(155, 179, 206, 0.7);
+}
+
+.pg-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pg-field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(219, 229, 239, 0.8);
+}
+
+.pg-input {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #0d1929;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 15px;
+  color: #f2f6fb;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+  color-scheme: dark;
+  appearance: none;
+  -webkit-appearance: none;
+  /* Override browser light-mode default for inputs */
+  -webkit-box-shadow: 0 0 0 1000px #0d1929 inset !important;
+  box-shadow: 0 0 0 1000px #0d1929 inset;
+}
+
+.pg-input::placeholder {
+  color: rgba(159, 176, 195, 0.4);
+  -webkit-text-fill-color: rgba(159, 176, 195, 0.4);
+}
+
+.pg-input:focus {
+  border-color: rgba(56, 189, 248, 0.5);
+  -webkit-box-shadow: 0 0 0 1000px #0d1929 inset, 0 0 0 3px rgba(56, 189, 248, 0.12) !important;
+  box-shadow: 0 0 0 1000px #0d1929 inset, 0 0 0 3px rgba(56, 189, 248, 0.12);
+}
+
+.pg-input:-webkit-autofill,
+.pg-input:-webkit-autofill:hover,
+.pg-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #0d1929 inset !important;
+  -webkit-text-fill-color: #f2f6fb !important;
+  caret-color: #f2f6fb;
+}
+
+.pg-input:focus {
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+}
+
+.pg-input:disabled {
+  opacity: 0.5;
+}
+
+/* ── Error ────────────────────────────────────────────────── */
+
+.pg-error {
+  margin: 0;
+  padding: 10px 14px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+  font-size: 13px;
+  color: #fca5a5;
+  text-align: center;
+}
+
+/* ── Submit ───────────────────────────────────────────────── */
+
+.pg-submit {
+  width: 100%;
+  padding: 13px;
+  background: #2563eb;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s, transform 0.1s;
+  font-family: inherit;
+}
+
+.pg-submit:hover:not(:disabled) {
+  background: #3b82f6;
+}
+
+.pg-submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.pg-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .pg-hero {
+    padding-top: 36px;
+  }
+
+  .pg-hero-car {
+    max-width: 85%;
+  }
+
+  .pg-form-wrap {
+    margin-top: 4px;
+  }
+
+  .pg-form {
+    padding: 22px 20px 20px;
+  }
+}
