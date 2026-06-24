@@ -27,6 +27,7 @@ import {
 import { persistAdminAction, listAdminActionLogs } from "../../services/adminActionLog.service.js";
 import { getSiteAnalytics, aggregateAnalytics } from "../../services/siteAnalytics.service.js";
 import { listRadarRequestsForAdmin, buildRadarCriteriaSummary } from "../../services/radarRequests.service.js";
+import { listAccessRequestsForAdmin, updateAccessRequestStatus } from "../../services/accessRequests.service.js";
 import { formatRelativeTime } from "../../lib/formatters.js";
 import { exportToCSV } from "../../lib/exportCsv.js";
 const AdminAnalytics = lazy(() => import("./AdminAnalytics.jsx"));
@@ -41,6 +42,7 @@ const ADMIN_MODULES = {
   ACTION_LOG: "actionLog",
   RADAR: "radar",
   ANALYTICS: "analytics",
+  ACCESS_REQUESTS: "accessRequests",
 };
 
 const ACTION_LABELS = {
@@ -237,6 +239,10 @@ export default function AdminPanel({ authProfile }) {
   const [loadingRadar, setLoadingRadar] = useState(true);
   const [radarSearch, setRadarSearch] = useState("");
 
+  const [accessRequests, setAccessRequests] = useState([]);
+  const [loadingAccessRequests, setLoadingAccessRequests] = useState(false);
+  const [accessRequestsError, setAccessRequestsError] = useState("");
+
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [selectedDealerForSlots, setSelectedDealerForSlots] = useState(null);
   const [selectedDealer, setSelectedDealer] = useState(null);
@@ -408,6 +414,20 @@ export default function AdminPanel({ authProfile }) {
     const { requests } = await listRadarRequestsForAdmin();
     setRadarRequests(requests || []);
     setLoadingRadar(false);
+  }
+
+  async function loadAccessRequests() {
+    setLoadingAccessRequests(true);
+    setAccessRequestsError("");
+    const { requests, error } = await listAccessRequestsForAdmin();
+    setAccessRequests(requests || []);
+    if (error) setAccessRequestsError(error.message || "Error al cargar solicitudes.");
+    setLoadingAccessRequests(false);
+  }
+
+  async function handleAccessRequestStatus(id, status) {
+    await updateAccessRequestStatus({ id, status });
+    setAccessRequests(prev => prev.map(r => r.id === id ? { ...r, status } : r));
   }
 
   async function refreshAdminPanel() {
@@ -665,6 +685,7 @@ export default function AdminPanel({ authProfile }) {
       [ADMIN_MODULES.ZERO_KM]: "system",
       [ADMIN_MODULES.TICKETS]: "tickets",
       [ADMIN_MODULES.ACTION_LOG]: "system",
+      [ADMIN_MODULES.ACCESS_REQUESTS]: "system",
     }[moduleName];
 
     setSelectedDealer(null);
@@ -680,6 +701,9 @@ export default function AdminPanel({ authProfile }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (moduleName === ADMIN_MODULES.ACTION_LOG) {
       loadActionLogs();
+    }
+    if (moduleName === ADMIN_MODULES.ACCESS_REQUESTS) {
+      loadAccessRequests();
     }
   }
 
@@ -940,6 +964,7 @@ export default function AdminPanel({ authProfile }) {
     [ADMIN_MODULES.ZERO_KM]: "Financiación 0km",
     [ADMIN_MODULES.TICKETS]: "Tickets internos",
     [ADMIN_MODULES.ACTION_LOG]: "Registro de acciones",
+    [ADMIN_MODULES.ACCESS_REQUESTS]: "Solicitudes de acceso",
   }[activeModule];
 
   function getAdminDateValue(item) {
@@ -1063,6 +1088,13 @@ export default function AdminPanel({ authProfile }) {
         text: `${radarRequests.length} señales totales registradas.`,
         module: ADMIN_MODULES.RADAR,
         tone: "info",
+      },
+      {
+        label: "Solicitudes de acceso",
+        value: accessRequests.filter(r => r.status === "pending").length,
+        text: `${accessRequests.length} solicitudes recibidas en total.`,
+        module: ADMIN_MODULES.ACCESS_REQUESTS,
+        tone: accessRequests.filter(r => r.status === "pending").length > 0 ? "warning" : "neutral",
       },
     ];
 
@@ -3124,6 +3156,73 @@ export default function AdminPanel({ authProfile }) {
                         >
                           {entry.result === "success" ? "OK" : "Error"}
                         </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (activeModule === ADMIN_MODULES.ACCESS_REQUESTS) {
+      return (
+        <div className="admin-section-block">
+          <div className="buyer-section-head">
+            <div>
+              <h2>Solicitudes de acceso</h2>
+              <p>Leads que solicitaron acceso al preview desde la pantalla de inicio.</p>
+            </div>
+            <div className="admin-action-row">
+              <button className="admin-refresh-btn" onClick={loadAccessRequests} disabled={loadingAccessRequests}>
+                {loadingAccessRequests ? "Cargando…" : "Actualizar"}
+              </button>
+              {renderBackToSummaryButton()}
+            </div>
+          </div>
+
+          {accessRequestsError && <p className="admin-error">{accessRequestsError}</p>}
+
+          {loadingAccessRequests ? (
+            <div className="empty-state">Cargando solicitudes…</div>
+          ) : accessRequests.length === 0 ? (
+            <div className="empty-state">Sin solicitudes todavía.</div>
+          ) : (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Empresa</th>
+                    <th>Teléfono</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {accessRequests.map(r => (
+                    <tr key={r.id}>
+                      <td>{formatRelativeTime(r.created_at)}</td>
+                      <td><strong>{r.name}</strong></td>
+                      <td>{r.email}</td>
+                      <td>{r.company || "—"}</td>
+                      <td>{r.phone || "—"}</td>
+                      <td>
+                        <span className={`admin-chip ${r.status === "approved" ? "success" : r.status === "rejected" ? "danger" : "warning"}`}>
+                          {r.status === "approved" ? "Aprobado" : r.status === "rejected" ? "Rechazado" : "Pendiente"}
+                        </span>
+                      </td>
+                      <td>
+                        {r.status === "pending" && (
+                          <div className="admin-action-row" style={{ gap: 6 }}>
+                            <button className="admin-chip-btn success" onClick={() => handleAccessRequestStatus(r.id, "approved")}>Aprobar</button>
+                            <button className="admin-chip-btn danger" onClick={() => handleAccessRequestStatus(r.id, "rejected")}>Rechazar</button>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}
