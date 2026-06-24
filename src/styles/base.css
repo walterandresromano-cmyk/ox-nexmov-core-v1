@@ -71,23 +71,6 @@ button {
   animation: route-fade-in 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* ── Ripple ───────────────────────────────────────────────────── */
-.ox-ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  pointer-events: none;
-  transform: scale(0);
-  animation: ox-ripple-expand 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  z-index: 999;
-}
-
-@keyframes ox-ripple-expand {
-  to {
-    transform: scale(1);
-    opacity: 0;
-  }
-}
 
 @keyframes route-fade-in {
   from {
