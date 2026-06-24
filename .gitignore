@@ -29,3 +29,10 @@ dist-ssr
 # Lighthouse reports
 lh-*.json
 .gstack/
+
+# Dev screenshots y scripts temporales
+ss_*.png
+ss_*.mjs
+take_screenshots.mjs
+playwright-report/
+test-results/
