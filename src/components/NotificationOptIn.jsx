@@ -47,7 +47,7 @@ function BellIcon() {
  */
 export default function NotificationOptIn({ authUser }) {
   const [visible, setVisible] = useState(false);
-  const { supported, permission, isSubscribed, isLoading, requestAndSubscribe } =
+  const { supported, permission, isSubscribed, isLoading, error, requestAndSubscribe } =
     usePushNotifications({ authUser });
 
   useEffect(() => {
@@ -64,8 +64,14 @@ export default function NotificationOptIn({ authUser }) {
 
   const handleEnable = useCallback(async () => {
     await requestAndSubscribe();
-    setVisible(false);
+    // Solo cerrar si no hubo error (error se setea en el hook)
+    // El efecto de abajo se encarga de cerrar cuando isSubscribed cambia a true
   }, [requestAndSubscribe]);
+
+  // Cerrar el modal cuando la suscripción se completó correctamente
+  useEffect(() => {
+    if (isSubscribed) setVisible(false);
+  }, [isSubscribed]);
 
   const handleDismiss = useCallback(() => {
     saveDismiss();
@@ -87,6 +93,9 @@ export default function NotificationOptIn({ authUser }) {
           que buscás.
         </p>
         <div className="notif-optin__actions">
+          {error && (
+            <p className="notif-optin__error" role="alert">{error}</p>
+          )}
           <button
             className="notif-optin__btn notif-optin__btn--primary"
             onClick={handleEnable}

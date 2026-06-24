@@ -39,6 +39,20 @@ button {
   100% { background-position:  200% 0; }
 }
 
+.ox-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+  transform: scale(0);
+  animation: ox-ripple-expand 0.52s ease-out forwards;
+}
+
+@keyframes ox-ripple-expand {
+  from { transform: scale(0); opacity: 1; }
+  to   { transform: scale(1); opacity: 0; }
+}
+
 .route-loading {
   min-height: 60vh;
   padding: 32px 20px;

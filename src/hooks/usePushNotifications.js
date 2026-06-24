@@ -3,6 +3,18 @@ import { supabase, isSupabaseConfigured } from "../lib/supabaseClient.js";
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
+function swReadyWithTimeout(ms = 10_000) {
+  return Promise.race([
+    navigator.serviceWorker.ready,
+    new Promise((_, reject) =>
+      setTimeout(
+        () => reject(new Error("El service worker no respondió. Recargá la página e intentá de nuevo.")),
+        ms
+      )
+    ),
+  ]);
+}
+
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
@@ -30,7 +42,7 @@ export function usePushNotifications({ authUser } = {}) {
   useEffect(() => {
     if (!supported) return;
     setPermission(Notification.permission);
-    navigator.serviceWorker.ready
+    swReadyWithTimeout()
       .then((reg) => reg.pushManager.getSubscription())
       .then((sub) => setIsSubscribed(Boolean(sub)))
       .catch(() => {});
@@ -57,7 +69,7 @@ export function usePushNotifications({ authUser } = {}) {
       }
 
       // 2. Registrar suscripción push en el navegador
-      const registration = await navigator.serviceWorker.ready;
+      const registration = await swReadyWithTimeout();
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
