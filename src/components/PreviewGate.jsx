@@ -25,7 +25,7 @@ function LandingView({ onRequestAccess, onLogin }) {
       <img className="pg-hero-car" src="/hero-car.svg" alt="oX NEXMOV" />
       <div className="pg-landing-content">
         <h1 className="pg-landing-tagline">
-          La plataforma que<br />los dealers necesitan.
+          La plataforma que<br />los dealers <em>necesitan.</em>
         </h1>
         <ul className="pg-landing-bullets">
           <li>Publicaciones verificadas con datos reales</li>
